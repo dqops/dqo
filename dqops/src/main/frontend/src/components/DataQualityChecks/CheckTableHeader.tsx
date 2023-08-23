@@ -88,7 +88,7 @@ const TableHeader = ({
     setCopyUI(newCheckUI);
   };
 
-  const copyRecurringCheck = async (timeScale: 'daily' | 'monthly') => {
+  const copyMonitoringCheck = async (timeScale: 'daily' | 'monthly') => {
     const newUI = {
       ...copyUI,
       categories: copyUI?.categories
@@ -101,7 +101,7 @@ const TableHeader = ({
               check_name: item.similar_checks?.find(
                 (item) =>
                   item.check_type ===
-                    SimilarCheckModelCheckTypeEnum.recurring &&
+                    SimilarCheckModelCheckTypeEnum.monitoring &&
                   item.time_scale === timeScale
               )?.check_name
             }))
@@ -110,7 +110,7 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    await TableApiClient.updateTableRecurringChecksModel(
+    await TableApiClient.updateTableMonitoringChecksModel(
       connection,
       schema,
       table,
@@ -118,26 +118,26 @@ const TableHeader = ({
       newUI
     );
 
-    const url = ROUTES.TABLE_RECURRING(
-      CheckTypes.RECURRING,
+    const url = ROUTES.TABLE_MONITORING(
+      CheckTypes.MONITORING,
       connection,
       schema,
       table,
       timeScale
     );
-    const value = ROUTES.TABLE_RECURRING_VALUE(
-      CheckTypes.RECURRING,
+    const value = ROUTES.TABLE_MONITORING_VALUE(
+      CheckTypes.MONITORING,
       connection,
       schema,
       table
     );
 
     dispatch(
-      addFirstLevelTab(CheckTypes.RECURRING, {
+      addFirstLevelTab(CheckTypes.MONITORING, {
         url,
         value,
         state: {},
-        label: `${timeScale === 'daily' ? 'Daily' : 'Monthly'} recurring checks`
+        label: `${timeScale === 'daily' ? 'Daily' : 'Monthly'} monitoring checks`
       })
     );
     history.push(url);
@@ -213,11 +213,11 @@ const TableHeader = ({
                 <>
                   <Button
                     color="primary"
-                    label="Set up recurring checks"
+                    label="Set up monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
                     variant="outlined"
-                    onClick={() => onChangeMode('recurring')}
+                    onClick={() => onChangeMode('monitoring')}
                   />
                   <Button
                     color="primary"
@@ -229,22 +229,22 @@ const TableHeader = ({
                   />
                 </>
               )}
-              {mode === 'recurring' && (
+              {mode === 'monitoring' && (
                 <>
                   <div className="text-sm">Copy selected checks to:</div>
                   <Button
                     color="primary"
-                    label="Daily recurring checks"
+                    label="Daily monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
-                    onClick={() => copyRecurringCheck('daily')}
+                    onClick={() => copyMonitoringCheck('daily')}
                   />
                   <Button
                     color="primary"
-                    label="Monthly recurring checks"
+                    label="Monthly monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
-                    onClick={() => copyRecurringCheck('monthly')}
+                    onClick={() => copyMonitoringCheck('monthly')}
                   />
                   <Button
                     color="primary"

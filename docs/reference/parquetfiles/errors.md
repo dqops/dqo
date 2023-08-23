@@ -17,7 +17,7 @@ The data quality execution errors table that stores execution errors captured du
  | expected_value | The expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks). | double |
  | time_period | The time period of the sensor readout (timestamp), using a local timezone from the data source. | local_date_time |
  | time_period_utc | The time period of the sensor readout (timestamp) as a UTC timestamp. | instant |
- | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
+ | time_gradient | The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
  | grouping_level_1 | Column name for the data stream. | text |
  | grouping_level_2 | Column name for the data stream. | text |
  | grouping_level_3 | Column name for the data stream. | text |
@@ -45,7 +45,7 @@ The data quality execution errors table that stores execution errors captured du
  | check_hash | The hash of a data quality check. | long |
  | check_name | The data quality check name. | text |
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
- | check_type | The data quality check type (profiling, recurring, partitioned). | text |
+ | check_type | The data quality check type (profiling, monitoring, partitioned). | text |
  | check_category | The data quality check category name. | text |
  | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | text |
  | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | text |

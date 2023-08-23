@@ -1614,7 +1614,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_expected_strings_in_top_values_count|recurring|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|daily_expected_strings_in_top_values_count|monitoring|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1640,7 +1640,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_expec
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_expected_strings_in_top_values_count:
@@ -1670,7 +1670,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_expected_strings_in_top_values_count:
@@ -2437,7 +2437,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_expected_strings_in_top_values_count:
@@ -3215,7 +3215,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_expected_strings_in_top_values_count|recurring|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|monthly_expected_strings_in_top_values_count|monitoring|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3241,7 +3241,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_exp
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_expected_strings_in_top_values_count:
@@ -3271,7 +3271,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_expected_strings_in_top_values_count:
@@ -4038,7 +4038,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_expected_strings_in_top_values_count:

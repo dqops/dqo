@@ -75,7 +75,7 @@ def sync_detailed(
 ) -> Response[MonoObject]:
     """createTableComparisonProfiling
 
-     Creates a table comparison configuration using advanced profiling checks
+     Creates a table comparison configuration using profiling checks
 
     Args:
         connection_name (str):
@@ -118,7 +118,7 @@ def sync(
 ) -> Optional[MonoObject]:
     """createTableComparisonProfiling
 
-     Creates a table comparison configuration using advanced profiling checks
+     Creates a table comparison configuration using profiling checks
 
     Args:
         connection_name (str):
@@ -154,7 +154,7 @@ async def asyncio_detailed(
 ) -> Response[MonoObject]:
     """createTableComparisonProfiling
 
-     Creates a table comparison configuration using advanced profiling checks
+     Creates a table comparison configuration using profiling checks
 
     Args:
         connection_name (str):
@@ -195,7 +195,7 @@ async def asyncio(
 ) -> Optional[MonoObject]:
     """createTableComparisonProfiling
 
-     Creates a table comparison configuration using advanced profiling checks
+     Creates a table comparison configuration using profiling checks
 
     Args:
         connection_name (str):

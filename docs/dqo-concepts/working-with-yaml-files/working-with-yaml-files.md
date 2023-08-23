@@ -6,7 +6,7 @@ data serialization language that is often used for writing configuration files.
 Defining data quality checks in the YAML files allows checks definitions to be stored in a source code repository and 
 versioned along with any other pipeline code or machine learning code.
 
-Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="15-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json

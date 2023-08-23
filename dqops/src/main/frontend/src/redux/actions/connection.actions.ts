@@ -23,9 +23,9 @@ import {
   CommentSpec,
   ConnectionBasicModel,
   DataGroupingConfigurationSpec,
-  RecurringScheduleSpec
+  MonitoringScheduleSpec
 } from '../../api';
-import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
 import { CheckTypes } from "../../shared/routes";
 
 export const getConnectionsRequest = () => ({
@@ -123,7 +123,7 @@ export const getConnectionSchedulingGroupRequest = (checkType: CheckTypes, activ
   activeTab,
 });
 
-export const getConnectionSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
+export const getConnectionSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, data: MonitoringScheduleSpec) => ({
   type: SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS,
   checkType,
   activeTab,
@@ -137,7 +137,7 @@ export const getConnectionSchedulingGroupFailed = (error: unknown) => ({
 });
 
 export const getConnectionSchedulingGroup =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup) => async (dispatch: Dispatch) => {
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunMonitoringScheduleGroup) => async (dispatch: Dispatch) => {
     dispatch(getConnectionSchedulingGroupRequest(checkType, activeTab));
     try {
       const res = await ConnectionApiClient.getConnectionSchedulingGroup(
@@ -168,7 +168,7 @@ export const updateConnectionSchedulingGroupFailed = (error: unknown) => ({
 });
 
 export const updateConnectionSchedulingGroup =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunMonitoringScheduleGroup, data: MonitoringScheduleSpec) =>
   async (dispatch: Dispatch) => {
     dispatch(updateConnectionSchedulingGroupRequest(checkType, activeTab));
     try {
@@ -392,7 +392,7 @@ export const setIsUpdatedConnectionBasic = (checkType: CheckTypes, activeTab: st
   data: isUpdated
 });
 
-export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, schedule?: MonitoringScheduleSpec) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
   checkType,
   activeTab,
@@ -402,7 +402,7 @@ export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: stri
   }
 });
 
-export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, isUpdated: boolean) => ({
   type: SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
   checkType,
   activeTab,

@@ -12,7 +12,7 @@ T = TypeVar("T", bound="SimilarCheckModel")
 
 @attr.s(auto_attribs=True)
 class SimilarCheckModel:
-    """Model that identifies a similar check in another category or another type of check (recurring, partition).
+    """Model that identifies a similar check in another category or another type of check (monitoring, partition).
 
     Attributes:
         check_target (Union[Unset, SimilarCheckModelCheckTarget]): The check target (table or column).

@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
- * The default profiling check stores one value per month. When advanced profiling is re-executed during the month,
- * the previous advanced profiling value is overwritten and only the most recent value is stored.
+ * The default profiling check stores one value per month. When profiling checks is re-executed during the month,
+ * the previous profiling checks value is overwritten and only the most recent value is stored.
  */
 public enum ProfilingTimePeriod {
     /**

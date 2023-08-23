@@ -5,7 +5,7 @@ table, or individual check.
 
 To set up schedule you can use the graphical interface as described below or manually modify the YAML configuration file as [described here.](./configuring-schedules-by-modifying-yaml-file.md)
 
-Different types of checks, such as Profiling, Recurring, and Partitioned, have their own schedules. For more information
+Different types of checks, such as Profiling, Monitoring, and Partitioned, have their own schedules. For more information
 on these different check types, please refer to the [DQO Concepts section](../../dqo-concepts/checks/index.md).  
 
 ## Configuring a schedule at connection and table level
@@ -20,8 +20,8 @@ To set up a schedule for the entire connection, follow these steps:
 
 4. Select the check type:
     - Profiling
-    - Recurring Daily
-    - Recurring Monthly
+    - Monitoring Daily
+    - Monitoring Monthly
     - Partitioned Daily
     - Partitioned Monthly
    
@@ -41,7 +41,7 @@ Please note that any changes made to the schedule on the table level will overri
 
 To set up a schedule for a specific check, follow these steps:
 
-1. Navigate to the section with a check type of interest (Profiling, Recurring Checks or Partition Checks).
+1. Navigate to the section with a check type of interest (Profiling, Monitoring Checks or Partition Checks).
 
 2. Choose table or column of interest from the tree view on the left.
 

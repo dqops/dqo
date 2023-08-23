@@ -879,7 +879,7 @@ Verifies that the percentage of valid USA phone values in a column does not fall
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_valid_usa_phone_percent|recurring|daily|[valid_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_valid_usa_phone_percent|monitoring|daily|[valid_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -905,7 +905,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_valid
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           pii:
             daily_valid_usa_phone_percent:
@@ -930,7 +930,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           pii:
             daily_valid_usa_phone_percent:
@@ -1333,7 +1333,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               pii:
                 daily_valid_usa_phone_percent:
@@ -1749,7 +1749,7 @@ Verifies that the percentage of valid USA phone values in a column does not fall
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_valid_usa_phone_percent|recurring|monthly|[valid_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_valid_usa_phone_percent|monitoring|monthly|[valid_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1775,7 +1775,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           pii:
             monthly_valid_usa_phone_percent:
@@ -1800,7 +1800,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           pii:
             monthly_valid_usa_phone_percent:
@@ -2203,7 +2203,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               pii:
                 monthly_valid_usa_phone_percent:

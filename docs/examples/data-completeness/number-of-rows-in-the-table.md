@@ -115,7 +115,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 2. Select the table or column mentioned in the example description from the tree view on the left.
 
-3. Select the **Advanced Profiling** tab.
+3. Select the **Profiling Checks** tab.
 
 4. Run the enabled check using the **Run check** button.
     ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)

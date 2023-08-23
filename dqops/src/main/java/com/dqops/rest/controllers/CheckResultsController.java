@@ -92,9 +92,9 @@ public class CheckResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
             @RequestParam(required = false) Optional<Integer> months,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
+            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType,
-            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for recurring and partitioned checks (values: daily or monthly).", required = false)
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -192,7 +192,7 @@ public class CheckResultsController {
     }
 
     /**
-     * Retrieves the complete results of the most recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the complete results of the most recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -200,19 +200,19 @@ public class CheckResultsController {
      * @param dataGroup Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent recurring results.
+     * @return View of the recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksResults", notes = "Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent recurring executions for the recurring at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "Complete view of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableRecurringChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableMonitoringChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -245,7 +245,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -256,7 +256,7 @@ public class CheckResultsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                recurringPartition, loadParams);
+                monitoringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -404,7 +404,7 @@ public class CheckResultsController {
     }
 
     /**
-     * Retrieves the complete view of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the complete view of the most recent monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -413,19 +413,19 @@ public class CheckResultsController {
      * @param dataGroup Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent recurring results.
+     * @return View of the recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksResults", notes = "Returns a complete view of the recent column level monitoring executions for the monitoring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of the recent recurring executions for the recurring at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "View of the recent monitoring executions for the monitoring at a requested time scale on a column returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnRecurringChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnMonitoringChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -464,7 +464,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -475,7 +475,7 @@ public class CheckResultsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                recurringPartition, loadParams);
+                monitoringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 

@@ -997,7 +997,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_expected_numbers_in_use_count|recurring|daily|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|daily_expected_numbers_in_use_count|monitoring|daily|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1023,7 +1023,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_expec
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_expected_numbers_in_use_count:
@@ -1052,7 +1052,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_expected_numbers_in_use_count:
@@ -1511,7 +1511,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_expected_numbers_in_use_count:
@@ -1983,7 +1983,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_expected_numbers_in_use_count|recurring|monthly|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|monthly_expected_numbers_in_use_count|monitoring|monthly|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2009,7 +2009,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_exp
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_expected_numbers_in_use_count:
@@ -2038,7 +2038,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_expected_numbers_in_use_count:
@@ -2497,7 +2497,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_expected_numbers_in_use_count:

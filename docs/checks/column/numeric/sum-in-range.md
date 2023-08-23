@@ -544,7 +544,7 @@ Verifies that the sum of all values in a column is not outside the set range. St
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_in_range|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_sum_in_range|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -570,7 +570,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_i
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_sum_in_range:
@@ -598,7 +598,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_sum_in_range:
@@ -832,7 +832,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_sum_in_range:
@@ -1079,7 +1079,7 @@ Verifies that the sum of all values in a column does not exceed the set range. S
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sum_in_range|recurring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_sum_in_range|monitoring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1105,7 +1105,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sum
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_sum_in_range:
@@ -1133,7 +1133,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_sum_in_range:
@@ -1367,7 +1367,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_sum_in_range:

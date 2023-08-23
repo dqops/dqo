@@ -817,7 +817,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_foreign_key_not_match_count|recurring|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_foreign_key_not_match_count|monitoring|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -843,7 +843,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_forei
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           integrity:
             daily_foreign_key_not_match_count:
@@ -871,7 +871,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           integrity:
             daily_foreign_key_not_match_count:
@@ -1242,7 +1242,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               integrity:
                 daily_foreign_key_not_match_count:
@@ -1625,7 +1625,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_not_match_count|recurring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_foreign_key_not_match_count|monitoring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1651,7 +1651,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_for
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           integrity:
             monthly_foreign_key_not_match_count:
@@ -1679,7 +1679,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           integrity:
             monthly_foreign_key_not_match_count:
@@ -2050,7 +2050,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               integrity:
                 monthly_foreign_key_not_match_count:

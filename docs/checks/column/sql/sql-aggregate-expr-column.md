@@ -482,7 +482,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sql_aggregate_expr_column|recurring|daily|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_sql_aggregate_expr_column|monitoring|daily|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -508,7 +508,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_a
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           sql:
             daily_sql_aggregate_expr_column:
@@ -538,7 +538,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           sql:
             daily_sql_aggregate_expr_column:
@@ -743,7 +743,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               sql:
                 daily_sql_aggregate_expr_column:
@@ -955,7 +955,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sql_aggregate_expr_column|recurring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_sql_aggregate_expr_column|monitoring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -981,7 +981,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           sql:
             monthly_sql_aggregate_expr_column:
@@ -1011,7 +1011,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           sql:
             monthly_sql_aggregate_expr_column:
@@ -1216,7 +1216,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               sql:
                 monthly_sql_aggregate_expr_column:

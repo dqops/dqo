@@ -156,7 +156,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param connectionName The connection name of the compared table.
      * @param physicalTableName Physical table name (schema and table) of the compared table.
      * @param checkType Check type.
-     * @param timeScale Optional check scale (daily, monthly) for recurring and partitioned checks.
+     * @param timeScale Optional check scale (daily, monthly) for monitoring and partitioned checks.
      * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Returns the summary information about the table comparison.
      */

@@ -112,7 +112,7 @@ public class ErrorSamplesColumnNames {
     public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
 
     /**
-     * The data quality check type (profiling, recurring, partitioned).
+     * The data quality check type (profiling, monitoring, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 

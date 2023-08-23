@@ -346,8 +346,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getColumnRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getColumnMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -396,8 +396,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getTableRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getTableMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -538,8 +538,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getColumnRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getColumnMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -586,8 +586,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getTableRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getTableMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -718,8 +718,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getColumnRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getColumnMonitoringErrors(
           connection,
           schema,
           table,
@@ -766,8 +766,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getTableRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getTableMonitoringErrors(
           connection,
           schema,
           table,

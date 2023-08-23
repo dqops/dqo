@@ -759,7 +759,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent_anomaly_stationary|recurring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|daily_nulls_percent_anomaly_stationary|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -785,7 +785,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_nulls
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent_anomaly_stationary:
@@ -810,7 +810,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent_anomaly_stationary:
@@ -1153,7 +1153,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               nulls:
                 daily_nulls_percent_anomaly_stationary:

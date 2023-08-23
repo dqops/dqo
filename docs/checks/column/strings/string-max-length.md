@@ -677,7 +677,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_max_length|recurring|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|daily_string_max_length|monitoring|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -703,7 +703,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_max_length:
@@ -728,7 +728,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_max_length:
@@ -1030,7 +1030,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_max_length:
@@ -1345,7 +1345,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_max_length|recurring|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|monthly_string_max_length|monitoring|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1371,7 +1371,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_max_length:
@@ -1396,7 +1396,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_max_length:
@@ -1698,7 +1698,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_max_length:

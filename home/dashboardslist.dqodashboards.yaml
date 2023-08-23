@@ -12,7 +12,7 @@ spec:
           height: 1400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+            ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: Current column status by Dimension
@@ -21,7 +21,7 @@ spec:
           height: 1760
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+            ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
     - folder_name: Current status by Category
@@ -32,7 +32,7 @@ spec:
           height: 1400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+            ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: Current column status by Category
@@ -41,7 +41,7 @@ spec:
           height: 1760
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+            ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
 - folder_name: Governance (KPIs)
@@ -79,7 +79,7 @@ spec:
     height: 1700
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: all
       ds0.p_check_category: all
   folders:
@@ -91,7 +91,7 @@ spec:
       height: 1550
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - folder_name: KPIs per Day
@@ -102,7 +102,7 @@ spec:
         height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
           ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
           ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
       - dashboard_name: Daily KPI per Column
@@ -111,7 +111,7 @@ spec:
         height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
           ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
           ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
       - dashboard_name: Daily KPI per Check
@@ -120,7 +120,7 @@ spec:
         height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
           ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
           ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
       - dashboard_name: Daily KPI per Data Grouping
@@ -129,7 +129,7 @@ spec:
         height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
           ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
           ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Operational
@@ -142,7 +142,7 @@ spec:
       height: 1600
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Issues per Check and day
@@ -151,7 +151,7 @@ spec:
       height: 1600
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Issues per data grouping and day
@@ -160,7 +160,7 @@ spec:
       height: 1600
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Issues per Column and day
@@ -169,7 +169,7 @@ spec:
       height: 1600
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   dashboards:
@@ -179,7 +179,7 @@ spec:
       height: 2150
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Affected Tables
@@ -188,7 +188,7 @@ spec:
       height: 2500
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
-        ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+        ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Data Quality Issue Details
@@ -199,7 +199,7 @@ spec:
     height: 2100
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Issues per Check
@@ -208,7 +208,7 @@ spec:
     height: 1800
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Issues per Table
@@ -217,7 +217,7 @@ spec:
     height: 1800
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Data Sources State
@@ -277,7 +277,7 @@ spec:
     #  height: 1300
     #  parameters:
     #    ds0.token: '%DQO_CLOUD_TOKEN%'
-    #    ds0.p_check_type: recurring
+    #    ds0.p_check_type: monitoring
     #    ds0.p_quality_dimension: all
     #    ds0.p_check_category: all
 - folder_name: Data Quality Platform
@@ -303,7 +303,7 @@ spec:
     height: 1600
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Daily Tests per Column
@@ -312,7 +312,7 @@ spec:
     height: 1600
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Daily Tests per Check
@@ -321,7 +321,7 @@ spec:
     height: 1600
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Daily Tests per Data Grouping
@@ -330,6 +330,6 @@ spec:
     height: 1600
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+      ds0.p_check_type: "*$Check Type:all,profiling,monitoring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"

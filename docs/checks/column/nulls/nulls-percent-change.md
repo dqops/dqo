@@ -759,7 +759,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent_change|recurring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_nulls_percent_change|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -785,7 +785,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_nulls
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent_change:
@@ -810,7 +810,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent_change:
@@ -1153,7 +1153,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               nulls:
                 daily_nulls_percent_change:

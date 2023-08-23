@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
@@ -115,7 +115,7 @@ public class CheckModel implements Cloneable {
      * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
      */
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    private RecurringScheduleSpec scheduleOverride;
+    private MonitoringScheduleSpec scheduleOverride;
 
     /**
      * Model of configured schedule enabled on the check level.

@@ -165,7 +165,7 @@ public class SchemasController {
     }
 
     /**
-     * Retrieves a UI friendly data quality recurring check configuration list on a requested schema.
+     * Retrieves a UI friendly data quality monitoring check configuration list on a requested schema.
      * @param connectionName    Connection name.
      * @param schemaName        Schema name.
      * @param timeScale         Check time-scale.
@@ -177,17 +177,17 @@ public class SchemasController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
-     * @return UI friendly data quality recurring check configuration list on a requested schema.
+     * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaRecurringChecksModel", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = CheckConfigurationModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getSchemaMonitoringChecksModel", notes = "Return a UI friendly model of configurations for data quality monitoring checks on a schema", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = CheckConfigurationModel[].class),
+            @ApiResponse(code = 200, message = "Configuration of data quality monitoring checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaRecurringChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaMonitoringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -216,7 +216,7 @@ public class SchemasController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.recurring, timeScale),
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
                 tableNamePattern.orElse(null),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
@@ -335,7 +335,7 @@ public class SchemasController {
     }
 
     /**
-     * Retrieves the list of recurring checks templates on the given schema.
+     * Retrieves the list of monitoring checks templates on the given schema.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param timeScale      Check time scale.
@@ -344,15 +344,15 @@ public class SchemasController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getSchemaRecurringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/monitoring/{timeScale}", produces = "application/json")
+    @ApiOperation(value = "getSchemaMonitoringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaRecurringChecksTemplates(
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaMonitoringChecksTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
@@ -368,7 +368,7 @@ public class SchemasController {
         }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.recurring,
+                connectionName, schemaName, CheckType.monitoring,
                 timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200

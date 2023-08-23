@@ -871,7 +871,7 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_contains_usa_phone_percent|recurring|daily|[contains_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_contains_usa_phone_percent|monitoring|daily|[contains_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -897,7 +897,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_conta
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           pii:
             daily_contains_usa_phone_percent:
@@ -922,7 +922,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           pii:
             daily_contains_usa_phone_percent:
@@ -1321,7 +1321,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               pii:
                 daily_contains_usa_phone_percent:
@@ -1733,7 +1733,7 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_contains_usa_phone_percent|recurring|monthly|[contains_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_contains_usa_phone_percent|monitoring|monthly|[contains_usa_phone_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1759,7 +1759,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_con
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           pii:
             monthly_contains_usa_phone_percent:
@@ -1784,7 +1784,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           pii:
             monthly_contains_usa_phone_percent:
@@ -2183,7 +2183,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               pii:
                 monthly_contains_usa_phone_percent:
