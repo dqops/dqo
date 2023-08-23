@@ -50,6 +50,10 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
     }
   }, [activeTab]);
 
+  console.log(pageTabs);
+
+  console.log(activeTab);
+
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Header />
@@ -74,7 +78,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
               className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
               style={{ maxHeight: 'calc(100vh - 80px)' }}
             >
-              {!!activeTab && <div>{children}</div>}
+              {!!activeTab && pageTabs.length !== 0 && <div>{children}</div>}
             </div>
           </div>
         </div>

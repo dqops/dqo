@@ -137,7 +137,7 @@ export const SensorDetail = () => {
     <DefinitionLayout>
       <div className="relative">
         <div className="flex space-x-4 items-center absolute right-2 top-2">
-          {custom !== false && (
+          {custom !== false && isCreating === false && (
             <Button
               color="primary"
               variant="outlined"
@@ -161,7 +161,7 @@ export const SensorDetail = () => {
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">
-                Check: {fullCheckName}
+                Check: {fullCheckName || checkName}
               </div>
             </div>
           </div>
