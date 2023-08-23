@@ -291,14 +291,15 @@ const TableHeader = ({
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
           </>
         )}
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          Passing check
+        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative ">
+          Passing rule
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td
           className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           colSpan={2}
         >
-          Failing check
+          Failing rule
         </td>
       </tr>
       <tr>
@@ -328,9 +329,7 @@ const TableHeader = ({
             )}
           </div>
         </td>
-        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          Sensor parameters
-        </td>
+        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
         <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100">
           Warning threshold
         </td>
