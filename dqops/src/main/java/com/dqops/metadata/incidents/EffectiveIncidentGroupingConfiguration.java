@@ -143,7 +143,7 @@ public class EffectiveIncidentGroupingConfiguration {
      * @param dataStreamName Data stream name.
      * @param dataQualityDimension Data quality dimension name.
      * @param checkCategory Data quality check category (group of checks).
-     * @param checkType Data quality check type (profiling, recurring, partitioned).
+     * @param checkType Data quality check type (profiling, monitoring, partitioned).
      * @param checkName Data quality check name.
      * @return Hash of the data quality incident.
      */

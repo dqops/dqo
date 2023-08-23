@@ -22,5 +22,6 @@ export * from './job.types';
 export * from './dashboard.types';
 export * from './source.types';
 export * from './sensor.types';
+export * from './dataQualityChecks.types'
 export * from './rule.types';
 export * from './incidents.types';

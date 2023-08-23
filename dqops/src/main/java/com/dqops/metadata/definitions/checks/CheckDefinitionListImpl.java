@@ -83,7 +83,7 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
      * Finds a check specification for the given check. Returns a check specification if the check was found or null, when the check is unknown.
      *
      * @param checkTarget    Check target (table or column).
-     * @param checkType      Check type (profiling, recurring, partitioned).
+     * @param checkType      Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
      * @param category       Check category name.
      * @param checkName      Check name.
@@ -106,9 +106,9 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
     }
 
     /**
-     * Finds all checks defined for the given check target (table or column), check type (profiling, recurring, partitioned) and optionally a time scale.
+     * Finds all custom checks defined for the given check target (table or column), check type (profiling, monitoring, partitioned) and optionally a time scale.
      * @param checkTarget Check target (table or column).
-     * @param checkType      Check type (profiling, recurring, partitioned).
+     * @param checkType      Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
      * @param category Check category.
      * @return Collection of checks defined at that level.

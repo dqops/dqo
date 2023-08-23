@@ -58,7 +58,7 @@ def sync_detailed(
 ) -> Response[MonoObject]:
     """startCronScheduler
 
-     Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.
+     Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -86,7 +86,7 @@ def sync(
 ) -> Optional[MonoObject]:
     """startCronScheduler
 
-     Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.
+     Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -107,7 +107,7 @@ async def asyncio_detailed(
 ) -> Response[MonoObject]:
     """startCronScheduler
 
-     Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.
+     Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,7 +133,7 @@ async def asyncio(
 ) -> Optional[MonoObject]:
     """startCronScheduler
 
-     Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.
+     Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

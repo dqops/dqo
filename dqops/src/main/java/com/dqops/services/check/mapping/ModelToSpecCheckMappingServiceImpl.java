@@ -261,8 +261,8 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
                 case double_type:
                     fieldInfo.setFieldValue(fieldModelForUpdate.getDoubleValue(), targetParametersSpec);
                     break;
-                case instant_type:
-                    fieldInfo.setFieldValue(fieldModelForUpdate.getDateTimeValue(), targetParametersSpec);
+                case datetime_type:
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getDatetimeValue(), targetParametersSpec);
                     break;
                 case column_name_type:
                     fieldInfo.setFieldValue(fieldModelForUpdate.getColumnNameValue(), targetParametersSpec);

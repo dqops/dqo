@@ -44,25 +44,25 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<DefaultObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("profiling", o -> o.profiling);
-            put("recurring_daily", o -> o.recurringDaily);
-            put("recurring_monthly", o -> o.recurringMonthly);
+            put("monitoring_daily", o -> o.monitoringDaily);
+            put("monitoring_monthly", o -> o.monitoringMonthly);
         }
     };
 
-    @JsonPropertyDescription("Default configuration of advanced profiling checks that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of profiling checks that are enabled on tables and columns that are imported into DQO.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DefaultProfilingObservabilityCheckSettingsSpec profiling = new DefaultProfilingObservabilityCheckSettingsSpec();
 
-    @JsonPropertyDescription("Default configuration of daily recurring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultDailyRecurringObservabilityCheckSettingsSpec recurringDaily = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+    private DefaultDailyMonitoringObservabilityCheckSettingsSpec monitoringDaily = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
 
-    @JsonPropertyDescription("Default configuration of daily recurring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultMonthlyRecurringObservabilityCheckSettingsSpec recurringMonthly = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+    private DefaultMonthlyMonitoringObservabilityCheckSettingsSpec monitoringMonthly = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
 
     /**
      * Returns the configuration of default profiling checks.
@@ -83,39 +83,39 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the configuration of default recurring daily checks.
-     * @return Default configuration of recurring daily checks.
+     * Returns the configuration of default monitoring daily checks.
+     * @return Default configuration of monitoring daily checks.
      */
-    public DefaultDailyRecurringObservabilityCheckSettingsSpec getRecurringDaily() {
-        return recurringDaily;
+    public DefaultDailyMonitoringObservabilityCheckSettingsSpec getMonitoringDaily() {
+        return monitoringDaily;
     }
 
     /**
-     * Sets the configuration of default recurring daily checks.
-     * @param recurringDaily Default recurring daily checks.
+     * Sets the configuration of default monitoring daily checks.
+     * @param monitoringDaily Default monitoring daily checks.
      */
-    public void setRecurringDaily(DefaultDailyRecurringObservabilityCheckSettingsSpec recurringDaily) {
-        setDirtyIf(!Objects.equals(this.recurringDaily, recurringDaily));
-        this.recurringDaily = recurringDaily;
-        propagateHierarchyIdToField(recurringDaily, "recurring_daily");
+    public void setMonitoringDaily(DefaultDailyMonitoringObservabilityCheckSettingsSpec monitoringDaily) {
+        setDirtyIf(!Objects.equals(this.monitoringDaily, monitoringDaily));
+        this.monitoringDaily = monitoringDaily;
+        propagateHierarchyIdToField(monitoringDaily, "monitoring_daily");
     }
 
     /**
-     * Returns the configuration of default recurring monthly checks.
-     * @return Default configuration of recurring monthly checks.
+     * Returns the configuration of default monitoring monthly checks.
+     * @return Default configuration of monitoring monthly checks.
      */
-    public DefaultMonthlyRecurringObservabilityCheckSettingsSpec getRecurringMonthly() {
-        return recurringMonthly;
+    public DefaultMonthlyMonitoringObservabilityCheckSettingsSpec getMonitoringMonthly() {
+        return monitoringMonthly;
     }
 
     /**
-     * Sets the configuration of default recurring monthly checks.
-     * @param recurringMonthly Default recurring monthly checks.
+     * Sets the configuration of default monitoring monthly checks.
+     * @param monitoringMonthly Default monitoring monthly checks.
      */
-    public void setRecurringMonthly(DefaultMonthlyRecurringObservabilityCheckSettingsSpec recurringMonthly) {
-        setDirtyIf(!Objects.equals(this.recurringMonthly, recurringMonthly));
-        this.recurringMonthly = recurringMonthly;
-        propagateHierarchyIdToField(recurringMonthly, "recurring_monthly");
+    public void setMonitoringMonthly(DefaultMonthlyMonitoringObservabilityCheckSettingsSpec monitoringMonthly) {
+        setDirtyIf(!Objects.equals(this.monitoringMonthly, monitoringMonthly));
+        this.monitoringMonthly = monitoringMonthly;
+        propagateHierarchyIdToField(monitoringMonthly, "monitoring_monthly");
     }
 
     /**
@@ -149,11 +149,11 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
         if (this.profiling != null) {
             this.profiling.applyOnTable(targetTable, dialectSettings);
         }
-        if (this.recurringDaily != null) {
-            this.recurringDaily.applyOnTable(targetTable, dialectSettings);
+        if (this.monitoringDaily != null) {
+            this.monitoringDaily.applyOnTable(targetTable, dialectSettings);
         }
-        if (this.recurringMonthly != null) {
-            this.recurringMonthly.applyOnTable(targetTable, dialectSettings);
+        if (this.monitoringMonthly != null) {
+            this.monitoringMonthly.applyOnTable(targetTable, dialectSettings);
         }
     }
 
@@ -166,11 +166,11 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
         if (this.profiling != null && this.profiling.getColumn() != null) {
             this.profiling.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
-        if (this.recurringDaily != null && this.recurringDaily.getColumn() != null) {
-            this.recurringDaily.getColumn().applyOnColumn(targetColumn, dialectSettings);
+        if (this.monitoringDaily != null && this.monitoringDaily.getColumn() != null) {
+            this.monitoringDaily.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
-        if (this.recurringMonthly != null && this.recurringMonthly.getColumn() != null) {
-            this.recurringMonthly.getColumn().applyOnColumn(targetColumn, dialectSettings);
+        if (this.monitoringMonthly != null && this.monitoringMonthly.getColumn() != null) {
+            this.monitoringMonthly.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
     }
 }

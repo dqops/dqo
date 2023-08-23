@@ -16,7 +16,7 @@
 
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
-import { CheckRunRecurringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { DataGroupingConfigurationSpec } from '../../api';
 
 export interface INestTab {
@@ -35,7 +35,7 @@ export interface ISourceState {
     tabs: INestTab[];
     activeTab?: string;
   };
-  [CheckTypes.RECURRING]: {
+  [CheckTypes.MONITORING]: {
     tabs: INestTab[];
     activeTab?: string;
   };
@@ -52,7 +52,7 @@ const initialState: ISourceState = {
   profiling: {
     tabs: []
   },
-  recurring: {
+  monitoring: {
     tabs: []
   },
   partitioned: {
@@ -68,7 +68,7 @@ export type BasicAction = {
 
 export type Action = BasicAction & {
   data?: any;
-  schedulingGroup?: CheckRunRecurringScheduleGroup;
+  schedulingGroup?: CheckRunMonitoringScheduleGroup;
   error?: any;
 };
 
@@ -608,34 +608,34 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        dailyRecurring: action.data,
-        isUpdatedDailyRecurring: false,
+        dailyMonitoring: action.data,
+        isUpdatedDailyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        monthlyRecurring: action.data,
-        isUpdatedMonthlyRecurring: false,
+        monthlyMonitoring: action.data,
+        isUpdatedMonthlyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -672,30 +672,30 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -744,18 +744,18 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        recurringUIFilter: action.data,
-        isUpdatedRecurringUIFilter: false,
+        monitoringUIFilter: action.data,
+        isUpdatedMonitoringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -792,15 +792,15 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedChecksUi: true,
         checksUI: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedDailyRecurring: true,
-        dailyRecurring: action.data
+        isUpdatedDailyMonitoring: true,
+        dailyMonitoring: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedMonthlyRecurring: true,
-        monthlyRecurring: action.data
+        isUpdatedMonthlyMonitoring: true,
+        monthlyMonitoring: action.data
       });
     case SOURCE_ACTION.SET_TABLE_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
@@ -822,10 +822,10 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedChecksUIFilter: true,
         checksUIFilter: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.SET_UPDATED_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
-        isUpdatedRecurringUIFilter: true,
-        recurringUIFilter: action.data
+        isUpdatedMonitoringUIFilter: true,
+        monitoringUIFilter: action.data
       });
     case SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
@@ -972,34 +972,34 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        dailyRecurring: action.data,
-        isUpdatedDailyRecurring: false,
+        dailyMonitoring: action.data,
+        isUpdatedDailyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        monthlyRecurring: action.data,
-        isUpdatedMonthlyRecurring: false,
+        monthlyMonitoring: action.data,
+        isUpdatedMonthlyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -1036,30 +1036,30 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -1097,15 +1097,15 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedColumnBasic: true,
         columnBasic: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedDailyRecurring: true,
-        dailyRecurring: action.data
+        isUpdatedDailyMonitoring: true,
+        dailyMonitoring: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedMonthlyRecurring: true,
-        monthlyRecurring: action.data
+        isUpdatedMonthlyMonitoring: true,
+        monthlyMonitoring: action.data
       });
     case SOURCE_ACTION.SET_COLUMN_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
@@ -1133,18 +1133,18 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        recurringUIFilter: action.data,
-        isUpdatedRecurringUIFilter: false,
+        monitoringUIFilter: action.data,
+        isUpdatedMonitoringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error

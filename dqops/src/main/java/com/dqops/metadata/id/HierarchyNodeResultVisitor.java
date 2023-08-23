@@ -19,21 +19,21 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.dashboards.*;
@@ -56,8 +56,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
@@ -391,13 +391,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(FileIndexWrapperImpl fileIndexWrapper, P parameter);
 
     /**
-     * Accepts a recurring schedule specification, it is the cron expression how to schedule the job.
-     *
-     * @param recurringScheduleSpec Recurring schedule.
+     * Accepts a monitoring schedule specification, it is the cron expression how to schedule the job.
+     * @param monitoringScheduleSpec Monitoring schedule.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(RecurringScheduleSpec recurringScheduleSpec, P parameter);
+    R accept(MonitoringScheduleSpec monitoringScheduleSpec, P parameter);
 
     /**
      * Accepts a parameter definition specification, it describes a single parameter for custom sensors and rules.
@@ -445,13 +444,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractCheckCategorySpec abstractCheckCategorySpec, P parameter);
 
     /**
-     * Accepts a container of table level recurring checks (daily, monthly, etc.)
-     *
-     * @param tableRecurringChecksSpec Table level recurring checks container.
+     * Accepts a container of table level monitoring checks (daily, monthly, etc.)
+     * @param tableMonitoringChecksSpec Table level monitoring checks container.
      * @param parameter                Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(TableRecurringChecksSpec tableRecurringChecksSpec, P parameter);
+    R accept(TableMonitoringChecksSpec tableMonitoringChecksSpec, P parameter);
 
     /**
      * Accepts a container of table level partitioned checks (daily, monthly, etc.)
@@ -463,13 +461,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, P parameter);
 
     /**
-     * Accepts a container of column level recurring checks (daily, monthly, etc.)
-     *
-     * @param columnRecurringChecksRootSpec Column level recurring checks container.
+     * Accepts a container of column level monitoring checks (daily, monthly, etc.)
+     * @param columnMonitoringChecksRootSpec Column level monitoring checks container.
      * @param parameter                     Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, P parameter);
+    R accept(ColumnMonitoringChecksRootSpec columnMonitoringChecksRootSpec, P parameter);
 
     /**
      * Accepts a container of column level partitioned checks (daily, monthly, etc.)
@@ -572,12 +569,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of schedules, divided by the time range.
-     *
-     * @param recurringSchedulesSpec Container of schedule categories.
+     * @param monitoringSchedulesSpec Container of schedule categories.
      * @param parameter              Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(RecurringSchedulesSpec recurringSchedulesSpec, P parameter);
+    R accept(MonitoringSchedulesSpec monitoringSchedulesSpec, P parameter);
 
     /**
      * Accepts a configuration of incremental partition checks.
@@ -706,22 +702,20 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultDailyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param defaultDailyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
      * @param parameter                                           Visitor's parameter.
      * @return Accept's result.
      */
 
-    R accept(DefaultDailyRecurringObservabilityCheckSettingsSpec defaultDailyRecurringObservabilityCheckSettingsSpec, P parameter);
+    R accept(DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultDailyMonitoringObservabilityCheckSettingsSpec, P parameter);
 
     /**
      * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultMonthlyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param defaultMonthlyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
      * @param parameter                                             Visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultMonthlyRecurringObservabilityCheckSettingsSpec, P parameter);
+    R accept(DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonthlyMonitoringObservabilityCheckSettingsSpec, P parameter);
 
     /**
      * Accepts a configuration of a pair of column names that are used for joining and grouping.

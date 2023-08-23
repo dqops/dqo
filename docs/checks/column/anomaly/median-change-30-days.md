@@ -711,7 +711,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_change_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
+|daily_median_change_30_days|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -737,7 +737,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_median_change_30_days:
@@ -767,7 +767,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_median_change_30_days:
@@ -1084,7 +1084,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               anomaly:
                 daily_median_change_30_days:

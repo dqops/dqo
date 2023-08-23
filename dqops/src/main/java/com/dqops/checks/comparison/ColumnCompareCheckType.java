@@ -18,7 +18,7 @@ package com.dqops.checks.comparison;
 
 /**
  * Enumeration of compare check on a column level. Identifies the check type (such as the min_match), to enable retrieving the same checks
- * with slightly different names from profiling, daily recurring, and other check types.
+ * with slightly different names from profiling, daily monitoring, and other check types.
  */
 public enum ColumnCompareCheckType {
     min_match,

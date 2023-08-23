@@ -6,11 +6,11 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { SensorBasicFolderModel } from "../../api";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../redux/actions/sensor.actions";
-import { ROUTES } from "../../shared/routes";
-import AddFolderDialog from "./AddFolderDialog";
+import { SensorBasicFolderModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { ROUTES } from '../../shared/routes';
+import AddFolderDialog from './AddFolderDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
@@ -28,15 +28,19 @@ const RuleContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   };
 
   const openAddNewRule = () => {
-    dispatch(addFirstLevelTab({
-      url: ROUTES.RULE_DETAIL([...path || [], "new_rule"].join("-")),
-      value: ROUTES.RULE_DETAIL_VALUE([...path || [], "new_rule"].join("-")),
-      state: {
-        type: "create",
-        path
-      },
-      label: "New rule"
-    }));
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.RULE_DETAIL([...(path || []), 'new_rule'].join('-')),
+        value: ROUTES.RULE_DETAIL_VALUE(
+          [...(path || []), 'new_rule'].join('-')
+        ),
+        state: {
+          type: 'create',
+          path
+        },
+        label: 'New rule'
+      })
+    );
   };
 
   const openAddNewFolder = () => {

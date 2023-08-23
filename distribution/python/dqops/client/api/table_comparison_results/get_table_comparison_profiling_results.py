@@ -72,7 +72,7 @@ def sync_detailed(
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonProfilingResults
 
-     Retrieves the results of the most table comparison performed using the advanced profiling comparison
+     Retrieves the results of the most table comparison performed using the profiling checks comparison
     checks.
 
     Args:
@@ -115,7 +115,7 @@ def sync(
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonProfilingResults
 
-     Retrieves the results of the most table comparison performed using the advanced profiling comparison
+     Retrieves the results of the most table comparison performed using the profiling checks comparison
     checks.
 
     Args:
@@ -151,7 +151,7 @@ async def asyncio_detailed(
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonProfilingResults
 
-     Retrieves the results of the most table comparison performed using the advanced profiling comparison
+     Retrieves the results of the most table comparison performed using the profiling checks comparison
     checks.
 
     Args:
@@ -192,7 +192,7 @@ async def asyncio(
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonProfilingResults
 
-     Retrieves the results of the most table comparison performed using the advanced profiling comparison
+     Retrieves the results of the most table comparison performed using the profiling checks comparison
     checks.
 
     Args:

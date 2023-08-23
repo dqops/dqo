@@ -13,7 +13,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
@@ -303,10 +303,10 @@ const TableColumns = ({
   );
 
   const maximumValueData = statistics?.column_statistics?.map((x) =>
-  x.statistics
-    ?.filter((item) => item.collector === 'max_value')
-    .map((item) => item.result)
-);
+    x.statistics
+      ?.filter((item) => item.collector === 'max_value')
+      .map((item) => item.result)
+  );
   const lengthData = statistics?.column_statistics?.map(
     (x) => x.type_snapshot?.length
   );
@@ -345,7 +345,7 @@ const TableColumns = ({
     }
   }
 
-  const sortAlphabetictly = (typ : keyof MyData) => {
+  const sortAlphabetictly = (typ: keyof MyData) => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
       const nullsCountA = String(a[typ]);
@@ -478,13 +478,13 @@ const TableColumns = ({
   const handleSorting = (param: string) => {
     switch (param) {
       case 'Column name':
-        sortAlphabetictly("nameOfCol");
+        sortAlphabetictly('nameOfCol');
         break;
       case 'Detected data type':
         sortData<MyData>('detectedDatatypeVar');
         break;
       case 'Imported data type':
-        sortAlphabetictly("importedDatatype");
+        sortAlphabetictly('importedDatatype');
         break;
       case 'Length':
         sortData<MyData>('length');
@@ -500,7 +500,7 @@ const TableColumns = ({
         break;
       case 'Max value':
         sortDataByMinimalValue('maximumValue');
-        break  
+        break;
     }
   };
 
@@ -750,7 +750,9 @@ const TableColumns = ({
                   className="flex"
                   style={{
                     justifyContent:
-                      x === 'Min value' || x === 'Null count' || x==="Max value"
+                      x === 'Min value' ||
+                      x === 'Null count' ||
+                      x === 'Max value'
                         ? 'flex-end'
                         : 'flex-start'
                   }}

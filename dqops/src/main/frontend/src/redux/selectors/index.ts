@@ -33,7 +33,7 @@ export const getFirstLevelActiveTab =
   };
 
 export const getFirstLevelSensorState = (state: IRootState) => {
-  const { tabs, activeTab = '' } = state.sensor;
+  const { tabs, activeTab = '' } = state.definition;
 
   return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };

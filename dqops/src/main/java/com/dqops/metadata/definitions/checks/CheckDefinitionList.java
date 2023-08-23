@@ -70,7 +70,7 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
     /**
      * Finds a check specification for the given check. Returns a check specification if the check was found or null, when the check is unknown.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
      * @param category Check category name.
      * @param checkName Check name.
@@ -98,8 +98,8 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
     /**
      * Creates a folder path for checks at a given level.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for monitoring and partitioned checks.
      * @return Full check name.
      */
     static String makeCheckFolderPrefix(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale) {
@@ -120,8 +120,8 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
     /**
      * Creates a folder path for checks at a given level, including also the category name.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for monitoring and partitioned checks.
      * @param category Check category name.
      * @return Check name prefix for all checks in the given category.
      */

@@ -523,7 +523,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_change|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_row_count_change|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -549,7 +549,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       volume:
         daily_row_count_change:
@@ -572,7 +572,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       volume:
         daily_row_count_change:
@@ -797,7 +797,7 @@ spec:
           level_2:
             source: column_value
             column: state
-      recurring_checks:
+      monitoring_checks:
         daily:
           volume:
             daily_row_count_change:
@@ -1037,7 +1037,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count_change|recurring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_row_count_change|monitoring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1063,7 +1063,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       volume:
         monthly_row_count_change:
@@ -1086,7 +1086,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       volume:
         monthly_row_count_change:
@@ -1311,7 +1311,7 @@ spec:
           level_2:
             source: column_value
             column: state
-      recurring_checks:
+      monitoring_checks:
         monthly:
           volume:
             monthly_row_count_change:

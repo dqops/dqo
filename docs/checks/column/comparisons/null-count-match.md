@@ -376,7 +376,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_null_count_match|recurring|daily|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_null_count_match|monitoring|daily|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -402,7 +402,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_null_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -440,7 +440,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -741,7 +741,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_null_count_match|recurring|monthly|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_null_count_match|monitoring|monthly|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -767,7 +767,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_nul
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -805,7 +805,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:

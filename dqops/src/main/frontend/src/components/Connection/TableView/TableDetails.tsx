@@ -15,6 +15,9 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
+import Select from '../../Select';
+import { TableBasicModelProfilingChecksResultTruncationEnum } from '../../../api';
+import NumberInput from '../../NumberInput';
 
 const TableDetails = () => {
   const {
@@ -104,9 +107,23 @@ const TableDetails = () => {
           <tr>
             <td className="px-4 py-2">Filter</td>
             <td className="px-4 py-2">
-              <Input
+              <textarea
+                className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
                 value={tableBasic?.filter}
                 onChange={(e) => handleChange({ filter: e.target.value })}
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-4 py-2">Priority</td>
+            <td className="px-4 py-2">
+              <NumberInput
+                value={
+                  tableBasic?.priority !== 0 ? tableBasic?.priority : undefined
+                }
+                onChange={(value) => handleChange({ priority: value })}
+                className="min-w-30 w-1/2"
+                placeholder=""
               />
             </td>
           </tr>
@@ -116,6 +133,27 @@ const TableDetails = () => {
               <Input
                 value={tableBasic?.stage}
                 onChange={(e) => handleChange({ stage: e.target.value })}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="px-4 py-2">Advanced profile results storage</td>
+            <td className="px-4 py-2">
+              <Select
+                options={[
+                  { label: '', value: undefined },
+                  ...Object.values(
+                    TableBasicModelProfilingChecksResultTruncationEnum
+                  ).map((x) => ({ label: x, value: x }))
+                ]}
+                value={tableBasic?.advanced_profiling_result_truncation}
+                onChange={(selected) =>
+                  handleChange({
+                    advanced_profiling_result_truncation: selected
+                  })
+                }
+                placeholder=""
+                empty={true}
               />
             </td>
           </tr>

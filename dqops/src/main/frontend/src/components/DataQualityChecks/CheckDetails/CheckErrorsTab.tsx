@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ErrorsDetailedDataModel } from '../../../api';
+import { ErrorsListModel } from '../../../api';
 import Select from '../../Select';
 import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
@@ -7,7 +7,7 @@ import moment from 'moment/moment';
 import ErrorText from './ErrorText';
 
 interface CheckErrorsTabProps {
-  errors: ErrorsDetailedDataModel[];
+  errors: ErrorsListModel[];
   dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
@@ -96,7 +96,7 @@ const CheckErrorsTab = ({
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={(result.singleErrors || []).map((item) => ({
+            data={(result.errorEntries || []).map((item) => ({
               ...item,
               checkName: result.checkName
             }))}

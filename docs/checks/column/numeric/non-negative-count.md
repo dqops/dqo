@@ -677,7 +677,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_non_negative_count|recurring|daily|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_non_negative_count|monitoring|daily|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -703,7 +703,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_non_n
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_non_negative_count:
@@ -728,7 +728,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_non_negative_count:
@@ -1030,7 +1030,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_non_negative_count:
@@ -1345,7 +1345,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_non_negative_count|recurring|monthly|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_non_negative_count|monitoring|monthly|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1371,7 +1371,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_non
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_non_negative_count:
@@ -1396,7 +1396,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_non_negative_count:
@@ -1698,7 +1698,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_non_negative_count:

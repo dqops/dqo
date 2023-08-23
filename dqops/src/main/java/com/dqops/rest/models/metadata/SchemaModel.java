@@ -47,8 +47,8 @@ public class SchemaModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this schema.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this schema.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this schema.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this schema.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
@@ -86,11 +86,11 @@ public class SchemaModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

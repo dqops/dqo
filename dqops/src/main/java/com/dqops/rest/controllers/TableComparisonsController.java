@@ -82,9 +82,9 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
+            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType,
-            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the recurring and partitioned checks (values: daily or monthly).", required = false)
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
@@ -324,7 +324,7 @@ public class TableComparisonsController {
      * @return Model of the table comparison using profiling checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using advanced profiling checks (comparison at any time)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using profiling checks (comparison at any time)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -357,22 +357,22 @@ public class TableComparisonsController {
     }
 
     /**
-     * Returns the table comparison in the daily recurring check type.
+     * Returns the table comparison in the daily monitoring check type.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param tableComparisonConfigurationName Table comparison configuration name.
-     * @return Model of the table comparison using daily recurring checks.
+     * @return Model of the table comparison using daily monitoring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringDaily", notes = "Returns a model of the table comparison using daily recurring checks (comparison once a day)", response = TableComparisonModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringDaily", notes = "Returns a model of the table comparison using daily monitoring checks (comparison once a day)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonRecurringDaily(
+    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -393,27 +393,27 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Returns the table comparison in the monthly recurring check type.
+     * Returns the table comparison in the monthly monitoring check type.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param tableComparisonConfigurationName Table comparison configuration name.
-     * @return Model of the table comparison using monthly recurring checks.
+     * @return Model of the table comparison using monthly monitoring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/recurring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringMonthly", notes = "Returns a model of the table comparison using monthly recurring checks (comparison once a month)", response = TableComparisonModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringMonthly", notes = "Returns a model of the table comparison using monthly monitoring checks (comparison once a month)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonRecurringMonthly(
+    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -434,7 +434,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -577,7 +577,7 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using advanced profiling checks")
+    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using profiling checks")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for profiling checks successfully created"),
@@ -595,57 +595,57 @@ public class TableComparisonsController {
     }
 
     /**
-     * Creates a configuration of daily recurring checks for performing the table comparison.
+     * Creates a configuration of daily monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonRecurringDaily", notes = "Creates a table comparison configuration using daily recurring checks")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableComparisonMonitoringDaily", notes = "Creates a table comparison configuration using daily monitoring checks")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for daily recurring checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for daily monitoring checks successfully created"),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonRecurringDaily(
+    public ResponseEntity<Mono<?>> createTableComparisonMonitoringDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.recurring, CheckTimeScale.daily);
+                CheckType.monitoring, CheckTimeScale.daily);
     }
 
     /**
-     * Creates a configuration of monthly recurring checks for performing the table comparison.
+     * Creates a configuration of monthly monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonRecurringMonthly", notes = "Creates a table comparison configuration using monthly recurring checks")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableComparisonMonitoringMonthly", notes = "Creates a table comparison configuration using monthly monitoring checks")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for monthly recurring checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for monthly monitoring checks successfully created"),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonRecurringMonthly(
+    public ResponseEntity<Mono<?>> createTableComparisonMonitoringMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.recurring, CheckTimeScale.monthly);
+                CheckType.monitoring, CheckTimeScale.monthly);
     }
 
     /**
@@ -781,7 +781,7 @@ public class TableComparisonsController {
     }
 
     /**
-     * Update the configuration of daily recurring checks for performing the table comparison.
+     * Update the configuration of daily monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -789,16 +789,16 @@ public class TableComparisonsController {
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonRecurringDaily", notes = "Updates a table comparison checks recurring daily")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonMonitoringDaily", notes = "Updates a table comparison checks monitoring daily")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison daily recurring checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated"),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonRecurringDaily(
+    public ResponseEntity<Mono<?>> updateTableComparisonMonitoringDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -806,11 +806,11 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.recurring, CheckTimeScale.daily);
+                tableComparisonModel, CheckType.monitoring, CheckTimeScale.daily);
     }
 
     /**
-     * Update the configuration of monthly recurring checks for performing the table comparison.
+     * Update the configuration of monthly monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -818,16 +818,16 @@ public class TableComparisonsController {
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonRecurringMonthly", notes = "Updates a table comparison checks recurring monthly")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonMonitoringMonthly", notes = "Updates a table comparison checks monitoring monthly")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison daily recurring checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated"),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonRecurringMonthly(
+    public ResponseEntity<Mono<?>> updateTableComparisonMonitoringMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -835,7 +835,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.recurring, CheckTimeScale.monthly);
+                tableComparisonModel, CheckType.monitoring, CheckTimeScale.monthly);
     }
 
     /**

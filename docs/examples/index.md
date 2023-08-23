@@ -77,7 +77,7 @@ To run the examples, follow the steps below.
 
     Go to the **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
 
-    Select the **Advanced Profiling** tab.
+    Select the **Profiling Checks** tab.
     ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
 
     Run the enabled check using the **Run check** button.

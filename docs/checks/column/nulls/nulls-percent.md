@@ -759,7 +759,7 @@ Verifies that the percentage of nulls in a column does not exceed the maximum ac
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent|recurring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_nulls_percent|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -785,7 +785,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_nulls
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent:
@@ -810,7 +810,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           nulls:
             daily_nulls_percent:
@@ -1153,7 +1153,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               nulls:
                 daily_nulls_percent:
@@ -1509,7 +1509,7 @@ Verifies that the percentage of null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_nulls_percent|recurring|monthly|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_nulls_percent|monitoring|monthly|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1535,7 +1535,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_nul
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           nulls:
             monthly_nulls_percent:
@@ -1560,7 +1560,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           nulls:
             monthly_nulls_percent:
@@ -1903,7 +1903,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               nulls:
                 monthly_nulls_percent:

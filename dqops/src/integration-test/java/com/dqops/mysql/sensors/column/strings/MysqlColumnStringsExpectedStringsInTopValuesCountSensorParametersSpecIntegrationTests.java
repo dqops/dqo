@@ -127,7 +127,7 @@ public class MysqlColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -135,7 +135,7 @@ public class MysqlColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -147,14 +147,14 @@ public class MysqlColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(5L);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

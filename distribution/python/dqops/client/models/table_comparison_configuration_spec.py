@@ -36,10 +36,10 @@ class TableComparisonConfigurationSpec:
         reference_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
             that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression
             that will be added to the WHERE clause when querying the reference table.
-        check_type (Union[Unset, TableComparisonConfigurationSpecCheckType]): The type of checks (profiling, recurring,
+        check_type (Union[Unset, TableComparisonConfigurationSpecCheckType]): The type of checks (profiling, monitoring,
             partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
         time_scale (Union[Unset, TableComparisonConfigurationSpecTimeScale]): The time scale that this check comparison
-            configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or
+            configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or
             an empty value for profiling checks.
         grouping_columns (Union[Unset, List['TableComparisonGroupingColumnsPairSpec']]): List of column pairs from both
             the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared

@@ -122,10 +122,10 @@ public class ConnectionBasicModel {
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
     /**
-     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run recurring checks within this connection.
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this connection.
      */
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this connection.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this connection.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this connection.
@@ -175,10 +175,10 @@ public class ConnectionBasicModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

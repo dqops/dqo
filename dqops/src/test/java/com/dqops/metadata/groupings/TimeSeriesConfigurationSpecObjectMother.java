@@ -62,11 +62,11 @@ public class TimeSeriesConfigurationSpecObjectMother {
     }
 
     /**
-     * Creates a current time time series for a recurring (daily or monthly).
+     * Creates a current time time series for a monitoring (daily or monthly).
      * @param checkTimeScale Check time scale.
      * @return Time series.
      */
-    public static TimeSeriesConfigurationSpec createTimeSeriesForRecurring(CheckTimeScale checkTimeScale) {
+    public static TimeSeriesConfigurationSpec createTimeSeriesForMonitoring(CheckTimeScale checkTimeScale) {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.current_time);
         switch (checkTimeScale) {

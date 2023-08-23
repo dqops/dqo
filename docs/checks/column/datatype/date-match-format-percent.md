@@ -971,11 +971,11 @@ ___
 ## **daily date match format percent**  
   
 **Check description**  
-Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily recurring.  
+Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_date_match_format_percent|recurring|daily|[date_match_format_percent](../../../../reference/sensors/Column/datatype-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_date_match_format_percent|monitoring|daily|[date_match_format_percent](../../../../reference/sensors/Column/datatype-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1001,7 +1001,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_date_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           datatype:
             daily_date_match_format_percent:
@@ -1028,7 +1028,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           datatype:
             daily_date_match_format_percent:
@@ -1478,7 +1478,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               datatype:
                 daily_date_match_format_percent:
@@ -1937,11 +1937,11 @@ ___
 ## **monthly date match format percent**  
   
 **Check description**  
-Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly recurring.  
+Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_date_match_format_percent|recurring|monthly|[date_match_format_percent](../../../../reference/sensors/Column/datatype-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_date_match_format_percent|monitoring|monthly|[date_match_format_percent](../../../../reference/sensors/Column/datatype-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1967,7 +1967,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dat
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datatype:
             monthly_date_match_format_percent:
@@ -1994,7 +1994,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datatype:
             monthly_date_match_format_percent:
@@ -2444,7 +2444,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               datatype:
                 monthly_date_match_format_percent:

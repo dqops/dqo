@@ -40,9 +40,9 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -64,8 +64,8 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -121,7 +121,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     /**
      * Creates a model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, monitoring or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
@@ -299,7 +299,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     /**
      * Creates a simplistic model of every data quality check on table level or column level, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, monitoring or partitioned check (for a specific timescale).
      * @param executionContext Check execution context with access to the check information.
      * @param providerType Provider type.
      * @return Simplistic model of data quality checks' container.
@@ -356,13 +356,13 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param executionContext        Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType            Provider type from the parent connection.
      * @param checkTarget             Check target.
-     * @param checkType               Check type (profiling, recurring, ...).
+     * @param checkType               Check type (profiling, monitoring, ...).
      * @param checkTimeScale          Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Model for a category with all quality checks, filtered by runChecksTemplate.
      */
     protected QualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                        Object checkCategoryParentNode,
-                                                       CheckRunRecurringScheduleGroup scheduleGroup,
+                                                       CheckRunMonitoringScheduleGroup scheduleGroup,
                                                        CheckSearchFilters runChecksTemplate,
                                                        TableSpec tableSpec,
                                                        ExecutionContext executionContext,
@@ -529,7 +529,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param executionContext          Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType              Provider type from the parent connection.
      * @param checkTarget               Check target.
-     * @param checkType                 Check type (profiling, recurring, ...).
+     * @param checkType                 Check type (profiling, monitoring, ...).
      * @param checkTimeScale            Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check model.
      */
@@ -537,7 +537,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     public CheckModel createCheckModel(FieldInfo checkFieldInfo,
                                        CheckDefinitionSpec customCheckDefinitionSpec,
                                        AbstractCheckSpec<?,?,?,?> checkSpec,
-                                       CheckRunRecurringScheduleGroup scheduleGroup,
+                                       CheckRunMonitoringScheduleGroup scheduleGroup,
                                        CheckSearchFilters runChecksCategoryTemplate,
                                        TableSpec tableSpec,
                                        ExecutionContext executionContext,
@@ -611,11 +611,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             checkModel.setSimilarChecks(this.similarCheckCache.findSimilarChecksTo(checkTarget, checkName));
         }
 
-        RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
+        MonitoringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
         if (scheduleOverride != null && !scheduleOverride.isDefault()) {
                 checkModel.setEffectiveSchedule(
-                        EffectiveScheduleModel.fromRecurringScheduleSpec(
+                        EffectiveScheduleModel.fromMonitoringScheduleSpec(
                                 scheduleOverride,
                                 scheduleGroup,
                                 EffectiveScheduleLevelModel.check_override,
@@ -660,7 +660,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkSpec Check specification.
      * @param executionContext Check execution context.
      * @param providerType Provider type from the parent connection.
-     * @param checkType Check type (profiling, recurring, ...).
+     * @param checkType Check type (profiling, monitoring, ...).
      * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check basic model.
      */
@@ -932,8 +932,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 case double_type:
                     fieldModel.setDoubleValue((Double) fieldValue);
                     break;
-                case instant_type:
-                    fieldModel.setDateTimeValue((Instant) fieldValue);
+                case datetime_type:
+                    fieldModel.setDatetimeValue((LocalDateTime) fieldValue);
                     break;
                 case column_name_type:
                     fieldModel.setColumnNameValue((String) fieldValue);
@@ -1007,7 +1007,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleSpec Schedule configuration containing a CRON expression with execution timetable.
      * @return Time of next execution of <code>scheduleSpec</code> if it's not disabled and the service is able to get it. Else null.
      */
-    protected ZonedDateTime safeGetTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+    protected ZonedDateTime safeGetTimeOfNextExecution(MonitoringScheduleSpec scheduleSpec) {
         if (this.schedulesUtilityService == null || scheduleSpec == null || scheduleSpec.isDisabled()) {
             return null;
         }
@@ -1021,15 +1021,15 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleLevel Schedule level.
      * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
      */
-    protected EffectiveScheduleModel getEffectiveScheduleModel(RecurringSchedulesSpec schedulesSpec,
-                                                               CheckRunRecurringScheduleGroup scheduleGroup,
+    protected EffectiveScheduleModel getEffectiveScheduleModel(MonitoringSchedulesSpec schedulesSpec,
+                                                               CheckRunMonitoringScheduleGroup scheduleGroup,
                                                                EffectiveScheduleLevelModel scheduleLevel) {
-        RecurringScheduleSpec scheduleSpec = schedulesSpec != null
+        MonitoringScheduleSpec scheduleSpec = schedulesSpec != null
                 ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
                 : null;
 
         if (scheduleSpec != null && !scheduleSpec.isDefault()) {
-            return EffectiveScheduleModel.fromRecurringScheduleSpec(
+            return EffectiveScheduleModel.fromMonitoringScheduleSpec(
                     scheduleSpec,
                     scheduleGroup,
                     scheduleLevel,
@@ -1044,7 +1044,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleSpec Schedule configuration for which to get activation status.
      * @return {@link ScheduleEnabledStatusModel} indicating the activation status of <code>scheduleSpec</code>.
      */
-    protected ScheduleEnabledStatusModel getScheduleEnabledStatus(RecurringScheduleSpec scheduleSpec) {
+    protected ScheduleEnabledStatusModel getScheduleEnabledStatus(MonitoringScheduleSpec scheduleSpec) {
         if (scheduleSpec != null) {
             if (scheduleSpec.isDisabled()) {
                 return ScheduleEnabledStatusModel.disabled;
