@@ -20,7 +20,6 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;

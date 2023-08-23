@@ -469,7 +469,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      */
     protected void addCustomChecksToCategoryModel(CustomCheckSpecMap customCheckSpecMap,
                                                   QualityCategoryModel targetCategoryModel,
-                                                  CheckRunRecurringScheduleGroup scheduleGroup,
+                                                  CheckRunMonitoringScheduleGroup scheduleGroup,
                                                   TableSpec tableSpec,
                                                   ExecutionContext executionContext,
                                                   ProviderType providerType,
