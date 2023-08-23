@@ -41,6 +41,7 @@ export const ROUTES = {
   COLUMN_PARTITIONED_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, column: string, timePartitioned: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned/${timePartitioned}/${category}/${checkName}`,
   SENSOR_DETAIL: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL: (rule: string) => `/definitions/rules/${rule}`,
+  CHECK_DETAIL: (check: string) => `/definitions/checks/${check}`,
   INCIDENT_CONNECTION: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
@@ -58,6 +59,7 @@ export const ROUTES = {
   COLUMN_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}`,
   SENSOR_DETAIL_VALUE: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL_VALUE: (rule: string) => `/definitions/rules/${rule}`,
+  CHECK_DETAIL_VALUE: (check: string) => `/definitions/checks/${check}`,
   INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
@@ -93,6 +95,7 @@ export const ROUTES = {
     INCIDENTS: '/incidents',
     SENSOR_DETAIL: '/definitions/sensors/:sensor',
     RULE_DETAIL: '/definitions/rules/:rule',
+    CHECK_DETAIL: '/definitions/checks/:check',
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
   }

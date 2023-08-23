@@ -1,16 +1,22 @@
-import Button from "../Button";
-import React from "react";
-import { useSelector } from "react-redux";
-import { getFirstLevelSensorState } from "../../redux/selectors";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { updateSensor } from "../../redux/actions/sensor.actions";
+import Button from '../Button';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { updateSensor } from '../../redux/actions/definition.actions';
 
 type SensorActionGroupProps = {
   onSave: () => void;
-}
+};
 
 export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
-  const { full_sensor_name, sensorDetail, isUpdatedSensorDetail, isUpdating, type } = useSelector(getFirstLevelSensorState);
+  const {
+    full_sensor_name,
+    sensorDetail,
+    isUpdatedSensorDetail,
+    isUpdating,
+    type
+  } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
 
   const handleSave = () => {

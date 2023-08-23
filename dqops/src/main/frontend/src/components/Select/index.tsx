@@ -126,18 +126,19 @@ const Select = ({
               'z-50 min-w-40 bg-gray-50 !p-0 max-h-81 overflow-auto',
               menuClassName
             )}
+            style={{zIndex: "200"}}
           >
             {options.map((option, index) => (
               <MenuItem
                 data-testid="select-option"
                 key={index}
-                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
+                className="py-2 px-4 z-50 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
                 onClick={() => handleClick(option)}
-                style={{ minWidth: menuWidth }}
+                style={{ minWidth: menuWidth, zIndex: "100" }}
               >
                 <div
                   className={clsx(
-                    'flex gap-2 items-center',
+                    'flex gap-2 items-center z-50',
                     empty ? 'h-5' : ''
                   )}
                 >
