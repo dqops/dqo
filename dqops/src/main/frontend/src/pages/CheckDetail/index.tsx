@@ -69,6 +69,7 @@ export const SensorDetail = () => {
   useEffect(() => {
     setSelectedRule((checkDetail as CheckSpecModel)?.rule_name ?? '');
     setSelectedSensor((checkDetail as CheckSpecModel)?.sensor_name ?? '');
+    console.log(1);
   }, [checkDetail]);
 
   const onCreateUpdateCheck = async () => {
@@ -130,8 +131,11 @@ export const SensorDetail = () => {
     );
   };
 
-  console.log(checkDetail);
-  console.log(fullCheckName);
+  // console.log(checkDetail);
+  // console.log(fullCheckName);
+
+  console.log(selectedSensor);
+  console.log(selectedRule);
 
   return (
     <DefinitionLayout>

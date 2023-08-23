@@ -81,6 +81,9 @@ const CheckEditor = ({
     );
   };
 
+  // console.log(selectedRule);
+  // console.log(selectedSensor);
+
   return (
     <div>
       <div>
