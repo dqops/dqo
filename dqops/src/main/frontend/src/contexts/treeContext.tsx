@@ -33,14 +33,14 @@ const TreeContext = React.createContext({} as any);
 export const checkTypesToJobTemplateKey = {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
-  [CheckTypes.RECURRING]: 'run_recurring_checks_job_template',
+  [CheckTypes.MONITORING]: 'run_monitoring_checks_job_template',
   [CheckTypes.PARTITIONED]: 'run_partition_checks_job_template'
 };
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
   [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
-  [CheckTypes.RECURRING]: 'has_any_configured_recurring_checks',
+  [CheckTypes.MONITORING]: 'has_any_configured_monitoring_checks',
   [CheckTypes.PARTITIONED]: 'has_any_configured_partition_checks'
 };
 
@@ -53,7 +53,7 @@ function TreeProvider(props: any) {
   const activeSourceRoute = (initialPathName.split('/')[1] ??
     CheckTypes.SOURCES) as CheckTypes;
   const checkTypes: CheckTypes = [
-    CheckTypes.RECURRING,
+    CheckTypes.MONITORING,
     CheckTypes.SOURCES,
     CheckTypes.PROFILING,
     CheckTypes.PARTITIONED
@@ -122,7 +122,7 @@ function TreeProvider(props: any) {
         open: false
       }));
       const treeDataMaps = [
-        CheckTypes.RECURRING,
+        CheckTypes.MONITORING,
         CheckTypes.SOURCES,
         CheckTypes.PROFILING,
         CheckTypes.PARTITIONED
@@ -159,7 +159,7 @@ function TreeProvider(props: any) {
     };
 
     const newTreeDataMaps = [
-      CheckTypes.RECURRING,
+      CheckTypes.MONITORING,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
       CheckTypes.PARTITIONED
@@ -332,24 +332,24 @@ function TreeProvider(props: any) {
         open: false
       });
     }
-    if (checkTypes === CheckTypes.RECURRING) {
+    if (checkTypes === CheckTypes.MONITORING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
-          label: 'Daily recurring',
+          label: 'Daily monitoring',
           level: TREE_LEVEL.TABLE_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily recurring`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily monitoring`,
           open: false
         },
         {
           id: `${node.id}.monthlyCheck`,
-          label: 'Monthly recurring',
+          label: 'Monthly monitoring',
           level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly recurring`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly monitoring`,
           open: false
         }
       );
@@ -399,24 +399,24 @@ function TreeProvider(props: any) {
         open: false
       });
     }
-    if (checkTypes === CheckTypes.RECURRING) {
+    if (checkTypes === CheckTypes.MONITORING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
-          label: 'Daily recurring',
+          label: 'Daily monitoring',
           level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} daily recurring`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} daily monitoring`,
           open: false
         },
         {
           id: `${node.id}.monthlyCheck`,
-          label: 'Monthly recurring',
+          label: 'Monthly monitoring',
           level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} monthly recurring`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} monthly monitoring`,
           open: false
         }
       );
@@ -495,7 +495,7 @@ function TreeProvider(props: any) {
         column.has_any_configured_checks ||
         column.has_any_configured_partition_checks ||
         column.has_any_configured_profiling_checks ||
-        column.has_any_configured_recurring_checks
+        column.has_any_configured_monitoring_checks
     }));
     if (reset) {
       resetTreeData(node, items);
@@ -519,14 +519,14 @@ function TreeProvider(props: any) {
     );
   };
 
-  const refreshTableRecurringNode = async (
+  const refreshTableMonitoringNode = async (
     node: CustomTreeNode,
     timePartitioned: 'daily' | 'monthly',
     reset = true
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
 
-    const res = await TableApiClient.getTableRecurringChecksBasicModel(
+    const res = await TableApiClient.getTableMonitoringChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -540,7 +540,7 @@ function TreeProvider(props: any) {
     );
   };
 
-  const refreshTablePartitionedRecurringNode = async (
+  const refreshTablePartitionedMonitoringNode = async (
     node: CustomTreeNode,
     timePartitioned: 'daily' | 'monthly',
     reset = true
@@ -580,13 +580,13 @@ function TreeProvider(props: any) {
     );
   };
 
-  const refreshColumnRecurringNode = async (
+  const refreshColumnMonitoringNode = async (
     node: CustomTreeNode,
     timePartitioned: 'daily' | 'monthly',
     reset = true
   ) => {
     const { connection, schema, table, column } = parseNodeId(node.id);
-    const res = await ColumnApiClient.getColumnRecurringChecksBasicModel(
+    const res = await ColumnApiClient.getColumnMonitoringChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -746,7 +746,7 @@ function TreeProvider(props: any) {
     setOpenNodes(openNodes.filter((item) => item.id !== node.id));
 
     const newTreeDataMaps = [
-      CheckTypes.RECURRING,
+      CheckTypes.MONITORING,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
       CheckTypes.PARTITIONED
@@ -770,7 +770,7 @@ function TreeProvider(props: any) {
       setActiveNode(newActiveNode);
 
       const newTabsMaps = [
-        CheckTypes.RECURRING,
+        CheckTypes.MONITORING,
         CheckTypes.SOURCES,
         CheckTypes.PROFILING,
         CheckTypes.PARTITIONED
@@ -833,17 +833,17 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
       newItems = await refreshTableChecksNode(node, reset);
     } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      newItems = await refreshTableRecurringNode(node, 'daily', reset);
+      newItems = await refreshTableMonitoringNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      newItems = await refreshTableRecurringNode(node, 'monthly', reset);
+      newItems = await refreshTableMonitoringNode(node, 'monthly', reset);
     } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-      newItems = await refreshTablePartitionedRecurringNode(
+      newItems = await refreshTablePartitionedMonitoringNode(
         node,
         'daily',
         reset
       );
     } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-      newItems = await refreshTablePartitionedRecurringNode(
+      newItems = await refreshTablePartitionedMonitoringNode(
         node,
         'monthly',
         reset
@@ -853,9 +853,9 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
       newItems = await refreshColumnChecksNode(node, reset);
     } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      newItems = await refreshColumnRecurringNode(node, 'daily', reset);
+      newItems = await refreshColumnMonitoringNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      newItems = await refreshColumnRecurringNode(node, 'monthly', reset);
+      newItems = await refreshColumnMonitoringNode(node, 'monthly', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
       newItems = await refreshColumnPartitionedChecksNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
@@ -929,7 +929,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringChecksModel(
+      const res = await TableApiClient.getTableMonitoringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -941,7 +941,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringChecksModel(
+      const res = await TableApiClient.getTableMonitoringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -990,7 +990,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringChecksModel(
+      const res = await ColumnApiClient.getColumnMonitoringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -1003,7 +1003,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringChecksModel(
+      const res = await ColumnApiClient.getColumnMonitoringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -1060,8 +1060,8 @@ function TreeProvider(props: any) {
     if (node.data_clean_job_template) {
       let checkType;
       switch (checkTypes) {
-        case CheckTypes.RECURRING:
-          checkType = 'recurring';
+        case CheckTypes.MONITORING:
+          checkType = 'monitoring';
           break;
         case CheckTypes.PROFILING:
           checkType = 'profiling';
@@ -1086,8 +1086,8 @@ function TreeProvider(props: any) {
     } else {
       let checkType;
       switch (checkTypes) {
-        case CheckTypes.RECURRING:
-          checkType = 'recurring';
+        case CheckTypes.MONITORING:
+          checkType = 'monitoring';
           break;
         case CheckTypes.PROFILING:
           checkType = 'profiling';
@@ -1177,7 +1177,7 @@ function TreeProvider(props: any) {
 
       let tab = subTabMap[node.id];
       if (
-        checkType === CheckTypes.RECURRING ||
+        checkType === CheckTypes.MONITORING ||
         checkType === CheckTypes.PARTITIONED
       ) {
         tab = tab || 'daily';
@@ -1249,28 +1249,28 @@ function TreeProvider(props: any) {
           tableNode?.label ?? ''
         );
       } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-        url = ROUTES.TABLE_RECURRING(
+        url = ROUTES.TABLE_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
           'daily'
         );
-        value = ROUTES.TABLE_RECURRING_VALUE(
+        value = ROUTES.TABLE_MONITORING_VALUE(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? ''
         );
       } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-        url = ROUTES.TABLE_RECURRING(
+        url = ROUTES.TABLE_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
           'monthly'
         );
-        value = ROUTES.TABLE_RECURRING_VALUE(
+        value = ROUTES.TABLE_MONITORING_VALUE(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1351,7 +1351,7 @@ function TreeProvider(props: any) {
           columnNode?.label ?? ''
         );
       } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-        url = ROUTES.COLUMN_RECURRING(
+        url = ROUTES.COLUMN_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1359,7 +1359,7 @@ function TreeProvider(props: any) {
           columnNode?.label ?? '',
           'daily'
         );
-        value = ROUTES.COLUMN_RECURRING_VALUE(
+        value = ROUTES.COLUMN_MONITORING_VALUE(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1367,7 +1367,7 @@ function TreeProvider(props: any) {
           columnNode?.label ?? ''
         );
       } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-        url = ROUTES.COLUMN_RECURRING(
+        url = ROUTES.COLUMN_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1375,7 +1375,7 @@ function TreeProvider(props: any) {
           columnNode?.label ?? '',
           'monthly'
         );
-        value = ROUTES.COLUMN_RECURRING_VALUE(
+        value = ROUTES.COLUMN_MONITORING_VALUE(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1461,7 +1461,7 @@ function TreeProvider(props: any) {
             node.label
           );
         } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-          url = ROUTES.TABLE_RECURRING_UI_FILTER(
+          url = ROUTES.TABLE_MONITORING_UI_FILTER(
             checkType,
             connectionNode?.label ?? '',
             schemaNode?.label ?? '',
@@ -1471,7 +1471,7 @@ function TreeProvider(props: any) {
             node.label
           );
         } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-          url = ROUTES.TABLE_RECURRING_UI_FILTER(
+          url = ROUTES.TABLE_MONITORING_UI_FILTER(
             checkType,
             connectionNode?.label ?? '',
             schemaNode?.label ?? '',
@@ -1548,7 +1548,7 @@ function TreeProvider(props: any) {
             node.label
           );
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-          url = ROUTES.COLUMN_RECURRING_UI_FILTER(
+          url = ROUTES.COLUMN_MONITORING_UI_FILTER(
             checkType,
             connectionNode?.label ?? '',
             schemaNode?.label ?? '',
@@ -1559,7 +1559,7 @@ function TreeProvider(props: any) {
             node.label
           );
         } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-          url = ROUTES.COLUMN_RECURRING_UI_FILTER(
+          url = ROUTES.COLUMN_MONITORING_UI_FILTER(
             checkType,
             connectionNode?.label ?? '',
             schemaNode?.label ?? '',
@@ -1677,7 +1677,7 @@ function TreeProvider(props: any) {
 
       let tab = subTabMap[node.id];
       if (
-        checkType === CheckTypes.RECURRING ||
+        checkType === CheckTypes.MONITORING ||
         checkType === CheckTypes.PARTITIONED
       ) {
         tab = tab || 'daily';
@@ -1760,7 +1760,7 @@ function TreeProvider(props: any) {
     }
 
     const newTreeDataMaps = [
-      CheckTypes.RECURRING,
+      CheckTypes.MONITORING,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
       CheckTypes.PARTITIONED

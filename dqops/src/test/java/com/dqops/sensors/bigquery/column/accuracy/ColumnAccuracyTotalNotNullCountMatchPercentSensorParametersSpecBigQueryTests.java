@@ -60,16 +60,16 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpecBigQ
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "result", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "result", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadata, "result", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunReferencedParametersProfiling() {
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadataReferenced, "result", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunReferencedParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadataReferenced, "result", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunReferencedParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadataReferenced, "result", this.checkSpec, timeScale);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
@@ -140,13 +140,13 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpecBigQ
         ), renderedTemplate);
     }
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
 
         this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
         this.sut.setReferencedColumn("result");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        SensorExecutionRunParameters runReferencedParameters = this.getRunReferencedParametersRecurring(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runReferencedParameters = this.getRunReferencedParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """

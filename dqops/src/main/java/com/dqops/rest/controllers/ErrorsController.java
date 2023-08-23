@@ -128,7 +128,7 @@ public class ErrorsController {
     }
 
     /**
-     * Retrieves the errors related to the most recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the errors related to the most recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -138,17 +138,17 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringErrors", notes = "Returns the errors related to the most recent table level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringErrors", notes = "Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Errors related to the most recent recurring executions for the recurring at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "Errors related to the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
                     response = ErrorsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getTableRecurringErrors(
+    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getTableMonitoringErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -181,7 +181,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoring = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         ErrorsDetailedFilterParameters loadParams = new ErrorsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -192,7 +192,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                recurring, new ErrorsDetailedFilterParameters());
+                monitoring, new ErrorsDetailedFilterParameters());
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -339,7 +339,7 @@ public class ErrorsController {
     }
 
     /**
-     * Retrieves the errors related to recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the errors related to monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -350,17 +350,17 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringErrors", notes = "Returns errors related to the recent column level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringErrors", notes = "Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of errors for the recurring at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "View of errors for the monitoring at a requested time scale on a column returned",
                     response = ErrorsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getColumnRecurringErrors(
+    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getColumnMonitoringErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -399,7 +399,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoring = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         ErrorsDetailedFilterParameters loadParams = new ErrorsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -410,7 +410,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                recurring, loadParams);
+                monitoring, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 

@@ -8,13 +8,13 @@ and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
 
 For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
 
-## Run table-level advanced profiling check
+## Run table-level profiling check
 
 1. In DQO User Interface Console go to the Profiling section.
 
     Click **Profiling** in the navigation bar at the top of the screen. 
 
-    Another option is to expand the tree view of the newly added connection on the left side, click on the "crime" table and use the "Advanced Profiling" link.
+    Another option is to expand the tree view of the newly added connection on the left side, click on the "crime" table and use the "Profiling Checks" link.
 
     ![Navigating to profiling section](https://dqops.com/docs/images/getting-started/austin-crime-table-view-link-to-profiling.jpg)
 
@@ -42,7 +42,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
     A table will appear with more details about the run check.
 
 
-## Run column-level advanced profiling check
+## Run column-level profiling check
 
 1. In the tree view on the left navigate to "clearance_status" column
 

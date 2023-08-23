@@ -109,8 +109,8 @@ public class SchemaServiceImpl implements SchemaService {
             // Connection name, schema name and check type have to be provided.
             return null;
         }
-        if ((checkType == CheckType.partitioned || checkType == CheckType.recurring) && checkTimeScale == null) {
-            // Time scale has to be provided for partitioned and recurring checks.
+        if ((checkType == CheckType.partitioned || checkType == CheckType.monitoring) && checkTimeScale == null) {
+            // Time scale has to be provided for partitioned and monitoring checks.
             return null;
         }
 

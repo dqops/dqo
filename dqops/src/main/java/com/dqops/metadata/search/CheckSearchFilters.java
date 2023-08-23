@@ -152,7 +152,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a check type (profiling, recurring, partitioned) filter.
+     * Returns a check type (profiling, monitoring, partitioned) filter.
      * @return Check type filter.
      */
     public CheckType getCheckType() {
@@ -160,7 +160,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a check type (profiling, recurring, partitioned) filter.
+     * Sets a check type (profiling, monitoring, partitioned) filter.
      * @param checkType Check type filter.
      */
     public void setCheckType(CheckType checkType) {
@@ -184,7 +184,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a time scale filter for recurring and partitioned checks.
+     * Returns a time scale filter for monitoring and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -192,7 +192,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a time scale filter for recurring and partitioned checks.
+     * Sets a time scale filter for monitoring and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

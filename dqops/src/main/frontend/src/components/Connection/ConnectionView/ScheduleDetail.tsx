@@ -10,7 +10,7 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import Tabs from "../../Tabs";
-import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import { CheckRunMonitoringScheduleGroup } from "../../../shared/enums/scheduling.enum";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
 import qs from "query-string";
@@ -18,23 +18,23 @@ import qs from "query-string";
 const pageTabs = [
   {
     label: 'Profiling',
-    value: CheckRunRecurringScheduleGroup.profiling
+    value: CheckRunMonitoringScheduleGroup.profiling
   },
   {
-    label: 'Recurring daily',
-    value: CheckRunRecurringScheduleGroup.recurring_daily
+    label: 'Monitoring daily',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
   },
   {
-    label: 'Recurring monthly',
-    value: CheckRunRecurringScheduleGroup.recurring_monthly
+    label: 'Monitoring monthly',
+    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
   },
   {
     label: 'Partitioned daily',
-    value: CheckRunRecurringScheduleGroup.partitioned_daily
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
   },
   {
     label: 'Partitioned monthly',
-    value: CheckRunRecurringScheduleGroup.partitioned_monthly
+    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
   },
 ]
 
@@ -43,7 +43,7 @@ const ScheduleDetail = () => {
   const [tabs, setTabs] = useState(pageTabs);
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
-  const { activeTab = CheckRunRecurringScheduleGroup.profiling } = qs.parse(location.search) as any;
+  const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
   const history = useHistory();
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -57,7 +57,7 @@ const ScheduleDetail = () => {
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
 
-  const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
+  const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
     history.push(`${location.pathname}?activeTab=${tab}`)
   }
 
@@ -104,58 +104,58 @@ const ScheduleDetail = () => {
       setTabs([
         {
           label: 'Profiling',
-          value: CheckRunRecurringScheduleGroup.profiling
+          value: CheckRunMonitoringScheduleGroup.profiling
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
-    } else if (checkTypes === 'recurring') {
+      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
+    } else if (checkTypes === 'monitoring') {
       setTabs([
         {
-          label: 'Recurring Daily',
-          value: CheckRunRecurringScheduleGroup.recurring_daily
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
         },
         {
-          label: 'Recurring Monthly',
-          value: CheckRunRecurringScheduleGroup.recurring_monthly
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.recurring_daily);
+      onChangeTab(CheckRunMonitoringScheduleGroup.monitoring_daily);
     } else if (checkTypes === 'partitioned') {
       setTabs([
         {
           label: 'Partitioned Daily',
-          value: CheckRunRecurringScheduleGroup.partitioned_daily
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
           label: 'Partitioned Monthly',
-          value: CheckRunRecurringScheduleGroup.partitioned_monthly
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.partitioned_daily);
+      onChangeTab(CheckRunMonitoringScheduleGroup.partitioned_daily);
     } else {
       setTabs([
         {
           label: 'Profiling',
-          value: CheckRunRecurringScheduleGroup.profiling
+          value: CheckRunMonitoringScheduleGroup.profiling
         },
         {
-          label: 'Recurring Daily',
-          value: CheckRunRecurringScheduleGroup.recurring_daily
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
         },
         {
-          label: 'Recurring Monthly',
-          value: CheckRunRecurringScheduleGroup.recurring_monthly
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
         {
           label: 'Partitioned Daily',
-          value: CheckRunRecurringScheduleGroup.partitioned_daily
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
           label: 'Partitioned Monthly',
-          value: CheckRunRecurringScheduleGroup.partitioned_monthly
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
+      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
     }
   }, [checkTypes]);
 

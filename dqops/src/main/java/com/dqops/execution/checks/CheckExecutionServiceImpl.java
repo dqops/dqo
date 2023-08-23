@@ -33,7 +33,7 @@ import com.dqops.execution.checks.scheduled.ScheduledTableChecksCollection;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.*;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.sources.*;
@@ -155,7 +155,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
-                                                          RecurringScheduleSpec targetSchedule,
+                                                          MonitoringScheduleSpec targetSchedule,
                                                           CheckExecutionProgressListener progressListener,
                                                           DqoQueueJobId parentJobId,
                                                           JobCancellationToken jobCancellationToken) {

@@ -297,7 +297,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_match|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_row_count_match|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -323,7 +323,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       comparisons:
         compare_to_source_of_truth_table:
@@ -358,7 +358,7 @@ spec:
         reference_table_column_name: country_column_name_on_reference_table
       - compared_table_column_name: state
         reference_table_column_name: state_column_name_on_reference_table
-  recurring_checks:
+  monitoring_checks:
     daily:
       comparisons:
         compare_to_source_of_truth_table:
@@ -584,7 +584,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count_match|recurring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_row_count_match|monitoring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -610,7 +610,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       comparisons:
         compare_to_source_of_truth_table:
@@ -645,7 +645,7 @@ spec:
         reference_table_column_name: country_column_name_on_reference_table
       - compared_table_column_name: state
         reference_table_column_name: state_column_name_on_reference_table
-  recurring_checks:
+  monitoring_checks:
     monthly:
       comparisons:
         compare_to_source_of_truth_table:

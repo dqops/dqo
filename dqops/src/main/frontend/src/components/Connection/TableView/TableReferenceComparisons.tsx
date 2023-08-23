@@ -74,7 +74,7 @@ export const TableReferenceComparisons = ({
       ).then((res) => {
         setReferences(res.data);
       });
-    } else if (checkTypes === CheckTypes.RECURRING) {
+    } else if (checkTypes === CheckTypes.MONITORING) {
       TableComparisonsApi.getTableComparisonConfigurations(
         connection,
         schema,

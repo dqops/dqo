@@ -544,7 +544,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sample_stddev_in_range|recurring|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_sample_stddev_in_range|monitoring|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -570,7 +570,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sampl
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_sample_stddev_in_range:
@@ -598,7 +598,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_sample_stddev_in_range:
@@ -832,7 +832,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_sample_stddev_in_range:
@@ -1079,7 +1079,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sample_stddev_in_range|recurring|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_sample_stddev_in_range|monitoring|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1105,7 +1105,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sam
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_sample_stddev_in_range:
@@ -1133,7 +1133,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_sample_stddev_in_range:
@@ -1367,7 +1367,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_sample_stddev_in_range:

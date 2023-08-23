@@ -797,7 +797,7 @@ The check counts the number of strings in the column that is above the length de
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_length_above_max_length_count|recurring|daily|[string_length_above_max_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_length_above_max_length_count|monitoring|daily|[string_length_above_max_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -823,7 +823,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_length_above_max_length_count:
@@ -850,7 +850,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_length_above_max_length_count:
@@ -1211,7 +1211,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_length_above_max_length_count:
@@ -1585,7 +1585,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_length_above_max_length_count|recurring|monthly|[string_length_above_max_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_length_above_max_length_count|monitoring|monthly|[string_length_above_max_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1611,7 +1611,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_length_above_max_length_count:
@@ -1638,7 +1638,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_length_above_max_length_count:
@@ -1999,7 +1999,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_length_above_max_length_count:

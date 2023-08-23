@@ -535,7 +535,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_anomaly_differencing|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|daily_sum_anomaly_differencing|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -561,7 +561,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_a
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_sum_anomaly_differencing:
@@ -586,7 +586,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_sum_anomaly_differencing:
@@ -817,7 +817,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               anomaly:
                 daily_sum_anomaly_differencing:

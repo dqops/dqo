@@ -683,7 +683,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_value_below_min_value_count|recurring|daily|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_value_below_min_value_count|monitoring|daily|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -709,7 +709,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_value_below_min_value_count:
@@ -734,7 +734,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_value_below_min_value_count:
@@ -1039,7 +1039,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_value_below_min_value_count:
@@ -1357,7 +1357,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_value_below_min_value_count|recurring|monthly|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_value_below_min_value_count|monitoring|monthly|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1383,7 +1383,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_value_below_min_value_count:
@@ -1408,7 +1408,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_value_below_min_value_count:
@@ -1713,7 +1713,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_value_below_min_value_count:

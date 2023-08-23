@@ -999,7 +999,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_match_date_regex_percent|recurring|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_string_match_date_regex_percent|monitoring|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1025,7 +1025,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_match_date_regex_percent:
@@ -1052,7 +1052,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_match_date_regex_percent:
@@ -1514,7 +1514,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_match_date_regex_percent:
@@ -1989,7 +1989,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_match_date_regex_percent|recurring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_string_match_date_regex_percent|monitoring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2015,7 +2015,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_match_date_regex_percent:
@@ -2042,7 +2042,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_match_date_regex_percent:
@@ -2504,7 +2504,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_match_date_regex_percent:

@@ -14,7 +14,7 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
-import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
+import TableProfilingChecks from '../../../pages/TableProfilingChecks';
 
 import Tabs from '../../Tabs';
 
@@ -44,7 +44,7 @@ const tabs = [
     value: 'statistics'
   },
   {
-    label: 'Advanced Profiling',
+    label: 'Profiling Checks',
     value: 'advanced'
   },
   {
@@ -251,7 +251,7 @@ const ProfilingView = () => {
           statistics={statistics}
         />
       )}
-      {activeTab === 'advanced' && <TableAdvancedProfiling />}
+      {activeTab === 'advanced' && <TableProfilingChecks />}
       {activeTab === 'reference-comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}

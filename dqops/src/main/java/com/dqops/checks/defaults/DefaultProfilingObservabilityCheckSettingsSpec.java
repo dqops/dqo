@@ -25,7 +25,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -41,7 +41,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * The default configuration of checks that are enabled as data observability advanced profiling checks that will be detecting anomalies
+ * The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
  * for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for profiling checks only.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

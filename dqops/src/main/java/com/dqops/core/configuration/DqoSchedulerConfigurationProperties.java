@@ -85,8 +85,8 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the default "cloud sync" mode used for selecting folders to be synchronized during a recurring synchronization.
-     * @return The folder selection mode for a recurring cloud sync operation: synchronize all folders or only locally changed.
+     * Returns the default "cloud sync" mode used for selecting folders to be synchronized during a monitoring synchronization.
+     * @return The folder selection mode for a monitoring cloud sync operation: synchronize all folders or only locally changed.
      */
     public ScheduledSynchronizationFolderSelectionMode getSynchronizedFolders() {
         return synchronizedFolders;
@@ -94,7 +94,7 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
 
     /**
      * Sets the folder selection mode for deciding which folders should be synchronized to the DQO Cloud during a scheduled synchronization.
-     * @param synchronizedFolders The value that decides which folders are synchronized during a recurring synchronization.
+     * @param synchronizedFolders The value that decides which folders are synchronized during a monitoring synchronization.
      */
     public void setSynchronizedFolders(ScheduledSynchronizationFolderSelectionMode synchronizedFolders) {
         this.synchronizedFolders = synchronizedFolders;

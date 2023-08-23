@@ -110,16 +110,16 @@ export const EditProfilingReferenceTable = ({
           table,
           selectedReference
         ).then(callback);
-      } else if (checkTypes === CheckTypes.RECURRING) {
+      } else if (checkTypes === CheckTypes.MONITORING) {
         if (timePartitioned === 'daily') {
-          TableComparisonsApi.getTableComparisonRecurringDaily(
+          TableComparisonsApi.getTableComparisonMonitoringDaily(
             connection,
             schema,
             table,
             selectedReference
           ).then(callback);
         } else if (timePartitioned === 'monthly') {
-          TableComparisonsApi.getTableComparisonRecurringMonthly(
+          TableComparisonsApi.getTableComparisonMonitoringMonthly(
             connection,
             schema,
             table,
@@ -215,9 +215,9 @@ export const EditProfilingReferenceTable = ({
         ).catch((err) => {
           console.log(err);
         });
-      } else if (checkTypes === CheckTypes.RECURRING) {
+      } else if (checkTypes === CheckTypes.MONITORING) {
         if (timePartitioned === 'daily') {
-          TableComparisonsApi.updateTableComparisonRecurringDaily(
+          TableComparisonsApi.updateTableComparisonMonitoringDaily(
             connection,
             schema,
             table,
@@ -227,7 +227,7 @@ export const EditProfilingReferenceTable = ({
             console.log(err);
           });
         } else if (timePartitioned === 'monthly') {
-          TableComparisonsApi.updateTableComparisonRecurringMonthly(
+          TableComparisonsApi.updateTableComparisonMonitoringMonthly(
             connection,
             schema,
             table,
@@ -320,8 +320,8 @@ export const EditProfilingReferenceTable = ({
           table,
           selectedReference ?? ''
           ).then((res) => setTableComparisonResults(res.data))
-        } else if (checkTypes === 'recurring') {
-          await TableComparisonResultsApi.getTableComparisonRecurringResults(
+        } else if (checkTypes === 'monitoring') {
+          await TableComparisonResultsApi.getTableComparisonMonitoringResults(
             connection,
             schema,
             table,
@@ -402,7 +402,7 @@ export const EditProfilingReferenceTable = ({
     if(checkTypes === CheckTypes.PROFILING){
       newNameOfCheck = 'profile_'+nameOfCheck
     }
-    if(checkTypes === CheckTypes.RECURRING || checkTypes === CheckTypes.PARTITIONED){
+    if(checkTypes === CheckTypes.MONITORING || checkTypes === CheckTypes.PARTITIONED){
       newNameOfCheck = nameOfCheck
     }
 

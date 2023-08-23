@@ -26,9 +26,9 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         state: {}
       }))
     },
-    [CheckTypes.RECURRING]: {
-      activeTab: newState[CheckTypes.RECURRING].activeTab,
-      tabs: newState[CheckTypes.RECURRING].tabs.map((item: INestTab) => ({
+    [CheckTypes.MONITORING]: {
+      activeTab: newState[CheckTypes.MONITORING].activeTab,
+      tabs: newState[CheckTypes.MONITORING].tabs.map((item: INestTab) => ({
         url: item.url,
         value: item.value,
         label: item.label,

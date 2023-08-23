@@ -41,7 +41,7 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 |`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name| ||
 |`-cr`<br/>`--check-results`<br/>|Delete the check results| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |profiling<br/>recurring<br/>partitioned<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-ds`<br/>`--data-group-tag`<br/>|Data group dimension level filter, that filters by tags.| ||

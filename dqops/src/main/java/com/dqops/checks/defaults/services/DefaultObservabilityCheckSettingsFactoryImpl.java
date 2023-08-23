@@ -25,12 +25,12 @@ import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSp
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnSchemaProfilingChecksSpec;
-import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
-import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
+import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
@@ -41,9 +41,9 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableAvailabilityProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
-import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
-import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
@@ -68,26 +68,26 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public DefaultObservabilityCheckSettingsSpec createDefaultCheckSettings() {
         DefaultObservabilityCheckSettingsSpec defaultSettings = new DefaultObservabilityCheckSettingsSpec();
         defaultSettings.setProfiling(createDefaultProfilingChecks());
-        defaultSettings.setRecurringDaily(createDefaultDailyRecurringChecks());
-        defaultSettings.setRecurringMonthly(createDefaultMonthlyRecurringChecks());
+        defaultSettings.setMonitoringDaily(createDefaultDailyMonitoringChecks());
+        defaultSettings.setMonitoringMonthly(createDefaultMonthlyMonitoringChecks());
 
         return defaultSettings;
     }
 
     /**
-     * Creates the default configuration of daily recurring checks.
-     * @return The default configuration of daily recurring checks.
+     * Creates the default configuration of daily monitoring checks.
+     * @return The default configuration of daily monitoring checks.
      */
-    protected DefaultDailyRecurringObservabilityCheckSettingsSpec createDefaultDailyRecurringChecks() {
-        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultSettings = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+    protected DefaultDailyMonitoringObservabilityCheckSettingsSpec createDefaultDailyMonitoringChecks() {
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultSettings = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
 
-        TableAvailabilityDailyRecurringChecksSpec tableAvailability = new TableAvailabilityDailyRecurringChecksSpec();
+        TableAvailabilityDailyMonitoringChecksSpec tableAvailability = new TableAvailabilityDailyMonitoringChecksSpec();
         tableAvailability.setDailyTableAvailability(new TableAvailabilityCheckSpec() {{
             setWarning(new MaxFailuresRule0ParametersSpec());
         }});
         defaultSettings.getTable().setAvailability(tableAvailability);
 
-        TableVolumeDailyRecurringChecksSpec tableVolume = new TableVolumeDailyRecurringChecksSpec();
+        TableVolumeDailyMonitoringChecksSpec tableVolume = new TableVolumeDailyMonitoringChecksSpec();
         tableVolume.setDailyRowCount(new TableRowCountCheckSpec()); // no rules, just monitoring
         tableVolume.setDailyRowCountChange(new TableChangeRowCountCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
@@ -97,13 +97,13 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 
-        ColumnDatatypeDailyRecurringChecksSpec columnDatatype = new ColumnDatatypeDailyRecurringChecksSpec();
+        ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
         columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
         defaultSettings.getColumn().setDatatype(columnDatatype);
 
-        ColumnAnomalyDailyRecurringChecksSpec columnAnomaly = new ColumnAnomalyDailyRecurringChecksSpec();
+        ColumnAnomalyDailyMonitoringChecksSpec columnAnomaly = new ColumnAnomalyDailyMonitoringChecksSpec();
         columnAnomaly.setDailySumAnomalyDifferencing(new ColumnAnomalyDifferencingSumCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
@@ -112,7 +112,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
 
-        TableSchemaDailyRecurringChecksSpec tableSchema = new TableSchemaDailyRecurringChecksSpec();
+        TableSchemaDailyMonitoringChecksSpec tableSchema = new TableSchemaDailyMonitoringChecksSpec();
         tableSchema.setDailyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
@@ -127,7 +127,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.getTable().setSchema(tableSchema);
 
-        ColumnSchemaDailyRecurringChecksSpec columnSchema = new ColumnSchemaDailyRecurringChecksSpec();
+        ColumnSchemaDailyMonitoringChecksSpec columnSchema = new ColumnSchemaDailyMonitoringChecksSpec();
         columnSchema.setDailyColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
             setWarning(new EqualsInteger1RuleParametersSpec());
         }});
@@ -136,7 +136,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.getColumn().setSchema(columnSchema);
 
-        ColumnNullsDailyRecurringChecksSpec columnNulls = new ColumnNullsDailyRecurringChecksSpec();
+        ColumnNullsDailyMonitoringChecksSpec columnNulls = new ColumnNullsDailyMonitoringChecksSpec();
         columnNulls.setDailyNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
         }});
@@ -201,11 +201,11 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     }
 
     /**
-     * Creates the default configuration of daily recurring checks.
-     * @return The default configuration of daily recurring checks.
+     * Creates the default configuration of daily monitoring checks.
+     * @return The default configuration of daily monitoring checks.
      */
-    protected DefaultMonthlyRecurringObservabilityCheckSettingsSpec createDefaultMonthlyRecurringChecks() {
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultSettings = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+    protected DefaultMonthlyMonitoringObservabilityCheckSettingsSpec createDefaultMonthlyMonitoringChecks() {
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultSettings = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         return defaultSettings;
     }
 }

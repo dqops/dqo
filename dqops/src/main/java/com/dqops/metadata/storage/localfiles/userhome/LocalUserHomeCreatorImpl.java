@@ -27,7 +27,7 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -222,7 +222,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             if (!Files.exists(localSettingsPath)) {
                 SettingsYaml settingsYaml = new SettingsYaml();
                 SettingsSpec settingsSpec = settingsYaml.getSpec();
-                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultRecurringSchedules());
+                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
                 settingsSpec.setDefaultDataObservabilityChecks(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
 
                 String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
@@ -324,8 +324,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (settingsSpec.getDefaultSchedules() == null) {
-            RecurringSchedulesSpec defaultRecurringSchedules = this.defaultSchedulesProvider.createDefaultRecurringSchedules();
-            settingsSpec.setDefaultSchedules(defaultRecurringSchedules);
+            MonitoringSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultMonitoringSchedules();
+            settingsSpec.setDefaultSchedules(defaultMonitoringSchedules);
         }
 
         if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

@@ -21,7 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -64,7 +64,7 @@ public class SettingsSpec extends AbstractSpec {
 	@JsonPropertyDescription("Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.")
 //	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 //	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)    // NOTE: we are intentionally commenting this out, because when the field is null, we will create a default configuration. An empty configuration is defined by an empty object (with no schedules configured).
-	private RecurringSchedulesSpec defaultSchedules;
+	private MonitoringSchedulesSpec defaultSchedules;
 
 	@JsonPropertyDescription("The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.")
 //	@JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -173,7 +173,7 @@ public class SettingsSpec extends AbstractSpec {
 	 * Returns the default configuration of schedules.
 	 * @return The default configuration of schedules.
 	 */
-	public RecurringSchedulesSpec getDefaultSchedules() {
+	public MonitoringSchedulesSpec getDefaultSchedules() {
 		return defaultSchedules;
 	}
 
@@ -181,7 +181,7 @@ public class SettingsSpec extends AbstractSpec {
 	 * Sets the default configuration of schedules for new connections.
 	 * @param defaultSchedules The default configuration of schedules for new connections.
 	 */
-	public void setDefaultSchedules(RecurringSchedulesSpec defaultSchedules) {
+	public void setDefaultSchedules(MonitoringSchedulesSpec defaultSchedules) {
 		setDirtyIf(!Objects.equals(this.defaultSchedules, defaultSchedules));
 		this.defaultSchedules = defaultSchedules;
 		propagateHierarchyIdToField(defaultSchedules, "default_schedules");

@@ -19,9 +19,9 @@ import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
@@ -166,11 +166,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringChecksModel_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUI(CheckTimeScale timePartition) {
+    void getColumnMonitoringChecksModel_whenColumnFromSampleTableRequested_thenReturnsMonitoringChecksUI(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnRecurringChecksModel(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnMonitoringChecksModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -227,11 +227,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringChecksBasicModel_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUIBasic(CheckTimeScale timePartition) {
+    void getColumnMonitoringChecksBasicModel_whenColumnFromSampleTableRequested_thenReturnsMonitoringChecksUIBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getColumnRecurringChecksBasicModel(
+        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getColumnMonitoringChecksBasicModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -304,7 +304,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnRecurringChecksDaily_whenColumnAndRecurringRequested_updatesRecurring() {
+    void updateColumnMonitoringChecksDaily_whenColumnAndMonitoringRequested_updatesMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -320,24 +320,24 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
-        ColumnNullsDailyRecurringChecksSpec nullDailyRecurring = new ColumnNullsDailyRecurringChecksSpec();
-        nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
-        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
-        dailyRecurring.setNulls(nullDailyRecurring);
-        ColumnRecurringChecksRootSpec sampleRecurring = new ColumnRecurringChecksRootSpec();
-        sampleRecurring.setDaily(dailyRecurring);
+        ColumnNullsDailyMonitoringChecksSpec nullDailyMonitoring = new ColumnNullsDailyMonitoringChecksSpec();
+        nullDailyMonitoring.setDailyNullsCount(nullsChecksSpec);
+        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = new ColumnDailyMonitoringCheckCategoriesSpec();
+        dailyMonitoring.setNulls(nullDailyMonitoring);
+        ColumnMonitoringChecksRootSpec sampleMonitoring = new ColumnMonitoringChecksRootSpec();
+        sampleMonitoring.setDaily(dailyMonitoring);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringChecksDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnMonitoringChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleRecurring.getDaily()));
+                Optional.of(sampleMonitoring.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getRecurringChecks().getDaily(), sampleRecurring.getDaily());
-        Assertions.assertNull(columnSpec.getRecurringChecks().getMonthly());
+        Assertions.assertSame(columnSpec.getMonitoringChecks().getDaily(), sampleMonitoring.getDaily());
+        Assertions.assertNull(columnSpec.getMonitoringChecks().getMonthly());
     }
 
     @Test

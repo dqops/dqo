@@ -102,8 +102,8 @@ export const MultiChecks = () => {
         schema,
         checkTarget
       ).then(processResult);
-    } else if (checkTypes === CheckTypes.RECURRING) {
-      SchemaApiClient.getSchemaRecurringChecksTemplates(
+    } else if (checkTypes === CheckTypes.MONITORING) {
+      SchemaApiClient.getSchemaMonitoringChecksTemplates(
         connection,
         schema,
         activeTab,
@@ -133,8 +133,8 @@ export const MultiChecks = () => {
       ).then((res) => {
         setChecks(res.data);
       });
-    } else if (checkTypes === CheckTypes.RECURRING) {
-      SchemaApiClient.getSchemaRecurringChecksModel(
+    } else if (checkTypes === CheckTypes.MONITORING) {
+      SchemaApiClient.getSchemaMonitoringChecksModel(
         connection,
         schema,
         activeTab,

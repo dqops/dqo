@@ -67,10 +67,10 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
             "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
     private String referenceTableFilter;
 
-    @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
+    @JsonPropertyDescription("The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
     private CheckType checkType = CheckType.profiling;
 
-    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
+    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.")
     private CheckTimeScale timeScale;
 
     @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
@@ -192,7 +192,7 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     }
 
     /**
-     * Sets the time scale of the checks (recurring, partitioned) that are used.
+     * Sets the time scale of the checks (monitoring, partitioned) that are used.
      * @param timeScale Time scale.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

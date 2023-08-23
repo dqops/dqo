@@ -33,7 +33,7 @@ to better understand data dynamics during the investigation phase when the data 
 later to confirm whether it has been resolved.
 
 - **Data Source States dashboards**. This group of dashboards contains a summaries on most incomplete columns, table 
-    freshness, table ingestion delay, the biggest tables measured by recurring checks anf table row count for time partitions.
+    freshness, table ingestion delay, the biggest tables measured by monitoring checks anf table row count for time partitions.
 
 - **DQ Statistics dashboards**. This group of dashboards contains the summaries of daily tests per check, data stream and table, as well as checks no longer in use.
 

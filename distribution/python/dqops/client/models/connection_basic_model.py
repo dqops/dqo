@@ -49,7 +49,7 @@ class ConnectionBasicModel:
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
-        run_recurring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
+        run_monitoring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
         run_partition_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
@@ -70,7 +70,7 @@ class ConnectionBasicModel:
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
-    run_recurring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_partition_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     collect_statistics_job_template: Union[
         Unset, "StatisticsCollectorSearchFilters"
@@ -124,10 +124,10 @@ class ConnectionBasicModel:
                 self.run_profiling_checks_job_template.to_dict()
             )
 
-        run_recurring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = (
-                self.run_recurring_checks_job_template.to_dict()
+        run_monitoring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.run_monitoring_checks_job_template, Unset):
+            run_monitoring_checks_job_template = (
+                self.run_monitoring_checks_job_template.to_dict()
             )
 
         run_partition_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
@@ -177,10 +177,10 @@ class ConnectionBasicModel:
             field_dict[
                 "run_profiling_checks_job_template"
             ] = run_profiling_checks_job_template
-        if run_recurring_checks_job_template is not UNSET:
+        if run_monitoring_checks_job_template is not UNSET:
             field_dict[
-                "run_recurring_checks_job_template"
-            ] = run_recurring_checks_job_template
+                "run_monitoring_checks_job_template"
+            ] = run_monitoring_checks_job_template
         if run_partition_checks_job_template is not UNSET:
             field_dict[
                 "run_partition_checks_job_template"
@@ -294,15 +294,15 @@ class ConnectionBasicModel:
                 _run_profiling_checks_job_template
             )
 
-        _run_recurring_checks_job_template = d.pop(
-            "run_recurring_checks_job_template", UNSET
+        _run_monitoring_checks_job_template = d.pop(
+            "run_monitoring_checks_job_template", UNSET
         )
-        run_recurring_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = UNSET
+        run_monitoring_checks_job_template: Union[Unset, CheckSearchFilters]
+        if isinstance(_run_monitoring_checks_job_template, Unset):
+            run_monitoring_checks_job_template = UNSET
         else:
-            run_recurring_checks_job_template = CheckSearchFilters.from_dict(
-                _run_recurring_checks_job_template
+            run_monitoring_checks_job_template = CheckSearchFilters.from_dict(
+                _run_monitoring_checks_job_template
             )
 
         _run_partition_checks_job_template = d.pop(
@@ -352,7 +352,7 @@ class ConnectionBasicModel:
             oracle=oracle,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
-            run_recurring_checks_job_template=run_recurring_checks_job_template,
+            run_monitoring_checks_job_template=run_monitoring_checks_job_template,
             run_partition_checks_job_template=run_partition_checks_job_template,
             collect_statistics_job_template=collect_statistics_job_template,
             data_clean_job_template=data_clean_job_template,
