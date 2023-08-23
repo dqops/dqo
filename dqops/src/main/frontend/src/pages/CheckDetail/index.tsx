@@ -19,7 +19,6 @@ import Input from '../../components/Input';
 import CheckEditor from './CheckEditor';
 import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
-import { useParams } from 'react-router';
 import { CheckSpecModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
@@ -37,8 +36,6 @@ export const SensorDetail = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const { check }: { check: string } = useParams();
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);

@@ -75,7 +75,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
               limit={10}
             />
             <div
-              className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
+              className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
               style={{ maxHeight: 'calc(100vh - 80px)' }}
             >
               {!!activeTab && pageTabs.length !== 0 && <div>{children}</div>}
