@@ -45,7 +45,7 @@ public class CommentSpec extends AbstractSpec {
     };
 
     @JsonPropertyDescription("Comment date and time")
-    private Instant date;
+    private LocalDateTime date;
 
     @JsonPropertyDescription("Commented by")
     private String commentBy;
@@ -57,7 +57,7 @@ public class CommentSpec extends AbstractSpec {
      * Comment date.
      * @return Commend date.
      */
-    public Instant getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -65,7 +65,7 @@ public class CommentSpec extends AbstractSpec {
      * Sets the comment date.
      * @param date Commend date.
      */
-    public void setDate(Instant date) {
+    public void setDate(LocalDateTime date) {
 		this.setDirtyIf(!Objects.equals(this.date, date));
         this.date = date;
     }

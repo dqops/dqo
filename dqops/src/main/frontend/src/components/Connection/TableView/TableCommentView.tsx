@@ -30,7 +30,7 @@ const TableCommentView = () => {
       updateTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, [...updatedComments, ...text ? [{
         comment: text,
         comment_by: 'user',
-        date: Number(new Date().toISOString())
+        date: new Date().toISOString()
       }] : []])
     );
     setText('');

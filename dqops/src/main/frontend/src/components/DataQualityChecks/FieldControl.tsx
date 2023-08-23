@@ -57,8 +57,8 @@ const FieldControl = ({
         return field.integer_list_value || [];
       case ParameterDefinitionSpecDataTypeEnum.enum:
         return field.enum_value;
-      case ParameterDefinitionSpecDataTypeEnum.instant:
-        return field.date_time_value;
+      case ParameterDefinitionSpecDataTypeEnum.datetime:
+        return field.datetime_value;
       case ParameterDefinitionSpecDataTypeEnum.object:
         return field.integer_value;
       case ParameterDefinitionSpecDataTypeEnum.date:
