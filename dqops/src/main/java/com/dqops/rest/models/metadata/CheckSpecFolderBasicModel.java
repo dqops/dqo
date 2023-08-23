@@ -15,12 +15,14 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -37,8 +39,8 @@ public class CheckSpecFolderBasicModel {
     private LinkedHashMap<String, CheckSpecFolderBasicModel> folders = new LinkedHashMap<>();
 
     @JsonPropertyDescription("Check basic model list of checks defined at this level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<CheckSpecBasicModel> checks = new ArrayList<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<CheckSpecBasicModel> checks;
 
     /**
      * Creates a new instance of RuleBasicFolderModel with empty lists.
@@ -68,7 +70,10 @@ public class CheckSpecFolderBasicModel {
             folderModel = nextCheckFolder;
         }
 
-        Optional<CheckSpecBasicModel> existingCheck = folderModel.checks.stream().filter(m -> Objects.equals(m.getCheckName(), checkName)).findFirst();
+        Optional<CheckSpecBasicModel> existingCheck =
+                folderModel.checks != null
+                ? folderModel.checks.stream().filter(m -> Objects.equals(m.getCheckName(), checkName)).findFirst()
+                : Optional.empty();
 
         if (!existingCheck.isPresent()) {
             CheckSpecBasicModel checkSpecBasicModel = new CheckSpecBasicModel();
@@ -76,6 +81,9 @@ public class CheckSpecFolderBasicModel {
             checkSpecBasicModel.setFullCheckName(fullCheckName);
             checkSpecBasicModel.setCustom(isCustom);
             checkSpecBasicModel.setBuiltIn(isBuiltIn);
+            if (folderModel.checks == null) {
+                folderModel.checks = new ArrayList<>();
+            }
             folderModel.checks.add(checkSpecBasicModel);
         } else {
             if (isCustom){
@@ -91,12 +99,39 @@ public class CheckSpecFolderBasicModel {
      * Collects all checks from all tree levels.
      * @return A list of all checks.
      */
+    @JsonIgnore
     public List<CheckSpecBasicModel> getAllChecks() {
-        List<CheckSpecBasicModel> allChecks = new ArrayList<>(this.getChecks());
+        if (this.checks == null) {
+            return new ArrayList<>();
+        }
+
+        List<CheckSpecBasicModel> allChecks = new ArrayList<>(this.checks);
         for (CheckSpecFolderBasicModel folder : this.folders.values()) {
             allChecks.addAll(folder.getAllChecks());
         }
 
         return allChecks;
+    }
+
+    /**
+     * Adds nested folders, used to add nested folders for custom checks.
+     * @param fullFolderName Full folder name, for example: table/profiling/custom
+     */
+    public void addFolderIfMissing(String fullFolderName) {
+        String[] folderElements = StringUtils.split(fullFolderName, '/');
+        CheckSpecFolderBasicModel childFolder = this.folders.get(folderElements[0]);
+        if (childFolder == null) {
+            childFolder = new CheckSpecFolderBasicModel();
+            if (folderElements.length == 1) {
+                // top most folder with checks
+                childFolder.checks = new ArrayList<>();
+            }
+            this.folders.put(folderElements[0], childFolder);
+        }
+
+        if (folderElements.length > 1) {
+            String nestedFolderFullName = String.join("/", Arrays.copyOfRange(folderElements, 1, folderElements.length));
+            childFolder.addFolderIfMissing(nestedFolderFullName);
+        }
     }
 }

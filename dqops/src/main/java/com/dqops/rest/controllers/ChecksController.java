@@ -298,9 +298,16 @@ public class ChecksController {
             checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
         }
 
-        if (!checkSpecFolderBasicModel.getFolders().containsKey("custom")) {
-            checkSpecFolderBasicModel.getFolders().put("custom", new CheckSpecFolderBasicModel());
-        }
+        checkSpecFolderBasicModel.addFolderIfMissing("table/profiling/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("column/profiling/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("table/monitoring/daily/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("column/monitoring/daily/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("table/monitoring/monthly/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("column/monitoring/monthly/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("table/partitioned/daily/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("column/partitioned/daily/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("table/partitioned/monthly/custom");
+        checkSpecFolderBasicModel.addFolderIfMissing("column/partitioned/monthly/custom");
 
         return checkSpecFolderBasicModel;
     }
