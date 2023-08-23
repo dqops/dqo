@@ -31,7 +31,7 @@ const CommentsView = ({
       {
         comment: text,
         comment_by: 'user',
-        date: new Date().toISOString()
+        date: Number(new Date().toISOString())
       }
     ]);
     setText('');

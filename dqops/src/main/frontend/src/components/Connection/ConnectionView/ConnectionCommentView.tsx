@@ -36,7 +36,7 @@ const ConnectionCommentView = () => {
       updateConnectionComments(checkTypes, firstLevelActiveTab, connection, [...(updatedComments || []), ...text ? [{
         comment: text,
         comment_by: 'user',
-        date: new Date().toISOString()
+        date: Number(new Date().toISOString())
       }] : []])
     );
     await dispatch(getConnectionComments(checkTypes, firstLevelActiveTab, connection, false));
