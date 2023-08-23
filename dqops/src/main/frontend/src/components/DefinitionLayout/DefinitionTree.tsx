@@ -31,6 +31,24 @@ import {
 } from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
+const treeRootElements = [
+  'Sensors',
+  'Rules',
+  'Data quality checks',
+  'Default data quality checks'
+];
+
+const defaultChecks = [
+  'Profiling checks',
+  'Recurring daily',
+  'Recurring monthly'
+];
+
+interface TreeRootInterface {
+  category: string;
+  isOpen: boolean;
+}
+
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
   const { sensorFolderTree, sensorState } = useSelector(
@@ -45,10 +63,13 @@ export const DefinitionTree = () => {
   );
   const [selected, setSelected] = useState('');
 
+  const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
+
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree());
+    setRootTree(treeRootElements.map((x) => ({ category: x, isOpen: false })));
   }, []);
 
   const toggleSensorFolder = (key: string) => {
@@ -102,6 +123,8 @@ export const DefinitionTree = () => {
       })
     );
   };
+
+  console.log(rootTree);
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -297,43 +320,8 @@ export const DefinitionTree = () => {
                   />
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
-                    {/* {check.custom === true && 
-                <CheckContextMenu
-                 onChangeSelected={onChangeSelected} 
-                 checkName={check.check_name ?? ""} 
-                 deleteCheck={deleteCheck}
-                 />} */}
                   </div>
                 </div>
-                {/* {selectedCheck.checkName === check.check_name && 
-            <div >
-            <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
-              label: x.rule_name ?? "", 
-              value: x.rule_name ?? ""
-            })) || []}
-            value={selectedCheck.sensor}
-            onChange={(selectedOption) => { 
-              onChangeNameOfCheck(check.check_name || "");
-              onChangeSensor(String(selectedOption));
-            }}
-            className='mt-2 mb-2'
-            />
-            <Select placeholder='Rule'  
-            options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
-            label: x.sensor_name ?? "", 
-            value: x.sensor_name ?? ""
-            })) || []}
-            onChange={(selectedOption) => {
-              onChangeNameOfCheck(check.check_name || "");
-              onChangeRule(String(selectedOption));
-            }}
-            value={selectedCheck.rule}
-            />
-            {
-            (selectedCheck.rule.length !==0 || selectedCheck.sensor.length !==0) &&
-            <Button className='mt-2 mb-2' color='primary' label='Update check' onClick={updateCheck}></Button>}
-            </div>
-            } */}
               </div>
             ))}
         </div>
@@ -343,30 +331,69 @@ export const DefinitionTree = () => {
 
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
-      <div className="mb-4">
-        <div className="text-sm text-gray-700 font-semibold mb-2">Sensors:</div>
-        {renderSensorFolderTree(sensorFolderTree, [])}
-      </div>
-
-      <div className="mb-4">
-        <div className="text-sm text-gray-700 font-semibold mb-2">Rules:</div>
-        {renderRuleFolderTree(ruleFolderTree, [])}
-      </div>
-
-      <div>
-        <div className="text-sm text-gray-700 font-semibold mb-2">
-          Data Quality Checks:{' '}
+      {rootTree?.map((x, index) => (
+        <div
+          key={index}
+          className="mt-2 mb-2 text-sm font-regular cursor-pointer"
+        >
+          <div
+            className="flex items-center mb-2"
+            onClick={() => {
+              const updatedRootTree = [...rootTree];
+              updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
+              setRootTree(updatedRootTree);
+            }}
+          >
+            <SvgIcon
+              name={x.isOpen ? 'folder' : 'closed-folder'}
+              className="w-4 h-4 min-w-4"
+            />
+            {x.category}
+          </div>
+          {x.category === 'Sensors' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderSensorFolderTree(sensorFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Rules' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderRuleFolderTree(ruleFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Data quality checks' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderChecksFolderTree(checksFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Default data quality checks' &&
+            x.isOpen === true && (
+              <div>
+                {defaultChecks.map((x, index) => (
+                  <div key={index}>
+                    <div
+                      className={clsx(
+                        'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300'
+                        // check.custom ? 'font-bold' : '',
+                        // selected == check.check_name ? 'bg-gray-300' : ''
+                      )}
+                      // onClick={() => {
+                      //   openCheckFirstLevelTab(check);
+                      // }}
+                    >
+                      <SvgIcon
+                        name="definitionssensors"
+                        className="w-4 h-4 min-w-4 shrink-0"
+                      />
+                      <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                        {x}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
-        {renderChecksFolderTree(checksFolderTree, [])}
-      </div>
-      <div className='text-sm'>
-        <div className="text-sm text-gray-700 font-semibold mb-2 mt-4">
-        Default data quality checks:{' '}
-        </div>
-        <div >Advanced profiling</div>
-        <div>Daily recurring checks</div>
-        <div>Monthly recurring checks</div>
-      </div>
+      ))}
     </div>
   );
 };
