@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.readouts.services.models;
+package com.dqops.data.errors.services.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -21,15 +21,16 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sensor readout detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
+ * Error detailed statuses. Returned in the context of a single data group, with a supplied list of other data groups.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class SensorReadoutsDetailedDataModel {
+public class ErrorsListModel {
     @JsonPropertyDescription("Check name.")
     private String checkName;
     @JsonPropertyDescription("Check display name.")
@@ -41,14 +42,11 @@ public class SensorReadoutsDetailedDataModel {
     @JsonPropertyDescription("Check category name.")
     private String checkCategory;
 
-    @JsonPropertyDescription("Sensor name.")
-    private String sensorName;
-
     @JsonPropertyDescription("Data groups list.")
-    private List<String> dataGroupNames;
+    private List<String> dataGroupsNames;
     @JsonPropertyDescription("Selected data group.")
     private String dataGroup;
 
-    @JsonPropertyDescription("Single sensor readouts")
-    private List<SensorReadoutDetailedSingleModel> singleSensorReadouts;
+    @JsonPropertyDescription("Error entries")
+    private List<ErrorEntryModel> errorEntries = new ArrayList<>();
 }

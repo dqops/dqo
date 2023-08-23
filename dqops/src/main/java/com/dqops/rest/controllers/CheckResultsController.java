@@ -19,9 +19,8 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
-import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
-import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
+import com.dqops.data.checkresults.services.models.CheckResultsListModel;
 import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -136,15 +135,15 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent check runs for table level data quality profiling checks on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableProfilingChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getTableProfilingChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -186,9 +185,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -204,15 +203,15 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getTableMonitoringChecksResults", notes = "Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableMonitoringChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getTableMonitoringChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -255,9 +254,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 monitoringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -272,15 +271,15 @@ public class CheckResultsController {
      * @return View of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsDetailedDataModel[].class)
+    @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The complete view of the most recent partitioned check executions for a requested time scale on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTablePartitionedChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getTablePartitionedChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -323,9 +322,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, new CheckResultsDetailedFilterParameters());
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
 
@@ -342,15 +341,15 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent check runs for column level data quality profiling checks on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnProfilingChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnProfilingChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -398,9 +397,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -417,15 +416,15 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksResults", notes = "Returns a complete view of the recent column level monitoring executions for the monitoring at a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the recent monitoring executions for the monitoring at a requested time scale on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnMonitoringChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnMonitoringChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -474,9 +473,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 monitoringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -493,15 +492,15 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksResults", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the recent partitioned check executions for a requested time scale on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnPartitionedChecksResults(
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnPartitionedChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -550,8 +549,8 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 }

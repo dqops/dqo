@@ -21,47 +21,35 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Detailed results for a single sensor. Represent one row in the sensor readouts table.
+ * Sensor readout detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class SensorReadoutDetailedSingleModel {
-    @JsonPropertyDescription("Sensor readout ID.")
-    String id;
-
+public class SensorReadoutsListModel {
     @JsonPropertyDescription("Check name.")
-    String checkName;
+    private String checkName;
     @JsonPropertyDescription("Check display name.")
-    String checkDisplayName;
+    private String checkDisplayName;
     @JsonPropertyDescription("Check type.")
-    String checkType;
+    private String checkType;
+    @JsonPropertyDescription("Check hash.")
+    private Long checkHash;
+    @JsonPropertyDescription("Check category name.")
+    private String checkCategory;
 
-    @JsonPropertyDescription("Actual value.")
-    Double actualValue;
-    @JsonPropertyDescription("Expected value.")
-    Double expectedValue;
+    @JsonPropertyDescription("Sensor name.")
+    private String sensorName;
 
-    @JsonPropertyDescription("Column name.")
-    String columnName;
-    @JsonPropertyDescription("Data group.")
-    String dataGroup;
+    @JsonPropertyDescription("Data groups list.")
+    private List<String> dataGroupNames;
+    @JsonPropertyDescription("Selected data group.")
+    private String dataGroup;
 
-    @JsonPropertyDescription("Duration (ms).")
-    Integer durationMs;
-    @JsonPropertyDescription("Executed at.")
-    Instant executedAt;
-    @JsonPropertyDescription("Time gradient.")
-    String timeGradient;
-    @JsonPropertyDescription("Time period.")
-    LocalDateTime timePeriod;
-
-    @JsonPropertyDescription("Provider.")
-    String provider;
-    @JsonPropertyDescription("Quality dimension.")
-    String qualityDimension;
+    @JsonPropertyDescription("Sensor readout entries")
+    private List<SensorReadoutEntryModel> sensorReadoutEntries = new ArrayList<>();
 }

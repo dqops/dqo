@@ -30,7 +30,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class CheckResultsDetailedDataModel {
+public class CheckResultsListModel {
     @JsonPropertyDescription("Check hash.")
     private long checkHash;
 
@@ -53,5 +53,5 @@ public class CheckResultsDetailedDataModel {
     private String dataGroup;
 
     @JsonPropertyDescription("Single check results")
-    private List<CheckResultDetailedSingleModel> singleCheckResults = new ArrayList<>();
+    private List<CheckResultEntryModel> checkResultEntries = new ArrayList<>();
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.errors.services.models;
+package com.dqops.data.readouts.services.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -21,32 +21,47 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
- * Error detailed statuses. Returned in the context of a single data- group, with a supplied list of other data groups.
+ * Detailed results for a single sensor. Represent one row in the sensor readouts table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class ErrorsDetailedDataModel {
+public class SensorReadoutEntryModel {
+    @JsonPropertyDescription("Sensor readout ID.")
+    String id;
+
     @JsonPropertyDescription("Check name.")
-    private String checkName;
+    String checkName;
     @JsonPropertyDescription("Check display name.")
-    private String checkDisplayName;
+    String checkDisplayName;
     @JsonPropertyDescription("Check type.")
-    private String checkType;
-    @JsonPropertyDescription("Check hash.")
-    private Long checkHash;
-    @JsonPropertyDescription("Check category name.")
-    private String checkCategory;
+    String checkType;
 
-    @JsonPropertyDescription("Data groups list.")
-    private List<String> dataGroupsNames;
-    @JsonPropertyDescription("Selected data group.")
-    private String dataGroup;
+    @JsonPropertyDescription("Actual value.")
+    Double actualValue;
+    @JsonPropertyDescription("Expected value.")
+    Double expectedValue;
 
-    @JsonPropertyDescription("Single error statuses")
-    private List<ErrorDetailedSingleModel> singleErrors = new ArrayList<>();
+    @JsonPropertyDescription("Column name.")
+    String columnName;
+    @JsonPropertyDescription("Data group.")
+    String dataGroup;
+
+    @JsonPropertyDescription("Duration (ms).")
+    Integer durationMs;
+    @JsonPropertyDescription("Executed at.")
+    Instant executedAt;
+    @JsonPropertyDescription("Time gradient.")
+    String timeGradient;
+    @JsonPropertyDescription("Time period.")
+    LocalDateTime timePeriod;
+
+    @JsonPropertyDescription("Provider.")
+    String provider;
+    @JsonPropertyDescription("Quality dimension.")
+    String qualityDimension;
 }

@@ -118,14 +118,14 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issues", produces = "application/json")
     @ApiOperation(value = "getIncidentIssues", notes = "Return a paged list of failed data quality check results that are related to an incident.",
-            response = CheckResultDetailedSingleModel[].class)
+            response = CheckResultEntryModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Incident returned", response = CheckResultDetailedSingleModel[].class),
+            @ApiResponse(code = 200, message = "Incident returned", response = CheckResultEntryModel[].class),
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultDetailedSingleModel>> getIncidentIssues(
+    public ResponseEntity<Flux<CheckResultEntryModel>> getIncidentIssues(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
@@ -178,14 +178,14 @@ public class IncidentsController {
             filterParameters.setSortDirection(direction.get());
         }
 
-        CheckResultDetailedSingleModel[] checkResultDetailedSingleModels = this.incidentsDataService.loadCheckResultsForIncident(
+        CheckResultEntryModel[] checkResultEntryModels = this.incidentsDataService.loadCheckResultsForIncident(
                 connectionName, year, month, incidentId, filterParameters);
 
-        if (checkResultDetailedSingleModels == null) {
+        if (checkResultEntryModels == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        return new ResponseEntity<>(Flux.just(checkResultDetailedSingleModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.just(checkResultEntryModels), HttpStatus.OK); // 200
     }
 
     /**

@@ -35,7 +35,7 @@ import java.util.NoSuchElementException;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class CheckResultDetailedSingleModel {
+public class CheckResultEntryModel {
     @JsonPropertyDescription("Check result ID.")
     String id;
 
@@ -132,7 +132,7 @@ public class CheckResultDetailedSingleModel {
      * @param sortOrder Sort order.
      * @return Comparator instance.
      */
-    public static Comparator<CheckResultDetailedSingleModel> makeSortComparator(CheckResultSortOrder sortOrder) {
+    public static Comparator<CheckResultEntryModel> makeSortComparator(CheckResultSortOrder sortOrder) {
         switch (sortOrder) {
             case executedAt:
                 return Comparator.comparing(o -> o.executedAt);

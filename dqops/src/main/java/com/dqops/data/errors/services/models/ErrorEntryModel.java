@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class ErrorDetailedSingleModel {
+public class ErrorEntryModel {
     @JsonPropertyDescription("Actual value.")
     Double actualValue;
     @JsonPropertyDescription("Expected value.")

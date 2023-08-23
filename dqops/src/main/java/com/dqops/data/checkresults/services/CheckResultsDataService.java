@@ -64,8 +64,8 @@ public interface CheckResultsDataService {
      * @param loadParameters          Load parameters.
      * @return Complete model of the check results.
      */
-    CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                              CheckResultsDetailedFilterParameters loadParameters);
+    CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                      CheckResultsDetailedFilterParameters loadParameters);
 
     /**
      * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
@@ -79,13 +79,13 @@ public interface CheckResultsDataService {
      * @param filterParameters Filter parameters.
      * @return An array of matching check results.
      */
-    CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
-                                                                       PhysicalTableName physicalTableName,
-                                                                       long incidentHash,
-                                                                       Instant firstSeen,
-                                                                       Instant incidentUntil,
-                                                                       int minSeverity,
-                                                                       CheckResultListFilterParameters filterParameters);
+    CheckResultEntryModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                              PhysicalTableName physicalTableName,
+                                                              long incidentHash,
+                                                              Instant firstSeen,
+                                                              Instant incidentUntil,
+                                                              int minSeverity,
+                                                              CheckResultListFilterParameters filterParameters);
 
     /**
      * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,

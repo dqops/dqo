@@ -18,14 +18,10 @@ package com.dqops.data.readouts.services;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
-import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
-import com.dqops.data.errors.factory.ErrorsColumnNames;
-import com.dqops.data.errors.services.models.ErrorDetailedSingleModel;
-import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
-import com.dqops.data.readouts.services.models.SensorReadoutDetailedSingleModel;
-import com.dqops.data.readouts.services.models.SensorReadoutsDetailedDataModel;
+import com.dqops.data.readouts.services.models.SensorReadoutEntryModel;
+import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -73,16 +69,16 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      * @return Complete model of the sensor readouts.
      */
     @Override
-    public SensorReadoutsDetailedDataModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                        SensorReadoutsDetailedFilterParameters loadParameters) {
-        Map<Long, SensorReadoutsDetailedDataModel> readoutMap = new LinkedHashMap<>();
+    public SensorReadoutsListModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                                SensorReadoutsDetailedFilterParameters loadParameters) {
+        Map<Long, SensorReadoutsListModel> readoutMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
         Table sensorReadoutsTable = loadRecentSensorReadouts(loadParameters, connectionName, physicalTableName);
         if (sensorReadoutsTable == null || sensorReadoutsTable.isEmpty()) {
-            return new SensorReadoutsDetailedDataModel[0]; // empty array
+            return new SensorReadoutsListModel[0]; // empty array
         }
 
         Table filteredTableWithAllDataGroups = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, sensorReadoutsTable, loadParameters);
@@ -94,7 +90,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         }
 
         if (filteredTableByDataGroup.isEmpty()) {
-            return new SensorReadoutsDetailedDataModel[0]; // empty array
+            return new SensorReadoutsListModel[0]; // empty array
         }
 
         Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
@@ -111,12 +107,12 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
             Long checkHash = checkHashColumn.get(rowIndex);
             String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            SensorReadoutsDetailedDataModel sensorReadoutDetailedDataModel = readoutMap.get(checkHash);
+            SensorReadoutsListModel sensorReadoutDetailedDataModel = readoutMap.get(checkHash);
 
-            SensorReadoutDetailedSingleModel singleModel = null;
+            SensorReadoutEntryModel singleModel = null;
 
             if (sensorReadoutDetailedDataModel != null) {
-                if (sensorReadoutDetailedDataModel.getSingleSensorReadouts().size() >= loadParameters.getMaxResultsPerCheck()) {
+                if (sensorReadoutDetailedDataModel.getSensorReadoutEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
                     continue; // enough results loaded
                 }
 
@@ -131,7 +127,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
                 String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-                sensorReadoutDetailedDataModel = new SensorReadoutsDetailedDataModel();
+                sensorReadoutDetailedDataModel = new SensorReadoutsListModel();
                 sensorReadoutDetailedDataModel.setCheckCategory(checkCategory);
                 sensorReadoutDetailedDataModel.setCheckName(checkName);
                 sensorReadoutDetailedDataModel.setCheckHash(checkHash);
@@ -154,14 +150,14 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             if (singleModel == null) {
                 singleModel = createSensorReadoutSingleRow(sortedTable.row(rowIndex));
             }
-            if (sensorReadoutDetailedDataModel.getSingleSensorReadouts() == null) {
-                sensorReadoutDetailedDataModel.setSingleSensorReadouts(new ArrayList<>());
+            if (sensorReadoutDetailedDataModel.getSensorReadoutEntries() == null) {
+                sensorReadoutDetailedDataModel.setSensorReadoutEntries(new ArrayList<>());
             }
 
-            sensorReadoutDetailedDataModel.getSingleSensorReadouts().add(singleModel);
+            sensorReadoutDetailedDataModel.getSensorReadoutEntries().add(singleModel);
         }
 
-        return readoutMap.values().toArray(SensorReadoutsDetailedDataModel[]::new);
+        return readoutMap.values().toArray(SensorReadoutsListModel[]::new);
     }
 
     /**
@@ -170,7 +166,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      * @return Single sensor result model.
      */
     @NotNull
-    private static SensorReadoutDetailedSingleModel createSensorReadoutSingleRow(Row row) {
+    private static SensorReadoutEntryModel createSensorReadoutSingleRow(Row row) {
         String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
 
         String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
@@ -191,7 +187,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
         String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
 
-        SensorReadoutDetailedSingleModel singleModel = new SensorReadoutDetailedSingleModel() {{
+        SensorReadoutEntryModel singleModel = new SensorReadoutEntryModel() {{
             setId(id);
             setActualValue(actualValue);
             setExpectedValue(expectedValue);
