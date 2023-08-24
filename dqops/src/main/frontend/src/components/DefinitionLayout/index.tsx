@@ -50,10 +50,6 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
     }
   }, [activeTab]);
 
-  console.log(pageTabs);
-
-  console.log(activeTab);
-
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Header />

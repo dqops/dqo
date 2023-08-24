@@ -140,9 +140,6 @@ export const SensorDetail = () => {
     );
   };
 
-  console.log(checkDetail);
-  console.log(helpText);
-
   return (
     <DefinitionLayout>
       <div className="relative">

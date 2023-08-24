@@ -35,6 +35,8 @@ export interface IDefinitionState {
   checksFolderTree?: CheckSpecFolderBasicModel;
   dataQualityChecksState: Record<string, boolean>;
   checkDetail?: CheckSpecModel;
+
+  definitionFirstLevelFolder?: Array<{ category: string; isOpen: boolean }>;
 }
 
 const initialState: IDefinitionState = {
@@ -43,7 +45,8 @@ const initialState: IDefinitionState = {
   sensorState: {},
   tabs: [],
   ruleState: {},
-  dataQualityChecksState: {}
+  dataQualityChecksState: {},
+  definitionFirstLevelFolder: []
 };
 
 const setActiveTabState = (
@@ -362,6 +365,10 @@ const definitionReducer = (state = initialState, action: any) => {
     }
     case DEFINITION_ACTION.GET_CHECK_DETAIL: {
       return setActiveTabState(state, action, {});
+    }
+
+    case DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER: {
+      return { ...state, definitionFirstLevelFolder: action.data };
     }
     default:
       return state;

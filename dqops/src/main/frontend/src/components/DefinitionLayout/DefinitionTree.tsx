@@ -19,7 +19,8 @@ import {
 import SvgIcon from '../SvgIcon';
 import {
   getRuleFolderTree,
-  toggleRuleFolderTree
+  toggleRuleFolderTree,
+  toggleFirstLevelFolder
 } from '../../redux/actions/definition.actions';
 import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
@@ -35,7 +36,7 @@ const treeRootElements = [
   'Sensors',
   'Rules',
   'Data quality checks',
-  'Default data quality checks'
+  'Default checks configuration'
 ];
 
 const defaultChecks = [
@@ -51,9 +52,8 @@ interface TreeRootInterface {
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
-  const { sensorFolderTree, sensorState } = useSelector(
-    (state: IRootState) => state.definition
-  );
+  const { sensorFolderTree, sensorState, definitionFirstLevelFolder } =
+    useSelector((state: IRootState) => state.definition);
   const { ruleFolderTree, ruleState } = useSelector(
     (state: IRootState) => state.definition || {}
   );
@@ -124,7 +124,59 @@ export const DefinitionTree = () => {
     );
   };
 
-  console.log(rootTree);
+  // console.log(rootTree);
+
+  console.log(definitionFirstLevelFolder);
+
+  // const toggleTreeFolder = (name: string, bool: boolean) => {
+  //   const array = { ...definitionFirstLevelFolder };
+  //   if(array !== undefined){
+  //   }
+
+  //   dispatch(toggleFirstLevelFolder([
+  //     { 'Sensor' : false },
+  //     { 'Rules' : false },
+  //     { 'Data quality checks': false },
+  //     { 'Default checks configuration': false }
+  //   ]))
+  // };
+
+  // function toggleTreeFolder(
+  //   arr:
+  //     | {
+  //         [key: string]: boolean;
+  //       }[]
+  //     | undefined,
+  //   key: string,
+  //   value: boolean
+  // ):
+  //   | {
+  //       [key: string]: boolean;
+  //     }[]
+  //   | undefined {
+  //   if (arr === undefined) {
+  //     return arr;
+  //   }
+
+  //   const updatedArray = arr.map((obj) => {
+  //     if (key in obj) {
+  //       obj[key] = value;
+  //     }
+  //     return obj;
+  //   });
+
+  //   console.log(updatedArray);
+  //   return updatedArray;
+  // }
+
+  useEffect(() => {
+    // dispatch(
+    //   toggleFirstLevelFolder(
+    // toggleTreeFolder(definitionFirstLevelFolder, 'Sensors', true);
+    //   )
+    // );
+    dispatch(toggleFirstLevelFolder(rootTree ?? []));
+  }, [rootTree]);
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -331,7 +383,7 @@ export const DefinitionTree = () => {
 
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
-      {rootTree?.map((x, index) => (
+      {definitionFirstLevelFolder?.map((x, index) => (
         <div
           key={index}
           className="mt-2 mb-2 text-sm font-regular cursor-pointer"
@@ -339,7 +391,7 @@ export const DefinitionTree = () => {
           <div
             className="flex items-center mb-2"
             onClick={() => {
-              const updatedRootTree = [...rootTree];
+              const updatedRootTree = [...definitionFirstLevelFolder];
               updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
               setRootTree(updatedRootTree);
             }}
@@ -365,7 +417,7 @@ export const DefinitionTree = () => {
               {renderChecksFolderTree(checksFolderTree, [])}
             </div>
           )}
-          {x.category === 'Default data quality checks' &&
+          {x.category === 'Default checks configuration' &&
             x.isOpen === true && (
               <div>
                 {defaultChecks.map((x, index) => (
