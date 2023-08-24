@@ -34,10 +34,11 @@ class TableComparisonConfigurationModel:
             reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
                 that has the reference data to compare to.
             reference_table (Union[Unset, PhysicalTableName]):
-            check_type (Union[Unset, TableComparisonConfigurationModelCheckType]): The type of checks (profiling, recurring,
-                partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
+            check_type (Union[Unset, TableComparisonConfigurationModelCheckType]): The type of checks (profiling,
+                monitoring, partitioned) that this check comparison configuration is applicable. The default value is
+                'profiling'.
             time_scale (Union[Unset, TableComparisonConfigurationModelTimeScale]): The time scale that this check comparison
-                configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or
+                configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or
                 an empty value for profiling checks.
             grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
                 the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared

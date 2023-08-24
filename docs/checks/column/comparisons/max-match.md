@@ -306,7 +306,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_max_match|recurring|daily|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_max_match|monitoring|daily|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -332,7 +332,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_max_m
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -370,7 +370,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -601,7 +601,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_max_match|recurring|monthly|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_max_match|monitoring|monthly|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -627,7 +627,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_max
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -665,7 +665,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:

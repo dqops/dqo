@@ -98,7 +98,7 @@ public class SensorExecutionRunParameters {
      * @param check Check specification (when a quality check is executed).
      * @param profiler Profiler specification (when a profiler is executed).
      * @param effectiveSensorRuleNames A pair of effective sensor names and rule names. The sensor name and rule name are retrieved from the check definition (for custom checks) or from the sensor parameters and rule parameters for built-in checks.
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
      * @param dataGroupings Effective data groupings configuration.
@@ -288,7 +288,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the check type (profiling, recurring, partitioned).
+     * Returns the check type (profiling, monitoring, partitioned).
      * @return Check type.
      */
     public CheckType getCheckType() {
@@ -296,7 +296,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Sets the check type (profiling, recurring, partitioned).
+     * Sets the check type (profiling, monitoring, partitioned).
      * @param checkType Check type.
      */
     public void setCheckType(CheckType checkType) {

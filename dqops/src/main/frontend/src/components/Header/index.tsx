@@ -252,13 +252,13 @@ const Header = () => {
           <div
             className={clsx(
               'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.RECURRING}`)
+              location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
                 ? 'font-bold'
                 : ''
             )}
-            onClick={onClick(CheckTypes.RECURRING)}
+            onClick={onClick(CheckTypes.MONITORING)}
           >
-            Recurring Checks
+            Monitoring Checks
           </div>
           <div
             className={clsx(

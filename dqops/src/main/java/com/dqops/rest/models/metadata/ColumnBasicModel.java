@@ -64,9 +64,9 @@ public class ColumnBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
-    @JsonPropertyDescription("True when the column has any recurring checks configured.")
+    @JsonPropertyDescription("True when the column has any monitoring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredRecurringChecks;
+    private boolean hasAnyConfiguredMonitoringChecks;
 
     @JsonPropertyDescription("True when the column has any partition checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -82,8 +82,8 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this column.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this column.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this column.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this column.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
@@ -117,7 +117,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
-            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredMonitoringChecks(columnSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.partitioned));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -134,12 +134,12 @@ public class ColumnBasicModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -196,7 +196,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
-            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredMonitoringChecks(columnSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.partitioned));
         }};
     }

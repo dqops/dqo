@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../Input';
 import Checkbox from '../Checkbox';
 import NumberInput from '../NumberInput';
-import { RecurringScheduleSpec } from '../../api';
+import { MonitoringScheduleSpec } from '../../api';
 import clsx from 'clsx';
 import RadioButton from '../RadioButton';
 import { useParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ import { setCronScheduler } from '../../redux/actions/job.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 
 interface IScheduleViewProps {
-  schedule?: RecurringScheduleSpec;
+  schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
 }
 

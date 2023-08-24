@@ -10,12 +10,12 @@ conditions against which sensor readouts are verified, described by a list of th
 
 In DQO there are 3 types of checks:
 
-- [Advanced profiling checks](./advanced-profiling/advanced-profiling.md) that should be used to profile data and run 
+- [Profiling checks](profiling-checks/profiling-checks.md) that should be used to profile data and run 
 experiments to see which check would be most appropriate for monitoring the quality of data.
 
-- [Recurring checks](./recurring-checks/recurring-checks.md) are standard checks that monitor data quality. Recurring 
-checks can be run daily and monthly. Daily recurring checks stores the most recent sensor readouts for each day when 
-the data quality check was run. While monthly recurring checks store the most recent sensor readout for each month 
+- [Monitoring checks](monitoring-checks/monitoring-checks.md) are standard checks that monitor data quality. Monitoring 
+checks can be run daily and monthly. Daily monitoring checks stores the most recent sensor readouts for each day when 
+the data quality check was run. While monthly monitoring checks store the most recent sensor readout for each month 
 when the data quality check was run.
 
 - [Partition checks](./partition-checks/partition-checks.md) measure data quality for each daily or monthly partition by
@@ -100,7 +100,7 @@ Data quality checks are defined as YAML files that support code completion in co
 Data quality check definitions can be stored in the source code repository, and versioned along with any other data
 pipeline or machine learning code.
 
-Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -272,7 +272,7 @@ identification of the source of the data quality issue.
 
 ## What's next
 
-- [Learn more about advanced profiling checks](./advanced-profiling/advanced-profiling.md)
-- [Learn more about recurring checks](./recurring-checks/recurring-checks.md)
+- [Learn more about profiling checks](profiling-checks/profiling-checks.md)
+- [Learn more about monitoring checks](monitoring-checks/monitoring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)
 - [Learn how to configure schedules](../../working-with-dqo/schedules/index.md)

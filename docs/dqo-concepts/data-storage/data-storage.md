@@ -85,9 +85,9 @@ each connection and table.
 ## Storage of check results data
 The way check results data are stored varies depending on the type of check used.
 
-### Advanced profiling checks
+### Profiling checks
 
-When the advanced profiling data quality check is run, all sensor readouts are saved. As an illustration, if the check
+When the profiling data quality check is run, all sensor readouts are saved. As an illustration, if the check
 is run three times, the table with the results could look like this:
 
 | actual_value |              time_period |
@@ -105,9 +105,9 @@ If there was a change in the data, and we run the check again, the table will be
 |       96.06% |     2023-04-07T09:10:44.386Z |
 |   **95.79%** | **2023-04-07T11:47:20.843Z** |
 
-### Recurring checks
+### Monitoring checks
 
-The daily recurring checks store the most recent sensor readouts for each day when the data quality check was run.
+The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run.
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
@@ -131,8 +131,8 @@ If there was a change in the data on 2023-04-07 and we run the check again, the 
 
 The previous result for 2023-04-07 was deleted.
 
-Similarly, the monthly recurring checks store the most recent sensor readout for each month when the data quality check was run.
-For monthly recurring checks, the original time_period of the result e.g. 2023-04-05T09:06:53.386Z is truncated to the 1st day of the month - 2023-04-01.
+Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:06:53.386Z is truncated to the 1st day of the month - 2023-04-01.
 
 This approach allows you to track the data quality over time and calculate daily and monthly data quality KPIs.
 
@@ -142,7 +142,7 @@ The daily partition checks store the most recent sensor readouts for each partit
 check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
-The daily recurring checks store the most recent sensor readouts for each day when the data quality check was run.
+The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run.
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
@@ -193,5 +193,5 @@ When there was a change in the data and on 2023-04-07 we run the check again, th
 
 The previous result for 2023-04-07 was deleted.
 
-Similarly, the monthly recurring checks store the most recent sensor readout for each month when the data quality check was run.
-For monthly recurring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
+Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.

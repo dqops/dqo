@@ -1135,7 +1135,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_date_values_in_future_percent|recurring|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_date_values_in_future_percent|monitoring|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1161,7 +1161,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_date_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           datetime:
             daily_date_values_in_future_percent:
@@ -1186,7 +1186,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           datetime:
             daily_date_values_in_future_percent:
@@ -1717,7 +1717,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               datetime:
                 daily_date_values_in_future_percent:
@@ -2261,7 +2261,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_date_values_in_future_percent|recurring|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_date_values_in_future_percent|monitoring|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2287,7 +2287,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dat
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datetime:
             monthly_date_values_in_future_percent:
@@ -2312,7 +2312,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datetime:
             monthly_date_values_in_future_percent:
@@ -2843,7 +2843,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               datetime:
                 monthly_date_values_in_future_percent:

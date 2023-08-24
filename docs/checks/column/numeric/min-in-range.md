@@ -544,7 +544,7 @@ Verifies that the minimal value in a column is not outside the set range. Stores
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_min_in_range|recurring|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_min_in_range|monitoring|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -570,7 +570,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_min_i
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_min_in_range:
@@ -598,7 +598,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_min_in_range:
@@ -832,7 +832,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_min_in_range:
@@ -1079,7 +1079,7 @@ Verifies that the minimal value in a column does not exceed the set range. Store
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_min_in_range|recurring|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_min_in_range|monitoring|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1105,7 +1105,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_min
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_min_in_range:
@@ -1133,7 +1133,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_min_in_range:
@@ -1367,7 +1367,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_min_in_range:

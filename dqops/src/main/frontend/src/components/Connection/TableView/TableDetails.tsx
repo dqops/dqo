@@ -16,7 +16,7 @@ import {
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import Select from '../../Select';
-import { TableBasicModelAdvancedProfilingResultTruncationEnum } from '../../../api';
+import { TableBasicModelProfilingChecksResultTruncationEnum } from '../../../api';
 import NumberInput from '../../NumberInput';
 
 const TableDetails = () => {
@@ -143,7 +143,7 @@ const TableDetails = () => {
                 options={[
                   { label: '', value: undefined },
                   ...Object.values(
-                    TableBasicModelAdvancedProfilingResultTruncationEnum
+                    TableBasicModelProfilingChecksResultTruncationEnum
                   ).map((x) => ({ label: x, value: x }))
                 ]}
                 value={tableBasic?.advanced_profiling_result_truncation}

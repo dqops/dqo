@@ -869,7 +869,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_null_placeholder_percent|recurring|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_string_null_placeholder_percent|monitoring|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -895,7 +895,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_null_placeholder_percent:
@@ -920,7 +920,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_null_placeholder_percent:
@@ -1318,7 +1318,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_null_placeholder_percent:
@@ -1729,7 +1729,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_null_placeholder_percent|recurring|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_string_null_placeholder_percent|monitoring|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1755,7 +1755,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_null_placeholder_percent:
@@ -1780,7 +1780,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_null_placeholder_percent:
@@ -2178,7 +2178,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_null_placeholder_percent:

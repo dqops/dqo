@@ -339,10 +339,10 @@ const EditReferenceTable = ({
             setIsUpdating(false);
           });
       } else if (
-        checkTypes === CheckTypes.RECURRING &&
+        checkTypes === CheckTypes.MONITORING &&
         timePartitioned === 'daily'
       ) {
-        await TableComparisonsApi.createTableComparisonRecurringDaily(
+        await TableComparisonsApi.createTableComparisonMonitoringDaily(
           connection,
           schema,
           table,
@@ -368,10 +368,10 @@ const EditReferenceTable = ({
             setIsUpdating(false);
           });
       } else if (
-        checkTypes === CheckTypes.RECURRING &&
+        checkTypes === CheckTypes.MONITORING &&
         timePartitioned === 'monthly'
       ) {
-        await TableComparisonsApi.createTableComparisonRecurringMonthly(
+        await TableComparisonsApi.createTableComparisonMonitoringMonthly(
           connection,
           schema,
           table,

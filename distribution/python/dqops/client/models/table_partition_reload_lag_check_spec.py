@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from ..models.max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
     from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
     from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_timeliness_partition_reload_lag_sensor_parameters_spec import (
         TableTimelinessPartitionReloadLagSensorParametersSpec,
     )
@@ -22,11 +22,11 @@ T = TypeVar("T", bound="TablePartitionReloadLagCheckSpec")
 class TablePartitionReloadLagCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
@@ -49,7 +49,7 @@ class TablePartitionReloadLagCheckSpec:
         fatal (Union[Unset, MaxDaysRule7ParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -136,18 +136,18 @@ class TablePartitionReloadLagCheckSpec:
         from ..models.max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
         from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
         from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_timeliness_partition_reload_lag_sensor_parameters_spec import (
             TableTimelinessPartitionReloadLagSensorParametersSpec,
         )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)

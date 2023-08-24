@@ -499,7 +499,7 @@ public class JobsController {
      * @return Nothing.
      */
     @PostMapping(value = "/scheduler/status/start", produces = "application/json")
-    @ApiOperation(value = "startCronScheduler", notes = "Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
+    @ApiOperation(value = "startCronScheduler", notes = "Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.",
             response = Void.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -522,7 +522,7 @@ public class JobsController {
      * @return Nothing.
      */
     @PostMapping(value = "/scheduler/status/stop", produces = "application/json")
-    @ApiOperation(value = "stopCronScheduler", notes = "Stops the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
+    @ApiOperation(value = "stopCronScheduler", notes = "Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.",
             response = Void.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

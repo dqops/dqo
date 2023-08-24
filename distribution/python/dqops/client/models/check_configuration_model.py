@@ -31,7 +31,7 @@ class CheckConfigurationModel:
         table_name (Union[Unset, str]): Table name.
         column_name (Union[Unset, str]): Column name, if the check is set up on a column.
         check_target (Union[Unset, CheckConfigurationModelCheckTarget]): Check target (table or column).
-        check_type (Union[Unset, CheckConfigurationModelCheckType]): Check type (profiling, recurring, partitioned).
+        check_type (Union[Unset, CheckConfigurationModelCheckType]): Check type (profiling, monitoring, partitioned).
         check_time_scale (Union[Unset, CheckConfigurationModelCheckTimeScale]): Category to which this check belongs.
         category_name (Union[Unset, str]): Category to which this check belongs.
         check_name (Union[Unset, str]): Check name that is used in YAML file.

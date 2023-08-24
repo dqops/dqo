@@ -759,7 +759,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_negative_percent|recurring|daily|[negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_negative_percent|monitoring|daily|[negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -785,7 +785,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_negat
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_negative_percent:
@@ -810,7 +810,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_negative_percent:
@@ -1153,7 +1153,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_negative_percent:
@@ -1509,7 +1509,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_negative_percent|recurring|monthly|[negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_negative_percent|monitoring|monthly|[negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1535,7 +1535,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_neg
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_negative_percent:
@@ -1560,7 +1560,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_negative_percent:
@@ -1903,7 +1903,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_negative_percent:

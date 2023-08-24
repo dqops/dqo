@@ -16,7 +16,7 @@
 package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
+import com.dqops.data.errors.services.models.ErrorsListModel;
 
 /**
  * Service that returns data from sensor readouts.
@@ -29,6 +29,6 @@ public interface ErrorsDataService {
      * @param loadParameters          Load parameters.
      * @return Complete model of the errors.
      */
-    ErrorsDetailedDataModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                 ErrorsDetailedFilterParameters loadParameters);
+    ErrorsListModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                         ErrorsDetailedFilterParameters loadParameters);
 }

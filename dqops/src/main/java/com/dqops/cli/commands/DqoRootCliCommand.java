@@ -246,7 +246,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoSchedulerSynchronizeCronSchedule;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronized-folders"},
-            description = "Configures which folders from the DQO user home folder are synchronized to DQO Cloud during a recurring synchronization (triggered by a cron schedule configured by --dqo.scheduler.synchronize-cron-schedule). By default, DQO synchronizes (pushes) only changes from folders that have local changes.", defaultValue = "locally_changed")
+            description = "Configures which folders from the DQO user home folder are synchronized to DQO Cloud during a monitoring synchronization (triggered by a cron schedule configured by --dqo.scheduler.synchronize-cron-schedule). By default, DQO synchronizes (pushes) only changes from folders that have local changes.", defaultValue = "locally_changed")
     private ScheduledSynchronizationFolderSelectionMode dqoSchedulerSynchronizedFolders = ScheduledSynchronizationFolderSelectionMode.locally_changed;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronization-mode"},
@@ -258,19 +258,19 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private CheckRunReportingMode dqoSchedulerCheckRunMode;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.profiling"},
-            description = "Sets the default schedule for running advanced profiling checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+            description = "Sets the default schedule for running profiling checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
                     "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesProfiling;
 
-    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.recurring-daily"},
-            description = "Sets the default schedule for running daily recurring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.monitoring-daily"},
+            description = "Sets the default schedule for running daily monitoring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
                     "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
-    private String dqoSchedulerDefaultSchedulesRecurringDaily;
+    private String dqoSchedulerDefaultSchedulesMonitoringDaily;
 
-    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.recurring-monthly"},
-            description = "Sets the default schedule for running monthly recurring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.monitoring-monthly"},
+            description = "Sets the default schedule for running monthly monitoring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
                     "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
-    private String dqoSchedulerDefaultSchedulesRecurringMonthly;
+    private String dqoSchedulerDefaultSchedulesMonitoringMonthly;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.partitioned-daily"},
             description = "Sets the default schedule for running daily partitioned checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
@@ -287,7 +287,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoDockerUserHomeAllowUnmounted;
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.sensor-readout-limit"},
-            description = "Default row count limit retrieved by a data quality sensor from the results of an SQL query for non-partitioned checks (profiling and recurring). This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source or raise an error.", defaultValue = "1000")
+            description = "Default row count limit retrieved by a data quality sensor from the results of an SQL query for non-partitioned checks (profiling and monitoring). This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source or raise an error.", defaultValue = "1000")
     private int dqoSensorLimitSensorReadoutLimit;
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.sensor-readout-limit-partitioned"},

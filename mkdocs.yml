@@ -16,8 +16,8 @@ nav:
       - "dqo-concepts/index.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
-          - Advanced profiling: "dqo-concepts/checks/advanced-profiling/advanced-profiling.md"
-          - Recurring checks: "dqo-concepts/checks/recurring-checks/recurring-checks.md"
+          - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
+          - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
       - Sensors: "dqo-concepts/sensors/sensors.md"
       - Rules: "dqo-concepts/rules/rules.md"
@@ -320,11 +320,11 @@ nav:
       - profiling:
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
         - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
-      - recurring:
-        - table daily recurring checks: 'reference/yaml/recurring/table-daily-recurring-checks.md'
-        - table monthly recurring checks: 'reference/yaml/recurring/table-monthly-recurring-checks.md'
-        - column daily recurring checks: 'reference/yaml/recurring/column-daily-recurring-checks.md'
-        - column monthly recurring checks: 'reference/yaml/recurring/column-monthly-recurring-checks.md'
+      - monitoring:
+        - table daily monitoring checks: 'reference/yaml/monitoring/table-daily-monitoring-checks.md'
+        - table monthly monitoring checks: 'reference/yaml/monitoring/table-monthly-monitoring-checks.md'
+        - column daily monitoring checks: 'reference/yaml/monitoring/column-daily-monitoring-checks.md'
+        - column monthly monitoring checks: 'reference/yaml/monitoring/column-monthly-monitoring-checks.md'
       - partitioned:
         - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
         - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'

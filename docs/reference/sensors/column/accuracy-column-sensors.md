@@ -62,6 +62,31 @@ Column level sensor that calculates percentage of the difference in average of a
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            AVG({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -218,6 +243,30 @@ Column level sensor that calculates percentage of the difference in max of a col
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -371,6 +420,31 @@ Column level sensor that calculates percentage of the difference in min of a col
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            MIN({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -523,6 +597,31 @@ Column level sensor that calculates percentage of the difference in row count of
         COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            COUNT({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
       

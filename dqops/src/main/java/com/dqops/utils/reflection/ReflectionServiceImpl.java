@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,8 +44,8 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(boolean.class, ParameterDataType.boolean_type);
         put(Double.class, ParameterDataType.double_type);
         put(double.class, ParameterDataType.double_type);
-        put(Instant.class, ParameterDataType.instant_type);
-        put(LocalDate.class, ParameterDataType.date_type);
+         put(LocalDate.class, ParameterDataType.date_type);
+        put(LocalDateTime.class, ParameterDataType.datetime_type);
     }};
 
     private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{

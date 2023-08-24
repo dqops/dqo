@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import org.apache.parquet.Strings;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -43,7 +45,7 @@ public class CommentSpec extends AbstractSpec {
     };
 
     @JsonPropertyDescription("Comment date and time")
-    private Date date;
+    private LocalDateTime date;
 
     @JsonPropertyDescription("Commented by")
     private String commentBy;
@@ -55,7 +57,7 @@ public class CommentSpec extends AbstractSpec {
      * Comment date.
      * @return Commend date.
      */
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -63,7 +65,7 @@ public class CommentSpec extends AbstractSpec {
      * Sets the comment date.
      * @param date Commend date.
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
 		this.setDirtyIf(!Objects.equals(this.date, date));
         this.date = date;
     }

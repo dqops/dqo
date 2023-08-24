@@ -407,7 +407,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         connectionWrapper.setSpec(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
             // no configuration, apply the defaults
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection());
         }
         userHomeContext.flush();
         cliOperationStatus.setSuccessMessage(String.format(

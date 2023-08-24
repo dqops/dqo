@@ -337,7 +337,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             DoubleColumn parsedValues = DoubleColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
-                if (stringValue != null) {
+                if (!Strings.isNullOrEmpty(stringValue)) {
                     Double parsedDoubleValue = Doubles.tryParse(stringValue);
                     if (parsedDoubleValue != null) {
                         parsedValues.set(i, parsedDoubleValue);

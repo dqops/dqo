@@ -23,7 +23,7 @@ import com.dqops.core.scheduler.synchronize.SynchronizeMetadataSchedulerJob;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,8 +169,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            RecurringScheduleSpec scanMetadataRecurringScheduleSpec = new RecurringScheduleSpec(scanMetadataCronSchedule);
-            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataRecurringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
+            MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
 
             this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
@@ -262,7 +262,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
 
             for (Trigger trigger : triggersOfJob) {
-                RecurringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+                MonitoringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
                 schedulesCollection.add(schedule);
             }
 
@@ -297,7 +297,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         for (Trigger trigger : triggersOfJob) {
-            RecurringScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+            MonitoringScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
 
             if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
                 try {
@@ -312,7 +312,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
 
-        for (RecurringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
+        for (MonitoringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
             try {
                 Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
 

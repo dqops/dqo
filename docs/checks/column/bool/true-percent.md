@@ -787,7 +787,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_true_percent|recurring|daily|[true_percent](../../../../reference/sensors/Column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_true_percent|monitoring|daily|[true_percent](../../../../reference/sensors/Column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -813,7 +813,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_true_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           bool:
             daily_true_percent:
@@ -838,7 +838,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           bool:
             daily_true_percent:
@@ -1195,7 +1195,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               bool:
                 daily_true_percent:
@@ -1565,7 +1565,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_true_percent|recurring|monthly|[true_percent](../../../../reference/sensors/Column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_true_percent|monitoring|monthly|[true_percent](../../../../reference/sensors/Column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1591,7 +1591,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tru
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           bool:
             monthly_true_percent:
@@ -1616,7 +1616,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           bool:
             monthly_true_percent:
@@ -1973,7 +1973,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               bool:
                 monthly_true_percent:

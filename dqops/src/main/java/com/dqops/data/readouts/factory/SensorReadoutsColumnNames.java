@@ -52,7 +52,7 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_PERIOD_UTC_COLUMN_NAME = "time_period_utc";
 
     /**
-     * The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
+     * The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
      */
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
@@ -152,7 +152,7 @@ public class SensorReadoutsColumnNames {
     public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
 
     /**
-     * The data quality check type (profiling, recurring, partitioned).
+     * The data quality check type (profiling, monitoring, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 

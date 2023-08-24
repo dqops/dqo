@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  CheckResultDetailedSingleModel,
-  CheckResultsDetailedDataModel
+  CheckResultEntryModel,
+  CheckResultsListModel
 } from '../../../api';
 import Select from '../../Select';
 import { Table } from '../../Table';
@@ -19,7 +19,7 @@ import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { IconButton } from '@material-tailwind/react';
 
 interface CheckResultsTabProps {
-  results: CheckResultsDetailedDataModel[];
+  results: CheckResultsListModel[];
   dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
@@ -61,7 +61,7 @@ const CheckResultsTab = ({
   } = useParams();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
+  const getSeverityClass = (row: CheckResultEntryModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
     if (row.severity === 2) return 'bg-orange-100';
     if (row.severity === 3) return 'bg-red-100';
@@ -296,7 +296,7 @@ const CheckResultsTab = ({
 
   const allResults = results
     .map((result) =>
-      (result.singleCheckResults || []).map((item) => ({
+      (result.checkResultEntries || []).map((item) => ({
         ...item,
         checkName: result.checkName
       }))
@@ -381,7 +381,7 @@ const CheckResultsTab = ({
             <Table
               className="mt-4 w-full"
               columns={columns}
-              data={(results[0].singleCheckResults || []).map((item) => ({
+              data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
                 checkName: results[0].checkName
               }))}

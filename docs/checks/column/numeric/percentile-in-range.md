@@ -4200,7 +4200,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4226,7 +4226,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_perce
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_in_range:
@@ -4254,7 +4254,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_in_range:
@@ -4569,7 +4569,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_percentile_in_range:
@@ -4896,7 +4896,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_median_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4922,7 +4922,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_median_in_range:
@@ -4952,7 +4952,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_median_in_range:
@@ -5269,7 +5269,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_median_in_range:
@@ -5598,7 +5598,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_10_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_10_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -5624,7 +5624,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_perce
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_10_in_range:
@@ -5654,7 +5654,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_10_in_range:
@@ -5971,7 +5971,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_percentile_10_in_range:
@@ -6300,7 +6300,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_25_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_25_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -6326,7 +6326,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_perce
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_25_in_range:
@@ -6356,7 +6356,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_25_in_range:
@@ -6673,7 +6673,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_percentile_25_in_range:
@@ -7002,7 +7002,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_75_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_75_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7028,7 +7028,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_perce
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_75_in_range:
@@ -7058,7 +7058,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_75_in_range:
@@ -7375,7 +7375,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_percentile_75_in_range:
@@ -7704,7 +7704,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_90_in_range|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_90_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7730,7 +7730,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_perce
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_90_in_range:
@@ -7760,7 +7760,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_percentile_90_in_range:
@@ -8077,7 +8077,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_percentile_90_in_range:
@@ -8406,7 +8406,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -8432,7 +8432,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_per
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_in_range:
@@ -8460,7 +8460,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_in_range:
@@ -8775,7 +8775,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_percentile_in_range:
@@ -9102,7 +9102,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_median_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_median_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -9128,7 +9128,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_med
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_median_in_range:
@@ -9158,7 +9158,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_median_in_range:
@@ -9475,7 +9475,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_median_in_range:
@@ -9804,7 +9804,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_10_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_10_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -9830,7 +9830,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_per
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_10_in_range:
@@ -9860,7 +9860,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_10_in_range:
@@ -10177,7 +10177,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_percentile_10_in_range:
@@ -10506,7 +10506,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_25_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_25_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -10532,7 +10532,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_per
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_25_in_range:
@@ -10562,7 +10562,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_25_in_range:
@@ -10879,7 +10879,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_percentile_25_in_range:
@@ -11208,7 +11208,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_75_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_75_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -11234,7 +11234,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_per
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_75_in_range:
@@ -11264,7 +11264,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_75_in_range:
@@ -11581,7 +11581,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_percentile_75_in_range:
@@ -11910,7 +11910,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_90_in_range|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_90_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -11936,7 +11936,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_per
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_90_in_range:
@@ -11966,7 +11966,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_percentile_90_in_range:
@@ -12283,7 +12283,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_percentile_90_in_range:

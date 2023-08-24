@@ -7,7 +7,7 @@ spec:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
   schedules:
-    recurring_daily:
+    monitoring_daily:
       cron_expression: 0 8 * * *
   incident_grouping:
     grouping_level: table_dimension_category

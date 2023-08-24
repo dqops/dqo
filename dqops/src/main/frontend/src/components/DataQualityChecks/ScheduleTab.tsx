@@ -1,10 +1,10 @@
 import React from 'react';
-import { RecurringScheduleSpec } from '../../api';
+import { MonitoringScheduleSpec } from '../../api';
 import ScheduleView from "../ScheduleView";
 
 interface IScheduleTabProps {
-  schedule?: RecurringScheduleSpec;
-  onChange: (item?: RecurringScheduleSpec) => void;
+  schedule?: MonitoringScheduleSpec;
+  onChange: (item?: MonitoringScheduleSpec) => void;
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {

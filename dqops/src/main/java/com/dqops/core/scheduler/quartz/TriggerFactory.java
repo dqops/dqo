@@ -15,7 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import org.quartz.JobKey;
 import org.quartz.Trigger;
 
@@ -29,5 +29,5 @@ public interface TriggerFactory {
      * @param jobKey Job key to identify a predefined job.
      * @return Trigger.
      */
-    Trigger createTrigger(RecurringScheduleSpec scheduleSpec, JobKey jobKey);
+    Trigger createTrigger(MonitoringScheduleSpec scheduleSpec, JobKey jobKey);
 }

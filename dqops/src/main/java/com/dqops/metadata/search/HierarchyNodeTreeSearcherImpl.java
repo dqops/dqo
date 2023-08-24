@@ -20,7 +20,7 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -176,20 +176,20 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     }
 
     /**
-     * Search for recurring schedules specs in the tree.
+     * Search for monitoring schedules specs in the tree.
      *
      * @param startNode                      Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param recurringScheduleSearchFilters Search filters.
-     * @return Collection of recurring schedules specs nodes that passed the filter.
+     * @param monitoringScheduleSearchFilters Search filters.
+     * @return Collection of monitoring schedules specs nodes that passed the filter.
      */
     @Override
-    public Collection<RecurringScheduleSpec> findSchedules(HierarchyNode startNode, RecurringScheduleSearchFilters recurringScheduleSearchFilters) {
-        RecurringScheduleSearchFiltersVisitor searchFilterVisitor = recurringScheduleSearchFilters.createSearchFilterVisitor();
+    public Collection<MonitoringScheduleSpec> findSchedules(HierarchyNode startNode, MonitoringScheduleSearchFilters monitoringScheduleSearchFilters) {
+        MonitoringScheduleSearchFiltersVisitor searchFilterVisitor = monitoringScheduleSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 new SearchParameterObject(matchingNodes, null, null)));
 
-        return (List<RecurringScheduleSpec>)(ArrayList<?>)matchingNodes;
+        return (List<MonitoringScheduleSpec>)(ArrayList<?>)matchingNodes;
     }
 
     /**

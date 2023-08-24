@@ -121,8 +121,8 @@ public class TableComparisonModel {
      * @param comparedTableSpec Source table specification (the compared table).
      * @param referenceTableSpec Reference table specification.
      * @param tableComparisonConfigurationName The table comparison name (the reference table configuration name).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param checkTimeScale Check time scale for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param checkTimeScale Check time scale for monitoring and partitioned checks.
      * @return Table comparison mode.
      */
     public static TableComparisonModel fromTableSpec(TableSpec comparedTableSpec,
@@ -203,7 +203,7 @@ public class TableComparisonModel {
      * Copies the configuration of table comparison on the table level and columns level to correct checks, creating these checks when comparison checks are not enabled.
      * @param targetTableSpec Target table specification to update.
      * @param referenceTableConfigurationName Table comparison name (the reference table configuration name).
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Check time scale.
      */
     public void copyToTableSpec(TableSpec targetTableSpec,
