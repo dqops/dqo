@@ -32,23 +32,11 @@ import {
 } from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
-const treeRootElements = [
-  'Sensors',
-  'Rules',
-  'Data quality checks',
-  'Default checks configuration'
-];
-
 const defaultChecks = [
   'Profiling checks',
   'Recurring daily',
   'Recurring monthly'
 ];
-
-interface TreeRootInterface {
-  category: string;
-  isOpen: boolean;
-}
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -63,13 +51,13 @@ export const DefinitionTree = () => {
   );
   const [selected, setSelected] = useState('');
 
-  const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
+  // const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree());
-    setRootTree(treeRootElements.map((x) => ({ category: x, isOpen: false })));
+    // setRootTree(treeRootElements.map((x) => ({ category: x, isOpen: false })));
   }, []);
 
   const toggleSensorFolder = (key: string) => {
@@ -124,59 +112,21 @@ export const DefinitionTree = () => {
     );
   };
 
-  // console.log(rootTree);
-
-  console.log(definitionFirstLevelFolder);
-
-  // const toggleTreeFolder = (name: string, bool: boolean) => {
-  //   const array = { ...definitionFirstLevelFolder };
-  //   if(array !== undefined){
-  //   }
-
-  //   dispatch(toggleFirstLevelFolder([
-  //     { 'Sensor' : false },
-  //     { 'Rules' : false },
-  //     { 'Data quality checks': false },
-  //     { 'Default checks configuration': false }
-  //   ]))
-  // };
-
-  // function toggleTreeFolder(
-  //   arr:
-  //     | {
-  //         [key: string]: boolean;
-  //       }[]
-  //     | undefined,
-  //   key: string,
-  //   value: boolean
-  // ):
-  //   | {
-  //       [key: string]: boolean;
-  //     }[]
-  //   | undefined {
-  //   if (arr === undefined) {
-  //     return arr;
-  //   }
-
-  //   const updatedArray = arr.map((obj) => {
-  //     if (key in obj) {
-  //       obj[key] = value;
-  //     }
-  //     return obj;
-  //   });
-
-  //   console.log(updatedArray);
-  //   return updatedArray;
-  // }
-
   useEffect(() => {
-    // dispatch(
-    //   toggleFirstLevelFolder(
-    // toggleTreeFolder(definitionFirstLevelFolder, 'Sensors', true);
-    //   )
-    // );
-    dispatch(toggleFirstLevelFolder(rootTree ?? []));
-  }, [rootTree]);
+    if (
+      definitionFirstLevelFolder === undefined ||
+      definitionFirstLevelFolder.length === 0
+    ) {
+      dispatch(
+        toggleFirstLevelFolder([
+          { category: 'Sensors', isOpen: false },
+          { category: 'Rules', isOpen: false },
+          { category: 'Data quality checks', isOpen: false },
+          { category: 'Default checks configuration', isOpen: false }
+        ])
+      );
+    }
+  }, []);
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -393,7 +343,7 @@ export const DefinitionTree = () => {
             onClick={() => {
               const updatedRootTree = [...definitionFirstLevelFolder];
               updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
-              setRootTree(updatedRootTree);
+              dispatch(toggleFirstLevelFolder(updatedRootTree));
             }}
           >
             <SvgIcon
