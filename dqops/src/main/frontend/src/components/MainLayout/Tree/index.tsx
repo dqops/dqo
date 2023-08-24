@@ -51,7 +51,7 @@ const Tree = () => {
         const id = [job.parameters?.importTableParameters?.connectionName, job.parameters?.importTableParameters?.schemaName].join('.');
         const schemaNode = findTreeNode(treeData, id);
 
-        refreshNode(schemaNode, false);
+        refreshNode(schemaNode, true);
       }
     })
   }, [job_dictionary_state]);
@@ -143,11 +143,11 @@ const Tree = () => {
         setActiveTab(`${tableNode?.id || ""}.incidents`);
       }
 
-      if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
+      if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_DAILY) {
         setActiveTab(`${tableNode?.id || ""}.dailyCheck`);
       }
 
-      if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_MONTHLY) {
+      if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_MONTHLY) {
         setActiveTab(`${tableNode?.id || ""}.monthlyCheck`);
       }
 
@@ -184,7 +184,7 @@ const Tree = () => {
 
         setActiveTab(`${columnNode?.id || ""}.checks`);
       }
-      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_DAILY) {
+      if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_DAILY) {
         const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
@@ -200,7 +200,7 @@ const Tree = () => {
 
         setActiveTab(`${columnNode?.id || ""}.dailyCheck`);
       }
-      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY) {
+      if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_MONTHLY) {
         const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);

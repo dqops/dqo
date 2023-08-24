@@ -55,7 +55,7 @@ public class TableComparisonResultsController {
     }
 
     /**
-     * Retrieves the results of the most table comparison performed using the advanced profiling comparison checks.
+     * Retrieves the results of the most table comparison performed using the profiling checks comparison checks.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -63,11 +63,11 @@ public class TableComparisonResultsController {
      * @return The results of the most recent table comparison.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonProfilingResults", notes = "Retrieves the results of the most table comparison performed using the advanced profiling comparison checks.",
+    @ApiOperation(value = "getTableComparisonProfilingResults", notes = "Retrieves the results of the most table comparison performed using the profiling checks comparison checks.",
             response = TableComparisonResultsModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the advanced profiling checks on a table returned",
+            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the profiling checks on a table returned",
                     response = TableComparisonResultsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -104,7 +104,7 @@ public class TableComparisonResultsController {
     }
 
     /**
-     * Retrieves the results of the most table comparison performed using the recurring comparison checks.
+     * Retrieves the results of the most table comparison performed using the monitoring comparison checks.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -112,17 +112,17 @@ public class TableComparisonResultsController {
      * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return The results of the most recent table comparison.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringResults", notes = "Retrieves the results of the most table comparison performed using the recurring comparison checks.",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringResults", notes = "Retrieves the results of the most table comparison performed using the monitoring comparison checks.",
             response = TableComparisonResultsModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the recurring checks on a table returned",
+            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the monitoring checks on a table returned",
                     response = TableComparisonResultsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonRecurringResults(
+    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonMonitoringResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -150,7 +150,7 @@ public class TableComparisonResultsController {
         }
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.recurring, timeScale, tableComparisonConfigurationName);
+                connectionName, physicalTableName, CheckType.monitoring, timeScale, tableComparisonConfigurationName);
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 

@@ -23,9 +23,9 @@ import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSp
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -37,9 +37,9 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -333,18 +333,18 @@ public class TablesController {
      * @return Overridden schedule configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table", response = RecurringScheduleSpec.class)
+    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table", response = MonitoringScheduleSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = RecurringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = MonitoringScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getTableSchedulingGroupOverride(
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getTableSchedulingGroupOverride(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -361,12 +361,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        RecurringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        RecurringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
         return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
     }
@@ -539,21 +539,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of daily data quality recurring on a table given a connection name and table name.
+     * Retrieves the configuration of daily data quality monitoring on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Daily data quality recurring on a requested table.
+     * @return Daily data quality monitoring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCheckCategoriesSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksDaily", notes = "Return the configuration of daily table level data quality monitoring on a table", response = TableDailyMonitoringCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily table level data quality recurring on a table returned", response = TableDailyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily table level data quality monitoring on a table returned", response = TableDailyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableDailyRecurringCheckCategoriesSpec>> getTableDailyRecurringChecks(
+    public ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>> getTableDailyMonitoringChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -577,26 +577,26 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableDailyRecurringCheckCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
+        TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = tableSpec.getMonitoringChecks().getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of monthly data quality recurring on a table given a connection name and table name.
+     * Retrieves the configuration of monthly data quality monitoring on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Monthly data quality recurring on a requested table.
+     * @return Monthly data quality monitoring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksMonthly", notes = "Return the configuration of monthly table level data quality recurring on a table", response = TableMonthlyRecurringCheckCategoriesSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksMonthly", notes = "Return the configuration of monthly table level data quality monitoring on a table", response = TableMonthlyMonitoringCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality recurring on a table returned", response = TableMonthlyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality monitoring on a table returned", response = TableMonthlyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableMonthlyRecurringCheckCategoriesSpec>> getTableRecurringChecksMonthly(
+    public ResponseEntity<Mono<TableMonthlyMonitoringCheckCategoriesSpec>> getTableMonitoringChecksMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -620,8 +620,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
+        TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = tableSpec.getMonitoringChecks().getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
     }
     
     /**
@@ -771,22 +771,22 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale.
+     * Retrieves the configuration of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
-     * @return UI friendly data quality recurring configuration list on a requested table.
+     * @return UI friendly data quality monitoring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getTableRecurringChecksModel(
+    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -811,7 +811,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -940,22 +940,22 @@ public class TablesController {
     }
 
     /**
-     * Retrieves a simplistic list of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale.
+     * Retrieves a simplistic list of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
-     * @return Simplistic UI friendly data quality recurring list on a requested table.
+     * @return Simplistic UI friendly data quality monitoring list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality recurring on a table for a given time scale", response = CheckContainerBasicModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/basic", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale", response = CheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality recurring on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableRecurringChecksBasicModel(
+    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableMonitoringChecksBasicModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -980,7 +980,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -1105,24 +1105,24 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale, filtered by category and check name.
+     * Retrieves the configuration of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly data quality recurring configuration list on a requested table.
+     * @return UI friendly data quality monitoring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getTableRecurringChecksModelFilter(
+    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModelFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1149,7 +1149,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1362,7 +1362,7 @@ public class TablesController {
     }
 
     /**
-     * Retrieves a UI friendly data quality recurring check configuration list of column-level checks on a requested table.
+     * Retrieves a UI friendly data quality monitoring check configuration list of column-level checks on a requested table.
      * @param connectionName    Connection name.
      * @param schemaName        Schema name.
      * @param tableName         Table name.
@@ -1373,17 +1373,17 @@ public class TablesController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
-     * @return UI friendly data quality recurring check configuration list on a requested schema.
+     * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsRecurringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = CheckConfigurationModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getTableColumnsMonitoringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality monitoring checks on a table", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = CheckConfigurationModel[].class),
+            @ApiResponse(code = 200, message = "Configuration of data quality monitoring checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsRecurringChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsMonitoringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1410,7 +1410,7 @@ public class TablesController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.recurring, timeScale),
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
                 CheckTarget.column,
@@ -1525,7 +1525,7 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the list of recurring checks templates on the given table.
+     * Retrieves the list of monitoring checks templates on the given table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -1534,15 +1534,15 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/monitoring/{timeScale}", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getTableRecurringChecksTemplates(
+    public ResponseEntity<Flux<CheckTemplate>> getTableMonitoringChecksTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1559,7 +1559,7 @@ public class TablesController {
         }
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.recurring,
+                connectionName, fullTableName, CheckType.monitoring,
                 timeScale, checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -1898,7 +1898,7 @@ public class TablesController {
      * @param connectionName              Connection name.
      * @param schemaName                  Schema name.
      * @param tableName                   Table name.
-     * @param recurringScheduleSpec       New recurring schedule configuration or an emtpy optional to clear the schedule configuration.
+     * @param monitoringScheduleSpec       New monitoring schedule configuration or an emtpy optional to clear the schedule configuration.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
@@ -1915,9 +1915,9 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
-                @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+                @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1940,24 +1940,24 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        RecurringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
-            schedules = new RecurringSchedulesSpec();
+            schedules = new MonitoringSchedulesSpec();
             tableSpec.setSchedulesOverride(schedules);
         }
 
-        RecurringScheduleSpec newScheduleSpec = recurringScheduleSpec.orElse(null);
+        MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
         switch (schedulingGroup) {
             case profiling:
                 schedules.setProfiling(newScheduleSpec);
                 break;
 
-            case recurring_daily:
-                schedules.setRecurringDaily(newScheduleSpec);
+            case monitoring_daily:
+                schedules.setMonitoringDaily(newScheduleSpec);
                 break;
 
-            case recurring_monthly:
-                schedules.setRecurringMonthly(newScheduleSpec);
+            case monitoring_monthly:
+                schedules.setMonitoringMonthly(newScheduleSpec);
                 break;
 
             case partitioned_daily:
@@ -2227,29 +2227,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of daily table level data quality recurring of an existing table.
+     * Updates the configuration of daily table level data quality monitoring of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableDailyRecurringSpec     New configuration of the daily data quality recurring on the table level.
+     * @param tableDailyMonitoringSpec     New configuration of the daily data quality monitoring on the table level.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksDaily", notes = "Updates the list of daily table level data quality recurring on an existing table.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDailyRecurringChecks(
+    public ResponseEntity<Mono<?>> updateTableDailyMonitoringChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of daily table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableDailyRecurringCheckCategoriesSpec> tableDailyRecurringSpec) {
+            @ApiParam("Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
+            @RequestBody Optional<TableDailyMonitoringCheckCategoriesSpec> tableDailyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2258,12 +2258,12 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
+                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
 
-                    if (tableDailyRecurringSpec.isPresent()) {
-                        recurringSpec.setDaily(tableDailyRecurringSpec.get());
+                    if (tableDailyMonitoringSpec.isPresent()) {
+                        monitoringSpec.setDaily(tableDailyMonitoringSpec.get());
                     } else {
-                        recurringSpec.setDaily(null);
+                        monitoringSpec.setDaily(null);
                     }
                 },
                 connectionName,
@@ -2279,29 +2279,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of monthly table level data quality recurring of an existing table.
+     * Updates the configuration of monthly table level data quality monitoring of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableMonthlyRecurringSpec     New configuration of the monthly data quality recurring on the table level.
+     * @param tableMonthlyMonitoringSpec     New configuration of the monthly data quality monitoring on the table level.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksMonthly", notes = "Updates the list of monthly table level data quality recurring on an existing table.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality monitoring successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksMonthly(
+    public ResponseEntity<Mono<?>> updateTableMonitoringChecksMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of monthly table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableMonthlyRecurringCheckCategoriesSpec> tableMonthlyRecurringSpec) {
+            @ApiParam("Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
+            @RequestBody Optional<TableMonthlyMonitoringCheckCategoriesSpec> tableMonthlyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2310,12 +2310,12 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
+                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
 
-                    if (tableMonthlyRecurringSpec.isPresent()) {
-                        recurringSpec.setMonthly(tableMonthlyRecurringSpec.get());
+                    if (tableMonthlyMonitoringSpec.isPresent()) {
+                        monitoringSpec.setMonthly(tableMonthlyMonitoringSpec.get());
                     } else {
-                        recurringSpec.setMonthly(null);
+                        monitoringSpec.setMonthly(null);
                     }
                 },
                 connectionName,
@@ -2342,7 +2342,7 @@ public class TablesController {
     @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -2519,30 +2519,30 @@ public class TablesController {
     }
 
     /**
-     * Updates the data quality recurring specification on an existing table for a given time scale from a check model with a patch of changes.
+     * Updates the data quality monitoring specification on an existing table for a given time scale from a check model with a patch of changes.
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
      * @param timeScale                Time scale.
-     * @param checkContainerModel      New configuration of the data quality recurring on the table level provided as a model. The model may contain only a subset of data quality dimensions or checks. Only those recurring that are present in the model are updated, the others are preserved without any changes.
+     * @param checkContainerModel      New configuration of the data quality monitoring on the table level provided as a model. The model may contain only a subset of data quality dimensions or checks. Only those monitoring that are present in the model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksModel", notes = "Updates the data quality recurring from a model that contains a patch with changes.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality monitoring successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksModel(
+    public ResponseEntity<Mono<?>> updateTableMonitoringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Model with the changes to be applied to the data quality recurring configuration.")
+            @ApiParam("Model with the changes to be applied to the data quality monitoring configuration.")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -2551,7 +2551,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
-                spec -> spec.getTableCheckRootContainer(CheckType.recurring, timeScale, true),
+                spec -> spec.getTableCheckRootContainer(CheckType.monitoring, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,

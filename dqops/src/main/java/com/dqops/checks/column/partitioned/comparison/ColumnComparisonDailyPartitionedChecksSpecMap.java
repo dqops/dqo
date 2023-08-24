@@ -16,7 +16,7 @@
 
 package com.dqops.checks.column.partitioned.comparison;
 
-import com.dqops.checks.column.recurring.comparison.ColumnComparisonDailyRecurringChecksSpec;
+import com.dqops.checks.column.monitoring.comparison.ColumnComparisonDailyMonitoringChecksSpec;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpecMap;
 
 /**

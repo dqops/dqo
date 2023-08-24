@@ -21,12 +21,10 @@ class CheckSpecFolderBasicModel:
     Attributes:
         folders (Union[Unset, CheckSpecFolderBasicModelFolders]): A map of folder-level children checks.
         checks (Union[Unset, List['CheckSpecBasicModel']]): Check basic model list of checks defined at this level.
-        all_checks (Union[Unset, List['CheckSpecBasicModel']]):
     """
 
     folders: Union[Unset, "CheckSpecFolderBasicModelFolders"] = UNSET
     checks: Union[Unset, List["CheckSpecBasicModel"]] = UNSET
-    all_checks: Union[Unset, List["CheckSpecBasicModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -42,14 +40,6 @@ class CheckSpecFolderBasicModel:
 
                 checks.append(checks_item)
 
-        all_checks: Union[Unset, List[Dict[str, Any]]] = UNSET
-        if not isinstance(self.all_checks, Unset):
-            all_checks = []
-            for all_checks_item_data in self.all_checks:
-                all_checks_item = all_checks_item_data.to_dict()
-
-                all_checks.append(all_checks_item)
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -57,8 +47,6 @@ class CheckSpecFolderBasicModel:
             field_dict["folders"] = folders
         if checks is not UNSET:
             field_dict["checks"] = checks
-        if all_checks is not UNSET:
-            field_dict["all_checks"] = all_checks
 
         return field_dict
 
@@ -84,17 +72,9 @@ class CheckSpecFolderBasicModel:
 
             checks.append(checks_item)
 
-        all_checks = []
-        _all_checks = d.pop("all_checks", UNSET)
-        for all_checks_item_data in _all_checks or []:
-            all_checks_item = CheckSpecBasicModel.from_dict(all_checks_item_data)
-
-            all_checks.append(all_checks_item)
-
         check_spec_folder_basic_model = cls(
             folders=folders,
             checks=checks,
-            all_checks=all_checks,
         )
 
         check_spec_folder_basic_model.additional_properties = d

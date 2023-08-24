@@ -1,7 +1,7 @@
 **table availability** checks  
 
 **Description**  
-Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
+Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
 
 ___
 
@@ -360,7 +360,7 @@ Verifies availability on table in database using simple row count. Stores the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|daily_table_availability|monitoring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -386,7 +386,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -409,7 +409,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -710,7 +710,7 @@ Verifies availability on table in database using simple row count. Stores the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|monthly_table_availability|monitoring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -736,7 +736,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tab
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       availability:
         monthly_table_availability:
@@ -759,7 +759,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       availability:
         monthly_table_availability:

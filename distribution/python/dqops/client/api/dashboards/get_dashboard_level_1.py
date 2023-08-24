@@ -72,7 +72,7 @@ def sync_detailed(
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel1
 
-     Returns a single dashboard in one folder with a temporary authenticated url
+     Returns a single dashboard in the tree of folder with a temporary authenticated url
 
     Args:
         folder (str):
@@ -111,7 +111,7 @@ def sync(
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel1
 
-     Returns a single dashboard in one folder with a temporary authenticated url
+     Returns a single dashboard in the tree of folder with a temporary authenticated url
 
     Args:
         folder (str):
@@ -143,7 +143,7 @@ async def asyncio_detailed(
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel1
 
-     Returns a single dashboard in one folder with a temporary authenticated url
+     Returns a single dashboard in the tree of folder with a temporary authenticated url
 
     Args:
         folder (str):
@@ -180,7 +180,7 @@ async def asyncio(
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel1
 
-     Returns a single dashboard in one folder with a temporary authenticated url
+     Returns a single dashboard in the tree of folder with a temporary authenticated url
 
     Args:
         folder (str):

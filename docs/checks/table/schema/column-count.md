@@ -94,7 +94,7 @@ Detects if the number of column matches an expected number. Retrieves the metada
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_count|recurring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|daily_column_count|monitoring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -120,7 +120,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_count:
@@ -143,7 +143,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_count:
@@ -178,7 +178,7 @@ Detects if the number of column matches an expected number. Retrieves the metada
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_count|recurring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|monthly_column_count|monitoring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -204,7 +204,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_count:
@@ -227,7 +227,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_count:

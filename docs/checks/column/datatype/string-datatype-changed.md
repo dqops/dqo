@@ -2,7 +2,7 @@
 
 **Description**  
 Table level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily recurring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
+ The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
  For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 ___
@@ -14,7 +14,7 @@ Detects that the data type of texts stored in a text column has changed since th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_datatype_changed|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_string_datatype_changed|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2004,11 +2004,11 @@ ___
 ## **daily string datatype changed**  
   
 **Check description**  
-Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
+Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_datatype_changed|recurring|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_string_datatype_changed|monitoring|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2034,7 +2034,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           datatype:
             daily_string_datatype_changed:
@@ -2056,7 +2056,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           datatype:
             daily_string_datatype_changed:
@@ -3030,7 +3030,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               datatype:
                 daily_string_datatype_changed:
@@ -4001,11 +4001,11 @@ ___
 ## **monthly string datatype changed**  
   
 **Check description**  
-Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
+Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_datatype_changed|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_string_datatype_changed|monitoring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4031,7 +4031,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datatype:
             monthly_string_datatype_changed:
@@ -4053,7 +4053,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datatype:
             monthly_string_datatype_changed:
@@ -5027,7 +5027,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               datatype:
                 monthly_string_datatype_changed:
@@ -5998,11 +5998,11 @@ ___
 ## **daily partition string datatype changed**  
   
 **Check description**  
-Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.  
+Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7995,11 +7995,11 @@ ___
 ## **monthly partition string datatype changed**  
   
 **Check description**  
-Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.  
+Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

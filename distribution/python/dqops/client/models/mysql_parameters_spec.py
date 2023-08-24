@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.mysql_parameters_spec_sslmode import MysqlParametersSpecSslmode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -17,8 +18,8 @@ class MysqlParametersSpec:
     Attributes:
         host (Union[Unset, str]): MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment
             variable.
-        port (Union[Unset, str]): MySQL port name. The default port is 3306. Supports also a ${MYSQL_PORT} configuration
-            with a custom environment variable.
+        port (Union[Unset, str]): MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT}
+            configuration with a custom environment variable.
         database (Union[Unset, str]): MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
             to use dynamic substitution.
         user (Union[Unset, str]): MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
@@ -28,7 +29,7 @@ class MysqlParametersSpec:
         options (Union[Unset, str]): MySQL connection 'options' initialization parameter. For example setting this to -c
             statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
             ${MYSQL_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connect to MySQL using SSL. The default value is false.
+        sslmode (Union[Unset, MysqlParametersSpecSslmode]): SslMode MySQL connection parameter.
         properties (Union[Unset, MysqlParametersSpecProperties]):
     """
 
@@ -38,7 +39,7 @@ class MysqlParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    ssl: Union[Unset, bool] = UNSET
+    sslmode: Union[Unset, MysqlParametersSpecSslmode] = UNSET
     properties: Union[Unset, "MysqlParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -49,7 +50,10 @@ class MysqlParametersSpec:
         user = self.user
         password = self.password
         options = self.options
-        ssl = self.ssl
+        sslmode: Union[Unset, str] = UNSET
+        if not isinstance(self.sslmode, Unset):
+            sslmode = self.sslmode.value
+
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -69,8 +73,8 @@ class MysqlParametersSpec:
             field_dict["password"] = password
         if options is not UNSET:
             field_dict["options"] = options
-        if ssl is not UNSET:
-            field_dict["ssl"] = ssl
+        if sslmode is not UNSET:
+            field_dict["sslmode"] = sslmode
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -95,7 +99,12 @@ class MysqlParametersSpec:
 
         options = d.pop("options", UNSET)
 
-        ssl = d.pop("ssl", UNSET)
+        _sslmode = d.pop("sslmode", UNSET)
+        sslmode: Union[Unset, MysqlParametersSpecSslmode]
+        if isinstance(_sslmode, Unset):
+            sslmode = UNSET
+        else:
+            sslmode = MysqlParametersSpecSslmode(_sslmode)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, MysqlParametersSpecProperties]
@@ -111,7 +120,7 @@ class MysqlParametersSpec:
             user=user,
             password=password,
             options=options,
-            ssl=ssl,
+            sslmode=sslmode,
             properties=properties,
         )
 

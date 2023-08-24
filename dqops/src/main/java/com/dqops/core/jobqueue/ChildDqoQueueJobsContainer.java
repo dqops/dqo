@@ -17,6 +17,7 @@
 package com.dqops.core.jobqueue;
 
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -74,15 +75,24 @@ public class ChildDqoQueueJobsContainer<T> {
 
         // the last job has finished, finishing...
         List<T> childJobsResults = new ArrayList<>();
+        Throwable firstJobFailure = null;
         for (DqoQueueJob<T> childJob : this.childJobsSet) {
             DqoJobCompletionStatus childJobCompletionStatus = childJob.getCompletionStatus();
             if (childJobCompletionStatus == DqoJobCompletionStatus.SUCCEEDED) {
                 T childJobResult = childJob.getResult();
                 childJobsResults.add(childJobResult);
+            } else if (childJobCompletionStatus == DqoJobCompletionStatus.FAILED) {
+                if (firstJobFailure == null) {
+                    firstJobFailure = childJob.getJobExecutionException();
+                }
             }
         }
 
-        this.allJobsFinished.complete(childJobsResults);
+        if (firstJobFailure != null) {
+            this.allJobsFinished.completeExceptionally(firstJobFailure);
+        } else {
+            this.allJobsFinished.complete(childJobsResults);
+        }
         assert this.childJobsSet.isEmpty();
         return null;
     }
@@ -118,8 +128,15 @@ public class ChildDqoQueueJobsContainer<T> {
         try (JobCancellationListenerHandle handle = parentJobCancellationToken.registerCancellationListener(jobCancellationTokenConsumer)) {
             try {
                 return this.allJobsFinished.get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
                 throw new DqoQueueJobCancelledException();
+            }
+            catch (ExecutionException e) {
+                if (e.getCause() instanceof DqoQueueJobCancelledException) {
+                    throw new DqoQueueJobCancelledException();
+                }
+
+                throw new DqoQueueJobExecutionException(e.getCause());
             }
         }
     }

@@ -4,6 +4,6 @@ spec:
   type: python
   mode: previous_readouts
   time_window:
-    prediction_time_window: 30
+    prediction_time_window: 60
     min_periods_with_readouts: 0
     historic_data_point_grouping: last_n_readouts

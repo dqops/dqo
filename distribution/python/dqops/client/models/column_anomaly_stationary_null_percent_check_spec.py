@@ -5,11 +5,11 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
-    )
     from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
         AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+    )
+    from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
     )
     from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
         AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
         ColumnNullsNullsPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
 T = TypeVar("T", bound="ColumnAnomalyStationaryNullPercentCheckSpec")
@@ -28,11 +28,11 @@ T = TypeVar("T", bound="ColumnAnomalyStationaryNullPercentCheckSpec")
 class ColumnAnomalyStationaryNullPercentCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
@@ -55,7 +55,7 @@ class ColumnAnomalyStationaryNullPercentCheckSpec:
         fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -142,11 +142,11 @@ class ColumnAnomalyStationaryNullPercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
-        )
         from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
             AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+        )
+        from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
         )
         from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
             AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
@@ -155,15 +155,15 @@ class ColumnAnomalyStationaryNullPercentCheckSpec:
             ColumnNullsNullsPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)

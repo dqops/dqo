@@ -38,7 +38,8 @@ import {
   EnvironmentApiFactory,
   ChecksApiFactory,
   TableComparisonsApiFactory,
-  TableComparisonResultsApiFactory
+  TableComparisonResultsApiFactory,
+  DefaultsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -131,3 +132,5 @@ export const TableComparisonResultsApi = TableComparisonResultsApiFactory(
   '',
   axios
 );
+
+export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);

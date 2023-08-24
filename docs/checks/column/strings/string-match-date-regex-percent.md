@@ -201,6 +201,76 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            'YYYY-MM-DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            'MM/DD/YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            'DD/MM/YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            'YYYY/MM/DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            'MON DD, YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -599,6 +669,82 @@ spec:
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'YYYY-MM-DD'-%}
+                'YYYY-MM-DD'
+            {%- elif date_formats == 'MM/DD/YYYY' -%}
+                'MM/DD/YYYY'
+            {%- elif date_formats == 'DD/MM/YYYY' -%}
+                'DD/MM/YYYY'
+            {%- elif date_formats == 'YYYY/MM/DD'-%}
+                'YYYY/MM/DD'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'MON DD, YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -853,7 +999,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_match_date_regex_percent|recurring|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_string_match_date_regex_percent|monitoring|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -879,7 +1025,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_match_date_regex_percent:
@@ -906,7 +1052,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_match_date_regex_percent:
@@ -1041,6 +1187,76 @@ spec:
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            'YYYY-MM-DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            'MM/DD/YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            'DD/MM/YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            'YYYY/MM/DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            'MON DD, YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1298,7 +1514,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_match_date_regex_percent:
@@ -1440,6 +1656,82 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'YYYY-MM-DD'-%}
+                'YYYY-MM-DD'
+            {%- elif date_formats == 'MM/DD/YYYY' -%}
+                'MM/DD/YYYY'
+            {%- elif date_formats == 'DD/MM/YYYY' -%}
+                'DD/MM/YYYY'
+            {%- elif date_formats == 'YYYY/MM/DD'-%}
+                'YYYY/MM/DD'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'MON DD, YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1697,7 +1989,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_match_date_regex_percent|recurring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_string_match_date_regex_percent|monitoring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1723,7 +2015,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_match_date_regex_percent:
@@ -1750,7 +2042,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_match_date_regex_percent:
@@ -1885,6 +2177,76 @@ spec:
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            'YYYY-MM-DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            'MM/DD/YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            'DD/MM/YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            'YYYY/MM/DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            'MON DD, YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2142,7 +2504,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_match_date_regex_percent:
@@ -2284,6 +2646,82 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'YYYY-MM-DD'-%}
+                'YYYY-MM-DD'
+            {%- elif date_formats == 'MM/DD/YYYY' -%}
+                'MM/DD/YYYY'
+            {%- elif date_formats == 'DD/MM/YYYY' -%}
+                'DD/MM/YYYY'
+            {%- elif date_formats == 'YYYY/MM/DD'-%}
+                'YYYY/MM/DD'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'MON DD, YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2732,6 +3170,76 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            'YYYY-MM-DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            'MM/DD/YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            'DD/MM/YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            'YYYY/MM/DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            'MON DD, YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -3132,6 +3640,82 @@ spec:
             DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'YYYY-MM-DD'-%}
+                'YYYY-MM-DD'
+            {%- elif date_formats == 'MM/DD/YYYY' -%}
+                'MM/DD/YYYY'
+            {%- elif date_formats == 'DD/MM/YYYY' -%}
+                'DD/MM/YYYY'
+            {%- elif date_formats == 'YYYY/MM/DD'-%}
+                'YYYY/MM/DD'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'MON DD, YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -3578,6 +4162,76 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            'YYYY-MM-DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            'MM/DD/YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            'DD/MM/YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            'YYYY/MM/DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            'MON DD, YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -3978,6 +4632,82 @@ spec:
             DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'YYYY-MM-DD'-%}
+                'YYYY-MM-DD'
+            {%- elif date_formats == 'MM/DD/YYYY' -%}
+                'MM/DD/YYYY'
+            {%- elif date_formats == 'DD/MM/YYYY' -%}
+                'DD/MM/YYYY'
+            {%- elif date_formats == 'YYYY/MM/DD'-%}
+                'YYYY/MM/DD'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'MON DD, YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```

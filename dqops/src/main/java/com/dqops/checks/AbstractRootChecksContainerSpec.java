@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildFieldEntry;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -49,7 +49,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Dictionary of custom checks. The keys are check names.")
+    @JsonPropertyDescription("Dictionary of custom checks. The keys are check names within this category.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CustomCheckSpecMap custom;
@@ -84,14 +84,14 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      * @return Check type.
      */
     @JsonIgnore
     public abstract CheckType getCheckType();
 
     /**
-     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time scale for monitoring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time scale and return null.
      * @return Time scale (daily, monthly, ...).
      */
@@ -107,10 +107,10 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
 
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @JsonIgnore
-    public abstract CheckRunRecurringScheduleGroup getSchedulingGroup();
+    public abstract CheckRunScheduleGroup getSchedulingGroup();
 
     /**
      * Returns the comparisons container for table comparison checks, indexed by the reference table configuration name.

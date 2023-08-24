@@ -6,11 +6,11 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { SensorBasicFolderModel } from "../../api";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../redux/actions/sensor.actions";
-import { ROUTES } from "../../shared/routes";
-import AddFolderDialog from "./AddFolderDialog";
+import { SensorBasicFolderModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { ROUTES } from '../../shared/routes';
+import AddFolderDialog from './AddFolderDialog';
 
 interface SensorContextMenuProps {
   folder?: SensorBasicFolderModel;
@@ -28,15 +28,19 @@ const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
   };
 
   const openAddNewSensor = () => {
-    dispatch(addFirstLevelTab({
-      url: ROUTES.SENSOR_DETAIL([...path || [], "new_sensor"].join("-")),
-      value: ROUTES.SENSOR_DETAIL_VALUE([...path || [], "new_sensor"].join("-")),
-      state: {
-        type: "create",
-        path
-      },
-      label: "New sensor"
-    }));
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SENSOR_DETAIL([...(path || []), 'new_sensor'].join('-')),
+        value: ROUTES.SENSOR_DETAIL_VALUE(
+          [...(path || []), 'new_sensor'].join('-')
+        ),
+        state: {
+          type: 'create',
+          path
+        },
+        label: 'New sensor'
+      })
+    );
   };
 
   const openAddNewFolder = () => {

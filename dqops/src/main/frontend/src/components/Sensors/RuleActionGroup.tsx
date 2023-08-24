@@ -1,16 +1,17 @@
-import Button from "../Button";
-import React from "react";
-import { useSelector } from "react-redux";
-import { getFirstLevelSensorState } from "../../redux/selectors";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { updateRule } from "../../redux/actions/sensor.actions";
+import Button from '../Button';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { updateRule } from '../../redux/actions/definition.actions';
 
 type RuleActionGroupProps = {
   onSave: () => void;
-}
+};
 
 export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
-  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail } = useSelector(getFirstLevelSensorState);
+  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail } =
+    useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
@@ -18,8 +19,8 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
       onSave();
       return;
     }
-    if(full_rule_name) {
-      dispatch(updateRule(full_rule_name, ruleDetail))
+    if (full_rule_name) {
+      dispatch(updateRule(full_rule_name, ruleDetail));
     }
   };
 

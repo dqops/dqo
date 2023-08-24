@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.sensors;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
@@ -40,7 +41,7 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         this.sut = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
     }
 
@@ -57,11 +58,11 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
-        Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertEquals(7,sensorDocumentation.getSqlTemplates().keySet().size());
         Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
                 .map(ProviderTypeModel::getProviderTypeName)
                 .anyMatch(provider -> provider.equals("bigquery")));
-        Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().values().size());
+        Assertions.assertEquals(7,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());

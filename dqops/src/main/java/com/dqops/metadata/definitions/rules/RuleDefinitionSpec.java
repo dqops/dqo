@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -219,5 +220,18 @@ public class RuleDefinitionSpec extends AbstractSpec {
         RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
         cloned.fields = null;
         return cloned;
+    }
+
+    /**
+     * Returns the rule name, retrieved from the hierarchy id.
+     * @return Full rule name.
+     */
+    @JsonIgnore
+    public String getRuleName() {
+        if (this.getHierarchyId() == null) {
+            return null;
+        }
+
+        return (String)this.getHierarchyId().getLast();
     }
 }

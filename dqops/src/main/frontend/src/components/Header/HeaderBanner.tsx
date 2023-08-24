@@ -123,7 +123,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
             </div>
           </div>
           <div className="flex mb-2 items-center justify-between">
-            <div className="grow">Run advanced profiling checks</div>
+            <div className="grow">Run profiling checks</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
@@ -146,7 +146,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
           </div>
           <div className="flex mb-2 items-center justify-between">
             <div className="grow">
-              Configure scheduling for profiling and daily recurring checks
+              Configure scheduling for profiling and daily monitoring checks
             </div>
 
             <div className="w-50 justify-between flex gap-2 items-center">

@@ -105,24 +105,24 @@ public class CheckResultsOverviewController {
     }
 
     /**
-     * Retrieves the overview of the most recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the overview of the most recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent recurring results.
+     * @return Overview of the most recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksOverview", notes = "Returns an overview of the most recent table level monitoring executions for the monitoring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableRecurringChecksOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableMonitoringChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -147,7 +147,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
@@ -260,25 +260,25 @@ public class CheckResultsOverviewController {
     }
 
     /**
-     * Retrieves the overview of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the overview of the most recent monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent recurring results.
+     * @return Overview of the most recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksOverview", notes = "Returns an overview of the most recent column level monitoring executions for the monitoring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent monitoring executions for the monitoring at a requested time scale on a column returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnRecurringChecksOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnMonitoringChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -309,7 +309,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());

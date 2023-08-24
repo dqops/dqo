@@ -19,7 +19,7 @@ negatively impact our business, we want to monitor various data quality aspects 
 
 **SOLUTION**
 
-We will set six data quality recurring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
+We will set six data quality monitoring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
 
 1. [daily_table_availability](../../checks/table/availability/table-availability.md) check on `users` table with max failures thresholds levels:
     - warning: 1
@@ -101,7 +101,7 @@ spec:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
   schedules:
-    recurring_daily:
+    monitoring_daily:
       cron_expression: 0 8 * * *
   incident_grouping:
     grouping_level: table_dimension_category
@@ -126,7 +126,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -143,7 +143,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -167,7 +167,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -189,7 +189,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_values_in_range_numeric_percent:
@@ -208,7 +208,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_value_in_set_percent:
@@ -269,7 +269,7 @@ To view the connection-level schedule:
 
 1. Go to the Data Source section and select the "thelook_ecommerce" connection from the tree view on the left. 
 
-2. In the main workspace select the **Schedule** tab and the **Recurring Daily** tab. 
+2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
     Here, you can see that a schedule has been set to "Run every day at 8:00".
 
     ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule.png)
@@ -279,7 +279,7 @@ DQO allows to set check-level schedules and override the connection level settin
 
 To view and modify individual check-level schedules:
 
-1. Go to the section with a list of checks. In our example, we have set recurring checks, so go to the **Recurring Checks** section.
+1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
 
 2. In the main workspace select the table "users" from the tree view on the left. 
 

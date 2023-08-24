@@ -23,9 +23,9 @@ import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
@@ -34,6 +34,7 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -99,7 +100,8 @@ public class TablesControllerUTTests extends BaseTest {
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
         CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
@@ -184,7 +186,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableDailyRecurringChecks_whenTableRequested_thenReturnsRecurring() {
+    void getTableDailyMonitoringChecks_whenTableRequested_thenReturnsMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
@@ -195,21 +197,21 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
-        TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
-        volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
-        TableDailyRecurringCheckCategoriesSpec dailyRecurring = new TableDailyRecurringCheckCategoriesSpec();
-        dailyRecurring.setVolume(volumeDailyRecurringSpec);
-        TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
-        sampleRecurring.setDaily(dailyRecurring);
+        TableVolumeDailyMonitoringChecksSpec volumeDailyMonitoringSpec = new TableVolumeDailyMonitoringChecksSpec();
+        volumeDailyMonitoringSpec.setDailyRowCount(minRowCountSpec);
+        TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = new TableDailyMonitoringCheckCategoriesSpec();
+        dailyMonitoring.setVolume(volumeDailyMonitoringSpec);
+        TableMonitoringChecksSpec sampleMonitoring = new TableMonitoringChecksSpec();
+        sampleMonitoring.setDaily(dailyMonitoring);
         
-        this.sampleTable.getTableSpec().setRecurringChecks(sampleRecurring);
+        this.sampleTable.getTableSpec().setMonitoringChecks(sampleMonitoring);
 
-        ResponseEntity<Mono<TableDailyRecurringCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyRecurringChecks(
+        ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyMonitoringChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        TableDailyRecurringCheckCategoriesSpec result = responseEntity.getBody().block();
+        TableDailyMonitoringCheckCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
     }
 
@@ -260,10 +262,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringChecksModel_whenTableRequested_thenReturnsRecurringChecksModel(CheckTimeScale timePartition) {
+    void getTableMonitoringChecksModel_whenTableRequested_thenReturnsMonitoringChecksModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableRecurringChecksModel(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableMonitoringChecksModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -317,10 +319,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringChecksBasicModel_whenTableRequested_thenReturnsRecurringChecksBasicModel(CheckTimeScale timePartition) {
+    void getTableMonitoringChecksBasicModel_whenTableRequested_thenReturnsMonitoringChecksBasicModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringChecksBasicModel(
+        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableMonitoringChecksBasicModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -384,7 +386,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateTableDailyRecurringChecks_whenTableAndRecurringRequested_updatesRecurring() {
+    void updateTableDailyMonitoringChecks_whenTableAndMonitoringRequested_updatesMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
@@ -395,24 +397,24 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
-        volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
-        TableDailyRecurringCheckCategoriesSpec dailyRecurring = new TableDailyRecurringCheckCategoriesSpec();
-        dailyRecurring.setVolume(volumeDailyRecurringSpec);
-        TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
-        sampleRecurring.setDaily(dailyRecurring);
+        TableVolumeDailyMonitoringChecksSpec volumeDailyMonitoringSpec = new TableVolumeDailyMonitoringChecksSpec();
+        volumeDailyMonitoringSpec.setDailyRowCount(minRowCountSpec);
+        TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = new TableDailyMonitoringCheckCategoriesSpec();
+        dailyMonitoring.setVolume(volumeDailyMonitoringSpec);
+        TableMonitoringChecksSpec sampleMonitoring = new TableMonitoringChecksSpec();
+        sampleMonitoring.setDaily(dailyMonitoring);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableDailyRecurringChecks(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
-                Optional.of(sampleRecurring.getDaily()));
+                Optional.of(sampleMonitoring.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
-                this.sampleTable.getTableSpec().getRecurringChecks().getDaily(),
-                sampleRecurring.getDaily());
+                this.sampleTable.getTableSpec().getMonitoringChecks().getDaily(),
+                sampleMonitoring.getDaily());
     }
 
     @Test

@@ -36,7 +36,7 @@ import java.time.ZoneId;
  * Base abstract class for sensor runners. Executes a sensor given a target data quality check.
  */
 public abstract class AbstractSensorRunner {
-    private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    protected DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Dependency injection constructor.
@@ -88,89 +88,4 @@ public abstract class AbstractSensorRunner {
                                                                SensorPrepareResult sensorPrepareResult,
                                                                SensorExecutionProgressListener progressListener,
                                                                JobCancellationToken jobCancellationToken);
-
-    /**
-     * Creates a local date time of NOW, using the default configured time zone.
-     * @return The local date time of NOW, based on the configured default time zone.
-     */
-    protected LocalDateTime getNowAtDefaultTimeZone() {
-        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
-        return Instant.now().atZone(defaultTimeZoneId).toLocalDateTime();
-    }
-
-    /**
-     * Creates a result table given a single result to be stored.
-     * @param actualValue Sensor execution actual value.
-     * @return Dummy result table.
-     */
-    public Table createResultTableWithResult(Integer actualValue) {
-        Table dummyResultTable = Table.create("dummy_results",
-                IntColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setInt(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-
-        return dummyResultTable;
-    }
-
-    /**
-     * Creates a result table given a single result to be stored.
-     * @param actualValue Sensor execution actual value.
-     * @return Dummy result table.
-     */
-    public Table createResultTableWithResult(Long actualValue) {
-        Table dummyResultTable = Table.create("dummy_results",
-                LongColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-
-        return dummyResultTable;
-    }
-
-    /**
-     * Creates a result table given a single result to be stored.
-     * @param actualValue Sensor execution actual value.
-     * @return Dummy result table.
-     */
-    public Table createResultTableWithResult(Double actualValue) {
-        Table dummyResultTable = Table.create("dummy_results",
-                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-
-        return dummyResultTable;
-    }
-
-    /**
-     * Creates a one row dummy result table, used when a dummy sensor run is requested (without running the query on the data source).
-     * @param sensorRunParameters Sensor execution run parameters.
-     * @return Dummy result table.
-     */
-    public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
-        Table dummyResultTable = Table.create("dummy_results",
-                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, 10.0);
-
-        TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
-        if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
-            row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-            row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-        }
-
-        return dummyResultTable;
-    }
 }

@@ -55,7 +55,7 @@ export const CONNECTION_LEVEL_TABS: {
       value: 'schemas'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Schedule',
       value: 'schedule'
@@ -112,7 +112,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'monthly'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Daily',
       value: 'daily'
@@ -157,7 +157,7 @@ export const COLUMN_LEVEL_TABS: {
       value: 'monthly'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Daily',
       value: 'daily'

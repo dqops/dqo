@@ -72,7 +72,7 @@ def sync_detailed(
 ) -> Response[TableComparisonModel]:
     """getTableComparisonProfiling
 
-     Returns a model of the table comparison using advanced profiling checks (comparison at any time)
+     Returns a model of the table comparison using profiling checks (comparison at any time)
 
     Args:
         connection_name (str):
@@ -114,7 +114,7 @@ def sync(
 ) -> Optional[TableComparisonModel]:
     """getTableComparisonProfiling
 
-     Returns a model of the table comparison using advanced profiling checks (comparison at any time)
+     Returns a model of the table comparison using profiling checks (comparison at any time)
 
     Args:
         connection_name (str):
@@ -149,7 +149,7 @@ async def asyncio_detailed(
 ) -> Response[TableComparisonModel]:
     """getTableComparisonProfiling
 
-     Returns a model of the table comparison using advanced profiling checks (comparison at any time)
+     Returns a model of the table comparison using profiling checks (comparison at any time)
 
     Args:
         connection_name (str):
@@ -189,7 +189,7 @@ async def asyncio(
 ) -> Optional[TableComparisonModel]:
     """getTableComparisonProfiling
 
-     Returns a model of the table comparison using advanced profiling checks (comparison at any time)
+     Returns a model of the table comparison using profiling checks (comparison at any time)
 
     Args:
         connection_name (str):

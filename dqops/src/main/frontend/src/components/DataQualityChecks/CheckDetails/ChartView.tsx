@@ -1,10 +1,10 @@
 import React from 'react';
-import { CheckResultDetailedSingleModel } from '../../../api';
+import { CheckResultEntryModel } from '../../../api';
 import { Line } from 'react-chartjs-2';
 import { useTree } from '../../../contexts/treeContext';
 
 type ChartViewProps = {
-  data: CheckResultDetailedSingleModel[];
+  data: CheckResultEntryModel[];
 };
 
 export const ChartView = ({ data }: ChartViewProps) => {

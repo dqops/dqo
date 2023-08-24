@@ -9,10 +9,6 @@ The daily partition checks store the most recent sensor readouts for each partit
 check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
-The daily recurring checks store the most recent sensor readouts for each day when the data quality check was run.
-This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
-that day will be overwritten.
-
 For example, we have a table with results from three consecutive days that look like this:
 
 | actual_value |              time_period |
@@ -60,8 +56,8 @@ When there was a change in the data and on 2023-04-07 we run the check again, th
 
 The previous result for 2023-04-07 was deleted.
 
-Similarly, the monthly recurring checks store the most recent sensor readout for each month when the data quality check was run.
-For monthly recurring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
+Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
 
 To run a partition check, you need to select a data column that is the time partitioning key for the table.
 
@@ -156,8 +152,8 @@ nulls_percent.
 
 ## What's next
 
-- [Learn more about advanced profiling checks](../advanced-profiling/advanced-profiling.md)
-- [Learn more about recurring checks](../recurring-checks/recurring-checks.md)
+- [Learn more about profiling checks](../profiling-checks/profiling-checks.md)
+- [Learn more about monitoring checks](../monitoring-checks/monitoring-checks.md)
 
 
 

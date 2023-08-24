@@ -17,10 +17,10 @@
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
 import {
-  CheckResultsDetailedDataModel,
-  ErrorsDetailedDataModel,
+  CheckResultsListModel,
+  ErrorsListModel,
   ConnectionIncidentGroupingSpec,
-  SensorReadoutsDetailedDataModel,
+  SensorReadoutsListModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
   TableIncidentGroupingSpec
@@ -68,7 +68,7 @@ export const setCheckResults = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_CHECK_RESULTS,
   checkType,
@@ -83,7 +83,7 @@ export const setSensorReadouts = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  sensorReadouts: SensorReadoutsDetailedDataModel[]
+  sensorReadouts: SensorReadoutsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_SENSOR_READOUTS,
   checkType,
@@ -98,7 +98,7 @@ export const setSensorErrors = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  errors: ErrorsDetailedDataModel[]
+  errors: ErrorsListModel[]
 ) => {
   return {
     type: SOURCE_ACTION.SET_SENSOR_ERRORS,
@@ -250,7 +250,7 @@ export const getCheckResultsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_RESULTS_SUCCESS,
   checkType,
@@ -306,7 +306,7 @@ export const getCheckResults =
     dispatch(getCheckResultsRequest(checkType, activeTab));
 
     const successCallback = (
-      res: AxiosResponse<CheckResultsDetailedDataModel[]>
+      res: AxiosResponse<CheckResultsListModel[]>
     ) => {
       dispatch(
         getCheckResultsSuccess(
@@ -346,8 +346,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getColumnRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getColumnMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -396,8 +396,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getTableRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getTableMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -446,7 +446,7 @@ export const getCheckReadoutsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_READOUTS_SUCCESS,
   checkType,
@@ -503,7 +503,7 @@ export const getCheckReadouts =
     dispatch(getCheckReadoutsRequest(checkType, activeTab));
 
     const successCallback = (
-      res: AxiosResponse<SensorReadoutsDetailedDataModel[]>
+      res: AxiosResponse<SensorReadoutsListModel[]>
     ) => {
       dispatch(
         setSensorReadouts(
@@ -512,8 +512,8 @@ export const getCheckReadouts =
           checkName,
           res.data.filter(
             (item) =>
-              item.singleSensorReadouts &&
-              item.singleSensorReadouts[0]?.checkName === checkName
+              item.sensorReadoutEntries &&
+              item.sensorReadoutEntries[0]?.checkName === checkName
           )
         )
       );
@@ -538,8 +538,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getColumnRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getColumnMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -586,8 +586,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getTableRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getTableMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -633,7 +633,7 @@ export const getCheckErrorsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_ERROR_SUCCESS,
   checkType,
@@ -688,7 +688,7 @@ export const getCheckErrors =
   (dispatch: any) => {
     dispatch(getCheckErrorsRequest(checkType, activeTab));
 
-    const successCallback = (res: AxiosResponse<ErrorsDetailedDataModel[]>) => {
+    const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
       dispatch(
         setSensorErrors(
           checkType,
@@ -718,8 +718,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getColumnRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getColumnMonitoringErrors(
           connection,
           schema,
           table,
@@ -766,8 +766,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getTableRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getTableMonitoringErrors(
           connection,
           schema,
           table,

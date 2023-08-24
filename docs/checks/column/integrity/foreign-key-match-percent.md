@@ -137,6 +137,68 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    LEFT OUTER JOIN "dim_customer" foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -439,6 +501,74 @@ spec:
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        LEFT OUTER JOIN "dim_customer" foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -663,7 +793,7 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_foreign_key_match_percent|recurring|daily|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_foreign_key_match_percent|monitoring|daily|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -689,7 +819,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_forei
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           integrity:
             daily_foreign_key_match_percent:
@@ -717,7 +847,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           integrity:
             daily_foreign_key_match_percent:
@@ -787,6 +917,68 @@ spec:
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    LEFT OUTER JOIN "dim_customer" foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1014,7 +1206,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               integrity:
                 daily_foreign_key_match_percent:
@@ -1090,6 +1282,74 @@ spec:
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        LEFT OUTER JOIN "dim_customer" foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1317,7 +1577,7 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_match_percent|recurring|monthly|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_foreign_key_match_percent|monitoring|monthly|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1343,7 +1603,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_for
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           integrity:
             monthly_foreign_key_match_percent:
@@ -1371,7 +1631,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           integrity:
             monthly_foreign_key_match_percent:
@@ -1441,6 +1701,68 @@ spec:
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    LEFT OUTER JOIN "dim_customer" foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1668,7 +1990,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               integrity:
                 monthly_foreign_key_match_percent:
@@ -1744,6 +2066,74 @@ spec:
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        LEFT OUTER JOIN "dim_customer" foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2098,6 +2488,68 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    LEFT OUTER JOIN "dim_customer" foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2402,6 +2854,74 @@ spec:
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        LEFT OUTER JOIN "dim_customer" foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2754,6 +3274,68 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            original_table.*,
+        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    LEFT OUTER JOIN "dim_customer" foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -3058,6 +3640,74 @@ spec:
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        LEFT OUTER JOIN "dim_customer" foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```

@@ -18,17 +18,18 @@ package com.dqops.utils.docs;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.incidents.IncidentNotificationMessage;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
@@ -146,7 +147,7 @@ public class GenerateDocumentationPostProcessor {
      */
     private static SensorDocumentationModelFactory createSensorDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return sensorDocumentationModelFactory;
     }
@@ -181,7 +182,7 @@ public class GenerateDocumentationPostProcessor {
      */
     private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
     }
@@ -257,7 +258,7 @@ public class GenerateDocumentationPostProcessor {
 
     public static SimilarCheckMatchingService createSimilarCheckMatchingService(ReflectionService reflectionService, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         return new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, new DqoHomeContextFactory() {
             @Override
             public DqoHomeContext openLocalDqoHome() {
@@ -301,7 +302,7 @@ public class GenerateDocumentationPostProcessor {
 
         List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
         Path profilingPath = Path.of("profiling");
-        Path recurringPath = Path.of("recurring");
+        Path monitoringPath = Path.of("monitoring");
         Path partitionedPath = Path.of("partitioned");
 
         // Assumption: No cyclical dependencies (considering linkage to different docs pages).
@@ -319,22 +320,22 @@ public class GenerateDocumentationPostProcessor {
 
         yamlDocumentationSchemaNodes.add(
                 new YamlDocumentationSchemaNode(
-                        TableDailyRecurringCheckCategoriesSpec.class, recurringPath.resolve("table-daily-recurring-checks")
+                        TableDailyMonitoringCheckCategoriesSpec.class, monitoringPath.resolve("table-daily-monitoring-checks")
                 )
         );
         yamlDocumentationSchemaNodes.add(
                 new YamlDocumentationSchemaNode(
-                        TableMonthlyRecurringCheckCategoriesSpec.class, recurringPath.resolve("table-monthly-recurring-checks")
+                        TableMonthlyMonitoringCheckCategoriesSpec.class, monitoringPath.resolve("table-monthly-monitoring-checks")
                 )
         );
         yamlDocumentationSchemaNodes.add(
                 new YamlDocumentationSchemaNode(
-                        ColumnDailyRecurringCheckCategoriesSpec.class, recurringPath.resolve("column-daily-recurring-checks")
+                        ColumnDailyMonitoringCheckCategoriesSpec.class, monitoringPath.resolve("column-daily-monitoring-checks")
                 )
         );
         yamlDocumentationSchemaNodes.add(
                 new YamlDocumentationSchemaNode(
-                        ColumnMonthlyRecurringCheckCategoriesSpec.class, recurringPath.resolve("column-monthly-recurring-checks")
+                        ColumnMonthlyMonitoringCheckCategoriesSpec.class, monitoringPath.resolve("column-monthly-monitoring-checks")
                 )
         );
 

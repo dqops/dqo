@@ -23,6 +23,7 @@ import com.dqops.data.statistics.factory.*;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.utils.tables.TableColumnUtility;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -407,7 +408,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             TextColumn truncatedTextColumn = TextColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
-                if (stringValue != null) {
+                if (!Strings.isNullOrEmpty(stringValue)) {
                     if (stringValue.length() > this.statisticsCollectorConfigurationProperties.getTruncatedStringsLength()) {
                         stringValue = stringValue.substring(0, this.statisticsCollectorConfigurationProperties.getTruncatedStringsLength());
                     }

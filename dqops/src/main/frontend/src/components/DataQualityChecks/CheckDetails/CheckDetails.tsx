@@ -102,7 +102,7 @@ const CheckDetails = ({
     filtersData && filtersData[checkName ?? '']
       ? filtersData[checkName ?? '']
       : defaultFilters || {
-          month: moment().format('MMMM YYYY')
+          month: "Last 3 months"
         };
 
   const dispatch = useActionDispatch();
@@ -273,6 +273,8 @@ const CheckDetails = ({
     fetchCheckResults(month, name);
     fetchCheckReadouts(month, name);
   };
+
+  console.log(filters)
 
   return (
     <div

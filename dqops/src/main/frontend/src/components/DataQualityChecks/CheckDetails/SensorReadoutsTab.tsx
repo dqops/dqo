@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { SensorReadoutsDetailedDataModel } from '../../../api';
+import { SensorReadoutsListModel } from '../../../api';
 import Select from '../../Select';
 import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 
 interface SensorReadoutsTabProps {
-  sensorReadouts: SensorReadoutsDetailedDataModel[];
+  sensorReadouts: SensorReadoutsListModel[];
   dataGroup?: string;
   onChangeDataGroup: (name: string) => void;
   month?: string;
@@ -126,7 +126,7 @@ const SensorReadoutsTab = ({
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleSensorReadouts || []}
+            data={result.sensorReadoutEntries || []}
           />
         </div>
       ))}

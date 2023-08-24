@@ -141,7 +141,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 2. Select the table or column mentioned in the example description from the tree view on the left.
 
-3. Select **Advanced Profiling** tab.
+3. Select **Profiling Checks** tab.
 
 4. Run the enabled check using the **Run check** button.
    ![Run check](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-run-check.png)
@@ -160,7 +160,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the DQ KPIs per check type dashboard showing results by KPI, KPI per check type, profiling KPI, recurring KPI and partitioned KPI.
+   the results displayed on the DQ KPIs per check type dashboard showing results by KPI, KPI per check type, profiling KPI, monitoring KPI and partitioned KPI.
 
    ![Values-in-range-numeric-percent check results on DQ KPIs per check type dashboard](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-check-results-on-DQ-KPIs-per-check-type-dashboard.png)
 

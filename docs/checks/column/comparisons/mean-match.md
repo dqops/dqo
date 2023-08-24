@@ -160,40 +160,35 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
     ```sql
     SELECT
-        AVG(
-        analyzed_table."target_column"
-        ) AS actual_value,
+        AVG(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                   original_table.*,
+     FROM(
+         SELECT
+             original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "<target_schema>"."<target_table>" original_table
-         ) analyzed_table
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -311,7 +306,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_mean_match|recurring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_mean_match|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -337,7 +332,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_mean_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -375,7 +370,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -460,40 +455,35 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
     ```sql
     SELECT
-        AVG(
-        analyzed_table."target_column"
-        ) AS actual_value,
+        AVG(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                   original_table.*,
+     FROM(
+         SELECT
+             original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "<target_schema>"."<target_table>" original_table
-         ) analyzed_table
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -611,7 +601,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_mean_match|recurring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_mean_match|monitoring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -637,7 +627,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_mea
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -675,7 +665,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -760,40 +750,35 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
     ```sql
     SELECT
-        AVG(
-        analyzed_table."target_column"
-        ) AS actual_value,
+        AVG(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                   original_table.*,
+     FROM(
+         SELECT
+             original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "<target_schema>"."<target_table>" original_table
-         ) analyzed_table
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1060,40 +1045,35 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
     ```sql
     SELECT
-        AVG(
-        analyzed_table."target_column"
-        ) AS actual_value,
+        AVG(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                   original_table.*,
+     FROM(
+         SELECT
+             original_table.*,
         TRUNC(CAST(original_table."" AS DATE)) AS time_period,
         CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "<target_schema>"."<target_table>" original_table
-         ) analyzed_table
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1364,40 +1344,35 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
     ```sql
     SELECT
-        AVG(
-        analyzed_table."target_column"
-        ) AS actual_value,
+        AVG(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                   original_table.*,
+     FROM(
+         SELECT
+             original_table.*,
         TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "<target_schema>"."<target_table>" original_table
-         ) analyzed_table
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```

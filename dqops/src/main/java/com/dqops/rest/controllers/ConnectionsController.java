@@ -22,9 +22,9 @@ import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -167,16 +167,16 @@ public class ConnectionsController {
      * @return Connection's schedule specification.
      */
     @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = RecurringScheduleSpec.class)
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's schedule returned", response = RecurringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Connection's schedule returned", response = MonitoringScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getConnectionSchedulingGroup(
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getConnectionSchedulingGroup(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -187,12 +187,12 @@ public class ConnectionsController {
         }
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        RecurringSchedulesSpec schedules = connectionSpec.getSchedules();
+        MonitoringSchedulesSpec schedules = connectionSpec.getSchedules();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        RecurringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
         return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
     }
@@ -400,7 +400,7 @@ public class ConnectionsController {
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection());
         }
 
         userHomeContext.flush();
@@ -444,7 +444,7 @@ public class ConnectionsController {
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionBasicModel.copyToConnectionSpecification(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection());
         }
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();
@@ -529,7 +529,7 @@ public class ConnectionsController {
     /**
      * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
      * @param connectionName        Connection name.
-     * @param recurringScheduleSpec Schedule specification.
+     * @param monitoringScheduleSpec Schedule specification.
      * @param schedulingGroup       Scheduling group.
      * @return Empty response.
      */
@@ -544,8 +544,8 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionSchedulingGroup(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup,
-            @ApiParam("Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
+            @ApiParam("Monitoring schedule definition to store") @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -556,24 +556,24 @@ public class ConnectionsController {
         }
 
         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        RecurringSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+        MonitoringSchedulesSpec schedules = existingConnectionSpec.getSchedules();
         if (schedules == null) {
-            schedules = new RecurringSchedulesSpec();
+            schedules = new MonitoringSchedulesSpec();
             existingConnectionSpec.setSchedules(schedules);
         }
 
-        RecurringScheduleSpec newScheduleSpec = recurringScheduleSpec.orElse(null);
+        MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
         switch (schedulingGroup) {
             case profiling:
                 schedules.setProfiling(newScheduleSpec);
                 break;
 
-            case recurring_daily:
-                schedules.setRecurringDaily(newScheduleSpec);
+            case monitoring_daily:
+                schedules.setMonitoringDaily(newScheduleSpec);
                 break;
 
-            case recurring_monthly:
-                schedules.setRecurringMonthly(newScheduleSpec);
+            case monitoring_monthly:
+                schedules.setMonitoringMonthly(newScheduleSpec);
                 break;
 
             case partitioned_daily:

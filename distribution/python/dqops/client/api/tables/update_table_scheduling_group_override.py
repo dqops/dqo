@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import Client
+from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
-from ...models.recurring_schedule_spec import RecurringScheduleSpec
 from ...models.update_table_scheduling_group_override_scheduling_group import (
     UpdateTableSchedulingGroupOverrideSchedulingGroup,
 )
@@ -20,7 +20,7 @@ def _get_kwargs(
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}".format(
         client.base_url,
@@ -77,7 +77,7 @@ def sync_detailed(
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
 
@@ -89,7 +89,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -123,7 +123,7 @@ def sync(
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride
 
@@ -135,7 +135,7 @@ def sync(
         schema_name (str):
         table_name (str):
         scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -162,7 +162,7 @@ async def asyncio_detailed(
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
 
@@ -174,7 +174,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -206,7 +206,7 @@ async def asyncio(
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride
 
@@ -218,7 +218,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

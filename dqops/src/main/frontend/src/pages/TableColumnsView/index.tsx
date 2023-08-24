@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../shared/routes';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 
 interface LocationState {
   bool: boolean;

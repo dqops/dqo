@@ -92,10 +92,10 @@ class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDailyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
+    void runSensor_whenSensorExecutedMonitoringDailyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
         this.sut.setFilter(validExamplesFilterText);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
-                .createForTableColumnForRecurringCheck(
+                .createForTableColumnForMonitoringCheck(
                         sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
@@ -108,10 +108,10 @@ class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDailyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+    void runSensor_whenSensorExecutedMonitoringDailyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
         this.sut.setFilter(invalidExamplesFilterText);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
-                .createForTableColumnForRecurringCheck(
+                .createForTableColumnForMonitoringCheck(
                         sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
@@ -124,10 +124,10 @@ class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthlyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
+    void runSensor_whenSensorExecutedMonitoringMonthlyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
         this.sut.setFilter(validExamplesFilterText);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
-                .createForTableColumnForRecurringCheck(
+                .createForTableColumnForMonitoringCheck(
                         sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
@@ -140,10 +140,10 @@ class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthlyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+    void runSensor_whenSensorExecutedMonitoringMonthlyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
         this.sut.setFilter(invalidExamplesFilterText);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
-                .createForTableColumnForRecurringCheck(
+                .createForTableColumnForMonitoringCheck(
                         sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother

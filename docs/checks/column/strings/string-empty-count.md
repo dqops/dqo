@@ -212,21 +212,21 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -236,8 +236,8 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN grouping_table."target_column" IS NOT NULL
-                AND grouping_table."target_column" = ''
+                WHEN analyzed_table."target_column" IS NOT NULL
+                AND analyzed_table."target_column" = ''
                     THEN 1
                 ELSE 0
             END
@@ -246,10 +246,10 @@ spec:
         time_period_utc
     FROM(
         SELECT
-            analyzed_table."target_column",
+            original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -590,21 +590,21 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
-            ) AS actual_value,
-            time_period,
-            time_period_utc
+            ) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
@@ -613,22 +613,27 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN grouping_table."target_column" IS NOT NULL
-                    AND grouping_table."target_column" = ''
+                    WHEN analyzed_table."target_column" IS NOT NULL
+                    AND analyzed_table."target_column" = ''
                         THEN 1
                     ELSE 0
                 END
             ) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
             time_period,
             time_period_utc
         FROM(
             SELECT
-                analyzed_table."target_column",
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -812,7 +817,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_empty_count|recurring|daily|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_empty_count|monitoring|daily|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -838,7 +843,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_empty_count:
@@ -863,7 +868,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_empty_count:
@@ -1014,21 +1019,21 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1038,8 +1043,8 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN grouping_table."target_column" IS NOT NULL
-                AND grouping_table."target_column" = ''
+                WHEN analyzed_table."target_column" IS NOT NULL
+                AND analyzed_table."target_column" = ''
                     THEN 1
                 ELSE 0
             END
@@ -1048,10 +1053,10 @@ spec:
         time_period_utc
     FROM(
         SELECT
-            analyzed_table."target_column",
+            original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1235,7 +1240,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_empty_count:
@@ -1393,21 +1398,21 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
-            ) AS actual_value,
-            time_period,
-            time_period_utc
+            ) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
@@ -1416,22 +1421,27 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN grouping_table."target_column" IS NOT NULL
-                    AND grouping_table."target_column" = ''
+                    WHEN analyzed_table."target_column" IS NOT NULL
+                    AND analyzed_table."target_column" = ''
                         THEN 1
                     ELSE 0
                 END
             ) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
             time_period,
             time_period_utc
         FROM(
             SELECT
-                analyzed_table."target_column",
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1615,7 +1625,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_empty_count|recurring|monthly|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_empty_count|monitoring|monthly|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1641,7 +1651,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_empty_count:
@@ -1666,7 +1676,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_empty_count:
@@ -1817,21 +1827,21 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1841,8 +1851,8 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN grouping_table."target_column" IS NOT NULL
-                AND grouping_table."target_column" = ''
+                WHEN analyzed_table."target_column" IS NOT NULL
+                AND analyzed_table."target_column" = ''
                     THEN 1
                 ELSE 0
             END
@@ -1851,10 +1861,10 @@ spec:
         time_period_utc
     FROM(
         SELECT
-            analyzed_table."target_column",
+            original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2038,7 +2048,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_empty_count:
@@ -2196,21 +2206,21 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
-            ) AS actual_value,
-            time_period,
-            time_period_utc
+            ) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
@@ -2219,22 +2229,27 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN grouping_table."target_column" IS NOT NULL
-                    AND grouping_table."target_column" = ''
+                    WHEN analyzed_table."target_column" IS NOT NULL
+                    AND analyzed_table."target_column" = ''
                         THEN 1
                     ELSE 0
                 END
             ) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
             time_period,
             time_period_utc
         FROM(
             SELECT
-                analyzed_table."target_column",
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2620,21 +2635,21 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2644,8 +2659,8 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN grouping_table."target_column" IS NOT NULL
-                AND grouping_table."target_column" = ''
+                WHEN analyzed_table."target_column" IS NOT NULL
+                AND analyzed_table."target_column" = ''
                     THEN 1
                 ELSE 0
             END
@@ -2654,10 +2669,10 @@ spec:
         time_period_utc
     FROM(
         SELECT
-            analyzed_table."target_column",
-        TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -3003,21 +3018,21 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
-            ) AS actual_value,
-            time_period,
-            time_period_utc
+            ) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
@@ -3026,22 +3041,27 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN grouping_table."target_column" IS NOT NULL
-                    AND grouping_table."target_column" = ''
+                    WHEN analyzed_table."target_column" IS NOT NULL
+                    AND analyzed_table."target_column" = ''
                         THEN 1
                     ELSE 0
                 END
             ) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
             time_period,
             time_period_utc
         FROM(
             SELECT
-                analyzed_table."target_column",
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -3425,21 +3445,21 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3449,8 +3469,8 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN grouping_table."target_column" IS NOT NULL
-                AND grouping_table."target_column" = ''
+                WHEN analyzed_table."target_column" IS NOT NULL
+                AND analyzed_table."target_column" = ''
                     THEN 1
                 ELSE 0
             END
@@ -3459,10 +3479,10 @@ spec:
         time_period_utc
     FROM(
         SELECT
-            analyzed_table."target_column",
-        TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            original_table.*,
+        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -3808,21 +3828,21 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
-            ) AS actual_value,
-            time_period,
-            time_period_utc
+            ) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
@@ -3831,22 +3851,27 @@ spec:
         SELECT
             SUM(
                 CASE
-                    WHEN grouping_table."target_column" IS NOT NULL
-                    AND grouping_table."target_column" = ''
+                    WHEN analyzed_table."target_column" IS NOT NULL
+                    AND analyzed_table."target_column" = ''
                         THEN 1
                     ELSE 0
                 END
             ) AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
             time_period,
             time_period_utc
         FROM(
             SELECT
-                analyzed_table."target_column",
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+                original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```

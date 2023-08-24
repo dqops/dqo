@@ -15,19 +15,19 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 
 /**
  * Hierarchy node search filters to find nodes that have a configured schedule and match a cron expression.
  */
 public class ScheduleRootsSearchFilters {
     private Boolean enabled = true;
-    private RecurringScheduleSpec schedule;
+    private MonitoringScheduleSpec schedule;
 
     public ScheduleRootsSearchFilters() {
     }
 
-    public ScheduleRootsSearchFilters(Boolean enabled, RecurringScheduleSpec schedule) {
+    public ScheduleRootsSearchFilters(Boolean enabled, MonitoringScheduleSpec schedule) {
         this.enabled = enabled;
         this.schedule = schedule;
     }
@@ -62,7 +62,7 @@ public class ScheduleRootsSearchFilters {
      * Returns a schedule settings (cron expression, etc.) that must match.
      * @return Schedule configuration with a time zone on the connection.
      */
-    public RecurringScheduleSpec getSchedule() {
+    public MonitoringScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -70,7 +70,7 @@ public class ScheduleRootsSearchFilters {
      * Sets a schedule (with connection's time zone) that must match.
      * @param schedule Schedule.
      */
-    public void setSchedule(RecurringScheduleSpec schedule) {
+    public void setSchedule(MonitoringScheduleSpec schedule) {
         this.schedule = schedule;
     }
 }

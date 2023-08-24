@@ -30,7 +30,7 @@ class TableMonthlyPartitionedCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-            are check names.
+            are check names within this category.
         volume (Union[Unset, TableVolumeMonthlyPartitionedChecksSpec]):
         timeliness (Union[Unset, TableTimelinessMonthlyPartitionedChecksSpec]):
         sql (Union[Unset, TableSqlMonthlyPartitionedChecksSpec]):

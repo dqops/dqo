@@ -19,6 +19,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
     /**
      * Finds a check specification for the given check. Returns a check specification if the check was found or null, when the check is unknown.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
      * @param category Check category name.
      * @param checkName Check name.
@@ -82,10 +83,23 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
                                                String checkName);
 
     /**
+     * Finds all checks defined for the given check target (table or column), check type (profiling, recurring, partitioned) and optionally a time scale.
+     * @param checkTarget    Check target (table or column).
+     * @param checkType      Check type (profiling, recurring, partitioned).
+     * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
+     * @param category       Check category.
+     * @return Collection of checks defined at that level.
+     */
+    Collection<CheckDefinitionSpec> getChecksAtLevel(CheckTarget checkTarget,
+                                                     CheckType checkType,
+                                                     CheckTimeScale checkTimeScale,
+                                                     String category);
+
+    /**
      * Creates a folder path for checks at a given level.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for monitoring and partitioned checks.
      * @return Full check name.
      */
     static String makeCheckFolderPrefix(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale) {
@@ -104,15 +118,14 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
     }
 
     /**
-     * Creates a check name given all components on the check path.
+     * Creates a folder path for checks at a given level, including also the category name.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for monitoring and partitioned checks.
      * @param category Check category name.
-     * @param checkName Check name.
-     * @return Full check name.
+     * @return Check name prefix for all checks in the given category.
      */
-    static String makeCheckName(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String category, String checkName) {
+    static String makeCheckFolderPrefix(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String category) {
         StringBuilder checkNameBuilder = new StringBuilder();
         checkNameBuilder.append(checkTarget);
         checkNameBuilder.append('/');
@@ -124,9 +137,22 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
         }
         checkNameBuilder.append(category);
         checkNameBuilder.append('/');
-        checkNameBuilder.append(checkName);
 
         String fullCheckName = checkNameBuilder.toString();
+        return fullCheckName;
+    }
+
+    /**
+     * Creates a check name given all components on the check path.
+     * @param checkTarget Check target (table or column).
+     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param category Check category name.
+     * @param checkName Check name.
+     * @return Full check name.
+     */
+    static String makeCheckName(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String category, String checkName) {
+        String fullCheckName = makeCheckFolderPrefix(checkTarget, checkType, timeScale, category) + checkName;
         return fullCheckName;
     }
 }

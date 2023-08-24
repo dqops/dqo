@@ -88,6 +88,45 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+        0
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -520,23 +559,20 @@ Column level sensor that counts the average (mean) of values in a column.
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        AVG(
-        {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -807,16 +843,16 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT(*)
         END AS actual_value
-           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
+                   original_table.*
+                       {{- lib.render_data_grouping_projections('original_table') }}
+                       {{- lib.render_time_dimension_projection('original_table') }}
+                   FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+         ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1106,27 +1142,24 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                    ELSE 1
-                END
-            ) / COUNT(*)
-        END AS actual_value
-           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM(
+            SELECT
+                       original_table.*
+                           {{- lib.render_data_grouping_projections('original_table') }}
+                           {{- lib.render_time_dimension_projection('original_table') }}
+                       FROM {{ lib.render_target_table() }} original_table
+             {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+             ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -1916,6 +1949,25 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -2123,23 +2175,20 @@ Column level sensor that counts the sum of values in a column.
       
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
     SELECT
-        SUM(
-       {{ lib.render_target_column('analyzed_table')}}
-        ) AS actual_value
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM(
-        SELECT
-                   original_table.*
-                       {{- lib.render_data_grouping_projections('original_table') }}
-                       {{- lib.render_time_dimension_projection('original_table') }}
-                   FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
          {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-         ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -2757,6 +2806,30 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+          FROM(
+              SELECT
+                  original_table.*
+                  {{- lib.render_data_grouping_projections('original_table') }}
+                  {{- lib.render_time_dimension_projection('original_table') }}
+              FROM {{ lib.render_target_table() }} original_table
+              {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+          ) analyzed_table
+          {{- lib.render_group_by() -}}
+          {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -2887,6 +2960,30 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM(
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -3016,6 +3113,30 @@ Column level sensor that finds the maximum value. It works on any data type that
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3151,6 +3272,30 @@ Column level sensor that finds the maximum value. It works on any data type that
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

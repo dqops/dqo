@@ -12,18 +12,21 @@ import Input from "../Input";
 interface ICheckSettingsTabProps {
   check?: CheckModel;
   onChange: (item: CheckModel) => void;
+  isDefaultEditing?: boolean
 }
 
-const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
+const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
   const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
 
   useEffect(() => {
-    DataGroupingConfigurationsApi.getTableGroupingConfigurations(connection ?? '', schema ?? '', table).then(
-      (res) => {
-        setDataGroupingConfigurations(res.data);
+    if(isDefaultEditing !== true){
+      DataGroupingConfigurationsApi.getTableGroupingConfigurations(connection ?? '', schema ?? '', table).then(
+        (res) => {
+          setDataGroupingConfigurations(res.data);
+        }
+        );
       }
-    );
   }, []);
 
   const options = useMemo(() => {
@@ -59,9 +62,10 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                 </div>
               </td>
             </tr>
+            {isDefaultEditing !== true && 
             <tr>
               <td className="px-4 py-2 w-60">Custom data grouping</td>
-              <td className="px-4 py-2">
+              <td className="px-4 py-2">   
                 <div className="flex items-center space-x-2">
                   <Select
                     className="w-50"
@@ -80,8 +84,9 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     onClick={onAddDataGroupingConfiguration}
                   />
                 </div>
-              </td>
+              </td>  
             </tr>
+                  }
             <tr>
               <td className="px-4 py-2">Exclude from KPI</td>
               <td className="px-4 py-2">

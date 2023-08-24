@@ -194,6 +194,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 AbstractRuleParametersSpec errorRule = checkSpec.getError();
                 AbstractRuleParametersSpec warningRule = checkSpec.getWarning();
                 Double expectedValue = null;
+                Double newActualValue = null;
 
                 if (fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
@@ -206,6 +207,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                     if (ruleExecutionResultFatal.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultFatal.getExpectedValue();
+                    }
+
+                    if (ruleExecutionResultFatal.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultFatal.getNewActualValue();
                     }
 
                     if (ruleExecutionResultFatal.getLowerBound() != null) {
@@ -229,6 +234,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
+                    if (newActualValue == null && ruleExecutionResultError.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultError.getNewActualValue();
+                    }
+
                     if (ruleExecutionResultError.getLowerBound() != null) {
                         result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultError.getLowerBound());
                     }
@@ -248,6 +257,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                     if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultWarning.getExpectedValue();
+                    }
+
+                    if (newActualValue == null && ruleExecutionResultWarning.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultWarning.getNewActualValue();
                     }
 
                     if (ruleExecutionResultWarning.getLowerBound() != null) {
@@ -285,6 +298,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 result.getSeverityColumn().set(targetRowIndex, highestSeverity);
                 result.getExpectedValueColumn().set(targetRowIndex, expectedValue);
+
+                if (newActualValue != null) {
+                    result.getActualValueColumn().set(targetRowIndex, newActualValue);
+                }
             }
         }
 

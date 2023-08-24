@@ -1,6 +1,6 @@
 
 ## DefaultProfilingObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability advanced profiling checks that will be detecting anomalies
+The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
  for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for profiling checks only.  
   
 
@@ -17,6 +17,133 @@ The default configuration of checks that are enabled as data observability advan
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[table](#defaultprofilingtableobservabilitychecksettingsspec)|The default configuration of profiling checks on a table level.|[DefaultProfilingTableObservabilityCheckSettingsSpec](#defaultprofilingtableobservabilitychecksettingsspec)| | | |
 |[column](#defaultprofilingcolumnobservabilitychecksettingsspec)|The default configuration of profiling checks on a column level.|[DefaultProfilingColumnObservabilityCheckSettingsSpec](#defaultprofilingcolumnobservabilitychecksettingsspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DefaultProfilingTableObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
+ for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for profiling checks only.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)| | | |
+|[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)| | | |
+|[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DefaultDailyMonitoringObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily monitoring checks only.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[table](#defaultdailymonitoringtableobservabilitychecksettingsspec)|The default configuration of daily monitoring checks on a table level.|[DefaultDailyMonitoringTableObservabilityCheckSettingsSpec](#defaultdailymonitoringtableobservabilitychecksettingsspec)| | | |
+|[column](#defaultdailymonitoringcolumnobservabilitychecksettingsspec)|The default configuration of daily monitoring checks on a column level.|[DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec](#defaultdailymonitoringcolumnobservabilitychecksettingsspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DefaultMonthlyMonitoringObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability monthly monitoring checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for monthly profiling checks only.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[table](#defaultmonthlymonitoringtableobservabilitychecksettingsspec)|The default configuration of monthly monitoring checks on a table level.|[DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec](#defaultmonthlymonitoringtableobservabilitychecksettingsspec)| | | |
+|[column](#defaultmonthlymonitoringcolumnobservabilitychecksettingsspec)|The default configuration of monthly monitoring checks on a column level.|[DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec](#defaultmonthlymonitoringcolumnobservabilitychecksettingsspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability monthly monitoring checks that will be detecting anomalies
+ for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for monthly monitoring checks only.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[nulls](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnnullsmonthlymonitoringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnnullsmonthlymonitoringchecksspec)| | | |
+|[numeric](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnnumericmonthlymonitoringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnnumericmonthlymonitoringchecksspec)| | | |
+|[strings](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnstringsmonthlymonitoringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnstringsmonthlymonitoringchecksspec)| | | |
+|[uniqueness](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnuniquenessmonthlymonitoringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnuniquenessmonthlymonitoringchecksspec)| | | |
+|[datetime](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatetimemonthlymonitoringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatetimemonthlymonitoringchecksspec)| | | |
+|[pii](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnpiimonthlymonitoringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnpiimonthlymonitoringchecksspec)| | | |
+|[bool](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnboolmonthlymonitoringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnboolmonthlymonitoringchecksspec)| | | |
+|[datatype](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatatypemonthlymonitoringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatatypemonthlymonitoringchecksspec)| | | |
+|[anomaly](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnanomalymonthlymonitoringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnanomalymonthlymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnschemamonthlymonitoringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnschemamonthlymonitoringchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
 
 
 
@@ -59,9 +186,9 @@ DQO local settings that are stored in the .localsettings.dqosettings.yaml file i
 
 ___  
 
-## DefaultDailyRecurringObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability daily recurring checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily recurring checks only.  
+## DefaultDailyMonitoringTableObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for daily monitoring checks only.  
   
 
 
@@ -75,8 +202,10 @@ The default configuration of checks that are enabled as data observability daily
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[table](#defaultdailyrecurringtableobservabilitychecksettingsspec)|The default configuration of daily recurring checks on a table level.|[DefaultDailyRecurringTableObservabilityCheckSettingsSpec](#defaultdailyrecurringtableobservabilitychecksettingsspec)| | | |
-|[column](#defaultdailyrecurringcolumnobservabilitychecksettingsspec)|The default configuration of daily recurring checks on a column level.|[DefaultDailyRecurringColumnObservabilityCheckSettingsSpec](#defaultdailyrecurringcolumnobservabilitychecksettingsspec)| | | |
+|[volume](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)| | | |
+|[availability](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
 
 
 
@@ -88,9 +217,9 @@ The default configuration of checks that are enabled as data observability daily
 
 ___  
 
-## DefaultObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported.  
+## DefaultProfilingColumnObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
+ for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for profiling checks only.  
   
 
 
@@ -104,9 +233,17 @@ The default configuration of checks that are enabled as data observability check
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profiling](#defaultprofilingobservabilitychecksettingsspec)|Default configuration of advanced profiling checks that are enabled on tables and columns that are imported into DQO.|[DefaultProfilingObservabilityCheckSettingsSpec](#defaultprofilingobservabilitychecksettingsspec)| | | |
-|[recurring_daily](#defaultdailyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.|[DefaultDailyRecurringObservabilityCheckSettingsSpec](#defaultdailyrecurringobservabilitychecksettingsspec)| | | |
-|[recurring_monthly](#defaultmonthlyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.|[DefaultMonthlyRecurringObservabilityCheckSettingsSpec](#defaultmonthlyrecurringobservabilitychecksettingsspec)| | | |
+|[nulls](\docs\reference\yaml\profiling\column-profiling-checks\#columnnullsprofilingchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnnullsprofilingchecksspec)| | | |
+|[numeric](\docs\reference\yaml\profiling\column-profiling-checks\#columnnumericprofilingchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnnumericprofilingchecksspec)| | | |
+|[strings](\docs\reference\yaml\profiling\column-profiling-checks\#columnstringsprofilingchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnstringsprofilingchecksspec)| | | |
+|[uniqueness](\docs\reference\yaml\profiling\column-profiling-checks\#columnuniquenessprofilingchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnuniquenessprofilingchecksspec)| | | |
+|[datetime](\docs\reference\yaml\profiling\column-profiling-checks\#columndatetimeprofilingchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columndatetimeprofilingchecksspec)| | | |
+|[pii](\docs\reference\yaml\profiling\column-profiling-checks\#columnpiiprofilingchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnpiiprofilingchecksspec)| | | |
+|[bool](\docs\reference\yaml\profiling\column-profiling-checks\#columnboolprofilingchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnboolprofilingchecksspec)| | | |
+|[datatype](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)| | | |
+|[anomaly](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)| | | |
+|[schema](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
 
 
 
@@ -118,9 +255,9 @@ The default configuration of checks that are enabled as data observability check
 
 ___  
 
-## DefaultMonthlyRecurringObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability monthly recurring checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for monthly profiling checks only.  
+## DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability monthly monitoring checks that will be detecting anomalies
+ for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for monthly monitoring checks only.  
   
 
 
@@ -134,39 +271,10 @@ The default configuration of checks that are enabled as data observability month
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[table](#defaultmonthlyrecurringtableobservabilitychecksettingsspec)|The default configuration of monthly recurring checks on a table level.|[DefaultMonthlyRecurringTableObservabilityCheckSettingsSpec](#defaultmonthlyrecurringtableobservabilitychecksettingsspec)| | | |
-|[column](#defaultmonthlyrecurringcolumnobservabilitychecksettingsspec)|The default configuration of monthly recurring checks on a column level.|[DefaultMonthlyRecurringColumnObservabilityCheckSettingsSpec](#defaultmonthlyrecurringcolumnobservabilitychecksettingsspec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DefaultDailyRecurringTableObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability daily recurring checks that will be detecting anomalies
- for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for daily recurring checks only.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)| | | |
-|[availability](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)| | | |
-|[schema](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
+|[volume](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)| | | |
+|[availability](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
 
 
 
@@ -198,7 +306,7 @@ Settings specification.
 |api_key|Api key|string| | | |
 |instance_signature_key|DQO instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.|string| | | |
 |time_zone|Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.|string| | | |
-|[default_schedules](\docs\reference\yaml\connectionyaml\#recurringschedulesspec)|Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.|[RecurringSchedulesSpec](\docs\reference\yaml\connectionyaml\#recurringschedulesspec)| | | |
+|[default_schedules](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)|Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.|[MonitoringSchedulesSpec](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)| | | |
 |[default_data_observability_checks](#defaultobservabilitychecksettingsspec)|The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.|[DefaultObservabilityCheckSettingsSpec](#defaultobservabilitychecksettingsspec)| | | |
 
 
@@ -211,9 +319,9 @@ Settings specification.
 
 ___  
 
-## DefaultProfilingColumnObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability advanced profiling checks that will be detecting anomalies
- for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for profiling checks only.  
+## DefaultObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported.  
   
 
 
@@ -227,17 +335,9 @@ The default configuration of checks that are enabled as data observability advan
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](\docs\reference\yaml\profiling\column-profiling-checks\#columnnullsprofilingchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnnullsprofilingchecksspec)| | | |
-|[numeric](\docs\reference\yaml\profiling\column-profiling-checks\#columnnumericprofilingchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnnumericprofilingchecksspec)| | | |
-|[strings](\docs\reference\yaml\profiling\column-profiling-checks\#columnstringsprofilingchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnstringsprofilingchecksspec)| | | |
-|[uniqueness](\docs\reference\yaml\profiling\column-profiling-checks\#columnuniquenessprofilingchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnuniquenessprofilingchecksspec)| | | |
-|[datetime](\docs\reference\yaml\profiling\column-profiling-checks\#columndatetimeprofilingchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columndatetimeprofilingchecksspec)| | | |
-|[pii](\docs\reference\yaml\profiling\column-profiling-checks\#columnpiiprofilingchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnpiiprofilingchecksspec)| | | |
-|[bool](\docs\reference\yaml\profiling\column-profiling-checks\#columnboolprofilingchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnboolprofilingchecksspec)| | | |
-|[datatype](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)| | | |
-|[anomaly](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)| | | |
-|[schema](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
+|[profiling](#defaultprofilingobservabilitychecksettingsspec)|Default configuration of profiling checks that are enabled on tables and columns that are imported into DQO.|[DefaultProfilingObservabilityCheckSettingsSpec](#defaultprofilingobservabilitychecksettingsspec)| | | |
+|[monitoring_daily](#defaultdailymonitoringobservabilitychecksettingsspec)|Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.|[DefaultDailyMonitoringObservabilityCheckSettingsSpec](#defaultdailymonitoringobservabilitychecksettingsspec)| | | |
+|[monitoring_monthly](#defaultmonthlymonitoringobservabilitychecksettingsspec)|Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.|[DefaultMonthlyMonitoringObservabilityCheckSettingsSpec](#defaultmonthlymonitoringobservabilitychecksettingsspec)| | | |
 
 
 
@@ -249,9 +349,9 @@ The default configuration of checks that are enabled as data observability advan
 
 ___  
 
-## DefaultProfilingTableObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability advanced profiling checks that will be detecting anomalies
- for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for profiling checks only.  
+## DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for daily monitoring checks only.  
   
 
 
@@ -265,117 +365,17 @@ The default configuration of checks that are enabled as data observability advan
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)| | | |
-|[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)| | | |
-|[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DefaultMonthlyRecurringColumnObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability monthly recurring checks that will be detecting anomalies
- for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for monthly recurring checks only.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnnullsmonthlyrecurringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnnullsmonthlyrecurringchecksspec)| | | |
-|[numeric](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnnumericmonthlyrecurringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnnumericmonthlyrecurringchecksspec)| | | |
-|[strings](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnstringsmonthlyrecurringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnstringsmonthlyrecurringchecksspec)| | | |
-|[uniqueness](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnuniquenessmonthlyrecurringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnuniquenessmonthlyrecurringchecksspec)| | | |
-|[datetime](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columndatetimemonthlyrecurringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columndatetimemonthlyrecurringchecksspec)| | | |
-|[pii](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnpiimonthlyrecurringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnpiimonthlyrecurringchecksspec)| | | |
-|[bool](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnboolmonthlyrecurringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnboolmonthlyrecurringchecksspec)| | | |
-|[datatype](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columndatatypemonthlyrecurringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columndatatypemonthlyrecurringchecksspec)| | | |
-|[anomaly](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnanomalymonthlyrecurringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnanomalymonthlyrecurringchecksspec)| | | |
-|[schema](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnschemamonthlyrecurringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\column-monthly-recurring-checks\#columnschemamonthlyrecurringchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DefaultDailyRecurringColumnObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability daily recurring checks that will be detecting anomalies
- for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for daily recurring checks only.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)| | | |
-|[numeric](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)| | | |
-|[strings](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)| | | |
-|[uniqueness](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)| | | |
-|[datetime](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)| | | |
-|[pii](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)| | | |
-|[bool](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)| | | |
-|[datatype](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)| | | |
-|[anomaly](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)| | | |
-|[schema](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DefaultMonthlyRecurringTableObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability monthly recurring checks that will be detecting anomalies
- for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for monthly recurring checks only.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tablevolumemonthlyrecurringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tablevolumemonthlyrecurringchecksspec)| | | |
-|[availability](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tableavailabilitymonthlyrecurringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tableavailabilitymonthlyrecurringchecksspec)| | | |
-|[schema](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tableschemamonthlyrecurringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaMonthlyRecurringChecksSpec](\docs\reference\yaml\recurring\table-monthly-recurring-checks\#tableschemamonthlyrecurringchecksspec)| | | |
-|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
+|[nulls](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnnullsdailymonitoringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnnullsdailymonitoringchecksspec)| | | |
+|[numeric](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnnumericdailymonitoringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnnumericdailymonitoringchecksspec)| | | |
+|[strings](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnstringsdailymonitoringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnstringsdailymonitoringchecksspec)| | | |
+|[uniqueness](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnuniquenessdailymonitoringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnuniquenessdailymonitoringchecksspec)| | | |
+|[datetime](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatetimedailymonitoringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatetimedailymonitoringchecksspec)| | | |
+|[pii](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnpiidailymonitoringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnpiidailymonitoringchecksspec)| | | |
+|[bool](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnbooldailymonitoringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnbooldailymonitoringchecksspec)| | | |
+|[datatype](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatatypedailymonitoringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatatypedailymonitoringchecksspec)| | | |
+|[anomaly](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnanomalydailymonitoringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnanomalydailymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnschemadailymonitoringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnschemadailymonitoringchecksspec)| | | |
+|[custom](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcheckspecmap)| | | |
 
 
 

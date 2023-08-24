@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_daily_partitioned_checks_spec_custom_checks import (
+        TableSqlDailyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableSqlDailyPartitionedChecksSpec")
@@ -23,12 +26,18 @@ T = TypeVar("T", bound="TableSqlDailyPartitionedChecksSpec")
 class TableSqlDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableSqlDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         daily_partition_sql_condition_failed_count_on_table (Union[Unset, TableSqlConditionFailedCountCheckSpec]):
         daily_partition_sql_aggregate_expr_table (Union[Unset, TableSqlAggregateExprCheckSpec]):
         min_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableSqlDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_sql_condition_passed_percent_on_table: Union[
         Unset, "TableSqlConditionPassedPercentCheckSpec"
     ] = UNSET
@@ -44,6 +53,10 @@ class TableSqlDailyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_sql_condition_passed_percent_on_table: Union[
             Unset, Dict[str, Any]
         ] = UNSET
@@ -79,6 +92,8 @@ class TableSqlDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_sql_condition_passed_percent_on_table is not UNSET:
             field_dict[
                 "daily_partition_sql_condition_passed_percent_on_table"
@@ -109,8 +124,20 @@ class TableSqlDailyPartitionedChecksSpec:
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
         )
+        from ..models.table_sql_daily_partitioned_checks_spec_custom_checks import (
+            TableSqlDailyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableSqlDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableSqlDailyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_partition_sql_condition_passed_percent_on_table = d.pop(
             "daily_partition_sql_condition_passed_percent_on_table", UNSET
         )
@@ -172,6 +199,7 @@ class TableSqlDailyPartitionedChecksSpec:
             )
 
         table_sql_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_sql_condition_passed_percent_on_table=daily_partition_sql_condition_passed_percent_on_table,
             daily_partition_sql_condition_failed_count_on_table=daily_partition_sql_condition_failed_count_on_table,
             daily_partition_sql_aggregate_expr_table=daily_partition_sql_aggregate_expr_table,

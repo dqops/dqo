@@ -411,7 +411,7 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns a column that stores the check type (profiling, recurring, partitioned).
+     * Returns a column that stores the check type (profiling, monitoring, partitioned).
      * @return Check type column.
      */
     public TextColumn getCheckTypeColumn() {
