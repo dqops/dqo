@@ -112,6 +112,20 @@ export const DefinitionTree = () => {
     );
   };
 
+  const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck),
+        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(defaultCheck),
+        state: {
+          type: defaultCheck
+        },
+        label: defaultCheck
+      })
+    );
+  };
+
+
   useEffect(() => {
     if (
       definitionFirstLevelFolder === undefined ||
@@ -127,6 +141,7 @@ export const DefinitionTree = () => {
       );
     }
   }, []);
+
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -378,16 +393,16 @@ export const DefinitionTree = () => {
                         // check.custom ? 'font-bold' : '',
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
-                      // onClick={() => {
-                      //   openCheckFirstLevelTab(check);
-                      // }}
+                      onClick={() => {
+                        openCheckDefaultFirstLevelTab(x.replace(/\s/g, "_"));
+                      }}
                     >
                       <SvgIcon
                         name="definitionssensors"
                         className="w-4 h-4 min-w-4 shrink-0"
                       />
                       <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                        {x}
+                        {x.replace(/\s/g, "_")}
                       </div>
                     </div>
                   </div>
