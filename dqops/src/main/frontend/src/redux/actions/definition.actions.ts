@@ -280,9 +280,9 @@ export const getdataQualityChecksFolderTree =
     }
   };
 
-export const toggledataQualityChecksFolderTree = (key: string) => ({
+export const toggledataQualityChecksFolderTree = (fullPath: string) => ({
   type: DEFINITION_ACTION.TOGGLE_DATA_QUALITY_CHECKS_FOLDER,
-  key
+  fullPath
 });
 
 export const updatedataQualityChecksFolderTree = (

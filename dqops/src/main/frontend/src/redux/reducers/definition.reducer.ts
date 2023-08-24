@@ -290,7 +290,7 @@ const definitionReducer = (state = initialState, action: any) => {
         ...state,
         dataQualityChecksState: {
           ...state.dataQualityChecksState,
-          [action.key]: !state.dataQualityChecksState[action.key]
+          [action.fullPath]: !state.dataQualityChecksState[action.fullPath]
         }
       };
     case DEFINITION_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE:

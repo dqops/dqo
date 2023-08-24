@@ -68,9 +68,12 @@ export const DefinitionTree = () => {
     dispatch(toggleRuleFolderTree(key));
   };
 
-  const toggleDataQualityChecksFolder = (key: string) => {
-    dispatch(toggledataQualityChecksFolderTree(key));
+  const toggleDataQualityChecksFolder = (fullPath: string) => {
+    dispatch(toggledataQualityChecksFolderTree(fullPath));
   };
+
+  console.log(dataQualityChecksState)
+  console.log(checksFolderTree?.folders)
 
   const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
     dispatch(
@@ -277,7 +280,8 @@ export const DefinitionTree = () => {
 
   const renderChecksFolderTree = (
     folder?: CheckSpecFolderBasicModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
@@ -289,7 +293,7 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleDataQualityChecksFolder(key)}
+                  onClick={() => toggleDataQualityChecksFolder(key === "custom" && previousFolder!==undefined ? previousFolder + "/" +key : key)}
                 >
                   <SvgIcon
                     name={
@@ -305,13 +309,13 @@ export const DefinitionTree = () => {
                     />
                   )}
                 </div>
-                {dataQualityChecksState[key] && (
+                {(key!== "custom" && dataQualityChecksState[key]) || (key==="custom" && dataQualityChecksState[previousFolder+"/custom"]) && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderChecksFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ], key)}
                   </div>
                 )}
               </div>
