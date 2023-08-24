@@ -6,7 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.check_result_detailed_single_model import CheckResultDetailedSingleModel
+from ...models.check_result_entry_model import CheckResultEntryModel
 from ...models.get_incident_issues_direction import GetIncidentIssuesDirection
 from ...models.get_incident_issues_order import GetIncidentIssuesOrder
 from ...types import UNSET, Response, Unset
@@ -86,14 +86,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+) -> Optional[List["CheckResultEntryModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = CheckResultDetailedSingleModel.from_dict(
-                response_200_item_data
-            )
+            response_200_item = CheckResultEntryModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -106,7 +104,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+) -> Response[List["CheckResultEntryModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -131,7 +129,7 @@ def sync_detailed(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -156,7 +154,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultDetailedSingleModel']]
+        Response[List['CheckResultEntryModel']]
     """
 
     kwargs = _get_kwargs(
@@ -200,7 +198,7 @@ def sync(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -225,7 +223,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultDetailedSingleModel']
+        List['CheckResultEntryModel']
     """
 
     return sync_detailed(
@@ -262,7 +260,7 @@ async def asyncio_detailed(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -287,7 +285,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultDetailedSingleModel']]
+        Response[List['CheckResultEntryModel']]
     """
 
     kwargs = _get_kwargs(
@@ -329,7 +327,7 @@ async def asyncio(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -354,7 +352,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultDetailedSingleModel']
+        List['CheckResultEntryModel']
     """
 
     return (

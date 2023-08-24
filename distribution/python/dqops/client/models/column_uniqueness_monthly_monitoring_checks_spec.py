@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
+    from ..models.column_uniqueness_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnUniquenessMonthlyMonitoringChecksSpec")
@@ -22,12 +25,18 @@ T = TypeVar("T", bound="ColumnUniquenessMonthlyMonitoringChecksSpec")
 class ColumnUniquenessMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
         monthly_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         monthly_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         monthly_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
     monthly_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     monthly_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
@@ -35,6 +44,10 @@ class ColumnUniquenessMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_distinct_count, Unset):
             monthly_distinct_count = self.monthly_distinct_count.to_dict()
@@ -54,6 +67,8 @@ class ColumnUniquenessMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_distinct_count is not UNSET:
             field_dict["monthly_distinct_count"] = monthly_distinct_count
         if monthly_distinct_percent is not UNSET:
@@ -79,8 +94,24 @@ class ColumnUniquenessMonthlyMonitoringChecksSpec:
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
+        from ..models.column_uniqueness_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnUniquenessMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_distinct_count = d.pop("monthly_distinct_count", UNSET)
         monthly_distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
         if isinstance(_monthly_distinct_count, Unset):
@@ -118,6 +149,7 @@ class ColumnUniquenessMonthlyMonitoringChecksSpec:
             )
 
         column_uniqueness_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_distinct_count=monthly_distinct_count,
             monthly_distinct_percent=monthly_distinct_percent,
             monthly_duplicate_count=monthly_duplicate_count,

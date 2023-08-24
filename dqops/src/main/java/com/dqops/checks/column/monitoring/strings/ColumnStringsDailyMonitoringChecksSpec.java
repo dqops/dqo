@@ -78,8 +78,6 @@ public class ColumnStringsDailyMonitoringChecksSpec extends AbstractCheckCategor
             put("daily_string_match_name_regex_percent", o -> o.dailyStringMatchNameRegexPercent);
 
             put("daily_expected_strings_in_top_values_count", o -> o.dailyExpectedStringsInTopValuesCount);
-
-            put("daily_string_datatype_detected", o -> o.dailyStringDatatypeDetected);
         }
     };
 
@@ -187,9 +185,6 @@ public class ColumnStringsDailyMonitoringChecksSpec extends AbstractCheckCategor
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount;
-
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected;
 
     /**
      * Returns a maximum string length below check.
@@ -819,24 +814,6 @@ public class ColumnStringsDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyExpectedStringsInTopValuesCount));
         this.dailyExpectedStringsInTopValuesCount = dailyExpectedStringsInTopValuesCount;
         propagateHierarchyIdToField(dailyExpectedStringsInTopValuesCount, "daily_expected_strings_in_top_values_count");
-    }
-
-    /**
-     * Returns a count of expected values in datatype detected check.
-     * @return Datatype detected check.
-     */
-    public ColumnStringDatatypeDetectedCheckSpec getDailyStringDatatypeDetected() {
-        return dailyStringDatatypeDetected;
-    }
-
-    /**
-     * Sets a new definition of a datatype detected check.
-     * @param dailyStringDatatypeDetected Datatype detected check.
-     */
-    public void setDailyStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetected, dailyStringDatatypeDetected));
-        this.dailyStringDatatypeDetected = dailyStringDatatypeDetected;
-        propagateHierarchyIdToField(dailyStringDatatypeDetected, "daily_string_datatype_detected");
     }
 
     /**

@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.column_comparison_null_count_match_check_spec import (
         ColumnComparisonNullCountMatchCheckSpec,
     )
+    from ..models.column_comparison_profiling_checks_spec_custom_checks import (
+        ColumnComparisonProfilingChecksSpecCustomChecks,
+    )
     from ..models.column_comparison_sum_match_check_spec import (
         ColumnComparisonSumMatchCheckSpec,
     )
@@ -32,6 +35,9 @@ T = TypeVar("T", bound="ColumnComparisonProfilingChecksSpec")
 class ColumnComparisonProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnComparisonProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         reference_column (Union[Unset, str]): The name of the reference column name in the reference table. It is the
             column to which the current column is compared to.
         profile_sum_match (Union[Unset, ColumnComparisonSumMatchCheckSpec]):
@@ -42,6 +48,9 @@ class ColumnComparisonProfilingChecksSpec:
         profile_null_count_match (Union[Unset, ColumnComparisonNullCountMatchCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnComparisonProfilingChecksSpecCustomChecks"
+    ] = UNSET
     reference_column: Union[Unset, str] = UNSET
     profile_sum_match: Union[Unset, "ColumnComparisonSumMatchCheckSpec"] = UNSET
     profile_min_match: Union[Unset, "ColumnComparisonMinMatchCheckSpec"] = UNSET
@@ -56,6 +65,10 @@ class ColumnComparisonProfilingChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         reference_column = self.reference_column
         profile_sum_match: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_sum_match, Unset):
@@ -84,6 +97,8 @@ class ColumnComparisonProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if reference_column is not UNSET:
             field_dict["reference_column"] = reference_column
         if profile_sum_match is not UNSET:
@@ -118,11 +133,23 @@ class ColumnComparisonProfilingChecksSpec:
         from ..models.column_comparison_null_count_match_check_spec import (
             ColumnComparisonNullCountMatchCheckSpec,
         )
+        from ..models.column_comparison_profiling_checks_spec_custom_checks import (
+            ColumnComparisonProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_comparison_sum_match_check_spec import (
             ColumnComparisonSumMatchCheckSpec,
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnComparisonProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnComparisonProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         reference_column = d.pop("reference_column", UNSET)
 
         _profile_sum_match = d.pop("profile_sum_match", UNSET)
@@ -186,6 +213,7 @@ class ColumnComparisonProfilingChecksSpec:
             )
 
         column_comparison_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             reference_column=reference_column,
             profile_sum_match=profile_sum_match,
             profile_min_match=profile_min_match,

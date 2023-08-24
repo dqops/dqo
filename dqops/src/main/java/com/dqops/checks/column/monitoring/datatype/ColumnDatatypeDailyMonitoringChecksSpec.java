@@ -16,8 +16,8 @@
 package com.dqops.checks.column.monitoring.datatype;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,33 +37,33 @@ import java.util.Objects;
 public class ColumnDatatypeDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
+            put("daily_string_datatype_detected", o -> o.dailyStringDatatypeDetected);
             put("daily_string_datatype_changed", o -> o.dailyStringDatatypeChanged);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnDatatypeStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected;
 
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDatatypeStringDatatypeChangedCheckSpec dailyStringDatatypeChanged;
 
     /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getDailyDateMatchFormatPercent() {
-        return dailyDateMatchFormatPercent;
+    public ColumnDatatypeStringDatatypeDetectedCheckSpec getDailyStringDatatypeDetected() {
+        return dailyStringDatatypeDetected;
     }
 
     /**
-     * Sets a new definition of a date match format percentage check.
-     * @param dailyDateMatchFormatPercent Date match format percentage check.
+     * Sets a new definition of a datatype detected check.
+     * @param dailyStringDatatypeDetected Datatype detected check.
      */
-    public void setDailyDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyDateMatchFormatPercent, dailyDateMatchFormatPercent));
-        this.dailyDateMatchFormatPercent = dailyDateMatchFormatPercent;
-        propagateHierarchyIdToField(dailyDateMatchFormatPercent, "daily_date_match_format_percent");
+    public void setDailyStringDatatypeDetected(ColumnDatatypeStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetected, dailyStringDatatypeDetected));
+        this.dailyStringDatatypeDetected = dailyStringDatatypeDetected;
+        propagateHierarchyIdToField(dailyStringDatatypeDetected, "daily_string_datatype_detected");
     }
 
     /**

@@ -20,9 +20,6 @@
 |table|Table name affected by a data quality incident.|string| | | |
 |table_priority|Table priority of the table that was affected by a data quality incident.|integer| | | |
 |incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long| | | |
-|first_seen|The UTC timestamp when the data quality incident was first seen.|instant| | | |
-|last_seen|The UTC timestamp when the data quality incident was last seen.|instant| | | |
-|incident_until|The UTC timestamp when the data quality incident is valid until. All new failed data quality check results until that date will be included in this incident, unless the incident status is changed to resolved, so a new incident must be created.|instant| | | |
 |data_stream_name|The data stream name that was affected by a data quality incident.|string| | | |
 |quality_dimension|The data quality dimension that was affected by a data quality incident.|string| | | |
 |check_category|The data quality check category that was affected by a data quality incident.|string| | | |

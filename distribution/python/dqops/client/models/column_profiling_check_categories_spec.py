@@ -54,7 +54,7 @@ class ColumnProfilingCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, ColumnProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
-            names.
+            names within this category.
         nulls (Union[Unset, ColumnNullsProfilingChecksSpec]):
         numeric (Union[Unset, ColumnNumericProfilingChecksSpec]):
         strings (Union[Unset, ColumnStringsProfilingChecksSpec]):

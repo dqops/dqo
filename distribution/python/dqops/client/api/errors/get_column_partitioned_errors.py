@@ -6,7 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.errors_detailed_data_model import ErrorsDetailedDataModel
+from ...models.errors_list_model import ErrorsListModel
 from ...models.get_column_partitioned_errors_time_scale import (
     GetColumnPartitionedErrorsTimeScale,
 )
@@ -79,14 +79,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["ErrorsDetailedDataModel"]]:
+) -> Optional[List["ErrorsListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = ErrorsDetailedDataModel.from_dict(
-                response_200_item_data
-            )
+            response_200_item = ErrorsListModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -99,7 +97,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["ErrorsDetailedDataModel"]]:
+) -> Response[List["ErrorsListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -123,7 +121,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["ErrorsDetailedDataModel"]]:
+) -> Response[List["ErrorsListModel"]]:
     """getColumnPartitionedErrors
 
      Returns the errors related to the recent column level partitioned checks executions for a requested
@@ -148,7 +146,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ErrorsDetailedDataModel']]
+        Response[List['ErrorsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -190,7 +188,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["ErrorsDetailedDataModel"]]:
+) -> Optional[List["ErrorsListModel"]]:
     """getColumnPartitionedErrors
 
      Returns the errors related to the recent column level partitioned checks executions for a requested
@@ -215,7 +213,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ErrorsDetailedDataModel']
+        List['ErrorsListModel']
     """
 
     return sync_detailed(
@@ -250,7 +248,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["ErrorsDetailedDataModel"]]:
+) -> Response[List["ErrorsListModel"]]:
     """getColumnPartitionedErrors
 
      Returns the errors related to the recent column level partitioned checks executions for a requested
@@ -275,7 +273,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ErrorsDetailedDataModel']]
+        Response[List['ErrorsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -315,7 +313,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["ErrorsDetailedDataModel"]]:
+) -> Optional[List["ErrorsListModel"]]:
     """getColumnPartitionedErrors
 
      Returns the errors related to the recent column level partitioned checks executions for a requested
@@ -340,7 +338,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ErrorsDetailedDataModel']
+        List['ErrorsListModel']
     """
 
     return (

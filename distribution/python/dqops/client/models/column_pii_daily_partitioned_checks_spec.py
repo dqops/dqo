@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
         ColumnPiiContainsUsaZipcodePercentCheckSpec,
     )
+    from ..models.column_pii_daily_partitioned_checks_spec_custom_checks import (
+        ColumnPiiDailyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.column_pii_valid_email_percent_check_spec import (
         ColumnPiiValidEmailPercentCheckSpec,
     )
@@ -44,6 +47,9 @@ T = TypeVar("T", bound="ColumnPiiDailyPartitionedChecksSpec")
 class ColumnPiiDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnPiiDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_valid_usa_phone_percent (Union[Unset, ColumnPiiValidUsaPhonePercentCheckSpec]):
         daily_partition_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
         daily_partition_valid_usa_zipcode_percent (Union[Unset, ColumnPiiValidUsaZipcodePercentCheckSpec]):
@@ -56,6 +62,9 @@ class ColumnPiiDailyPartitionedChecksSpec:
         daily_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnPiiDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_valid_usa_phone_percent: Union[
         Unset, "ColumnPiiValidUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -89,6 +98,10 @@ class ColumnPiiDailyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_valid_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_valid_usa_phone_percent, Unset):
             daily_partition_valid_usa_phone_percent = (
@@ -154,6 +167,8 @@ class ColumnPiiDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_valid_usa_phone_percent is not UNSET:
             field_dict[
                 "daily_partition_valid_usa_phone_percent"
@@ -214,6 +229,9 @@ class ColumnPiiDailyPartitionedChecksSpec:
         from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
             ColumnPiiContainsUsaZipcodePercentCheckSpec,
         )
+        from ..models.column_pii_daily_partitioned_checks_spec_custom_checks import (
+            ColumnPiiDailyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_pii_valid_email_percent_check_spec import (
             ColumnPiiValidEmailPercentCheckSpec,
         )
@@ -231,6 +249,15 @@ class ColumnPiiDailyPartitionedChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnPiiDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnPiiDailyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_partition_valid_usa_phone_percent = d.pop(
             "daily_partition_valid_usa_phone_percent", UNSET
         )
@@ -382,6 +409,7 @@ class ColumnPiiDailyPartitionedChecksSpec:
             )
 
         column_pii_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_valid_usa_phone_percent=daily_partition_valid_usa_phone_percent,
             daily_partition_contains_usa_phone_percent=daily_partition_contains_usa_phone_percent,
             daily_partition_valid_usa_zipcode_percent=daily_partition_valid_usa_zipcode_percent,

@@ -10,6 +10,9 @@ if TYPE_CHECKING:
         ColumnNotNullsPercentCheckSpec,
     )
     from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+    from ..models.column_nulls_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnNullsMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
 
@@ -20,12 +23,18 @@ T = TypeVar("T", bound="ColumnNullsMonthlyMonitoringChecksSpec")
 class ColumnNullsMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNullsMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         monthly_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         monthly_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         monthly_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnNullsMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     monthly_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     monthly_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
@@ -33,6 +42,10 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_nulls_count, Unset):
             monthly_nulls_count = self.monthly_nulls_count.to_dict()
@@ -52,6 +65,8 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_nulls_count is not UNSET:
             field_dict["monthly_nulls_count"] = monthly_nulls_count
         if monthly_nulls_percent is not UNSET:
@@ -72,9 +87,23 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
             ColumnNotNullsPercentCheckSpec,
         )
         from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+        from ..models.column_nulls_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnNullsMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNullsMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnNullsMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_nulls_count = d.pop("monthly_nulls_count", UNSET)
         monthly_nulls_count: Union[Unset, ColumnNullsCountCheckSpec]
         if isinstance(_monthly_nulls_count, Unset):
@@ -112,6 +141,7 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
             )
 
         column_nulls_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_nulls_count=monthly_nulls_count,
             monthly_nulls_percent=monthly_nulls_percent,
             monthly_not_nulls_count=monthly_not_nulls_count,

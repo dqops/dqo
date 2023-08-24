@@ -39,7 +39,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableDailyMonitoringCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are
-            check names.
+            check names within this category.
         volume (Union[Unset, TableVolumeDailyMonitoringChecksSpec]):
         timeliness (Union[Unset, TableTimelinessDailyMonitoringChecksSpec]):
         accuracy (Union[Unset, TableAccuracyDailyMonitoringChecksSpec]):

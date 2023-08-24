@@ -11,7 +11,7 @@ T = TypeVar("T", bound="ColumnMonthlyPartitionedCheckCategoriesSpecCustom")
 
 @attr.s(auto_attribs=True)
 class ColumnMonthlyPartitionedCheckCategoriesSpecCustom:
-    """Dictionary of custom checks. The keys are check names."""
+    """Dictionary of custom checks. The keys are check names within this category."""
 
     additional_properties: Dict[str, "CustomCheckSpec"] = attr.ib(
         init=False, factory=dict

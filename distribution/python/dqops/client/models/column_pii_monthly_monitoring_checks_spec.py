@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
         ColumnPiiContainsUsaZipcodePercentCheckSpec,
     )
+    from ..models.column_pii_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnPiiMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_pii_valid_email_percent_check_spec import (
         ColumnPiiValidEmailPercentCheckSpec,
     )
@@ -44,6 +47,9 @@ T = TypeVar("T", bound="ColumnPiiMonthlyMonitoringChecksSpec")
 class ColumnPiiMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnPiiMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         monthly_valid_usa_phone_percent (Union[Unset, ColumnPiiValidUsaPhonePercentCheckSpec]):
         monthly_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
         monthly_valid_usa_zipcode_percent (Union[Unset, ColumnPiiValidUsaZipcodePercentCheckSpec]):
@@ -56,6 +62,9 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         monthly_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnPiiMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_valid_usa_phone_percent: Union[
         Unset, "ColumnPiiValidUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -89,6 +98,10 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_valid_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_valid_usa_phone_percent, Unset):
             monthly_valid_usa_phone_percent = (
@@ -146,6 +159,8 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_valid_usa_phone_percent is not UNSET:
             field_dict[
                 "monthly_valid_usa_phone_percent"
@@ -200,6 +215,9 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
             ColumnPiiContainsUsaZipcodePercentCheckSpec,
         )
+        from ..models.column_pii_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnPiiMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_pii_valid_email_percent_check_spec import (
             ColumnPiiValidEmailPercentCheckSpec,
         )
@@ -217,6 +235,15 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnPiiMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnPiiMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _monthly_valid_usa_phone_percent = d.pop(
             "monthly_valid_usa_phone_percent", UNSET
         )
@@ -352,6 +379,7 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
             )
 
         column_pii_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_valid_usa_phone_percent=monthly_valid_usa_phone_percent,
             monthly_contains_usa_phone_percent=monthly_contains_usa_phone_percent,
             monthly_valid_usa_zipcode_percent=monthly_valid_usa_zipcode_percent,

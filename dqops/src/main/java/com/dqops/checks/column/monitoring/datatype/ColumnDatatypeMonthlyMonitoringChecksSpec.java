@@ -16,8 +16,8 @@
 package com.dqops.checks.column.monitoring.datatype;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,33 +37,33 @@ import java.util.Objects;
 public class ColumnDatatypeMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_date_match_format_percent", o -> o.monthlyDateMatchFormatPercent);
+            put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
             put("monthly_string_datatype_changed", o -> o.monthlyStringDatatypeChanged);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
 
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged;
 
     /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getMonthlyDateMatchFormatPercent() {
-        return monthlyDateMatchFormatPercent;
+    public ColumnDatatypeStringDatatypeDetectedCheckSpec getMonthlyStringDatatypeDetected() {
+        return monthlyStringDatatypeDetected;
     }
 
     /**
-     * Sets a new definition of a date match format percentage check.
-     * @param monthlyDateMatchFormatPercent Date match format percentage check.
+     * Sets a new definition of a datatype detect check.
+     * @param monthlyStringDatatypeDetected Datatype detect check.
      */
-    public void setMonthlyDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyDateMatchFormatPercent, monthlyDateMatchFormatPercent));
-        this.monthlyDateMatchFormatPercent = monthlyDateMatchFormatPercent;
-        propagateHierarchyIdToField(monthlyDateMatchFormatPercent, "monthly_date_match_format_percent");
+    public void setMonthlyStringDatatypeDetected(ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetected, monthlyStringDatatypeDetected));
+        this.monthlyStringDatatypeDetected = monthlyStringDatatypeDetected;
+        propagateHierarchyIdToField(monthlyStringDatatypeDetected, "monthly_string_datatype_detected");
     }
 
     /**

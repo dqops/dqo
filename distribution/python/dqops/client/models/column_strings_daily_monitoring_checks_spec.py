@@ -14,9 +14,6 @@ if TYPE_CHECKING:
     from ..models.column_string_boolean_placeholder_percent_check_spec import (
         ColumnStringBooleanPlaceholderPercentCheckSpec,
     )
-    from ..models.column_string_datatype_detected_check_spec import (
-        ColumnStringDatatypeDetectedCheckSpec,
-    )
     from ..models.column_string_empty_count_check_spec import (
         ColumnStringEmptyCountCheckSpec,
     )
@@ -113,6 +110,9 @@ if TYPE_CHECKING:
     from ..models.column_string_whitespace_percent_check_spec import (
         ColumnStringWhitespacePercentCheckSpec,
     )
+    from ..models.column_strings_daily_monitoring_checks_spec_custom_checks import (
+        ColumnStringsDailyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnStringsDailyMonitoringChecksSpec")
@@ -122,6 +122,9 @@ T = TypeVar("T", bound="ColumnStringsDailyMonitoringChecksSpec")
 class ColumnStringsDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnStringsDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_string_max_length (Union[Unset, ColumnStringMaxLengthCheckSpec]):
         daily_string_min_length (Union[Unset, ColumnStringMinLengthCheckSpec]):
         daily_string_mean_length (Union[Unset, ColumnStringMeanLengthCheckSpec]):
@@ -158,9 +161,11 @@ class ColumnStringsDailyMonitoringChecksSpec:
         daily_string_match_date_regex_percent (Union[Unset, ColumnStringMatchDateRegexPercentCheckSpec]):
         daily_string_match_name_regex_percent (Union[Unset, ColumnStringMatchNameRegexPercentCheckSpec]):
         daily_expected_strings_in_top_values_count (Union[Unset, ColumnExpectedStringsInTopValuesCountCheckSpec]):
-        daily_string_datatype_detected (Union[Unset, ColumnStringDatatypeDetectedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnStringsDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_string_max_length: Union[Unset, "ColumnStringMaxLengthCheckSpec"] = UNSET
     daily_string_min_length: Union[Unset, "ColumnStringMinLengthCheckSpec"] = UNSET
     daily_string_mean_length: Union[Unset, "ColumnStringMeanLengthCheckSpec"] = UNSET
@@ -258,12 +263,13 @@ class ColumnStringsDailyMonitoringChecksSpec:
     daily_expected_strings_in_top_values_count: Union[
         Unset, "ColumnExpectedStringsInTopValuesCountCheckSpec"
     ] = UNSET
-    daily_string_datatype_detected: Union[
-        Unset, "ColumnStringDatatypeDetectedCheckSpec"
-    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_string_max_length: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_string_max_length, Unset):
             daily_string_max_length = self.daily_string_max_length.to_dict()
@@ -470,15 +476,11 @@ class ColumnStringsDailyMonitoringChecksSpec:
                 self.daily_expected_strings_in_top_values_count.to_dict()
             )
 
-        daily_string_datatype_detected: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_string_datatype_detected, Unset):
-            daily_string_datatype_detected = (
-                self.daily_string_datatype_detected.to_dict()
-            )
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_string_max_length is not UNSET:
             field_dict["daily_string_max_length"] = daily_string_max_length
         if daily_string_min_length is not UNSET:
@@ -607,10 +609,6 @@ class ColumnStringsDailyMonitoringChecksSpec:
             field_dict[
                 "daily_expected_strings_in_top_values_count"
             ] = daily_expected_strings_in_top_values_count
-        if daily_string_datatype_detected is not UNSET:
-            field_dict[
-                "daily_string_datatype_detected"
-            ] = daily_string_datatype_detected
 
         return field_dict
 
@@ -624,9 +622,6 @@ class ColumnStringsDailyMonitoringChecksSpec:
         )
         from ..models.column_string_boolean_placeholder_percent_check_spec import (
             ColumnStringBooleanPlaceholderPercentCheckSpec,
-        )
-        from ..models.column_string_datatype_detected_check_spec import (
-            ColumnStringDatatypeDetectedCheckSpec,
         )
         from ..models.column_string_empty_count_check_spec import (
             ColumnStringEmptyCountCheckSpec,
@@ -724,8 +719,22 @@ class ColumnStringsDailyMonitoringChecksSpec:
         from ..models.column_string_whitespace_percent_check_spec import (
             ColumnStringWhitespacePercentCheckSpec,
         )
+        from ..models.column_strings_daily_monitoring_checks_spec_custom_checks import (
+            ColumnStringsDailyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnStringsDailyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnStringsDailyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_string_max_length = d.pop("daily_string_max_length", UNSET)
         daily_string_max_length: Union[Unset, ColumnStringMaxLengthCheckSpec]
         if isinstance(_daily_string_max_length, Unset):
@@ -1219,20 +1228,8 @@ class ColumnStringsDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_string_datatype_detected = d.pop("daily_string_datatype_detected", UNSET)
-        daily_string_datatype_detected: Union[
-            Unset, ColumnStringDatatypeDetectedCheckSpec
-        ]
-        if isinstance(_daily_string_datatype_detected, Unset):
-            daily_string_datatype_detected = UNSET
-        else:
-            daily_string_datatype_detected = (
-                ColumnStringDatatypeDetectedCheckSpec.from_dict(
-                    _daily_string_datatype_detected
-                )
-            )
-
         column_strings_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_string_max_length=daily_string_max_length,
             daily_string_min_length=daily_string_min_length,
             daily_string_mean_length=daily_string_mean_length,
@@ -1268,7 +1265,6 @@ class ColumnStringsDailyMonitoringChecksSpec:
             daily_string_match_date_regex_percent=daily_string_match_date_regex_percent,
             daily_string_match_name_regex_percent=daily_string_match_name_regex_percent,
             daily_expected_strings_in_top_values_count=daily_expected_strings_in_top_values_count,
-            daily_string_datatype_detected=daily_string_datatype_detected,
         )
 
         column_strings_daily_monitoring_checks_spec.additional_properties = d

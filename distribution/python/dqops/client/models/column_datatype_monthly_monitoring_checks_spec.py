@@ -5,11 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_datatype_date_match_format_percent_check_spec import (
-        ColumnDatatypeDateMatchFormatPercentCheckSpec,
+    from ..models.column_datatype_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks,
     )
     from ..models.column_datatype_string_datatype_changed_check_spec import (
         ColumnDatatypeStringDatatypeChangedCheckSpec,
+    )
+    from ..models.column_datatype_string_datatype_detected_check_spec import (
+        ColumnDatatypeStringDatatypeDetectedCheckSpec,
     )
 
 
@@ -20,12 +23,18 @@ T = TypeVar("T", bound="ColumnDatatypeMonthlyMonitoringChecksSpec")
 class ColumnDatatypeMonthlyMonitoringChecksSpec:
     """
     Attributes:
-        monthly_date_match_format_percent (Union[Unset, ColumnDatatypeDateMatchFormatPercentCheckSpec]):
+        custom_checks (Union[Unset, ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
+        monthly_string_datatype_detected (Union[Unset, ColumnDatatypeStringDatatypeDetectedCheckSpec]):
         monthly_string_datatype_changed (Union[Unset, ColumnDatatypeStringDatatypeChangedCheckSpec]):
     """
 
-    monthly_date_match_format_percent: Union[
-        Unset, "ColumnDatatypeDateMatchFormatPercentCheckSpec"
+    custom_checks: Union[
+        Unset, "ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
+    monthly_string_datatype_detected: Union[
+        Unset, "ColumnDatatypeStringDatatypeDetectedCheckSpec"
     ] = UNSET
     monthly_string_datatype_changed: Union[
         Unset, "ColumnDatatypeStringDatatypeChangedCheckSpec"
@@ -33,10 +42,14 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        monthly_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_date_match_format_percent, Unset):
-            monthly_date_match_format_percent = (
-                self.monthly_date_match_format_percent.to_dict()
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
+        monthly_string_datatype_detected: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_string_datatype_detected, Unset):
+            monthly_string_datatype_detected = (
+                self.monthly_string_datatype_detected.to_dict()
             )
 
         monthly_string_datatype_changed: Union[Unset, Dict[str, Any]] = UNSET
@@ -48,10 +61,12 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if monthly_date_match_format_percent is not UNSET:
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
+        if monthly_string_datatype_detected is not UNSET:
             field_dict[
-                "monthly_date_match_format_percent"
-            ] = monthly_date_match_format_percent
+                "monthly_string_datatype_detected"
+            ] = monthly_string_datatype_detected
         if monthly_string_datatype_changed is not UNSET:
             field_dict[
                 "monthly_string_datatype_changed"
@@ -61,26 +76,42 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_datatype_date_match_format_percent_check_spec import (
-            ColumnDatatypeDateMatchFormatPercentCheckSpec,
+        from ..models.column_datatype_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks,
         )
         from ..models.column_datatype_string_datatype_changed_check_spec import (
             ColumnDatatypeStringDatatypeChangedCheckSpec,
         )
+        from ..models.column_datatype_string_datatype_detected_check_spec import (
+            ColumnDatatypeStringDatatypeDetectedCheckSpec,
+        )
 
         d = src_dict.copy()
-        _monthly_date_match_format_percent = d.pop(
-            "monthly_date_match_format_percent", UNSET
-        )
-        monthly_date_match_format_percent: Union[
-            Unset, ColumnDatatypeDateMatchFormatPercentCheckSpec
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks
         ]
-        if isinstance(_monthly_date_match_format_percent, Unset):
-            monthly_date_match_format_percent = UNSET
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
         else:
-            monthly_date_match_format_percent = (
-                ColumnDatatypeDateMatchFormatPercentCheckSpec.from_dict(
-                    _monthly_date_match_format_percent
+            custom_checks = (
+                ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
+        _monthly_string_datatype_detected = d.pop(
+            "monthly_string_datatype_detected", UNSET
+        )
+        monthly_string_datatype_detected: Union[
+            Unset, ColumnDatatypeStringDatatypeDetectedCheckSpec
+        ]
+        if isinstance(_monthly_string_datatype_detected, Unset):
+            monthly_string_datatype_detected = UNSET
+        else:
+            monthly_string_datatype_detected = (
+                ColumnDatatypeStringDatatypeDetectedCheckSpec.from_dict(
+                    _monthly_string_datatype_detected
                 )
             )
 
@@ -100,7 +131,8 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
             )
 
         column_datatype_monthly_monitoring_checks_spec = cls(
-            monthly_date_match_format_percent=monthly_date_match_format_percent,
+            custom_checks=custom_checks,
+            monthly_string_datatype_detected=monthly_string_datatype_detected,
             monthly_string_datatype_changed=monthly_string_datatype_changed,
         )
 

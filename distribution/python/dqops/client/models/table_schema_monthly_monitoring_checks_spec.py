@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.table_schema_column_types_changed_check_spec import (
         TableSchemaColumnTypesChangedCheckSpec,
     )
+    from ..models.table_schema_monthly_monitoring_checks_spec_custom_checks import (
+        TableSchemaMonthlyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableSchemaMonthlyMonitoringChecksSpec")
@@ -29,6 +32,9 @@ T = TypeVar("T", bound="TableSchemaMonthlyMonitoringChecksSpec")
 class TableSchemaMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableSchemaMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_column_count (Union[Unset, TableSchemaColumnCountCheckSpec]):
         monthly_column_count_changed (Union[Unset, TableSchemaColumnCountChangedCheckSpec]):
         monthly_column_list_changed (Union[Unset, TableSchemaColumnListChangedCheckSpec]):
@@ -36,6 +42,9 @@ class TableSchemaMonthlyMonitoringChecksSpec:
         monthly_column_types_changed (Union[Unset, TableSchemaColumnTypesChangedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableSchemaMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_column_count: Union[Unset, "TableSchemaColumnCountCheckSpec"] = UNSET
     monthly_column_count_changed: Union[
         Unset, "TableSchemaColumnCountChangedCheckSpec"
@@ -52,6 +61,10 @@ class TableSchemaMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_column_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_column_count, Unset):
             monthly_column_count = self.monthly_column_count.to_dict()
@@ -77,6 +90,8 @@ class TableSchemaMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_column_count is not UNSET:
             field_dict["monthly_column_count"] = monthly_column_count
         if monthly_column_count_changed is not UNSET:
@@ -109,8 +124,22 @@ class TableSchemaMonthlyMonitoringChecksSpec:
         from ..models.table_schema_column_types_changed_check_spec import (
             TableSchemaColumnTypesChangedCheckSpec,
         )
+        from ..models.table_schema_monthly_monitoring_checks_spec_custom_checks import (
+            TableSchemaMonthlyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableSchemaMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableSchemaMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_column_count = d.pop("monthly_column_count", UNSET)
         monthly_column_count: Union[Unset, TableSchemaColumnCountCheckSpec]
         if isinstance(_monthly_column_count, Unset):
@@ -173,6 +202,7 @@ class TableSchemaMonthlyMonitoringChecksSpec:
             )
 
         table_schema_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_column_count=monthly_column_count,
             monthly_column_count_changed=monthly_column_count_changed,
             monthly_column_list_changed=monthly_column_list_changed,

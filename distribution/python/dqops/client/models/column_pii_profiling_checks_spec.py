@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
         ColumnPiiContainsUsaZipcodePercentCheckSpec,
     )
+    from ..models.column_pii_profiling_checks_spec_custom_checks import (
+        ColumnPiiProfilingChecksSpecCustomChecks,
+    )
     from ..models.column_pii_valid_email_percent_check_spec import (
         ColumnPiiValidEmailPercentCheckSpec,
     )
@@ -44,6 +47,9 @@ T = TypeVar("T", bound="ColumnPiiProfilingChecksSpec")
 class ColumnPiiProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnPiiProfilingChecksSpecCustomChecks]): Dictionary of additional custom checks
+            within this category. The keys are check names defined in the definition section. The sensor parameters and
+            rules should match the type of the configured sensor and rule for the custom check.
         profile_valid_usa_phone_percent (Union[Unset, ColumnPiiValidUsaPhonePercentCheckSpec]):
         profile_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
         profile_valid_usa_zipcode_percent (Union[Unset, ColumnPiiValidUsaZipcodePercentCheckSpec]):
@@ -56,6 +62,7 @@ class ColumnPiiProfilingChecksSpec:
         profile_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnPiiProfilingChecksSpecCustomChecks"] = UNSET
     profile_valid_usa_phone_percent: Union[
         Unset, "ColumnPiiValidUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -89,6 +96,10 @@ class ColumnPiiProfilingChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_valid_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_valid_usa_phone_percent, Unset):
             profile_valid_usa_phone_percent = (
@@ -146,6 +157,8 @@ class ColumnPiiProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_valid_usa_phone_percent is not UNSET:
             field_dict[
                 "profile_valid_usa_phone_percent"
@@ -200,6 +213,9 @@ class ColumnPiiProfilingChecksSpec:
         from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
             ColumnPiiContainsUsaZipcodePercentCheckSpec,
         )
+        from ..models.column_pii_profiling_checks_spec_custom_checks import (
+            ColumnPiiProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_pii_valid_email_percent_check_spec import (
             ColumnPiiValidEmailPercentCheckSpec,
         )
@@ -217,6 +233,15 @@ class ColumnPiiProfilingChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnPiiProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnPiiProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_valid_usa_phone_percent = d.pop(
             "profile_valid_usa_phone_percent", UNSET
         )
@@ -352,6 +377,7 @@ class ColumnPiiProfilingChecksSpec:
             )
 
         column_pii_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_valid_usa_phone_percent=profile_valid_usa_phone_percent,
             profile_contains_usa_phone_percent=profile_contains_usa_phone_percent,
             profile_valid_usa_zipcode_percent=profile_valid_usa_zipcode_percent,

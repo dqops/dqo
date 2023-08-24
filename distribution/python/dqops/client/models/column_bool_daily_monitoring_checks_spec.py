@@ -5,6 +5,9 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_bool_daily_monitoring_checks_spec_custom_checks import (
+        ColumnBoolDailyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
     from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
 
@@ -16,15 +19,25 @@ T = TypeVar("T", bound="ColumnBoolDailyMonitoringChecksSpec")
 class ColumnBoolDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnBoolDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_true_percent (Union[Unset, ColumnTruePercentCheckSpec]):
         daily_false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnBoolDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_true_percent: Union[Unset, "ColumnTruePercentCheckSpec"] = UNSET
     daily_false_percent: Union[Unset, "ColumnFalsePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_true_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_true_percent, Unset):
             daily_true_percent = self.daily_true_percent.to_dict()
@@ -36,6 +49,8 @@ class ColumnBoolDailyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_true_percent is not UNSET:
             field_dict["daily_true_percent"] = daily_true_percent
         if daily_false_percent is not UNSET:
@@ -45,10 +60,22 @@ class ColumnBoolDailyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_bool_daily_monitoring_checks_spec_custom_checks import (
+            ColumnBoolDailyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
         from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnBoolDailyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnBoolDailyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_true_percent = d.pop("daily_true_percent", UNSET)
         daily_true_percent: Union[Unset, ColumnTruePercentCheckSpec]
         if isinstance(_daily_true_percent, Unset):
@@ -68,6 +95,7 @@ class ColumnBoolDailyMonitoringChecksSpec:
             )
 
         column_bool_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_true_percent=daily_true_percent,
             daily_false_percent=daily_false_percent,
         )
