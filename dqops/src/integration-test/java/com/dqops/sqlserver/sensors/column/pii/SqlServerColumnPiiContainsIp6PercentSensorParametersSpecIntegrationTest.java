@@ -186,6 +186,7 @@ class SqlServerColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0, resultTable.column(0).get(0));
         Assertions.assertEquals(0.0, resultTable.column(0).get(1));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(2));
     }
 
     @Test
