@@ -44,7 +44,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/defaults")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Settings", description = "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.")
+@Api(value = "Defaults", description = "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.")
 public class DefaultsController {
     private ExecutionContextFactory executionContextFactory;
     private SpecToModelCheckMappingService specToModelCheckMappingService;

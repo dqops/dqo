@@ -29,6 +29,7 @@ interface CheckCategoriesViewProps {
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
   copyCategory?: QualityCategoryModel;
+  isDefaultEditing?: boolean;
 }
 const CheckCategoriesView = ({
   mode,
@@ -39,7 +40,8 @@ const CheckCategoriesView = ({
   getCheckOverview,
   timeWindowFilter,
   changeCopyUI,
-  copyCategory
+  copyCategory,
+  isDefaultEditing
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -108,30 +110,32 @@ const CheckCategoriesView = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          <div className="flex justify-end gap-x-3">
-            <div className="group relative">
-              <SvgIcon
-                name="delete"
-                width={20}
-                className="cursor-pointer"
-                onClick={() => setDeleteDataDialogOpened(true)}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Delete data for the category
+          {isDefaultEditing !== true && (
+            <div className="flex justify-end gap-x-3">
+              <div className="group relative">
+                <SvgIcon
+                  name="delete"
+                  width={20}
+                  className="cursor-pointer"
+                  onClick={() => setDeleteDataDialogOpened(true)}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Delete data for the category
+                </div>
+              </div>
+              <div className="group relative">
+                <SvgIcon
+                  name="play"
+                  width={20}
+                  className="text-primary cursor-pointer"
+                  onClick={onRunChecks}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Run checks for the category
+                </div>
               </div>
             </div>
-            <div className="group relative">
-              <SvgIcon
-                name="play"
-                width={20}
-                className="text-primary cursor-pointer"
-                onClick={onRunChecks}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Run checks for the category
-              </div>
-            </div>
-          </div>
+          )}
         </td>
       </tr>
       {category.checks &&
@@ -166,6 +170,7 @@ const CheckCategoriesView = ({
             }
             category={category.category}
             comparisonName={category.comparison_name}
+            isDefaultEditing={isDefaultEditing}
           />
         ))}
       <DeleteOnlyDataDialog

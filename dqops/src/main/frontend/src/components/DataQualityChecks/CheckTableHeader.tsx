@@ -33,6 +33,7 @@ interface TableHeaderProps {
   copyUI?: CheckContainerModel;
   setCopyUI: (ui: CheckContainerModel) => void;
   onUpdate: () => void;
+  isDefaultEditing?: boolean;
 }
 
 const TableHeader = ({
@@ -42,7 +43,8 @@ const TableHeader = ({
   setMode,
   copyUI,
   setCopyUI,
-  onUpdate
+  onUpdate,
+  isDefaultEditing
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -137,7 +139,9 @@ const TableHeader = ({
         url,
         value,
         state: {},
-        label: `${timeScale === 'daily' ? 'Daily' : 'Monthly'} monitoring checks`
+        label: `${
+          timeScale === 'daily' ? 'Daily' : 'Monthly'
+        } monitoring checks`
       })
     );
     history.push(url);

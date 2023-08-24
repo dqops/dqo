@@ -42,6 +42,7 @@ export const ROUTES = {
   SENSOR_DETAIL: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL: (rule: string) => `/definitions/rules/${rule}`,
   CHECK_DETAIL: (check: string) => `/definitions/checks/${check}`,
+  CHECK_DEFAULT_DETAIL: (defaultCheck: string) => `/definitions/default_checks/${defaultCheck}`,
   INCIDENT_CONNECTION: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
@@ -60,6 +61,7 @@ export const ROUTES = {
   SENSOR_DETAIL_VALUE: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL_VALUE: (rule: string) => `/definitions/rules/${rule}`,
   CHECK_DETAIL_VALUE: (check: string) => `/definitions/checks/${check}`,
+  CHECK_DEFAULT_DETAIL_VALUE: (defaultCheck: string) => `/definitions/default_checks/${defaultCheck}`,
   INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
@@ -96,6 +98,7 @@ export const ROUTES = {
     SENSOR_DETAIL: '/definitions/sensors/:sensor',
     RULE_DETAIL: '/definitions/rules/:rule',
     CHECK_DETAIL: '/definitions/checks/:check',
+    CHECK_DEFAULT_DETAIL: '/definitions/default_checks/:defaultCheck',
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
   }

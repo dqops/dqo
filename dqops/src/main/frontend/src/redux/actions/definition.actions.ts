@@ -426,3 +426,10 @@ export const setCreatedDataStream = (
   dataGrouping,
   spec
 });
+
+export const toggleFirstLevelFolder = (
+  data: Array<{ category: string; isOpen: boolean }>
+) => ({
+  type: DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER,
+  data
+});

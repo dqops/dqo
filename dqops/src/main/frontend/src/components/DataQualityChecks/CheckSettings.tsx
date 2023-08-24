@@ -17,6 +17,7 @@ interface ICheckSettingsProps {
   tabs: ITab[];
   onClose: () => void;
   onChange: (check: CheckModel) => void;
+  isDefaultEditing?: boolean
 }
 
 const CheckSettings = ({
@@ -25,7 +26,8 @@ const CheckSettings = ({
   setActiveTab,
   tabs,
   onClose,
-  onChange
+  onChange,
+  isDefaultEditing
 }: ICheckSettingsProps) => {
   const [text, setText] = useState('');
   const getDataGroupingDimensionLevel = (index: number) => {
@@ -72,7 +74,8 @@ const CheckSettings = ({
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="pt-5">
           {activeTab === 'check-settings' && (
-            <CheckSettingsTab check={check} onChange={onChange} />
+            <CheckSettingsTab check={check} onChange={onChange} 
+            isDefaultEditing={isDefaultEditing} />
           )}
           {activeTab === 'data-streams' && (
             <div>
