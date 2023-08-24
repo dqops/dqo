@@ -293,11 +293,11 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleDataQualityChecksFolder(key === "custom" && previousFolder!==undefined ? previousFolder + "/" +key : key)}
+                  onClick={() => toggleDataQualityChecksFolder(previousFolder+"/"+key)}
                 >
                   <SvgIcon
                     name={
-                      dataQualityChecksState[key] ? 'folder' : 'closed-folder'
+                      dataQualityChecksState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'
                     }
                     className="w-4 h-4 min-w-4"
                   />
@@ -309,13 +309,13 @@ export const DefinitionTree = () => {
                     />
                   )}
                 </div>
-                {(key!== "custom" && dataQualityChecksState[key]) || (key==="custom" && dataQualityChecksState[previousFolder+"/custom"]) && (
+                {dataQualityChecksState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderChecksFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ], key)}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>
