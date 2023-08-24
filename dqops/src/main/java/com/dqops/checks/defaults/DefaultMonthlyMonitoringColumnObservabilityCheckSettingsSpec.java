@@ -142,7 +142,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setNulls(ColumnNullsMonthlyMonitoringChecksSpec nulls) {
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
-        this.propagateHierarchyIdToField(nulls, "column_nulls");
+        this.propagateHierarchyIdToField(nulls, "nulls");
     }
 
     /**
@@ -160,7 +160,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setNumeric(ColumnNumericMonthlyMonitoringChecksSpec numeric) {
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
-        this.propagateHierarchyIdToField(numeric, "column_numeric");
+        this.propagateHierarchyIdToField(numeric, "numeric");
     }
 
     /**
@@ -178,7 +178,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setStrings(ColumnStringsMonthlyMonitoringChecksSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "column_strings");
+        this.propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
@@ -196,7 +196,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setUniqueness(ColumnUniquenessMonthlyMonitoringChecksSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
-        this.propagateHierarchyIdToField(uniqueness, "column_uniqueness");
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**
@@ -214,7 +214,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setDatetime(ColumnDatetimeMonthlyMonitoringChecksSpec datetime) {
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
-        this.propagateHierarchyIdToField(datetime, "column_datetime");
+        this.propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**
@@ -232,7 +232,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setPii(ColumnPiiMonthlyMonitoringChecksSpec pii) {
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
-        this.propagateHierarchyIdToField(pii, "column_pii");
+        this.propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
@@ -250,7 +250,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setBool(ColumnBoolMonthlyMonitoringChecksSpec bool) {
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
-        this.propagateHierarchyIdToField(bool, "column_bool");
+        this.propagateHierarchyIdToField(bool, "bool");
     }
 
     /**
@@ -268,7 +268,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setDatatype(ColumnDatatypeMonthlyMonitoringChecksSpec datatype) {
         this.setDirtyIf(!Objects.equals(this.datatype, datatype));
         this.datatype = datatype;
-        this.propagateHierarchyIdToField(datatype, "column_datatype");
+        this.propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**
@@ -286,7 +286,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setAnomaly(ColumnAnomalyMonthlyMonitoringChecksSpec anomaly) {
         this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
         this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "column_anomaly");
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**
@@ -304,7 +304,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     public void setSchema(ColumnSchemaMonthlyMonitoringChecksSpec schema) {
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
-        this.propagateHierarchyIdToField(schema, "column_schema");
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

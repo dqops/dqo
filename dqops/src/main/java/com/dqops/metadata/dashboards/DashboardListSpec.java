@@ -43,7 +43,7 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
     public DashboardListSpec deepClone() {
         DashboardListSpec cloned = new DashboardListSpec();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (DashboardSpec dashboard : this) {
