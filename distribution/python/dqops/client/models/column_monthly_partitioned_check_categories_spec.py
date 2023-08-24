@@ -57,7 +57,7 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-            are check names.
+            are check names within this category.
         nulls (Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]):
         numeric (Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]):
         strings (Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]):

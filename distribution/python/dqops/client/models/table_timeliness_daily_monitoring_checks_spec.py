@@ -10,6 +10,9 @@ if TYPE_CHECKING:
         TableDataIngestionDelayCheckSpec,
     )
     from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
+    from ..models.table_timeliness_daily_monitoring_checks_spec_custom_checks import (
+        TableTimelinessDailyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableTimelinessDailyMonitoringChecksSpec")
@@ -19,17 +22,27 @@ T = TypeVar("T", bound="TableTimelinessDailyMonitoringChecksSpec")
 class TableTimelinessDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableTimelinessDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         daily_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
         daily_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableTimelinessDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
     daily_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
     daily_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_data_freshness, Unset):
             daily_data_freshness = self.daily_data_freshness.to_dict()
@@ -45,6 +58,8 @@ class TableTimelinessDailyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_data_freshness is not UNSET:
             field_dict["daily_data_freshness"] = daily_data_freshness
         if daily_data_staleness is not UNSET:
@@ -61,8 +76,24 @@ class TableTimelinessDailyMonitoringChecksSpec:
             TableDataIngestionDelayCheckSpec,
         )
         from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
+        from ..models.table_timeliness_daily_monitoring_checks_spec_custom_checks import (
+            TableTimelinessDailyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, TableTimelinessDailyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableTimelinessDailyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_data_freshness = d.pop("daily_data_freshness", UNSET)
         daily_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
         if isinstance(_daily_data_freshness, Unset):
@@ -91,6 +122,7 @@ class TableTimelinessDailyMonitoringChecksSpec:
             )
 
         table_timeliness_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_data_freshness=daily_data_freshness,
             daily_data_staleness=daily_data_staleness,
             daily_data_ingestion_delay=daily_data_ingestion_delay,

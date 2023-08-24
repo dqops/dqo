@@ -6,9 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.sensor_readouts_detailed_data_model import (
-    SensorReadoutsDetailedDataModel,
-)
+from ...models.sensor_readouts_list_model import SensorReadoutsListModel
 from ...types import UNSET, Response, Unset
 
 
@@ -74,12 +72,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+) -> Optional[List["SensorReadoutsListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = SensorReadoutsDetailedDataModel.from_dict(
+            response_200_item = SensorReadoutsListModel.from_dict(
                 response_200_item_data
             )
 
@@ -94,7 +92,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+) -> Response[List["SensorReadoutsListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -116,7 +114,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+) -> Response[List["SensorReadoutsListModel"]]:
     """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -139,7 +137,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorReadoutsDetailedDataModel']]
+        Response[List['SensorReadoutsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -177,7 +175,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+) -> Optional[List["SensorReadoutsListModel"]]:
     """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -200,7 +198,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorReadoutsDetailedDataModel']
+        List['SensorReadoutsListModel']
     """
 
     return sync_detailed(
@@ -231,7 +229,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+) -> Response[List["SensorReadoutsListModel"]]:
     """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -254,7 +252,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorReadoutsDetailedDataModel']]
+        Response[List['SensorReadoutsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -290,7 +288,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+) -> Optional[List["SensorReadoutsListModel"]]:
     """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -313,7 +311,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorReadoutsDetailedDataModel']
+        List['SensorReadoutsListModel']
     """
 
     return (

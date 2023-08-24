@@ -48,7 +48,7 @@ nav:
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
       - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
+          - Percent of rows with string values in set: "examples/data-datatype/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
@@ -174,9 +174,10 @@ nav:
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
       - datatype:
-        - date match format percent: 'checks/column/datatype/date-match-format-percent.md'
+        - string datatype detected: 'checks/column/datatype/string-datatype-detected.md'
         - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
       - datetime:
+        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
       - integrity:
@@ -273,7 +274,6 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
-        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
         - distinct percent: 'checks/column/uniqueness/distinct-percent.md'

@@ -57,7 +57,7 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, ColumnDailyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-            are check names.
+            are check names within this category.
         nulls (Union[Unset, ColumnNullsDailyPartitionedChecksSpec]):
         numeric (Union[Unset, ColumnNumericDailyPartitionedChecksSpec]):
         strings (Union[Unset, ColumnStringsDailyPartitionedChecksSpec]):

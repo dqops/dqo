@@ -28,6 +28,9 @@ if TYPE_CHECKING:
         ColumnNotNullsPercentCheckSpec,
     )
     from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+    from ..models.column_nulls_daily_monitoring_checks_spec_custom_checks import (
+        ColumnNullsDailyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
 
@@ -38,6 +41,9 @@ T = TypeVar("T", bound="ColumnNullsDailyMonitoringChecksSpec")
 class ColumnNullsDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNullsDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         daily_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         daily_nulls_percent_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryNullPercentCheckSpec]):
@@ -51,6 +57,9 @@ class ColumnNullsDailyMonitoringChecksSpec:
         daily_nulls_percent_change_30_days (Union[Unset, ColumnChangeNullPercentSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnNullsDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     daily_nulls_percent_anomaly_stationary: Union[
@@ -74,6 +83,10 @@ class ColumnNullsDailyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_nulls_count, Unset):
             daily_nulls_count = self.daily_nulls_count.to_dict()
@@ -129,6 +142,8 @@ class ColumnNullsDailyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_nulls_count is not UNSET:
             field_dict["daily_nulls_count"] = daily_nulls_count
         if daily_nulls_percent is not UNSET:
@@ -189,9 +204,21 @@ class ColumnNullsDailyMonitoringChecksSpec:
             ColumnNotNullsPercentCheckSpec,
         )
         from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+        from ..models.column_nulls_daily_monitoring_checks_spec_custom_checks import (
+            ColumnNullsDailyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNullsDailyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnNullsDailyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_nulls_count = d.pop("daily_nulls_count", UNSET)
         daily_nulls_count: Union[Unset, ColumnNullsCountCheckSpec]
         if isinstance(_daily_nulls_count, Unset):
@@ -311,6 +338,7 @@ class ColumnNullsDailyMonitoringChecksSpec:
             )
 
         column_nulls_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_nulls_count=daily_nulls_count,
             daily_nulls_percent=daily_nulls_percent,
             daily_nulls_percent_anomaly_stationary=daily_nulls_percent_anomaly_stationary,

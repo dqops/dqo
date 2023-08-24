@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.table_schema_column_types_changed_check_spec import (
         TableSchemaColumnTypesChangedCheckSpec,
     )
+    from ..models.table_schema_daily_monitoring_checks_spec_custom_checks import (
+        TableSchemaDailyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableSchemaDailyMonitoringChecksSpec")
@@ -29,6 +32,9 @@ T = TypeVar("T", bound="TableSchemaDailyMonitoringChecksSpec")
 class TableSchemaDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableSchemaDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_column_count (Union[Unset, TableSchemaColumnCountCheckSpec]):
         daily_column_count_changed (Union[Unset, TableSchemaColumnCountChangedCheckSpec]):
         daily_column_list_changed (Union[Unset, TableSchemaColumnListChangedCheckSpec]):
@@ -36,6 +42,9 @@ class TableSchemaDailyMonitoringChecksSpec:
         daily_column_types_changed (Union[Unset, TableSchemaColumnTypesChangedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableSchemaDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_column_count: Union[Unset, "TableSchemaColumnCountCheckSpec"] = UNSET
     daily_column_count_changed: Union[
         Unset, "TableSchemaColumnCountChangedCheckSpec"
@@ -52,6 +61,10 @@ class TableSchemaDailyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_column_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_column_count, Unset):
             daily_column_count = self.daily_column_count.to_dict()
@@ -77,6 +90,8 @@ class TableSchemaDailyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_column_count is not UNSET:
             field_dict["daily_column_count"] = daily_column_count
         if daily_column_count_changed is not UNSET:
@@ -109,8 +124,20 @@ class TableSchemaDailyMonitoringChecksSpec:
         from ..models.table_schema_column_types_changed_check_spec import (
             TableSchemaColumnTypesChangedCheckSpec,
         )
+        from ..models.table_schema_daily_monitoring_checks_spec_custom_checks import (
+            TableSchemaDailyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableSchemaDailyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableSchemaDailyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_column_count = d.pop("daily_column_count", UNSET)
         daily_column_count: Union[Unset, TableSchemaColumnCountCheckSpec]
         if isinstance(_daily_column_count, Unset):
@@ -167,6 +194,7 @@ class TableSchemaDailyMonitoringChecksSpec:
             )
 
         table_schema_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_column_count=daily_column_count,
             daily_column_count_changed=daily_column_count_changed,
             daily_column_list_changed=daily_column_list_changed,

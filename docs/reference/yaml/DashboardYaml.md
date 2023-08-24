@@ -1,6 +1,6 @@
 
-## DashboardSpec  
-Description of a single dashboard that is available in the platform.  
+## DashboardListSpec  
+List of dashboards.  
   
 
 
@@ -10,17 +10,19 @@ Description of a single dashboard that is available in the platform.
 
 
 
-**The structure of this object is described below**  
+
+
+
+
+
+
+
+
+___  
+
+## DashboardsFolderListSpec  
+List of dashboard folders.  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|dashboard_name|Dashboard name|string| | | |
-|url|Dashboard url|string| | | |
-|width|Dashboard width (px)|integer| | | |
-|height|Dashboard height (px)|integer| | | |
-
-
-
 
 
 
@@ -87,19 +89,8 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
 
 ___  
 
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
-
-
-
-
-
-
-___  
-
-## DashboardListSpec  
-List of dashboards.  
+## DashboardSpec  
+Description of a single dashboard that is available in the platform.  
   
 
 
@@ -108,6 +99,15 @@ List of dashboards.
 
 
 
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|dashboard_name|Dashboard name|string| | | |
+|url|Dashboard url|string| | | |
+|width|Dashboard width (px)|integer| | | |
+|height|Dashboard height (px)|integer| | | |
 
 
 

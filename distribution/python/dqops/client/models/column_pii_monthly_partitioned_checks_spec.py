@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
         ColumnPiiContainsUsaZipcodePercentCheckSpec,
     )
+    from ..models.column_pii_monthly_partitioned_checks_spec_custom_checks import (
+        ColumnPiiMonthlyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.column_pii_valid_email_percent_check_spec import (
         ColumnPiiValidEmailPercentCheckSpec,
     )
@@ -44,6 +47,9 @@ T = TypeVar("T", bound="ColumnPiiMonthlyPartitionedChecksSpec")
 class ColumnPiiMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnPiiMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_valid_usa_phone_percent (Union[Unset, ColumnPiiValidUsaPhonePercentCheckSpec]):
         monthly_partition_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
         monthly_partition_valid_usa_zipcode_percent (Union[Unset, ColumnPiiValidUsaZipcodePercentCheckSpec]):
@@ -56,6 +62,9 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         monthly_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnPiiMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_valid_usa_phone_percent: Union[
         Unset, "ColumnPiiValidUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -89,6 +98,10 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_valid_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_valid_usa_phone_percent, Unset):
             monthly_partition_valid_usa_phone_percent = (
@@ -162,6 +175,8 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_valid_usa_phone_percent is not UNSET:
             field_dict[
                 "monthly_partition_valid_usa_phone_percent"
@@ -222,6 +237,9 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         from ..models.column_pii_contains_usa_zipcode_percent_check_spec import (
             ColumnPiiContainsUsaZipcodePercentCheckSpec,
         )
+        from ..models.column_pii_monthly_partitioned_checks_spec_custom_checks import (
+            ColumnPiiMonthlyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_pii_valid_email_percent_check_spec import (
             ColumnPiiValidEmailPercentCheckSpec,
         )
@@ -239,6 +257,15 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnPiiMonthlyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnPiiMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _monthly_partition_valid_usa_phone_percent = d.pop(
             "monthly_partition_valid_usa_phone_percent", UNSET
         )
@@ -390,6 +417,7 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
             )
 
         column_pii_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_valid_usa_phone_percent=monthly_partition_valid_usa_phone_percent,
             monthly_partition_contains_usa_phone_percent=monthly_partition_contains_usa_phone_percent,
             monthly_partition_valid_usa_zipcode_percent=monthly_partition_valid_usa_zipcode_percent,

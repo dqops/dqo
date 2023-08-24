@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.column_sql_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnSqlMonthlyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnSqlMonthlyMonitoringChecksSpec")
@@ -23,11 +26,17 @@ T = TypeVar("T", bound="ColumnSqlMonthlyMonitoringChecksSpec")
 class ColumnSqlMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnSqlMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         monthly_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
         monthly_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         monthly_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnSqlMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
     ] = UNSET
@@ -40,6 +49,10 @@ class ColumnSqlMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
@@ -65,6 +78,8 @@ class ColumnSqlMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "monthly_sql_condition_passed_percent_on_column"
@@ -91,8 +106,20 @@ class ColumnSqlMonthlyMonitoringChecksSpec:
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
         )
+        from ..models.column_sql_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnSqlMonthlyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnSqlMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnSqlMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _monthly_sql_condition_passed_percent_on_column = d.pop(
             "monthly_sql_condition_passed_percent_on_column", UNSET
         )
@@ -137,6 +164,7 @@ class ColumnSqlMonthlyMonitoringChecksSpec:
             )
 
         column_sql_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_sql_condition_passed_percent_on_column=monthly_sql_condition_passed_percent_on_column,
             monthly_sql_condition_failed_count_on_column=monthly_sql_condition_failed_count_on_column,
             monthly_sql_aggregate_expr_column=monthly_sql_aggregate_expr_column,

@@ -5,8 +5,8 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-        ColumnStringsStringDatatypeDetectSensorParametersSpec,
+    from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+        ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -41,7 +41,7 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
-        parameters (Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]):
+        parameters (Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]):
         warning (Union[Unset, ValueChangedParametersSpec]):
         error (Union[Unset, ValueChangedParametersSpec]):
         fatal (Union[Unset, ValueChangedParametersSpec]):
@@ -56,7 +56,7 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "ColumnStringsStringDatatypeDetectSensorParametersSpec"
+        Unset, "ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
     ] = UNSET
     warning: Union[Unset, "ValueChangedParametersSpec"] = UNSET
     error: Union[Unset, "ValueChangedParametersSpec"] = UNSET
@@ -130,8 +130,8 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-            ColumnStringsStringDatatypeDetectSensorParametersSpec,
+        from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+            ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -165,12 +165,12 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
         data_grouping = d.pop("data_grouping", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]
+        parameters: Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
             parameters = (
-                ColumnStringsStringDatatypeDetectSensorParametersSpec.from_dict(
+                ColumnDatatypeStringDatatypeDetectSensorParametersSpec.from_dict(
                     _parameters
                 )
             )

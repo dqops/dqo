@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from ..models.column_comparison_min_match_check_spec import (
         ColumnComparisonMinMatchCheckSpec,
     )
+    from ..models.column_comparison_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_comparison_not_null_count_match_check_spec import (
         ColumnComparisonNotNullCountMatchCheckSpec,
     )
@@ -32,6 +35,9 @@ T = TypeVar("T", bound="ColumnComparisonMonthlyMonitoringChecksSpec")
 class ColumnComparisonMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         reference_column (Union[Unset, str]): The name of the reference column name in the reference table. It is the
             column to which the current column is compared to.
         monthly_sum_match (Union[Unset, ColumnComparisonSumMatchCheckSpec]):
@@ -42,6 +48,9 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
         monthly_null_count_match (Union[Unset, ColumnComparisonNullCountMatchCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     reference_column: Union[Unset, str] = UNSET
     monthly_sum_match: Union[Unset, "ColumnComparisonSumMatchCheckSpec"] = UNSET
     monthly_min_match: Union[Unset, "ColumnComparisonMinMatchCheckSpec"] = UNSET
@@ -56,6 +65,10 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         reference_column = self.reference_column
         monthly_sum_match: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_sum_match, Unset):
@@ -84,6 +97,8 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if reference_column is not UNSET:
             field_dict["reference_column"] = reference_column
         if monthly_sum_match is not UNSET:
@@ -112,6 +127,9 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
         from ..models.column_comparison_min_match_check_spec import (
             ColumnComparisonMinMatchCheckSpec,
         )
+        from ..models.column_comparison_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_comparison_not_null_count_match_check_spec import (
             ColumnComparisonNotNullCountMatchCheckSpec,
         )
@@ -123,6 +141,19 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnComparisonMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         reference_column = d.pop("reference_column", UNSET)
 
         _monthly_sum_match = d.pop("monthly_sum_match", UNSET)
@@ -186,6 +217,7 @@ class ColumnComparisonMonthlyMonitoringChecksSpec:
             )
 
         column_comparison_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             reference_column=reference_column,
             monthly_sum_match=monthly_sum_match,
             monthly_min_match=monthly_min_match,

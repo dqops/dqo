@@ -16,6 +16,7 @@
 package com.dqops.checks.column.monitoring.strings;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
 import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -77,8 +78,6 @@ public class ColumnStringsMonthlyMonitoringChecksSpec extends AbstractCheckCateg
             put("monthly_string_match_name_regex_percent", o -> o.monthlyStringMatchNameRegexPercent);
 
             put("monthly_expected_strings_in_top_values_count", o -> o.monthlyExpectedStringsInTopValuesCount);
-
-            put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
         }
     };
 
@@ -186,9 +185,6 @@ public class ColumnStringsMonthlyMonitoringChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount;
-
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
 
     /**
      * Returns a maximum string length below check.
@@ -818,24 +814,6 @@ public class ColumnStringsMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInTopValuesCount, monthlyExpectedStringsInTopValuesCount));
         this.monthlyExpectedStringsInTopValuesCount = monthlyExpectedStringsInTopValuesCount;
         propagateHierarchyIdToField(monthlyExpectedStringsInTopValuesCount, "monthly_expected_strings_in_top_values_count");
-    }
-
-    /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
-     */
-    public ColumnStringDatatypeDetectedCheckSpec getMonthlyStringDatatypeDetected() {
-        return monthlyStringDatatypeDetected;
-    }
-
-    /**
-     * Sets a new definition of a datatype detect check.
-     * @param monthlyStringDatatypeDetected Datatype detect check.
-     */
-    public void setMonthlyStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetected, monthlyStringDatatypeDetected));
-        this.monthlyStringDatatypeDetected = monthlyStringDatatypeDetected;
-        propagateHierarchyIdToField(monthlyStringDatatypeDetected, "monthly_string_datatype_detected");
     }
 
     /**

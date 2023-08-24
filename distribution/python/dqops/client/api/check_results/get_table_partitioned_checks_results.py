@@ -6,7 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.check_results_detailed_data_model import CheckResultsDetailedDataModel
+from ...models.check_results_list_model import CheckResultsListModel
 from ...models.get_table_partitioned_checks_results_time_scale import (
     GetTablePartitionedChecksResultsTimeScale,
 )
@@ -77,14 +77,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+) -> Optional[List["CheckResultsListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = CheckResultsDetailedDataModel.from_dict(
-                response_200_item_data
-            )
+            response_200_item = CheckResultsListModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -97,7 +95,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+) -> Response[List["CheckResultsListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -120,7 +118,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+) -> Response[List["CheckResultsListModel"]]:
     """getTablePartitionedChecksResults
 
      Returns a complete view of the recent table level partitioned checks executions for a requested time
@@ -144,7 +142,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultsDetailedDataModel']]
+        Response[List['CheckResultsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -184,7 +182,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+) -> Optional[List["CheckResultsListModel"]]:
     """getTablePartitionedChecksResults
 
      Returns a complete view of the recent table level partitioned checks executions for a requested time
@@ -208,7 +206,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultsDetailedDataModel']
+        List['CheckResultsListModel']
     """
 
     return sync_detailed(
@@ -241,7 +239,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+) -> Response[List["CheckResultsListModel"]]:
     """getTablePartitionedChecksResults
 
      Returns a complete view of the recent table level partitioned checks executions for a requested time
@@ -265,7 +263,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultsDetailedDataModel']]
+        Response[List['CheckResultsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -303,7 +301,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+) -> Optional[List["CheckResultsListModel"]]:
     """getTablePartitionedChecksResults
 
      Returns a complete view of the recent table level partitioned checks executions for a requested time
@@ -327,7 +325,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultsDetailedDataModel']
+        List['CheckResultsListModel']
     """
 
     return (

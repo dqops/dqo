@@ -16,6 +16,7 @@
 package com.dqops.checks.column.partitioned.datetime;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -37,16 +38,38 @@ import java.util.Objects;
 public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
             put("monthly_partition_date_values_in_future_percent", o -> o.monthlyPartitionDateValuesInFuturePercent);
             put("monthly_partition_datetime_value_in_range_date_percent", o -> o.monthlyPartitionDatetimeValueInRangeDatePercent);
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDateValuesInFuturePercentCheckSpec monthlyPartitionDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyPartitionDatetimeValueInRangeDatePercent;
+
+    /**
+     * Returns a date match format percentage check.
+     * @return Maximum date match format percentage check.
+     */
+    public ColumnDatetimeDateMatchFormatPercentCheckSpec getMonthlyPartitionDateMatchFormatPercent() {
+        return monthlyPartitionDateMatchFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a date match format percentage check.
+     * @param monthlyPartitionDateMatchFormatPercent Date match format percentage check.
+     */
+    public void setMonthlyPartitionDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateMatchFormatPercent, monthlyPartitionDateMatchFormatPercent));
+        this.monthlyPartitionDateMatchFormatPercent = monthlyPartitionDateMatchFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionDateMatchFormatPercent, "monthly_partition_date_match_format_percent");
+    }
 
     /**
      * Returns a date values in future percentage check.

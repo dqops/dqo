@@ -39,7 +39,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableMonthlyMonitoringCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-            are check names.
+            are check names within this category.
         volume (Union[Unset, TableVolumeMonthlyMonitoringChecksSpec]):
         timeliness (Union[Unset, TableTimelinessMonthlyMonitoringChecksSpec]):
         accuracy (Union[Unset, TableAccuracyMonthlyMonitoringChecksSpec]):

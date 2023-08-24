@@ -6,6 +6,9 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
+    from ..models.table_availability_monthly_monitoring_checks_spec_custom_checks import (
+        TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableAvailabilityMonthlyMonitoringChecksSpec")
@@ -15,13 +18,23 @@ T = TypeVar("T", bound="TableAvailabilityMonthlyMonitoringChecksSpec")
 class TableAvailabilityMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_table_availability (Union[Unset, TableAvailabilityCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_table_availability: Union[Unset, "TableAvailabilityCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_table_availability: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_table_availability, Unset):
             monthly_table_availability = self.monthly_table_availability.to_dict()
@@ -29,6 +42,8 @@ class TableAvailabilityMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_table_availability is not UNSET:
             field_dict["monthly_table_availability"] = monthly_table_availability
 
@@ -37,8 +52,24 @@ class TableAvailabilityMonthlyMonitoringChecksSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
+        from ..models.table_availability_monthly_monitoring_checks_spec_custom_checks import (
+            TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableAvailabilityMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_table_availability = d.pop("monthly_table_availability", UNSET)
         monthly_table_availability: Union[Unset, TableAvailabilityCheckSpec]
         if isinstance(_monthly_table_availability, Unset):
@@ -49,6 +80,7 @@ class TableAvailabilityMonthlyMonitoringChecksSpec:
             )
 
         table_availability_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_table_availability=monthly_table_availability,
         )
 

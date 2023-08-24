@@ -31,6 +31,9 @@ if TYPE_CHECKING:
     from ..models.column_number_value_in_set_percent_check_spec import (
         ColumnNumberValueInSetPercentCheckSpec,
     )
+    from ..models.column_numeric_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnNumericMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_percentile_10_in_range_check_spec import (
         ColumnPercentile10InRangeCheckSpec,
     )
@@ -92,6 +95,9 @@ T = TypeVar("T", bound="ColumnNumericMonthlyMonitoringChecksSpec")
 class ColumnNumericMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNumericMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
         monthly_negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
         monthly_non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
@@ -124,6 +130,9 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         monthly_valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnNumericMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
     monthly_negative_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = UNSET
     monthly_non_negative_count: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
@@ -201,6 +210,10 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_negative_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_negative_count, Unset):
             monthly_negative_count = self.monthly_negative_count.to_dict()
@@ -364,6 +377,8 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_negative_count is not UNSET:
             field_dict["monthly_negative_count"] = monthly_negative_count
         if monthly_negative_percent is not UNSET:
@@ -499,6 +514,9 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         from ..models.column_number_value_in_set_percent_check_spec import (
             ColumnNumberValueInSetPercentCheckSpec,
         )
+        from ..models.column_numeric_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnNumericMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_percentile_10_in_range_check_spec import (
             ColumnPercentile10InRangeCheckSpec,
         )
@@ -553,6 +571,19 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnNumericMonthlyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnNumericMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_negative_count = d.pop("monthly_negative_count", UNSET)
         monthly_negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
         if isinstance(_monthly_negative_count, Unset):
@@ -920,6 +951,7 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
             )
 
         column_numeric_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_negative_count=monthly_negative_count,
             monthly_negative_percent=monthly_negative_percent,
             monthly_non_negative_count=monthly_non_negative_count,

@@ -5,6 +5,9 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_bool_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnBoolMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
     from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
 
@@ -16,15 +19,25 @@ T = TypeVar("T", bound="ColumnBoolMonthlyMonitoringChecksSpec")
 class ColumnBoolMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnBoolMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         monthly_true_percent (Union[Unset, ColumnTruePercentCheckSpec]):
         monthly_false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnBoolMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_true_percent: Union[Unset, "ColumnTruePercentCheckSpec"] = UNSET
     monthly_false_percent: Union[Unset, "ColumnFalsePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_true_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_true_percent, Unset):
             monthly_true_percent = self.monthly_true_percent.to_dict()
@@ -36,6 +49,8 @@ class ColumnBoolMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_true_percent is not UNSET:
             field_dict["monthly_true_percent"] = monthly_true_percent
         if monthly_false_percent is not UNSET:
@@ -45,10 +60,22 @@ class ColumnBoolMonthlyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_bool_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnBoolMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
         from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnBoolMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnBoolMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _monthly_true_percent = d.pop("monthly_true_percent", UNSET)
         monthly_true_percent: Union[Unset, ColumnTruePercentCheckSpec]
         if isinstance(_monthly_true_percent, Unset):
@@ -68,6 +95,7 @@ class ColumnBoolMonthlyMonitoringChecksSpec:
             )
 
         column_bool_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_true_percent=monthly_true_percent,
             monthly_false_percent=monthly_false_percent,
         )

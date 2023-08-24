@@ -40,7 +40,7 @@ class TableProfilingCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
-            names.
+            names within this category.
         result_truncation (Union[Unset, TableProfilingCheckCategoriesSpecResultTruncation]): Defines how many profiling
             checks results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and
             store only the most recent profiling checks result executed during the month. By changing this value, it is

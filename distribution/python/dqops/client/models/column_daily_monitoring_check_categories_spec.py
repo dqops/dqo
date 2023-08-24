@@ -60,7 +60,7 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, ColumnDailyMonitoringCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are
-            check names.
+            check names within this category.
         nulls (Union[Unset, ColumnNullsDailyMonitoringChecksSpec]):
         numeric (Union[Unset, ColumnNumericDailyMonitoringChecksSpec]):
         strings (Union[Unset, ColumnStringsDailyMonitoringChecksSpec]):

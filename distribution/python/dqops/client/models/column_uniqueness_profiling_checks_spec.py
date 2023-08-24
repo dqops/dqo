@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
+    from ..models.column_uniqueness_profiling_checks_spec_custom_checks import (
+        ColumnUniquenessProfilingChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
@@ -22,12 +25,18 @@ T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
 class ColumnUniquenessProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnUniquenessProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         profile_distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
         profile_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         profile_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         profile_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnUniquenessProfilingChecksSpecCustomChecks"
+    ] = UNSET
     profile_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
     profile_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     profile_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
@@ -35,6 +44,10 @@ class ColumnUniquenessProfilingChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_distinct_count, Unset):
             profile_distinct_count = self.profile_distinct_count.to_dict()
@@ -54,6 +67,8 @@ class ColumnUniquenessProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_distinct_count is not UNSET:
             field_dict["profile_distinct_count"] = profile_distinct_count
         if profile_distinct_percent is not UNSET:
@@ -79,8 +94,20 @@ class ColumnUniquenessProfilingChecksSpec:
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
+        from ..models.column_uniqueness_profiling_checks_spec_custom_checks import (
+            ColumnUniquenessProfilingChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnUniquenessProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnUniquenessProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_distinct_count = d.pop("profile_distinct_count", UNSET)
         profile_distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
         if isinstance(_profile_distinct_count, Unset):
@@ -118,6 +145,7 @@ class ColumnUniquenessProfilingChecksSpec:
             )
 
         column_uniqueness_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_distinct_count=profile_distinct_count,
             profile_distinct_percent=profile_distinct_percent,
             profile_duplicate_count=profile_duplicate_count,

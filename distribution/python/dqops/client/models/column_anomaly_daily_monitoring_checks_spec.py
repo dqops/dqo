@@ -5,6 +5,9 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_anomaly_daily_monitoring_checks_spec_custom_checks import (
+        ColumnAnomalyDailyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_anomaly_differencing_sum_30_days_check_spec import (
         ColumnAnomalyDifferencingSum30DaysCheckSpec,
     )
@@ -62,6 +65,9 @@ T = TypeVar("T", bound="ColumnAnomalyDailyMonitoringChecksSpec")
 class ColumnAnomalyDailyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnAnomalyDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_mean_change (Union[Unset, ColumnChangeMeanCheckSpec]):
         daily_mean_change_yesterday (Union[Unset, ColumnChangeMeanSinceYesterdayCheckSpec]):
         daily_median_change (Union[Unset, ColumnChangeMedianCheckSpec]):
@@ -82,6 +88,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         daily_sum_change_30_days (Union[Unset, ColumnChangeSumSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnAnomalyDailyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     daily_mean_change: Union[Unset, "ColumnChangeMeanCheckSpec"] = UNSET
     daily_mean_change_yesterday: Union[
         Unset, "ColumnChangeMeanSinceYesterdayCheckSpec"
@@ -131,6 +140,10 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_change, Unset):
             daily_mean_change = self.daily_mean_change.to_dict()
@@ -216,6 +229,8 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_mean_change is not UNSET:
             field_dict["daily_mean_change"] = daily_mean_change
         if daily_mean_change_yesterday is not UNSET:
@@ -267,6 +282,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_anomaly_daily_monitoring_checks_spec_custom_checks import (
+            ColumnAnomalyDailyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_anomaly_differencing_sum_30_days_check_spec import (
             ColumnAnomalyDifferencingSum30DaysCheckSpec,
         )
@@ -317,6 +335,17 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnAnomalyDailyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnAnomalyDailyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_mean_change = d.pop("daily_mean_change", UNSET)
         daily_mean_change: Union[Unset, ColumnChangeMeanCheckSpec]
         if isinstance(_daily_mean_change, Unset):
@@ -524,6 +553,7 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
             )
 
         column_anomaly_daily_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_mean_change=daily_mean_change,
             daily_mean_change_yesterday=daily_mean_change_yesterday,
             daily_median_change=daily_median_change,

@@ -14,9 +14,6 @@ if TYPE_CHECKING:
     from ..models.column_string_boolean_placeholder_percent_check_spec import (
         ColumnStringBooleanPlaceholderPercentCheckSpec,
     )
-    from ..models.column_string_datatype_detected_check_spec import (
-        ColumnStringDatatypeDetectedCheckSpec,
-    )
     from ..models.column_string_empty_count_check_spec import (
         ColumnStringEmptyCountCheckSpec,
     )
@@ -113,6 +110,9 @@ if TYPE_CHECKING:
     from ..models.column_string_whitespace_percent_check_spec import (
         ColumnStringWhitespacePercentCheckSpec,
     )
+    from ..models.column_strings_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnStringsMonthlyMonitoringChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnStringsMonthlyMonitoringChecksSpec")
@@ -122,6 +122,9 @@ T = TypeVar("T", bound="ColumnStringsMonthlyMonitoringChecksSpec")
 class ColumnStringsMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnStringsMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_string_max_length (Union[Unset, ColumnStringMaxLengthCheckSpec]):
         monthly_string_min_length (Union[Unset, ColumnStringMinLengthCheckSpec]):
         monthly_string_mean_length (Union[Unset, ColumnStringMeanLengthCheckSpec]):
@@ -158,9 +161,11 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
         monthly_string_match_date_regex_percent (Union[Unset, ColumnStringMatchDateRegexPercentCheckSpec]):
         monthly_string_match_name_regex_percent (Union[Unset, ColumnStringMatchNameRegexPercentCheckSpec]):
         monthly_expected_strings_in_top_values_count (Union[Unset, ColumnExpectedStringsInTopValuesCountCheckSpec]):
-        monthly_string_datatype_detected (Union[Unset, ColumnStringDatatypeDetectedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnStringsMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_string_max_length: Union[Unset, "ColumnStringMaxLengthCheckSpec"] = UNSET
     monthly_string_min_length: Union[Unset, "ColumnStringMinLengthCheckSpec"] = UNSET
     monthly_string_mean_length: Union[Unset, "ColumnStringMeanLengthCheckSpec"] = UNSET
@@ -258,12 +263,13 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
     monthly_expected_strings_in_top_values_count: Union[
         Unset, "ColumnExpectedStringsInTopValuesCountCheckSpec"
     ] = UNSET
-    monthly_string_datatype_detected: Union[
-        Unset, "ColumnStringDatatypeDetectedCheckSpec"
-    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_string_max_length: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_string_max_length, Unset):
             monthly_string_max_length = self.monthly_string_max_length.to_dict()
@@ -478,15 +484,11 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
                 self.monthly_expected_strings_in_top_values_count.to_dict()
             )
 
-        monthly_string_datatype_detected: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_string_datatype_detected, Unset):
-            monthly_string_datatype_detected = (
-                self.monthly_string_datatype_detected.to_dict()
-            )
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_string_max_length is not UNSET:
             field_dict["monthly_string_max_length"] = monthly_string_max_length
         if monthly_string_min_length is not UNSET:
@@ -617,10 +619,6 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
             field_dict[
                 "monthly_expected_strings_in_top_values_count"
             ] = monthly_expected_strings_in_top_values_count
-        if monthly_string_datatype_detected is not UNSET:
-            field_dict[
-                "monthly_string_datatype_detected"
-            ] = monthly_string_datatype_detected
 
         return field_dict
 
@@ -634,9 +632,6 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
         )
         from ..models.column_string_boolean_placeholder_percent_check_spec import (
             ColumnStringBooleanPlaceholderPercentCheckSpec,
-        )
-        from ..models.column_string_datatype_detected_check_spec import (
-            ColumnStringDatatypeDetectedCheckSpec,
         )
         from ..models.column_string_empty_count_check_spec import (
             ColumnStringEmptyCountCheckSpec,
@@ -734,8 +729,24 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
         from ..models.column_string_whitespace_percent_check_spec import (
             ColumnStringWhitespacePercentCheckSpec,
         )
+        from ..models.column_strings_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnStringsMonthlyMonitoringChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnStringsMonthlyMonitoringChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnStringsMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_string_max_length = d.pop("monthly_string_max_length", UNSET)
         monthly_string_max_length: Union[Unset, ColumnStringMaxLengthCheckSpec]
         if isinstance(_monthly_string_max_length, Unset):
@@ -1231,22 +1242,8 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
                 )
             )
 
-        _monthly_string_datatype_detected = d.pop(
-            "monthly_string_datatype_detected", UNSET
-        )
-        monthly_string_datatype_detected: Union[
-            Unset, ColumnStringDatatypeDetectedCheckSpec
-        ]
-        if isinstance(_monthly_string_datatype_detected, Unset):
-            monthly_string_datatype_detected = UNSET
-        else:
-            monthly_string_datatype_detected = (
-                ColumnStringDatatypeDetectedCheckSpec.from_dict(
-                    _monthly_string_datatype_detected
-                )
-            )
-
         column_strings_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_string_max_length=monthly_string_max_length,
             monthly_string_min_length=monthly_string_min_length,
             monthly_string_mean_length=monthly_string_mean_length,
@@ -1282,7 +1279,6 @@ class ColumnStringsMonthlyMonitoringChecksSpec:
             monthly_string_match_date_regex_percent=monthly_string_match_date_regex_percent,
             monthly_string_match_name_regex_percent=monthly_string_match_name_regex_percent,
             monthly_expected_strings_in_top_values_count=monthly_expected_strings_in_top_values_count,
-            monthly_string_datatype_detected=monthly_string_datatype_detected,
         )
 
         column_strings_monthly_monitoring_checks_spec.additional_properties = d

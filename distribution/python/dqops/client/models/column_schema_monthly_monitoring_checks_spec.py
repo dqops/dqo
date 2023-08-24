@@ -8,6 +8,9 @@ if TYPE_CHECKING:
     from ..models.column_schema_column_exists_check_spec import (
         ColumnSchemaColumnExistsCheckSpec,
     )
+    from ..models.column_schema_monthly_monitoring_checks_spec_custom_checks import (
+        ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks,
+    )
     from ..models.column_schema_type_changed_check_spec import (
         ColumnSchemaTypeChangedCheckSpec,
     )
@@ -20,10 +23,16 @@ T = TypeVar("T", bound="ColumnSchemaMonthlyMonitoringChecksSpec")
 class ColumnSchemaMonthlyMonitoringChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
         monthly_column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks"
+    ] = UNSET
     monthly_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
     monthly_column_type_changed: Union[
         Unset, "ColumnSchemaTypeChangedCheckSpec"
@@ -31,6 +40,10 @@ class ColumnSchemaMonthlyMonitoringChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_column_exists: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_column_exists, Unset):
             monthly_column_exists = self.monthly_column_exists.to_dict()
@@ -42,6 +55,8 @@ class ColumnSchemaMonthlyMonitoringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_column_exists is not UNSET:
             field_dict["monthly_column_exists"] = monthly_column_exists
         if monthly_column_type_changed is not UNSET:
@@ -54,11 +69,25 @@ class ColumnSchemaMonthlyMonitoringChecksSpec:
         from ..models.column_schema_column_exists_check_spec import (
             ColumnSchemaColumnExistsCheckSpec,
         )
+        from ..models.column_schema_monthly_monitoring_checks_spec_custom_checks import (
+            ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks,
+        )
         from ..models.column_schema_type_changed_check_spec import (
             ColumnSchemaTypeChangedCheckSpec,
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_column_exists = d.pop("monthly_column_exists", UNSET)
         monthly_column_exists: Union[Unset, ColumnSchemaColumnExistsCheckSpec]
         if isinstance(_monthly_column_exists, Unset):
@@ -78,6 +107,7 @@ class ColumnSchemaMonthlyMonitoringChecksSpec:
             )
 
         column_schema_monthly_monitoring_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_column_exists=monthly_column_exists,
             monthly_column_type_changed=monthly_column_type_changed,
         )
