@@ -1,22 +1,46 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+
+{% set byte = "[0-9A-Fa-f]" %}
+{% set qbyte = byte + byte + byte + byte %}
+{% set negbyte = "[^g-z]" %}
+{% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+{% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+
 SELECT
     CASE
-        WHEN COUNT_BIG(*) = 0 THEN 100.0
+        WHEN COUNT_BIG(*) = 0 THEN 0.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                    OR
+                    {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                    OR -- 6x bytes
+                    ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                    ) AND {{ colons_count }} = 7
+                    OR -- 5x bytes
+                    ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                    ) AND {{ colons_count }} = 6
+                    OR -- 4x bytes
+                    ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                    ) AND {{ colons_count }} = 5
+                    OR -- 3x bytes
+                    ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                        OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                       ) AND {{ colons_count }} = 4
                     THEN 1
                 ELSE 0
             END
