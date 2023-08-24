@@ -309,6 +309,7 @@ const DataQualityChecks = ({
       }}
     >
       <div className="flex items-center text-sm mb-3 gap-6">
+        {isDefaultEditing !== true &&
         <div className="flex items-center space-x-1 gap-x-4">
           <div className="flex items-center space-x-1">
             <span>Scheduling status:</span>
@@ -351,6 +352,7 @@ const DataQualityChecks = ({
             </div>
           )}
         </div>
+        }
         <div className="flex items-center justify-between">
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}

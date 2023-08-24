@@ -5,11 +5,10 @@ import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { SettingsApi } from '../../services/apiClient';
-import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import { CheckContainerModel } from '../../api';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { setUpdatedChecksModel } from '../../redux/actions/table.actions';
-import { CheckTypes } from '../../shared/routes';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
+import Button from '../../components/Button';
+import { useParams } from 'react-router-dom';
 
 const tabs = [
   {
@@ -23,14 +22,12 @@ const tabs = [
 ];
 
 const checkDefaultDetail = () => {
+  const { defaultCheck } : { defaultCheck : string} = useParams()
   const { type } = useSelector(getFirstLevelSensorState);
   const [activeTab, setActiveTab] = useState('table');
   const [checkContainer, setCheckContainer] = useState<CheckContainerModel>();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<
-    CheckResultsOverviewDataModel[]
-  >([]);
-  const firstLevelActiveTab = useSelector(getFirstLevelSensorState);
-  const dispatch = useActionDispatch();
+
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const fetchDataSetType = async () => {
     if (type === 'Profiling checks') {
@@ -59,8 +56,38 @@ const checkDefaultDetail = () => {
           (res) => setCheckContainer(res.data)
         );
       } else {
-        await SettingsApi.getDefaultDataObservabilityDailyMonitoringTableChecks().then(
+        await SettingsApi.getDefaultDataObservabilityMonthlyMonitoringTableChecks().then(
           (res) => setCheckContainer(res.data)
+        );
+      }
+    }
+  };
+
+  const updateDataSetType = async (value: CheckContainerModel) => {
+    if (type === 'Profiling checks') {
+      if (activeTab === 'column') {
+        await SettingsApi.updateDefaultProfilingColumnChecks(value);
+      } else {
+        await SettingsApi.updateDefaultProfilingTableChecks(value);
+      }
+    } else if (type === 'Monitoring daily') {
+      if (activeTab === 'column') {
+        await SettingsApi.updateDefaultDataObservabilityDailyMonitoringColumnChecks(
+          value
+        );
+      } else {
+        await SettingsApi.updateDefaultDataObservabilityDailyMonitoringTableChecks(
+          value
+        );
+      }
+    } else if (type === 'Monitoring monthly') {
+      if (activeTab === 'column') {
+        await SettingsApi.updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+          value
+        );
+      } else {
+        await SettingsApi.updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
+          value
         );
       }
     }
@@ -68,9 +95,10 @@ const checkDefaultDetail = () => {
 
   React.useEffect(() => {
     fetchDataSetType();
-  }, [type, activeTab]);
+  }, [type, activeTab, defaultCheck]);
 
-  console.log(checkContainer);
+  // console.log(type, activeTab);
+  // console.log(defaultCheck)
 
   const onUpdate = async () => {
     // await dispatch(
@@ -96,20 +124,16 @@ const checkDefaultDetail = () => {
   };
 
   const handleChange = (value: CheckContainerModel) => {
-    dispatch(
-      setUpdatedChecksModel(CheckTypes.PROFILING, firstLevelActiveTab, value)
-    );
+    setCheckContainer(value);
+    setIsUpdated(true);
   };
 
-  const getCheckOverview = () => {
-    //     CheckResultOverviewApi.getTableProfilingChecksOverview(
-    //       connectionName,
-    //       schemaName,
-    //       tableName
-    //     ).then((res) => {
-    //       setCheckResultsOverview(res.data);
-    //     });
+  const handleSubmit = () => {
+    updateDataSetType(checkContainer ?? {});
+    setIsUpdated(false);
   };
+
+  const getCheckOverview = () => {};
 
   return (
     <DefinitionLayout>
@@ -120,6 +144,13 @@ const checkDefaultDetail = () => {
             Default check editor for {type} ({activeTab})
           </div>
         </div>
+        <Button
+          label="Save"
+          color="primary"
+          className="pl-14 pr-14"
+          onClick={handleSubmit}
+          disabled={!isUpdated}
+        />
       </div>
       <div className="border-b border-gray-300 relative">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -127,10 +158,9 @@ const checkDefaultDetail = () => {
       <div>
         <DataQualityChecks
           checksUI={checkContainer}
-          //   columntable={activeTab}
           onUpdate={onUpdate}
           onChange={handleChange}
-          checkResultsOverview={checkResultsOverview}
+          checkResultsOverview={[]}
           getCheckOverview={getCheckOverview}
           isDefaultEditing={true}
         />

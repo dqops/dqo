@@ -611,6 +611,7 @@ const CheckListItem = ({
               onClose={closeExpand}
               onChange={onChange}
               check={check}
+              isDefaultEditing={isDefaultEditing}
             />
           </td>
         </tr>
