@@ -73,7 +73,7 @@ public class OracleTableSqlConditionFailedCountSensorParametersSpecIntegrationTe
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         this.sut.setSqlCondition("{alias}.\"id\" is null");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -88,7 +88,7 @@ public class OracleTableSqlConditionFailedCountSensorParametersSpecIntegrationTe
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         this.sut.setSqlCondition("{alias}.\"id\" is null");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

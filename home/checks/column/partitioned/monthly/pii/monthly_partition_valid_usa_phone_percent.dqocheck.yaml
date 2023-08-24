@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/pii/valid_usa_phone_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of valid USA phone values in a column does
-    not fall below the minimum accepted percentage. Creates a separate data quality
-    check (and an alert) for each monthly partition.
