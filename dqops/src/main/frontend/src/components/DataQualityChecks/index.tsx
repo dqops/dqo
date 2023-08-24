@@ -28,6 +28,7 @@ interface IDataQualityChecksProps {
   getCheckOverview: () => void;
   onUpdate: () => void;
   loading?: boolean;
+  isDefaultEditing?: boolean;
 }
 
 const DataQualityChecks = ({
@@ -37,7 +38,8 @@ const DataQualityChecks = ({
   checkResultsOverview = [],
   getCheckOverview,
   onUpdate,
-  loading
+  loading,
+  isDefaultEditing
 }: IDataQualityChecksProps) => {
   const {
     checkTypes,
@@ -419,6 +421,7 @@ const DataQualityChecks = ({
           copyUI={copyUI}
           setCopyUI={setCopyUI}
           onUpdate={onUpdate}
+          isDefaultEditing={isDefaultEditing}
         />
         <tbody>
           {checksUI?.categories.map((category, index) => (
@@ -437,6 +440,7 @@ const DataQualityChecks = ({
               copyCategory={copyUI?.categories?.find(
                 (item) => item.category === category.category
               )}
+              isDefaultEditing={isDefaultEditing}
             />
           ))}
         </tbody>

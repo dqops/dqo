@@ -408,7 +408,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return null;
+        return CheckType.monitoring;
     }
 
     /**
@@ -420,7 +420,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return null;
+        return CheckTimeScale.monthly;
     }
 
     /**
@@ -431,7 +431,7 @@ public class DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec extend
     @Override
     @JsonIgnore
     public CheckTarget getCheckTarget() {
-        return null;
+        return CheckTarget.column;
     }
 
     /**

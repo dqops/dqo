@@ -34,8 +34,8 @@ import DataQualityContextMenu from './DataQualityContextMenu';
 
 const defaultChecks = [
   'Profiling checks',
-  'Recurring daily',
-  'Recurring monthly'
+  'Monitoring daily',
+  'Monitoring monthly'
 ];
 
 export const DefinitionTree = () => {
@@ -115,8 +115,8 @@ export const DefinitionTree = () => {
   const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck),
-        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(defaultCheck),
+        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, "_")),
+        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(defaultCheck.replace(/\s/g, "_")),
         state: {
           type: defaultCheck
         },
@@ -394,7 +394,7 @@ export const DefinitionTree = () => {
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
                       onClick={() => {
-                        openCheckDefaultFirstLevelTab(x.replace(/\s/g, "_"));
+                        openCheckDefaultFirstLevelTab(x);
                       }}
                     >
                       <SvgIcon
@@ -402,7 +402,7 @@ export const DefinitionTree = () => {
                         className="w-4 h-4 min-w-4 shrink-0"
                       />
                       <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                        {x.replace(/\s/g, "_")}
+                        {x}
                       </div>
                     </div>
                   </div>
