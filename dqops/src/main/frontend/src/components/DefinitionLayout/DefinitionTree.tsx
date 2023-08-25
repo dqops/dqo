@@ -5,7 +5,14 @@ import {
   addFirstLevelTab,
   getSensorFolderTree,
   toggleSensorFolderTree,
-  openRuleFolderTree
+  openRuleFolderTree,
+  getRuleFolderTree,
+  toggleRuleFolderTree,
+  toggleFirstLevelFolder,
+  openSensorFolderTree,
+  getdataQualityChecksFolderTree,
+  toggledataQualityChecksFolderTree,
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -18,21 +25,10 @@ import {
   CheckSpecBasicModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
-import {
-  getRuleFolderTree,
-  toggleRuleFolderTree,
-  toggleFirstLevelFolder,
-  openSensorFolderTree
-} from '../../redux/actions/definition.actions';
 import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import {
-  getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
-} from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
 const defaultChecks = [
@@ -57,12 +53,10 @@ export const DefinitionTree = () => {
   }, []);
 
   const toggleSensorFolder = (key: string) => {
-    console.log(key)
     dispatch(toggleSensorFolderTree(key));
   };
 
   const openSensorFolder = (key: string )=> {
-    console.log(key)
     dispatch(openSensorFolderTree(key))
   }
 
@@ -135,45 +129,29 @@ export const DefinitionTree = () => {
     );
   };
 
-  const toggleDataQualityChecksRecursively = (elements: string[], index = 0) => {
+  const toggleFolderRecursively = (elements: string[], index = 0, type: string) => {
     if (index >= elements.length -1 ) {
       return;
     }
     const path = elements.slice(0, index + 1).join('/'); 
     if(index ===0 ){
-      openDataQualityChecksFolder("undefined/"+path)
+      if(type==="checks"){
+        openDataQualityChecksFolder("undefined/"+path)
+      }else if(type==="rules"){
+        openRuleFolder("undefined/"+path)
+      }else{
+        openSensorFolder("undefined/"+path)
+      }
     }else{
-      openDataQualityChecksFolder(path); 
+      if(type==="checks"){
+        openDataQualityChecksFolder(path)
+      }else if(type==="rules"){
+        openRuleFolder(path)
+      }else{
+        openSensorFolder(path)
+      }
     }
-  
-    
-    toggleDataQualityChecksRecursively(elements, index + 1);
-  };
-  const toggleSensorRecursively = (elements: string[], index = 0) => {
-    if (index >= elements.length -1 ) {
-      return;
-    }
-    const path = elements.slice(0, index + 1).join('/'); 
-    if(index ===0 ){
-      openSensorFolder("undefined/"+path)
-    }else{
-      openSensorFolder(path); 
-    }
-    
-    toggleSensorRecursively(elements, index + 1);
-  };
-  const toggleRuleRecursively = (elements: string[], index = 0) => {
-    if (index >= elements.length -1 ) {
-      return;
-    }
-    const path = elements.slice(0, index + 1).join('/'); 
-    if(index ===0 ){
-      openRuleFolder("undefined/"+path)
-    }else{
-      openRuleFolder(path); 
-    }
-    
-    toggleRuleRecursively(elements, index + 1);
+    toggleFolderRecursively(elements, index + 1, type);
   };
 
   useEffect(() => {
@@ -191,24 +169,21 @@ export const DefinitionTree = () => {
         if(tabs[i].url.includes("checks")){
           configuration[2].isOpen = true
           const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
-          console.log(arrayOfElemsToToggle);  
           if (arrayOfElemsToToggle) {
-            toggleDataQualityChecksRecursively(arrayOfElemsToToggle);
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "checks");
           }
         }else if(tabs[i].url.includes("sensors")){
           configuration[0].isOpen = true
           const arrayOfElemsToToggle = (tabs[i].state.full_sensor_name as string)?.split("/");
-          console.log(arrayOfElemsToToggle);  
           if (arrayOfElemsToToggle) {
-            toggleSensorRecursively(arrayOfElemsToToggle);
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "sensors");
           }
 
         }else if(tabs[i].url.includes("rules")){
           configuration[1].isOpen = true
           const arrayOfElemsToToggle = (tabs[i].state.full_rule_name as string)?.split("/");
-          console.log(arrayOfElemsToToggle);  
           if (arrayOfElemsToToggle) {
-            toggleRuleRecursively(arrayOfElemsToToggle);
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "rules");
           }
         }else if(tabs[i].url.includes("default_checks")){
           configuration[3].isOpen = true
