@@ -28,7 +28,8 @@ import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import {
   getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree
+  toggledataQualityChecksFolderTree,
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
@@ -40,15 +41,8 @@ const defaultChecks = [
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
-  const { sensorFolderTree, sensorState, definitionFirstLevelFolder } =
+  const { sensorFolderTree, sensorState, definitionFirstLevelFolder, checksFolderTree, dataQualityChecksState, ruleFolderTree, ruleState, tabs } =
     useSelector((state: IRootState) => state.definition);
-  const { ruleFolderTree, ruleState } = useSelector(
-    (state: IRootState) => state.definition || {}
-  );
-
-  const { checksFolderTree, dataQualityChecksState } = useSelector(
-    (state: IRootState) => state.definition || {}
-  );
   const [selected, setSelected] = useState('');
 
   // const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
@@ -69,11 +63,13 @@ export const DefinitionTree = () => {
   };
 
   const toggleDataQualityChecksFolder = (fullPath: string) => {
+    console.log(fullPath)
     dispatch(toggledataQualityChecksFolderTree(fullPath));
   };
-
-  console.log(dataQualityChecksState)
-  console.log(checksFolderTree?.folders)
+  const openDataQualityChecksFolder = (fullPath: string) => {
+    console.log(fullPath)
+    dispatch(opendataQualityChecksFolderTree(fullPath));
+  };
 
   const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
     dispatch(
@@ -128,22 +124,74 @@ export const DefinitionTree = () => {
     );
   };
 
+  const toggleTree = () => {
+    // if(tabs && tabs.length!==0){
+    //   for(let i =0; i<tabs.length; i++){
+    //     if(tabs[i].url.includes("checks")){
+    //       const obj = {...definitionFirstLevelFolder};
+    //       const thirdElement = obj[2];
+          
+    //       if (thirdElement && typeof thirdElement === 'object' && 'isOpen' in thirdElement) {
+    //         thirdElement.isOpen = true;
+    //         dispatch(toggleFirstLevelFolder(obj));
+    //       }
+    //     }
+    //   }
+    // }
+  }
+  const toggleDataQualityChecksRecursively = (elements: string[], index = 0) => {
+    if (index >= elements.length -1 ) {
+      return;
+    }
+    const path = elements.slice(0, index + 1).join('/'); 
+    if(index ===0 ){
+      openDataQualityChecksFolder("undefined/"+path)
+    }else{
+      openDataQualityChecksFolder(path); 
+    }
+  
+    
+    toggleDataQualityChecksRecursively(elements, index + 1);
+  };
+  console.log(dataQualityChecksState)
 
   useEffect(() => {
     if (
       definitionFirstLevelFolder === undefined ||
       definitionFirstLevelFolder.length === 0
     ) {
+      const configuration = [
+        { category: 'Sensors', isOpen: false },
+        { category: 'Rules', isOpen: false },
+        { category: 'Data quality checks', isOpen: false },
+        { category: 'Default checks configuration', isOpen: false }
+      ]
+      for(let i =0; i<tabs.length; i++){
+        if(tabs[i].url.includes("checks")){
+          configuration[2].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
+          console.log(arrayOfElemsToToggle);  
+          if (arrayOfElemsToToggle) {
+            toggleDataQualityChecksRecursively(arrayOfElemsToToggle);
+          }
+        }else if(tabs[i].url.includes("sensors")){
+          configuration[0].isOpen = true
+        }else if(tabs[i].url.includes("rules")){
+          configuration[1].isOpen = true
+        }else if(tabs[i].url.includes("default_checks")){
+          configuration[3].isOpen = true
+        }
+      }
       dispatch(
-        toggleFirstLevelFolder([
-          { category: 'Sensors', isOpen: false },
-          { category: 'Rules', isOpen: false },
-          { category: 'Data quality checks', isOpen: false },
-          { category: 'Default checks configuration', isOpen: false }
-        ])
+        toggleFirstLevelFolder(configuration)
       );
     }
+    //  toggleDataQualityChecksFolder("undefined/column")
   }, []);
+
+  console.log(tabs)
+
+
 
 
   const renderSensorFolderTree = (
@@ -154,6 +202,7 @@ export const DefinitionTree = () => {
 
     return (
       <div className="text-sm">
+        {/* <div onClick={() => toggleDataQualityChecksFolder("undefined/column")}>KLIK</div> */}
         {folder.folders &&
           Object.keys(folder.folders).map((key, index) => {
             return (
@@ -293,7 +342,7 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleDataQualityChecksFolder(previousFolder+"/"+key)}
+                  onClick={() => toggleDataQualityChecksFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
                     name={

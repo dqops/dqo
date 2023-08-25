@@ -103,6 +103,14 @@ const definitionReducer = (state = initialState, action: any) => {
           [action.key]: !state.sensorState[action.key]
         }
       };
+      case DEFINITION_ACTION.OPEN_SENSOR_FOLDER:
+      return {
+        ...state,
+        sensorState: {
+          ...state.sensorState,
+          [action.key]: true
+        }
+      };
     case DEFINITION_ACTION.ADD_FIRST_LEVEL_TAB: {
       const existing = state.tabs?.find(
         (item) => item.value === action.data.value
@@ -261,7 +269,7 @@ const definitionReducer = (state = initialState, action: any) => {
           ...state.ruleState,
           [action.key]: !state.ruleState[action.key]
         }
-      };
+      }; 
     case DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE:
       return {
         ...state,
@@ -293,6 +301,15 @@ const definitionReducer = (state = initialState, action: any) => {
           [action.fullPath]: !state.dataQualityChecksState[action.fullPath]
         }
       };
+      case DEFINITION_ACTION.OPEN_DATA_QUALITY_CHECKS_FOLDER:
+        return {
+          ...state,
+          dataQualityChecksState: {
+            ...state.dataQualityChecksState,
+            [action.fullPath]: true
+          }
+        };
+
     case DEFINITION_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE:
       return {
         ...state,
