@@ -20,7 +20,8 @@ import SvgIcon from '../SvgIcon';
 import {
   getRuleFolderTree,
   toggleRuleFolderTree,
-  toggleFirstLevelFolder
+  toggleFirstLevelFolder,
+  openSensorFolderTree
 } from '../../redux/actions/definition.actions';
 import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
@@ -55,19 +56,23 @@ export const DefinitionTree = () => {
   }, []);
 
   const toggleSensorFolder = (key: string) => {
+    console.log(key)
     dispatch(toggleSensorFolderTree(key));
   };
+
+  const openSensorFolder = (key: string )=> {
+    console.log(key)
+    dispatch(openSensorFolderTree(key))
+  }
 
   const toggleRuleFolder = (key: string) => {
     dispatch(toggleRuleFolderTree(key));
   };
 
   const toggleDataQualityChecksFolder = (fullPath: string) => {
-    console.log(fullPath)
     dispatch(toggledataQualityChecksFolderTree(fullPath));
   };
   const openDataQualityChecksFolder = (fullPath: string) => {
-    console.log(fullPath)
     dispatch(opendataQualityChecksFolderTree(fullPath));
   };
 
@@ -124,21 +129,6 @@ export const DefinitionTree = () => {
     );
   };
 
-  const toggleTree = () => {
-    // if(tabs && tabs.length!==0){
-    //   for(let i =0; i<tabs.length; i++){
-    //     if(tabs[i].url.includes("checks")){
-    //       const obj = {...definitionFirstLevelFolder};
-    //       const thirdElement = obj[2];
-          
-    //       if (thirdElement && typeof thirdElement === 'object' && 'isOpen' in thirdElement) {
-    //         thirdElement.isOpen = true;
-    //         dispatch(toggleFirstLevelFolder(obj));
-    //       }
-    //     }
-    //   }
-    // }
-  }
   const toggleDataQualityChecksRecursively = (elements: string[], index = 0) => {
     if (index >= elements.length -1 ) {
       return;
@@ -153,7 +143,32 @@ export const DefinitionTree = () => {
     
     toggleDataQualityChecksRecursively(elements, index + 1);
   };
-  console.log(dataQualityChecksState)
+  const toggleSensorRecursively = (elements: string[], index = 0) => {
+    if (index >= elements.length -1 ) {
+      return;
+    }
+    const path = elements.slice(0, index + 1).join('/'); 
+    if(index ===0 ){
+      openSensorFolder("undefined/"+path)
+    }else{
+      openSensorFolder(path); 
+    }
+    
+    toggleSensorRecursively(elements, index + 1);
+  };
+  const toggleRuleRecursively = (elements: string[], index = 0) => {
+    if (index >= elements.length -1 ) {
+      return;
+    }
+    const path = elements.slice(0, index + 1).join('/'); 
+    if(index ===0 ){
+      openSensorFolder("undefined/"+path)
+    }else{
+      openSensorFolder(path); 
+    }
+    
+    toggleRuleRecursively(elements, index + 1);
+  };
 
   useEffect(() => {
     if (
@@ -176,6 +191,12 @@ export const DefinitionTree = () => {
           }
         }else if(tabs[i].url.includes("sensors")){
           configuration[0].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.full_sensor_name as string)?.split("/");
+          console.log(arrayOfElemsToToggle);  
+          if (arrayOfElemsToToggle) {
+            toggleSensorRecursively(arrayOfElemsToToggle);
+          }
+
         }else if(tabs[i].url.includes("rules")){
           configuration[1].isOpen = true
         }else if(tabs[i].url.includes("default_checks")){
@@ -186,33 +207,29 @@ export const DefinitionTree = () => {
         toggleFirstLevelFolder(configuration)
       );
     }
-    //  toggleDataQualityChecksFolder("undefined/column")
   }, []);
-
-  console.log(tabs)
-
 
 
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
     return (
       <div className="text-sm">
-        {/* <div onClick={() => toggleDataQualityChecksFolder("undefined/column")}>KLIK</div> */}
         {folder.folders &&
           Object.keys(folder.folders).map((key, index) => {
             return (
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleSensorFolder(key)}
+                  onClick={() => toggleSensorFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
-                    name={sensorState[key] ? 'folder' : 'closed-folder'}
+                    name={sensorState[previousFolder+"/"+key] === true  ? 'folder' : 'closed-folder'}
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -221,13 +238,13 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {sensorState[key] && (
+                {sensorState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderSensorFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>
