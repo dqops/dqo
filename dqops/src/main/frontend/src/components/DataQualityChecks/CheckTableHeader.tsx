@@ -312,12 +312,13 @@ const TableHeader = ({
             <span className="mr-1">Data quality check</span>
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <CategoryMenu
-                onRunChecks={onRunChecks}
-                onDeleteChecks={() => setDeleteDataDialogOpened(true)}
-              />
-            )}
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+              isDefaultEditing !== true && (
+                <CategoryMenu
+                  onRunChecks={onRunChecks}
+                  onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+                />
+              )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <SvgIcon
                 name="hourglass"
