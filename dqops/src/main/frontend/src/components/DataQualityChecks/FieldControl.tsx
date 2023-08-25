@@ -15,6 +15,7 @@ import TextArea from '../TextArea';
 import IntegerListField from '../IntegerListField';
 import FieldDatePicker from '../FieldDatePicker';
 import clsx from 'clsx';
+import FloatingPointInput from '../FloatingPointInput';
 
 interface ISensorParametersFieldSettingsProps {
   field: FieldModel;
@@ -147,10 +148,14 @@ const FieldControl = ({
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.double && (
-        <NumberInput
+        <FloatingPointInput
           label={label}
-          value={value}
-          onChange={(value) => handleChange({ double_value: value })}
+          value={String(value)}
+          onChange={(value) =>
+            handleChange({
+              double_value: Number(String(value))
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
