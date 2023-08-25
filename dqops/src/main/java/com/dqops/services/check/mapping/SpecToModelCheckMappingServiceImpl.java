@@ -31,6 +31,7 @@ import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
@@ -169,6 +170,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
                 if (tableSpec != null && tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().size() > 0) {
                     for (String comparisonName : tableSpec.getTableComparisons().keySet()) {
+                        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableSpec.getTableComparisons().get(comparisonName);
+                        if (tableComparisonConfigurationSpec.getCheckType() != checkType ||
+                            tableComparisonConfigurationSpec.getTimeScale() != checkTimeScale) {
+                            continue; // configuration for a different check type
+                        }
+
                         AbstractComparisonCheckCategorySpec configuredComparisonChecksCategory = comparisonCheckCategorySpecMap.get(comparisonName);
                         if (configuredComparisonChecksCategory == null) {
                             configuredComparisonChecksCategory = (AbstractComparisonCheckCategorySpec) comparisonChecksCategoryClassInfo.createNewInstance();
@@ -197,6 +204,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     if (tableSpec == null || (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().get(configuredComparisonChecks.getComparisonName()) != null)) {
                         continue; // already added, we are adding only orphaned check configuration for reference table configurations no longer configured
                         // TODO: assign some boolean flag to the model to identify misconfigured (orphaned) checks, because they will fail to run anyway
+                    }
+
+                    if (!configuredComparisonChecks.hasAnyConfiguredChecks()) {
+                        continue;  // abandoned configuration, no need to show it
                     }
 
                     QualityCategoryModel comparisonCategoryModel = createCategoryModel(categoryFieldInfo,
