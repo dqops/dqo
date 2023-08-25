@@ -55,7 +55,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -65,9 +65,13 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    extracted = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+
+    if len(extracted) == 0:
+        return RuleExecutionResult()
+
     filtered = np.array(extracted, dtype=float)
     differences = np.diff(filtered)
     differences_std = float(scipy.stats.tstd(differences))

@@ -53,7 +53,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
