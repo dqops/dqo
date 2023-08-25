@@ -40,42 +40,10 @@ const JobItem = ({
 }) => {
   const dispatch = useActionDispatch();
 
-  // const getNotificationDate = (notification: any) => {
-  //   if (notification.type === 'job') {
-  //     return notification.item.jobId?.createdAt;
-  //   }
-  //   return notification.item.date;
-  // };
-
   const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
-
-  // useEffect(() => {
-  //   firstMatchingItem();
-  // }, []);
-
-  // const data = useMemo(() => {
-  //   const jobsData = Object.values(job_dictionary_state)
-  //     .sort((a, b) => {
-  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-  //     })
-  //     .map((item) => ({ type: 'job', item }));
-
-  //   const errorData = errors.map((item: IError) => ({ type: 'error', item }));
-
-  //   const newData = jobsData.concat(errorData);
-
-  //   newData.sort((a, b) => {
-  //     const date1 = getNotificationDate(a);
-  //     const date2 = getNotificationDate(b);
-
-  //     return moment(date1).isBefore(moment(date2)) ? 1 : -1;
-  //   });
-
-  //   return newData;
-  // }, [job_dictionary_state, errors]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -131,15 +99,9 @@ const JobItem = ({
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
   };
-  // const firstMatchingItem = (): boolean => {
-  //   for (const x of data) {
-  //     if (x.item.jobId?.parentJobId?.jobId === job.jobId?.jobId) {
-  //       return true;
-  //     }
-  //   }
 
-  //   return false;
-  // };
+const hasInvalidApiKeyError = job.childs.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
+const errorApiKeyMessage = "Cloud DQO Api Key is invalid or outdated, please run 'cloud login' from DQO shell";
 
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
@@ -147,7 +109,11 @@ const JobItem = ({
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
             <div>{job.jobType}</div>
-            {renderStatus()}
+            {!hasInvalidApiKeyError ? renderStatus() : (
+             <span className="px-2 text-red-500 text-xs">
+               {errorApiKeyMessage}
+            </span>
+              )}
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
