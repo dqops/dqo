@@ -78,6 +78,7 @@ const JobItem = ({
         return 'black';
     }
   };
+  const hasInvalidApiKeyError = job.childs.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
@@ -98,10 +99,11 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
+    if(hasInvalidApiKeyError){
+      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+    }
   };
 
-const hasInvalidApiKeyError = job.childs.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
-const errorApiKeyMessage = "Cloud DQO Api Key is invalid or outdated, please run 'cloud login' from DQO shell";
 
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
@@ -109,11 +111,7 @@ const errorApiKeyMessage = "Cloud DQO Api Key is invalid or outdated, please run
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
             <div>{job.jobType}</div>
-            {!hasInvalidApiKeyError ? renderStatus() : (
-             <span className="px-2 text-red-500 text-xs">
-               {errorApiKeyMessage}
-            </span>
-              )}
+            { renderStatus() }
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -249,6 +247,12 @@ const errorApiKeyMessage = "Cloud DQO Api Key is invalid or outdated, please run
             <tr className="flex justify-between w-108">
               <td>Status</td>
               <td>{job?.status}</td>
+              {hasInvalidApiKeyError && (
+                    <span className="px-2 text-red-500">
+                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
+                      {"'"}cloud login{"'"} from DQO shell)
+                    </span>
+                  )}
             </tr>
             <tr className="flex justify-between w-108">
               <td>Last Changed</td>
