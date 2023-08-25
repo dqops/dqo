@@ -36,66 +36,28 @@ import java.util.Objects;
 public class ColumnPiiDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_valid_usa_phone_percent", o -> o.dailyValidUsaPhonePercent);
             put("daily_contains_usa_phone_percent", o -> o.dailyContainsUsaPhonePercent);
-            put("daily_valid_usa_zipcode_percent", o -> o.dailyValidUsaZipcodePercent);
             put("daily_contains_usa_zipcode_percent", o -> o.dailyContainsUsaZipcodePercent);
-            put("daily_valid_email_percent", o -> o.dailyValidEmailPercent);
             put("daily_contains_email_percent", o -> o.dailyContainsEmailPercent);
-            put("daily_valid_ip4_address_percent", o -> o.dailyValidIp4AddressPercent);
             put("daily_contains_ip4_percent", o -> o.dailyContainsIp4Percent);
-            put("daily_valid_ip6_address_percent", o -> o.dailyValidIp6AddressPercent);
             put("daily_contains_ip6_percent", o -> o.dailyContainsIp6Percent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPiiValidUsaPhonePercentCheckSpec dailyValidUsaPhonePercent;
-    
     @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec dailyContainsUsaPhonePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPiiValidUsaZipcodePercentCheckSpec dailyValidUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec dailyContainsUsaZipcodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPiiValidEmailPercentCheckSpec dailyValidEmailPercent;
-
     @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPiiContainsEmailPercentCheckSpec dailyContainsEmailPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPiiValidIp4AddressPercentCheckSpec dailyValidIp4AddressPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPiiContainsIp4PercentCheckSpec dailyContainsIp4Percent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPiiValidIp6AddressPercentCheckSpec dailyValidIp6AddressPercent;
-
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPiiContainsIp6PercentCheckSpec dailyContainsIp6Percent;
-
-    /**
-     * Returns a minimum valid USA phone percent check.
-     * @return Minimum valid USA phone percent check.
-     */
-    public ColumnPiiValidUsaPhonePercentCheckSpec getDailyValidUsaPhonePercent() {
-        return dailyValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid USA phone percent check.
-     * @param dailyValidUsaPhonePercent Minimum valid USA phone percent check.
-     */
-    public void setDailyValidUsaPhonePercent(ColumnPiiValidUsaPhonePercentCheckSpec dailyValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValidUsaPhonePercent, dailyValidUsaPhonePercent));
-        this.dailyValidUsaPhonePercent = dailyValidUsaPhonePercent;
-        propagateHierarchyIdToField(dailyValidUsaPhonePercent, "daily_valid_usa_phone_percent");
-    }
 
     /**
      * Returns contains USA phone number percent check specification.
@@ -113,24 +75,6 @@ public class ColumnPiiDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyContainsUsaPhonePercent, dailyContainsUsaPhonePercent));
         this.dailyContainsUsaPhonePercent = dailyContainsUsaPhonePercent;
         propagateHierarchyIdToField(dailyContainsUsaPhonePercent, "daily_contains_usa_phone_percent");
-    }
-
-    /**
-     * Returns a minimum valid usa zip code percent check.
-     * @return Minimum valid usa zip code percent check.
-     */
-    public ColumnPiiValidUsaZipcodePercentCheckSpec getDailyValidUsaZipcodePercent() {
-        return dailyValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid usa zip code percent check.
-     * @param dailyValidUsaZipcodePercent Minimum valid usa zip code percent check.
-     */
-    public void setDailyValidUsaZipcodePercent(ColumnPiiValidUsaZipcodePercentCheckSpec dailyValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValidUsaZipcodePercent, dailyValidUsaZipcodePercent));
-        this.dailyValidUsaZipcodePercent = dailyValidUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyValidUsaZipcodePercent, "daily_valid_usa_zipcode_percent");
     }
 
     /**
@@ -152,24 +96,6 @@ public class ColumnPiiDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
     }
 
     /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnPiiValidEmailPercentCheckSpec getDailyValidEmailPercent() {
-        return dailyValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param dailyValidEmailPercent Minimum valid email percent check.
-     */
-    public void setDailyValidEmailPercent(ColumnPiiValidEmailPercentCheckSpec dailyValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValidEmailPercent, dailyValidEmailPercent));
-        this.dailyValidEmailPercent = dailyValidEmailPercent;
-        propagateHierarchyIdToField(dailyValidEmailPercent, "daily_valid_email_percent");
-    }
-
-    /**
      * Returns a contains email percent check.
      * @return Contains email percent check.
      */
@@ -188,24 +114,6 @@ public class ColumnPiiDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnPiiValidIp4AddressPercentCheckSpec getDailyValidIp4AddressPercent() {
-        return dailyValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param dailyValidIp4AddressPercent Minimum valid IP4 address percent check.
-     */
-    public void setDailyValidIp4AddressPercent(ColumnPiiValidIp4AddressPercentCheckSpec dailyValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValidIp4AddressPercent, dailyValidIp4AddressPercent));
-        this.dailyValidIp4AddressPercent = dailyValidIp4AddressPercent;
-        propagateHierarchyIdToField(dailyValidIp4AddressPercent, "daily_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a contains IP4 percent check.
      * @return Contains IP4 percent check.
      */
@@ -221,24 +129,6 @@ public class ColumnPiiDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyContainsIp4Percent, dailyContainsIp4Percent));
         this.dailyContainsIp4Percent = dailyContainsIp4Percent;
         propagateHierarchyIdToField(dailyContainsIp4Percent, "daily_contains_ip4_percent");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnPiiValidIp6AddressPercentCheckSpec getDailyValidIp6AddressPercent() {
-        return dailyValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param dailyValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setDailyValidIp6AddressPercent(ColumnPiiValidIp6AddressPercentCheckSpec dailyValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValidIp6AddressPercent, dailyValidIp6AddressPercent));
-        this.dailyValidIp6AddressPercent = dailyValidIp6AddressPercent;
-        propagateHierarchyIdToField(dailyValidIp6AddressPercent, "daily_valid_ip6_address_percent");
     }
 
     /**

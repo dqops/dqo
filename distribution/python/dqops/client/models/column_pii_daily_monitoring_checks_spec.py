@@ -23,21 +23,6 @@ if TYPE_CHECKING:
     from ..models.column_pii_daily_monitoring_checks_spec_custom_checks import (
         ColumnPiiDailyMonitoringChecksSpecCustomChecks,
     )
-    from ..models.column_pii_valid_email_percent_check_spec import (
-        ColumnPiiValidEmailPercentCheckSpec,
-    )
-    from ..models.column_pii_valid_ip_4_address_percent_check_spec import (
-        ColumnPiiValidIp4AddressPercentCheckSpec,
-    )
-    from ..models.column_pii_valid_ip_6_address_percent_check_spec import (
-        ColumnPiiValidIp6AddressPercentCheckSpec,
-    )
-    from ..models.column_pii_valid_usa_phone_percent_check_spec import (
-        ColumnPiiValidUsaPhonePercentCheckSpec,
-    )
-    from ..models.column_pii_valid_usa_zipcode_percent_check_spec import (
-        ColumnPiiValidUsaZipcodePercentCheckSpec,
-    )
 
 
 T = TypeVar("T", bound="ColumnPiiDailyMonitoringChecksSpec")
@@ -50,47 +35,27 @@ class ColumnPiiDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnPiiDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional custom
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
-        daily_valid_usa_phone_percent (Union[Unset, ColumnPiiValidUsaPhonePercentCheckSpec]):
         daily_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
-        daily_valid_usa_zipcode_percent (Union[Unset, ColumnPiiValidUsaZipcodePercentCheckSpec]):
         daily_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
-        daily_valid_email_percent (Union[Unset, ColumnPiiValidEmailPercentCheckSpec]):
         daily_contains_email_percent (Union[Unset, ColumnPiiContainsEmailPercentCheckSpec]):
-        daily_valid_ip4_address_percent (Union[Unset, ColumnPiiValidIp4AddressPercentCheckSpec]):
         daily_contains_ip4_percent (Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]):
-        daily_valid_ip6_address_percent (Union[Unset, ColumnPiiValidIp6AddressPercentCheckSpec]):
         daily_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnPiiDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    daily_valid_usa_phone_percent: Union[
-        Unset, "ColumnPiiValidUsaPhonePercentCheckSpec"
-    ] = UNSET
     daily_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
-    ] = UNSET
-    daily_valid_usa_zipcode_percent: Union[
-        Unset, "ColumnPiiValidUsaZipcodePercentCheckSpec"
     ] = UNSET
     daily_contains_usa_zipcode_percent: Union[
         Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
-    daily_valid_email_percent: Union[
-        Unset, "ColumnPiiValidEmailPercentCheckSpec"
-    ] = UNSET
     daily_contains_email_percent: Union[
         Unset, "ColumnPiiContainsEmailPercentCheckSpec"
     ] = UNSET
-    daily_valid_ip4_address_percent: Union[
-        Unset, "ColumnPiiValidIp4AddressPercentCheckSpec"
-    ] = UNSET
     daily_contains_ip4_percent: Union[
         Unset, "ColumnPiiContainsIp4PercentCheckSpec"
-    ] = UNSET
-    daily_valid_ip6_address_percent: Union[
-        Unset, "ColumnPiiValidIp6AddressPercentCheckSpec"
     ] = UNSET
     daily_contains_ip6_percent: Union[
         Unset, "ColumnPiiContainsIp6PercentCheckSpec"
@@ -102,20 +67,10 @@ class ColumnPiiDailyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_valid_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_valid_usa_phone_percent, Unset):
-            daily_valid_usa_phone_percent = self.daily_valid_usa_phone_percent.to_dict()
-
         daily_contains_usa_phone_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_contains_usa_phone_percent, Unset):
             daily_contains_usa_phone_percent = (
                 self.daily_contains_usa_phone_percent.to_dict()
-            )
-
-        daily_valid_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_valid_usa_zipcode_percent, Unset):
-            daily_valid_usa_zipcode_percent = (
-                self.daily_valid_usa_zipcode_percent.to_dict()
             )
 
         daily_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
@@ -124,29 +79,13 @@ class ColumnPiiDailyMonitoringChecksSpec:
                 self.daily_contains_usa_zipcode_percent.to_dict()
             )
 
-        daily_valid_email_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_valid_email_percent, Unset):
-            daily_valid_email_percent = self.daily_valid_email_percent.to_dict()
-
         daily_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_contains_email_percent, Unset):
             daily_contains_email_percent = self.daily_contains_email_percent.to_dict()
 
-        daily_valid_ip4_address_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_valid_ip4_address_percent, Unset):
-            daily_valid_ip4_address_percent = (
-                self.daily_valid_ip4_address_percent.to_dict()
-            )
-
         daily_contains_ip4_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_contains_ip4_percent, Unset):
             daily_contains_ip4_percent = self.daily_contains_ip4_percent.to_dict()
-
-        daily_valid_ip6_address_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_valid_ip6_address_percent, Unset):
-            daily_valid_ip6_address_percent = (
-                self.daily_valid_ip6_address_percent.to_dict()
-            )
 
         daily_contains_ip6_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_contains_ip6_percent, Unset):
@@ -157,34 +96,18 @@ class ColumnPiiDailyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if daily_valid_usa_phone_percent is not UNSET:
-            field_dict["daily_valid_usa_phone_percent"] = daily_valid_usa_phone_percent
         if daily_contains_usa_phone_percent is not UNSET:
             field_dict[
                 "daily_contains_usa_phone_percent"
             ] = daily_contains_usa_phone_percent
-        if daily_valid_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "daily_valid_usa_zipcode_percent"
-            ] = daily_valid_usa_zipcode_percent
         if daily_contains_usa_zipcode_percent is not UNSET:
             field_dict[
                 "daily_contains_usa_zipcode_percent"
             ] = daily_contains_usa_zipcode_percent
-        if daily_valid_email_percent is not UNSET:
-            field_dict["daily_valid_email_percent"] = daily_valid_email_percent
         if daily_contains_email_percent is not UNSET:
             field_dict["daily_contains_email_percent"] = daily_contains_email_percent
-        if daily_valid_ip4_address_percent is not UNSET:
-            field_dict[
-                "daily_valid_ip4_address_percent"
-            ] = daily_valid_ip4_address_percent
         if daily_contains_ip4_percent is not UNSET:
             field_dict["daily_contains_ip4_percent"] = daily_contains_ip4_percent
-        if daily_valid_ip6_address_percent is not UNSET:
-            field_dict[
-                "daily_valid_ip6_address_percent"
-            ] = daily_valid_ip6_address_percent
         if daily_contains_ip6_percent is not UNSET:
             field_dict["daily_contains_ip6_percent"] = daily_contains_ip6_percent
 
@@ -210,21 +133,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
         from ..models.column_pii_daily_monitoring_checks_spec_custom_checks import (
             ColumnPiiDailyMonitoringChecksSpecCustomChecks,
         )
-        from ..models.column_pii_valid_email_percent_check_spec import (
-            ColumnPiiValidEmailPercentCheckSpec,
-        )
-        from ..models.column_pii_valid_ip_4_address_percent_check_spec import (
-            ColumnPiiValidIp4AddressPercentCheckSpec,
-        )
-        from ..models.column_pii_valid_ip_6_address_percent_check_spec import (
-            ColumnPiiValidIp6AddressPercentCheckSpec,
-        )
-        from ..models.column_pii_valid_usa_phone_percent_check_spec import (
-            ColumnPiiValidUsaPhonePercentCheckSpec,
-        )
-        from ..models.column_pii_valid_usa_zipcode_percent_check_spec import (
-            ColumnPiiValidUsaZipcodePercentCheckSpec,
-        )
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -234,19 +142,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
         else:
             custom_checks = ColumnPiiDailyMonitoringChecksSpecCustomChecks.from_dict(
                 _custom_checks
-            )
-
-        _daily_valid_usa_phone_percent = d.pop("daily_valid_usa_phone_percent", UNSET)
-        daily_valid_usa_phone_percent: Union[
-            Unset, ColumnPiiValidUsaPhonePercentCheckSpec
-        ]
-        if isinstance(_daily_valid_usa_phone_percent, Unset):
-            daily_valid_usa_phone_percent = UNSET
-        else:
-            daily_valid_usa_phone_percent = (
-                ColumnPiiValidUsaPhonePercentCheckSpec.from_dict(
-                    _daily_valid_usa_phone_percent
-                )
             )
 
         _daily_contains_usa_phone_percent = d.pop(
@@ -261,21 +156,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
             daily_contains_usa_phone_percent = (
                 ColumnPiiContainsUsaPhonePercentCheckSpec.from_dict(
                     _daily_contains_usa_phone_percent
-                )
-            )
-
-        _daily_valid_usa_zipcode_percent = d.pop(
-            "daily_valid_usa_zipcode_percent", UNSET
-        )
-        daily_valid_usa_zipcode_percent: Union[
-            Unset, ColumnPiiValidUsaZipcodePercentCheckSpec
-        ]
-        if isinstance(_daily_valid_usa_zipcode_percent, Unset):
-            daily_valid_usa_zipcode_percent = UNSET
-        else:
-            daily_valid_usa_zipcode_percent = (
-                ColumnPiiValidUsaZipcodePercentCheckSpec.from_dict(
-                    _daily_valid_usa_zipcode_percent
                 )
             )
 
@@ -294,15 +174,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_valid_email_percent = d.pop("daily_valid_email_percent", UNSET)
-        daily_valid_email_percent: Union[Unset, ColumnPiiValidEmailPercentCheckSpec]
-        if isinstance(_daily_valid_email_percent, Unset):
-            daily_valid_email_percent = UNSET
-        else:
-            daily_valid_email_percent = ColumnPiiValidEmailPercentCheckSpec.from_dict(
-                _daily_valid_email_percent
-            )
-
         _daily_contains_email_percent = d.pop("daily_contains_email_percent", UNSET)
         daily_contains_email_percent: Union[
             Unset, ColumnPiiContainsEmailPercentCheckSpec
@@ -316,21 +187,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_valid_ip4_address_percent = d.pop(
-            "daily_valid_ip4_address_percent", UNSET
-        )
-        daily_valid_ip4_address_percent: Union[
-            Unset, ColumnPiiValidIp4AddressPercentCheckSpec
-        ]
-        if isinstance(_daily_valid_ip4_address_percent, Unset):
-            daily_valid_ip4_address_percent = UNSET
-        else:
-            daily_valid_ip4_address_percent = (
-                ColumnPiiValidIp4AddressPercentCheckSpec.from_dict(
-                    _daily_valid_ip4_address_percent
-                )
-            )
-
         _daily_contains_ip4_percent = d.pop("daily_contains_ip4_percent", UNSET)
         daily_contains_ip4_percent: Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]
         if isinstance(_daily_contains_ip4_percent, Unset):
@@ -338,21 +194,6 @@ class ColumnPiiDailyMonitoringChecksSpec:
         else:
             daily_contains_ip4_percent = ColumnPiiContainsIp4PercentCheckSpec.from_dict(
                 _daily_contains_ip4_percent
-            )
-
-        _daily_valid_ip6_address_percent = d.pop(
-            "daily_valid_ip6_address_percent", UNSET
-        )
-        daily_valid_ip6_address_percent: Union[
-            Unset, ColumnPiiValidIp6AddressPercentCheckSpec
-        ]
-        if isinstance(_daily_valid_ip6_address_percent, Unset):
-            daily_valid_ip6_address_percent = UNSET
-        else:
-            daily_valid_ip6_address_percent = (
-                ColumnPiiValidIp6AddressPercentCheckSpec.from_dict(
-                    _daily_valid_ip6_address_percent
-                )
             )
 
         _daily_contains_ip6_percent = d.pop("daily_contains_ip6_percent", UNSET)
@@ -366,15 +207,10 @@ class ColumnPiiDailyMonitoringChecksSpec:
 
         column_pii_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
-            daily_valid_usa_phone_percent=daily_valid_usa_phone_percent,
             daily_contains_usa_phone_percent=daily_contains_usa_phone_percent,
-            daily_valid_usa_zipcode_percent=daily_valid_usa_zipcode_percent,
             daily_contains_usa_zipcode_percent=daily_contains_usa_zipcode_percent,
-            daily_valid_email_percent=daily_valid_email_percent,
             daily_contains_email_percent=daily_contains_email_percent,
-            daily_valid_ip4_address_percent=daily_valid_ip4_address_percent,
             daily_contains_ip4_percent=daily_contains_ip4_percent,
-            daily_valid_ip6_address_percent=daily_valid_ip6_address_percent,
             daily_contains_ip6_percent=daily_contains_ip6_percent,
         )
 
