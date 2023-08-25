@@ -269,7 +269,15 @@ const definitionReducer = (state = initialState, action: any) => {
           ...state.ruleState,
           [action.key]: !state.ruleState[action.key]
         }
-      }; 
+      };
+      case DEFINITION_ACTION.OPEN_RULE_FOLDER:
+        return {
+          ...state,
+          ruleState: {
+            ...state.ruleState,
+            [action.key]: true
+          }
+        };  
     case DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE:
       return {
         ...state,

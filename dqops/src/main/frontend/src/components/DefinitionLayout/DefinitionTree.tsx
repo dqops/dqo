@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import {
   addFirstLevelTab,
   getSensorFolderTree,
-  toggleSensorFolderTree
+  toggleSensorFolderTree,
+  openRuleFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -68,6 +69,11 @@ export const DefinitionTree = () => {
   const toggleRuleFolder = (key: string) => {
     dispatch(toggleRuleFolderTree(key));
   };
+
+  const openRuleFolder = (key: string) => {
+    dispatch(openRuleFolderTree(key));
+  };
+
 
   const toggleDataQualityChecksFolder = (fullPath: string) => {
     dispatch(toggledataQualityChecksFolderTree(fullPath));
@@ -162,9 +168,9 @@ export const DefinitionTree = () => {
     }
     const path = elements.slice(0, index + 1).join('/'); 
     if(index ===0 ){
-      openSensorFolder("undefined/"+path)
+      openRuleFolder("undefined/"+path)
     }else{
-      openSensorFolder(path); 
+      openRuleFolder(path); 
     }
     
     toggleRuleRecursively(elements, index + 1);
@@ -199,6 +205,11 @@ export const DefinitionTree = () => {
 
         }else if(tabs[i].url.includes("rules")){
           configuration[1].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.full_rule_name as string)?.split("/");
+          console.log(arrayOfElemsToToggle);  
+          if (arrayOfElemsToToggle) {
+            toggleRuleRecursively(arrayOfElemsToToggle);
+          }
         }else if(tabs[i].url.includes("default_checks")){
           configuration[3].isOpen = true
         }
@@ -280,7 +291,8 @@ export const DefinitionTree = () => {
 
   const renderRuleFolderTree = (
     folder?: RuleBasicFolderModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
@@ -292,10 +304,10 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleRuleFolder(key)}
+                  onClick={() => toggleRuleFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
-                    name={ruleState[key] ? 'folder' : 'closed-folder'}
+                    name={ruleState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'}
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -304,13 +316,13 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {ruleState[key] && (
+                {ruleState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderRuleFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>

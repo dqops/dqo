@@ -422,6 +422,12 @@ export const toggleRuleFolderTree = (key: string) => ({
   key
 });
 
+export const openRuleFolderTree = (key: string) => ({
+  type: DEFINITION_ACTION.OPEN_RULE_FOLDER,
+  key
+});
+
+
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE,
   data
