@@ -227,6 +227,7 @@ export const TableReferenceComparisons = ({
     setIsEditing(true);
   };
 
+  console.log(references);
   return (
     <>
       {isEditing ? (
@@ -245,7 +246,9 @@ export const TableReferenceComparisons = ({
           isCreating={isCreating}
           getNewTableComparison={getNewTableComparison}
           onChangeSelectedReference={onChangeSelectedReference}
-          listOfExistingReferences = {references.map((x) => x.table_comparison_configuration_name)}
+          listOfExistingReferences={references.map(
+            (x) => x.table_comparison_configuration_name
+          )}
         />
       ) : (
         <ProfilingReferenceTableList
