@@ -67,7 +67,7 @@ const FloatingPointInput = ({
               error ? 'text-red-500' : ''
             )}
           >
-            <span>{label}</span>21
+            <span>{label}</span>
             {!!tooltipText && (
               <Tooltip
                 content={tooltipText}
