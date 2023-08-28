@@ -958,7 +958,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_datetime_value_in_range_date_percent|recurring|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_datetime_value_in_range_date_percent|monitoring|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -984,7 +984,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_datet
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           datetime:
             daily_datetime_value_in_range_date_percent:
@@ -1009,7 +1009,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           datetime:
             daily_datetime_value_in_range_date_percent:
@@ -1453,7 +1453,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               datetime:
                 daily_datetime_value_in_range_date_percent:
@@ -1907,7 +1907,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_datetime_value_in_range_date_percent|recurring|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_datetime_value_in_range_date_percent|monitoring|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1933,7 +1933,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dat
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datetime:
             monthly_datetime_value_in_range_date_percent:
@@ -1958,7 +1958,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           datetime:
             monthly_datetime_value_in_range_date_percent:
@@ -2402,7 +2402,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               datetime:
                 monthly_datetime_value_in_range_date_percent:

@@ -330,10 +330,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         CompletableFuture<DqoJobQueueIncrementalSnapshotModel> waitForChangeFuture = null;
 
         synchronized (this.lock) {
-            if (!this.started) {
-                throw new DqoQueueJobExecutionException("Queue is stopped");
-            }
-
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)

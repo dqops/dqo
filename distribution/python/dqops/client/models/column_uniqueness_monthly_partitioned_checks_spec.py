@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
+    from ..models.column_uniqueness_monthly_partitioned_checks_spec_custom_checks import (
+        ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnUniquenessMonthlyPartitionedChecksSpec")
@@ -22,12 +25,18 @@ T = TypeVar("T", bound="ColumnUniquenessMonthlyPartitionedChecksSpec")
 class ColumnUniquenessMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
         monthly_partition_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         monthly_partition_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         monthly_partition_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_distinct_count: Union[
         Unset, "ColumnDistinctCountCheckSpec"
     ] = UNSET
@@ -43,6 +52,10 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_distinct_count, Unset):
             monthly_partition_distinct_count = (
@@ -70,6 +83,8 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_distinct_count is not UNSET:
             field_dict[
                 "monthly_partition_distinct_count"
@@ -103,8 +118,24 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
+        from ..models.column_uniqueness_monthly_partitioned_checks_spec_custom_checks import (
+            ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_partition_distinct_count = d.pop(
             "monthly_partition_distinct_count", UNSET
         )
@@ -156,6 +187,7 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
             )
 
         column_uniqueness_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_distinct_count=monthly_partition_distinct_count,
             monthly_partition_distinct_percent=monthly_partition_distinct_percent,
             monthly_partition_duplicate_count=monthly_partition_duplicate_count,

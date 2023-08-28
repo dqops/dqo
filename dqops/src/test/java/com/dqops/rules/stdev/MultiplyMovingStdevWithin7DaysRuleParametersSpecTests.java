@@ -72,7 +72,7 @@ public class MultiplyMovingStdevWithin7DaysRuleParametersSpecTests extends BaseT
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
         Assertions.assertEquals(13.94, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(24.63, ruleExecutionResult.getUpperBound(), 0.1);
@@ -86,7 +86,7 @@ public class MultiplyMovingStdevWithin7DaysRuleParametersSpecTests extends BaseT
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

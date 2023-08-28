@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.table_basic_model_advanced_profiling_result_truncation import (
-    TableBasicModelAdvancedProfilingResultTruncation,
+from ..models.table_basic_model_profiling_checks_result_truncation import (
+    TableBasicModelProfilingChecksResultTruncation,
 )
 from ..types import UNSET, Unset
 
@@ -39,15 +39,14 @@ class TableBasicModel:
             grouping of more and less important tables during a data quality improvement project, when the data quality
             issues on higher priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
-        advanced_profiling_result_truncation (Union[Unset, TableBasicModelAdvancedProfilingResultTruncation]): Defines
-            how many advanced profiling results are stored for the table monthly. By default, DQO will use the
-            'one_per_month' configuration and store only the most recent advanced profiling result executed during the
-            month. By changing this value, it is possible to store one value per day or even store all advanced profiling
-            results.
+        profiling_checks_result_truncation (Union[Unset, TableBasicModelProfilingChecksResultTruncation]): Defines how
+            many profiling checks results are stored for the table monthly. By default, DQO will use the 'one_per_month'
+            configuration and store only the most recent profiling checks result executed during the month. By changing this
+            value, it is possible to store one value per day or even store all profiling checks results.
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
             configured.
-        has_any_configured_recurring_checks (Union[Unset, bool]): True when the table has any recurring checks
+        has_any_configured_monitoring_checks (Union[Unset, bool]): True when the table has any monitoring checks
             configured.
         has_any_configured_partition_checks (Union[Unset, bool]): True when the table has any partition checks
             configured.
@@ -57,7 +56,7 @@ class TableBasicModel:
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
-        run_recurring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
+        run_monitoring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
         run_partition_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
@@ -73,17 +72,17 @@ class TableBasicModel:
     filter_: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
-    advanced_profiling_result_truncation: Union[
-        Unset, TableBasicModelAdvancedProfilingResultTruncation
+    profiling_checks_result_truncation: Union[
+        Unset, TableBasicModelProfilingChecksResultTruncation
     ] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
-    has_any_configured_recurring_checks: Union[Unset, bool] = UNSET
+    has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
     has_any_configured_partition_checks: Union[Unset, bool] = UNSET
     partitioning_configuration_missing: Union[Unset, bool] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
-    run_recurring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_partition_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     collect_statistics_job_template: Union[
         Unset, "StatisticsCollectorSearchFilters"
@@ -106,15 +105,15 @@ class TableBasicModel:
         if not isinstance(self.owner, Unset):
             owner = self.owner.to_dict()
 
-        advanced_profiling_result_truncation: Union[Unset, str] = UNSET
-        if not isinstance(self.advanced_profiling_result_truncation, Unset):
-            advanced_profiling_result_truncation = (
-                self.advanced_profiling_result_truncation.value
+        profiling_checks_result_truncation: Union[Unset, str] = UNSET
+        if not isinstance(self.profiling_checks_result_truncation, Unset):
+            profiling_checks_result_truncation = (
+                self.profiling_checks_result_truncation.value
             )
 
         has_any_configured_checks = self.has_any_configured_checks
         has_any_configured_profiling_checks = self.has_any_configured_profiling_checks
-        has_any_configured_recurring_checks = self.has_any_configured_recurring_checks
+        has_any_configured_monitoring_checks = self.has_any_configured_monitoring_checks
         has_any_configured_partition_checks = self.has_any_configured_partition_checks
         partitioning_configuration_missing = self.partitioning_configuration_missing
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
@@ -127,10 +126,10 @@ class TableBasicModel:
                 self.run_profiling_checks_job_template.to_dict()
             )
 
-        run_recurring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = (
-                self.run_recurring_checks_job_template.to_dict()
+        run_monitoring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.run_monitoring_checks_job_template, Unset):
+            run_monitoring_checks_job_template = (
+                self.run_monitoring_checks_job_template.to_dict()
             )
 
         run_partition_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
@@ -168,20 +167,20 @@ class TableBasicModel:
             field_dict["priority"] = priority
         if owner is not UNSET:
             field_dict["owner"] = owner
-        if advanced_profiling_result_truncation is not UNSET:
+        if profiling_checks_result_truncation is not UNSET:
             field_dict[
-                "advanced_profiling_result_truncation"
-            ] = advanced_profiling_result_truncation
+                "profiling_checks_result_truncation"
+            ] = profiling_checks_result_truncation
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
             field_dict[
                 "has_any_configured_profiling_checks"
             ] = has_any_configured_profiling_checks
-        if has_any_configured_recurring_checks is not UNSET:
+        if has_any_configured_monitoring_checks is not UNSET:
             field_dict[
-                "has_any_configured_recurring_checks"
-            ] = has_any_configured_recurring_checks
+                "has_any_configured_monitoring_checks"
+            ] = has_any_configured_monitoring_checks
         if has_any_configured_partition_checks is not UNSET:
             field_dict[
                 "has_any_configured_partition_checks"
@@ -196,10 +195,10 @@ class TableBasicModel:
             field_dict[
                 "run_profiling_checks_job_template"
             ] = run_profiling_checks_job_template
-        if run_recurring_checks_job_template is not UNSET:
+        if run_monitoring_checks_job_template is not UNSET:
             field_dict[
-                "run_recurring_checks_job_template"
-            ] = run_recurring_checks_job_template
+                "run_monitoring_checks_job_template"
+            ] = run_monitoring_checks_job_template
         if run_partition_checks_job_template is not UNSET:
             field_dict[
                 "run_partition_checks_job_template"
@@ -252,18 +251,18 @@ class TableBasicModel:
         else:
             owner = TableOwnerSpec.from_dict(_owner)
 
-        _advanced_profiling_result_truncation = d.pop(
-            "advanced_profiling_result_truncation", UNSET
+        _profiling_checks_result_truncation = d.pop(
+            "profiling_checks_result_truncation", UNSET
         )
-        advanced_profiling_result_truncation: Union[
-            Unset, TableBasicModelAdvancedProfilingResultTruncation
+        profiling_checks_result_truncation: Union[
+            Unset, TableBasicModelProfilingChecksResultTruncation
         ]
-        if isinstance(_advanced_profiling_result_truncation, Unset):
-            advanced_profiling_result_truncation = UNSET
+        if isinstance(_profiling_checks_result_truncation, Unset):
+            profiling_checks_result_truncation = UNSET
         else:
-            advanced_profiling_result_truncation = (
-                TableBasicModelAdvancedProfilingResultTruncation(
-                    _advanced_profiling_result_truncation
+            profiling_checks_result_truncation = (
+                TableBasicModelProfilingChecksResultTruncation(
+                    _profiling_checks_result_truncation
                 )
             )
 
@@ -273,8 +272,8 @@ class TableBasicModel:
             "has_any_configured_profiling_checks", UNSET
         )
 
-        has_any_configured_recurring_checks = d.pop(
-            "has_any_configured_recurring_checks", UNSET
+        has_any_configured_monitoring_checks = d.pop(
+            "has_any_configured_monitoring_checks", UNSET
         )
 
         has_any_configured_partition_checks = d.pop(
@@ -305,15 +304,15 @@ class TableBasicModel:
                 _run_profiling_checks_job_template
             )
 
-        _run_recurring_checks_job_template = d.pop(
-            "run_recurring_checks_job_template", UNSET
+        _run_monitoring_checks_job_template = d.pop(
+            "run_monitoring_checks_job_template", UNSET
         )
-        run_recurring_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = UNSET
+        run_monitoring_checks_job_template: Union[Unset, CheckSearchFilters]
+        if isinstance(_run_monitoring_checks_job_template, Unset):
+            run_monitoring_checks_job_template = UNSET
         else:
-            run_recurring_checks_job_template = CheckSearchFilters.from_dict(
-                _run_recurring_checks_job_template
+            run_monitoring_checks_job_template = CheckSearchFilters.from_dict(
+                _run_monitoring_checks_job_template
             )
 
         _run_partition_checks_job_template = d.pop(
@@ -358,15 +357,15 @@ class TableBasicModel:
             filter_=filter_,
             priority=priority,
             owner=owner,
-            advanced_profiling_result_truncation=advanced_profiling_result_truncation,
+            profiling_checks_result_truncation=profiling_checks_result_truncation,
             has_any_configured_checks=has_any_configured_checks,
             has_any_configured_profiling_checks=has_any_configured_profiling_checks,
-            has_any_configured_recurring_checks=has_any_configured_recurring_checks,
+            has_any_configured_monitoring_checks=has_any_configured_monitoring_checks,
             has_any_configured_partition_checks=has_any_configured_partition_checks,
             partitioning_configuration_missing=partitioning_configuration_missing,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
-            run_recurring_checks_job_template=run_recurring_checks_job_template,
+            run_monitoring_checks_job_template=run_monitoring_checks_job_template,
             run_partition_checks_job_template=run_partition_checks_job_template,
             collect_statistics_job_template=collect_statistics_job_template,
             data_clean_job_template=data_clean_job_template,

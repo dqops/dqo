@@ -723,7 +723,7 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_invalid_ip4_address_count|recurring|daily|[string_invalid_ip4_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_invalid_ip4_address_count|monitoring|daily|[string_invalid_ip4_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -749,7 +749,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_invalid_ip4_address_count:
@@ -774,7 +774,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_invalid_ip4_address_count:
@@ -1099,7 +1099,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               strings:
                 daily_string_invalid_ip4_address_count:
@@ -1437,7 +1437,7 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_invalid_ip4_address_count|recurring|monthly|[string_invalid_ip4_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_invalid_ip4_address_count|monitoring|monthly|[string_invalid_ip4_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1463,7 +1463,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_invalid_ip4_address_count:
@@ -1488,7 +1488,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           strings:
             monthly_string_invalid_ip4_address_count:
@@ -1813,7 +1813,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               strings:
                 monthly_string_invalid_ip4_address_count:

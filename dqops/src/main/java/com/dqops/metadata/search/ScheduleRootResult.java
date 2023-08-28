@@ -15,9 +15,8 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 
 /**
  * Result object returned by the schedule root search operation (to find nodes that have a cron schedule that is applicable to all nodes inside).
@@ -25,7 +24,7 @@ import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
  * and a scheduling group type (profiling, daily, monthly, etc).
  */
 public class ScheduleRootResult {
-    private CheckRunRecurringScheduleGroup scheduleGroup;
+    private CheckRunScheduleGroup scheduleGroup;
     private HierarchyNode scheduleRootNode;
 
     /**
@@ -33,7 +32,7 @@ public class ScheduleRootResult {
      * @param scheduleGroup Scheduling group that identifies the type of schedule to use.
      * @param scheduleRootNode Metadata root node ({@link com.dqops.metadata.sources.ConnectionSpec}, {@link com.dqops.metadata.sources.TableSpec} or {@link com.dqops.checks.AbstractCheckSpec}) that has a schedule defined.
      */
-    public ScheduleRootResult(CheckRunRecurringScheduleGroup scheduleGroup, HierarchyNode scheduleRootNode) {
+    public ScheduleRootResult(CheckRunScheduleGroup scheduleGroup, HierarchyNode scheduleRootNode) {
         this.scheduleGroup = scheduleGroup;
         this.scheduleRootNode = scheduleRootNode;
     }
@@ -42,7 +41,7 @@ public class ScheduleRootResult {
      * Returns the scheduling group - the name of the schedule to use and filter the check types.
      * @return Scheduling group.
      */
-    public CheckRunRecurringScheduleGroup getScheduleGroup() {
+    public CheckRunScheduleGroup getScheduleGroup() {
         return scheduleGroup;
     }
 

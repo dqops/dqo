@@ -21,8 +21,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -68,15 +68,15 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 
     if (defaultTab) {
-      if (item.value === CheckTypes.RECURRING) {
-        url = ROUTES.TABLE_RECURRING(
+      if (item.value === CheckTypes.MONITORING) {
+        url = ROUTES.TABLE_MONITORING(
           item.value,
           connection,
           schema,
           table,
           defaultTab
         );
-        value = ROUTES.TABLE_RECURRING_VALUE(
+        value = ROUTES.TABLE_MONITORING_VALUE(
           item.value,
           connection,
           schema,
@@ -108,7 +108,7 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       }
     } else {
       const tab =
-        item.value === CheckTypes.RECURRING ||
+        item.value === CheckTypes.MONITORING ||
         item.value === CheckTypes.PARTITIONED
           ? 'daily'
           : item.value === CheckTypes.PROFILING

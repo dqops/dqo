@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.table_partition_reload_lag_check_spec import (
         TablePartitionReloadLagCheckSpec,
     )
+    from ..models.table_timeliness_daily_partitioned_checks_spec_custom_checks import (
+        TableTimelinessDailyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableTimelinessDailyPartitionedChecksSpec")
@@ -22,12 +25,18 @@ T = TypeVar("T", bound="TableTimelinessDailyPartitionedChecksSpec")
 class TableTimelinessDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableTimelinessDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         daily_partition_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
         daily_partition_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
         daily_partition_reload_lag (Union[Unset, TablePartitionReloadLagCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableTimelinessDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
     daily_partition_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
     daily_partition_data_ingestion_delay: Union[
@@ -37,6 +46,10 @@ class TableTimelinessDailyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_data_freshness, Unset):
             daily_partition_data_freshness = (
@@ -62,6 +75,8 @@ class TableTimelinessDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_data_freshness is not UNSET:
             field_dict[
                 "daily_partition_data_freshness"
@@ -89,8 +104,24 @@ class TableTimelinessDailyPartitionedChecksSpec:
         from ..models.table_partition_reload_lag_check_spec import (
             TablePartitionReloadLagCheckSpec,
         )
+        from ..models.table_timeliness_daily_partitioned_checks_spec_custom_checks import (
+            TableTimelinessDailyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, TableTimelinessDailyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableTimelinessDailyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_partition_data_freshness = d.pop("daily_partition_data_freshness", UNSET)
         daily_partition_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
         if isinstance(_daily_partition_data_freshness, Unset):
@@ -134,6 +165,7 @@ class TableTimelinessDailyPartitionedChecksSpec:
             )
 
         table_timeliness_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_data_freshness=daily_partition_data_freshness,
             daily_partition_data_staleness=daily_partition_data_staleness,
             daily_partition_data_ingestion_delay=daily_partition_data_ingestion_delay,

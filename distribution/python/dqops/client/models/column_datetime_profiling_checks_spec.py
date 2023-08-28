@@ -8,6 +8,12 @@ if TYPE_CHECKING:
     from ..models.column_date_values_in_future_percent_check_spec import (
         ColumnDateValuesInFuturePercentCheckSpec,
     )
+    from ..models.column_datetime_date_match_format_percent_check_spec import (
+        ColumnDatetimeDateMatchFormatPercentCheckSpec,
+    )
+    from ..models.column_datetime_profiling_checks_spec_custom_checks import (
+        ColumnDatetimeProfilingChecksSpecCustomChecks,
+    )
     from ..models.column_datetime_value_in_range_date_percent_check_spec import (
         ColumnDatetimeValueInRangeDatePercentCheckSpec,
     )
@@ -20,10 +26,18 @@ T = TypeVar("T", bound="ColumnDatetimeProfilingChecksSpec")
 class ColumnDatetimeProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnDatetimeProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
+        profile_date_match_format_percent (Union[Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec]):
         profile_date_values_in_future_percent (Union[Unset, ColumnDateValuesInFuturePercentCheckSpec]):
         profile_datetime_value_in_range_date_percent (Union[Unset, ColumnDatetimeValueInRangeDatePercentCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnDatetimeProfilingChecksSpecCustomChecks"] = UNSET
+    profile_date_match_format_percent: Union[
+        Unset, "ColumnDatetimeDateMatchFormatPercentCheckSpec"
+    ] = UNSET
     profile_date_values_in_future_percent: Union[
         Unset, "ColumnDateValuesInFuturePercentCheckSpec"
     ] = UNSET
@@ -33,6 +47,16 @@ class ColumnDatetimeProfilingChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
+        profile_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_date_match_format_percent, Unset):
+            profile_date_match_format_percent = (
+                self.profile_date_match_format_percent.to_dict()
+            )
+
         profile_date_values_in_future_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_date_values_in_future_percent, Unset):
             profile_date_values_in_future_percent = (
@@ -50,6 +74,12 @@ class ColumnDatetimeProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
+        if profile_date_match_format_percent is not UNSET:
+            field_dict[
+                "profile_date_match_format_percent"
+            ] = profile_date_match_format_percent
         if profile_date_values_in_future_percent is not UNSET:
             field_dict[
                 "profile_date_values_in_future_percent"
@@ -66,11 +96,41 @@ class ColumnDatetimeProfilingChecksSpec:
         from ..models.column_date_values_in_future_percent_check_spec import (
             ColumnDateValuesInFuturePercentCheckSpec,
         )
+        from ..models.column_datetime_date_match_format_percent_check_spec import (
+            ColumnDatetimeDateMatchFormatPercentCheckSpec,
+        )
+        from ..models.column_datetime_profiling_checks_spec_custom_checks import (
+            ColumnDatetimeProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_datetime_value_in_range_date_percent_check_spec import (
             ColumnDatetimeValueInRangeDatePercentCheckSpec,
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnDatetimeProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnDatetimeProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
+        _profile_date_match_format_percent = d.pop(
+            "profile_date_match_format_percent", UNSET
+        )
+        profile_date_match_format_percent: Union[
+            Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec
+        ]
+        if isinstance(_profile_date_match_format_percent, Unset):
+            profile_date_match_format_percent = UNSET
+        else:
+            profile_date_match_format_percent = (
+                ColumnDatetimeDateMatchFormatPercentCheckSpec.from_dict(
+                    _profile_date_match_format_percent
+                )
+            )
+
         _profile_date_values_in_future_percent = d.pop(
             "profile_date_values_in_future_percent", UNSET
         )
@@ -102,6 +162,8 @@ class ColumnDatetimeProfilingChecksSpec:
             )
 
         column_datetime_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
+            profile_date_match_format_percent=profile_date_match_format_percent,
             profile_date_values_in_future_percent=profile_date_values_in_future_percent,
             profile_datetime_value_in_range_date_percent=profile_datetime_value_in_range_date_percent,
         )

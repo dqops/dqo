@@ -90,7 +90,7 @@ Detects if new columns were added or existing columns were removed since the mos
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_list_changed|recurring|daily|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_list_changed|monitoring|daily|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -116,7 +116,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_list_changed:
@@ -136,7 +136,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_list_changed:
@@ -168,7 +168,7 @@ Detects if new columns were added or existing columns were removed since the las
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_list_changed|recurring|monthly|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_list_changed|monitoring|monthly|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -194,7 +194,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_list_changed:
@@ -214,7 +214,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_list_changed:

@@ -535,7 +535,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_mean_change|recurring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_mean_change|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -561,7 +561,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_mean_
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_mean_change:
@@ -586,7 +586,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_mean_change:
@@ -817,7 +817,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               anomaly:
                 daily_mean_change:
@@ -1061,7 +1061,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_mean_change|recurring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_mean_change|monitoring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1087,7 +1087,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_mea
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           anomaly:
             monthly_mean_change:
@@ -1112,7 +1112,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           anomaly:
             monthly_mean_change:
@@ -1343,7 +1343,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               anomaly:
                 monthly_mean_change:

@@ -70,9 +70,9 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -84,9 +84,9 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

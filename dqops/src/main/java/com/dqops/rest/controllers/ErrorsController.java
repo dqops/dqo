@@ -21,7 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.errors.services.ErrorsDataService;
 import com.dqops.data.errors.services.ErrorsDetailedFilterParameters;
-import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
+import com.dqops.data.errors.services.models.ErrorsListModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -72,15 +72,15 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors", produces = "application/json")
     @ApiOperation(value = "getTableProfilingErrors", notes = "Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table",
-            response = ErrorsDetailedDataModel[].class)
+            response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Errors related to the most recent check runs for table level data quality profiling checks on a table returned",
-                    response = ErrorsDetailedDataModel[].class),
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getTableProfilingErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getTableProfilingErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -122,13 +122,13 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
                 checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the errors related to the most recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the errors related to the most recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -138,17 +138,17 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringErrors", notes = "Returns the errors related to the most recent table level recurring executions for the recurring at a requested time scale",
-            response = ErrorsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringErrors", notes = "Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale",
+            response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Errors related to the most recent recurring executions for the recurring at a requested time scale on a table returned",
-                    response = ErrorsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "Errors related to the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getTableRecurringErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getTableMonitoringErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -181,7 +181,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoring = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         ErrorsDetailedFilterParameters loadParams = new ErrorsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -191,9 +191,9 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                recurring, new ErrorsDetailedFilterParameters());
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
+                monitoring, new ErrorsDetailedFilterParameters());
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -208,15 +208,15 @@ public class ErrorsController {
      * @return View of the errors related to the recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale", response = ErrorsDetailedDataModel[].class)
+    @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale", response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The errors related to partitioned check executions for a requested time scale on a table returned",
-                    response = ErrorsDetailedDataModel[].class),
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getTablePartitionedErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getTablePartitionedErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -259,9 +259,9 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
                 Partitioned, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -277,15 +277,15 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingErrors", notes = "Returns the errors related to the recent check executions for all column level data quality profiling checks on a column",
-            response = ErrorsDetailedDataModel[].class)
+            response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Errors related to the most recent check runs for column level data quality profiling checks on a column returned",
-                    response = ErrorsDetailedDataModel[].class),
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getColumnProfilingErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getColumnProfilingErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -333,13 +333,13 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
                 checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the errors related to recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the errors related to monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -350,17 +350,17 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringErrors", notes = "Returns errors related to the recent column level recurring executions for the recurring at a requested time scale",
-            response = ErrorsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringErrors", notes = "Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale",
+            response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of errors for the recurring at a requested time scale on a column returned",
-                    response = ErrorsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "View of errors for the monitoring at a requested time scale on a column returned",
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getColumnRecurringErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getColumnMonitoringErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -399,7 +399,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoring = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         ErrorsDetailedFilterParameters loadParams = new ErrorsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -409,9 +409,9 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                recurring, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
+                monitoring, loadParams);
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -428,15 +428,15 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedErrors", notes = "Returns the errors related to the recent column level partitioned checks executions for a requested time scale",
-            response = ErrorsDetailedDataModel[].class)
+            response = ErrorsListModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of errors related to the recent partitioned check executions for a requested time scale on a column returned",
-                    response = ErrorsDetailedDataModel[].class),
+                    response = ErrorsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ErrorsDetailedDataModel>> getColumnPartitionedErrors(
+    public ResponseEntity<Flux<ErrorsListModel>> getColumnPartitionedErrors(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -485,8 +485,8 @@ public class ErrorsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
+        ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
                 Partitioned, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 }

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     )
     from ..models.effective_schedule_model import EffectiveScheduleModel
     from ..models.field_model import FieldModel
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.rule_thresholds_model import RuleThresholdsModel
     from ..models.similar_check_model import SimilarCheckModel
 
@@ -42,7 +42,7 @@ class CheckModel:
             single rule with all three threshold levels (low, medium, high).
         supports_grouping (Union[Unset, bool]): The data quality check supports a custom data grouping configuration.
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
@@ -84,7 +84,7 @@ class CheckModel:
     rule: Union[Unset, "RuleThresholdsModel"] = UNSET
     supports_grouping: Union[Unset, bool] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
     schedule_enabled_status: Union[Unset, CheckModelScheduleEnabledStatus] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -251,7 +251,7 @@ class CheckModel:
         )
         from ..models.effective_schedule_model import EffectiveScheduleModel
         from ..models.field_model import FieldModel
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.rule_thresholds_model import RuleThresholdsModel
         from ..models.similar_check_model import SimilarCheckModel
 
@@ -290,11 +290,11 @@ class CheckModel:
             )
 
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         _effective_schedule = d.pop("effective_schedule", UNSET)
         effective_schedule: Union[Unset, EffectiveScheduleModel]

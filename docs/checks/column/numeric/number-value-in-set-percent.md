@@ -997,7 +997,7 @@ The check measures the percentage of rows whose value in a tested column is one 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_number_value_in_set_percent|recurring|daily|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_number_value_in_set_percent|monitoring|daily|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1023,7 +1023,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_numbe
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_number_value_in_set_percent:
@@ -1052,7 +1052,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_number_value_in_set_percent:
@@ -1510,7 +1510,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_number_value_in_set_percent:
@@ -1981,7 +1981,7 @@ The check measures the percentage of rows whose value in a tested column is one 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_number_value_in_set_percent|recurring|monthly|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_number_value_in_set_percent|monitoring|monthly|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2007,7 +2007,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_num
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_number_value_in_set_percent:
@@ -2036,7 +2036,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_number_value_in_set_percent:
@@ -2494,7 +2494,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_number_value_in_set_percent:

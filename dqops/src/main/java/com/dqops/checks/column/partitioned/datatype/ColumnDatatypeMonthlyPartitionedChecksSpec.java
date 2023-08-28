@@ -16,8 +16,8 @@
 package com.dqops.checks.column.partitioned.datatype;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,33 +37,33 @@ import java.util.Objects;
 public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
+            put("monthly_partition_string_datatype_detected", o -> o.monthlyPartitionStringDatatypeDetected);
             put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected;
 
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
 
     /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getMonthlyPartitionDateMatchFormatPercent() {
-        return monthlyPartitionDateMatchFormatPercent;
+    public ColumnDatatypeStringDatatypeDetectedCheckSpec getMonthlyPartitionStringDatatypeDetected() {
+        return monthlyPartitionStringDatatypeDetected;
     }
 
     /**
-     * Sets a new definition of a date match format percentage check.
-     * @param monthlyPartitionDateMatchFormatPercent Date match format percentage check.
+     * Sets a new definition of a datatype detected check.
+     * @param monthlyPartitionStringDatatypeDetected Datatype detected check.
      */
-    public void setMonthlyPartitionDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateMatchFormatPercent, monthlyPartitionDateMatchFormatPercent));
-        this.monthlyPartitionDateMatchFormatPercent = monthlyPartitionDateMatchFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionDateMatchFormatPercent, "monthly_partition_date_match_format_percent");
+    public void setMonthlyPartitionStringDatatypeDetected(ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetected, monthlyPartitionStringDatatypeDetected));
+        this.monthlyPartitionStringDatatypeDetected = monthlyPartitionStringDatatypeDetected;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetected, "monthly_partition_string_datatype_detected");
     }
 
     /**

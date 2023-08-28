@@ -46,6 +46,7 @@ interface ICheckListItemProps {
   changeCopyUI: (checked: boolean) => void;
   checkedCopyUI?: boolean;
   comparisonName?: string;
+  isDefaultEditing?: boolean;
 }
 
 const CheckListItem = ({
@@ -59,7 +60,8 @@ const CheckListItem = ({
   changeCopyUI,
   checkedCopyUI,
   category,
-  comparisonName
+  comparisonName,
+  isDefaultEditing
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
@@ -406,20 +408,21 @@ const CheckListItem = ({
             </Tooltip>
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <Tooltip
-                content="Run Check"
-                className="max-w-80 py-4 px-4 bg-gray-800"
-              >
-                <div>
-                  <SvgIcon
-                    name="play"
-                    className="text-primary h-5 cursor-pointer"
-                    onClick={onRunCheck}
-                  />
-                </div>
-              </Tooltip>
-            )}
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+              isDefaultEditing !== true && (
+                <Tooltip
+                  content="Run Check"
+                  className="max-w-80 py-4 px-4 bg-gray-800"
+                >
+                  <div>
+                    <SvgIcon
+                      name="play"
+                      className="text-primary h-5 cursor-pointer"
+                      onClick={onRunCheck}
+                    />
+                  </div>
+                </Tooltip>
+              )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
                 content="Waiting"
@@ -447,18 +450,20 @@ const CheckListItem = ({
                 </div>
               </Tooltip>
             )}
-            <Tooltip
-              content="Results"
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div className="w-5 h-5">
-                <SvgIcon
-                  name="rectangle-list"
-                  className="text-gray-700 h-5 cursor-pointer"
-                  onClick={toggleCheckDetails}
-                />
-              </div>
-            </Tooltip>
+            {isDefaultEditing !== true && (
+              <Tooltip
+                content="Results"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div className="w-5 h-5">
+                  <SvgIcon
+                    name="rectangle-list"
+                    className="text-gray-700 h-5 cursor-pointer"
+                    onClick={toggleCheckDetails}
+                  />
+                </div>
+              </Tooltip>
+            )}
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -540,7 +545,7 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100">
+        <td className="py-2 px-4 bg-yellow-100 relative">
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -557,6 +562,7 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
@@ -605,6 +611,7 @@ const CheckListItem = ({
               onClose={closeExpand}
               onChange={onChange}
               check={check}
+              isDefaultEditing={isDefaultEditing}
             />
           </td>
         </tr>

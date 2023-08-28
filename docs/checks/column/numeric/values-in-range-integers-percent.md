@@ -693,7 +693,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_values_in_range_integers_percent|recurring|daily|[values_in_range_integers_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_values_in_range_integers_percent|monitoring|daily|[values_in_range_integers_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -719,7 +719,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_values_in_range_integers_percent:
@@ -744,7 +744,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_values_in_range_integers_percent:
@@ -1054,7 +1054,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_values_in_range_integers_percent:
@@ -1377,7 +1377,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_values_in_range_integers_percent|recurring|monthly|[values_in_range_integers_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_values_in_range_integers_percent|monitoring|monthly|[values_in_range_integers_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1403,7 +1403,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_values_in_range_integers_percent:
@@ -1428,7 +1428,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_values_in_range_integers_percent:
@@ -1738,7 +1738,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_values_in_range_integers_percent:

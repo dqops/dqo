@@ -16,9 +16,9 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -50,29 +50,29 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, FoundResultsCollector<ScheduleRootResult> foundNodes) {
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        RecurringSchedulesSpec schedules = connectionSpec.getSchedules();
+        MonitoringSchedulesSpec schedules = connectionSpec.getSchedules();
         assert this.filters.getSchedule() != null;
         assert this.filters.getSchedule() != null;
 
         if (schedules != null) {
             if (Objects.equals(schedules.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, connectionWrapper));
             }
 
-            if (Objects.equals(schedules.getRecurringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_daily, connectionWrapper));
+            if (Objects.equals(schedules.getMonitoringDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, connectionWrapper));
             }
 
-            if (Objects.equals(schedules.getRecurringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_monthly, connectionWrapper));
+            if (Objects.equals(schedules.getMonitoringMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_daily, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_monthly, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, connectionWrapper));
             }
         }
 
@@ -96,28 +96,28 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
             }
         }
 
-        RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null) {
             if (Objects.equals(schedulesOverride.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, tableSpec));
             }
 
-            if (Objects.equals(schedulesOverride.getRecurringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_daily, tableSpec));
+            if (Objects.equals(schedulesOverride.getMonitoringDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, tableSpec));
             }
 
-            if (Objects.equals(schedulesOverride.getRecurringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_monthly, tableSpec));
+            if (Objects.equals(schedulesOverride.getMonitoringMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_daily, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_monthly, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, tableSpec));
             }
         }
 
@@ -133,7 +133,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, FoundResultsCollector<ScheduleRootResult> foundNodes) {
-        RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
+        MonitoringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {

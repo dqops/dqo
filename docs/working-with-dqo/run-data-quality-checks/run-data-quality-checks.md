@@ -11,7 +11,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
 ## Run data quality checks using the graphical interface
 
-1. In DQO graphical interface navigate to the check section Profiling, Recurring Checks or Partition Checks at the top of the screen.
+1. In DQO graphical interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
    
@@ -120,7 +120,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 
 3. Add the check to the YAML file using Visual Studio Code editor and save the file. 
 
-    Below is an example of the YAML file showing sample configuration of an advanced profiling table check row_count. 
+    Below is an example of the YAML file showing sample configuration of a profiling table check row_count. 
     Some columns were truncated for clarity
 
     ```yaml hl_lines="9-13"

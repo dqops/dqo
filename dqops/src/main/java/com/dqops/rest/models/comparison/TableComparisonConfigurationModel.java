@@ -71,10 +71,10 @@ public class TableComparisonConfigurationModel {
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
     private PhysicalTableName referenceTable;
 
-    @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
+    @JsonPropertyDescription("The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
     private CheckType checkType = CheckType.profiling;
 
-    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
+    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.")
     private CheckTimeScale timeScale;
 
     /**

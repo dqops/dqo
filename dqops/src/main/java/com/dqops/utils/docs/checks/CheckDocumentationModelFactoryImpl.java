@@ -471,7 +471,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
         String profilingBeginMarker = "profiling_checks:";
-        String recurringBeginMarker = "recurring_checks:";
+        String monitoringBeginMarker = "monitoring_checks:";
         String partitionedBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
@@ -482,7 +482,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains(profilingBeginMarker) || splitYaml.get(i).contains(recurringBeginMarker) || splitYaml.get(i).contains(partitionedBeginMarker)) {
+            if (splitYaml.get(i).contains(profilingBeginMarker) || splitYaml.get(i).contains(monitoringBeginMarker) || splitYaml.get(i).contains(partitionedBeginMarker)) {
                 isCheckSection = true;
                 checkDocumentationModel.setCheckSampleBeginLine(i + 1);
             }

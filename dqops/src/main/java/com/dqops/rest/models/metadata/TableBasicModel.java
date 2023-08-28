@@ -91,13 +91,13 @@ public class TableBasicModel {
     private TableOwnerSpec owner;
 
     /**
-     * Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent
-     * advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.
+     * Defines how many profiling checks results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent
+     * profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.
      */
-    @JsonPropertyDescription("Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
-            "advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.")
+    @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
+            "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ProfilingTimePeriod advancedProfilingResultTruncation;
+    private ProfilingTimePeriod profilingChecksResultTruncation;
 
     /**
      * True when the table has any checks configured.
@@ -114,11 +114,11 @@ public class TableBasicModel {
     private boolean hasAnyConfiguredProfilingChecks;
 
     /**
-     * True when the table has any recurring checks configured.
+     * True when the table has any monitoring checks configured.
      */
-    @JsonPropertyDescription("True when the table has any recurring checks configured.")
+    @JsonPropertyDescription("True when the table has any monitoring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredRecurringChecks;
+    private boolean hasAnyConfiguredMonitoringChecks;
 
     /**
      * True when the table has any partition checks configured.
@@ -147,10 +147,10 @@ public class TableBasicModel {
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
     /**
-     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run recurring checks within this table.
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this table.
      */
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this table.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this table.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this table.
@@ -183,12 +183,12 @@ public class TableBasicModel {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
             setDisabled(tableSpec.isDisabled());
-            setAdvancedProfilingResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
+            setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredMonitoringChecks(tableSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -203,11 +203,11 @@ public class TableBasicModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -242,12 +242,12 @@ public class TableBasicModel {
             setFilter(tableSpec.getFilter());
             setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
-            setAdvancedProfilingResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
+            setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredMonitoringChecks(tableSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -262,11 +262,11 @@ public class TableBasicModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -306,6 +306,6 @@ public class TableBasicModel {
         if (targetTableSpec.getProfilingChecks() == null) {
             targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         }
-        targetTableSpec.getProfilingChecks().setResultTruncation(this.advancedProfilingResultTruncation);
+        targetTableSpec.getProfilingChecks().setResultTruncation(this.profilingChecksResultTruncation);
     }
 }

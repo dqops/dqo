@@ -575,7 +575,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_invalid_longitude_count|recurring|daily|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_invalid_longitude_count|monitoring|daily|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -601,7 +601,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_inval
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_invalid_longitude_count:
@@ -626,7 +626,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_invalid_longitude_count:
@@ -880,7 +880,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_invalid_longitude_count:
@@ -1141,7 +1141,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_invalid_longitude_count|recurring|monthly|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_invalid_longitude_count|monitoring|monthly|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1167,7 +1167,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_inv
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_invalid_longitude_count:
@@ -1192,7 +1192,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_invalid_longitude_count:
@@ -1446,7 +1446,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_invalid_longitude_count:

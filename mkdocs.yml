@@ -16,8 +16,8 @@ nav:
       - "dqo-concepts/index.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
-          - Advanced profiling: "dqo-concepts/checks/advanced-profiling/advanced-profiling.md"
-          - Recurring checks: "dqo-concepts/checks/recurring-checks/recurring-checks.md"
+          - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
+          - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
       - Sensors: "dqo-concepts/sensors/sensors.md"
       - Rules: "dqo-concepts/rules/rules.md"
@@ -48,7 +48,7 @@ nav:
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
       - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
+          - Percent of rows with string values in set: "examples/data-datatype/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
@@ -174,9 +174,10 @@ nav:
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
       - datatype:
-        - date match format percent: 'checks/column/datatype/date-match-format-percent.md'
+        - string datatype detected: 'checks/column/datatype/string-datatype-detected.md'
         - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
       - datetime:
+        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
       - integrity:
@@ -220,15 +221,10 @@ nav:
         - invalid longitude count: 'checks/column/numeric/invalid-longitude-count.md'
         - valid longitude percent: 'checks/column/numeric/valid-longitude-percent.md'
       - pii:
-        - valid usa phone percent: 'checks/column/pii/valid-usa-phone-percent.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
-        - valid usa zipcode percent: 'checks/column/pii/valid-usa-zipcode-percent.md'
         - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
-        - valid email percent: 'checks/column/pii/valid-email-percent.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
-        - valid ip4 address percent: 'checks/column/pii/valid-ip4-address-percent.md'
         - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
-        - valid ip6 address percent: 'checks/column/pii/valid-ip6-address-percent.md'
         - contains ip6 percent: 'checks/column/pii/contains-ip6-percent.md'
       - schema:
         - column exists: 'checks/column/schema/column-exists.md'
@@ -273,7 +269,6 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
-        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
         - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
@@ -320,11 +315,11 @@ nav:
       - profiling:
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
         - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
-      - recurring:
-        - table daily recurring checks: 'reference/yaml/recurring/table-daily-recurring-checks.md'
-        - table monthly recurring checks: 'reference/yaml/recurring/table-monthly-recurring-checks.md'
-        - column daily recurring checks: 'reference/yaml/recurring/column-daily-recurring-checks.md'
-        - column monthly recurring checks: 'reference/yaml/recurring/column-monthly-recurring-checks.md'
+      - monitoring:
+        - table daily monitoring checks: 'reference/yaml/monitoring/table-daily-monitoring-checks.md'
+        - table monthly monitoring checks: 'reference/yaml/monitoring/table-monthly-monitoring-checks.md'
+        - column daily monitoring checks: 'reference/yaml/monitoring/column-daily-monitoring-checks.md'
+        - column monthly monitoring checks: 'reference/yaml/monitoring/column-monthly-monitoring-checks.md'
       - partitioned:
         - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
         - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'

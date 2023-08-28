@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import Client
+from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
-from ...models.recurring_schedule_spec import RecurringScheduleSpec
 from ...models.update_connection_scheduling_group_scheduling_group import (
     UpdateConnectionSchedulingGroupSchedulingGroup,
 )
@@ -18,7 +18,7 @@ def _get_kwargs(
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schedules/{schedulingGroup}".format(
         client.base_url,
@@ -71,7 +71,7 @@ def sync_detailed(
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateConnectionSchedulingGroup
 
@@ -81,7 +81,7 @@ def sync_detailed(
     Args:
         connection_name (str):
         scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,7 +111,7 @@ def sync(
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionSchedulingGroup
 
@@ -121,7 +121,7 @@ def sync(
     Args:
         connection_name (str):
         scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,7 +144,7 @@ async def asyncio_detailed(
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateConnectionSchedulingGroup
 
@@ -154,7 +154,7 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -182,7 +182,7 @@ async def asyncio(
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
-    json_body: RecurringScheduleSpec,
+    json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionSchedulingGroup
 
@@ -192,7 +192,7 @@ async def asyncio(
     Args:
         connection_name (str):
         scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
-        json_body (RecurringScheduleSpec):
+        json_body (MonitoringScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

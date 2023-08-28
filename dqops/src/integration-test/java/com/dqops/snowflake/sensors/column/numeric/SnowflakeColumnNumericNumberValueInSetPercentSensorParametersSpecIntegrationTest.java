@@ -74,7 +74,7 @@ public class SnowflakeColumnNumericNumberValueInSetPercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         List<Long> values = new ArrayList<>();
         values.add(123L);
         values.add(1234L);
@@ -85,7 +85,7 @@ public class SnowflakeColumnNumericNumberValueInSetPercentSensorParametersSpecIn
         values.add(123456789L);
         this.sut.setExpectedValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -97,7 +97,7 @@ public class SnowflakeColumnNumericNumberValueInSetPercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         List<Long> values = new ArrayList<>();
         values.add(123L);
         values.add(1234L);
@@ -108,7 +108,7 @@ public class SnowflakeColumnNumericNumberValueInSetPercentSensorParametersSpecIn
         values.add(123456789L);
         this.sut.setExpectedValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

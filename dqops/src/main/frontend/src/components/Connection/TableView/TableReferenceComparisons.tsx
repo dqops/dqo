@@ -74,7 +74,7 @@ export const TableReferenceComparisons = ({
       ).then((res) => {
         setReferences(res.data);
       });
-    } else if (checkTypes === CheckTypes.RECURRING) {
+    } else if (checkTypes === CheckTypes.MONITORING) {
       TableComparisonsApi.getTableComparisonConfigurations(
         connection,
         schema,
@@ -245,7 +245,9 @@ export const TableReferenceComparisons = ({
           isCreating={isCreating}
           getNewTableComparison={getNewTableComparison}
           onChangeSelectedReference={onChangeSelectedReference}
-          listOfExistingReferences = {references.map((x) => x.table_comparison_configuration_name)}
+          listOfExistingReferences={references.map(
+            (x) => x.table_comparison_configuration_name
+          )}
         />
       ) : (
         <ProfilingReferenceTableList

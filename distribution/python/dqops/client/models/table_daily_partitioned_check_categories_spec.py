@@ -30,7 +30,7 @@ class TableDailyPartitionedCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableDailyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are
-            check names.
+            check names within this category.
         volume (Union[Unset, TableVolumeDailyPartitionedChecksSpec]):
         timeliness (Union[Unset, TableTimelinessDailyPartitionedChecksSpec]):
         sql (Union[Unset, TableSqlDailyPartitionedChecksSpec]):

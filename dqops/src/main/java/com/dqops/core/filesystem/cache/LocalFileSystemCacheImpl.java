@@ -52,7 +52,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final Cache<Path, FileContent> textFilesCache;
     private final Cache<Path, LoadedMonthlyPartition> parquetFilesCache;
     private WatchService watchService;
-    private final Map<Path, WatchKey> directoryWatchers = new LinkedHashMap<>();
+    private final Map<Path, WatchKey> directoryWatchersByPath = new LinkedHashMap<>();
+    private final Map<WatchKey, Path> watchedDirectoriesByWatchKey = new LinkedHashMap<>();
     private final Object directoryWatchersLock = new Object();
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
@@ -116,7 +117,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         synchronized (this.directoryWatchersLock) {
-            if (this.directoryWatchers.containsKey(folderPath)) {
+            if (this.directoryWatchersByPath.containsKey(folderPath)) {
                 return;
             }
 
@@ -128,7 +129,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 WatchKey watchKey = folderPath.register(this.watchService,
                         StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
 
-                this.directoryWatchers.put(folderPath, watchKey);
+                this.directoryWatchersByPath.put(folderPath, watchKey);
+                this.watchedDirectoriesByWatchKey.put(watchKey, folderPath);
             }
             catch (IOException ioe) {
                 throw new DqoRuntimeException("Cannot start watching changes in the folder " + folderPath, ioe);
@@ -146,12 +148,13 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         synchronized (this.directoryWatchersLock) {
-            if (!this.directoryWatchers.containsKey(folderPath)) {
+            if (!this.directoryWatchersByPath.containsKey(folderPath)) {
                 return;
             }
 
-            WatchKey watchKey = this.directoryWatchers.get(folderPath);
-            this.directoryWatchers.remove(folderPath);
+            WatchKey watchKey = this.directoryWatchersByPath.get(folderPath);
+            this.directoryWatchersByPath.remove(folderPath);
+            this.watchedDirectoriesByWatchKey.remove(watchKey);
             watchKey.cancel();
         }
     }
@@ -176,10 +179,19 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         WatchKey watchKey;
         while ((watchKey = this.watchService.poll()) != null) {
-            for (WatchEvent<?> event : watchKey.pollEvents()) {
-                Path filePath = (Path) event.context();
-                invalidateFile(filePath);
-                invalidateFolder(filePath); // we don't know if it is a file or a folder
+            Path directoryPath;
+            synchronized (this.directoryWatchersLock) {
+                directoryPath = this.watchedDirectoriesByWatchKey.get(watchKey);
+            }
+
+            if (directoryPath != null) {
+                for (WatchEvent<?> event : watchKey.pollEvents()) {
+                    Path filePath = (Path) event.context();
+                    Path absoluteFilePath = directoryPath.resolve(filePath).toAbsolutePath().normalize();
+                    invalidateFile(absoluteFilePath);
+                    invalidateFolder(absoluteFilePath); // we don't know if it is a file or a folder
+                    invalidateFolder(directoryPath);
+                }
             }
             watchKey.reset();
         }
@@ -370,11 +382,12 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         if (this.dqoCacheConfigurationProperties.isWatchFileSystemChanges() && this.watchService != null) {
             synchronized (this.directoryWatchersLock) {
-                for (WatchKey watchKey : this.directoryWatchers.values()) {
+                for (WatchKey watchKey : this.directoryWatchersByPath.values()) {
                     watchKey.cancel();
                 }
 
-                this.directoryWatchers.clear();
+                this.directoryWatchersByPath.clear();
+                this.watchedDirectoriesByWatchKey.clear();
             }
         }
     }

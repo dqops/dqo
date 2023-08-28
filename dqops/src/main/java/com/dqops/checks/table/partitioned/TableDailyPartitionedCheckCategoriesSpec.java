@@ -28,7 +28,7 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -179,7 +179,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.
      */
@@ -215,11 +215,11 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
      *
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @Override
     @JsonIgnore
-    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.partitioned_daily;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.partitioned_daily;
     }
 }

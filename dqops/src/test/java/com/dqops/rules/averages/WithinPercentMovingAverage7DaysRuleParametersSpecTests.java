@@ -68,7 +68,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
@@ -85,7 +85,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
@@ -102,7 +102,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
@@ -122,7 +122,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
@@ -139,7 +139,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(19.71, ruleExecutionResult.getExpectedValue(), 0.1);
         Assertions.assertEquals(18.72, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(20.70, ruleExecutionResult.getUpperBound(), 0.1);
@@ -152,7 +152,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

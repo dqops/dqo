@@ -29,7 +29,7 @@ import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -46,7 +46,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private TerminalTableWritter terminalTableWritter;
-    private RecurringScheduleSpec cronSchedule;
+    private MonitoringScheduleSpec cronSchedule;
 
     /**
      * Creates a dqo job that runs checks scheduled for one cron expression.
@@ -73,7 +73,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * Cron schedule (cron expression and time zone) that is executed.
      * @return Cron schedule.
      */
-    public RecurringScheduleSpec getCronSchedule() {
+    public MonitoringScheduleSpec getCronSchedule() {
         return cronSchedule;
     }
 
@@ -81,7 +81,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * Sets the cron schedule that is triggered and whose checks are executed.
      * @param cronSchedule Cron schedule.
      */
-    public void setCronSchedule(RecurringScheduleSpec cronSchedule) {
+    public void setCronSchedule(MonitoringScheduleSpec cronSchedule) {
         this.cronSchedule = cronSchedule;
     }
 

@@ -647,7 +647,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_distinct_percent|recurring|daily|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_distinct_percent|monitoring|daily|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -673,7 +673,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_disti
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -698,7 +698,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -985,7 +985,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               uniqueness:
                 daily_distinct_percent:
@@ -1285,7 +1285,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_distinct_percent|recurring|monthly|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_distinct_percent|monitoring|monthly|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1311,7 +1311,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dis
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           uniqueness:
             monthly_distinct_percent:
@@ -1336,7 +1336,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           uniqueness:
             monthly_distinct_percent:
@@ -1623,7 +1623,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               uniqueness:
                 monthly_distinct_percent:

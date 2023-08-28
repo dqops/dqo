@@ -25,7 +25,7 @@ import com.dqops.execution.checks.jobs.RunChecksOnTableParameters;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -37,7 +37,7 @@ import lombok.Data;
 public class DqoJobEntryParametersModel {
     private SynchronizeRootFolderDqoQueueJobParameters synchronizeRootFolderParameters;
     private SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeMultipleFoldersParameters;
-    private RecurringScheduleSpec runScheduledChecksParameters;
+    private MonitoringScheduleSpec runScheduledChecksParameters;
     private RunChecksParameters runChecksParameters;
     private RunChecksOnTableParameters runChecksOnTableParameters;
     private CollectStatisticsQueueJobParameters collectStatisticsParameters;

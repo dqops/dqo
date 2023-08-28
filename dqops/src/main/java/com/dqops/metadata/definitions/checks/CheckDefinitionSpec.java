@@ -15,18 +15,18 @@
  */
 package com.dqops.metadata.definitions.checks;
 
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -156,5 +156,50 @@ public class CheckDefinitionSpec extends AbstractSpec {
     public CheckDefinitionSpec deepClone() {
         CheckDefinitionSpec cloned = (CheckDefinitionSpec)super.deepClone();
         return cloned;
+    }
+
+    /**
+     * Returns the full check name, including the target, check type, time scale, category and the check name.
+     * @return Full check name.
+     */
+    @JsonIgnore
+    public String getFullCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Returns the check name, without the category.
+     * @return Check name, without the category or type.
+     */
+    @JsonIgnore
+    public String getCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 1];
+    }
+
+    /**
+     * Returns the check category extracted from the full check name.
+     * @return Check category.
+     */
+    @JsonIgnore
+    public String getCheckCategory() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 2];
     }
 }

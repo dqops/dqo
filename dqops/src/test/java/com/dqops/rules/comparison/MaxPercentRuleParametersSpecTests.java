@@ -54,7 +54,7 @@ public class MaxPercentRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

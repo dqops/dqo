@@ -8,7 +8,7 @@ from ...client import Client
 from ...models.get_table_scheduling_group_override_scheduling_group import (
     GetTableSchedulingGroupOverrideSchedulingGroup,
 )
-from ...models.recurring_schedule_spec import RecurringScheduleSpec
+from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...types import Response
 
 
@@ -43,9 +43,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[RecurringScheduleSpec]:
+) -> Optional[MonitoringScheduleSpec]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = RecurringScheduleSpec.from_dict(response.json())
+        response_200 = MonitoringScheduleSpec.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -56,7 +56,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[RecurringScheduleSpec]:
+) -> Response[MonitoringScheduleSpec]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -72,7 +72,7 @@ def sync_detailed(
     scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-) -> Response[RecurringScheduleSpec]:
+) -> Response[MonitoringScheduleSpec]:
     """getTableSchedulingGroupOverride
 
      Return the schedule override configuration for a table
@@ -88,7 +88,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[RecurringScheduleSpec]
+        Response[MonitoringScheduleSpec]
     """
 
     kwargs = _get_kwargs(
@@ -114,7 +114,7 @@ def sync(
     scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-) -> Optional[RecurringScheduleSpec]:
+) -> Optional[MonitoringScheduleSpec]:
     """getTableSchedulingGroupOverride
 
      Return the schedule override configuration for a table
@@ -130,7 +130,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        RecurringScheduleSpec
+        MonitoringScheduleSpec
     """
 
     return sync_detailed(
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-) -> Response[RecurringScheduleSpec]:
+) -> Response[MonitoringScheduleSpec]:
     """getTableSchedulingGroupOverride
 
      Return the schedule override configuration for a table
@@ -165,7 +165,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[RecurringScheduleSpec]
+        Response[MonitoringScheduleSpec]
     """
 
     kwargs = _get_kwargs(
@@ -189,7 +189,7 @@ async def asyncio(
     scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
     *,
     client: Client,
-) -> Optional[RecurringScheduleSpec]:
+) -> Optional[MonitoringScheduleSpec]:
     """getTableSchedulingGroupOverride
 
      Return the schedule override configuration for a table
@@ -205,7 +205,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        RecurringScheduleSpec
+        MonitoringScheduleSpec
     """
 
     return (

@@ -28,6 +28,7 @@ import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -76,7 +77,8 @@ public class SchemasControllerUTTests extends BaseTest {
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
         CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 

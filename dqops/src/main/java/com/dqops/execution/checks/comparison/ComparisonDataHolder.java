@@ -96,7 +96,7 @@ public class ComparisonDataHolder {
 
     /**
      * Checks if there is the result for the time period and the data group hash.
-     * @param timePeriod Time period. Does not matter if the data is not date partitioned and is ignored (for profiling and recurring checks).
+     * @param timePeriod Time period. Does not matter if the data is not date partitioned and is ignored (for profiling and monitoring checks).
      * @param dataGroupHash Data group hash.
      * @return True when the result is present, false otherwise.
      */
@@ -116,7 +116,7 @@ public class ComparisonDataHolder {
 
     /**
      * Returns the value for the time period and data group hash.
-     * @param timePeriod Time period. Does not matter if the data is not date partitioned and is ignored (for profiling and recurring checks).
+     * @param timePeriod Time period. Does not matter if the data is not date partitioned and is ignored (for profiling and monitoring checks).
      * @param dataGroupHash Data group hash.
      * @return The value retrieved from the actual values. The value could be null when we do not have the value or the sensor returned null.
      */

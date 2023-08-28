@@ -675,7 +675,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_duplicate_percent|recurring|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_duplicate_percent|monitoring|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -701,7 +701,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_dupli
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_duplicate_percent:
@@ -726,7 +726,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_duplicate_percent:
@@ -1027,7 +1027,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               uniqueness:
                 daily_duplicate_percent:
@@ -1341,7 +1341,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_duplicate_percent|recurring|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_duplicate_percent|monitoring|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1367,7 +1367,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dup
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           uniqueness:
             monthly_duplicate_percent:
@@ -1392,7 +1392,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           uniqueness:
             monthly_duplicate_percent:
@@ -1693,7 +1693,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               uniqueness:
                 monthly_duplicate_percent:

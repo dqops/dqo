@@ -35,6 +35,8 @@ export interface IDefinitionState {
   checksFolderTree?: CheckSpecFolderBasicModel;
   dataQualityChecksState: Record<string, boolean>;
   checkDetail?: CheckSpecModel;
+
+  definitionFirstLevelFolder?: Array<{ category: string; isOpen: boolean }>;
 }
 
 const initialState: IDefinitionState = {
@@ -43,7 +45,8 @@ const initialState: IDefinitionState = {
   sensorState: {},
   tabs: [],
   ruleState: {},
-  dataQualityChecksState: {}
+  dataQualityChecksState: {},
+  definitionFirstLevelFolder: []
 };
 
 const setActiveTabState = (
@@ -98,6 +101,14 @@ const definitionReducer = (state = initialState, action: any) => {
         sensorState: {
           ...state.sensorState,
           [action.key]: !state.sensorState[action.key]
+        }
+      };
+      case DEFINITION_ACTION.OPEN_SENSOR_FOLDER:
+      return {
+        ...state,
+        sensorState: {
+          ...state.sensorState,
+          [action.key]: true
         }
       };
     case DEFINITION_ACTION.ADD_FIRST_LEVEL_TAB: {
@@ -259,6 +270,14 @@ const definitionReducer = (state = initialState, action: any) => {
           [action.key]: !state.ruleState[action.key]
         }
       };
+      case DEFINITION_ACTION.OPEN_RULE_FOLDER:
+        return {
+          ...state,
+          ruleState: {
+            ...state.ruleState,
+            [action.key]: true
+          }
+        };  
     case DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE:
       return {
         ...state,
@@ -287,9 +306,18 @@ const definitionReducer = (state = initialState, action: any) => {
         ...state,
         dataQualityChecksState: {
           ...state.dataQualityChecksState,
-          [action.key]: !state.dataQualityChecksState[action.key]
+          [action.fullPath]: !state.dataQualityChecksState[action.fullPath]
         }
       };
+      case DEFINITION_ACTION.OPEN_DATA_QUALITY_CHECKS_FOLDER:
+        return {
+          ...state,
+          dataQualityChecksState: {
+            ...state.dataQualityChecksState,
+            [action.fullPath]: true
+          }
+        };
+
     case DEFINITION_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE:
       return {
         ...state,
@@ -362,6 +390,10 @@ const definitionReducer = (state = initialState, action: any) => {
     }
     case DEFINITION_ACTION.GET_CHECK_DETAIL: {
       return setActiveTabState(state, action, {});
+    }
+
+    case DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER: {
+      return { ...state, definitionFirstLevelFolder: action.data };
     }
     default:
       return state;

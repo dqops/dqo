@@ -31,6 +31,9 @@ if TYPE_CHECKING:
     from ..models.column_number_value_in_set_percent_check_spec import (
         ColumnNumberValueInSetPercentCheckSpec,
     )
+    from ..models.column_numeric_daily_partitioned_checks_spec_custom_checks import (
+        ColumnNumericDailyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.column_percentile_10_in_range_check_spec import (
         ColumnPercentile10InRangeCheckSpec,
     )
@@ -92,6 +95,9 @@ T = TypeVar("T", bound="ColumnNumericDailyPartitionedChecksSpec")
 class ColumnNumericDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNumericDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
         daily_partition_negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
         daily_partition_non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
@@ -124,6 +130,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
         daily_partition_valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnNumericDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
     daily_partition_negative_percent: Union[
         Unset, "ColumnNegativePercentCheckSpec"
@@ -207,6 +216,10 @@ class ColumnNumericDailyPartitionedChecksSpec:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_negative_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_negative_count, Unset):
             daily_partition_negative_count = (
@@ -400,6 +413,8 @@ class ColumnNumericDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_negative_count is not UNSET:
             field_dict[
                 "daily_partition_negative_count"
@@ -547,6 +562,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
         from ..models.column_number_value_in_set_percent_check_spec import (
             ColumnNumberValueInSetPercentCheckSpec,
         )
+        from ..models.column_numeric_daily_partitioned_checks_spec_custom_checks import (
+            ColumnNumericDailyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_percentile_10_in_range_check_spec import (
             ColumnPercentile10InRangeCheckSpec,
         )
@@ -601,6 +619,17 @@ class ColumnNumericDailyPartitionedChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNumericDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnNumericDailyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_partition_negative_count = d.pop("daily_partition_negative_count", UNSET)
         daily_partition_negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
         if isinstance(_daily_partition_negative_count, Unset):
@@ -1014,6 +1043,7 @@ class ColumnNumericDailyPartitionedChecksSpec:
             )
 
         column_numeric_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_negative_count=daily_partition_negative_count,
             daily_partition_negative_percent=daily_partition_negative_percent,
             daily_partition_non_negative_count=daily_partition_non_negative_count,

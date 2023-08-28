@@ -16,7 +16,7 @@ connection edit -c=testconnection
 ```
 
 To add a schedule to the YAML file, start by including the `schedules:` parameter at the end of the document. Then, specify the check type you want
-to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
+to run (`profiling`, `monitoring_daily`, `monitoring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
 Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
@@ -33,9 +33,9 @@ spec:
   schedules:
     profiling:
       cron_expression: 0 12 * * *
-    recurring_daily:
+    monitoring_daily:
       cron_expression: 0 12 * * *
-    recurring_monthly:
+    monitoring_monthly:
       cron_expression: 0 12 * * *
     partitioned_daily:
       cron_expression: 0 12 * * *
@@ -60,7 +60,7 @@ table edit -c=testconnection -t=austin_crime.crime
 ```
 
 To set a schedule for an entire table in the YAML file, begin by adding the `schedules_override:` parameter before the 
-column section. Then, specify the check type you want to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
+column section. Then, specify the check type you want to run (`profiling`, `monitoring_daily`, `monitoring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
 Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 

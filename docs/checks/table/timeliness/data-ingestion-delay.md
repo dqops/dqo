@@ -841,7 +841,7 @@ Daily  calculating the time difference in days between the most recent event tim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_data_ingestion_delay|recurring|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_data_ingestion_delay|monitoring|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -867,7 +867,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_data_
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       timeliness:
         daily_data_ingestion_delay:
@@ -890,7 +890,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       timeliness:
         daily_data_ingestion_delay:
@@ -1275,7 +1275,7 @@ spec:
           level_2:
             source: column_value
             column: state
-      recurring_checks:
+      monitoring_checks:
         daily:
           timeliness:
             daily_data_ingestion_delay:
@@ -1665,11 +1665,11 @@ ___
 ## **monthly data ingestion delay**  
   
 **Check description**  
-Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
+Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_data_ingestion_delay|recurring|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_data_ingestion_delay|monitoring|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1695,7 +1695,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dat
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       timeliness:
         monthly_data_ingestion_delay:
@@ -1718,7 +1718,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       timeliness:
         monthly_data_ingestion_delay:
@@ -2103,7 +2103,7 @@ spec:
           level_2:
             source: column_value
             column: state
-      recurring_checks:
+      monitoring_checks:
         monthly:
           timeliness:
             monthly_data_ingestion_delay:

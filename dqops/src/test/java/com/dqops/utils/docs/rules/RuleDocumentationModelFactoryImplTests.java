@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.rules;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
@@ -40,7 +41,7 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         this.sut = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
     }
 

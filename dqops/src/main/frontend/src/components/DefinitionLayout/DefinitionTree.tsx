@@ -4,7 +4,15 @@ import { useSelector } from 'react-redux';
 import {
   addFirstLevelTab,
   getSensorFolderTree,
-  toggleSensorFolderTree
+  toggleSensorFolderTree,
+  openRuleFolderTree,
+  getRuleFolderTree,
+  toggleRuleFolderTree,
+  toggleFirstLevelFolder,
+  openSensorFolderTree,
+  getdataQualityChecksFolderTree,
+  toggledataQualityChecksFolderTree,
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -17,50 +25,55 @@ import {
   CheckSpecBasicModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
-import {
-  getRuleFolderTree,
-  toggleRuleFolderTree
-} from '../../redux/actions/definition.actions';
 import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import {
-  getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree
-} from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
+
+const defaultChecks = [
+  'Profiling checks',
+  'Monitoring daily',
+  'Monitoring monthly'
+];
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
-  const { sensorFolderTree, sensorState } = useSelector(
-    (state: IRootState) => state.definition
-  );
-  const { ruleFolderTree, ruleState } = useSelector(
-    (state: IRootState) => state.definition || {}
-  );
-
-  const { checksFolderTree, dataQualityChecksState } = useSelector(
-    (state: IRootState) => state.definition || {}
-  );
+  const { sensorFolderTree, sensorState, definitionFirstLevelFolder, checksFolderTree, dataQualityChecksState, ruleFolderTree, ruleState, tabs } =
+    useSelector((state: IRootState) => state.definition);
   const [selected, setSelected] = useState('');
+
+  // const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree());
+    // setRootTree(treeRootElements.map((x) => ({ category: x, isOpen: false })));
   }, []);
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
   };
 
+  const openSensorFolder = (key: string )=> {
+    dispatch(openSensorFolderTree(key))
+  }
+
   const toggleRuleFolder = (key: string) => {
     dispatch(toggleRuleFolderTree(key));
   };
 
-  const toggleDataQualityChecksFolder = (key: string) => {
-    dispatch(toggledataQualityChecksFolderTree(key));
+  const openRuleFolder = (key: string) => {
+    dispatch(openRuleFolderTree(key));
+  };
+
+
+  const toggleDataQualityChecksFolder = (fullPath: string) => {
+    dispatch(toggledataQualityChecksFolderTree(fullPath));
+  };
+  const openDataQualityChecksFolder = (fullPath: string) => {
+    dispatch(opendataQualityChecksFolderTree(fullPath));
   };
 
   const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
@@ -103,9 +116,91 @@ export const DefinitionTree = () => {
     );
   };
 
+  const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, "_")),
+        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(defaultCheck.replace(/\s/g, "_")),
+        state: {
+          type: defaultCheck
+        },
+        label: defaultCheck
+      })
+    );
+  };
+
+  const toggleFolderRecursively = (elements: string[], index = 0, type: string) => {
+    if (index >= elements.length -1 ) {
+      return;
+    }
+    const path = elements.slice(0, index + 1).join('/'); 
+    if(index ===0 ){
+      if(type==="checks"){
+        openDataQualityChecksFolder("undefined/"+path)
+      }else if(type==="rules"){
+        openRuleFolder("undefined/"+path)
+      }else{
+        openSensorFolder("undefined/"+path)
+      }
+    }else{
+      if(type==="checks"){
+        openDataQualityChecksFolder(path)
+      }else if(type==="rules"){
+        openRuleFolder(path)
+      }else{
+        openSensorFolder(path)
+      }
+    }
+    toggleFolderRecursively(elements, index + 1, type);
+  };
+
+  useEffect(() => {
+    if (
+      definitionFirstLevelFolder === undefined ||
+      definitionFirstLevelFolder.length === 0
+    ) {
+      const configuration = [
+        { category: 'Sensors', isOpen: false },
+        { category: 'Rules', isOpen: false },
+        { category: 'Data quality checks', isOpen: false },
+        { category: 'Default checks configuration', isOpen: false }
+      ]
+      for(let i =0; i<tabs.length; i++){
+        if(tabs[i].url.includes("checks")){
+          configuration[2].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "checks");
+          }
+        }else if(tabs[i].url.includes("sensors")){
+          configuration[0].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.full_sensor_name as string)?.split("/");
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "sensors");
+          }
+
+        }else if(tabs[i].url.includes("rules")){
+          configuration[1].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.full_rule_name as string)?.split("/");
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "rules");
+          }
+        }else if(tabs[i].url.includes("default_checks")){
+          configuration[3].isOpen = true
+        }
+      }
+      dispatch(
+        toggleFirstLevelFolder(configuration)
+      );
+    }
+  }, []);
+
+
+
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
@@ -117,10 +212,10 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleSensorFolder(key)}
+                  onClick={() => toggleSensorFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
-                    name={sensorState[key] ? 'folder' : 'closed-folder'}
+                    name={sensorState[previousFolder+"/"+key] === true  ? 'folder' : 'closed-folder'}
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -129,13 +224,13 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {sensorState[key] && (
+                {sensorState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderSensorFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>
@@ -171,7 +266,8 @@ export const DefinitionTree = () => {
 
   const renderRuleFolderTree = (
     folder?: RuleBasicFolderModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
@@ -183,10 +279,10 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleRuleFolder(key)}
+                  onClick={() => toggleRuleFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
-                    name={ruleState[key] ? 'folder' : 'closed-folder'}
+                    name={ruleState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'}
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -195,13 +291,13 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {ruleState[key] && (
+                {ruleState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderRuleFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>
@@ -237,7 +333,8 @@ export const DefinitionTree = () => {
 
   const renderChecksFolderTree = (
     folder?: CheckSpecFolderBasicModel,
-    path?: string[]
+    path?: string[],
+    previousFolder?: string
   ) => {
     if (!folder) return null;
 
@@ -249,11 +346,11 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleDataQualityChecksFolder(key)}
+                  onClick={() => toggleDataQualityChecksFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
                 >
                   <SvgIcon
                     name={
-                      dataQualityChecksState[key] ? 'folder' : 'closed-folder'
+                      dataQualityChecksState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'
                     }
                     className="w-4 h-4 min-w-4"
                   />
@@ -265,13 +362,13 @@ export const DefinitionTree = () => {
                     />
                   )}
                 </div>
-                {dataQualityChecksState[key] && (
+                {dataQualityChecksState[previousFolder+"/"+key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
                       renderChecksFolderTree(folder?.folders[key], [
                         ...(path || []),
                         key
-                      ])}
+                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
                   </div>
                 )}
               </div>
@@ -297,43 +394,8 @@ export const DefinitionTree = () => {
                   />
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
-                    {/* {check.custom === true && 
-                <CheckContextMenu
-                 onChangeSelected={onChangeSelected} 
-                 checkName={check.check_name ?? ""} 
-                 deleteCheck={deleteCheck}
-                 />} */}
                   </div>
                 </div>
-                {/* {selectedCheck.checkName === check.check_name && 
-            <div >
-            <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
-              label: x.rule_name ?? "", 
-              value: x.rule_name ?? ""
-            })) || []}
-            value={selectedCheck.sensor}
-            onChange={(selectedOption) => { 
-              onChangeNameOfCheck(check.check_name || "");
-              onChangeSensor(String(selectedOption));
-            }}
-            className='mt-2 mb-2'
-            />
-            <Select placeholder='Rule'  
-            options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
-            label: x.sensor_name ?? "", 
-            value: x.sensor_name ?? ""
-            })) || []}
-            onChange={(selectedOption) => {
-              onChangeNameOfCheck(check.check_name || "");
-              onChangeRule(String(selectedOption));
-            }}
-            value={selectedCheck.rule}
-            />
-            {
-            (selectedCheck.rule.length !==0 || selectedCheck.sensor.length !==0) &&
-            <Button className='mt-2 mb-2' color='primary' label='Update check' onClick={updateCheck}></Button>}
-            </div>
-            } */}
               </div>
             ))}
         </div>
@@ -343,22 +405,69 @@ export const DefinitionTree = () => {
 
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
-      <div className="mb-4">
-        <div className="text-sm text-gray-700 font-semibold mb-2">Sensors:</div>
-        {renderSensorFolderTree(sensorFolderTree, [])}
-      </div>
-
-      <div className="mb-4">
-        <div className="text-sm text-gray-700 font-semibold mb-2">Rules:</div>
-        {renderRuleFolderTree(ruleFolderTree, [])}
-      </div>
-
-      <div>
-        <div className="text-sm text-gray-700 font-semibold mb-2">
-          Data Quality Checks:{' '}
+      {definitionFirstLevelFolder?.map((x, index) => (
+        <div
+          key={index}
+          className="mt-2 mb-2 text-sm font-regular cursor-pointer"
+        >
+          <div
+            className="flex items-center mb-2"
+            onClick={() => {
+              const updatedRootTree = [...definitionFirstLevelFolder];
+              updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
+              dispatch(toggleFirstLevelFolder(updatedRootTree));
+            }}
+          >
+            <SvgIcon
+              name={x.isOpen ? 'folder' : 'closed-folder'}
+              className="w-4 h-4 min-w-4"
+            />
+            {x.category}
+          </div>
+          {x.category === 'Sensors' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderSensorFolderTree(sensorFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Rules' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderRuleFolderTree(ruleFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Data quality checks' && x.isOpen === true && (
+            <div className="ml-2">
+              {renderChecksFolderTree(checksFolderTree, [])}
+            </div>
+          )}
+          {x.category === 'Default checks configuration' &&
+            x.isOpen === true && (
+              <div>
+                {defaultChecks.map((x, index) => (
+                  <div key={index}>
+                    <div
+                      className={clsx(
+                        'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300'
+                        // check.custom ? 'font-bold' : '',
+                        // selected == check.check_name ? 'bg-gray-300' : ''
+                      )}
+                      onClick={() => {
+                        openCheckDefaultFirstLevelTab(x);
+                      }}
+                    >
+                      <SvgIcon
+                        name="definitionssensors"
+                        className="w-4 h-4 min-w-4 shrink-0"
+                      />
+                      <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                        {x}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
-        {renderChecksFolderTree(checksFolderTree, [])}
-      </div>
+      ))}
     </div>
   );
 };
