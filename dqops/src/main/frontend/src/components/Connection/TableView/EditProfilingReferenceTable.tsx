@@ -35,7 +35,6 @@ import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
 import EditReferenceTable from './EditReferenceTable';
-import { getTableProfilingChecksModel } from '../../../redux/actions/table.actions';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -74,7 +73,13 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const { checksUI } = useSelector(getFirstLevelState(checkTypes));
+  const {
+    checksUI,
+    dailyMonitoring,
+    monthlyMonitoring,
+    dailyPartitionedChecks,
+    monthlyPartitionedChecks
+  } = useSelector(getFirstLevelState(checkTypes));
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
@@ -102,21 +107,47 @@ export const EditProfilingReferenceTable = ({
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
   };
+  const checkIfRowCountClicked = () => {
+    let values: string | any[] = [];
+    if (checkTypes === CheckTypes.PROFILING) {
+      values = Object.values(checksUI);
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
+      if (timePartitioned === 'daily') {
+        values = Object.values(dailyPartitionedChecks);
+      } else {
+        values = Object.values(monthlyPartitionedChecks);
+      }
+    } else if (checkTypes === CheckTypes.MONITORING) {
+      if (timePartitioned === 'daily') {
+        values = Object.values(dailyMonitoring);
+      } else {
+        values = Object.values(monthlyMonitoring);
+      }
+    }
 
-  const getRowData = async () => {
-    await dispatch(
-      getTableProfilingChecksModel(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        schema,
-        table,
-        false
-      )
+    if (values.length === 0 || !Array.isArray(values[0])) {
+      return;
+    }
+
+    const comparisonCategory = values[0].find(
+      (x) => x && x.category === `comparisons/${selectedReference}`
     );
+    if (!comparisonCategory || !comparisonCategory.checks) {
+      return;
+    }
+
+    const rowCountElem = comparisonCategory.checks.find(
+      (c: any) =>
+        c.check_name === 'profile_row_count_match' ||
+        c.check_name === 'daily_row_count_match' ||
+        c.check_name === 'monthly_row_count_match'
+    );
+
+    if (rowCountElem) {
+      setShowRowCount(!!rowCountElem.configured);
+    }
   };
 
-  console.log(checksUI);
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
@@ -162,6 +193,7 @@ export const EditProfilingReferenceTable = ({
           ).then(callback);
         }
       }
+      checkIfRowCountClicked();
     }
     if (
       reference !== undefined &&
@@ -181,7 +213,6 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-    getRowData();
   }, [selectedReference]);
 
   useEffect(() => {
@@ -232,7 +263,11 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdate = () => {
-    if (reference !== undefined && Object.keys(reference).length > 0) {
+    if (
+      reference !== undefined &&
+      Object.keys(reference).length > 0 &&
+      reference.table_comparison_configuration_name
+    ) {
       if (checkTypes === CheckTypes.PROFILING) {
         TableComparisonsApi.updateTableComparisonProfiling(
           connection,
@@ -241,7 +276,7 @@ export const EditProfilingReferenceTable = ({
           reference?.table_comparison_configuration_name ?? '',
           reference
         ).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
       } else if (checkTypes === CheckTypes.MONITORING) {
         if (timePartitioned === 'daily') {
@@ -252,7 +287,7 @@ export const EditProfilingReferenceTable = ({
             reference?.table_comparison_configuration_name ?? '',
             reference
           ).catch((err) => {
-            console.log(err);
+            console.error(err);
           });
         } else if (timePartitioned === 'monthly') {
           TableComparisonsApi.updateTableComparisonMonitoringMonthly(
@@ -262,7 +297,7 @@ export const EditProfilingReferenceTable = ({
             reference?.table_comparison_configuration_name ?? '',
             reference
           ).catch((err) => {
-            console.log(err);
+            console.error(err);
           });
         }
       } else if (checkTypes === CheckTypes.PARTITIONED) {
@@ -274,7 +309,7 @@ export const EditProfilingReferenceTable = ({
             reference?.table_comparison_configuration_name ?? '',
             reference
           ).catch((err) => {
-            console.log(err);
+            console.error(err);
           });
         } else if (timePartitioned === 'monthly') {
           TableComparisonsApi.updateTableComparisonPartitionedMonthly(
@@ -284,7 +319,7 @@ export const EditProfilingReferenceTable = ({
             reference?.table_comparison_configuration_name ?? '',
             reference
           ).catch((err) => {
-            console.log(err);
+            console.error(err);
           });
         }
       }
