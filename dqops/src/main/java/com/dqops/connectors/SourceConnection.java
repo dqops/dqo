@@ -98,4 +98,10 @@ public interface SourceConnection extends Closeable {
      * @param data Dataset with the expected data.
      */
     void loadData(TableSpec tableSpec, Table data);
+
+    /**
+     * Drops a target table following the table specification.
+     * @param tableSpec Table specification with the physical table name, column names and physical column data types.
+     */
+    void dropTable(TableSpec tableSpec);
 }
