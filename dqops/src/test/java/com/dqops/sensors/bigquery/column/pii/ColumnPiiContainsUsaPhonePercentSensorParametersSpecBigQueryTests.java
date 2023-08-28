@@ -101,7 +101,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -125,7 +125,6 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         ), renderedTemplate);
     }
 
-
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
@@ -139,7 +138,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -175,7 +174,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -211,7 +210,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -241,7 +240,6 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         ), renderedTemplate);
     }
 
-
     @Test
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
@@ -254,7 +252,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -292,7 +290,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -332,7 +330,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -363,7 +361,6 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         ), renderedTemplate);
     }
 
-
     @Test
     void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
@@ -382,7 +379,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -426,7 +423,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
@@ -470,7 +467,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(

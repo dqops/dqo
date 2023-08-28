@@ -101,7 +101,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -137,7 +137,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -171,7 +171,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -205,7 +205,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -246,7 +246,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -282,7 +282,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -320,7 +320,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -368,7 +368,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -410,7 +410,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
@@ -452,7 +452,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)

@@ -42,7 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsIp6PercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\"";
+    private final String sensorRegexCompleteIPv6 = "r\"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\"";
+    private final String sensorRegexShortenedIPv6 = "r\"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -101,10 +102,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -115,7 +120,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -137,10 +144,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -155,7 +166,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -171,10 +184,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -189,7 +206,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -205,10 +224,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -225,7 +248,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -246,10 +271,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -263,7 +292,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -282,10 +313,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -301,7 +336,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -320,10 +357,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -341,7 +382,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -368,10 +411,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -389,7 +436,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -410,10 +459,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -431,7 +484,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -452,10 +507,14 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN 
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s) OR
+                                REGEXP_CONTAINS(CAST(%s AS STRING), 
+                                    %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -475,7 +534,9 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.sensorRegex,
+                this.sensorRegexCompleteIPv6,
+                this.getTableColumnName(runParameters),
+                this.sensorRegexShortenedIPv6,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
