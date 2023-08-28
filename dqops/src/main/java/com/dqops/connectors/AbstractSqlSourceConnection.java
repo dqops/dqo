@@ -328,18 +328,11 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      */
     @Override
     public void createTable(TableSpec tableSpec) {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE TABLE ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
-            sqlBuilder.append(".");
-        }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
-        sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
+        sqlBuilder.append(makeFullyQualifiedTableName(tableSpec));
         sqlBuilder.append(" (\n");
 
         Map.Entry<String, ColumnSpec> [] columnKeyPairs = tableSpec.getColumns().entrySet().toArray(Map.Entry[]::new);
@@ -397,17 +390,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             return;
         }
 
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("INSERT INTO ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
-            sqlBuilder.append(".");
-        }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
-        sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
+        sqlBuilder.append(makeFullyQualifiedTableName(tableSpec));
         sqlBuilder.append("(");
         for (int i = 0; i < data.columnCount() ; i++) {
             if (i > 0) {
@@ -443,4 +429,29 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         String insertValueSql = sqlBuilder.toString();
 		this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
     }
+
+    public void dropTable(TableSpec tableSpec){
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("DROP TABLE ");
+        sqlBuilder.append(makeFullyQualifiedTableName(tableSpec));
+
+        String insertValueSql = sqlBuilder.toString();
+        this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
+    }
+
+    private String makeFullyQualifiedTableName(TableSpec tableSpec){
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+        ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
+
+        StringBuilder tableNameBuilder = new StringBuilder();
+        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            tableNameBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
+            tableNameBuilder.append(".");
+        }
+        tableNameBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
+        tableNameBuilder.append(".");
+        tableNameBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
+        return tableNameBuilder.toString();
+    }
+
 }
