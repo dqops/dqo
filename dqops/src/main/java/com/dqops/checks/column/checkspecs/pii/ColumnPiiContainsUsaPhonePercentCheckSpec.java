@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxPercentRule1ParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule0ParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule2ParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.pii.ColumnPiiContainsUsaPhonePercentSensorParametersSpec;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnPiiContainsUsaPhonePercentCheckSpec
-        extends AbstractCheckSpec<ColumnPiiContainsUsaPhonePercentSensorParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPiiContainsUsaPhonePercentSensorParametersSpec, MaxPercentRule0ParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule5ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiContainsUsaPhonePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -55,7 +55,7 @@ public class ColumnPiiContainsUsaPhonePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule1ParametersSpec warning;
+    private MaxPercentRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for the minimum percentage of rows that contains a USA phone number in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -92,7 +92,7 @@ public class ColumnPiiContainsUsaPhonePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule1ParametersSpec getWarning() {
+    public MaxPercentRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class ColumnPiiContainsUsaPhonePercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxPercentRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
