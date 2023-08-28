@@ -68,7 +68,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         DashboardsFolderListSpec cloned = new DashboardsFolderListSpec();
         cloned.setFileLastModified(this.fileLastModified);
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (DashboardsFolderSpec folderSpec : this) {

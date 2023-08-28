@@ -44,7 +44,7 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
     public ColumnSpecMap deepClone() {
         ColumnSpecMap cloned = new ColumnSpecMap();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, ColumnSpec> keyPair : this.entrySet()) {

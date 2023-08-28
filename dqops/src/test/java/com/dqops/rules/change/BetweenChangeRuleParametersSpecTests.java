@@ -67,7 +67,7 @@ public class BetweenChangeRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.2,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(15.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound());
@@ -84,7 +84,7 @@ public class BetweenChangeRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound());
@@ -101,7 +101,7 @@ public class BetweenChangeRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(251.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(105.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(-40.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(250.0, ruleExecutionResult.getUpperBound());
@@ -114,7 +114,7 @@ public class BetweenChangeRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

@@ -79,7 +79,7 @@ public class ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpecTests extend
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(165.01, ruleExecutionResult.getExpectedValue(), 0.1);
         Assertions.assertEquals(162.67, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(167.35, ruleExecutionResult.getUpperBound(), 0.1);
@@ -102,7 +102,7 @@ public class ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpecTests extend
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
@@ -116,7 +116,7 @@ public class ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpecTests extend
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

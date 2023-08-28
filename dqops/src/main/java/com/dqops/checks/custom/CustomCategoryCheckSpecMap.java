@@ -41,7 +41,7 @@ public class CustomCategoryCheckSpecMap extends CustomCheckSpecMap {
     public CustomCategoryCheckSpecMap deepClone() {
         CustomCategoryCheckSpecMap cloned = new CustomCategoryCheckSpecMap();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, CustomCheckSpec> keyPair : this.entrySet()) {

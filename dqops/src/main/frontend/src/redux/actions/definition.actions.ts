@@ -65,6 +65,12 @@ export const toggleSensorFolderTree = (key: string) => ({
   key
 });
 
+export const openSensorFolderTree = (key: string) => ({
+  type: DEFINITION_ACTION.OPEN_SENSOR_FOLDER,
+  key
+});
+
+
 export const addFirstLevelTab = (data: any) => ({
   type: DEFINITION_ACTION.ADD_FIRST_LEVEL_TAB,
   data
@@ -280,9 +286,13 @@ export const getdataQualityChecksFolderTree =
     }
   };
 
-export const toggledataQualityChecksFolderTree = (key: string) => ({
+export const toggledataQualityChecksFolderTree = (fullPath: string) => ({
   type: DEFINITION_ACTION.TOGGLE_DATA_QUALITY_CHECKS_FOLDER,
-  key
+  fullPath
+});
+export const opendataQualityChecksFolderTree = (fullPath: string) => ({
+  type: DEFINITION_ACTION.OPEN_DATA_QUALITY_CHECKS_FOLDER,
+  fullPath
 });
 
 export const updatedataQualityChecksFolderTree = (
@@ -411,6 +421,12 @@ export const toggleRuleFolderTree = (key: string) => ({
   type: DEFINITION_ACTION.TOGGLE_RULE_FOLDER,
   key
 });
+
+export const openRuleFolderTree = (key: string) => ({
+  type: DEFINITION_ACTION.OPEN_RULE_FOLDER,
+  key
+});
+
 
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE,

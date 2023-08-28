@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RuleExecutionResult {
-    private boolean passed;
+    private Boolean passed;
     private Double newActualValue;
     private Double expectedValue;
     private Double lowerBound;
@@ -34,7 +34,7 @@ public class RuleExecutionResult {
      * Returns the status if the rule has passed.
      * @return Rule has passed and the sensor readout is valid according to the rule.
      */
-    public boolean isPassed() {
+    public Boolean getPassed() {
         return passed;
     }
 
@@ -42,7 +42,7 @@ public class RuleExecutionResult {
      * Sets the rule pass status.
      * @param passed True when the rule was passed (readout is correct) or false when the value was rejected and an alert will be raised.
      */
-    public void setPassed(boolean passed) {
+    public void setPassed(Boolean passed) {
         this.passed = passed;
     }
 

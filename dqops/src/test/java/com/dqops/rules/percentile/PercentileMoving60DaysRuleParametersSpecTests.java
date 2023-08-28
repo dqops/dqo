@@ -75,7 +75,7 @@ public class PercentileMoving60DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(13.48, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(24.28, ruleExecutionResult.getUpperBound(), 0.1);
@@ -94,7 +94,7 @@ public class PercentileMoving60DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
@@ -108,7 +108,7 @@ public class PercentileMoving60DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

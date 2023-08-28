@@ -45,7 +45,7 @@ public class DataGroupingConfigurationSpecMap extends AbstractDirtyTrackingSpecM
     public DataGroupingConfigurationSpecMap deepClone() {
         DataGroupingConfigurationSpecMap cloned = new DataGroupingConfigurationSpecMap();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, DataGroupingConfigurationSpec> keyPair : this.entrySet()) {

@@ -989,29 +989,11 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_valid_usa_phone_percent](./column/pii/valid-usa-phone-percent/#profile-valid-usa-phone-percent)|profiling|Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage.|
-|[daily_valid_usa_phone_percent](./column/pii/valid-usa-phone-percent/#daily-valid-usa-phone-percent)|monitoring|Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_valid_usa_phone_percent](./column/pii/valid-usa-phone-percent/#monthly-valid-usa-phone-percent)|monitoring|Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_valid_usa_phone_percent](./column/pii/valid-usa-phone-percent/#daily-partition-valid-usa-phone-percent)|partitioned|Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_valid_usa_phone_percent](./column/pii/valid-usa-phone-percent/#monthly-partition-valid-usa-phone-percent)|partitioned|Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
 |[profile_contains_usa_phone_percent](./column/pii/contains-usa-phone-percent/#profile-contains-usa-phone-percent)|profiling|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.|
 |[daily_contains_usa_phone_percent](./column/pii/contains-usa-phone-percent/#daily-contains-usa-phone-percent)|monitoring|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
 |[monthly_contains_usa_phone_percent](./column/pii/contains-usa-phone-percent/#monthly-contains-usa-phone-percent)|monitoring|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_contains_usa_phone_percent](./column/pii/contains-usa-phone-percent/#daily-partition-contains-usa-phone-percent)|partitioned|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_contains_usa_phone_percent](./column/pii/contains-usa-phone-percent/#monthly-partition-contains-usa-phone-percent)|partitioned|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_valid_usa_zipcode_percent](./column/pii/valid-usa-zipcode-percent/#profile-valid-usa-zipcode-percent)|profiling|Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage.|
-|[daily_valid_usa_zipcode_percent](./column/pii/valid-usa-zipcode-percent/#daily-valid-usa-zipcode-percent)|monitoring|Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_valid_usa_zipcode_percent](./column/pii/valid-usa-zipcode-percent/#monthly-valid-usa-zipcode-percent)|monitoring|Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_valid_usa_zipcode_percent](./column/pii/valid-usa-zipcode-percent/#daily-partition-valid-usa-zipcode-percent)|partitioned|Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_valid_usa_zipcode_percent](./column/pii/valid-usa-zipcode-percent/#monthly-partition-valid-usa-zipcode-percent)|partitioned|Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -1025,15 +1007,6 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_valid_email_percent](./column/pii/valid-email-percent/#profile-valid-email-percent)|profiling|Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage.|
-|[daily_valid_email_percent](./column/pii/valid-email-percent/#daily-valid-email-percent)|monitoring|Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_valid_email_percent](./column/pii/valid-email-percent/#monthly-valid-email-percent)|monitoring|Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_valid_email_percent](./column/pii/valid-email-percent/#daily-partition-valid-email-percent)|partitioned|Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_valid_email_percent](./column/pii/valid-email-percent/#monthly-partition-valid-email-percent)|partitioned|Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
 |[profile_contains_email_percent](./column/pii/contains-email-percent/#profile-contains-email-percent)|profiling|Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.|
 |[daily_contains_email_percent](./column/pii/contains-email-percent/#daily-contains-email-percent)|monitoring|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
 |[monthly_contains_email_percent](./column/pii/contains-email-percent/#monthly-contains-email-percent)|monitoring|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
@@ -1043,29 +1016,11 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_valid_ip4_address_percent](./column/pii/valid-ip4-address-percent/#profile-valid-ip4-address-percent)|profiling|Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage.|
-|[daily_valid_ip4_address_percent](./column/pii/valid-ip4-address-percent/#daily-valid-ip4-address-percent)|monitoring|Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_valid_ip4_address_percent](./column/pii/valid-ip4-address-percent/#monthly-valid-ip4-address-percent)|monitoring|Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_valid_ip4_address_percent](./column/pii/valid-ip4-address-percent/#daily-partition-valid-ip4-address-percent)|partitioned|Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_valid_ip4_address_percent](./column/pii/valid-ip4-address-percent/#monthly-partition-valid-ip4-address-percent)|partitioned|Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
 |[profile_contains_ip4_percent](./column/pii/contains-ip4-percent/#profile-contains-ip4-percent)|profiling|Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.|
 |[daily_contains_ip4_percent](./column/pii/contains-ip4-percent/#daily-contains-ip4-percent)|monitoring|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
 |[monthly_contains_ip4_percent](./column/pii/contains-ip4-percent/#monthly-contains-ip4-percent)|monitoring|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_contains_ip4_percent](./column/pii/contains-ip4-percent/#daily-partition-contains-ip4-percent)|partitioned|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_contains_ip4_percent](./column/pii/contains-ip4-percent/#monthly-partition-contains-ip4-percent)|partitioned|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_valid_ip6_address_percent](./column/pii/valid-ip6-address-percent/#profile-valid-ip6-address-percent)|profiling|Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage.|
-|[daily_valid_ip6_address_percent](./column/pii/valid-ip6-address-percent/#daily-valid-ip6-address-percent)|monitoring|Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_valid_ip6_address_percent](./column/pii/valid-ip6-address-percent/#monthly-valid-ip6-address-percent)|monitoring|Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_valid_ip6_address_percent](./column/pii/valid-ip6-address-percent/#daily-partition-valid-ip6-address-percent)|partitioned|Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_valid_ip6_address_percent](./column/pii/valid-ip6-address-percent/#monthly-partition-valid-ip6-address-percent)|partitioned|Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

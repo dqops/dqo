@@ -40,7 +40,7 @@ public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec>
     public CommentsListSpec deepClone() {
         CommentsListSpec cloned = new CommentsListSpec();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (CommentSpec comment : this) {

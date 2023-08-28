@@ -37,7 +37,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 		this.sut.setFrom(1L);
         this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
     }
@@ -47,7 +47,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
         this.sut.setFrom(1L);
         this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
     }
@@ -57,7 +57,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
         this.sut.setFrom(1L);
         this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
     }
@@ -67,7 +67,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
         this.sut.setFrom(1L);
         this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
     }
@@ -77,7 +77,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
         this.sut.setFrom(1L);
         this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
     }
@@ -123,7 +123,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
