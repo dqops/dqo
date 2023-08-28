@@ -20,7 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxPercentRule0ParametersSpec;
-import com.dqops.rules.comparison.MaxPercentRule2ParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.pii.ColumnPiiContainsEmailPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnPiiContainsEmailPercentCheckSpec
-        extends AbstractCheckSpec<ColumnPiiContainsEmailPercentSensorParametersSpec, MaxPercentRule0ParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPiiContainsEmailPercentSensorParametersSpec, MaxPercentRule0ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiContainsEmailPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -59,7 +59,7 @@ public class ColumnPiiContainsEmailPercentCheckSpec
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows that contains email values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule2ParametersSpec error;
+    private MaxPercentRule1ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -111,7 +111,7 @@ public class ColumnPiiContainsEmailPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule2ParametersSpec getError() {
+    public MaxPercentRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnPiiContainsEmailPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule2ParametersSpec error) {
+    public void setError(MaxPercentRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
