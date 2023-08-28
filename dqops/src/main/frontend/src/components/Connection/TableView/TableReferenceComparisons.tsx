@@ -227,7 +227,6 @@ export const TableReferenceComparisons = ({
     setIsEditing(true);
   };
 
-  console.log(references);
   return (
     <>
       {isEditing ? (
