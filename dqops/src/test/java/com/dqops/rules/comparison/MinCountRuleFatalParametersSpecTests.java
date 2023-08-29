@@ -37,8 +37,8 @@ public class MinCountRuleFatalParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
@@ -47,8 +47,8 @@ public class MinCountRuleFatalParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
@@ -57,8 +57,8 @@ public class MinCountRuleFatalParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 

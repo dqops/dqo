@@ -64,7 +64,7 @@ public class PythonRuleRunnerTests extends BaseTest {
 
         Assertions.assertNotNull(executionResult);
         Assertions.assertTrue(executionResult.getPassed());
-        Assertions.assertNull(executionResult.getExpectedValue());
+        Assertions.assertEquals(15.5, executionResult.getExpectedValue().doubleValue());
         Assertions.assertEquals(15.5, executionResult.getLowerBound().doubleValue());
         Assertions.assertNull(executionResult.getUpperBound());
     }

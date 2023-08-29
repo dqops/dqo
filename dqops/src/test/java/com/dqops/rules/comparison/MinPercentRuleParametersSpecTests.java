@@ -37,7 +37,7 @@ public class MinPercentRuleParametersSpecTests extends BaseTest {
         this.sut.setMinPercent(20.5);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8, this.sut);
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -47,7 +47,7 @@ public class MinPercentRuleParametersSpecTests extends BaseTest {
         this.sut.setMinPercent(20.5);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.5, this.sut);
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -57,7 +57,7 @@ public class MinPercentRuleParametersSpecTests extends BaseTest {
         this.sut.setMinPercent(20.5);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4, this.sut);
         Assertions.assertFalse(ruleExecutionResult.getPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
