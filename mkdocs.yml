@@ -48,7 +48,7 @@ nav:
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
       - Data consistency:
-          - Percent of rows with string values in set: "examples/data-datatype/percent-of-string-in-set.md"
+          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
@@ -72,6 +72,7 @@ nav:
           - PostgreSQL: "working-with-dqo/adding-data-source-connection/postgresql.md"
           - SQL Server: "working-with-dqo/adding-data-source-connection/sql-server.md"
           - MySQL: "working-with-dqo/adding-data-source-connection/mysql.md"
+          - Oracle: "working-with-dqo/adding-data-source-connection/oracle.md"
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
       - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"

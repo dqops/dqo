@@ -36,7 +36,7 @@ We will set six data quality monitoring checks on `bigquery-public-data.thelook_
     - error: 98.0%
     - fatal: 95.0%
 
-4. [daily_valid_email_percent](../../checks/column/pii/valid-email-percent.md) check on `email` column with minimum percent thresholds levels
+4. [daily_contains_email_percent](../../checks/column/pii/contains-email-percent.md) check on `email` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -178,7 +178,7 @@ spec:
               fatal:
                 min_percent: 95.0
           pii:
-            daily_valid_email_percent:
+            daily_contains_email_percent:
               warning:
                 min_percent: 99.0
               error:

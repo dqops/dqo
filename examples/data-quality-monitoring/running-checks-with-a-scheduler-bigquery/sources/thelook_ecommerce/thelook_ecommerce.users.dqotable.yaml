@@ -57,7 +57,7 @@ spec:
               fatal:
                 min_percent: 95.0
           pii:
-            daily_valid_email_percent:
+            daily_contains_email_percent:
               warning:
                 min_percent: 99.0
               error:
