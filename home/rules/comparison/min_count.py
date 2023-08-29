@@ -64,7 +64,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
