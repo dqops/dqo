@@ -64,7 +64,7 @@ const CheckListItem = ({
   isDefaultEditing
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('data-streams');
+  const [activeTab, setActiveTab] = useState('check-settings');
   const [tabs, setTabs] = useState<ITab[]>([]);
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -140,14 +140,6 @@ const CheckListItem = ({
           label: 'Check Settings',
           value: 'check-settings'
         },
-        ...(check?.supports_grouping
-          ? [
-              {
-                label: 'Grouping configuration override',
-                value: 'data-streams'
-              }
-            ]
-          : []),
         {
           label: 'Schedule override',
           value: 'schedule'
