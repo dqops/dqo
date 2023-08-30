@@ -655,14 +655,16 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             RuleThresholdsModel ruleModel = createRuleThresholdsModel(checkSpec);
             checkModel.setRule(ruleModel);
         } else {
-            CustomSensorParametersSpec customSensorParametersSpec = (CustomSensorParametersSpec)parametersSpec;
-            List<FieldModel> customFieldsForParameterSpec = createFieldsForSensorParametersCustomCheck(
-                    customSensorParametersSpec, sensorDefinitionSpec.getFields());
-            checkModel.setSensorParameters(customFieldsForParameterSpec);
+            if (sensorDefinitionSpec != null) {
+                CustomSensorParametersSpec customSensorParametersSpec = (CustomSensorParametersSpec) parametersSpec;
+                List<FieldModel> customFieldsForParameterSpec = createFieldsForSensorParametersCustomCheck(
+                        customSensorParametersSpec, sensorDefinitionSpec.getFields());
+                checkModel.setSensorParameters(customFieldsForParameterSpec);
 
-            RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
-                    (CustomCheckSpec)checkSpec, customCheckDefinitionSpec, executionContext);
-            checkModel.setRule(ruleModel);
+                RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
+                        (CustomCheckSpec) checkSpec, customCheckDefinitionSpec, executionContext);
+                checkModel.setRule(ruleModel);
+            }
         }
 
         return checkModel;
@@ -751,6 +753,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                                        CheckDefinitionSpec customCheckDefinitionSpec,
                                                                        ExecutionContext executionContext) {
         RuleThresholdsModel thresholdsModel = new RuleThresholdsModel();
+        if (Strings.isNullOrEmpty(customCheckDefinitionSpec.getRuleName())) {
+            return thresholdsModel;
+        }
+
         RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(
                 executionContext, customCheckDefinitionSpec.getRuleName());
         if (ruleDefinitionFindResult == null) {

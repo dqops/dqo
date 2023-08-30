@@ -41,7 +41,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         {
             put("daily_row_count", o -> o.dailyRowCount);
             put("daily_row_count_anomaly_differencing_30_days", o -> o.dailyRowCountAnomalyDifferencing30Days);
-            put("daily_row_count_anomaly_differencing", o -> o.dailyRowCountAnomalyDifferencing60Days);
+            put("daily_row_count_anomaly_differencing", o -> o.dailyRowCountAnomalyDifferencing);
             put("daily_row_count_change", o -> o.dailyRowCountChange);
             put("daily_row_count_change_yesterday", o -> o.dailyRowCountChangeYesterday);
             put("daily_row_count_change_7_days", o -> o.dailyRowCountChange7Days);
@@ -60,7 +60,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
 
     @JsonProperty("daily_row_count_anomaly_differencing")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
-    private TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing60Days;
+    private TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     private TableChangeRowCountCheckSpec dailyRowCountChange;
@@ -117,18 +117,18 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyDifferencingRowCountCheckSpec getDailyRowCountAnomalyDifferencing60Days() {
-        return dailyRowCountAnomalyDifferencing60Days;
+    public TableAnomalyDifferencingRowCountCheckSpec getDailyRowCountAnomalyDifferencing() {
+        return dailyRowCountAnomalyDifferencing;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param dailyRowCountAnomalyDifferencing60Days Row count anomaly 60 days check.
+     * @param dailyRowCountAnomalyDifferencing Row count anomaly 60 days check.
      */
-    public void setDailyRowCountAnomalyDifferencing60Days(TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing60Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing60Days, dailyRowCountAnomalyDifferencing60Days));
-        this.dailyRowCountAnomalyDifferencing60Days = dailyRowCountAnomalyDifferencing60Days;
-        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing60Days, "daily_row_count_anomaly_differencing");
+    public void setDailyRowCountAnomalyDifferencing(TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing) {
+        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing, dailyRowCountAnomalyDifferencing));
+        this.dailyRowCountAnomalyDifferencing = dailyRowCountAnomalyDifferencing;
+        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing, "daily_row_count_anomaly_differencing");
     }
 
     /**

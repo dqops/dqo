@@ -19,7 +19,7 @@ package com.dqops.checks.defaults.services;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyDifferencingSumCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyStationaryMeanCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnAnomalyStationaryNullPercent30DaysCheckSpec;
+import com.dqops.checks.column.checkspecs.nulls.ColumnAnomalyStationaryNullPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnChangeNullPercentSinceYesterdayCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
@@ -35,7 +35,7 @@ import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCount30DaysCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableAvailabilityProfilingChecksSpec;
@@ -49,9 +49,7 @@ import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule0ParametersSpec;
 import com.dqops.rules.comparison.ValueChangedParametersSpec;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
 import org.springframework.stereotype.Component;
 
@@ -92,8 +90,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableVolume.setDailyRowCountChange(new TableChangeRowCountCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
-        tableVolume.setDailyRowCountAnomalyDifferencing30Days(new TableAnomalyDifferencingRowCount30DaysCheckSpec() {{
-            setWarning(new AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec());
+        tableVolume.setDailyRowCountAnomalyDifferencing(new TableAnomalyDifferencingRowCountCheckSpec() {{
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 
@@ -137,8 +135,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsDailyMonitoringChecksSpec columnNulls = new ColumnNullsDailyMonitoringChecksSpec();
-        columnNulls.setDailyNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
-            setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
+        columnNulls.setDailyNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         columnNulls.setDailyNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
@@ -189,8 +187,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
-        columnNulls.setProfileNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
-            setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
+        columnNulls.setProfileNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         columnNulls.setProfileNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
