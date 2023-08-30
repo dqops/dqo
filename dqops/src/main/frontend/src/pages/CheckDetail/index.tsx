@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
   addFirstLevelTab,
-  closeFirstLevelTab
+  closeFirstLevelTab,
+  getdataQualityChecksFolderTree,
+  toggledataQualityChecksFolderTree 
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 // import { createRule, getRule, setUpdatedRule } from "../../redux/actions/definition.actions";
@@ -89,6 +91,8 @@ export const SensorDetail = () => {
       setIsUpdating(false);
       setIsCreating(false);
       openAddNewCheck();
+      dispatch(getdataQualityChecksFolderTree());
+      dispatch(toggledataQualityChecksFolderTree(Array.from(path).join("/")))
     } else {
       await dispatch(
         updateCheck(
