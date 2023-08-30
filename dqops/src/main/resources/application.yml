@@ -151,8 +151,8 @@ dqo:
     enable-cloud-sync: true
     default-schedules:
       profiling: "0 12 * * *"  # 12PM every day (noon)
-      recurring-daily: "0 12 * * *"  # 12PM every day (noon)
-      recurring-monthly: "0 12 * * *"  # 12PM every day (noon)
+      monitoring-daily: "0 12 * * *"  # 12PM every day (noon)
+      monitoring-monthly: "0 12 * * *"  # 12PM every day (noon)
       partitioned-daily: "0 12 * * *"  # 12PM every day (noon)
       partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
   cli:
