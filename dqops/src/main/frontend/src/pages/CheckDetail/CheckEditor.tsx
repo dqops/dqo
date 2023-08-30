@@ -133,8 +133,8 @@ const CheckEditor = ({
                 options={
                   (memoizedData.sensors &&
                     memoizedData.sensors.map((x) => ({
-                      label: x.sensor_name ?? '',
-                      value: x.sensor_name ?? ''
+                      label: x.full_sensor_name ?? '',
+                      value: x.full_sensor_name ?? ''
                     }))) ||
                   []
                 }
@@ -162,8 +162,8 @@ const CheckEditor = ({
                 options={
                   (memoizedData.rules &&
                     memoizedData.rules.map((x) => ({
-                      label: x.rule_name ?? '',
-                      value: x.rule_name ?? ''
+                      label: x.full_rule_name ?? '',
+                      value: x.full_rule_name ?? ''
                     }))) ||
                   []
                 }
