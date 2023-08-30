@@ -45,6 +45,14 @@ public class TableDataChanges {
     }
 
     /**
+     * Changes the table with new rows.
+     * @param newOrChangedRows New or changed rows.
+     */
+    public void setNewOrChangedRows(Table newOrChangedRows) {
+        this.newOrChangedRows = newOrChangedRows;
+    }
+
+    /**
      * Optional collection of primary keys to be deleted.
      * @return Primary keys to be deleted.
      */

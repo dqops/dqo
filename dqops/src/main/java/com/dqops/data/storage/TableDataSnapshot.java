@@ -15,6 +15,7 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.models.DataDeleteResult;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.normalization.CommonColumnNames;
@@ -22,11 +23,9 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import jakarta.validation.constraints.NotNull;
-import tech.tablesaw.api.DateColumn;
-import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.InstantColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
@@ -614,6 +613,42 @@ public class TableDataSnapshot {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings);
+        }
+    }
+
+    /**
+     * Removes additional duplicate rows in the new or changed rows table.
+     */
+    public void dropDuplicateNewRows() {
+        if (this.getTableDataChanges().getNewOrChangedRows() == null ||
+                this.getTableDataChanges().getNewOrChangedRows().rowCount() == 0) {
+            return;
+        }
+
+        TextColumn idColumn = this.getTableDataChanges()
+                .getNewOrChangedRows()
+                .textColumn(this.storageSettings.getIdStringColumnName());
+        Set<String> foundIds = new HashSet<>();
+        IntArrayList duplicateRowIndexesToDrop = null;
+
+        for (int i = 0; i < idColumn.size(); i++) {
+            String id = idColumn.get(i);
+
+            if (foundIds.contains(id)) {
+                if (duplicateRowIndexesToDrop == null) {
+                    duplicateRowIndexesToDrop = new IntArrayList();
+                }
+
+                duplicateRowIndexesToDrop.add(i);
+            } else {
+                foundIds.add(id);
+            }
+        }
+
+        if (duplicateRowIndexesToDrop != null) {
+            int[] rowIndexesToDrop = duplicateRowIndexesToDrop.toIntArray();
+            Table uniqueErrorsList = this.getTableDataChanges().getNewOrChangedRows().dropRows(rowIndexesToDrop);
+            this.getTableDataChanges().setNewOrChangedRows(uniqueErrorsList);
         }
     }
 }
