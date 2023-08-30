@@ -376,7 +376,6 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 // ensure the partition data is deleted
                 if (targetParquetFile.exists()) {
                     boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
-                    this.localFileSystemCache.removeFile(targetParquetFilePath);
 
                     if (success) {
                         return true;
@@ -407,6 +406,30 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     }
 
     /**
+     * Deletes a partition file.
+     * @param loadedPartitionId Partition id to delete.
+     * @param storageSettings Storage settings.
+     * @return True when the file was removed, false otherwise.
+     */
+    public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
+                                       FileStorageSettings storageSettings) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings);
+            File targetParquetFile = targetParquetFilePath.toFile();
+
+            if (!targetParquetFile.exists()) {
+                return false;
+            }
+
+            boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+            return success;
+        }
+        catch (Exception ex) {
+            throw new DataStorageIOException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
      * Deletes a parquet file responsible for holding a partition, along with its .crc checksum file.
      * If there are no other files or folders in this folder, deletes the folders in a cascading pattern until it reaches the root .data folder.
      * @param targetPartitionFilePath Path to the .parquet file with the partition.
@@ -415,7 +438,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
-            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);
+            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath()
+                    .relativize(targetPartitionFilePath).normalize().toAbsolutePath();
 
             if (Files.isDirectory(homeRelativePath)) {
                 return false;
@@ -437,6 +461,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 // Deleting .parquet file failed.
                 return false;
             }
+
+            this.localFileSystemCache.removeFile(targetPartitionFilePath);
+
 
             while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.

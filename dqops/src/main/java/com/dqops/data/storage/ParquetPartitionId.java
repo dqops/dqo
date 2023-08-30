@@ -106,6 +106,16 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "ParquetPartitionId{" +
+                "tableType=" + tableType +
+                ", connectionName='" + connectionName + '\'' +
+                ", tableName=" + tableName +
+                ", month=" + month +
+                '}';
+    }
+
     /**
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less

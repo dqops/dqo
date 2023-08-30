@@ -121,4 +121,16 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
     public void savePartition(LoadedMonthlyPartition loadedPartition, TableDataChanges tableDataChanges, FileStorageSettings storageSettings) {
         // do nothing
     }
+
+    /**
+     * Deletes a partition file.
+     *
+     * @param loadedPartitionId Partition id to delete.
+     * @param storageSettings   Storage settings.
+     * @return True when the file was removed, false otherwise.
+     */
+    @Override
+    public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId, FileStorageSettings storageSettings) {
+        return false;
+    }
 }
