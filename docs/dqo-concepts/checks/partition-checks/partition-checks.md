@@ -3,7 +3,8 @@
 In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
-Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score. 
+Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](../monitoring-checks/monitoring-checks.md),
+partition checks produce separate monitoring results for each partition. There are two categories of partition checks: daily checks and monthly checks.
 
 The daily partition checks store the most recent sensor readouts for each partition and each day when the data quality
 check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
@@ -56,10 +57,10 @@ When there was a change in the data and on 2023-04-07 we run the check again, th
 
 The previous result for 2023-04-07 was deleted.
 
-Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
-For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
+Similarly, the monthly partition checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly partition checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
 
-To run a partition check, you need to select a data column that is the time partitioning key for the table.
+To run a partition check, you need to select a column that serves as the time partitioning key for the data.
 
 ## Setting up date or datetime column name
 In order to enable time partition check, set a column that contains date, datetime or timestamp. 
@@ -82,14 +83,11 @@ Below is an example of the YAML file showing sample configuration of a daily and
 nulls_percent.
 
 === "Daily partition check"
-    ``` yaml hl_lines="14-23"
+    ``` yaml hl_lines="11-20"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -108,22 +106,13 @@ nulls_percent.
                     max_percent: 30.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
     ```
 === "Monthly partition check"
-    ``` yaml hl_lines="14-23"
+    ``` yaml hl_lines="11-20"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -142,12 +131,6 @@ nulls_percent.
                     max_percent: 30.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
     ```
 
 ## What's next

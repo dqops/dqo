@@ -112,23 +112,26 @@ pipeline or machine learning code.
 
 Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
-``` yaml hl_lines="14-22"
+``` yaml hl_lines="17-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
-    partitioned_checks_timestamp_source: event_timestamp
+    partition_by_column:: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1    
   columns:
     target_column:
-      checks:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
         nulls:
-          nulls_percent:
+          profile_nulls_percent:
             warning:
               max_percent: 1.0
             error:
@@ -137,19 +140,13 @@ spec:
               max_percent: 30.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested  
 ```
 The `spec` section contains the details of the table, including the target schema and table name. 
 
 The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
 The `columns` section lists the columns in the table which has configured checks. In this example the column named 
-`target_column` has a configured check `nulls_percent`. This means that the sensor reads the percentage of null
+`target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 

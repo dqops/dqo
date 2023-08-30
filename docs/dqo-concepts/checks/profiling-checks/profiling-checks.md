@@ -3,9 +3,8 @@
 In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
-Profiling is a type of check that should be used to profile data and run experiments to see which types 
-of [monitoring checks](../monitoring-checks/monitoring-checks.md) or [partition checks](../partition-checks/partition-checks.md)
-are the most appropriate for monitoring the quality of data.
+Profiling checks are useful for exploring and experimenting with various types of checks and determining the most suitable
+ones for regular data quality monitoring.
 
 When the profiling data quality check is run, only one sensor readout is saved per month. As an illustration, if the check 
 is run three times in April, and one time in May the table with the results could look like this:
@@ -24,7 +23,7 @@ If there was a change in the data, and we run the check again in May, the result
 
 
 ## Checks configuration in the YAML file
-Advance profiling data quality checks, like other data quality checks in DQO checks are defined as YAML files.
+Profiling data quality checks, like other data quality checks in DQO are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
@@ -33,9 +32,6 @@ Below is an example of the YAML file showing sample configuration of a profiling
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -53,12 +49,6 @@ spec:
               max_percent: 30.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested  
 ```
 The `spec` section contains the details of the table, including the target schema and table name.
 

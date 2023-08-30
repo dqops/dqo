@@ -18,25 +18,21 @@ the error severity level is set to 10 and the table has fewer than 10 rows the d
 Below is an example of Phyton script that defines classes and methods for min_count threshold rule.
 
 ``` py title="min_count.py"
-
-# Class that specifies the minimum count parameter for the rule. 
+# rule specific parameters object, contains values received from the quality check threshold configuration
 class MinCountRuleParametersSpec:
-    min_count: float
+    min_count: int
 
-# Class that represents a historical data point from the sensor.
 class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
     sensor_readout: float
 
-# Class that specifies the time window settings for the rule.
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
     min_periods_with_readouts: int
 
-
-# Class Rthat specifies the parameters for running the rule. 
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: MinCountRuleParametersSpec
@@ -44,27 +40,26 @@ class RuleExecutionRunParameters:
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
-
-# Class that specifies the result of running the rule.
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
 class RuleExecutionResult:
     passed: bool
     expected_value: float
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
-
-# A method that evaluates the rule based on the parameters specified in the RuleExecutionRunParameters class.
+# rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
@@ -78,13 +73,30 @@ Rules are divided into the following categories. A full description of each cate
 available at the link.
 
 - averages:
+    - [between percent moving average 7 days](../../../reference/rules/averages/#between-percent-moving-average-7-days)
     - [between percent moving average 30 days](../../../reference/rules/averages/#between-percent-moving-average-30-days)
     - [between percent moving average 60 days](../../../reference/rules/averages/#between-percent-moving-average-60-days)
-    - [between percent moving average 7 days](../../../reference/rules/averages/#between-percent-moving-average-7-days)
     - [percent moving average](../../../reference/rules/averages/#percent-moving-average)
+    - [within percent moving average 7 days](../../../reference/rules/averages/#within-percent-moving-average-7-days)
     - [within percent moving average 30 days](../../../reference/rules/averages/#within-percent-moving-average-30-days)
     - [within percent moving average 60 days](../../../reference/rules/averages/#within-percent-moving-average-60-days)
-    - [within percent moving average 7 days](../../../reference/rules/averages/#within-percent-moving-average-7-days)
+- change:
+    - [between change](../../../reference/rules/change/#between-change)
+    - [between change 1 day](../../../reference/rules/change/#between-change-1-day)
+    - [between change 7 days](../../../reference/rules/change/#between-change-7-days)
+    - [between change 30 days](../../../reference/rules/change/#between-change-30-days)
+    - [between percent change](../../../reference/rules/change/#between-percent-change)
+    - [between percent change 1 day](../../../reference/rules/change/#between-percent-change-1-day)
+    - [between percent change 7 days](../../../reference/rules/change/#between-percent-change-7days)
+    - [between percent change 30 days](../../../reference/rules/change/#between-percent-change-30-days)
+    - [change difference](../../../reference/rules/change/#change-difference)
+    - [change difference 1 day](../../../reference/rules/change/#change-difference-1-day)
+    - [change difference 7 days](../../../reference/rules/change/#change-difference-7-days)
+    - [change difference 30 days](../../../reference/rules/change/#change-difference-30-days)
+    - [change percent](../../../reference/rules/change/#change-percent)
+    - [change percent 1 day](../../../reference/rules/change/#change-percent-1-day)
+    - [change percent 7 days](../../../reference/rules/change/#change-percent-7-days)
+    - [change percent 30 days](../../../reference/rules/change/#change-percent-30-days)
 - comparison:
     - [between floats](../../../reference/rules/comparison/#between-floats)
     - [between ints](../../../reference/rules/comparison/#between-ints)
@@ -99,6 +111,17 @@ available at the link.
     - [min count](../../../reference/rules/comparison/#min-count)
     - [min percent](../../../reference/rules/comparison/#min-percent)
     - [min value](../../../reference/rules/comparison/#min-value)
+- percentile:
+    - [anomaly differencing percentile moving average](../../../reference/rules/percentile/#anomaly-differencing-percentile-moving-average)
+    - [anomaly differencing percentile moving average 30 days](../../../reference/rules/percentile/#anomaly-differencing-percentile-moving-average-30-days)
+    - [anomaly stationary percentile moving average](../../../reference/rules/percentile/#anomaly-stationary-percentile-moving-average)
+    - [anomaly stationary percentile moving average 30 days](../../../reference/rules/percentile/#anomaly-stationary-percentile-moving-average-30-days)
+    - [change percentile moving 7 days](../../../reference/rules/percentile/#change-percentile-moving-7-days)
+    - [change percentile moving 30 days](../../../reference/rules/percentile/#change-percentile-moving-30-days)
+    - [change percentile moving 60 days](../../../reference/rules/percentile/#change-percentile-moving-60-days)
+    - [percentile moving 7 days](../../../reference/rules/percentile/#percentile-moving-7-days)
+    - [percentile moving 30 days](../../../reference/rules/percentile/#percentile-moving-30-days)
+    - [percentile moving 60 days](../../../reference/rules/percentile/#percentile-moving-60-days)
 - stdev:
     - [below percent population stdev 30 days](../../../reference/rules/stdev/#below-percent-population-stdev-30-days)
     - [below percent population stdev 60 days](../../../reference/rules/stdev/#below-percent-population-stdev-60-days)

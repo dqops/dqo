@@ -3,7 +3,8 @@
 In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
-Monitoring checks are standard checks that monitor data quality. Monitoring checks can be run daily and monthly. 
+Monitoring checks are standard checks that monitor the data quality of a table or column. There are two categories of 
+monitoring checks: daily checks and monthly checks.
 
 The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run. 
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for 
@@ -19,7 +20,7 @@ For example, if we run the check for three consecutive days, the results table c
 
 The original time_period timestamp of the result e.g. 2023-04-05T09:06:53.386Z is truncated to midnight for daily checks.
 
-If there was a change in the data on 2023-04-07 and we run the check again, the table will be updated to show the latest result. 
+If there was a change in the data on 2023-04-07, and we run the check again, the table will be updated to show the latest result. 
 
 | actual_value |    time_period |
 |-------------:|---------------:|
@@ -41,14 +42,11 @@ Below is an example of the YAML file showing sample configuration of a daily and
 nulls_percent.
 
 === "Daily monitoring check"
-    ``` yaml hl_lines="14-23"
+    ``` yaml hl_lines="10-19"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -67,22 +65,13 @@ nulls_percent.
                     max_percent: 30.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
     ```
 === "Monthly monitoring check"
-    ``` yaml hl_lines="14-23"
+    ``` yaml hl_lines="10-19"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
