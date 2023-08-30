@@ -43,13 +43,10 @@ export const DefinitionTree = () => {
     useSelector((state: IRootState) => state.definition);
   const [selected, setSelected] = useState('');
 
-  // const [rootTree, setRootTree] = useState<Array<TreeRootInterface>>();
-
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree());
-    // setRootTree(treeRootElements.map((x) => ({ category: x, isOpen: false })));
   }, []);
 
   const toggleSensorFolder = (key: string) => {
