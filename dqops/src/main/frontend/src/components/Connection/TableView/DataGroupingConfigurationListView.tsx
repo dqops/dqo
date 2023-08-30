@@ -103,10 +103,10 @@ const DataGroupingConfigurationListView = ({
   return (
     <div className="px-8 py-4 text-sm">
       <table className="mb-4">
-        <thead>
-          <tr className="flex px-2 py-2">
-            <th className="w-5 h-5"></th>
+        <thead className='relative'>
+          <tr className="flex py-2">
             <th>Data grouping configuration name</th>
+            <th className='absolute right-5'>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -152,15 +152,21 @@ const DataGroupingConfigurationListView = ({
                     }
                   />
                 </div>
-                <span
-                  onClick={() => onEdit(groupingConfiguration)}
-                  className="cursor-pointer underline"
-                >
+                <span>
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
               </td>
 
               <td className="px-2 py-2">
+              <IconButton
+                  size="sm"
+                  className="group bg-teal-500 ml-3"
+                  onClick={() => 
+                    onEdit(groupingConfiguration)
+                  }
+                >
+                  <SvgIcon name="edit" className="w-4" />
+                </IconButton>
                 <IconButton
                   size="sm"
                   className="group bg-teal-500 ml-3"
