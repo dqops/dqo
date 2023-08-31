@@ -99,7 +99,7 @@ const TableProfilingChecks = () => {
   return (
     <div
       className=" flex flex-col overflow-x-auto overflow-y-hidden"
-      style={{ height: `calc(100vh - 350px` }}
+      style={{ height: `calc(100vh - 350px)` }}
     >
       <TableActionGroup
         shouldDelete={false}
