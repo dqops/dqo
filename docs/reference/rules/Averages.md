@@ -94,7 +94,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -106,7 +106,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
@@ -213,7 +216,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -225,7 +228,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
@@ -332,7 +338,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -344,7 +350,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
@@ -455,7 +464,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -467,7 +476,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
@@ -564,7 +576,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -576,7 +588,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
@@ -673,7 +688,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -685,7 +700,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
@@ -782,7 +800,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -794,7 +812,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if len(filtered) == 0:
+        return RuleExecutionResult()
+
     filtered_mean = float(scipy.mean(filtered))
 
     upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)

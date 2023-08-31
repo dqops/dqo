@@ -91,7 +91,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -101,7 +101,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters,"from")
@@ -204,7 +204,7 @@ class RuleExecutionResult:
     lower_bound: int
     upper_bound: int
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -214,7 +214,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters, "from")
@@ -305,7 +305,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -315,7 +315,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     expected_value = rule_parameters.parameters.expected_datatype
     lower_bound = expected_value
@@ -402,7 +402,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -414,7 +414,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     has_expected_value = hasattr(rule_parameters, 'expected_value')
     has_actual_value = hasattr(rule_parameters, 'actual_value')
     if not has_expected_value and not has_actual_value:
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     if not has_expected_value:
         return RuleExecutionResult(False, None, None, None)
@@ -516,7 +516,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -526,7 +526,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value - rule_parameters.parameters.error_margin
@@ -614,7 +614,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -624,7 +624,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value
@@ -712,7 +712,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -722,9 +722,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.max_value
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_value
     passed = rule_parameters.actual_value <= upper_bound
@@ -809,7 +809,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -819,9 +819,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.max_count
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_count
     passed = rule_parameters.actual_value <= upper_bound
@@ -906,7 +906,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -918,7 +918,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.max_days
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_days
     passed = rule_parameters.actual_value <= upper_bound
@@ -1009,7 +1009,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.new_actual_value = new_actual_value
         self.expected_value = expected_value
@@ -1020,10 +1020,10 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered.append(rule_parameters.actual_value)
@@ -1129,7 +1129,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1229,7 +1229,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1239,9 +1239,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.max_percent
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_percent
     passed = rule_parameters.actual_value <= upper_bound
@@ -1328,7 +1328,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1338,9 +1338,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.max_value
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_value
     passed = rule_parameters.actual_value <= upper_bound
@@ -1427,7 +1427,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1437,9 +1437,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
@@ -1526,7 +1526,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1536,9 +1536,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
@@ -1623,7 +1623,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1633,9 +1633,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_percent
     lower_bound = rule_parameters.parameters.min_percent
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
@@ -1722,7 +1722,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1732,9 +1732,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
@@ -1810,7 +1810,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1820,17 +1820,17 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None and hasattr(readouts, 'sensor_readout') and rule_parameters.actual_value is not None]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
 
     expected_value = filtered[-1].sensor_readout if len(filtered) > 0 else None
     lower_bound = expected_value
     upper_bound = expected_value
-    passed = len(filtered) == 0 or (filtered[-1] is not None and filtered[-1] == rule_parameters.actual_value) or filtered[-1] == None
+    passed = len(filtered) == 0 or (filtered[-1] == rule_parameters.actual_value)
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 ```

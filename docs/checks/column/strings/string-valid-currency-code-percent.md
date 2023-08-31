@@ -2639,7 +2639,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                 min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2647,6 +2647,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2752,8 +2753,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2796,8 +2797,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2850,8 +2851,8 @@ spec:
     FROM(
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2893,8 +2894,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2936,8 +2937,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2979,8 +2980,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3022,11 +3023,11 @@ spec:
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-    ORDER BY CAST(analyzed_table.[] AS date)
+    GROUP BY CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+    ORDER BY CAST(analyzed_table.[col_event_timestamp] AS date)
     
         
     ```
@@ -3034,7 +3035,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3042,6 +3043,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -3162,8 +3164,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+            CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3207,8 +3209,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3267,8 +3269,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3311,8 +3313,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3355,8 +3357,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3399,8 +3401,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3443,11 +3445,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[col_event_timestamp] AS date)
         
             
         ```
@@ -3505,7 +3507,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                 min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3513,6 +3515,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -3618,8 +3621,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3662,8 +3665,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3716,8 +3719,8 @@ spec:
     FROM(
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3759,8 +3762,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3802,8 +3805,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3845,8 +3848,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3888,11 +3891,11 @@ spec:
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
     
         
     ```
@@ -3900,7 +3903,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3908,6 +3911,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -4028,8 +4032,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+            DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4073,8 +4077,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4133,8 +4137,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4177,8 +4181,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4221,8 +4225,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4265,8 +4269,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4309,11 +4313,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
         
             
         ```

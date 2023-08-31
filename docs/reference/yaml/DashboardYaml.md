@@ -28,6 +28,38 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
 
 ___  
 
+## DashboardsFolderListSpec  
+List of dashboard folders.  
+  
+
+
+
+
+
+
+___  
+
+## DashboardListSpec  
+List of dashboards.  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___  
+
 ## DashboardSpec  
 Description of a single dashboard that is available in the platform.  
   
@@ -79,38 +111,6 @@ Description of a folder with multiple dashboards or other folders.
 
 
 
-
-
-
-
-
-
-___  
-
-## DashboardListSpec  
-List of dashboards.  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___  
-
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
 
 
 

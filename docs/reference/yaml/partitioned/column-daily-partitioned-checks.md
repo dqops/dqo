@@ -88,10 +88,8 @@ Container of accuracy data quality partitioned checks on a column level that are
 
 ___  
 
-## ColumnComparisonDailyPartitionedChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+## ColumnNullsDailyPartitionedChecksSpec  
+Container of nulls data quality partitioned checks on a column level that are checking at a daily level.  
   
 
 
@@ -105,10 +103,120 @@ Container of comparison checks for each defined data comparison. The name of the
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|access_order||boolean| | | |
-|size||integer| | | |
-|mod_count||integer| | | |
-|threshold||integer| | | |
+|[daily_partition_nulls_count](\docs\checks\column\nulls\nulls-count)|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNullsCountCheckSpec](\docs\checks\column\nulls\nulls-count)| | | |
+|[daily_partition_nulls_percent](\docs\checks\column\nulls\nulls-percent)|Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNullsPercentCheckSpec](\docs\checks\column\nulls\nulls-percent)| | | |
+|[daily_partition_nulls_percent_anomaly_stationary_30_days](\docs\checks\column\nulls\nulls-percent-anomaly-stationary-30-days)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryNullPercent30DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-anomaly-stationary-30-days)| | | |
+|[daily_partition_nulls_percent_anomaly_stationary](\docs\checks\column\nulls\nulls-percent-anomaly-stationary)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryNullPercentCheckSpec](\docs\checks\column\nulls\nulls-percent-anomaly-stationary)| | | |
+|[daily_partition_nulls_percent_change](\docs\checks\column\nulls\nulls-percent-change)|Verifies that the null percent value in a column changed in a fixed rate since last readout.|[ColumnChangeNullPercentCheckSpec](\docs\checks\column\nulls\nulls-percent-change)| | | |
+|[daily_partition_nulls_percent_change_yesterday](\docs\checks\column\nulls\nulls-percent-change-yesterday)|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeNullPercentSinceYesterdayCheckSpec](\docs\checks\column\nulls\nulls-percent-change-yesterday)| | | |
+|[daily_partition_nulls_percent_change_7_days](\docs\checks\column\nulls\nulls-percent-change-7-days)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeNullPercentSince7DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-change-7-days)| | | |
+|[daily_partition_nulls_percent_change_30_days](\docs\checks\column\nulls\nulls-percent-change-30-days)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|[ColumnChangeNullPercentSince30DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-change-30-days)| | | |
+|[daily_partition_not_nulls_count](\docs\checks\column\nulls\not-nulls-count)|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNotNullsCountCheckSpec](\docs\checks\column\nulls\not-nulls-count)| | | |
+|[daily_partition_not_nulls_percent](\docs\checks\column\nulls\not-nulls-percent)|Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNotNullsPercentCheckSpec](\docs\checks\column\nulls\not-nulls-percent)| | | |
+|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnBoolDailyPartitionedChecksSpec  
+Container of boolean data quality partitioned checks on a column level that are checking at a daily level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_true_percent](\docs\checks\column\bool\true-percent)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnTruePercentCheckSpec](\docs\checks\column\bool\true-percent)| | | |
+|[daily_partition_false_percent](\docs\checks\column\bool\false-percent)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnFalsePercentCheckSpec](\docs\checks\column\bool\false-percent)| | | |
+|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnAnomalyDailyPartitionedChecksSpec  
+Container of built-in preconfigured data quality checks on a column level for detecting anomalies.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_mean_anomaly_stationary_30_days](\docs\checks\column\anomaly\mean-anomaly-stationary-30-days)|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMean30DaysCheckSpec](\docs\checks\column\anomaly\mean-anomaly-stationary-30-days)| | | |
+|[daily_partition_mean_anomaly_stationary](\docs\checks\column\anomaly\mean-anomaly-stationary)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMeanCheckSpec](\docs\checks\column\anomaly\mean-anomaly-stationary)| | | |
+|[daily_partition_median_anomaly_stationary_30_days](\docs\checks\column\anomaly\median-anomaly-stationary-30-days)|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMedian30DaysCheckSpec](\docs\checks\column\anomaly\median-anomaly-stationary-30-days)| | | |
+|[daily_partition_median_anomaly_stationary](\docs\checks\column\anomaly\median-anomaly-stationary)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMedianCheckSpec](\docs\checks\column\anomaly\median-anomaly-stationary)| | | |
+|[daily_partition_sum_anomaly_stationary_30_days](\docs\checks\column\anomaly\sum-anomaly-stationary-30-days)|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryPartitionSum30DaysCheckSpec](\docs\checks\column\anomaly\sum-anomaly-stationary-30-days)| | | |
+|[daily_partition_sum_anomaly_stationary](\docs\checks\column\anomaly\sum-anomaly-stationary)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryPartitionSumCheckSpec](\docs\checks\column\anomaly\sum-anomaly-stationary)| | | |
+|[daily_partition_mean_change](\docs\checks\column\anomaly\mean-change)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](\docs\checks\column\anomaly\mean-change)| | | |
+|[daily_partition_mean_change_yesterday](\docs\checks\column\anomaly\mean-change-yesterday)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMeanSinceYesterdayCheckSpec](\docs\checks\column\anomaly\mean-change-yesterday)| | | |
+|[daily_partition_mean_change_7_days](\docs\checks\column\anomaly\mean-change-7-days)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMeanSince7DaysCheckSpec](\docs\checks\column\anomaly\mean-change-7-days)| | | |
+|[daily_partition_mean_change_30_days](\docs\checks\column\anomaly\mean-change-30-days)|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|[ColumnChangeMeanSince30DaysCheckSpec](\docs\checks\column\anomaly\mean-change-30-days)| | | |
+|[daily_partition_median_change](\docs\checks\column\anomaly\median-change)|Verifies that the median in a column changed in a fixed rate since last readout.|[ColumnChangeMedianCheckSpec](\docs\checks\column\anomaly\median-change)| | | |
+|[daily_partition_median_change_yesterday](\docs\checks\column\anomaly\median-change-yesterday)|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMedianSinceYesterdayCheckSpec](\docs\checks\column\anomaly\median-change-yesterday)| | | |
+|[daily_partition_median_change_7_days](\docs\checks\column\anomaly\median-change-7-days)|Verifies that the median in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMedianSince7DaysCheckSpec](\docs\checks\column\anomaly\median-change-7-days)| | | |
+|[daily_partition_median_change_30_days](\docs\checks\column\anomaly\median-change-30-days)|Verifies that the median in a column changed in a fixed rate since last readout from last month.|[ColumnChangeMedianSince30DaysCheckSpec](\docs\checks\column\anomaly\median-change-30-days)| | | |
+|[daily_partition_sum_change](\docs\checks\column\anomaly\sum-change)|Verifies that the sum in a column changed in a fixed rate since last readout.|[ColumnChangeSumCheckSpec](\docs\checks\column\anomaly\sum-change)| | | |
+|[daily_partition_sum_change_yesterday](\docs\checks\column\anomaly\sum-change-yesterday)|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeSumSinceYesterdayCheckSpec](\docs\checks\column\anomaly\sum-change-yesterday)| | | |
+|[daily_partition_sum_change_7_days](\docs\checks\column\anomaly\sum-change-7-days)|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|[ColumnChangeSumSince7DaysCheckSpec](\docs\checks\column\anomaly\sum-change-7-days)| | | |
+|[daily_partition_sum_change_30_days](\docs\checks\column\anomaly\sum-change-30-days)|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|[ColumnChangeSumSince30DaysCheckSpec](\docs\checks\column\anomaly\sum-change-30-days)| | | |
+|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnIntegrityDailyPartitionedChecksSpec  
+Container of integrity data quality partitioned checks on a column level that are checking at a daily level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_foreign_key_not_match_count](\docs\checks\column\integrity\foreign-key-not-match-count)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnIntegrityForeignKeyNotMatchCountCheckSpec](\docs\checks\column\integrity\foreign-key-not-match-count)| | | |
+|[daily_partition_foreign_key_match_percent](\docs\checks\column\integrity\foreign-key-match-percent)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnIntegrityForeignKeyMatchPercentCheckSpec](\docs\checks\column\integrity\foreign-key-match-percent)| | | |
+|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
 
 
 
@@ -144,65 +252,6 @@ Container of built-in preconfigured column level comparison checks that compare 
 |[daily_partition_not_null_count_match](\docs\checks\column\comparisons\not-null-count-match)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNotNullCountMatchCheckSpec](\docs\checks\column\comparisons\not-null-count-match)| | | |
 |[daily_partition_null_count_match](\docs\checks\column\comparisons\null-count-match)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNullCountMatchCheckSpec](\docs\checks\column\comparisons\null-count-match)| | | |
 |reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
-|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnSqlDailyPartitionedChecksSpec  
-Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_sql_condition_passed_percent_on_column](\docs\checks\column\sql\sql-condition-passed-percent-on-column)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlConditionPassedPercentCheckSpec](\docs\checks\column\sql\sql-condition-passed-percent-on-column)| | | |
-|[daily_partition_sql_condition_failed_count_on_column](\docs\checks\column\sql\sql-condition-failed-count-on-column)|Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlConditionFailedCountCheckSpec](\docs\checks\column\sql\sql-condition-failed-count-on-column)| | | |
-|[daily_partition_sql_aggregate_expr_column](\docs\checks\column\sql\sql-aggregate-expr-column)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlAggregateExprCheckSpec](\docs\checks\column\sql\sql-aggregate-expr-column)| | | |
-|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnBoolDailyPartitionedChecksSpec  
-Container of boolean data quality partitioned checks on a column level that are checking at a daily level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_true_percent](\docs\checks\column\bool\true-percent)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnTruePercentCheckSpec](\docs\checks\column\bool\true-percent)| | | |
-|[daily_partition_false_percent](\docs\checks\column\bool\false-percent)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnFalsePercentCheckSpec](\docs\checks\column\bool\false-percent)| | | |
 |[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
 
 
@@ -272,74 +321,6 @@ Container of numeric data quality partitioned checks on a column level that are 
 
 ___  
 
-## ColumnUniquenessDailyPartitionedChecksSpec  
-Container of uniqueness data quality partitioned checks on a column level that are checking at a daily level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_distinct_count](\docs\checks\column\uniqueness\distinct-count)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctCountCheckSpec](\docs\checks\column\uniqueness\distinct-count)| | | |
-|[daily_partition_distinct_percent](\docs\checks\column\uniqueness\distinct-percent)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctPercentCheckSpec](\docs\checks\column\uniqueness\distinct-percent)| | | |
-|[daily_partition_duplicate_count](\docs\checks\column\uniqueness\duplicate-count)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicateCountCheckSpec](\docs\checks\column\uniqueness\duplicate-count)| | | |
-|[daily_partition_duplicate_percent](\docs\checks\column\uniqueness\duplicate-percent)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicatePercentCheckSpec](\docs\checks\column\uniqueness\duplicate-percent)| | | |
-|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnNullsDailyPartitionedChecksSpec  
-Container of nulls data quality partitioned checks on a column level that are checking at a daily level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_nulls_count](\docs\checks\column\nulls\nulls-count)|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNullsCountCheckSpec](\docs\checks\column\nulls\nulls-count)| | | |
-|[daily_partition_nulls_percent](\docs\checks\column\nulls\nulls-percent)|Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNullsPercentCheckSpec](\docs\checks\column\nulls\nulls-percent)| | | |
-|[daily_partition_nulls_percent_anomaly_stationary_30_days](\docs\checks\column\nulls\nulls-percent-anomaly-stationary-30-days)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryNullPercent30DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-anomaly-stationary-30-days)| | | |
-|[daily_partition_nulls_percent_anomaly_stationary](\docs\checks\column\nulls\nulls-percent-anomaly-stationary)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryNullPercentCheckSpec](\docs\checks\column\nulls\nulls-percent-anomaly-stationary)| | | |
-|[daily_partition_nulls_percent_change](\docs\checks\column\nulls\nulls-percent-change)|Verifies that the null percent value in a column changed in a fixed rate since last readout.|[ColumnChangeNullPercentCheckSpec](\docs\checks\column\nulls\nulls-percent-change)| | | |
-|[daily_partition_nulls_percent_change_yesterday](\docs\checks\column\nulls\nulls-percent-change-yesterday)|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeNullPercentSinceYesterdayCheckSpec](\docs\checks\column\nulls\nulls-percent-change-yesterday)| | | |
-|[daily_partition_nulls_percent_change_7_days](\docs\checks\column\nulls\nulls-percent-change-7-days)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeNullPercentSince7DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-change-7-days)| | | |
-|[daily_partition_nulls_percent_change_30_days](\docs\checks\column\nulls\nulls-percent-change-30-days)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|[ColumnChangeNullPercentSince30DaysCheckSpec](\docs\checks\column\nulls\nulls-percent-change-30-days)| | | |
-|[daily_partition_not_nulls_count](\docs\checks\column\nulls\not-nulls-count)|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNotNullsCountCheckSpec](\docs\checks\column\nulls\not-nulls-count)| | | |
-|[daily_partition_not_nulls_percent](\docs\checks\column\nulls\not-nulls-percent)|Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNotNullsPercentCheckSpec](\docs\checks\column\nulls\not-nulls-percent)| | | |
-|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## ColumnPiiDailyPartitionedChecksSpec  
 Container of PII data quality partitioned checks on a column level that are checking at a daily level.  
   
@@ -372,8 +353,10 @@ Container of PII data quality partitioned checks on a column level that are chec
 
 ___  
 
-## ColumnDatatypeDailyPartitionedChecksSpec  
-Container of datatype data quality partitioned checks on a column level that are checking at a daily level.  
+## ColumnComparisonDailyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
   
 
 
@@ -387,8 +370,39 @@ Container of datatype data quality partitioned checks on a column level that are
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_string_datatype_detected](\docs\checks\column\datatype\string-datatype-detected)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatatypeStringDatatypeDetectedCheckSpec](\docs\checks\column\datatype\string-datatype-detected)| | | |
-|[daily_partition_string_datatype_changed](\docs\checks\column\datatype\string-datatype-changed)|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatatypeStringDatatypeChangedCheckSpec](\docs\checks\column\datatype\string-datatype-changed)| | | |
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSqlDailyPartitionedChecksSpec  
+Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_sql_condition_passed_percent_on_column](\docs\checks\column\sql\sql-condition-passed-percent-on-column)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlConditionPassedPercentCheckSpec](\docs\checks\column\sql\sql-condition-passed-percent-on-column)| | | |
+|[daily_partition_sql_condition_failed_count_on_column](\docs\checks\column\sql\sql-condition-failed-count-on-column)|Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlConditionFailedCountCheckSpec](\docs\checks\column\sql\sql-condition-failed-count-on-column)| | | |
+|[daily_partition_sql_aggregate_expr_column](\docs\checks\column\sql\sql-aggregate-expr-column)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnSqlAggregateExprCheckSpec](\docs\checks\column\sql\sql-aggregate-expr-column)| | | |
 |[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
 
 
@@ -401,8 +415,8 @@ Container of datatype data quality partitioned checks on a column level that are
 
 ___  
 
-## ColumnDatetimeDailyPartitionedChecksSpec  
-Container of date-time data quality partitioned checks on a column level that are checking at a daily level.  
+## ColumnUniquenessDailyPartitionedChecksSpec  
+Container of uniqueness data quality partitioned checks on a column level that are checking at a daily level.  
   
 
 
@@ -416,38 +430,10 @@ Container of date-time data quality partitioned checks on a column level that ar
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_date_match_format_percent](\docs\checks\column\datetime\date-match-format-percent)|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatetimeDateMatchFormatPercentCheckSpec](\docs\checks\column\datetime\date-match-format-percent)| | | |
-|[daily_partition_date_values_in_future_percent](\docs\checks\column\datetime\date-values-in-future-percent)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDateValuesInFuturePercentCheckSpec](\docs\checks\column\datetime\date-values-in-future-percent)| | | |
-|[daily_partition_datetime_value_in_range_date_percent](\docs\checks\column\datetime\datetime-value-in-range-date-percent)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatetimeValueInRangeDatePercentCheckSpec](\docs\checks\column\datetime\datetime-value-in-range-date-percent)| | | |
-|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnIntegrityDailyPartitionedChecksSpec  
-Container of integrity data quality partitioned checks on a column level that are checking at a daily level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_foreign_key_not_match_count](\docs\checks\column\integrity\foreign-key-not-match-count)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnIntegrityForeignKeyNotMatchCountCheckSpec](\docs\checks\column\integrity\foreign-key-not-match-count)| | | |
-|[daily_partition_foreign_key_match_percent](\docs\checks\column\integrity\foreign-key-match-percent)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnIntegrityForeignKeyMatchPercentCheckSpec](\docs\checks\column\integrity\foreign-key-match-percent)| | | |
+|[daily_partition_distinct_count](\docs\checks\column\uniqueness\distinct-count)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctCountCheckSpec](\docs\checks\column\uniqueness\distinct-count)| | | |
+|[daily_partition_distinct_percent](\docs\checks\column\uniqueness\distinct-percent)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctPercentCheckSpec](\docs\checks\column\uniqueness\distinct-percent)| | | |
+|[daily_partition_duplicate_count](\docs\checks\column\uniqueness\duplicate-count)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicateCountCheckSpec](\docs\checks\column\uniqueness\duplicate-count)| | | |
+|[daily_partition_duplicate_percent](\docs\checks\column\uniqueness\duplicate-percent)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicatePercentCheckSpec](\docs\checks\column\uniqueness\duplicate-percent)| | | |
 |[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
 
 
@@ -500,8 +486,8 @@ Container of data quality partitioned checks on a column level that are checking
 
 ___  
 
-## ColumnAnomalyDailyPartitionedChecksSpec  
-Container of built-in preconfigured data quality checks on a column level for detecting anomalies.  
+## ColumnDatetimeDailyPartitionedChecksSpec  
+Container of date-time data quality partitioned checks on a column level that are checking at a daily level.  
   
 
 
@@ -515,24 +501,38 @@ Container of built-in preconfigured data quality checks on a column level for de
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_mean_anomaly_stationary_30_days](\docs\checks\column\anomaly\mean-anomaly-stationary-30-days)|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMean30DaysCheckSpec](\docs\checks\column\anomaly\mean-anomaly-stationary-30-days)| | | |
-|[daily_partition_mean_anomaly_stationary](\docs\checks\column\anomaly\mean-anomaly-stationary)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMeanCheckSpec](\docs\checks\column\anomaly\mean-anomaly-stationary)| | | |
-|[daily_partition_median_anomaly_stationary_30_days](\docs\checks\column\anomaly\median-anomaly-stationary-30-days)|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMedian30DaysCheckSpec](\docs\checks\column\anomaly\median-anomaly-stationary-30-days)| | | |
-|[daily_partition_median_anomaly_stationary](\docs\checks\column\anomaly\median-anomaly-stationary)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMedianCheckSpec](\docs\checks\column\anomaly\median-anomaly-stationary)| | | |
-|[daily_partition_sum_anomaly_stationary_30_days](\docs\checks\column\anomaly\sum-anomaly-stationary-30-days)|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryPartitionSum30DaysCheckSpec](\docs\checks\column\anomaly\sum-anomaly-stationary-30-days)| | | |
-|[daily_partition_sum_anomaly_stationary](\docs\checks\column\anomaly\sum-anomaly-stationary)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryPartitionSumCheckSpec](\docs\checks\column\anomaly\sum-anomaly-stationary)| | | |
-|[daily_partition_mean_change](\docs\checks\column\anomaly\mean-change)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](\docs\checks\column\anomaly\mean-change)| | | |
-|[daily_partition_mean_change_yesterday](\docs\checks\column\anomaly\mean-change-yesterday)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMeanSinceYesterdayCheckSpec](\docs\checks\column\anomaly\mean-change-yesterday)| | | |
-|[daily_partition_mean_change_7_days](\docs\checks\column\anomaly\mean-change-7-days)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMeanSince7DaysCheckSpec](\docs\checks\column\anomaly\mean-change-7-days)| | | |
-|[daily_partition_mean_change_30_days](\docs\checks\column\anomaly\mean-change-30-days)|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|[ColumnChangeMeanSince30DaysCheckSpec](\docs\checks\column\anomaly\mean-change-30-days)| | | |
-|[daily_partition_median_change](\docs\checks\column\anomaly\median-change)|Verifies that the median in a column changed in a fixed rate since last readout.|[ColumnChangeMedianCheckSpec](\docs\checks\column\anomaly\median-change)| | | |
-|[daily_partition_median_change_yesterday](\docs\checks\column\anomaly\median-change-yesterday)|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMedianSinceYesterdayCheckSpec](\docs\checks\column\anomaly\median-change-yesterday)| | | |
-|[daily_partition_median_change_7_days](\docs\checks\column\anomaly\median-change-7-days)|Verifies that the median in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMedianSince7DaysCheckSpec](\docs\checks\column\anomaly\median-change-7-days)| | | |
-|[daily_partition_median_change_30_days](\docs\checks\column\anomaly\median-change-30-days)|Verifies that the median in a column changed in a fixed rate since last readout from last month.|[ColumnChangeMedianSince30DaysCheckSpec](\docs\checks\column\anomaly\median-change-30-days)| | | |
-|[daily_partition_sum_change](\docs\checks\column\anomaly\sum-change)|Verifies that the sum in a column changed in a fixed rate since last readout.|[ColumnChangeSumCheckSpec](\docs\checks\column\anomaly\sum-change)| | | |
-|[daily_partition_sum_change_yesterday](\docs\checks\column\anomaly\sum-change-yesterday)|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeSumSinceYesterdayCheckSpec](\docs\checks\column\anomaly\sum-change-yesterday)| | | |
-|[daily_partition_sum_change_7_days](\docs\checks\column\anomaly\sum-change-7-days)|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|[ColumnChangeSumSince7DaysCheckSpec](\docs\checks\column\anomaly\sum-change-7-days)| | | |
-|[daily_partition_sum_change_30_days](\docs\checks\column\anomaly\sum-change-30-days)|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|[ColumnChangeSumSince30DaysCheckSpec](\docs\checks\column\anomaly\sum-change-30-days)| | | |
+|[daily_partition_date_match_format_percent](\docs\checks\column\datetime\date-match-format-percent)|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatetimeDateMatchFormatPercentCheckSpec](\docs\checks\column\datetime\date-match-format-percent)| | | |
+|[daily_partition_date_values_in_future_percent](\docs\checks\column\datetime\date-values-in-future-percent)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDateValuesInFuturePercentCheckSpec](\docs\checks\column\datetime\date-values-in-future-percent)| | | |
+|[daily_partition_datetime_value_in_range_date_percent](\docs\checks\column\datetime\datetime-value-in-range-date-percent)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatetimeValueInRangeDatePercentCheckSpec](\docs\checks\column\datetime\datetime-value-in-range-date-percent)| | | |
+|[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnDatatypeDailyPartitionedChecksSpec  
+Container of datatype data quality partitioned checks on a column level that are checking at a daily level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_string_datatype_detected](\docs\checks\column\datatype\string-datatype-detected)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatatypeStringDatatypeDetectedCheckSpec](\docs\checks\column\datatype\string-datatype-detected)| | | |
+|[daily_partition_string_datatype_changed](\docs\checks\column\datatype\string-datatype-changed)|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDatatypeStringDatatypeChangedCheckSpec](\docs\checks\column\datatype\string-datatype-changed)| | | |
 |[custom_checks](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](\docs\reference\yaml\profiling\table-profiling-checks\#customcategorycheckspecmap)| | | |
 
 

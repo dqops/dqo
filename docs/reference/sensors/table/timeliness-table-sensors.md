@@ -97,6 +97,38 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- else -%}
+        (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -347,6 +379,42 @@ Table sensor that runs a query calculating the time difference in days between t
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE)) - MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+             MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE)) - MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+         MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE)) - MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+    
+        {%- else -%}
+         MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE)) - MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -604,6 +672,38 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+         (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+             (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+         (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- else -%}
+        (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -870,6 +970,41 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+       MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE) - (CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE) - (CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+       MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE) - (CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- else -%}
+        MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE) - (CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       

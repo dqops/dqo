@@ -18,6 +18,7 @@ package com.dqops.utils.docs.checks;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
@@ -339,13 +340,17 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         AbstractRootChecksContainerSpec checkRootContainer =
             (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
-                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false) :
-                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false);
+                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), true) :
+                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), true);
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
         }
         else {
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
+        }
+
+        if (checkRootContainer.getCheckType() == CheckType.partitioned) {
+            trimmedTableSpec.getTimestampColumns().setPartitionByColumn(trimmedTableSpec.getTimestampColumns().getEventTimestampColumn());
         }
 
         CheckContainerModel allChecksModel = new CheckContainerModel();

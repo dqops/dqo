@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_con
         pii:
           profile_contains_usa_zipcode_percent:
             warning:
-              max_percent: 1.0
+              max_percent: 0.0
             error:
-              max_percent: 2.0
+              max_percent: 1.0
             fatal:
               max_percent: 5.0
 ```
@@ -66,9 +66,9 @@ spec:
         pii:
           profile_contains_usa_zipcode_percent:
             warning:
-              max_percent: 1.0
+              max_percent: 0.0
             error:
-              max_percent: 2.0
+              max_percent: 1.0
             fatal:
               max_percent: 5.0
       labels:
@@ -88,7 +88,7 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -111,7 +111,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -135,7 +135,7 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -156,7 +156,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -178,7 +178,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -205,7 +205,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -233,7 +233,7 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -254,7 +254,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -276,7 +276,7 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -297,7 +297,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -319,11 +319,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -340,11 +340,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -362,7 +362,7 @@ spec:
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -383,7 +383,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -426,9 +426,9 @@ spec:
             pii:
               profile_contains_usa_zipcode_percent:
                 warning:
-                  max_percent: 1.0
+                  max_percent: 0.0
                 error:
-                  max_percent: 2.0
+                  max_percent: 1.0
                 fatal:
                   max_percent: 5.0
           labels:
@@ -453,7 +453,7 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -475,7 +475,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -501,7 +501,7 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -521,7 +521,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -545,7 +545,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -571,7 +571,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -606,7 +606,7 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -626,7 +626,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -650,7 +650,7 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -670,7 +670,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -694,11 +694,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -714,11 +714,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -738,7 +738,7 @@ spec:
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -758,7 +758,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -826,9 +826,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_conta
           pii:
             daily_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
 ```
@@ -851,9 +851,9 @@ spec:
           pii:
             daily_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
       labels:
@@ -873,7 +873,7 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -896,7 +896,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -920,7 +920,7 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -941,7 +941,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -963,7 +963,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -990,7 +990,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -1018,7 +1018,7 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1039,7 +1039,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1061,7 +1061,7 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1082,7 +1082,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1104,11 +1104,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1125,11 +1125,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1147,7 +1147,7 @@ spec:
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1168,7 +1168,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1212,9 +1212,9 @@ spec:
               pii:
                 daily_contains_usa_zipcode_percent:
                   warning:
-                    max_percent: 1.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 2.0
+                    max_percent: 1.0
                   fatal:
                     max_percent: 5.0
           labels:
@@ -1239,7 +1239,7 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -1261,7 +1261,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -1287,7 +1287,7 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1307,7 +1307,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1331,7 +1331,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1357,7 +1357,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -1392,7 +1392,7 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1412,7 +1412,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1436,7 +1436,7 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1456,7 +1456,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1480,11 +1480,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1500,11 +1500,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1524,7 +1524,7 @@ spec:
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1544,7 +1544,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1612,9 +1612,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_con
           pii:
             monthly_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
 ```
@@ -1637,9 +1637,9 @@ spec:
           pii:
             monthly_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
       labels:
@@ -1659,7 +1659,7 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -1682,7 +1682,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -1706,7 +1706,7 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1727,7 +1727,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1749,7 +1749,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -1776,7 +1776,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -1804,7 +1804,7 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1825,7 +1825,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -1847,7 +1847,7 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1868,7 +1868,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -1890,11 +1890,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1911,11 +1911,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1933,7 +1933,7 @@ spec:
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1954,7 +1954,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -1998,9 +1998,9 @@ spec:
               pii:
                 monthly_contains_usa_zipcode_percent:
                   warning:
-                    max_percent: 1.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 2.0
+                    max_percent: 1.0
                   fatal:
                     max_percent: 5.0
           labels:
@@ -2025,7 +2025,7 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -2047,7 +2047,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -2073,7 +2073,7 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2093,7 +2093,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2117,7 +2117,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2143,7 +2143,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -2178,7 +2178,7 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2198,7 +2198,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2222,7 +2222,7 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -2242,7 +2242,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -2266,11 +2266,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2286,11 +2286,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2310,7 +2310,7 @@ spec:
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -2330,7 +2330,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -2398,14 +2398,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           pii:
             daily_partition_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2413,6 +2413,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2423,9 +2424,9 @@ spec:
           pii:
             daily_partition_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
       labels:
@@ -2445,7 +2446,7 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -2468,7 +2469,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -2479,8 +2480,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2492,7 +2493,7 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2513,7 +2514,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2522,8 +2523,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2535,7 +2536,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2562,7 +2563,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -2576,8 +2577,8 @@ spec:
     FROM (
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     GROUP BY time_period, time_period_utc
@@ -2590,7 +2591,7 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2611,7 +2612,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2620,8 +2621,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2633,7 +2634,7 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -2654,7 +2655,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -2663,8 +2664,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2676,11 +2677,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -2697,17 +2698,17 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2719,7 +2720,7 @@ spec:
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -2740,7 +2741,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -2749,11 +2750,11 @@ spec:
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-    ORDER BY CAST(analyzed_table.[] AS date)
+    GROUP BY CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+    ORDER BY CAST(analyzed_table.[col_event_timestamp] AS date)
     
         
     ```
@@ -2761,7 +2762,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2769,6 +2770,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2788,9 +2790,9 @@ spec:
               pii:
                 daily_partition_contains_usa_zipcode_percent:
                   warning:
-                    max_percent: 1.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 2.0
+                    max_percent: 1.0
                   fatal:
                     max_percent: 5.0
           labels:
@@ -2815,7 +2817,7 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -2837,7 +2839,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -2850,8 +2852,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+            CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2863,7 +2865,7 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2883,7 +2885,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2894,8 +2896,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2907,7 +2909,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -2933,7 +2935,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -2954,8 +2956,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table
         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2968,7 +2970,7 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2988,7 +2990,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -2999,8 +3001,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3012,7 +3014,7 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3032,7 +3034,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3043,8 +3045,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3056,11 +3058,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -3076,19 +3078,19 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3100,7 +3102,7 @@ spec:
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3120,7 +3122,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3131,11 +3133,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[col_event_timestamp] AS date)
         
             
         ```
@@ -3186,14 +3188,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           pii:
             monthly_partition_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3201,6 +3203,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -3211,9 +3214,9 @@ spec:
           pii:
             monthly_partition_contains_usa_zipcode_percent:
               warning:
-                max_percent: 1.0
+                max_percent: 0.0
               error:
-                max_percent: 2.0
+                max_percent: 1.0
               fatal:
                 max_percent: 5.0
       labels:
@@ -3233,7 +3236,7 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -3256,7 +3259,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
@@ -3267,8 +3270,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3280,7 +3283,7 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3301,7 +3304,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3310,8 +3313,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3323,7 +3326,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3350,7 +3353,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -3364,8 +3367,8 @@ spec:
     FROM (
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     GROUP BY time_period, time_period_utc
@@ -3378,7 +3381,7 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -3399,7 +3402,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -3408,8 +3411,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3421,7 +3424,7 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3442,7 +3445,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3451,8 +3454,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3464,11 +3467,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -3485,17 +3488,17 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                            THEN 1
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3507,7 +3510,7 @@ spec:
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3528,7 +3531,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3537,11 +3540,11 @@ spec:
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
     
         
     ```
@@ -3549,7 +3552,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3557,6 +3560,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -3576,9 +3580,9 @@ spec:
               pii:
                 monthly_partition_contains_usa_zipcode_percent:
                   warning:
-                    max_percent: 1.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 2.0
+                    max_percent: 1.0
                   fatal:
                     max_percent: 5.0
           labels:
@@ -3603,7 +3607,7 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -3625,7 +3629,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_CONTAINS(
@@ -3638,8 +3642,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+            DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3651,7 +3655,7 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3671,7 +3675,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3682,8 +3686,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3695,7 +3699,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
@@ -3721,7 +3725,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN REGEXP_LIKE(analyzed_table."target_column", '[0-9]{5}(?:-[0-9]{4})?')
@@ -3742,8 +3746,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table
         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3756,7 +3760,7 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -3776,7 +3780,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN SUBSTRING(analyzed_table."target_column" from '[0-9]{5}(?:-[0-9]{4})?') IS NOT NULL
@@ -3787,8 +3791,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3800,7 +3804,7 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3820,7 +3824,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
@@ -3831,8 +3835,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3844,11 +3848,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -3864,19 +3868,19 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table."target_column" REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
-                                THEN 1
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3888,7 +3892,7 @@ spec:
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3908,7 +3912,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]%'
@@ -3919,11 +3923,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
         
             
         ```

@@ -181,6 +181,97 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value top_value,
+            top_col_values.time_period time_period,
+            top_col_values.time_period_utc time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} top_value,
+                COUNT(*) total_values
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM
+            (
+                SELECT
+                additional_table.*,
+                {{ lib.render_target_column('additional_table') }} top_value
+                {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
+                FROM {{ lib.render_target_table() }} additional_table) analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) top_col_values
+    ) top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {{ ',' }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL actual_value,
+        MAX(0) expected_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) actual_value,
+        MAX({{ parameters.expected_values | length }})  expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -608,6 +699,53 @@ Column level sensor that counts how many expected string values are used in a te
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            MAX(NULL)
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) expected_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1740,6 +1878,32 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                    THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -1867,6 +2031,31 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                    THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -5057,13 +5246,16 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
     SELECT
-        SUM(
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
             CASE
                 WHEN LOWER({{ lib.render_target_column('analyzed_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '''', '-', '')
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value
+            ) / COUNT(*)
+            END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
@@ -5366,6 +5558,33 @@ Column level sensor that calculates the number of rows with parsable to integer 
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                CASE
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
+                    ELSE NULL
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -6381,6 +6600,34 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'YYYY-MM-DD HH24:MI:SS') IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -6527,6 +6774,33 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

@@ -12,7 +12,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_contains_ip6_percent|profiling| |[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_contains_ip6_percent|profiling| |[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_con
         pii:
           profile_contains_ip6_percent:
             warning:
-              min_percent: 100.0
+              max_percent: 0.0
             error:
-              min_percent: 99.0
+              max_percent: 1.0
             fatal:
-              min_percent: 95.0
+              max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         pii:
           profile_contains_ip6_percent:
             warning:
-              min_percent: 100.0
+              max_percent: 0.0
             error:
-              min_percent: 99.0
+              max_percent: 1.0
             fatal:
-              min_percent: 95.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -88,10 +88,14 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -109,10 +113,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -131,10 +139,14 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -152,10 +164,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -174,7 +190,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -205,7 +221,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -237,11 +253,14 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -258,11 +277,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE(analyzed_table."target_column",
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -280,10 +302,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -301,10 +324,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -323,11 +347,12 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -344,11 +369,12 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -364,24 +390,48 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% set byte = "[0-9A-Fa-f]" %}
+    {% set qbyte = byte + byte + byte + byte %}
+    {% set negbyte = "[^g-z]" %}
+    {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+    {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                        OR
+                        {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                        OR -- 6x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 7
+                        OR -- 5x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 6
+                        OR -- 4x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 5
+                        OR -- 3x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                           ) AND {{ colons_count }} = 4
                         THEN 1
                     ELSE 0
                 END
@@ -397,24 +447,47 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```sql
+    
+    
+    
+    
+    
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                        OR
+                        CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                        OR -- 6x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                        OR -- 5x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                        OR -- 4x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                        OR -- 3x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                           ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                         THEN 1
                     ELSE 0
                 END
@@ -454,11 +527,11 @@ spec:
             pii:
               profile_contains_ip6_percent:
                 warning:
-                  min_percent: 100.0
+                  max_percent: 0.0
                 error:
-                  min_percent: 99.0
+                  max_percent: 1.0
                 fatal:
-                  min_percent: 95.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -481,10 +554,14 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -501,10 +578,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -525,10 +606,14 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -545,10 +630,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -569,7 +658,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -599,7 +688,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -638,11 +727,14 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -658,11 +750,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE(analyzed_table."target_column",
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -682,10 +777,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -702,10 +798,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -726,11 +823,12 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -746,11 +844,12 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -768,24 +867,48 @@ spec:
     === "Sensor template for SQL Server"
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% set byte = "[0-9A-Fa-f]" %}
+        {% set qbyte = byte + byte + byte + byte %}
+        {% set negbyte = "[^g-z]" %}
+        {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+        {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                            OR
+                            {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                            OR -- 6x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 7
+                            OR -- 5x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 6
+                            OR -- 4x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 5
+                            OR -- 3x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                               ) AND {{ colons_count }} = 4
                             THEN 1
                         ELSE 0
                     END
@@ -800,24 +923,47 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```sql
+        
+        
+        
+        
+        
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                            OR
+                            CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                            OR -- 6x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                            OR -- 5x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                            OR -- 4x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                            OR -- 3x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                               ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                             THEN 1
                         ELSE 0
                     END
@@ -851,7 +997,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_contains_ip6_percent|monitoring|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_contains_ip6_percent|monitoring|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -882,11 +1028,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_conta
           pii:
             daily_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -907,11 +1053,11 @@ spec:
           pii:
             daily_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -929,10 +1075,14 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -950,10 +1100,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -972,10 +1126,14 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -993,10 +1151,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -1015,7 +1177,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -1046,7 +1208,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -1078,11 +1240,14 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1099,11 +1264,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE(analyzed_table."target_column",
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1121,10 +1289,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -1142,10 +1311,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -1164,11 +1334,12 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1185,11 +1356,12 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1205,24 +1377,48 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% set byte = "[0-9A-Fa-f]" %}
+    {% set qbyte = byte + byte + byte + byte %}
+    {% set negbyte = "[^g-z]" %}
+    {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+    {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                        OR
+                        {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                        OR -- 6x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 7
+                        OR -- 5x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 6
+                        OR -- 4x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 5
+                        OR -- 3x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                           ) AND {{ colons_count }} = 4
                         THEN 1
                     ELSE 0
                 END
@@ -1238,24 +1434,47 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```sql
+    
+    
+    
+    
+    
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                        OR
+                        CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                        OR -- 6x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                        OR -- 5x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                        OR -- 4x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                        OR -- 3x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                           ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                         THEN 1
                     ELSE 0
                 END
@@ -1296,11 +1515,11 @@ spec:
               pii:
                 daily_contains_ip6_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1323,10 +1542,14 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -1343,10 +1566,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -1367,10 +1594,14 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -1387,10 +1618,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -1411,7 +1646,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -1441,7 +1676,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -1480,11 +1715,14 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1500,11 +1738,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE(analyzed_table."target_column",
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1524,10 +1765,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -1544,10 +1786,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -1568,11 +1811,12 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1588,11 +1832,12 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -1610,24 +1855,48 @@ spec:
     === "Sensor template for SQL Server"
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% set byte = "[0-9A-Fa-f]" %}
+        {% set qbyte = byte + byte + byte + byte %}
+        {% set negbyte = "[^g-z]" %}
+        {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+        {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                            OR
+                            {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                            OR -- 6x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 7
+                            OR -- 5x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 6
+                            OR -- 4x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 5
+                            OR -- 3x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                               ) AND {{ colons_count }} = 4
                             THEN 1
                         ELSE 0
                     END
@@ -1642,24 +1911,47 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```sql
+        
+        
+        
+        
+        
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                            OR
+                            CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                            OR -- 6x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                            OR -- 5x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                            OR -- 4x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                            OR -- 3x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                               ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                             THEN 1
                         ELSE 0
                     END
@@ -1693,7 +1985,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_contains_ip6_percent|monitoring|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_contains_ip6_percent|monitoring|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1724,11 +2016,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_con
           pii:
             monthly_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1749,11 +2041,11 @@ spec:
           pii:
             monthly_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1771,10 +2063,14 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -1792,10 +2088,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -1814,10 +2114,14 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -1835,10 +2139,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -1857,7 +2165,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -1888,7 +2196,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -1920,11 +2228,14 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1941,11 +2252,14 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE(analyzed_table."target_column",
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1963,10 +2277,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -1984,10 +2299,11 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -2006,11 +2322,12 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -2027,11 +2344,12 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -2047,24 +2365,48 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% set byte = "[0-9A-Fa-f]" %}
+    {% set qbyte = byte + byte + byte + byte %}
+    {% set negbyte = "[^g-z]" %}
+    {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+    {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                        OR
+                        {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                        OR -- 6x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 7
+                        OR -- 5x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 6
+                        OR -- 4x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 5
+                        OR -- 3x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                           ) AND {{ colons_count }} = 4
                         THEN 1
                     ELSE 0
                 END
@@ -2080,24 +2422,47 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```sql
+    
+    
+    
+    
+    
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                        OR
+                        CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                        OR -- 6x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                        OR -- 5x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                        OR -- 4x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                        OR -- 3x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                           ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                         THEN 1
                     ELSE 0
                 END
@@ -2138,11 +2503,11 @@ spec:
               pii:
                 monthly_contains_ip6_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2165,10 +2530,14 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -2185,10 +2554,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -2209,10 +2582,14 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -2229,10 +2606,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -2253,7 +2634,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -2283,7 +2664,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -2322,11 +2703,14 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2342,11 +2726,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE(analyzed_table."target_column",
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2366,10 +2753,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -2386,10 +2774,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -2410,11 +2799,12 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2430,11 +2820,12 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -2452,24 +2843,48 @@ spec:
     === "Sensor template for SQL Server"
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% set byte = "[0-9A-Fa-f]" %}
+        {% set qbyte = byte + byte + byte + byte %}
+        {% set negbyte = "[^g-z]" %}
+        {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+        {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                            OR
+                            {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                            OR -- 6x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 7
+                            OR -- 5x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 6
+                            OR -- 4x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 5
+                            OR -- 3x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                               ) AND {{ colons_count }} = 4
                             THEN 1
                         ELSE 0
                     END
@@ -2484,24 +2899,47 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```sql
+        
+        
+        
+        
+        
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                            OR
+                            CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                            OR -- 6x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                            OR -- 5x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                            OR -- 4x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                            OR -- 3x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                               ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                             THEN 1
                         ELSE 0
                     END
@@ -2535,7 +2973,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_contains_ip6_percent|partitioned|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_contains_ip6_percent|partitioned|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2566,14 +3004,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           pii:
             daily_partition_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2581,6 +3019,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2591,11 +3030,11 @@ spec:
           pii:
             daily_partition_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2613,10 +3052,14 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -2634,17 +3077,21 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2656,10 +3103,14 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -2677,17 +3128,21 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2699,7 +3154,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -2730,7 +3185,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -2748,8 +3203,8 @@ spec:
     FROM (
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     GROUP BY time_period, time_period_utc
@@ -2762,11 +3217,14 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -2783,17 +3241,20 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE(analyzed_table."target_column",
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2805,10 +3266,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -2826,17 +3288,18 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2848,11 +3311,12 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -2869,17 +3333,18 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2889,24 +3354,48 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% set byte = "[0-9A-Fa-f]" %}
+    {% set qbyte = byte + byte + byte + byte %}
+    {% set negbyte = "[^g-z]" %}
+    {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+    {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                        OR
+                        {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                        OR -- 6x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 7
+                        OR -- 5x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 6
+                        OR -- 4x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 5
+                        OR -- 3x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                           ) AND {{ colons_count }} = 4
                         THEN 1
                     ELSE 0
                 END
@@ -2922,34 +3411,57 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```sql
+    
+    
+    
+    
+    
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                        OR
+                        CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                        OR -- 6x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                        OR -- 5x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                        OR -- 4x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                        OR -- 3x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                           ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-    ORDER BY CAST(analyzed_table.[] AS date)
+    GROUP BY CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+    ORDER BY CAST(analyzed_table.[col_event_timestamp] AS date)
     
         
     ```
@@ -2957,7 +3469,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2965,6 +3477,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2984,11 +3497,11 @@ spec:
               pii:
                 daily_partition_contains_ip6_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3011,10 +3524,14 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -3031,10 +3548,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -3042,8 +3563,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+            CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3055,10 +3576,14 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -3075,10 +3600,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -3086,8 +3615,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3099,7 +3628,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -3129,7 +3658,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -3154,8 +3683,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table
         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3168,11 +3697,14 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -3188,19 +3720,22 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE(analyzed_table."target_column",
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3212,10 +3747,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -3232,10 +3768,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -3243,8 +3780,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3256,11 +3793,12 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -3276,19 +3814,20 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3298,24 +3837,48 @@ spec:
     === "Sensor template for SQL Server"
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% set byte = "[0-9A-Fa-f]" %}
+        {% set qbyte = byte + byte + byte + byte %}
+        {% set negbyte = "[^g-z]" %}
+        {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+        {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                            OR
+                            {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                            OR -- 6x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 7
+                            OR -- 5x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 6
+                            OR -- 4x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 5
+                            OR -- 3x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                               ) AND {{ colons_count }} = 4
                             THEN 1
                         ELSE 0
                     END
@@ -3330,24 +3893,47 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```sql
+        
+        
+        
+        
+        
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                            OR
+                            CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                            OR -- 6x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                            OR -- 5x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                            OR -- 4x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                            OR -- 3x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                               ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                             THEN 1
                         ELSE 0
                     END
@@ -3355,11 +3941,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[col_event_timestamp] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[col_event_timestamp] AS date), CAST(analyzed_table.[col_event_timestamp] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[col_event_timestamp] AS date)
         
             
         ```
@@ -3379,7 +3965,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_ip6_percent|partitioned|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_contains_ip6_percent|partitioned|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3410,14 +3996,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           pii:
             monthly_partition_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3425,6 +4011,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: col_event_timestamp
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -3435,11 +4022,11 @@ spec:
           pii:
             monthly_partition_contains_ip6_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -3457,10 +4044,14 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
@@ -3478,17 +4069,21 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                    WHEN
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                        REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                            r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3500,10 +4095,14 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
@@ -3521,17 +4120,21 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                    WHEN
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(analyzed_table.`target_column`,
+                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3543,7 +4146,7 @@ spec:
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -3574,7 +4177,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
@@ -3592,8 +4195,8 @@ spec:
     FROM (
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     GROUP BY time_period, time_period_utc
@@ -3606,11 +4209,14 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -3627,17 +4233,20 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                     '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                         REGEXP_LIKE(analyzed_table."target_column",
+                                      '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3649,10 +4258,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
@@ -3670,17 +4280,18 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                    WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                        OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3692,11 +4303,12 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -3713,17 +4325,18 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                        THEN 1
+                    WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                        OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3733,24 +4346,48 @@ spec:
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% set byte = "[0-9A-Fa-f]" %}
+    {% set qbyte = byte + byte + byte + byte %}
+    {% set negbyte = "[^g-z]" %}
+    {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+    {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                        OR
+                        {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                        OR -- 6x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 7
+                        OR -- 5x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 6
+                        OR -- 4x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                        ) AND {{ colons_count }} = 5
+                        OR -- 3x bytes
+                        ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                            OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                           ) AND {{ colons_count }} = 4
                         THEN 1
                     ELSE 0
                 END
@@ -3766,34 +4403,57 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```sql
+    
+    
+    
+    
+    
+    
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                        OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                    WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                        OR
+                        CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                        OR -- 6x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                        OR -- 5x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                        OR -- 4x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                        ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                        OR -- 3x bytes
+                        (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                           ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
         END AS actual_value,
-        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
     
         
     ```
@@ -3801,7 +4461,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="12-22 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3809,6 +4469,7 @@ spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: col_event_timestamp
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -3828,11 +4489,11 @@ spec:
               pii:
                 monthly_partition_contains_ip6_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3855,10 +4516,14 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -3875,10 +4540,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                        WHEN
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}") OR
+                            REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),
+                                r"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}")
                             THEN 1
                         ELSE 0
                     END
@@ -3886,8 +4555,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+            DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3899,10 +4568,14 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -3919,10 +4592,14 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))')
+                        WHEN
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                        '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                            REGEXP_LIKE(analyzed_table.`target_column`,
+                                         '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
                             THEN 1
                         ELSE 0
                     END
@@ -3930,8 +4607,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`col_event_timestamp`, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3943,7 +4620,7 @@ spec:
         {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -3973,7 +4650,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN
@@ -3998,8 +4675,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."col_event_timestamp" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table
         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4012,11 +4689,14 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -4032,19 +4712,22 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') IS NOT NULL
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column",
+                                         '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                             REGEXP_LIKE(analyzed_table."target_column",
+                                          '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                             THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4056,10 +4739,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN {{lib.render_target_column('analyzed_table')}} ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR {{lib.render_target_column('analyzed_table')}} ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -4076,10 +4760,11 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))'
+                        WHEN analyzed_table."target_column" ~ '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+                            OR analyzed_table."target_column" ~ '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'
                             THEN 1
                         ELSE 0
                     END
@@ -4087,8 +4772,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4100,11 +4785,12 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
@@ -4120,19 +4806,20 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN 100.0
+                WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column",'.*(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])).*')
-                            THEN 1
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '.*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}).*' )
+                            OR REGEXP_LIKE(analyzed_table."target_column", '.*('[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}'}).*' )
+                        THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4142,24 +4829,48 @@ spec:
     === "Sensor template for SQL Server"
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% set byte = "[0-9A-Fa-f]" %}
+        {% set qbyte = byte + byte + byte + byte %}
+        {% set negbyte = "[^g-z]" %}
+        {% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+        {% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
+                            OR
+                            {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                AND {{ tested_column }} LIKE '%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%:{{negbyte}}%'
+                            OR -- 6x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 7
+                            OR -- 5x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 6
+                            OR -- 4x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%{{negbyte}}:%'
+                            ) AND {{ colons_count }} = 5
+                            OR -- 3x bytes
+                            ({{ tested_column }} LIKE '%{{negbyte}}:%{{negbyte}}::%{{negbyte}}:%'
+                                OR {{ tested_column }} LIKE '%{{negbyte}}::%{{negbyte}}:%{{negbyte}}:%'
+                               ) AND {{ colons_count }} = 4
                             THEN 1
                         ELSE 0
                     END
@@ -4174,24 +4885,47 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```sql
+        
+        
+        
+        
+        
+        
         SELECT
             CASE
-                WHEN COUNT_BIG(*) = 0 THEN 100.0
+                WHEN COUNT_BIG(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
-                            OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]%'
+                            OR
+                            CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                AND CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%:[^g-z]%'
+                            OR -- 6x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 7
+                            OR -- 5x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%::%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 6
+                            OR -- 4x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]:%[^g-z]::%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%[^g-z]:%'
+                            ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 5
+                            OR -- 3x bytes
+                            (CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]:%[^g-z]::%[^g-z]:%'
+                                OR CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '%[^g-z]::%[^g-z]:%[^g-z]:%'
+                               ) AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], ':', '')) = 4
                             THEN 1
                         ELSE 0
                     END
@@ -4199,11 +4933,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[col_event_timestamp]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[col_event_timestamp] AS date)), MONTH(CAST(analyzed_table.[col_event_timestamp] AS date)), 1)
         
             
         ```
