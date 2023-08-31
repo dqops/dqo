@@ -106,7 +106,7 @@ const DataGroupingConfigurationListView = ({
         <thead className='relative'>
           <tr className="flex py-2">
             <th>Data grouping configuration name</th>
-            <th className='absolute right-5'>Action</th>
+            {dataGroupingConfigurations.length!== 0 && <th className='absolute right-5'>Action</th>}
           </tr>
         </thead>
         <tbody>
