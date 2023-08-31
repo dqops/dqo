@@ -43,8 +43,8 @@ public class ColumnUniquenessDailyMonitoringChecksSpec extends AbstractCheckCate
 
             put("daily_anomaly_differencing_distinct_count_30_days", o -> o.dailyAnomalyDifferencingDistinctCount30Days);
             put("daily_anomaly_differencing_distinct_count", o -> o.dailyAnomalyDifferencingDistinctCount);
-            put("daily_anomaly_differencing_distinct_percent_30_days", o -> o.dailyAnomalyDifferencingDistinctPercent30Days);
-            put("daily_anomaly_differencing_distinct_percent", o -> o.dailyAnomalyDifferencingDistinctPercent);
+            put("daily_anomaly_stationary_distinct_percent_30_days", o -> o.dailyAnomalyStationaryDistinctPercent30Days);
+            put("daily_anomaly_stationary_distinct_percent", o -> o.dailyAnomalyStationaryDistinctPercent);
             put("daily_change_distinct_count", o -> o.dailyChangeDistinctCount);
             put("daily_change_distinct_count_since_7_days", o -> o.dailyChangeDistinctCountSince7Days);
             put("daily_change_distinct_count_since_30_days", o -> o.dailyChangeDistinctCountSince30Days);
@@ -76,10 +76,10 @@ public class ColumnUniquenessDailyMonitoringChecksSpec extends AbstractCheckCate
     private ColumnAnomalyDifferencingDistinctCountCheckSpec dailyAnomalyDifferencingDistinctCount;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec dailyAnomalyDifferencingDistinctPercent30Days;
+    private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec dailyAnomalyStationaryDistinctPercent30Days;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctPercentCheckSpec dailyAnomalyDifferencingDistinctPercent;
+    private ColumnAnomalyStationaryDistinctPercentCheckSpec dailyAnomalyStationaryDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctCountCheckSpec dailyChangeDistinctCount;
@@ -217,36 +217,36 @@ public class ColumnUniquenessDailyMonitoringChecksSpec extends AbstractCheckCate
      * Returns a distinct percent value anomaly 30 days check specification.
      * @return Distinct percent value anomaly 30 days check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec getDailyAnomalyDifferencingDistinctPercent30Days() {
-        return dailyAnomalyDifferencingDistinctPercent30Days;
+    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getDailyAnomalyStationaryDistinctPercent30Days() {
+        return dailyAnomalyStationaryDistinctPercent30Days;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly 30 days check.
-     * @param dailyAnomalyDifferencingDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
+     * @param dailyAnomalyStationaryDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
      */
-    public void setDailyAnomalyDifferencingDistinctPercent30Days(ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec dailyAnomalyDifferencingDistinctPercent30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyAnomalyDifferencingDistinctPercent30Days, dailyAnomalyDifferencingDistinctPercent30Days));
-        this.dailyAnomalyDifferencingDistinctPercent30Days = dailyAnomalyDifferencingDistinctPercent30Days;
-        propagateHierarchyIdToField(dailyAnomalyDifferencingDistinctPercent30Days, "daily_anomaly_differencing_distinct_percent_30_days");
+    public void setDailyAnomalyStationaryDistinctPercent30Days(ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec dailyAnomalyStationaryDistinctPercent30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyAnomalyStationaryDistinctPercent30Days, dailyAnomalyStationaryDistinctPercent30Days));
+        this.dailyAnomalyStationaryDistinctPercent30Days = dailyAnomalyStationaryDistinctPercent30Days;
+        propagateHierarchyIdToField(dailyAnomalyStationaryDistinctPercent30Days, "daily_anomaly_stationary_distinct_percent_30_days");
     }
 
     /**
      * Returns a distinct percent value anomaly check specification.
      * @return Distinct percent value anomaly check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercentCheckSpec getDailyAnomalyDifferencingDistinctPercent() {
-        return dailyAnomalyDifferencingDistinctPercent;
+    public ColumnAnomalyStationaryDistinctPercentCheckSpec getDailyAnomalyStationaryDistinctPercent() {
+        return dailyAnomalyStationaryDistinctPercent;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly check.
-     * @param dailyAnomalyDifferencingDistinctPercent Distinct percent value anomaly check specification.
+     * @param dailyAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
      */
-    public void setDailyAnomalyDifferencingDistinctPercent(ColumnAnomalyDifferencingDistinctPercentCheckSpec dailyAnomalyDifferencingDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyAnomalyDifferencingDistinctPercent, dailyAnomalyDifferencingDistinctPercent));
-        this.dailyAnomalyDifferencingDistinctPercent = dailyAnomalyDifferencingDistinctPercent;
-        propagateHierarchyIdToField(dailyAnomalyDifferencingDistinctPercent, "daily_anomaly_differencing_distinct_percent");
+    public void setDailyAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec dailyAnomalyStationaryDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyAnomalyStationaryDistinctPercent, dailyAnomalyStationaryDistinctPercent));
+        this.dailyAnomalyStationaryDistinctPercent = dailyAnomalyStationaryDistinctPercent;
+        propagateHierarchyIdToField(dailyAnomalyStationaryDistinctPercent, "daily_anomaly_stationary_distinct_percent");
     }
 
     /**

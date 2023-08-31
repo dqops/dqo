@@ -19,11 +19,10 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule01ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule05ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+ * Column level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec, AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec, AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnAnomalyStationaryDistinctPercentCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyStationaryDistinctPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,22 +49,22 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec warning;
+    private AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec error;
+    private AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec fatal;
+    private AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -73,7 +72,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +81,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -94,7 +93,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec getWarning() {
+    public AnomalyStationaryPercentileMovingAverageRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -103,7 +102,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec warning) {
+    public void setWarning(AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -115,7 +114,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec getError() {
+    public AnomalyStationaryPercentileMovingAverageRule05ParametersSpec getError() {
         return this.error;
     }
 
@@ -124,7 +123,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec error) {
+    public void setError(AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -136,7 +135,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec getFatal() {
+    public AnomalyStationaryPercentileMovingAverageRule01ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -145,7 +144,7 @@ public class ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec fatal) {
+    public void setFatal(AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

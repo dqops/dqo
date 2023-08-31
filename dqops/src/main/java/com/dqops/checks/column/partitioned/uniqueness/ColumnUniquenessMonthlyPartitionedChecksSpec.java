@@ -41,10 +41,10 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
             put("monthly_partition_duplicate_count", o -> o.monthlyPartitionDuplicateCount);
             put("monthly_partition_duplicate_percent", o -> o.monthlyPartitionDuplicatePercent);
 
-            put("monthly_partition_anomaly_differencing_distinct_count_30_days", o -> o.monthlyPartitionAnomalyDifferencingDistinctCount30Days);
-            put("monthly_partition_anomaly_differencing_distinct_count", o -> o.monthlyPartitionAnomalyDifferencingDistinctCount);
-            put("monthly_partition_anomaly_differencing_distinct_percent_30_days", o -> o.monthlyPartitionAnomalyDifferencingDistinctPercent30Days);
-            put("monthly_partition_anomaly_differencing_distinct_percent", o -> o.monthlyPartitionAnomalyDifferencingDistinctPercent);
+            put("monthly_partition_anomaly_stationary_distinct_count_30_days", o -> o.monthlyPartitionAnomalyStationaryDistinctCount30Days);
+            put("monthly_partition_anomaly_stationary_distinct_count", o -> o.monthlyPartitionAnomalyStationaryDistinctCount);
+            put("monthly_partition_anomaly_stationary_distinct_percent_30_days", o -> o.monthlyPartitionAnomalyStationaryDistinctPercent30Days);
+            put("monthly_partition_anomaly_stationary_distinct_percent", o -> o.monthlyPartitionAnomalyStationaryDistinctPercent);
             put("monthly_partition_change_distinct_count", o -> o.monthlyPartitionChangeDistinctCount);
             put("monthly_partition_change_distinct_count_since_7_days", o -> o.monthlyPartitionChangeDistinctCountSince7Days);
             put("monthly_partition_change_distinct_count_since_30_days", o -> o.monthlyPartitionChangeDistinctCountSince30Days);
@@ -70,16 +70,16 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
     private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec monthlyPartitionAnomalyDifferencingDistinctCount30Days;
+    private ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec monthlyPartitionAnomalyStationaryDistinctCount30Days;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctCountCheckSpec monthlyPartitionAnomalyDifferencingDistinctCount;
+    private ColumnAnomalyStationaryPartitionDistinctCountCheckSpec monthlyPartitionAnomalyStationaryDistinctCount;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec monthlyPartitionAnomalyDifferencingDistinctPercent30Days;
+    private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent30Days;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctPercentCheckSpec monthlyPartitionAnomalyDifferencingDistinctPercent;
+    private ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctCountCheckSpec monthlyPartitionChangeDistinctCount;
@@ -182,72 +182,72 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
      * Returns a distinct count value anomaly 30 days check specification.
      * @return Distinct count value anomaly 30 days check specification.
      */
-    public ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec getMonthlyPartitionAnomalyDifferencingDistinctCount30Days() {
-        return monthlyPartitionAnomalyDifferencingDistinctCount30Days;
+    public ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec getMonthlyPartitionAnomalyStationaryDistinctCount30Days() {
+        return monthlyPartitionAnomalyStationaryDistinctCount30Days;
     }
 
     /**
      * Sets a new specification of a distinct count value anomaly 30 days check.
-     * @param monthlyPartitionAnomalyDifferencingDistinctCount30Days Distinct count value anomaly 30 days check specification.
+     * @param monthlyPartitionAnomalyStationaryDistinctCount30Days Distinct count value anomaly 30 days check specification.
      */
-    public void setMonthlyPartitionAnomalyDifferencingDistinctCount30Days(ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec monthlyPartitionAnomalyDifferencingDistinctCount30Days) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyDifferencingDistinctCount30Days, monthlyPartitionAnomalyDifferencingDistinctCount30Days));
-        this.monthlyPartitionAnomalyDifferencingDistinctCount30Days = monthlyPartitionAnomalyDifferencingDistinctCount30Days;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyDifferencingDistinctCount30Days, "monthly_partition_anomaly_differencing_distinct_count_30_days");
+    public void setMonthlyPartitionAnomalyStationaryDistinctCount30Days(ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec monthlyPartitionAnomalyStationaryDistinctCount30Days) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctCount30Days, monthlyPartitionAnomalyStationaryDistinctCount30Days));
+        this.monthlyPartitionAnomalyStationaryDistinctCount30Days = monthlyPartitionAnomalyStationaryDistinctCount30Days;
+        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctCount30Days, "monthly_partition_anomaly_stationary_distinct_count_30_days");
     }
 
     /**
      * Returns a distinct count value anomaly check specification.
      * @return Distinct count value anomaly check specification.
      */
-    public ColumnAnomalyDifferencingDistinctCountCheckSpec getMonthlyPartitionAnomalyDifferencingDistinctCount() {
-        return monthlyPartitionAnomalyDifferencingDistinctCount;
+    public ColumnAnomalyStationaryPartitionDistinctCountCheckSpec getMonthlyPartitionAnomalyStationaryDistinctCount() {
+        return monthlyPartitionAnomalyStationaryDistinctCount;
     }
 
     /**
      * Sets a new specification of a distinct count value anomaly check.
-     * @param monthlyPartitionAnomalyDifferencingDistinctCount Distinct count value anomaly check specification.
+     * @param monthlyPartitionAnomalyStationaryDistinctCount Distinct count value anomaly check specification.
      */
-    public void setMonthlyPartitionAnomalyDifferencingDistinctCount(ColumnAnomalyDifferencingDistinctCountCheckSpec monthlyPartitionAnomalyDifferencingDistinctCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyDifferencingDistinctCount, monthlyPartitionAnomalyDifferencingDistinctCount));
-        this.monthlyPartitionAnomalyDifferencingDistinctCount = monthlyPartitionAnomalyDifferencingDistinctCount;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyDifferencingDistinctCount, "monthly_partition_anomaly_differencing_distinct_count");
+    public void setMonthlyPartitionAnomalyStationaryDistinctCount(ColumnAnomalyStationaryPartitionDistinctCountCheckSpec monthlyPartitionAnomalyStationaryDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctCount, monthlyPartitionAnomalyStationaryDistinctCount));
+        this.monthlyPartitionAnomalyStationaryDistinctCount = monthlyPartitionAnomalyStationaryDistinctCount;
+        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctCount, "monthly_partition_anomaly_stationary_distinct_count");
     }
 
     /**
      * Returns a distinct percent value anomaly 30 days check specification.
      * @return Distinct percent value anomaly 30 days check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec getMonthlyPartitionAnomalyDifferencingDistinctPercent30Days() {
-        return monthlyPartitionAnomalyDifferencingDistinctPercent30Days;
+    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getMonthlyPartitionAnomalyStationaryDistinctPercent30Days() {
+        return monthlyPartitionAnomalyStationaryDistinctPercent30Days;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly 30 days check.
-     * @param monthlyPartitionAnomalyDifferencingDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
+     * @param monthlyPartitionAnomalyStationaryDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
      */
-    public void setMonthlyPartitionAnomalyDifferencingDistinctPercent30Days(ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec monthlyPartitionAnomalyDifferencingDistinctPercent30Days) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyDifferencingDistinctPercent30Days, monthlyPartitionAnomalyDifferencingDistinctPercent30Days));
-        this.monthlyPartitionAnomalyDifferencingDistinctPercent30Days = monthlyPartitionAnomalyDifferencingDistinctPercent30Days;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyDifferencingDistinctPercent30Days, "monthly_partition_anomaly_differencing_distinct_percent_30_days");
+    public void setMonthlyPartitionAnomalyStationaryDistinctPercent30Days(ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent30Days) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctPercent30Days, monthlyPartitionAnomalyStationaryDistinctPercent30Days));
+        this.monthlyPartitionAnomalyStationaryDistinctPercent30Days = monthlyPartitionAnomalyStationaryDistinctPercent30Days;
+        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctPercent30Days, "monthly_partition_anomaly_stationary_distinct_percent_30_days");
     }
 
     /**
      * Returns a distinct percent value anomaly check specification.
      * @return Distinct percent value anomaly check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercentCheckSpec getMonthlyPartitionAnomalyDifferencingDistinctPercent() {
-        return monthlyPartitionAnomalyDifferencingDistinctPercent;
+    public ColumnAnomalyStationaryDistinctPercentCheckSpec getMonthlyPartitionAnomalyStationaryDistinctPercent() {
+        return monthlyPartitionAnomalyStationaryDistinctPercent;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly check.
-     * @param monthlyPartitionAnomalyDifferencingDistinctPercent Distinct percent value anomaly check specification.
+     * @param monthlyPartitionAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
      */
-    public void setMonthlyPartitionAnomalyDifferencingDistinctPercent(ColumnAnomalyDifferencingDistinctPercentCheckSpec monthlyPartitionAnomalyDifferencingDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyDifferencingDistinctPercent, monthlyPartitionAnomalyDifferencingDistinctPercent));
-        this.monthlyPartitionAnomalyDifferencingDistinctPercent = monthlyPartitionAnomalyDifferencingDistinctPercent;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyDifferencingDistinctPercent, "monthly_partition_anomaly_differencing_distinct_percent");
+    public void setMonthlyPartitionAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctPercent, monthlyPartitionAnomalyStationaryDistinctPercent));
+        this.monthlyPartitionAnomalyStationaryDistinctPercent = monthlyPartitionAnomalyStationaryDistinctPercent;
+        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctPercent, "monthly_partition_anomaly_stationary_distinct_percent");
     }
 
     /**

@@ -43,8 +43,8 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
 
             put("profile_anomaly_differencing_distinct_count_30_days", o -> o.profileAnomalyDifferencingDistinctCount30Days);
             put("profile_anomaly_differencing_distinct_count", o -> o.profileAnomalyDifferencingDistinctCount);
-            put("profile_anomaly_differencing_distinct_percent_30_days", o -> o.profileAnomalyDifferencingDistinctPercent30Days);
-            put("profile_anomaly_differencing_distinct_percent", o -> o.profileAnomalyDifferencingDistinctPercent);
+            put("profile_anomaly_stationary_distinct_percent_30_days", o -> o.profileAnomalyStationaryDistinctPercent30Days);
+            put("profile_anomaly_stationary_distinct_percent", o -> o.profileAnomalyStationaryDistinctPercent);
             put("profile_change_distinct_count", o -> o.profileChangeDistinctCount);
             put("profile_change_distinct_count_since_7_days", o -> o.profileChangeDistinctCountSince7Days);
             put("profile_change_distinct_count_since_30_days", o -> o.profileChangeDistinctCountSince30Days);
@@ -76,10 +76,10 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     private ColumnAnomalyDifferencingDistinctCountCheckSpec profileAnomalyDifferencingDistinctCount;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec profileAnomalyDifferencingDistinctPercent30Days;
+    private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec profileAnomalyStationaryDistinctPercent30Days;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctPercentCheckSpec profileAnomalyDifferencingDistinctPercent;
+    private ColumnAnomalyStationaryDistinctPercentCheckSpec profileAnomalyStationaryDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctCountCheckSpec profileChangeDistinctCount;
@@ -217,36 +217,36 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
      * Returns a distinct percent value anomaly 30 days check specification.
      * @return Distinct percent value anomaly 30 days check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec getProfileAnomalyDifferencingDistinctPercent30Days() {
-        return profileAnomalyDifferencingDistinctPercent30Days;
+    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getProfileAnomalyDifferencingDistinctPercent30Days() {
+        return profileAnomalyStationaryDistinctPercent30Days;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly 30 days check.
-     * @param profileAnomalyDifferencingDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
+     * @param profileAnomalyStationaryDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
      */
-    public void setProfileAnomalyDifferencingDistinctPercent30Days(ColumnAnomalyDifferencingDistinctPercent30DaysCheckSpec profileAnomalyDifferencingDistinctPercent30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyDifferencingDistinctPercent30Days, profileAnomalyDifferencingDistinctPercent30Days));
-        this.profileAnomalyDifferencingDistinctPercent30Days = profileAnomalyDifferencingDistinctPercent30Days;
-        propagateHierarchyIdToField(profileAnomalyDifferencingDistinctPercent30Days, "profile_anomaly_differencing_distinct_percent_30_days");
+    public void setProfileAnomalyStationaryDistinctPercent30Days(ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec profileAnomalyStationaryDistinctPercent30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileAnomalyStationaryDistinctPercent30Days, profileAnomalyStationaryDistinctPercent30Days));
+        this.profileAnomalyStationaryDistinctPercent30Days = profileAnomalyStationaryDistinctPercent30Days;
+        propagateHierarchyIdToField(profileAnomalyStationaryDistinctPercent30Days, "profile_anomaly_stationary_distinct_percent_30_days");
     }
 
     /**
      * Returns a distinct percent value anomaly check specification.
      * @return Distinct percent value anomaly check specification.
      */
-    public ColumnAnomalyDifferencingDistinctPercentCheckSpec getProfileAnomalyDifferencingDistinctPercent() {
-        return profileAnomalyDifferencingDistinctPercent;
+    public ColumnAnomalyStationaryDistinctPercentCheckSpec getProfileAnomalyStationaryDistinctPercent() {
+        return profileAnomalyStationaryDistinctPercent;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly check.
-     * @param profileAnomalyDifferencingDistinctPercent Distinct percent value anomaly check specification.
+     * @param profileAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
      */
-    public void setProfileAnomalyDifferencingDistinctPercent(ColumnAnomalyDifferencingDistinctPercentCheckSpec profileAnomalyDifferencingDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyDifferencingDistinctPercent, profileAnomalyDifferencingDistinctPercent));
-        this.profileAnomalyDifferencingDistinctPercent = profileAnomalyDifferencingDistinctPercent;
-        propagateHierarchyIdToField(profileAnomalyDifferencingDistinctPercent, "profile_anomaly_differencing_distinct_percent");
+    public void setProfileAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec profileAnomalyStationaryDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileAnomalyStationaryDistinctPercent, profileAnomalyStationaryDistinctPercent));
+        this.profileAnomalyStationaryDistinctPercent = profileAnomalyStationaryDistinctPercent;
+        propagateHierarchyIdToField(profileAnomalyStationaryDistinctPercent, "profile_anomaly_stationary_distinct_percent");
     }
 
     /**
