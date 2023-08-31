@@ -11,6 +11,7 @@ import LabelsView from '../LabelsView';
 import { useParams } from "react-router-dom";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
+import { setIsUpdatedLabels } from '../../../redux/actions/connection.actions';
 
 const TableLabelsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
@@ -31,6 +32,7 @@ const TableLabelsView = () => {
 
   const handleChange = (value: string[]) => {
     dispatch(setUpdatedLabels(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedLabels(checkTypes, firstLevelActiveTab, true))
   };
 
   return (
