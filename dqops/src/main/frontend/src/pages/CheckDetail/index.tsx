@@ -7,6 +7,7 @@ import {
   addFirstLevelTab,
   closeFirstLevelTab,
   getdataQualityChecksFolderTree,
+  setActiveFirstLevelTab,
   toggledataQualityChecksFolderTree 
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -23,10 +24,14 @@ import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
 import { CheckSpecModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
 
 export const SensorDetail = () => {
   const { fullCheckName, path, type, custom, checkDetail } = useSelector(
     getFirstLevelSensorState
+  );
+  const {tabs, activeTab } = useSelector(
+    (state: IRootState) => state.definition
   );
 
   const dispatch = useActionDispatch();
@@ -73,9 +78,10 @@ export const SensorDetail = () => {
   }, [fullCheckName, type]);
 
   useEffect(() => {
-    setSelectedRule((checkDetail as CheckSpecModel)?.rule_name ?? '');
-    setSelectedSensor((checkDetail as CheckSpecModel)?.sensor_name ?? '');
-    setHelpText((checkDetail as CheckSpecModel)?.help_text ?? '');
+    const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)?? ''
+    setSelectedRule(activeCheckDetail?.rule_name ?? '');
+    setSelectedSensor(activeCheckDetail?.sensor_name ?? '');
+    setHelpText(activeCheckDetail?.help_text ?? '');
   }, [checkDetail]);
 
   const onCreateUpdateCheck = async () => {
@@ -128,16 +134,17 @@ export const SensorDetail = () => {
   };
 
   const openAddNewCheck = () => {
+    dispatch(closeFirstLevelTab("/definitions/checks/"+Array.from(path).join("-") + "-new_check"))
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL([...(path || []), 'new_check'].join('-')),
-        value: ROUTES.CHECK_DETAIL_VALUE(
-          [...(path || []), 'new_check'].join('-')
-        ),
+        url: ROUTES.CHECK_DETAIL(checkName ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(checkName ?? ''),
         state: {
-          type: 'upgrade',
-          path,
-          fullCheckName
+          fullCheckName: (path !== undefined && (Array.from(path).join('/') + '/' + checkName)),
+          custom: true,
+          sensor: selectedSensor,
+          rule: selectedRule,
+          checkName: checkName
         },
         label: checkName
       })
@@ -172,7 +179,7 @@ export const SensorDetail = () => {
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">
-                Check: {fullCheckName || checkName}
+                Check: {fullCheckName || (path !== undefined && (Array.from(path).join('/') + '/' + checkName)) || checkName}
               </div>
             </div>
           </div>
