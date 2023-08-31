@@ -4,10 +4,12 @@ import { DataGroupingConfigurationBasicModel, CheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataGroupingConfigurationsApi } from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import Button from "../Button";
 import Input from "../Input";
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 
 interface ICheckSettingsTabProps {
   check?: CheckModel;
@@ -18,6 +20,8 @@ interface ICheckSettingsTabProps {
 const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
   const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
+  const history = useHistory()
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     if(isDefaultEditing !== true){
@@ -43,7 +47,27 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
   }, [dataGroupingConfigurations]);
 
   const onAddDataGroupingConfiguration = () => {
-    window.location.href = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'data-streams');
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'data-streams'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
   };
 
   return (
