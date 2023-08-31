@@ -147,7 +147,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
                 if (idColumn.countUnique() != idColumn.size()) {
                     // duplicates found, removing the partition
                     this.parquetPartitionStorageService.deletePartitionFile(loadedMonthlyPartition.getPartitionId(), fileStorageSettings);
-                    log.warn("Parquet file with duplicate rows having the same ID were identified, the parquet file was removed: " + loadedMonthlyPartition.getPartitionId().toString());
+                    log.warn("Parquet file with duplicate rows having the same ID was identified, the parquet file was removed: " + loadedMonthlyPartition.getPartitionId().toString());
                 }
             }
         }
