@@ -20,7 +20,6 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-
   const { dashboardFolders } = useSelector(
     (state: IRootState) => state.dashboard
   );
@@ -70,6 +69,23 @@ const LeftView = () => {
       [folder, parents]
     );
 
+    const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+    let timeout: NodeJS.Timeout | null = null;
+    
+    const handleMouseEnter = (index: number) => {
+      timeout = setTimeout(() => {
+        setActiveTooltip(index);
+      }, 300);
+    };
+
+    const handleMouseLeave = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      setActiveTooltip(null);
+    };
+
     return (
       <div>
         <div
@@ -98,8 +114,8 @@ const LeftView = () => {
                 key={jIndex}
                 className={
                   selected === [key, dashboard.dashboard_name].join('-')
-                    ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300'
-                    : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300'
+                    ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
+                    : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
                 onClick={() => {
                   changeActiveTab(
@@ -121,7 +137,15 @@ const LeftView = () => {
                 }}
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
-                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                <div className="text-[13px] leading-1.5 whitespace-nowrap" 
+                      onMouseEnter={() => handleMouseEnter(jIndex)}
+                      onMouseLeave={handleMouseLeave}>
+                  {activeTooltip === jIndex && (
+                <div className="max-w-60 py-4 px-2 bg-gray-800 text-white absolute bottom-5 z-1000 text-xs text-left rounded-1 whitespace-normal"
+                style={{left: "-45px"}}>
+                {dashboard.dashboard_name}
+                </div>
+                 )}
                   {dashboard.dashboard_name}
                 </div>
               </div>
@@ -134,7 +158,7 @@ const LeftView = () => {
 
   return (
     <div
-      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white"
+      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white overflow-x-hidden"
       ref={sidebarRef}
       style={{ width: sidebarWidth }}
     >
