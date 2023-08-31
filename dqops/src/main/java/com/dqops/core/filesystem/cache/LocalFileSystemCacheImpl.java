@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +113,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void startFolderWatcher(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         if (!this.dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
             return;
         }
@@ -143,6 +148,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void stopFolderWatcher(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         if (!this.dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
             return;
         }
@@ -213,7 +222,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         if (this.dqoCacheConfigurationProperties.isEnable()) {
             this.startFolderWatcher(folderPath);
             this.processFileChanges(false);
-            return this.folderListsCache.get(folderPath, listingFunction);
+            List<HomeFolderPath> homeFolderPaths = this.folderListsCache.get(folderPath, listingFunction);
+            return homeFolderPaths;
         }
 
         return listingFunction.apply(folderPath);
@@ -316,6 +326,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void removeFile(Path filePath) {
+        if (filePath == null) {
+            return;
+        }
+
         this.textFilesCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
 
@@ -333,6 +347,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void removeFolder(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
 
@@ -350,6 +368,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void invalidateFolder(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
     }
@@ -360,6 +382,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void invalidateFile(Path filePath) {
+        if (filePath == null) {
+            return;
+        }
+
         this.textFilesCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
 
