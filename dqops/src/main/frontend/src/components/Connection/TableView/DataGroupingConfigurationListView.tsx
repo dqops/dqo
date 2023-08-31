@@ -106,7 +106,7 @@ const DataGroupingConfigurationListView = ({
         <thead className='relative'>
           <tr className="flex py-2">
             <th>Data grouping configuration name</th>
-            {dataGroupingConfigurations.length!== 0 && <th className='absolute right-5'>Action</th>}
+            {dataGroupingConfigurations.length!== 0 && <th className='absolute right-22.5'>Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -157,8 +157,8 @@ const DataGroupingConfigurationListView = ({
                 </span>
               </td>
 
-              <td className="px-2 py-2">
-              <IconButton
+              <td className="px-20 py-2 ">
+                <IconButton
                   size="sm"
                   className="group bg-teal-500 ml-3"
                   onClick={() => 
