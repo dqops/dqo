@@ -142,7 +142,7 @@ const LeftView = () => {
                       onMouseLeave={handleMouseLeave}>
                   {activeTooltip === jIndex && (
                 <div className="max-w-60 py-4 px-2 bg-gray-800 text-white absolute bottom-5 z-1000 text-xs text-left rounded-1 whitespace-normal"
-                style={{left: "-45px"}}>
+                style={{left: "0"}}>
                 {dashboard.dashboard_name}
                 </div>
                  )}
