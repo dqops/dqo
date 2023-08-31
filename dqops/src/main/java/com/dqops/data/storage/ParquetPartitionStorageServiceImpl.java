@@ -439,9 +439,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
             Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath()
-                    .relativize(targetPartitionFilePath).normalize().toAbsolutePath();
+                    .relativize(targetPartitionFilePath);
 
-            if (Files.isDirectory(homeRelativePath)) {
+            if (Files.isDirectory(targetPartitionFilePath)) {
                 return false;
             }
 
@@ -452,12 +452,12 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 );
             }
 
-            if (!this.localUserHomeFileStorageService.deleteFile(
-                    new HomeFilePath(
-                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
-                            homeRelativePath.getFileName().toString()
-                    )
-            )) {
+            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(homeRelativePath.toString()); new HomeFilePath(
+                    new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                    homeRelativePath.getFileName().toString()
+            );
+
+            if (!this.localUserHomeFileStorageService.deleteFile(homeFilePath)) {
                 // Deleting .parquet file failed.
                 return false;
             }
