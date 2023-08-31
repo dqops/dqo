@@ -1,6 +1,6 @@
 
-## ParameterDefinitionSpec  
-Defines a single field that is a sensor parameter or a rule parameter.  
+## RuleDefinitionYaml  
+Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).  
   
 
 
@@ -14,28 +14,10 @@ Defines a single field that is a sensor parameter or a rule parameter.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
-|display_name|Field display name that should be shown as a label for the control.|string| | | |
-|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
-|data_type|Parameter data type.|enum|date<br/>string<br/>enum<br/>string_list<br/>object<br/>datetime<br/>column_name<br/>boolean<br/>integer<br/>double<br/>integer_list<br/>long<br/>| | |
-|display_hint|UI control display hint.|enum|textarea<br/>| | |
-|required|True when the value for the parameter must be provided.|boolean| | | |
-|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
-|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
+|api_version||string| | | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|[spec](#ruledefinitionspec)||[RuleDefinitionSpec](#ruledefinitionspec)| | | |
 
-
-
-
-
-
-
-
-
-___  
-
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
-  
 
 
 
@@ -77,8 +59,8 @@ Custom data quality rule specification. Provides the custom rule configuration. 
 
 ___  
 
-## RuleDefinitionYaml  
-Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).  
+## ParameterDefinitionSpec  
+Defines a single field that is a sensor parameter or a rule parameter.  
   
 
 
@@ -92,9 +74,14 @@ Custom rule specification that describes the configuration of a python module wi
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#ruledefinitionspec)||[RuleDefinitionSpec](#ruledefinitionspec)| | | |
+|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
+|display_name|Field display name that should be shown as a label for the control.|string| | | |
+|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
+|data_type|Parameter data type.|enum|date<br/>string<br/>enum<br/>string_list<br/>object<br/>datetime<br/>column_name<br/>boolean<br/>integer<br/>double<br/>integer_list<br/>long<br/>| | |
+|display_hint|UI control display hint.|enum|textarea<br/>| | |
+|required|True when the value for the parameter must be provided.|boolean| | | |
+|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
+|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
 
 
 
@@ -125,6 +112,19 @@ Rule historic data configuration. Specifies the number of past values for rules 
 |min_periods_with_readouts|Minimum number of past time periods with a sensor readout that must be present in the data in order to call the rule. The rule is not called and the sensor readout is discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor readouts is not met. The default is 7.|integer| | | |
 |historic_data_point_grouping|Time period grouping for collecting previous data quality sensor results for the data quality rules that use historic data for prediction. For example, when the default time period grouping &#x27;day&#x27; is used, DQO will find the most recent data quality sensor readout for each day and pass an array of most recent days per day in an array of historic sensor readout data points to a data quality rule for prediction.|enum|week<br/>month<br/>hour<br/>year<br/>last_n_readouts<br/>day<br/>quarter<br/>| | |
 
+
+
+
+
+
+
+
+
+___  
+
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
 
 
 

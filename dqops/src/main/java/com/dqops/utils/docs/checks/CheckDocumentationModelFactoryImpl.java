@@ -350,7 +350,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         }
 
         if (checkRootContainer.getCheckType() == CheckType.partitioned) {
-            trimmedTableSpec.getTimestampColumns().setPartitionByColumn(trimmedTableSpec.getTimestampColumns().getEventTimestampColumn());
+            trimmedTableSpec.getColumns().put("date_column", createColumnWithLabel("date or datetime column used as a daily or monthly partitioning key, dates (and times) are truncated to a day or a month by the sensor's query for partitioned checks"));
+            trimmedTableSpec.getTimestampColumns().setPartitionByColumn("date_column");
         }
 
         CheckContainerModel allChecksModel = new CheckContainerModel();
