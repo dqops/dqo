@@ -7,10 +7,9 @@ import {
   addFirstLevelTab,
   closeFirstLevelTab,
   getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree 
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-// import { createRule, getRule, setUpdatedRule } from "../../redux/actions/definition.actions";
 import {
   createCheck,
   updateCheck,
@@ -23,22 +22,28 @@ import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
 import { CheckSpecModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
 
 export const SensorDetail = () => {
-  const { fullCheckName, path, type, custom, checkDetail } = useSelector(
+  const { fullCheckName, path, type, custom} = useSelector(
     getFirstLevelSensorState
+  );
+  const {tabs, activeTab } = useSelector(
+    (state: IRootState) => state.definition
   );
 
   const dispatch = useActionDispatch();
+  const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)
 
   const [checkName, setcheckName] = useState('');
-  const [selectedSensor, setSelectedSensor] = useState('');
-  const [selectedRule, setSelectedRule] = useState('');
+  const [selectedSensor, setSelectedSensor] = useState(activeCheckDetail?.sensor_name ?? "");
+  const [selectedRule, setSelectedRule] = useState(activeCheckDetail?.rule_name ?? "");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [helpText, setHelpText] = useState('');
+  const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? "");
+
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -63,20 +68,24 @@ export const SensorDetail = () => {
     } else if ((fullCheckName as string).length === 0) {
       dispatch(closeFirstLevelTab(path));
     }
-    dispatch(getCheck(fullCheckName));
-  }, [fullCheckName, path, type, custom]);
-
-  useEffect(() => {
-    if (fullCheckName !== undefined && type !== 'create') {
+    if(activeCheckDetail === undefined){
       dispatch(getCheck(fullCheckName));
     }
-  }, [fullCheckName, type]);
+  }, [fullCheckName, path, type, custom, activeCheckDetail]);
 
   useEffect(() => {
-    setSelectedRule((checkDetail as CheckSpecModel)?.rule_name ?? '');
-    setSelectedSensor((checkDetail as CheckSpecModel)?.sensor_name ?? '');
-    setHelpText((checkDetail as CheckSpecModel)?.help_text ?? '');
-  }, [checkDetail]);
+    if(activeCheckDetail === undefined){
+      setSelectedRule('');
+      setSelectedSensor('');
+      setHelpText('');
+      setcheckName('')
+    }else{
+      setSelectedRule(activeCheckDetail.rule_name ?? "");
+      setSelectedSensor(activeCheckDetail.sensor_name ?? "");
+      setHelpText(activeCheckDetail.help_text ?? "");
+      setcheckName(activeCheckDetail.check_name ?? "")
+    }
+  }, [activeTab, activeCheckDetail]);
 
   const onCreateUpdateCheck = async () => {
     const fullName = [...(path || []), checkName].join('/');
@@ -85,14 +94,15 @@ export const SensorDetail = () => {
       await dispatch(
         createCheck(fullName, {
           sensor_name: selectedSensor,
-          rule_name: selectedRule
+          rule_name: selectedRule,
+          help_text: helpText
         })
       );
       setIsUpdating(false);
       setIsCreating(false);
       openAddNewCheck();
       dispatch(getdataQualityChecksFolderTree());
-      dispatch(toggledataQualityChecksFolderTree(Array.from(path).join("/")))
+      dispatch(opendataQualityChecksFolderTree(Array.from(path).join("/")))
     } else {
       await dispatch(
         updateCheck(
@@ -128,16 +138,18 @@ export const SensorDetail = () => {
   };
 
   const openAddNewCheck = () => {
+    dispatch(closeFirstLevelTab("/definitions/checks/"+Array.from(path).join("-") + "-new_check"))
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL([...(path || []), 'new_check'].join('-')),
-        value: ROUTES.CHECK_DETAIL_VALUE(
-          [...(path || []), 'new_check'].join('-')
-        ),
+        url: ROUTES.CHECK_DETAIL(checkName ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(checkName ?? ''),
         state: {
-          type: 'upgrade',
-          path,
-          fullCheckName
+          fullCheckName: (path !== undefined && (Array.from(path).join('/') + '/' + checkName)),
+          custom: true,
+          sensor: selectedSensor,
+          rule: selectedRule,
+          checkName: checkName,
+          helpText: helpText
         },
         label: checkName
       })
@@ -172,7 +184,7 @@ export const SensorDetail = () => {
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">
-                Check: {fullCheckName || checkName}
+                Check: {fullCheckName || (path !== undefined && (Array.from(path).join('/') + '/' + checkName)) || checkName}
               </div>
             </div>
           </div>
@@ -191,10 +203,6 @@ export const SensorDetail = () => {
             </div>
           </div>
         )}
-        {/* <div className="border-b border-gray-300 relative">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-        </div>
-        {activeTab === 'check_editor' && ( */}
         <CheckEditor
           create={type === 'create' ? true : false}
           onChangeRule={onChangeRule}
@@ -203,7 +211,7 @@ export const SensorDetail = () => {
           selectedSensor={selectedSensor}
           setIsUpdated={setIsUpdated}
           custom={custom}
-          helpText={checkDetail?.help_text}
+          helpText={helpText}
           onChangeHelpText={onChangeHelpText}
         />
         {/* )} */}

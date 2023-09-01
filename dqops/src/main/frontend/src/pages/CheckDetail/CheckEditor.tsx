@@ -120,10 +120,7 @@ const CheckEditor = ({
       );
     }
   };
-
-  return (
-    <div>
-      <div>
+      return (
         <div className="pt-10 pb-2 px-8 z-1">
           <div className="pb-4 gap-2">
             Sensor Name:
@@ -197,9 +194,7 @@ const CheckEditor = ({
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
+      );
+    };
 
 export default CheckEditor;
