@@ -218,7 +218,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     public void setDailyPartitionStringMinLength(ColumnStringMinLengthCheckSpec dailyPartitionStringMinLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMinLength, dailyPartitionStringMinLength));
         this.dailyPartitionStringMinLength = dailyPartitionStringMinLength;
-        propagateHierarchyIdToField(dailyPartitionStringMaxLength, "daily_partition_string_min_length");
+        propagateHierarchyIdToField(dailyPartitionStringMinLength, "daily_partition_string_min_length");
     }
 
     /**

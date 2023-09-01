@@ -77,7 +77,7 @@ public class TableSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySp
     public void setMonthlySqlConditionPassedPercentOnTable(TableSqlConditionPassedPercentCheckSpec monthlySqlConditionPassedPercentOnTable) {
         this.setDirtyIf(!Objects.equals(this.monthlySqlConditionPassedPercentOnTable, monthlySqlConditionPassedPercentOnTable));
         this.monthlySqlConditionPassedPercentOnTable = monthlySqlConditionPassedPercentOnTable;
-        propagateHierarchyIdToField(monthlySqlConditionPassedPercentOnTable, "monthly_sql_aggregate_expr_table");
+        propagateHierarchyIdToField(monthlySqlConditionPassedPercentOnTable, "monthly_sql_condition_passed_percent_on_table");
     }
 
     /**
@@ -113,7 +113,7 @@ public class TableSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySp
     public void setMonthlySqlAggregateExprTable(TableSqlAggregateExprCheckSpec monthlySqlAggregateExprTable) {
         this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExprTable, monthlySqlAggregateExprTable));
         this.monthlySqlAggregateExprTable = monthlySqlAggregateExprTable;
-        propagateHierarchyIdToField(monthlySqlAggregateExprTable, "monthly_sql_aggregated_expression_value_on_table_min");
+        propagateHierarchyIdToField(monthlySqlAggregateExprTable, "monthly_sql_aggregate_expr_table");
     }
 
     /**

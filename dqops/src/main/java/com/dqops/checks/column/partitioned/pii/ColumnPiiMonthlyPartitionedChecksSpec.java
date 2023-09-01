@@ -75,7 +75,7 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     public void setMonthlyPartitionContainsUsaPhonePercent(ColumnPiiContainsUsaPhonePercentCheckSpec monthlyPartitionContainsUsaPhonePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionContainsUsaPhonePercent, monthlyPartitionContainsUsaPhonePercent));
         this.monthlyPartitionContainsUsaPhonePercent = monthlyPartitionContainsUsaPhonePercent;
-        propagateHierarchyIdToField(monthlyPartitionContainsUsaPhonePercent, "monthly_partition_max_contains_usa_phone_percent");
+        propagateHierarchyIdToField(monthlyPartitionContainsUsaPhonePercent, "monthly_partition_contains_usa_phone_percent");
     }
 
     /**
@@ -93,7 +93,7 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     public void setMonthlyPartitionContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec monthlyPartitionContainsUsaZipcodePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionContainsUsaZipcodePercent, monthlyPartitionContainsUsaZipcodePercent));
         this.monthlyPartitionContainsUsaZipcodePercent = monthlyPartitionContainsUsaZipcodePercent;
-        propagateHierarchyIdToField(monthlyPartitionContainsUsaZipcodePercent, "monthly_partition_max_contains_usa_zipcode_percent");
+        propagateHierarchyIdToField(monthlyPartitionContainsUsaZipcodePercent, "monthly_partition_contains_usa_zipcode_percent");
     }
 
     /**

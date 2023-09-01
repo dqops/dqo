@@ -95,4 +95,39 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
     public void sort() {
         this.sort(Comparator.comparing(DashboardSpec::getDashboardName));
     }
+
+    /**
+     * Merges the list of dashboards with another (user's custom dashboards), returning a combined list.
+     * @param otherDashboards List of custom dashboards.
+     * @return Combined list of dashboards, overriding own dashboards by dashboards from the other list.
+     */
+    public DashboardListSpec merge(DashboardListSpec otherDashboards) {
+        if (otherDashboards == null || otherDashboards.size() == 0) {
+            return this;
+        }
+
+        DashboardListSpec cloned = new DashboardListSpec();
+        if (this.getHierarchyId() != null) {
+            cloned.setHierarchyId(this.getHierarchyId());
+        }
+
+        for (DashboardSpec dashboardSpec : this) {
+            DashboardSpec otherDashboard = otherDashboards.getDashboardByName(dashboardSpec.getDashboardName());
+            if (otherDashboard != null) {
+                cloned.add(otherDashboard);
+            } else {
+                cloned.add(dashboardSpec);
+            }
+        }
+
+        for (DashboardSpec otherDashboard : otherDashboards) {
+            if (cloned.getDashboardByName(otherDashboard.getDashboardName()) != null) {
+                continue; // dashboard already merged
+            }
+
+            cloned.add(otherDashboard);
+        }
+
+        return cloned;
+    }
 }

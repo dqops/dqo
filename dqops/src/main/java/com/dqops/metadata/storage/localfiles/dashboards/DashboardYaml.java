@@ -23,12 +23,11 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
  * Data quality dashboard definition YAML schema for a data quality dashboards list specification.
  */
 public class DashboardYaml {
-
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.DASHBOARDS;
     private DashboardsFolderListSpec spec = new DashboardsFolderListSpec();
 
-    DashboardYaml() {
+    public DashboardYaml() {
     }
 
     public DashboardYaml(DashboardsFolderListSpec spec) {

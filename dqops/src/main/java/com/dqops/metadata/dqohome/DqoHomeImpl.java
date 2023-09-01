@@ -141,8 +141,8 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
     }
 
     /**
-     * Returns a collection of custom dashboards in the user home folder.
-     * @return Collection of user's custom dashboards.
+     * Returns a collection of default dashboards in the user home folder.
+     * @return Collection of default dashboards.
      */
     public DashboardFolderListSpecWrapperImpl getDashboards() {
         return dashboards;
@@ -150,8 +150,8 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
 
 
     /**
-     * Changes the collection of custom dashboards.
-     * @param dashboards New collection of custom dashboards.
+     * Changes the collection of default dashboards.
+     * @param dashboards New collection of default dashboards.
      */
     public void setDashboards(DashboardFolderListSpecWrapperImpl dashboards) {
         this.dashboards = dashboards;
@@ -161,6 +161,7 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
             assert FIELDS.get("dashboards").apply(this).getHierarchyId().equals(childHierarchyId);
         }
     }
+
     /**
      * Flushes an object to a persistent store.
      */

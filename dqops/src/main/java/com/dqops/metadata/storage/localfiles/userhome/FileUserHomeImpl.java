@@ -18,6 +18,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
+import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
 import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
@@ -45,6 +46,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param checks Custom checks list.
      * @param settings Settings.
      * @param fileIndices File indices list.
+     * @param dashboards Custom dashboards.
      * @param userHomeContext User home context.
      */
     public FileUserHomeImpl(FileConnectionListImpl sources,
@@ -53,8 +55,9 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileCheckDefinitionListImpl checks,
                             FileSettingsWrapperImpl settings,
                             FileFileIndexListImpl fileIndices,
+                            FileDashboardFolderListSpecWrapperImpl dashboards,
                             UserHomeContext userHomeContext) {
-        super(sources, sensors, rules, checks, settings, fileIndices);
+        super(sources, sensors, rules, checks, settings, fileIndices, dashboards);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -73,13 +76,17 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode checksFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
         FolderTreeNode settingsFolder = userHomeContext.getHomeRoot();
+        FolderTreeNode dashboardsFolder = userHomeContext.getHomeRoot();
+
         FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
         FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
         FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
         FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
         FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(settingsFolder, yamlSerializer);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
-        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, fileIndices, userHomeContext);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(dashboardsFolder, yamlSerializer);
+
+        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, fileIndices, dashboards, userHomeContext);
     }
 
     /**

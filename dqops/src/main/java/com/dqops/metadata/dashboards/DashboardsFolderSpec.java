@@ -354,4 +354,22 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
         this.folders.sort();
         this.dashboards.sort();
     }
+
+    /**
+     * Merges the current folder with the <code>otherFolder</code>, adding or overriding dashboard configuration.
+     * @param otherFolder The other dashboard configuration, from the DQO user home, containing user overwritten dashboards.
+     * @return Merged folder that includes current folders and dashboards, merged with the other dashboards.
+     */
+    public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {
+        DashboardsFolderSpec cloned = new DashboardsFolderSpec();
+        cloned.setFolderName(this.folderName);
+        if (this.getHierarchyId() != null) {
+            cloned.setHierarchyId(this.getHierarchyId());
+        }
+
+        cloned.setFolders(this.folders.merge(otherFolder.folders));
+        cloned.setDashboards(this.dashboards.merge(otherFolder.dashboards));
+
+        return cloned;
+    }
 }

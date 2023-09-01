@@ -20,6 +20,9 @@ import com.dqops.core.dqocloud.dashboards.LookerStudioUrlService;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderSpec;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dashboards.AuthenticatedDashboardModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.metadata.DashboardsProvider;
@@ -47,18 +50,21 @@ import java.util.Optional;
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
     private DashboardsProvider dashboardsProvider;
-
+    private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Default dependency injection constructor.
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
      * @param dashboardsProvider Dashboard tree provider.
+     * @param userHomeContextFactory User home factory.
      */
     @Autowired
     public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
-                                DashboardsProvider dashboardsProvider) {
+                                DashboardsProvider dashboardsProvider,
+                                UserHomeContextFactory userHomeContextFactory) {
         this.lookerStudioUrlService = lookerStudioUrlService;
         this.dashboardsProvider = dashboardsProvider;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -75,14 +81,37 @@ public class DashboardsController {
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
 
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
+
+        DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList.merge(userDashboardsList);
+
         return ResponseEntity.ok()
                 .cacheControl(CacheControl
                         .maxAge(Duration.ofDays(1))
                         .cachePublic()
                         .mustRevalidate())
-                .lastModified(dashboardList.getFileLastModified())
-                .eTag(dashboardList.getFileLastModified().toString())
-                .body(Flux.fromStream(dashboardList.stream())); // 200
+                .lastModified(combinedDefaultAndUserDashboards.getFileLastModified())
+                .eTag(combinedDefaultAndUserDashboards.getFileLastModified().toString())
+                .body(Flux.fromStream(combinedDefaultAndUserDashboards.stream())); // 200
+    }
+
+    /**
+     * Retrieves a custom user dashboard from the definition of custom dashboards.
+     * @param dashboardName Dashboard name.
+     * @param folders Folders structure to traverse.
+     * @return Custom dashboard specification or null, when the dashboard was not found.
+     */
+    protected DashboardSpec findUserCustomDashboard(String dashboardName, String... folders) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
+        if (userDashboardsList == null || userDashboardsList.size() == 0) {
+            return null;
+        }
+
+        return userDashboardsList.getDashboard(dashboardName, folders);
     }
 
     /**
@@ -106,14 +135,12 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
-
-        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder);
-        if (folder1Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder);
+        if (dashboard == null) {
+            DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+            dashboard = rootFolders.getDashboard(dashboardName, folder);
         }
 
-        DashboardSpec dashboard = folder1Spec.getDashboards().getDashboardByName(dashboardName);
         if (dashboard == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -154,19 +181,12 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
-
-        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
-        if (folder1Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2);
+        if (dashboard == null) {
+            DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+            dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2);
         }
 
-        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
-        if (folder2Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardSpec dashboard = folder2Spec.getDashboards().getDashboardByName(dashboardName);
         if (dashboard == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -210,24 +230,12 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
-
-        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
-        if (folder1Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3);
+        if (dashboard == null) {
+            DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+            dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3);
         }
 
-        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
-        if (folder2Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
-        if (folder3Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardSpec dashboard = folder3Spec.getDashboards().getDashboardByName(dashboardName);
         if (dashboard == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -273,29 +281,12 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
-
-        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
-        if (folder1Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3, folder4);
+        if (dashboard == null) {
+            DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+            dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3, folder4);
         }
 
-        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
-        if (folder2Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
-        if (folder3Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder4Spec = folder3Spec.getFolders().getFolderByName(folder4);
-        if (folder4Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardSpec dashboard = folder4Spec.getDashboards().getDashboardByName(dashboardName);
         if (dashboard == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -343,34 +334,12 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
-
-        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
-        if (folder1Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3, folder4, folder5);
+        if (dashboard == null) {
+            DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+            dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3, folder4, folder5);
         }
 
-        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
-        if (folder2Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
-        if (folder3Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder4Spec = folder3Spec.getFolders().getFolderByName(folder4);
-        if (folder4Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardsFolderSpec folder5Spec = folder4Spec.getFolders().getFolderByName(folder4);
-        if (folder5Spec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DashboardSpec dashboard = folder5Spec.getDashboards().getDashboardByName(dashboardName);
         if (dashboard == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }

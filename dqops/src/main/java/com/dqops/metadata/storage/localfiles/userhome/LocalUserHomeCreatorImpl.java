@@ -36,6 +36,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -227,6 +228,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
                 String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
                 Files.writeString(localSettingsPath, emptyLocalSettings);
+            }
+
+            Path customDashboardsPath = userHomePath.resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(customDashboardsPath)) {
+                DashboardYaml dashboardYaml = new DashboardYaml();
+                String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
+                Files.writeString(customDashboardsPath, emptyDashboards);
             }
         }
         catch (Exception ex) {

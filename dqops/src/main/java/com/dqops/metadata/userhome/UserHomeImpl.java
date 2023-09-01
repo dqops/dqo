@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionListImpl;
@@ -39,6 +40,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("checks", o -> o.checks);
             put("settings", o -> o.settings);
             put("file_indices", o -> o.fileIndices);
+            put("dashboards", o -> o.dashboards);
         }
     };
 
@@ -50,6 +52,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private CheckDefinitionListImpl checks;
     private SettingsWrapperImpl settings;
     private FileIndexList fileIndices;
+    private DashboardFolderListSpecWrapperImpl dashboards;
     @JsonIgnore
     private boolean dirty;
 
@@ -63,6 +66,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
         this.setFileIndices(new FileIndexListImpl());
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
     }
 
     /**
@@ -73,19 +77,22 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param checks Collection of custom check definitions.
      * @param settings user local settings.
      * @param fileIndices File synchronization indexes.
+     * @param dashboards Custom dashboards wrapper.
      */
     public UserHomeImpl(ConnectionListImpl connections,
                         SensorDefinitionListImpl sensors,
                         RuleDefinitionListImpl rules,
                         CheckDefinitionListImpl checks,
                         SettingsWrapperImpl settings,
-                        FileIndexListImpl fileIndices) {
+                        FileIndexListImpl fileIndices,
+                        DashboardFolderListSpecWrapperImpl dashboards) {
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
         this.setChecks(checks);
         this.setSettings(settings);
         this.setFileIndices(fileIndices);
+        this.setDashboards(dashboards);
     }
 
     /**
@@ -219,6 +226,28 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns a collection of custom dashboards in the user home folder.
+     * @return Collection of user's custom dashboards.
+     */
+    public DashboardFolderListSpecWrapperImpl getDashboards() {
+        return dashboards;
+    }
+
+
+    /**
+     * Changes the collection of custom dashboards.
+     * @param dashboards New collection of custom dashboards.
+     */
+    public void setDashboards(DashboardFolderListSpecWrapperImpl dashboards) {
+        this.dashboards = dashboards;
+        if (dashboards != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "dashboards");
+            dashboards.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("dashboards").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Flushes an object to a persistent store.
      */
     @Override
@@ -230,8 +259,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getChecks().flush();
         this.getSettings().flush();
         this.getFileIndices().flush();
+        this.getDashboards().flush();
 
-		this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
+        this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
         assert !this.isDirty();
     }
 
@@ -444,6 +474,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
             }
             if (cloned.settings != null) {
                 cloned.settings = (SettingsWrapperImpl) cloned.settings.deepClone();
+            }
+            if (cloned.dashboards != null) {
+                cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();
             }
             // NOTE: the file index is not cloned... it has a different lifecycle
 

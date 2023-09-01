@@ -16,6 +16,7 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.metadata.basespecs.Flushable;
+import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
@@ -98,4 +99,10 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Node that was found.
      */
     HierarchyNode findNode(HierarchyId hierarchyId);
+
+    /**
+     * Returns a list of dashboards definitions.
+     * @return Collection of dashboards definitions.
+     */
+    DashboardFolderListSpecWrapper getDashboards();
 }

@@ -105,7 +105,7 @@ public class ColumnSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategoryS
     public void setMonthlySqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec monthlySqlAggregateExprColumn) {
         this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExprColumn, monthlySqlAggregateExprColumn));
         this.monthlySqlAggregateExprColumn = monthlySqlAggregateExprColumn;
-        propagateHierarchyIdToField(monthlySqlAggregateExprColumn, "monthly_sql_aggregated_expression_value_on_column_min");
+        propagateHierarchyIdToField(monthlySqlAggregateExprColumn, "monthly_sql_aggregate_expr_column");
     }
 
     /**

@@ -105,7 +105,7 @@ public class ColumnSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
     public void setDailySqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailySqlAggregateExprColumn) {
         this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExprColumn, dailySqlAggregateExprColumn));
         this.dailySqlAggregateExprColumn = dailySqlAggregateExprColumn;
-        propagateHierarchyIdToField(dailySqlAggregateExprColumn, "daily_sql_aggregated_expression_value_on_column_min");
+        propagateHierarchyIdToField(dailySqlAggregateExprColumn, "daily_sql_aggregate_expr_column");
     }
 
     /**
