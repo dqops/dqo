@@ -31,10 +31,6 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     e.stopPropagation();
   };
 
-  // const openAddNewFolder = () => {
-  //   setIsOpen(true);
-  // };
-
   const closeModal = () => {
     setIsOpen(false);
     setOpen(false);
@@ -58,6 +54,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         label: 'New check'
       })
     );
+    setOpen(false)
   };
 
   return (
