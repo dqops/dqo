@@ -28,7 +28,7 @@ You can use DQO with the most popular databases. [Learn here how to connect a da
 &nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
 &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
 &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
-&nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle.png)
+&nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle2.png)
 
 ## DQO user interface
 
