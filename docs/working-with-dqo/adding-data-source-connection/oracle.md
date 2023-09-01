@@ -145,13 +145,3 @@ spec:
     max_incident_length_days: 60
     mute_for_days: 60
 ```
-apiVersion: dqo/v1
-kind: source
-spec:
-provider_type: oracle
-oracle:
-host: localhost
-database: DB_TEST
-user: ' USER_TEST'
-password: PASSWD_TEST
-ssl: false
