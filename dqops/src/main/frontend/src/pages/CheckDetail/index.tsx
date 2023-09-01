@@ -7,11 +7,9 @@ import {
   addFirstLevelTab,
   closeFirstLevelTab,
   getdataQualityChecksFolderTree,
-  setActiveFirstLevelTab,
-  toggledataQualityChecksFolderTree 
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-// import { createRule, getRule, setUpdatedRule } from "../../redux/actions/definition.actions";
 import {
   createCheck,
   updateCheck,
@@ -27,7 +25,7 @@ import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
 
 export const SensorDetail = () => {
-  const { fullCheckName, path, type, custom, checkDetail } = useSelector(
+  const { fullCheckName, path, type, custom} = useSelector(
     getFirstLevelSensorState
   );
   const {tabs, activeTab } = useSelector(
@@ -35,15 +33,17 @@ export const SensorDetail = () => {
   );
 
   const dispatch = useActionDispatch();
+  const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)
 
   const [checkName, setcheckName] = useState('');
-  const [selectedSensor, setSelectedSensor] = useState('');
-  const [selectedRule, setSelectedRule] = useState('');
+  const [selectedSensor, setSelectedSensor] = useState(activeCheckDetail?.sensor_name ?? "");
+  const [selectedRule, setSelectedRule] = useState(activeCheckDetail?.rule_name ?? "");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [helpText, setHelpText] = useState('');
+  const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? "");
+
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -72,17 +72,18 @@ export const SensorDetail = () => {
   }, [fullCheckName, path, type, custom]);
 
   useEffect(() => {
-    if (fullCheckName !== undefined && type !== 'create') {
-      dispatch(getCheck(fullCheckName));
+    if(activeCheckDetail === undefined){
+      setSelectedRule('');
+      setSelectedSensor('');
+      setHelpText('');
+      setcheckName('')
+    }else{
+      setSelectedRule(activeCheckDetail.rule_name ?? "");
+      setSelectedSensor(activeCheckDetail.sensor_name ?? "");
+      setHelpText(activeCheckDetail.help_text ?? "");
+      setcheckName(activeCheckDetail.check_name ?? "")
     }
-  }, [fullCheckName, type]);
-
-  useEffect(() => {
-    const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)?? ''
-    setSelectedRule(activeCheckDetail?.rule_name ?? '');
-    setSelectedSensor(activeCheckDetail?.sensor_name ?? '');
-    setHelpText(activeCheckDetail?.help_text ?? '');
-  }, [checkDetail]);
+  }, [activeTab, activeCheckDetail]);
 
   const onCreateUpdateCheck = async () => {
     const fullName = [...(path || []), checkName].join('/');
@@ -91,14 +92,15 @@ export const SensorDetail = () => {
       await dispatch(
         createCheck(fullName, {
           sensor_name: selectedSensor,
-          rule_name: selectedRule
+          rule_name: selectedRule,
+          help_text: helpText
         })
       );
       setIsUpdating(false);
       setIsCreating(false);
       openAddNewCheck();
       dispatch(getdataQualityChecksFolderTree());
-      dispatch(toggledataQualityChecksFolderTree(Array.from(path).join("/")))
+      dispatch(opendataQualityChecksFolderTree(Array.from(path).join("/")))
     } else {
       await dispatch(
         updateCheck(
@@ -144,7 +146,8 @@ export const SensorDetail = () => {
           custom: true,
           sensor: selectedSensor,
           rule: selectedRule,
-          checkName: checkName
+          checkName: checkName,
+          helpText: helpText
         },
         label: checkName
       })
@@ -210,7 +213,7 @@ export const SensorDetail = () => {
           selectedSensor={selectedSensor}
           setIsUpdated={setIsUpdated}
           custom={custom}
-          helpText={checkDetail?.help_text}
+          helpText={helpText}
           onChangeHelpText={onChangeHelpText}
         />
         {/* )} */}
