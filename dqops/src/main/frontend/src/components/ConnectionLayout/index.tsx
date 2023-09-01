@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
 import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
@@ -8,6 +8,9 @@ import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 import { TabOption } from "../PageTabs/tab";
 import qs from "query-string";
+import axios, { AxiosError } from 'axios';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 interface ConnectionLayoutProps {
   children: any;
@@ -22,6 +25,8 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const history = useHistory();
   const location = useLocation();
   const match = useRouteMatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [objectNotFound, setObjectNotFound] = useState(false)
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
@@ -53,6 +58,32 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       }
     }
   }, [activeTab]);
+// Inicjalizacja zmiennej, do której będziemy zapisywać komunikaty błędów
+const errorLogs: string[] = [];
+
+function captureConsoleErrors() {
+  const originalConsoleError = console.error;
+  console.error = function (...args: any[]) {
+    const errorMessage = args.map(arg => JSON.stringify(arg)).join(' ');
+    console.log(errorMessage)
+    if(errorMessage.includes("404")){
+      setObjectNotFound(true)
+    }
+    const timestampedError = `${new Date().toLocaleString()}: ${errorMessage}`;
+
+    errorLogs.push(timestampedError);
+
+    originalConsoleError(...args);
+  };
+  console.log(originalConsoleError)
+}
+
+useEffect(() => {
+  captureConsoleErrors();
+}, [])
+
+console.log('Zapisane komunikaty błędów:');
+console.log(errorLogs);
 
   return (
     <MainLayout>
@@ -75,7 +106,14 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           ) : null}
         </div>
       </div>
+      <ConfirmDialog
+      open={objectNotFound}
+      onConfirm={() => new Promise(() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)))}
+      isCancelExcluded={true} 
+      onClose={() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab))}
+      message='The definition of this object was deleted in DQO user home, closing the tab'/>
     </MainLayout>
+    
   );
 };
 
