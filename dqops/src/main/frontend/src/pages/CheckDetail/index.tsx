@@ -68,8 +68,10 @@ export const SensorDetail = () => {
     } else if ((fullCheckName as string).length === 0) {
       dispatch(closeFirstLevelTab(path));
     }
-    dispatch(getCheck(fullCheckName));
-  }, [fullCheckName, path, type, custom]);
+    if(activeCheckDetail === undefined){
+      dispatch(getCheck(fullCheckName));
+    }
+  }, [fullCheckName, path, type, custom, activeCheckDetail]);
 
   useEffect(() => {
     if(activeCheckDetail === undefined){
@@ -201,10 +203,6 @@ export const SensorDetail = () => {
             </div>
           </div>
         )}
-        {/* <div className="border-b border-gray-300 relative">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-        </div>
-        {activeTab === 'check_editor' && ( */}
         <CheckEditor
           create={type === 'create' ? true : false}
           onChangeRule={onChangeRule}
