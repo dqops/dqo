@@ -56,9 +56,10 @@ public class DashboardsProviderImpl implements DashboardsProvider {
                 DashboardsFolderListSpec defaultTemplatedFolderList = dqoHomeContext.getDqoHome().getDashboards().getSpec();
                 DashboardsFolderListSpec expandedDashboardTree = defaultTemplatedFolderList.createExpandedDashboardTree();
 
-                for (DashboardsFolderSpec rootDashboardFolder : expandedDashboardTree) {
-                    rootDashboardFolder.sort();
-                }
+                // disable sorting, we will show the original order
+//                for (DashboardsFolderSpec rootDashboardFolder : expandedDashboardTree) {
+//                    rootDashboardFolder.sort();
+//                }
                 this.dashboardFolderTree = expandedDashboardTree;
             }
 
