@@ -7,6 +7,7 @@ interface ConfirmDialogProps {
   onClose: () => void;
   message: string;
   onConfirm: () => Promise<void>;
+  isCancelExcluded ?: boolean
 }
 
 const ConfirmDialog = ({
@@ -14,6 +15,7 @@ const ConfirmDialog = ({
   onClose,
   onConfirm,
   message,
+  isCancelExcluded
 }: ConfirmDialogProps) => {
   const handleSubmit = async () => {
     await onConfirm();
@@ -28,6 +30,7 @@ const ConfirmDialog = ({
         </div>
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
+      {isCancelExcluded !== true &&
         <Button
           color="primary"
           variant="outlined"
@@ -35,12 +38,13 @@ const ConfirmDialog = ({
           onClick={onClose}
           label="Cancel"
         />
+      }
         <Button
           color="primary"
           className="px-8"
           onClick={handleSubmit}
           label="Confirm"
-        />
+        /> 
       </DialogFooter>
     </Dialog>
   );

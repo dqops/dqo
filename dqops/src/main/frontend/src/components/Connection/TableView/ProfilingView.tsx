@@ -31,7 +31,6 @@ import {
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
-import { AxiosResponse } from 'axios';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -77,17 +76,16 @@ const ProfilingView = () => {
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
-    try {
-      const res: AxiosResponse<TableColumnsStatisticsModel> =
-        await ColumnApiClient.getColumnsStatistics(
-          connectionName,
-          schemaName,
-          tableName
-        );
-      setStatistics(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+       try{
+         await ColumnApiClient.getColumnsStatistics(
+           connectionName,
+           schemaName,
+           tableName
+           ).then((res) => 
+           setStatistics(res.data))
+          }catch (err){
+            console.error(err)
+          }
   };
 
   useEffect(() => {
