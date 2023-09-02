@@ -14,35 +14,23 @@
  * limitations under the License.
  */
 
-package com.dqops.core.dqocloud.login;
+package com.dqops.rest.server.authentication;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.AuthenticatedPrincipal;
 
 /**
- * DQO user role within a data domain.
+ * DQO user principal that identifies an unauthenticated user.
  */
-public enum DqoUserDataDomainRole {
-    /**
-     * Administrator (owner) of the account who can manage users and perform all actions.
-     */
-    @JsonProperty("admin")
-    ADMIN,
+public class AuthenticatedDqoUserPrincipal extends DqoUserPrincipal implements AuthenticatedPrincipal {
+    public AuthenticatedDqoUserPrincipal() {
+    }
 
     /**
-     * Editor who can configure and run data quality checks.
+     * Creates a user principal.
+     *
+     * @param name User's email (principal name).
      */
-    @JsonProperty("editor")
-    EDITOR,
-
-    /**
-     * The user can run data quality checks, but cannot make changes.
-     */
-    @JsonProperty("operator")
-    OPERATOR,
-
-    /**
-     * Just a read-only viewer.
-     */
-    @JsonProperty("viewer")
-    VIEWER
+    public AuthenticatedDqoUserPrincipal(String name) {
+        super(name);
+    }
 }

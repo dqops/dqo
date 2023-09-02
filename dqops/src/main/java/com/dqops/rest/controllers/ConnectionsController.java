@@ -42,6 +42,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -85,7 +86,7 @@ public class ConnectionsController {
             @ApiResponse(code = 200, message = "OK", response = ConnectionBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ConnectionBasicModel>> getAllConnections() {
+    public ResponseEntity<Flux<ConnectionBasicModel>> getAllConnections(@AuthenticationPrincipal Object principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 

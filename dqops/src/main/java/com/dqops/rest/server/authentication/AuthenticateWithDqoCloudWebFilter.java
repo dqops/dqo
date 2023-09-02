@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.rest.server;
+package com.dqops.rest.server.authentication;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
@@ -24,6 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -39,14 +43,22 @@ import java.util.Objects;
 @Component
 @Slf4j
 public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
+    /**
+     * Special url that receives a post with the authentication token received from DQO Cloud.
+     */
+    public static final String ISSUE_TOKEN_URL = "/tokenissuer";
+
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
+    private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
-                                             InstanceCloudLoginService instanceCloudLoginService) {
+                                             InstanceCloudLoginService instanceCloudLoginService,
+                                             DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
+        this.dqoAuthenticationTokenFactory = dqoAuthenticationTokenFactory;
     }
 
     /**
@@ -58,11 +70,23 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
-            return chain.filter(exchange);
+            Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
+            SecurityContextHolder.getContext().setAuthentication(singleUserAuthenticationToken);
+
+            ServerWebExchange mutatedExchange = exchange.mutate()
+                    .principal(Mono.just(singleUserAuthenticationToken))
+                    .build();
+            mutatedExchange.getAttributes().put(DqoUserPrincipal.SERVER_WEB_EXCHANGE_ATTRIBUTE_NAME, singleUserAuthenticationToken.getPrincipal()); // probably not required, because repository is triggered before this filter
+
+            return chain
+                    .filter(mutatedExchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(new SecurityContextImpl(singleUserAuthenticationToken))))
+                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(singleUserAuthenticationToken))
+                    .then();
         }
 
         String requestPath = exchange.getRequest().getPath().value();
-        if (Objects.equals(requestPath, "/tokenissuer")) {
+        if (Objects.equals(requestPath, ISSUE_TOKEN_URL)) {
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
             String returnUrl = exchange.getRequest().getQueryParams().getFirst("returnUrl");
             String refreshToken = exchange.getRequest().getQueryParams().getFirst("refreshToken");
@@ -90,6 +114,9 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             } else {
                 try {
                     SignedObject<DqoUserTokenPayload> decodedAuthenticationToken = this.instanceCloudLoginService.verifyAuthenticationToken(dqoAccessTokenCookie.getValue());
+
+                    // TODO: create token...
+
                     return chain.filter(exchange);
                 }
                 catch (Exception ex) {

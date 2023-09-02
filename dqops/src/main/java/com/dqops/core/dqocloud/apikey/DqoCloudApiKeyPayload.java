@@ -15,6 +15,7 @@
  */
 package com.dqops.core.dqocloud.apikey;
 
+import com.dqops.rest.server.authentication.DqoRoleNames;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -68,6 +69,9 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String region;
 
+    @JsonProperty("rl")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String role = DqoRoleNames.ADMIN;
 
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
@@ -244,6 +248,21 @@ public class DqoCloudApiKeyPayload {
         this.region = region;
     }
 
+    /**
+     * Returns the role of the user. Roles are defined in {@link com.dqops.rest.server.authentication.DqoRoleNames} class.
+     * @return The role of the user.
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * Sets the role of the user.
+     * @param role User role.
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
