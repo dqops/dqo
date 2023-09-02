@@ -25,13 +25,12 @@ import {
 } from '../../../api';
 
 import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
-import { addFirstLevelTab, closeFirstLevelTab } from '../../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
-import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -76,15 +75,17 @@ const ProfilingView = () => {
   const [selected, setSelected] = useState<number>(0);
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-  const [objectNotFound, setObjectNotFound] = useState(false)
   const fetchColumns = async () => {
-        await ColumnApiClient.getColumnsStatistics(
-          connectionName,
-          schemaName,
-          tableName
-        ).then((res) => 
-      setStatistics(res.data))
-      .catch((res) => (res?.response.status === 404 && setObjectNotFound(true)));
+       try{
+         await ColumnApiClient.getColumnsStatistics(
+           connectionName,
+           schemaName,
+           tableName
+           ).then((res) => 
+           setStatistics(res.data))
+          }catch (err){
+            console.error(err)
+          }
   };
 
   useEffect(() => {
@@ -212,23 +213,6 @@ const ProfilingView = () => {
     setActiveTab(tab);
   };
 
-  // useEffect(() => {
-  //   if(objectNotFound === true ){
-  //     setTimeout(() => (
-  //       // console.log("deleted"),
-  //       dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab))
-  //     ), 2000)
-  //   }
-  // }, [objectNotFound])
-
-
-  // console.log(objectNotFound)
-  //   if(objectNotFound === true){
-  //     return <div className='w-full text-center flex items-center justify-center text-xl text-red-500'>
-  //       The definition of this object was deleted in DQO user home, closing the tab.
-  //     </div>
-  //   }
-
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       {activeTab === 'statistics' && (
@@ -273,12 +257,6 @@ const ProfilingView = () => {
           fetchChecks={onUpdate}
         />
       )}
-      <ConfirmDialog
-      open={objectNotFound}
-      onConfirm={() => new Promise(() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)))}
-      isCancelExcluded={true} 
-      onClose={() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab))}
-      message='The definition of this object was deleted in DQO user home, closing the tab'/>
     </div>
   );
 };

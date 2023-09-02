@@ -8,7 +8,7 @@ import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 import { TabOption } from "../PageTabs/tab";
 import qs from "query-string";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 
@@ -58,32 +58,14 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       }
     }
   }, [activeTab]);
-// Inicjalizacja zmiennej, do której będziemy zapisywać komunikaty błędów
-const errorLogs: string[] = [];
 
-function captureConsoleErrors() {
-  const originalConsoleError = console.error;
-  console.error = function (...args: any[]) {
-    const errorMessage = args.map(arg => JSON.stringify(arg)).join(' ');
-    console.log(errorMessage)
-    if(errorMessage.includes("404")){
-      setObjectNotFound(true)
-    }
-    const timestampedError = `${new Date().toLocaleString()}: ${errorMessage}`;
-
-    errorLogs.push(timestampedError);
-
-    originalConsoleError(...args);
-  };
-  console.log(originalConsoleError)
-}
-
-useEffect(() => {
-  captureConsoleErrors();
-}, [])
-
-console.log('Zapisane komunikaty błędów:');
-console.log(errorLogs);
+axios.interceptors.response.use(undefined, function (error) {
+  const statusCode = error.response ? error.response.status : null;
+  if (statusCode === 404 ) {
+    setObjectNotFound(true)
+  }
+  return Promise.reject(error);
+});
 
   return (
     <MainLayout>
@@ -96,7 +78,7 @@ console.log(errorLogs);
           limit={10}
         />
         <div
-          className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
+          className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
           style={{ maxHeight: "calc(100vh - 80px)" }}
         >
           {!!activeTab && pageTabs.length ? (
@@ -108,9 +90,9 @@ console.log(errorLogs);
       </div>
       <ConfirmDialog
       open={objectNotFound}
-      onConfirm={() => new Promise(() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)))}
+      onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
-      onClose={() => dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab))}
+      onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
       message='The definition of this object was deleted in DQO user home, closing the tab'/>
     </MainLayout>
     
