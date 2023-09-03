@@ -45,6 +45,11 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
      */
     public static final String ISSUE_TOKEN_URL = "/tokenissuer";
 
+    /**
+     * Health check url.
+     */
+    public static final String HEALTHCHECK_URL = "/api/ishealthy";
+
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;

@@ -35,6 +35,12 @@ public interface DqoJobQueue {
     void stop();
 
     /**
+     * Checks if the job queue is started and is running. The health check depends on a working job queue.
+     * @return True when the job queue is started and is running, false when the job queue was not yet started or is stopping.
+     */
+    boolean isStarted();
+
+    /**
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.

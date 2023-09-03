@@ -67,6 +67,7 @@ public class WebSecurityConfiguration {
 
         http.authorizeExchange(customizer -> {
             customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_URL).permitAll();
+            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_URL).permitAll();
             customizer.pathMatchers("/**").hasAuthority(DqoPermissionNames.VIEW);
         });
 

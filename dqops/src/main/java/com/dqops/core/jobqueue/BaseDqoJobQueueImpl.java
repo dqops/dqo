@@ -55,7 +55,8 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry> jobEntriesByJobId;
     private Set<DqoJobQueueEntry> runningJobs;
     private List<DqoJobQueueEntry> jobsQueuedBeforeStart = new ArrayList<>();
-    private boolean started;
+    private volatile boolean started;
+    private volatile boolean stopInProgress;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
     private final Object runnerThreadsFuturesLock = new Object();
@@ -125,6 +126,14 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         for (DqoJobQueueEntry jobQueueEntry : preStartQueuedJobs) {
             this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId(), jobQueueEntry.getJob().getPrincipal());
         }
+    }
+
+    /**
+     * Checks if the job queue is started and is running. The health check depends on a working job queue.
+     * @return True when the job queue is started and is running, false when the job queue was not yet started or is stopping.
+     */
+    public boolean isStarted() {
+        return this.started;
     }
 
     /**
@@ -224,11 +233,11 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Stops the job queue.
      */
     public void stop() {
-        if (!this.started) {
+        if (!this.started || this.stopInProgress) {
             return;
         }
 
-        this.started = false;
+        this.stopInProgress = true;
 
         int startedThreadsCount = this.startedThreadsCount.get();
         for (int i = 0; i < startedThreadsCount; i++) {
@@ -264,6 +273,8 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         this.jobsBlockingQueue = null;
         this.runningJobs = null;
         this.jobEntriesByJobId = null;
+        this.started = false;
+        this.stopInProgress = false;
     }
 
     /**
