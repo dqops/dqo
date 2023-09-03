@@ -16,14 +16,19 @@
 package com.dqops.rest.server.authentication;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -32,6 +37,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -53,14 +59,41 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;
+    private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                              InstanceCloudLoginService instanceCloudLoginService,
-                                             DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory) {
+                                             DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
+                                             DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dqoAuthenticationTokenFactory = dqoAuthenticationTokenFactory;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+    }
+
+    /**
+     * Extracts the token from the Authorization header, after the "Bearer" value or returns null when the Authorization header as not present or the format was not accepted.
+     * @param request Http request to use for retrieving the header.
+     * @return Token extracted from the Authorization header or null.
+     */
+    protected String extractAuthenticationBearerToken(ServerHttpRequest request) {
+        List<String> authorizationHeaderValues = request.getHeaders().get(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeaderValues == null || authorizationHeaderValues.size() != 1) {
+            return null;
+        }
+
+        String headerValue = authorizationHeaderValues.get(0);
+        String[] headerTokens = StringUtils.split(headerValue, ' ');
+        if (headerTokens == null || headerTokens.length != 2) {
+            return null;
+        }
+
+        if (!Objects.equals("Bearer", headerTokens[0])) {
+            return null;
+        }
+
+        return headerTokens[1];
     }
 
     /**
@@ -71,6 +104,46 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        String requestPath = request.getPath().value();
+
+        String authorizationToken = extractAuthenticationBearerToken(request);
+        if (authorizationToken != null) {
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
+                Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
+
+                ServerWebExchange mutatedExchange = exchange.mutate()
+                        .principal(Mono.just(singleUserAuthenticationToken))
+                        .build();
+
+                return chain
+                        .filter(mutatedExchange)
+                        .then();
+            }
+
+            try {
+                SignedObject<DqoUserTokenPayload> decodedAuthenticationToken =
+                        this.instanceCloudLoginService.verifyAuthenticationToken(authorizationToken);
+                Authentication userTokenAuthentication = this.dqoAuthenticationTokenFactory.createAuthenticatedWithUserToken(
+                        decodedAuthenticationToken.getTarget());
+
+                ServerWebExchange mutatedExchange = exchange.mutate()
+                        .principal(Mono.just(userTokenAuthentication))
+                        .build();
+
+                return chain
+                        .filter(mutatedExchange)
+                        .then();
+            }
+            catch (Exception ex) {
+                log.warn("Invalid Authentication token.", ex);
+            }
+
+            exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(401));
+            return exchange.getResponse().writeAndFlushWith(Mono.empty());
+        }
+
         if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
@@ -83,7 +156,6 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     .then();
         }
 
-        String requestPath = exchange.getRequest().getPath().value();
         if (Objects.equals(requestPath, ISSUE_TOKEN_URL)) {
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
             String returnUrl = exchange.getRequest().getQueryParams().getFirst("returnUrl");
@@ -102,6 +174,16 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
 
             exchange.getResponse().getHeaders().add("Location", returnUrl);
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
+        } else if (Objects.equals(requestPath, HEALTHCHECK_URL)) {
+            Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAnonymousToken();
+
+            ServerWebExchange mutatedExchange = exchange.mutate()
+                    .principal(Mono.just(singleUserAuthenticationToken))
+                    .build();
+
+            return chain
+                    .filter(mutatedExchange)
+                    .then();
         } else {
             HttpCookie dqoAccessTokenCookie = exchange.getRequest().getCookies().getFirst("DQOAccessToken");
             if (dqoAccessTokenCookie == null) {

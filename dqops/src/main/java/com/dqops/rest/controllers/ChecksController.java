@@ -74,7 +74,10 @@ public class ChecksController {
      * @return Model of the check with specific check name.
      */
     @GetMapping(value = "/checks/{fullCheckName}", produces = "application/json")
-    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckSpecModel.class)
+    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckSpecModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecModel.class),
@@ -119,7 +122,10 @@ public class ChecksController {
      * @return Empty response.
      */
     @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.")
+    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New custom check successfully created"),
@@ -166,7 +172,10 @@ public class ChecksController {
      * @return Empty response.
      */
     @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present")
+    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom check successfully updated"),
@@ -231,7 +240,10 @@ public class ChecksController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
-    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
+    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Custom check definition successfully deleted", response = DqoQueueJobId.class),
@@ -269,7 +281,10 @@ public class ChecksController {
      */
     @GetMapping(value = "/definitions/checks", produces = "application/json")
     @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckSpecFolderBasicModel.class)
+            response = CheckSpecFolderBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecFolderBasicModel.class),
@@ -334,7 +349,10 @@ public class ChecksController {
      */
     @GetMapping(value = "/checks", produces = "application/json")
     @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckSpecBasicModel[].class)
+            response = CheckSpecBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),

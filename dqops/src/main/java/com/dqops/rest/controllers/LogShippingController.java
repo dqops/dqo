@@ -48,7 +48,10 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/debug", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logDebug", notes = "Logs an information message in the server's logs as a debug severity log entry.", response = Void.class)
+    @ApiOperation(value = "logDebug", notes = "Logs an information message in the server's logs as a debug severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
@@ -73,7 +76,10 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/info",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logInfo", notes = "Logs an information message in the server's logs as an info severity log entry.", response = Void.class)
+    @ApiOperation(value = "logInfo", notes = "Logs an information message in the server's logs as an info severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
@@ -98,7 +104,10 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/warn", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logWarn", notes = "Logs an information message in the server's logs as a warn severity log entry.", response = Void.class)
+    @ApiOperation(value = "logWarn", notes = "Logs an information message in the server's logs as a warn severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
@@ -123,7 +132,10 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/error", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logError", notes = "Logs an information message in the server's logs as an error severity log entry.", response = Void.class)
+    @ApiOperation(value = "logError", notes = "Logs an information message in the server's logs as an error severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),

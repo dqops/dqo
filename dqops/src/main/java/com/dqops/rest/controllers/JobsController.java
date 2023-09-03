@@ -132,7 +132,11 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/runchecks", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = RunChecksQueueJobResult.class)
+    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks",
+            response = RunChecksQueueJobResult.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = RunChecksQueueJobResult.class),
@@ -182,7 +186,10 @@ public class JobsController {
      */
     @GetMapping(value = "/runchecks/{jobId}/wait", produces = "application/json")
     @ApiOperation(value = "waitForRunChecksJob", notes = "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
-            response = RunChecksQueueJobResult.class)
+            response = RunChecksQueueJobResult.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Run checks job information returned. When the wait timeout has elapsed, the job status could be still queued or running and the result will be missing.",
@@ -232,7 +239,11 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/collectstatistics/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table", response = DqoQueueJobId.class)
+    @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table",
+            response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
@@ -263,7 +274,12 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/collectstatistics/withgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "collectStatisticsOnDataGroups", notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping", response = DqoQueueJobId.class)
+    @ApiOperation(value = "collectStatisticsOnDataGroups",
+            notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping",
+            response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
@@ -294,7 +310,10 @@ public class JobsController {
      */
     @GetMapping(value = "/jobs", produces = "application/json")
     @ApiOperation(value = "getAllJobs", notes = "Retrieves a list of all queued and recently finished jobs.",
-            response = DqoJobQueueInitialSnapshotModel.class)
+            response = DqoJobQueueInitialSnapshotModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "A list of all queued and finished jobs returned. Call jobchangessince/{changeSequence} to receive incremental changes.",
@@ -314,7 +333,10 @@ public class JobsController {
      */
     @GetMapping(value = "/jobs/{jobId}", produces = "application/json")
     @ApiOperation(value = "getJob", notes = "Retrieves the current status of a single job, identified by a job id.",
-            response = DqoJobHistoryEntryModel.class)
+            response = DqoJobHistoryEntryModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retrieves the current status of a single job, identified by a job id.",
@@ -341,7 +363,10 @@ public class JobsController {
      */
     @GetMapping(value = "/jobs/{jobId}/wait", produces = "application/json")
     @ApiOperation(value = "waitForJob", notes = "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
-            response = DqoJobHistoryEntryModel.class)
+            response = DqoJobHistoryEntryModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The job status was returned. If the response is returned before the wait timeout, the response will contain information about a finished job. When the wait timeout has elapsed, the job status could be still queued or running.",
@@ -383,7 +408,10 @@ public class JobsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/jobs/{jobId}", produces = "application/json")
-    @ApiOperation(value = "cancelJob", notes = "Cancels a running job")
+    @ApiOperation(value = "cancelJob", notes = "Cancels a running job",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Job was cancelled"),
@@ -406,7 +434,10 @@ public class JobsController {
      */
     @GetMapping(value = "/jobchangessince/{sequenceNumber}", produces = "application/json")
     @ApiOperation(value = "getJobChangesSince", notes = "Retrieves an incremental list of job changes (new jobs or job status changes)",
-            response = DqoJobQueueIncrementalSnapshotModel.class)
+            response = DqoJobQueueIncrementalSnapshotModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "A list of all queued and finished jobs returned. Call jobchangessince/{sequenceNumber} to receive incremental changes.",
@@ -438,7 +469,10 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/importtables",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "importTables", notes = "Starts a new background job that will import selected tables.", response = DqoQueueJobId.class)
+    @ApiOperation(value = "importTables", notes = "Starts a new background job that will import selected tables.", response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will import selected tables was added to the queue", response = DqoQueueJobId.class),
@@ -462,7 +496,11 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/deletestoreddata", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored data about check results, sensor readouts etc.", response = DqoQueueJobId.class)
+    @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored data about check results, sensor readouts etc.",
+            response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will delete stored registry data was added to the queue", response = DqoQueueJobId.class),
@@ -486,7 +524,11 @@ public class JobsController {
      */
     @PostMapping(value = "/synchronize",consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
-            "The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
+            "The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).",
+            response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId.class),
@@ -510,7 +552,10 @@ public class JobsController {
      */
     @GetMapping(value = "/scheduler/isrunning", produces = "application/json")
     @ApiOperation(value = "isCronSchedulerRunning", notes = "Checks if the DQO internal CRON scheduler is running and processing jobs scheduled using cron expressions.",
-            response = Boolean.class)
+            response = Boolean.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The cron scheduler status was checked and returned",
@@ -530,7 +575,10 @@ public class JobsController {
      */
     @PostMapping(value = "/scheduler/status/start", produces = "application/json")
     @ApiOperation(value = "startCronScheduler", notes = "Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.",
-            response = Void.class)
+            response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The cron scheduler was started or was already running",
@@ -555,7 +603,10 @@ public class JobsController {
      */
     @PostMapping(value = "/scheduler/status/stop", produces = "application/json")
     @ApiOperation(value = "stopCronScheduler", notes = "Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.",
-            response = Void.class)
+            response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The cron scheduler was stopped or was already not running",

@@ -16,6 +16,7 @@
 
 package com.dqops.core.dqocloud.login;
 
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -108,5 +109,22 @@ public class DqoUserTokenPayload implements Cloneable {
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
         DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.user, this.accountRole, grantedPrivileges, this);
         return dqoUserPrincipal;
+    }
+
+    /**
+     * Creates a local DQO instance authentication token from the DQO Cloud API Key that identifies the instance and the main user.
+     * @param cloudApiKey Cloud API key.
+     * @return User token payload for a local authentication.
+     */
+    public static DqoUserTokenPayload createFromCloudApiKey(DqoCloudApiKeyPayload cloudApiKey) {
+        DqoUserTokenPayload dqoUserTokenPayload = new DqoUserTokenPayload();
+        dqoUserTokenPayload.setUser(cloudApiKey.getSubject());
+        dqoUserTokenPayload.setExpiresAt(cloudApiKey.getExpiresAt());
+        dqoUserTokenPayload.setDisposition(DqoUserAuthenticationTokenDisposition.API_KEY);
+        dqoUserTokenPayload.setTenantId(cloudApiKey.getTenantId());
+        dqoUserTokenPayload.setTenantGroup(cloudApiKey.getTenantGroup());
+        dqoUserTokenPayload.setAccountRole(cloudApiKey.getAccountRole());
+
+        return dqoUserTokenPayload;
     }
 }

@@ -76,7 +76,11 @@ public class TableComparisonsController {
      * @return List of reference tables.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonConfigurations", notes = "Returns the list of table comparison configurations on a compared table", response = TableComparisonConfigurationModel[].class)
+    @ApiOperation(value = "getTableComparisonConfigurations", notes = "Returns the list of table comparison configurations on a compared table",
+            response = TableComparisonConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel[].class),
@@ -128,7 +132,11 @@ public class TableComparisonsController {
      * @return Table comparison model.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonConfiguration", notes = "Returns a model of the table comparison configuration", response = TableComparisonConfigurationModel.class)
+    @ApiOperation(value = "getTableComparisonConfiguration", notes = "Returns a model of the table comparison configuration",
+            response = TableComparisonConfigurationModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel.class),
@@ -170,7 +178,10 @@ public class TableComparisonsController {
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}",
             consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonConfiguration", notes = "Updates a table configuration configuration")
+    @ApiOperation(value = "updateTableComparisonConfiguration", notes = "Updates a table configuration configuration",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison configuration successfully updated"),
@@ -238,7 +249,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonConfiguration", notes = "Creates a new table comparison configuration added to the compared table")
+    @ApiOperation(value = "createTableComparisonConfiguration", notes = "Creates a new table comparison configuration added to the compared table",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration successfully created"),
@@ -289,7 +303,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "deleteTableComparisonConfiguration", notes = "Deletes a table comparison configuration from a compared table")
+    @ApiOperation(value = "deleteTableComparisonConfiguration", notes = "Deletes a table comparison configuration from a compared table",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison configuration removed"),
@@ -343,7 +360,11 @@ public class TableComparisonsController {
      * @return Model of the table comparison using profiling checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using profiling checks (comparison at any time)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using profiling checks (comparison at any time)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -388,7 +409,11 @@ public class TableComparisonsController {
      * @return Model of the table comparison using daily monitoring checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonMonitoringDaily", notes = "Returns a model of the table comparison using daily monitoring checks (comparison once a day)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonMonitoringDaily", notes = "Returns a model of the table comparison using daily monitoring checks (comparison once a day)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -433,7 +458,11 @@ public class TableComparisonsController {
      * @return Model of the table comparison using monthly monitoring checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonMonitoringMonthly", notes = "Returns a model of the table comparison using monthly monitoring checks (comparison once a month)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonMonitoringMonthly", notes = "Returns a model of the table comparison using monthly monitoring checks (comparison once a month)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -478,7 +507,11 @@ public class TableComparisonsController {
      * @return Model of the table comparison using daily partitioned checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonPartitionedDaily", notes = "Returns a model of the table comparison using daily partition checks (comparing day to day)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonPartitionedDaily", notes = "Returns a model of the table comparison using daily partition checks (comparing day to day)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -523,7 +556,11 @@ public class TableComparisonsController {
      * @return Model of the table comparison using monthly partitioned checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonPartitionedMonthly", notes = "Returns a model of the table comparison using monthly partition checks (comparing month to month)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonPartitionedMonthly", notes = "Returns a model of the table comparison using monthly partition checks (comparing month to month)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
@@ -618,7 +655,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using profiling checks")
+    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using profiling checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for profiling checks successfully created"),
@@ -646,7 +686,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonMonitoringDaily", notes = "Creates a table comparison configuration using daily monitoring checks")
+    @ApiOperation(value = "createTableComparisonMonitoringDaily", notes = "Creates a table comparison configuration using daily monitoring checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for daily monitoring checks successfully created"),
@@ -675,7 +718,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonMonitoringMonthly", notes = "Creates a table comparison configuration using monthly monitoring checks")
+    @ApiOperation(value = "createTableComparisonMonitoringMonthly", notes = "Creates a table comparison configuration using monthly monitoring checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for monthly monitoring checks successfully created"),
@@ -704,7 +750,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonPartitionedDaily", notes = "Creates a table comparison configuration using daily partitioned checks")
+    @ApiOperation(value = "createTableComparisonPartitionedDaily", notes = "Creates a table comparison configuration using daily partitioned checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for daily partitioned checks successfully created"),
@@ -733,7 +782,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonPartitionedMonthly", notes = "Creates a table comparison configuration using monthly partitioned checks")
+    @ApiOperation(value = "createTableComparisonPartitionedMonthly", notes = "Creates a table comparison configuration using monthly partitioned checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table comparison configuration for monthly partitioned checks successfully created"),
@@ -814,7 +866,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks")
+    @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison profiling checks successfully updated"),
@@ -845,7 +900,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonMonitoringDaily", notes = "Updates a table comparison checks monitoring daily")
+    @ApiOperation(value = "updateTableComparisonMonitoringDaily", notes = "Updates a table comparison checks monitoring daily",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated"),
@@ -876,7 +934,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonMonitoringMonthly", notes = "Updates a table comparison checks monitoring monthly")
+    @ApiOperation(value = "updateTableComparisonMonitoringMonthly", notes = "Updates a table comparison checks monitoring monthly",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated"),
@@ -907,7 +968,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonPartitionedDaily", notes = "Updates a table comparison checks partitioned daily (comparing day to day)")
+    @ApiOperation(value = "updateTableComparisonPartitionedDaily", notes = "Updates a table comparison checks partitioned daily (comparing day to day)",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison daily partitioned checks successfully updated"),
@@ -938,7 +1002,10 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonPartitionedMonthly", notes = "Updates a table comparison checks partitioned monthly (comparing month to month)")
+    @ApiOperation(value = "updateTableComparisonPartitionedMonthly", notes = "Updates a table comparison checks partitioned monthly (comparing month to month)",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison monthly partitioned checks successfully updated"),

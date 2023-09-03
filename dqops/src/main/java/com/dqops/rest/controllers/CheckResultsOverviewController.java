@@ -69,7 +69,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Overview of the most recent check runs for table level data quality profiling checks on a table returned",
@@ -120,7 +123,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getTableMonitoringChecksOverview", notes = "Returns an overview of the most recent table level monitoring executions for the monitoring at a requested time scale",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "An overview of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
@@ -172,7 +178,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksOverview", notes = "Returns an overview of the most recent table level partitioned checks executions for a requested time scale",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "An overview of the most recent partitioned check executions for a requested time scale on a table returned",
@@ -224,7 +233,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Overview of the most recent check runs for column level data quality profiling checks on a column returned",
@@ -282,7 +294,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksOverview", notes = "Returns an overview of the most recent column level monitoring executions for the monitoring at a requested time scale",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "An overview of the most recent monitoring executions for the monitoring at a requested time scale on a column returned",
@@ -341,7 +356,10 @@ public class CheckResultsOverviewController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksOverview", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
-            response = CheckResultsOverviewDataModel[].class)
+            response = CheckResultsOverviewDataModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "An overview of the most recent partitioned check executions for a requested time scale on a column returned",

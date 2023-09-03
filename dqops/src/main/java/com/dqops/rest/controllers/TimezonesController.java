@@ -19,10 +19,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.utils.datetime.TimeZoneUtility;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -43,7 +40,10 @@ import reactor.core.publisher.Flux;
 public class TimezonesController {
 
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available time zone ids", response = String[].class)
+    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available time zone ids", response = String[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = String[].class),

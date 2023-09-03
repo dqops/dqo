@@ -68,7 +68,11 @@ public class DataGroupingConfigurationsController {
      * @return List of basic models of data grouping configurations on the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings", produces = "application/json")
-    @ApiOperation(value = "getTableGroupingConfigurations", notes = "Returns the list of data grouping configurations on a table", response = DataGroupingConfigurationBasicModel[].class)
+    @ApiOperation(value = "getTableGroupingConfigurations", notes = "Returns the list of data grouping configurations on a table",
+            response = DataGroupingConfigurationBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationBasicModel[].class),
@@ -120,7 +124,11 @@ public class DataGroupingConfigurationsController {
      * @return Model of the data grouping configuration.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "getTableGroupingConfiguration", notes = "Returns a model of the data grouping configuration", response = DataGroupingConfigurationModel.class)
+    @ApiOperation(value = "getTableGroupingConfiguration", notes = "Returns a model of the data grouping configuration",
+            response = DataGroupingConfigurationModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationModel.class),
@@ -163,7 +171,10 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableGroupingConfiguration", notes = "Updates a data grouping configuration according to the provided model")
+    @ApiOperation(value = "updateTableGroupingConfiguration", notes = "Updates a data grouping configuration according to the provided model",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data grouping configuration successfully updated"),
@@ -230,7 +241,10 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableGroupingConfiguration", notes = "Creates a new data grouping configuration on a table level")
+    @ApiOperation(value = "createTableGroupingConfiguration", notes = "Creates a new data grouping configuration on a table level",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New data grouping configuration successfully created"),
@@ -279,7 +293,10 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PatchMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault", produces = "application/json")
-    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping")
+    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table"),
@@ -324,7 +341,10 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "deleteTableGroupingConfiguration", notes = "Deletes a data grouping configuration from a table")
+    @ApiOperation(value = "deleteTableGroupingConfiguration", notes = "Deletes a data grouping configuration from a table",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data grouping configuration removed"),

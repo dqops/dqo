@@ -74,7 +74,10 @@ public class SchemasController {
      * @return List of schemas inside a connection.
      */
     @GetMapping(value = "/{connectionName}/schemas", produces = "application/json")
-    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class)
+    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SchemaModel[].class),
@@ -124,7 +127,11 @@ public class SchemasController {
      * @return List of profiling check configurations on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaProfilingChecksModel", notes = "Return a flat list of configurations for profiling checks on a schema", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getSchemaProfilingChecksModel", notes = "Return a flat list of configurations for profiling checks on a schema",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of profiling checks configurations on a schema returned", response = CheckConfigurationModel[].class),
@@ -192,7 +199,11 @@ public class SchemasController {
      * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaMonitoringChecksModel", notes = "Return a UI friendly model of configurations for data quality monitoring checks on a schema", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getSchemaMonitoringChecksModel", notes = "Return a UI friendly model of configurations for data quality monitoring checks on a schema",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality monitoring checks on a schema returned", response = CheckConfigurationModel[].class),
@@ -261,7 +272,11 @@ public class SchemasController {
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaPartitionedChecksModel", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getSchemaPartitionedChecksModel", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = CheckConfigurationModel[].class),
@@ -324,7 +339,11 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/profiling", produces = "application/json")
-    @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.",
+            response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
@@ -365,7 +384,11 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/monitoring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getSchemaMonitoringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getSchemaMonitoringChecksTemplates", notes = "Return available data quality checks on a requested schema.",
+            response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
@@ -407,7 +430,11 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.",
+            response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),

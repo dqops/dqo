@@ -117,7 +117,10 @@ public class ColumnsController {
      * @return List of columns inside a table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns", produces = "application/json")
-    @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table", response = ColumnBasicModel[].class)
+    @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table", response = ColumnBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = ColumnBasicModel[].class),
@@ -160,7 +163,10 @@ public class ColumnsController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnsStatistics",
             notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
-            response = TableColumnsStatisticsModel.class)
+            response = TableColumnsStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableColumnsStatisticsModel.class),
@@ -232,7 +238,10 @@ public class ColumnsController {
      * @return Column full specification for the requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
-    @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class)
+    @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column returned", response = ColumnModel.class),
@@ -280,7 +289,10 @@ public class ColumnsController {
      * @return Basic column details for the requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnBasicModel.class)
+    @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column basic details returned", response = ColumnBasicModel.class),
@@ -326,7 +338,10 @@ public class ColumnsController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnStatistics",
             notes = "Returns the column specification with the metrics captured by the most recent statistics collection.",
-            response = ColumnStatisticsModel.class)
+            response = ColumnStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column statistics returned", response = ColumnStatisticsModel.class),
@@ -376,7 +391,10 @@ public class ColumnsController {
      * @return List of labels assigned to a column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", produces = "application/json")
-    @ApiOperation(value = "getColumnLabels", notes = "Return the list of labels assigned to a column", response = LabelSetSpec.class)
+    @ApiOperation(value = "getColumnLabels", notes = "Return the list of labels assigned to a column", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of labels assigned to a column returned", response = LabelSetSpec.class),
@@ -409,7 +427,10 @@ public class ColumnsController {
      * @return List of comments assigned to a column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", produces = "application/json")
-    @ApiOperation(value = "getColumnComments", notes = "Return the list of comments assigned to a column", response = CommentsListSpec.class)
+    @ApiOperation(value = "getColumnComments", notes = "Return the list of comments assigned to a column", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of comments assigned to a column returned", response = CommentsListSpec.class),
@@ -442,7 +463,11 @@ public class ColumnsController {
      * @return Data quality profiling checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column",
+            response = ColumnProfilingCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of column level data quality profiling checks on a column returned", response = ColumnProfilingCheckCategoriesSpec.class),
@@ -475,7 +500,11 @@ public class ColumnsController {
      * @return Daily data quality monitoring on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", produces = "application/json")
-    @ApiOperation(value = "getColumnMonitoringChecksDaily", notes = "Return the configuration of daily column level data quality monitoring on a column", response = ColumnMonitoringChecksRootSpec.class)
+    @ApiOperation(value = "getColumnMonitoringChecksDaily", notes = "Return the configuration of daily column level data quality monitoring on a column",
+            response = ColumnMonitoringChecksRootSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of daily column level data quality monitoring on a column returned", response = ColumnDailyMonitoringCheckCategoriesSpec.class),
@@ -513,7 +542,11 @@ public class ColumnsController {
      * @return Monthly data quality monitoring on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", produces = "application/json")
-    @ApiOperation(value = "getColumnMonitoringChecksMonthly", notes = "Return the configuration of monthly column level data quality monitoring on a column", response = ColumnMonitoringChecksRootSpec.class)
+    @ApiOperation(value = "getColumnMonitoringChecksMonthly", notes = "Return the configuration of monthly column level data quality monitoring on a column",
+            response = ColumnMonitoringChecksRootSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of monthly column level data quality monitoring on a column returned", response = ColumnMonthlyMonitoringCheckCategoriesSpec.class),
@@ -551,7 +584,11 @@ public class ColumnsController {
      * @return Daily data quality partitioned checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column", response = ColumnDailyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column",
+            response = ColumnDailyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of daily column level data quality partitioned checks on a column returned", response = ColumnDailyPartitionedCheckCategoriesSpec.class),
@@ -589,10 +626,15 @@ public class ColumnsController {
      * @return Monthly data quality partitioned checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column",
+            response = ColumnMonthlyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality partitioned checks on a column returned", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality partitioned checks on a column returned",
+                    response = ColumnMonthlyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -628,7 +670,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksModel", notes = "Return a UI friendly model of data quality profiling checks on a column", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksModel", notes = "Return a UI friendly model of data quality profiling checks on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
@@ -696,7 +742,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality monitoring on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getColumnMonitoringChecksModel", notes = "Return a UI friendly model of column level data quality monitoring on a column", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnMonitoringChecksModel", notes = "Return a UI friendly model of column level data quality monitoring on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality monitoring on a column returned", response = CheckContainerModel.class),
@@ -764,7 +814,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksModel", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksModel", notes = "Return a UI friendly model of column level data quality partitioned checks on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
@@ -833,7 +887,11 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic model of column level data quality profiling checks on a column returned", response = CheckContainerBasicModel.class),
@@ -888,7 +946,11 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality monitoring list on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality monitoring on a column", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality monitoring on a column",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic model of column level data quality monitoring on a column returned", response = CheckContainerBasicModel.class),
@@ -944,7 +1006,11 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic model of column level data quality partitioned checks on a column returned", response = CheckContainerBasicModel.class),
@@ -1001,7 +1067,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksModelFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksModelFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
@@ -1075,7 +1145,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality monitoring on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnMonitoringChecksModelFilter", notes = "Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnMonitoringChecksModelFilter", notes = "Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality monitoring on a column returned", response = CheckContainerModel.class),
@@ -1149,7 +1223,11 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksModelFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksModelFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
@@ -1220,7 +1298,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createColumn", notes = "Creates a new column (adds a column metadata to the table)")
+    @ApiOperation(value = "createColumn", notes = "Creates a new column (adds a column metadata to the table)",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New column successfully created"),
@@ -1273,7 +1354,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumn", notes = "Updates an existing column specification, changing all the fields (even the column level data quality checks).")
+    @ApiOperation(value = "updateColumn", notes = "Updates an existing column specification, changing all the fields (even the column level data quality checks).",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column successfully updated"),
@@ -1327,7 +1411,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnBasic", notes = "Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).")
+    @ApiOperation(value = "updateColumnBasic", notes = "Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column basic information successfully updated"),
@@ -1387,7 +1474,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnLabels", notes = "Updates the list of labels assigned to a column.")
+    @ApiOperation(value = "updateColumnLabels", notes = "Updates the list of labels assigned to a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column's list of labels successfully updated"),
@@ -1439,7 +1529,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnComments", notes = "Updates the list of comments assigned to a column.")
+    @ApiOperation(value = "updateColumnComments", notes = "Updates the list of comments assigned to a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column's list of comments successfully updated"),
@@ -1491,7 +1584,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
+    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
@@ -1542,7 +1638,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnMonitoringChecksDaily", notes = "Updates configuration of daily column level data quality monitoring on a column.")
+    @ApiOperation(value = "updateColumnMonitoringChecksDaily", notes = "Updates configuration of daily column level data quality monitoring on a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily column level data quality monitoring successfully updated"),
@@ -1602,7 +1701,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnMonitoringChecksMonthly", notes = "Updates configuration of monthly column level data quality monitoring checks on a column.")
+    @ApiOperation(value = "updateColumnMonitoringChecksMonthly", notes = "Updates configuration of monthly column level data quality monitoring checks on a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Monthly column level data quality monitoring checks successfully updated"),
@@ -1662,7 +1764,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.")
+    @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily column level data quality partitioned checks successfully updated"),
@@ -1722,7 +1827,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.")
+    @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Monthly column level data quality partitioned checks successfully updated"),
@@ -1783,7 +1891,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnProfilingChecksModel", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
+    @ApiOperation(value = "updateColumnProfilingChecksModel", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
@@ -1841,7 +1952,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnMonitoringChecksModel", notes = "Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.")
+    @ApiOperation(value = "updateColumnMonitoringChecksModel", notes = "Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality monitoring successfully updated"),
@@ -1900,7 +2014,10 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksModel", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
+    @ApiOperation(value = "updateColumnPartitionedChecksModel", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality partitioned checks successfully updated"),
@@ -1957,7 +2074,10 @@ public class ColumnsController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
-    @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table")
+    @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column successfully deleted", response = DqoQueueJobId.class),

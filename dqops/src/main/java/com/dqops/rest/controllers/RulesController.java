@@ -53,7 +53,6 @@ import java.util.stream.Collectors;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Rules", description = "Rule management")
 public class RulesController {
-
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
 
@@ -74,7 +73,10 @@ public class RulesController {
      * @return Model of the rule with specific rule name.
      */
     @GetMapping(value = "/rules/{fullRuleName}", produces = "application/json")
-    @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
+    @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = RuleModel.class),
@@ -119,7 +121,10 @@ public class RulesController {
      * @return Empty response.
      */
     @PostMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.")
+    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New custom rule successfully created"),
@@ -162,7 +167,10 @@ public class RulesController {
      * @return Empty response.
      */
     @PutMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present")
+    @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom rule successfully updated"),
@@ -224,7 +232,10 @@ public class RulesController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/rules/{fullRuleName}", produces = "application/json")
-    @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
+    @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom rule definition successfully deleted"),
@@ -262,7 +273,10 @@ public class RulesController {
      */
     @GetMapping(value = "/definitions/rules", produces = "application/json")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
-            response = RuleBasicFolderModel.class)
+            response = RuleBasicFolderModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = RuleBasicFolderModel.class),
@@ -315,7 +329,10 @@ public class RulesController {
      */
     @GetMapping(value = "/rules", produces = "application/json")
     @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
-            response = RuleBasicModel[].class)
+            response = RuleBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),

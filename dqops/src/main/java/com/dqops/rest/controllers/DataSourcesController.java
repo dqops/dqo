@@ -79,7 +79,10 @@ public class DataSourcesController {
      */
     @PostMapping(value = "/datasource/testconnection", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "testConnection", notes = "Checks if the given remote connection could be opened and the credentials are valid",
-            response = ConnectionTestModel.class)
+            response = ConnectionTestModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",  response = ConnectionTestModel.class),
@@ -108,7 +111,11 @@ public class DataSourcesController {
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceSchemas",
-            notes = "Introspects a list of schemas inside a remote data source, identified by an already imported connection.", response = SchemaRemoteModel[].class)
+            notes = "Introspects a list of schemas inside a remote data source, identified by an already imported connection.",
+            response = SchemaRemoteModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The list of schemas on a remote data source was introspected and is returned", response = SchemaRemoteModel[].class),
@@ -143,7 +150,10 @@ public class DataSourcesController {
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
-            response = TableRemoteBasicModel[].class)
+            response = TableRemoteBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The list of tables on a remote data source was introspected and is returned",

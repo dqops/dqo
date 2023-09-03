@@ -103,11 +103,7 @@ public class CheckSpecFolderBasicModel {
      */
     @JsonIgnore
     public List<CheckSpecBasicModel> getAllChecks() {
-        if (this.checks == null) {
-            return new ArrayList<>();
-        }
-
-        List<CheckSpecBasicModel> allChecks = new ArrayList<>(this.checks);
+        List<CheckSpecBasicModel> allChecks = this.checks != null ? new ArrayList<>(this.checks) : new ArrayList<>();
         for (CheckSpecFolderBasicModel folder : this.folders.values()) {
             allChecks.addAll(folder.getAllChecks());
         }

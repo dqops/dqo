@@ -76,7 +76,10 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
-            response = SensorReadoutsListModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for table level data quality profiling checks on a table returned",
@@ -146,7 +149,10 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getTableMonitoringSensorReadouts", notes = "Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale",
-            response = SensorReadoutsListModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
@@ -216,7 +222,11 @@ public class SensorReadoutsController {
      * @return View of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedSensorReadouts", notes = "Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale", response = SensorReadoutsListModel[].class)
+    @ApiOperation(value = "getTablePartitionedSensorReadouts", notes = "Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale",
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The complete view of the sensor readouts for recent partitioned check executions for a requested time scale on a table returned",
@@ -287,7 +297,10 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality profiling checks on a column",
-            response = SensorReadoutsListModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for column level data quality profiling checks on a column returned",
@@ -364,7 +377,10 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level monitoring executions for the monitoring at a requested time scale",
-            response = SensorReadoutsListModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the sensor readouts of recent monitoring executions for the monitoring at a requested time scale on a column returned",
@@ -442,7 +458,10 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedSensorReadouts", notes = "Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale",
-            response = SensorReadoutsListModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the sensor readouts for recent partitioned check executions for a requested time scale on a column returned",

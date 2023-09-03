@@ -71,7 +71,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/profiling/table", produces = "application/json")
     @ApiOperation(value = "getDefaultProfilingTableChecks", notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -106,7 +109,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/profiling/column", produces = "application/json")
     @ApiOperation(value = "getDefaultProfilingColumnChecks", notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -141,7 +147,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", produces = "application/json")
     @ApiOperation(value = "getDefaultDataObservabilityDailyMonitoringTableChecks", notes = "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -176,7 +185,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", produces = "application/json")
     @ApiOperation(value = "getDefaultDataObservabilityDailyMonitoringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -211,7 +223,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", produces = "application/json")
     @ApiOperation(value = "getDefaultDataObservabilityMonthlyMonitoringTableChecks", notes = "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -246,7 +261,10 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", produces = "application/json")
     @ApiOperation(value = "getDefaultDataObservabilityMonthlyMonitoringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
@@ -281,7 +299,10 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingTableChecks", notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.")
+    @ApiOperation(value = "updateDefaultProfilingTableChecks", notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
@@ -332,7 +353,10 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingColumnChecks", notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.")
+    @ApiOperation(value = "updateDefaultProfilingColumnChecks", notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
@@ -383,7 +407,11 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringTableChecks", notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.")
+    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringTableChecks",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
@@ -434,7 +462,11 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringColumnChecks", notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.")
+    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
@@ -485,7 +517,11 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringTableChecks", notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.")
+    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
+            notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
@@ -536,7 +572,11 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks", notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.")
+    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
+            notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),

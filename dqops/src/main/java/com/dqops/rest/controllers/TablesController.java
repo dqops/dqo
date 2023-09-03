@@ -133,7 +133,10 @@ public class TablesController {
      * @return List of tables inside a connection's schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
-    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableBasicModel[].class)
+    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableBasicModel[].class),
@@ -178,7 +181,10 @@ public class TablesController {
      * @return Table specification for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
-    @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class)
+    @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table full specification returned", response = TableModel.class),
@@ -225,7 +231,10 @@ public class TablesController {
      * @return Table basic information for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", produces = "application/json")
-    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableBasicModel.class)
+    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table basic information returned", response = TableBasicModel.class),
@@ -270,7 +279,10 @@ public class TablesController {
      * @return Table partitioning information for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", produces = "application/json")
-    @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class)
+    @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table partitioning information returned", response = TablePartitioningModel.class),
@@ -313,7 +325,11 @@ public class TablesController {
      * @return Default data grouping configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", produces = "application/json")
-    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a table.", response = DataGroupingConfigurationSpec.class)
+    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a table.",
+            response = DataGroupingConfigurationSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Default data grouping configuration for a table returned", response = DataGroupingConfigurationSpec.class),
@@ -356,7 +372,11 @@ public class TablesController {
      * @return Overridden schedule configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table", response = MonitoringScheduleSpec.class)
+    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table",
+            response = MonitoringScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = MonitoringScheduleSpec.class),
@@ -404,7 +424,11 @@ public class TablesController {
      * @return Incident grouping configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", produces = "application/json")
-    @ApiOperation(value = "getTableIncidentGrouping", notes = "Return the configuration of incident grouping on a table", response = TableIncidentGroupingSpec.class)
+    @ApiOperation(value = "getTableIncidentGrouping", notes = "Return the configuration of incident grouping on a table",
+            response = TableIncidentGroupingSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table's incident grouping configuration returned", response = TableIncidentGroupingSpec.class),
@@ -449,7 +473,10 @@ public class TablesController {
      * @return Labels assigned to the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", produces = "application/json")
-    @ApiOperation(value = "getTableLabels", notes = "Return the list of labels assigned to a table", response = LabelSetSpec.class)
+    @ApiOperation(value = "getTableLabels", notes = "Return the list of labels assigned to a table", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of labels on a table returned", response = LabelSetSpec.class),
@@ -491,7 +518,10 @@ public class TablesController {
      * @return Comments on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", produces = "application/json")
-    @ApiOperation(value = "getTableComments", notes = "Return the list of comments added to a table", response = CommentsListSpec.class)
+    @ApiOperation(value = "getTableComments", notes = "Return the list of comments added to a table", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of comments on a table returned", response = CommentsListSpec.class),
@@ -534,7 +564,11 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableProfilingCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table",
+            response = TableProfilingCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableProfilingCheckCategoriesSpec.class),
@@ -579,10 +613,15 @@ public class TablesController {
      * @return Daily data quality monitoring on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksDaily", notes = "Return the configuration of daily table level data quality monitoring on a table", response = TableDailyMonitoringCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableMonitoringChecksDaily", notes = "Return the configuration of daily table level data quality monitoring on a table",
+            response = TableDailyMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily table level data quality monitoring on a table returned", response = TableDailyMonitoringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily table level data quality monitoring on a table returned",
+                    response = TableDailyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -624,10 +663,15 @@ public class TablesController {
      * @return Monthly data quality monitoring on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksMonthly", notes = "Return the configuration of monthly table level data quality monitoring on a table", response = TableMonthlyMonitoringCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableMonitoringChecksMonthly", notes = "Return the configuration of monthly table level data quality monitoring on a table",
+            response = TableMonthlyMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality monitoring on a table returned", response = TableMonthlyMonitoringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality monitoring on a table returned",
+                    response = TableMonthlyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -669,10 +713,15 @@ public class TablesController {
      * @return Daily data quality partitioned checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table", response = TableDailyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table",
+            response = TableDailyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableDailyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned",
+                    response = TableDailyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -714,10 +763,15 @@ public class TablesController {
      * @return Monthly data quality partitioned checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table", response = TableMonthlyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table",
+            response = TableMonthlyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableMonthlyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned",
+                    response = TableMonthlyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -759,10 +813,15 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksModel", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableProfilingChecksModel", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned",
+                    response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -823,7 +882,11 @@ public class TablesController {
      * @return UI friendly data quality monitoring configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableMonitoringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
@@ -886,7 +949,11 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksModel", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksModel", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerModel.class),
@@ -949,7 +1016,11 @@ public class TablesController {
      * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getTableProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = CheckContainerBasicModel.class),
@@ -1001,7 +1072,11 @@ public class TablesController {
      * @return Simplistic UI friendly data quality monitoring list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getTableMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerBasicModel.class),
@@ -1054,7 +1129,11 @@ public class TablesController {
      * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale",
+            response = CheckContainerBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerBasicModel.class),
@@ -1107,7 +1186,11 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksModelFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableProfilingChecksModelFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = CheckContainerModel.class),
@@ -1177,7 +1260,12 @@ public class TablesController {
      * @return UI friendly data quality monitoring configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableMonitoringChecksModelFilter",
+            notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
@@ -1247,7 +1335,12 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksModelFilter",
+            notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerModel.class),
@@ -1315,7 +1408,10 @@ public class TablesController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics", produces = "application/json")
     @ApiOperation(value = "getTableStatistics",
             notes = "Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.",
-            response = TableStatisticsModel.class)
+            response = TableStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableStatisticsModel.class),
@@ -1386,7 +1482,11 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = CheckConfigurationModel[].class),
@@ -1450,7 +1550,11 @@ public class TablesController {
      * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/monitoring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsMonitoringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality monitoring checks on a table", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getTableColumnsMonitoringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality monitoring checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality monitoring checks on a schema returned", response = CheckConfigurationModel[].class),
@@ -1515,7 +1619,11 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = CheckConfigurationModel[].class),
@@ -1575,7 +1683,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
@@ -1617,7 +1728,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/monitoring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTableMonitoringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getTableMonitoringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
@@ -1660,7 +1774,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
@@ -1702,7 +1819,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)")
+    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New table successfully created"),
@@ -1756,7 +1876,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields")
+    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table successfully updated"),
@@ -1809,7 +1932,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.")
+    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table successfully updated"),
@@ -1870,7 +1996,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.")
+    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table partitioning successfully updated"),
@@ -1931,7 +2060,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.")
+    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated"),
@@ -1998,7 +2130,11 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableSchedulingGroupOverride", notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).")
+    @ApiOperation(value = "updateTableSchedulingGroupOverride",
+            notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated"),
@@ -2085,7 +2221,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.")
+    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's incident grouping configuration successfully updated"),
@@ -2143,7 +2282,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.")
+    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's labels successfully updated"),
@@ -2202,7 +2344,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.")
+    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's comments successfully updated"),
@@ -2290,7 +2435,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
@@ -2343,7 +2491,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.")
+    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
@@ -2398,7 +2549,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.")
+    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Monthly table level data quality monitoring successfully updated"),
@@ -2453,7 +2607,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.")
+    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
@@ -2508,7 +2665,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.")
+    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated"),
@@ -2602,7 +2762,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
@@ -2652,7 +2815,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality monitoring successfully updated"),
@@ -2703,7 +2869,10 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.")
+    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated"),
@@ -2752,7 +2921,10 @@ public class TablesController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
-    @ApiOperation(value = "deleteTable", notes = "Deletes a table", response = DqoQueueJobId.class)
+    @ApiOperation(value = "deleteTable", notes = "Deletes a table", response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table successfully deleted", response = DqoQueueJobId.class),

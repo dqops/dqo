@@ -84,7 +84,10 @@ public class ConnectionsController {
      * @return List of connections.
      */
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class)
+    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = ConnectionBasicModel[].class),
@@ -110,7 +113,10 @@ public class ConnectionsController {
      * @return Full connection model with the connection name and the connection specification.
      */
     @GetMapping(value = "/{connectionName}", produces = "application/json")
-    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionModel.class)
+    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection returned", response = ConnectionModel.class),
@@ -147,7 +153,10 @@ public class ConnectionsController {
      * @return Connection basic model with the connection name and the connection parameters.
      */
     @GetMapping(value = "/{connectionName}/basic", produces = "application/json")
-    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionBasicModel.class)
+    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionBasicModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection basic information returned", response = ConnectionBasicModel.class),
@@ -183,7 +192,10 @@ public class ConnectionsController {
      * @return Connection's schedule specification.
      */
     @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class)
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's schedule returned", response = MonitoringScheduleSpec.class),
@@ -221,7 +233,10 @@ public class ConnectionsController {
      * @return Connection's list of comments.
      */
     @GetMapping(value = "/{connectionName}/comments", produces = "application/json")
-    @ApiOperation(value = "getConnectionComments", notes = "Return the comments for a connection", response = CommentsListSpec.class)
+    @ApiOperation(value = "getConnectionComments", notes = "Return the comments for a connection", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's comments returned", response = CommentsListSpec.class),
@@ -253,7 +268,10 @@ public class ConnectionsController {
      * @return Connection's list of labels.
      */
     @GetMapping(value = "/{connectionName}/labels", produces = "application/json")
-    @ApiOperation(value = "getConnectionLabels", notes = "Return the labels for a connection", response = LabelSetSpec.class)
+    @ApiOperation(value = "getConnectionLabels", notes = "Return the labels for a connection", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's labels returned", response = LabelSetSpec.class),
@@ -285,7 +303,11 @@ public class ConnectionsController {
      * @return Connection's default data grouping configuration.
      */
     @GetMapping(value = "/{connectionName}/defaultgroupingconfiguration", produces = "application/json")
-    @ApiOperation(value = "getConnectionDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a connection", response = DataGroupingConfigurationSpec.class)
+    @ApiOperation(value = "getConnectionDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a connection",
+            response = DataGroupingConfigurationSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's default data grouping configuration returned", response = DataGroupingConfigurationSpec.class),
@@ -318,7 +340,10 @@ public class ConnectionsController {
      */
     @GetMapping(value = "/{connectionName}/incidentgrouping", produces = "application/json")
     @ApiOperation(value = "getConnectionIncidentGrouping", notes = "Retrieves the configuration of data quality incident grouping and incident notifications",
-            response = ConnectionIncidentGroupingSpec.class)
+            response = ConnectionIncidentGroupingSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's incident grouping configuration returned", response = ConnectionIncidentGroupingSpec.class),
@@ -351,7 +376,10 @@ public class ConnectionsController {
      */
     @GetMapping(value = "/{connectionName}/commoncolumns", produces = "application/json")
     @ApiOperation(value = "getConnectionCommonColumns", notes = "Finds common column names that are used on one or more tables. " +
-            "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class)
+            "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of common columns within a connection returned", response = CommonColumnModel[].class),
@@ -400,7 +428,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnection", notes = "Creates a new connection")
+    @ApiOperation(value = "createConnection", notes = "Creates a new connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New connection successfully created"),
@@ -445,7 +476,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.")
+    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New connection successfully created"),
@@ -491,7 +525,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection")
+    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection successfully updated"),
@@ -527,7 +564,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection")
+    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's basic parameters successfully updated"),
@@ -570,7 +610,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schedules/{schedulingGroup}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionSchedulingGroup", notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)")
+    @ApiOperation(value = "updateConnectionSchedulingGroup", notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's schedule successfully updated"),
@@ -638,7 +681,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection")
+    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's labels successfully updated"),
@@ -678,7 +724,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection")
+    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's comments successfully updated"),
@@ -718,7 +767,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection")
+    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated"),
@@ -760,7 +812,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionIncidentGrouping", notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.")
+    @ApiOperation(value = "updateConnectionIncidentGrouping", notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated"),
@@ -802,7 +857,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkenable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
+    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Checks enabled in bulk"),
@@ -845,7 +903,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdisable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter")
+    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Checks disabled"),
@@ -882,7 +943,10 @@ public class ConnectionsController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}", produces = "application/json")
-    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
+    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection successfully deleted", response = DqoQueueJobId.class),

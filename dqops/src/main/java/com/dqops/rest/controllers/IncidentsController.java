@@ -82,7 +82,10 @@ public class IncidentsController {
      * @return Incident model of the loaded incident.
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}", produces = "application/json")
-    @ApiOperation(value = "getIncident", notes = "Return a single data quality incident's details.", response = IncidentModel.class)
+    @ApiOperation(value = "getIncident", notes = "Return a single data quality incident's details.", response = IncidentModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Incident returned", response = IncidentModel.class),
@@ -124,7 +127,10 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issues", produces = "application/json")
     @ApiOperation(value = "getIncidentIssues", notes = "Return a paged list of failed data quality check results that are related to an incident.",
-            response = CheckResultEntryModel[].class)
+            response = CheckResultEntryModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Incident returned", response = CheckResultEntryModel[].class),
@@ -212,7 +218,10 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
     @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
-            response = IncidentIssueHistogramModel.class)
+            response = IncidentIssueHistogramModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IncidentIssueHistogramModel.class),
@@ -280,7 +289,10 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidents/{connectionName}", produces = "application/json")
     @ApiOperation(value = "findRecentIncidentsOnConnection", notes = "Returns a list of recent data quality incidents.",
-            response = IncidentModel[].class)
+            response = IncidentModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = IncidentModel[].class),
@@ -347,7 +359,10 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidentstat", produces = "application/json")
     @ApiOperation(value = "findConnectionIncidentStats", notes = "Returns a list of connection names with incident statistics - the count of recent open incidents.",
-            response = IncidentsPerConnectionModel[].class)
+            response = IncidentsPerConnectionModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = IncidentsPerConnectionModel[].class),
@@ -370,7 +385,10 @@ public class IncidentsController {
      * @return None.
      */
     @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/status", produces = "application/json")
-    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.")
+    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data quality incident's status successfully updated"),
@@ -413,7 +431,10 @@ public class IncidentsController {
      * @return None.
      */
     @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl", produces = "application/json")
-    @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.")
+    @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data quality incident's issueUrl successfully updated"),

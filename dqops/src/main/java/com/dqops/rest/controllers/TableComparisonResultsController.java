@@ -68,7 +68,10 @@ public class TableComparisonResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
     @ApiOperation(value = "getTableComparisonProfilingResults", notes = "Retrieves the results of the most table comparison performed using the profiling checks comparison checks.",
-            response = TableComparisonResultsModel.class)
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The results of the most recent table comparison using the profiling checks on a table returned",
@@ -120,7 +123,10 @@ public class TableComparisonResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
     @ApiOperation(value = "getTableComparisonMonitoringResults", notes = "Retrieves the results of the most table comparison performed using the monitoring comparison checks.",
-            response = TableComparisonResultsModel.class)
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The results of the most recent table comparison using the monitoring checks on a table returned",
@@ -173,7 +179,10 @@ public class TableComparisonResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
     @ApiOperation(value = "getTableComparisonPartitionedResults", notes = "Retrieves the results of the most table comparison performed using the partitioned comparison checks, comparing days or months of data.",
-            response = TableComparisonResultsModel.class)
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The results of the most recent table comparison using the partitioned checks on a table returned",

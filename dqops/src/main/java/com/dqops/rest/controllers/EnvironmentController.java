@@ -17,15 +17,15 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
+import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.AbstractEnvironment;
@@ -52,22 +52,26 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/api/environment")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Environment", description = "DQO environment and configuration controller, provides access to the DQO configuration.")
+@Api(value = "Environment", description = "DQO environment and configuration controller, provides access to the DQO configuration, current user's information and issue local API Keys for the calling user.")
 @Slf4j
 public class EnvironmentController {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private Environment springEnvironment;
+    private InstanceCloudLoginService instanceCloudLoginService;
 
     /**
      * Dependency injection constructor of the environment controller.
      * @param dqoCloudApiKeyProvider DQO API key provider.
      * @param springEnvironment Spring Boot environment.
+     * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
-                                 Environment springEnvironment) {
+                                 Environment springEnvironment,
+                                 InstanceCloudLoginService instanceCloudLoginService) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
+        this.instanceCloudLoginService = instanceCloudLoginService;
     }
 
     /**
@@ -76,7 +80,10 @@ public class EnvironmentController {
      */
     @GetMapping(value = "/settings", produces = "application/json")
     @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQO configuration settings.",
-            response = DqoSettingsModel.class)
+            response = DqoSettingsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoSettingsModel.class),
@@ -120,11 +127,14 @@ public class EnvironmentController {
      */
     @GetMapping(value = "/profile", produces = "application/json")
     @ApiOperation(value = "getUserProfile", notes = "Returns the profile of the current user.",
-            response = DqoUserProfileModel.class)
+            response = DqoUserProfileModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoUserProfileModel.class),
-            @ApiResponse(code = 404, message = "User not logged in", response = Void.class),
+            @ApiResponse(code = 404, message = "Instance not authenticated to DQO Cloud, the DQO Cloud API key is missing.", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
@@ -137,5 +147,29 @@ public class EnvironmentController {
 
         DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
         return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+    }
+
+    /**
+     * Issues a local API Key for the calling user.
+     * @return The local API key issued for the calling user.
+     */
+    @GetMapping(value = "/issueapikey", produces = "text/plain")
+    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQO Rest API client. " +
+            "This API Key should be passed in the \"Authorization\" HTTP header in the format \"Authorization: Bearer <api_key>\".",
+            response = String.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<String>> issueApiKey(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
+
+        return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
     }
 }

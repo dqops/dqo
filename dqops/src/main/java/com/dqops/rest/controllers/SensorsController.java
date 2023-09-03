@@ -55,9 +55,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Sensors", description = "Sensors definition Management")
+@Api(value = "Sensors", description = "Sensors definition management")
 public class SensorsController {
-
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
 
@@ -81,7 +80,10 @@ public class SensorsController {
      * @return Model of the sensor with specific sensor name.
      */
     @GetMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
-    @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
+    @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SensorModel.class),
@@ -160,7 +162,10 @@ public class SensorsController {
      * @param sensorModel sensor model
      */
     @PostMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.")
+    @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New sensor successfully created"),
@@ -211,7 +216,10 @@ public class SensorsController {
      */
     @PutMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
-            "Removes sensor if custom definition is same as Dqo Home sensor")
+            "Removes sensor if custom definition is same as Dqo Home sensor",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Sensor model successfully updated"),
@@ -313,7 +321,10 @@ public class SensorsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
-    @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
+    @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom sensor definition successfully deleted"),
@@ -351,7 +362,10 @@ public class SensorsController {
      */
     @GetMapping(value = "/definitions/sensors", produces = "application/json")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
-            response = SensorBasicFolderModel.class)
+            response = SensorBasicFolderModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
@@ -423,7 +437,10 @@ public class SensorsController {
      */
     @GetMapping(value = "/sensors", produces = "application/json")
     @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
-            response = SensorBasicModel[].class)
+            response = SensorBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),

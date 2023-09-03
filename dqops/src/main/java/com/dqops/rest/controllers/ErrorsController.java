@@ -76,7 +76,10 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors", produces = "application/json")
     @ApiOperation(value = "getTableProfilingErrors", notes = "Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table",
-            response = ErrorsListModel[].class)
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Errors related to the most recent check runs for table level data quality profiling checks on a table returned",
@@ -146,7 +149,10 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors", produces = "application/json")
     @ApiOperation(value = "getTableMonitoringErrors", notes = "Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale",
-            response = ErrorsListModel[].class)
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Errors related to the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
@@ -216,7 +222,11 @@ public class ErrorsController {
      * @return View of the errors related to the recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale", response = ErrorsListModel[].class)
+    @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale",
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The errors related to partitioned check executions for a requested time scale on a table returned",
@@ -287,7 +297,10 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingErrors", notes = "Returns the errors related to the recent check executions for all column level data quality profiling checks on a column",
-            response = ErrorsListModel[].class)
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Errors related to the most recent check runs for column level data quality profiling checks on a column returned",
@@ -364,7 +377,10 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringErrors", notes = "Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale",
-            response = ErrorsListModel[].class)
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of errors for the monitoring at a requested time scale on a column returned",
@@ -442,7 +458,10 @@ public class ErrorsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedErrors", notes = "Returns the errors related to the recent column level partitioned checks executions for a requested time scale",
-            response = ErrorsListModel[].class)
+            response = ErrorsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of errors related to the recent partitioned check executions for a requested time scale on a column returned",

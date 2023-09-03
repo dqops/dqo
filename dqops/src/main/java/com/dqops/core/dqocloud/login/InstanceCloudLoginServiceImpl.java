@@ -24,8 +24,10 @@ import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.ServerConfigurationProperties;
 import com.dqops.core.configuration.ServerSslConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.signature.InstanceSignatureKeyProvider;
 import com.dqops.core.secrets.signature.SignatureService;
 import com.dqops.core.secrets.signature.SignedObject;
@@ -214,6 +216,27 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
 
         SignedObject<DqoUserTokenPayload> signedApiKeyToken = this.signatureService.createSigned(authenticationToken);
         return signedApiKeyToken;
+    }
+
+    /**
+     * Issues an API key token for the calling user, using a principal. Generates a local API Key independent of the authentication method (DQO Cloud federated login or a local login).
+     * @param principal User principal
+     * @return Signed API Key token.
+     */
+    @Override
+    public SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserPrincipal principal) {
+        DqoUserTokenPayload userTokenPayload = principal.getUserTokenPayload();
+        if (userTokenPayload != null ) {
+            return issueApiKey(userTokenPayload); // federated login
+        }
+
+        DqoCloudApiKeyPayload apiKeyPayload = principal.getApiKeyPayload();
+        if (apiKeyPayload != null) {
+            DqoUserTokenPayload userTokenFromApiKey = DqoUserTokenPayload.createFromCloudApiKey(apiKeyPayload);
+            return issueApiKey(userTokenFromApiKey); // local user login
+        }
+
+        return null;
     }
 
     /**

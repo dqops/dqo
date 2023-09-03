@@ -16,6 +16,7 @@
 
 package com.dqops.core.dqocloud.login;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.signature.SignedObject;
 
 /**
@@ -58,6 +59,13 @@ public interface InstanceCloudLoginService {
      * @return Signed API Key token.
      */
     SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserTokenPayload sourceUserToken);
+
+    /**
+     * Issues an API key token for the calling user, using a principal. Generates a local API Key independent of the authentication method (DQO Cloud federated login or a local login).
+     * @param principal User principal
+     * @return Signed API Key token.
+     */
+    SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserPrincipal principal);
 
     /**
      * Verifies and decodes the authentication token. Throws an exception if the authentication token is invalid or has expired.
