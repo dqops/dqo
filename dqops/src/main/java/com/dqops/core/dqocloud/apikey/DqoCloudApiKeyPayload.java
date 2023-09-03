@@ -15,15 +15,19 @@
  */
 package com.dqops.core.dqocloud.apikey;
 
-import com.dqops.rest.server.authentication.DqoRoleNames;
+import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,9 +73,9 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String region;
 
-    @JsonProperty("rl")
+    @JsonProperty("arl")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String role = DqoRoleNames.ADMIN;
+    private DqoUserRole accountRole = DqoUserRole.ADMIN;
 
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
@@ -249,19 +253,19 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
-     * Returns the role of the user. Roles are defined in {@link com.dqops.rest.server.authentication.DqoRoleNames} class.
-     * @return The role of the user.
+     * Returns the role of the user at the account (tenant) level.
+     * @return The role of the user at the account level.
      */
-    public String getRole() {
-        return role;
+    public DqoUserRole getAccountRole() {
+        return accountRole;
     }
 
     /**
-     * Sets the role of the user.
-     * @param role User role.
+     * Sets the role of the user at the account level.
+     * @param accountRole User's role at the account level.
      */
-    public void setRole(String role) {
-        this.role = role;
+    public void setAccountRole(DqoUserRole accountRole) {
+        this.accountRole = accountRole;
     }
 
     /**
@@ -275,6 +279,16 @@ public class DqoCloudApiKeyPayload {
             this.ignoredProperties = new LinkedHashMap<>();
         }
         this.ignoredProperties.put(name, value);
+    }
+
+    /**
+     * Create a user principal from the api key.
+     * @return User principal copied from the user.
+     */
+    public DqoUserPrincipal createUserPrincipal() {
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.subject, this.accountRole, grantedPrivileges,this);
+        return dqoUserPrincipal;
     }
 }
 

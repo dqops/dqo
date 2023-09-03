@@ -19,9 +19,9 @@ package com.dqops.core.dqocloud.login;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * DQO user role within a data domain.
+ * DQO user role within a data domain or a whole account level.
  */
-public enum DqoUserDataDomainRole {
+public enum DqoUserRole {
     /**
      * Administrator (owner) of the account who can manage users and perform all actions.
      */
@@ -44,5 +44,11 @@ public enum DqoUserDataDomainRole {
      * Just a read-only viewer.
      */
     @JsonProperty("viewer")
-    VIEWER
+    VIEWER,
+
+    /**
+     * No access rights role.
+     */
+    @JsonProperty("none")
+    NONE
 }

@@ -69,9 +69,5 @@ public class DqoServerSecurityContextRepositoryImpl implements DqoServerSecurity
                 });
 
         return makeSecurityContextMono;
-//
-//        Authentication authentication = this.dqoAuthenticationTokenFactory.createAnonymousToken();
-//        SecurityContextImpl securityContext = new SecurityContextImpl(authentication);
-//        return Mono.just(securityContext);
     }
 }

@@ -17,9 +17,11 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -32,6 +34,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -78,7 +82,9 @@ public class EnvironmentController {
             @ApiResponse(code = 200, message = "OK", response = DqoSettingsModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoSettingsModel>> getDqoSettings() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<DqoSettingsModel>> getDqoSettings(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
         final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
 
@@ -121,7 +127,9 @@ public class EnvironmentController {
             @ApiResponse(code = 404, message = "User not logged in", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         if (apiKey == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404

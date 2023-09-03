@@ -19,6 +19,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.IncidentIssueUrlChangeParameters;
 import com.dqops.core.incidents.IncidentStatusChangeParameters;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.models.*;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.services.models.*;
@@ -30,10 +31,13 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -85,7 +89,9 @@ public class IncidentsController {
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<IncidentModel>> getIncident(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
@@ -125,7 +131,9 @@ public class IncidentsController {
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckResultEntryModel>> getIncidentIssues(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
@@ -211,7 +219,9 @@ public class IncidentsController {
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<IncidentIssueHistogramModel>> getIncidentHistogram(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
@@ -276,7 +286,9 @@ public class IncidentsController {
             @ApiResponse(code = 200, message = "OK", response = IncidentModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<IncidentModel>> findRecentIncidentsOnConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam(name = "months", value = "Number of recent months to load, the default is 3 months", required = false)
                 @RequestParam(required = false) Optional<Integer> months,
@@ -341,7 +353,9 @@ public class IncidentsController {
             @ApiResponse(code = 200, message = "OK", response = IncidentsPerConnectionModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<IncidentsPerConnectionModel>> findConnectionIncidentStats() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<IncidentsPerConnectionModel>> findConnectionIncidentStats(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats();
         return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
     }
@@ -364,7 +378,9 @@ public class IncidentsController {
             @ApiResponse(code = 404, message = "Connection was not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<?>> setIncidentStatus(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
@@ -404,7 +420,9 @@ public class IncidentsController {
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<?>> setIncidentIssueUrl(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,

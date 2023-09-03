@@ -16,19 +16,15 @@
 
 package com.dqops.rest.server.authentication;
 
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import org.apache.parquet.Strings;
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * DQO authentication token factory that creates Spring Security {@link org.springframework.security.core.Authentication} token
@@ -36,11 +32,15 @@ import java.util.List;
  */
 @Component
 public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationTokenFactory {
-    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
 
+    /**
+     * Dependency injection constructor.
+     * @param dqoCloudApiKeyPrincipalProvider DQO principal provider that creates a principal for a single user, having direct access to DQO.
+     */
     @Autowired
-    public DqoAuthenticationTokenFactoryImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
-        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+    public DqoAuthenticationTokenFactoryImpl(DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
+        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
     }
 
     /**
@@ -64,26 +64,24 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAuthenticatedWithDefaultDqoCloudApiKey() {
-        DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
-        if (dqoCloudApiKey == null) {
-            // user not authenticated to DQO Cloud, so we use a default token
-            DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal();
-            List<GrantedAuthority> adminRoles = DqoRoleAuthorities.getExpandedRoles(DqoRoleAuthorities.ADMIN);
-            UsernamePasswordAuthenticationToken adminAuthenticationTokenLocal = new UsernamePasswordAuthenticationToken(
-                    dqoUserPrincipalLocal, null, adminRoles);
-            return adminAuthenticationTokenLocal;
-        }
+        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
+        UsernamePasswordAuthenticationToken localUserAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userPrincipal, userPrincipal.getApiKeyPayload(), userPrincipal.getPrivileges());
+        return localUserAuthenticationToken;
+    }
 
-        DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject());
-        List<GrantedAuthority> roles = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(apiKeyPayload.getRole())) {
-            SimpleGrantedAuthority authorityForRole = DqoRoleAuthorities.getAuthorityForRole(apiKeyPayload.getRole());
-            roles = DqoRoleAuthorities.getExpandedRoles(authorityForRole);
-        }
+    /**
+     * Creates an authentication principal from a DQO Cloud issued user token. User tokens are issued for multi-user accounts.
+     *
+     * @param userTokenPayload User token payload.
+     * @return Authenticated user principal, based on the user token.
+     */
+    @Override
+    public Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload) {
+        DqoUserPrincipal userPrincipalFromApiKey = userTokenPayload.createUserPrincipal();
 
         UsernamePasswordAuthenticationToken apiKeyAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                dqoUserPrincipal, dqoCloudApiKey.getApiKeyToken(), roles);
+                userPrincipalFromApiKey, userTokenPayload, userPrincipalFromApiKey.getPrivileges());
         return apiKeyAuthenticationToken;
     }
 }

@@ -16,6 +16,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
@@ -30,11 +31,14 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.*;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -83,7 +87,9 @@ public class SensorsController {
             @ApiResponse(code = 404, message = "Sensor name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<SensorModel>> getSensor(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
 
         if (Strings.isNullOrEmpty(fullSensorName)) {
@@ -158,7 +164,9 @@ public class SensorsController {
             @ApiResponse(code = 409, message = "Sensor with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> createSensor(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
 
@@ -206,7 +214,9 @@ public class SensorsController {
             @ApiResponse(code = 404, message = "Sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateSensor(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
 
@@ -305,7 +315,9 @@ public class SensorsController {
             @ApiResponse(code = 404, message = "Custom sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> deleteSensor(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
 
         if (Strings.isNullOrEmpty(fullSensorName)) {
@@ -340,8 +352,10 @@ public class SensorsController {
             @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderTree() {
-        SensorBasicFolderModel sensorFolderModel = createSensorTreeModel();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderTree(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        SensorBasicFolderModel sensorFolderModel = createSensorTreeModel(principal);
 
         return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
     }
@@ -351,7 +365,7 @@ public class SensorsController {
      * @return A tree with all defined sensors.
      */
     @NotNull
-    private SensorBasicFolderModel createSensorTreeModel() {
+    private SensorBasicFolderModel createSensorTreeModel(DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -409,8 +423,10 @@ public class SensorsController {
             @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors() {
-        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel(principal);
         List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
 
         return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);

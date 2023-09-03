@@ -16,6 +16,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
@@ -29,11 +30,14 @@ import com.dqops.rest.models.metadata.CheckSpecBasicModel;
 import com.dqops.rest.models.metadata.CheckSpecModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -49,7 +53,6 @@ import java.util.stream.Collectors;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Checks", description = "Data quality check definition management")
 public class ChecksController {
-
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
 
@@ -77,7 +80,9 @@ public class ChecksController {
             @ApiResponse(code = 404, message = "Check name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckSpecModel>> getCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
         if (Strings.isNullOrEmpty(fullCheckName)) {
@@ -121,7 +126,9 @@ public class ChecksController {
             @ApiResponse(code = 409, message = "Custom check with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> createCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName,
             @ApiParam("Check model") @RequestBody CheckSpecModel checkSpecModel) {
         if (checkSpecModel == null || Strings.isNullOrEmpty(fullCheckName)) {
@@ -166,7 +173,9 @@ public class ChecksController {
             @ApiResponse(code = 409, message = "Cannot change a check definition of a built-in check"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("List of check definitions") @RequestBody CheckSpecModel checkSpecModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
@@ -227,7 +236,9 @@ public class ChecksController {
             @ApiResponse(code = 404, message = "Custom check not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> deleteCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
         if (Strings.isNullOrEmpty(fullCheckName)) {
@@ -262,8 +273,10 @@ public class ChecksController {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecFolderBasicModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<CheckSpecFolderBasicModel>> getCheckFolderTree() {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckSpecFolderBasicModel>> getCheckFolderTree(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel(principal);
 
         return new ResponseEntity<>(Mono.just(checkSpecFolderBasicModel), HttpStatus.OK);
     }
@@ -273,7 +286,7 @@ public class ChecksController {
      * @return Check tree.
      */
     @NotNull
-    private CheckSpecFolderBasicModel createCheckTreeModel() {
+    private CheckSpecFolderBasicModel createCheckTreeModel(DqoUserPrincipal principal) {
         CheckSpecFolderBasicModel checkSpecFolderBasicModel = new CheckSpecFolderBasicModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
@@ -324,8 +337,10 @@ public class ChecksController {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks() {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel(principal);
         List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
 
         return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);

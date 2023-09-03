@@ -15,14 +15,18 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.rest.models.platform.ExternalLogEntry;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -50,7 +54,9 @@ public class LogShippingController {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<?>> logDebug(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isDebugEnabled()) {
@@ -73,7 +79,9 @@ public class LogShippingController {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<?>> logInfo(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isInfoEnabled()) {
@@ -96,7 +104,9 @@ public class LogShippingController {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<?>> logWarn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isWarnEnabled()) {
@@ -119,7 +129,9 @@ public class LogShippingController {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<?>> logError(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isErrorEnabled()) {

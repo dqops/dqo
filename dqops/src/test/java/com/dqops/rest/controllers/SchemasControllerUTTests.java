@@ -26,6 +26,7 @@ import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -174,6 +175,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -218,6 +220,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -260,6 +263,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),

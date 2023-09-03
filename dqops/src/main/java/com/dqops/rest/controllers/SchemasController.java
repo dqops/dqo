@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
@@ -27,6 +28,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
 import com.dqops.rest.models.metadata.SchemaModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
 import com.dqops.services.metadata.SchemaService;
@@ -36,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -76,7 +80,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -122,7 +128,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Table name pattern", required = false) @RequestParam(required = false)
@@ -187,7 +195,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -253,7 +263,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaPartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -313,7 +325,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
@@ -352,7 +366,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckTemplate>> getSchemaMonitoringChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
@@ -392,7 +408,9 @@ public class SchemasController {
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckTemplate>> getSchemaPartitionedChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,

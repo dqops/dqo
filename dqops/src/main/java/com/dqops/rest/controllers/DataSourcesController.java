@@ -16,12 +16,14 @@
 
 package com.dqops.rest.controllers;
 
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.rest.models.metadata.ConnectionBasicModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.models.remote.ConnectionTestModel;
 import com.dqops.rest.models.remote.SchemaRemoteModel;
 import com.dqops.rest.models.remote.TableRemoteBasicModel;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.remote.connections.SourceConnectionsService;
 import com.dqops.services.remote.schemas.SourceSchemasService;
 import com.dqops.services.remote.schemas.SourceSchemasServiceException;
@@ -31,6 +33,8 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -81,7 +85,9 @@ public class DataSourcesController {
             @ApiResponse(code = 200, message = "OK",  response = ConnectionTestModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<ConnectionTestModel>> testConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(value = "Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel,
             @ApiParam(name = "verifyNameUniqueness", value = "Verify if the connection name is unique, the default value is true", required = false)
             @RequestParam(required = false) Optional<Boolean> verifyNameUniqueness) {
@@ -110,7 +116,9 @@ public class DataSourcesController {
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Flux<SchemaRemoteModel>> getRemoteDataSourceSchemas(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
         List<SchemaRemoteModel> result;
         try {
@@ -144,7 +152,9 @@ public class DataSourcesController {
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Flux<TableRemoteBasicModel>> getRemoteDataSourceTables(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName) {
         List<TableRemoteBasicModel> result;

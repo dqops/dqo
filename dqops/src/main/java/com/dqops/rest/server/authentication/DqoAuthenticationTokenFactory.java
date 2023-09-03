@@ -16,6 +16,7 @@
 
 package com.dqops.rest.server.authentication;
 
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -38,4 +39,11 @@ public interface DqoAuthenticationTokenFactory {
      * @return Authenticated user principal, based on the identity stored in the DQO Cloud API Key.
      */
     Authentication createAuthenticatedWithDefaultDqoCloudApiKey();
+
+    /**
+     * Creates an authentication principal from a DQO Cloud issued user token. User tokens are issued for multi-user accounts.
+     * @param userTokenPayload User token payload.
+     * @return Authenticated user principal, based on the user token.
+     */
+    Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload);
 }

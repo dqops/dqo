@@ -17,6 +17,7 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.dashboards.LookerStudioUrlService;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderSpec;
@@ -25,6 +26,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dashboards.AuthenticatedDashboardModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.metadata.DashboardsProvider;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -78,7 +82,9 @@ public class DashboardsController {
             @ApiResponse(code = 200, message = "OK", response = DashboardsFolderSpec[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -99,11 +105,12 @@ public class DashboardsController {
 
     /**
      * Retrieves a custom user dashboard from the definition of custom dashboards.
+     * @param principal DQO user principal.
      * @param dashboardName Dashboard name.
      * @param folders Folders structure to traverse.
      * @return Custom dashboard specification or null, when the dashboard was not found.
      */
-    protected DashboardSpec findUserCustomDashboard(String dashboardName, String... folders) {
+    protected DashboardSpec findUserCustomDashboard(DqoUserPrincipal principal, String dashboardName, String... folders) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
@@ -130,12 +137,14 @@ public class DashboardsController {
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel1(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder);
+        DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder);
         if (dashboard == null) {
             DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
             dashboard = rootFolders.getDashboard(dashboardName, folder);
@@ -175,13 +184,15 @@ public class DashboardsController {
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel2(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2);
+        DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2);
         if (dashboard == null) {
             DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
             dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2);
@@ -223,14 +234,16 @@ public class DashboardsController {
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel3(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3);
+        DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3);
         if (dashboard == null) {
             DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
             dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3);
@@ -273,7 +286,9 @@ public class DashboardsController {
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel4(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
@@ -281,7 +296,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3, folder4);
+        DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4);
         if (dashboard == null) {
             DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
             dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3, folder4);
@@ -325,7 +340,9 @@ public class DashboardsController {
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel5(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
@@ -334,7 +351,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DashboardSpec dashboard = this.findUserCustomDashboard(dashboardName, folder1, folder2, folder3, folder4, folder5);
+        DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4, folder5);
         if (dashboard == null) {
             DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
             dashboard = rootFolders.getDashboard(dashboardName, folder1, folder2, folder3, folder4, folder5);

@@ -25,9 +25,6 @@ import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -71,17 +68,13 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
-            SecurityContextHolder.getContext().setAuthentication(singleUserAuthenticationToken);
 
             ServerWebExchange mutatedExchange = exchange.mutate()
                     .principal(Mono.just(singleUserAuthenticationToken))
                     .build();
-            mutatedExchange.getAttributes().put(DqoUserPrincipal.SERVER_WEB_EXCHANGE_ATTRIBUTE_NAME, singleUserAuthenticationToken.getPrincipal()); // probably not required, because repository is triggered before this filter
 
             return chain
                     .filter(mutatedExchange)
-                    .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(new SecurityContextImpl(singleUserAuthenticationToken))))
-                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(singleUserAuthenticationToken))
                     .then();
         }
 
@@ -113,11 +106,18 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 }
             } else {
                 try {
-                    SignedObject<DqoUserTokenPayload> decodedAuthenticationToken = this.instanceCloudLoginService.verifyAuthenticationToken(dqoAccessTokenCookie.getValue());
+                    SignedObject<DqoUserTokenPayload> decodedAuthenticationToken = 
+                            this.instanceCloudLoginService.verifyAuthenticationToken(dqoAccessTokenCookie.getValue());
+                    Authentication userTokenAuthentication = this.dqoAuthenticationTokenFactory.createAuthenticatedWithUserToken(
+                            decodedAuthenticationToken.getTarget());
 
-                    // TODO: create token...
+                    ServerWebExchange mutatedExchange = exchange.mutate()
+                            .principal(Mono.just(userTokenAuthentication))
+                            .build();
 
-                    return chain.filter(exchange);
+                    return chain
+                            .filter(mutatedExchange)
+                            .then();
                 }
                 catch (Exception ex) {
                     if (requestPath.startsWith("/api")) {

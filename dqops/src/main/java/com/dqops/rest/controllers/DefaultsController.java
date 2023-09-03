@@ -20,12 +20,14 @@ import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSetting
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
@@ -33,6 +35,8 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -72,7 +76,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -104,7 +110,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -136,7 +144,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -168,7 +178,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -200,7 +212,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -232,7 +246,9 @@ public class DefaultsController {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -266,7 +282,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultProfilingTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -315,7 +333,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultProfilingColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -364,7 +384,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -413,7 +435,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -462,7 +486,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -511,7 +537,9 @@ public class DefaultsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();

@@ -15,23 +15,14 @@
  */
 package com.dqops.rest.server.authentication;
 
+import com.dqops.core.principal.DqoPermissionNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.authorization.ReactiveAuthorizationManager;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authorization.AuthorizationContext;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import reactor.core.publisher.Mono;
 
 /**
  * Reactive web security configuration.
@@ -73,28 +64,10 @@ public class WebSecurityConfiguration {
         });
 
         http.securityContextRepository(this.dqoServerSecurityContextRepository);
-        http.authenticationManager(new ReactiveAuthenticationManager() {
-            @Override
-            public Mono<Authentication> authenticate(Authentication authentication) {
-                return Mono.just(authentication);
-            }
-        });
 
         http.authorizeExchange(customizer -> {
             customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_URL).permitAll();
-//            customizer.pathMatchers("/**").authenticated();
-//            customizer.pathMatchers("/**").hasRole(DqoRoleNames.VIEWER);
-            customizer.pathMatchers("/**").hasAuthority(DqoRoleNames.VIEWER);
-
-//            customizer.pathMatchers("/**").access(new ReactiveAuthorizationManager<AuthorizationContext>() {
-//                @Override
-//                public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
-//                    return authentication.map(a -> {
-//                        return new AuthorizationDecision(true);
-//                    });
-////                    return Mono.just(new AuthorizationDecision(true));
-//                }
-//            });
+            customizer.pathMatchers("/**").hasAuthority(DqoPermissionNames.VIEW);
         });
 
         http.addFilterBefore(this.authenticateWithDqoCloudWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT);
