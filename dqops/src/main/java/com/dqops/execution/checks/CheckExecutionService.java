@@ -17,6 +17,7 @@ package com.dqops.execution.checks;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -38,6 +39,7 @@ public interface CheckExecutionService {
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
      * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token.
+     * @param principal Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecks(ExecutionContext executionContext,
@@ -47,7 +49,8 @@ public interface CheckExecutionService {
                                         boolean dummySensorExecution,
                                         boolean startChildJobsPerTable,
                                         DqoQueueJobId parentJobId,
-                                        JobCancellationToken jobCancellationToken);
+                                        JobCancellationToken jobCancellationToken,
+                                        DqoUserPrincipal principal);
 
     /**
      * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
@@ -56,13 +59,15 @@ public interface CheckExecutionService {
      * @param progressListener Progress listener that receives progress calls.
      * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token.
+     * @param principal Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
                                                    MonitoringScheduleSpec targetSchedule,
                                                    CheckExecutionProgressListener progressListener,
                                                    DqoQueueJobId parentJobId,
-                                                   JobCancellationToken jobCancellationToken);
+                                                   JobCancellationToken jobCancellationToken,
+                                                   DqoUserPrincipal principal);
 
     /**
      * Executes selected checks on a table. This method is called from {@link com.dqops.execution.checks.jobs.RunChecksOnTableQueueJob}

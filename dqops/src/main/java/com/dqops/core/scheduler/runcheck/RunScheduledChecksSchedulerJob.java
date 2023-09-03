@@ -17,6 +17,8 @@ package com.dqops.core.scheduler.runcheck;
 
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
@@ -38,20 +40,24 @@ public class RunScheduledChecksSchedulerJob implements Job {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
      * @param jobDataMapAdapter Quartz job data adapter that extracts the original schedule definition from the job data.
      * @param dqoQueueJobFactory DQO job factory.
      * @param dqoJobQueue DQO job runner where the actual operation is executed.
+     * @param principalProvider User principal provider that returns the system principal.
      */
     @Autowired
     public RunScheduledChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
                                           DqoQueueJobFactory dqoQueueJobFactory,
-                                          ParentDqoJobQueue dqoJobQueue) {
+                                          ParentDqoJobQueue dqoJobQueue,
+                                          DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -66,7 +72,8 @@ public class RunScheduledChecksSchedulerJob implements Job {
         try {
             RunScheduledChecksDqoJob runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
             runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
-            this.dqoJobQueue.pushJob(runScheduledChecksJob);
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            this.dqoJobQueue.pushJob(runScheduledChecksJob, principal);
 
             runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
         }

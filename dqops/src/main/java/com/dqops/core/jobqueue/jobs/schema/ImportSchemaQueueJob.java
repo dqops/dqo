@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.sources.*;
@@ -143,6 +144,8 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      */
     @Override
     public ImportSchemaQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+
         String tableNamePattern = this.importParameters.getTableNamePattern();
 
         if (tableNamePattern == null) {

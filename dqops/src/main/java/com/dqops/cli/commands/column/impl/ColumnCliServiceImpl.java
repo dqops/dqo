@@ -22,6 +22,7 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.search.ColumnSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -180,10 +181,11 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param columnName Column name.
+	 * @param principal Principal that will be used to run the job.
 	 * @return CLI operation status.
 	 */
 	@Override
-	public CliOperationStatus removeColumn(String connectionName, String tableName, String columnName) {
+	public CliOperationStatus removeColumn(String connectionName, String tableName, String columnName, DqoUserPrincipal principal) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -214,7 +216,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		}
 
 		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(
-				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs));
+				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs), principal);
 
 		try {
 			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {

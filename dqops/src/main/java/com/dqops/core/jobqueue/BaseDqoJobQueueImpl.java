@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.exceptions.DqoInvalidQueueConfigurationException;
 import com.dqops.core.jobqueue.exceptions.DqoJobQueuePushFailedException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
@@ -46,7 +47,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
     protected ParallelJobLimitProvider parallelJobLimitProvider;
     private final DqoJobConcurrencyLimiter jobConcurrencyLimiter;
-    private DqoJobIdGenerator dqoJobIdGenerator;
+    private final DqoJobIdGenerator dqoJobIdGenerator;
     private final DqoJobQueueMonitoringService queueMonitoringService;
     private final AtomicInteger startedThreadsCount = new AtomicInteger();
     private final AtomicInteger runningJobsCount = new AtomicInteger();
@@ -122,7 +123,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         }
 
         for (DqoJobQueueEntry jobQueueEntry : preStartQueuedJobs) {
-            this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId());
+            this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId(), jobQueueEntry.getJob().getPrincipal());
         }
     }
 
@@ -296,9 +297,10 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Pushes a job to the job queue without waiting.
      * @param job Job to be pushed.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
+    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
         if (!this.started) {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
@@ -306,6 +308,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            job.setPrincipal(principal);
             synchronized (this) {
                 this.jobsQueuedBeforeStart.add(jobQueueEntry);
             }
@@ -324,6 +327,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            job.setPrincipal(principal);
             this.jobEntriesByJobId.put(job.getJobId(), jobQueueEntry);
 
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);

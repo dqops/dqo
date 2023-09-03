@@ -1983,7 +1983,7 @@ public class ColumnsController {
         }
 
         PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.columnService.deleteColumn(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName);
+                connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }
 

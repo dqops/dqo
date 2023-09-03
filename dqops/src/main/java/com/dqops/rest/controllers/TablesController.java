@@ -2781,7 +2781,7 @@ public class TablesController {
         }
 
         PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(
-                connectionName, tableWrapper.getPhysicalTableName());
+                connectionName, tableWrapper.getPhysicalTableName(), principal);
 
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }

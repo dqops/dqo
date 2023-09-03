@@ -15,6 +15,8 @@
  */
 package com.dqops.core.jobqueue;
 
+import com.dqops.core.principal.DqoUserPrincipal;
+
 /**
  * DQO job queue - manages a pool of threads that are executing operations.
  * This is a second job queue that has it's own limits and is meant to accept only parent jobs that will create child jobs on the main job queue.
@@ -34,7 +36,8 @@ public interface DqoParentJobQueue {
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
+    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoUserPrincipal principal);
 }

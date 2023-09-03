@@ -130,4 +130,14 @@ public class DqoUserPrincipal {
     public boolean hasPrivilege(GrantedAuthority privilege) {
         return this.privileges.contains(privilege);
     }
+
+    /**
+     * Checks if the principal has the required permission. Throws an exception if the principal has no right to execute the given operation.
+     * @param requiredPrivilege Required privilege to test.
+     */
+    public void throwIfNotHavingPrivilege(GrantedAuthority requiredPrivilege) {
+        if (!hasPrivilege(requiredPrivilege)) {
+            throw new DqoAccessDeniedException(requiredPrivilege);
+        }
+    }
 }

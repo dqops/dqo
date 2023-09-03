@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.checks.CheckExecutionService;
@@ -78,6 +79,8 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      */
     @Override
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         ExecutionContext executionContext = this.executionContextFactory.create();
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
                 executionContext,

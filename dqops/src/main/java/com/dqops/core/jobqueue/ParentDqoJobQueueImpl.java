@@ -20,6 +20,7 @@ import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.jobqueue.concurrency.DqoJobConcurrencyLimiter;
 import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProvider;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -50,10 +51,11 @@ public class ParentDqoJobQueueImpl extends BaseDqoJobQueueImpl implements Parent
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
     @Override
-    public <T> PushJobResult<T> pushJob(ParentDqoQueueJob<T> job) {
-        return super.pushJobCore(job, null);
+    public <T> PushJobResult<T> pushJob(ParentDqoQueueJob<T> job, DqoUserPrincipal principal) {
+        return super.pushJobCore(job, null, principal);
     }
 }

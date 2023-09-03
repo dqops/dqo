@@ -22,6 +22,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
@@ -84,6 +85,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param forceRefreshNativeTable Forces to refresh a whole native table for data folders.
      * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
      *                             False when the operation should be executed on the caller's thread.
+     * @param principal Principal that will be used to run the job.
      * @return 0 when success, -1 when an error.
      */
     @Override
@@ -92,7 +94,8 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
                                FileSynchronizationDirection synchronizationDirection,
                                boolean forceRefreshNativeTable,
                                boolean headlessMode,
-                               boolean runOnBackgroundQueue) {
+                               boolean runOnBackgroundQueue,
+                               DqoUserPrincipal principal) {
         DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
         if (apiKey == null) {
             // the api key is missing
@@ -122,7 +125,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
                     synchronizationParameter, synchronizationListener);
             synchronizeRootFolderJob.setParameters(jobParameters);
 
-            this.dqoJobQueue.pushJob(synchronizeRootFolderJob);
+            this.dqoJobQueue.pushJob(synchronizeRootFolderJob, principal);
             synchronizeRootFolderJob.waitForFinish();
         }
         else {

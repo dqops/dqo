@@ -21,6 +21,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.quartz.JobKeys;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -109,6 +110,8 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
      */
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         List<SynchronizeRootFolderParameters> jobParametersList = new ArrayList<>();
 
         SynchronizeMultipleFoldersDqoQueueJobParameters clonedParameters = this.parameters.clone();
@@ -172,7 +175,8 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
                 })
                 .collect(Collectors.toList());
 
-        ChildDqoQueueJobsContainer<Void> childJobsContainer = this.dqoJobQueue.pushChildJobs(synchronizeFolderJobs, jobExecutionContext.getJobId());
+        ChildDqoQueueJobsContainer<Void> childJobsContainer = this.dqoJobQueue.pushChildJobs(synchronizeFolderJobs, jobExecutionContext.getJobId(),
+                this.getPrincipal());
         childJobsContainer.waitForChildResults(jobExecutionContext.getCancellationToken());
 
         // TODO: the child folder synchronization jobs should return a summary of files uploaded and downloaded, when the "sources" folder has incoming changes, we should always update the schedules

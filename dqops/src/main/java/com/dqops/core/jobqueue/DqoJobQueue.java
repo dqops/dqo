@@ -15,6 +15,8 @@
  */
 package com.dqops.core.jobqueue;
 
+import com.dqops.core.principal.DqoUserPrincipal;
+
 import java.util.Collection;
 
 /**
@@ -36,27 +38,30 @@ public interface DqoJobQueue {
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
+    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoUserPrincipal principal);
 
     /**
      * Pushes a job to the job queue without waiting, storing also a reference to the parent job.
      *
      * @param job Job to be pushed.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId);
+    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal);
 
     /**
      * Pushes a collection of child jobs.
      * @param childJobs Collection of child jobs.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Child jobs container that will track the completion of all child jobs.
      * @param <T> Child job result type.
      */
-    <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId);
+    <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId, DqoUserPrincipal principal);
 
     /**
      * Cancels a job given a job id.

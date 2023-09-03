@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
@@ -73,6 +74,8 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
      */
     @Override
     public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         ExecutionContext executionContext = this.executionContextFactory.create();
         StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectorsOnTable(
                 executionContext,

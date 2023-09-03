@@ -30,6 +30,8 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.StringPatternComparer;
@@ -67,6 +69,7 @@ public class TableCliServiceImpl implements TableCliService {
     private final OutputFormatService outputFormatService;
     private final DqoJobQueue dqoJobQueue;
     private final DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     @Autowired
     public TableCliServiceImpl(TableService tableService,
@@ -78,7 +81,8 @@ public class TableCliServiceImpl implements TableCliService {
                                TerminalTableWritter terminalTableWritter,
                                OutputFormatService outputFormatService,
                                DqoJobQueue dqoJobQueue,
-                               DqoQueueJobFactory dqoQueueJobFactory) {
+                               DqoQueueJobFactory dqoQueueJobFactory,
+                               DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -89,6 +93,7 @@ public class TableCliServiceImpl implements TableCliService {
         this.outputFormatService = outputFormatService;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -170,7 +175,8 @@ public class TableCliServiceImpl implements TableCliService {
                 connectionName, schemaName, tableName);
         importSchemaJob.setImportParameters(importParameters);
 
-        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob);
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob, principal);
 
         try {
             ImportSchemaQueueJobResult importSchemaQueueJobResult = pushJobResult.getFinishedFuture().get(); // TODO: add import timeout to stop blocking the CLI and run the import in the background after a while
@@ -299,6 +305,7 @@ public class TableCliServiceImpl implements TableCliService {
      * @param fullTableName Full table name.
      * @return Cli operation status.
      */
+    @Override
     public CliOperationStatus removeTable(String connectionName, String fullTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
@@ -333,7 +340,9 @@ public class TableCliServiceImpl implements TableCliService {
                 .map(TableWrapper::getPhysicalTableName)
                 .collect(Collectors.toList());
         connToTablesMap.put(connectionName, tableNames);
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap);
+
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap, principal);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
@@ -365,6 +374,7 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus updateTable(String connectionName, String schemaName, String tableName, String newTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
         CliOperationStatus deleteStatus = removeTable(connectionName, schemaName + "." + tableName);
         if (!deleteStatus.isSuccess()) {
             cliOperationStatus.setFailedMessage(deleteStatus.getMessage());

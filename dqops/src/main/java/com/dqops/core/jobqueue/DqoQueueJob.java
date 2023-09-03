@@ -19,6 +19,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoUserPrincipal;
 
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
@@ -34,6 +35,7 @@ public abstract class DqoQueueJob<T> {
     private final Object lock = new Object();
     private DqoQueueJobId jobId;
     private Throwable jobExecutionException;
+    private DqoUserPrincipal principal;
 
     /**
      * Creates and configures a new job.
@@ -171,6 +173,22 @@ public abstract class DqoQueueJob<T> {
      */
     public void setJobId(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    /**
+     * Returns the user principal associated with the job.
+     * @return User principal stored on the job.
+     */
+    public DqoUserPrincipal getPrincipal() {
+        return principal;
+    }
+
+    /**
+     * Sets a reference to the user principal that will be associated with the job.
+     * @param principal User principal to use within the job evaluation.
+     */
+    public void setPrincipal(DqoUserPrincipal principal) {
+        this.principal = principal;
     }
 
     /**

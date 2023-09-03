@@ -19,6 +19,8 @@ import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.PushJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -42,20 +44,24 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     /**
      * Creates a schedule metadata job instance using dependencies.
      * @param dqoQueueJobFactory DQO job queue factory.
      * @param dqoJobQueue DQO job queue to push the actual job to execute.
      * @param dqoSchedulerConfigurationProperties DQO cron scheduler configuration properties.
+     * @param principalProvider Principal provider for the local instance.
      */
     @Autowired
     public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
                                            ParentDqoJobQueue dqoJobQueue,
-                                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties) {
+                                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                                           DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -87,7 +93,8 @@ public class SynchronizeMetadataSchedulerJob implements Job {
             jobParameters.setDetectCronSchedules(true);
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 
-            PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
             pushJobResult.getFinishedFuture().get();
         }
         catch (Exception ex) {

@@ -21,6 +21,7 @@ import com.dqops.core.jobqueue.concurrency.DqoJobConcurrencyLimiter;
 import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProvider;
 import com.dqops.core.jobqueue.exceptions.DqoJobQueuePushFailedException;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -54,15 +55,16 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
     @Override
-    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job) {
+    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoUserPrincipal principal) {
         if (job instanceof ParentDqoQueueJob) {
             throw new DqoJobQueuePushFailedException("Parent jobs must be pushed to the ParentDqoJobQueue only.");
         }
 
-        return super.pushJobCore(job, null);
+        return super.pushJobCore(job, null, principal);
     }
 
     /**
@@ -70,26 +72,28 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
      *
      * @param job Job to be pushed.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
     @Override
-    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
+    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
         if (job instanceof ParentDqoQueueJob) {
             throw new DqoJobQueuePushFailedException("Parent jobs must be pushed to the ParentDqoJobQueue only.");
         }
 
-        return super.pushJobCore(job, parentJobId);
+        return super.pushJobCore(job, parentJobId, principal);
     }
 
     /**
      * Pushes a collection of child jobs.
      * @param childJobs Collection of child jobs.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Child jobs container that will track the completion of all child jobs.
      * @param <T> Child job result type.
      */
     @Override
-    public <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId) {
+    public <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
         assert parentJobId != null;
         ChildDqoQueueJobsContainer<T> childDqoQueueJobsContainer = new ChildDqoQueueJobsContainer<T>(childJobs);
         if (childJobs.isEmpty()) {
@@ -103,7 +107,7 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
             DqoQueueJob<T> finishedJob = (DqoQueueJob<T>) job;
             DqoQueueJob<T> nextJobToSchedule = childDqoQueueJobsContainer.notifyChildJobFinished(finishedJob, completionStatus);
             if (nextJobToSchedule != null) {
-                this.pushJob(nextJobToSchedule, parentJobId);
+                this.pushJob(nextJobToSchedule, parentJobId, principal);
             }
         };
 
@@ -118,7 +122,7 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
             }
 
             assert !(nextChildJob instanceof ParentDqoQueueJob);
-            this.pushJob(nextChildJob, parentJobId);
+            this.pushJob(nextChildJob, parentJobId, principal);
         }
 
         return childDqoQueueJobsContainer;

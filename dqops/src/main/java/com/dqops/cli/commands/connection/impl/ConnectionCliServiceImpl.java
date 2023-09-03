@@ -25,6 +25,8 @@ import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.ConnectionSearchFilters;
@@ -63,6 +65,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     private final OutputFormatService outputFormatService;
     private final EditorLaunchService editorLaunchService;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
+    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
 
     @Autowired
     public ConnectionCliServiceImpl(ConnectionService connectionService,
@@ -73,7 +76,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                     SecretValueProvider secretValueProvider,
                                     OutputFormatService outputFormatService,
                                     EditorLaunchService editorLaunchService,
-                                    DefaultSchedulesProvider defaultSchedulesProvider) {
+                                    DefaultSchedulesProvider defaultSchedulesProvider,
+                                    DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
         this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -83,6 +87,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         this.outputFormatService = outputFormatService;
         this.editorLaunchService = editorLaunchService;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -455,8 +460,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 .map(ConnectionSpec::getConnectionName)
                 .collect(Collectors.toList());
 
+        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
         List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
-                connectionNames);
+                connectionNames, userPrincipal);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {

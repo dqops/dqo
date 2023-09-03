@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -78,6 +79,8 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      */
     @Override
     public RepairStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
 
         if (this.repairParameters.isRepairErrors()) {

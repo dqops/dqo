@@ -98,15 +98,19 @@ public interface TableService {
      * Cleans all stored data from .data folder related to this table.
      * @param connectionName Connection name
      * @param tableName      Physical table name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName);
+    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(
+            String connectionName, PhysicalTableName tableName, DqoUserPrincipal principal);
 
     /**
      * Deletes tables from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these tables.
      * @param connectionToTables Connection name to tables on that connection mapping.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Map<String, Iterable<PhysicalTableName>> connectionToTables);
+    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(
+            Map<String, Iterable<PhysicalTableName>> connectionToTables, DqoUserPrincipal principal);
 }

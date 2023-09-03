@@ -191,16 +191,17 @@ public class TableServiceImpl implements TableService {
      * Cleans all stored data from .data folder related to this table.
      * @param connectionName Connection name
      * @param tableName      Physical table name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName) {
+    public PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName, DqoUserPrincipal principal) {
         List<PhysicalTableName> tableNameList = new LinkedList<>();
         tableNameList.add(tableName);
 
         Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new HashMap<>();
         connectionToTableMapping.put(connectionName, tableNameList);
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteTables(connectionToTableMapping);
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteTables(connectionToTableMapping, principal);
 
         return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
@@ -209,10 +210,13 @@ public class TableServiceImpl implements TableService {
      * Deletes tables from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these tables.
      * @param connectionToTables Connection name to tables on that connection mapping.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Map<String, Iterable<PhysicalTableName>> connectionToTables) {
+    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(
+            Map<String, Iterable<PhysicalTableName>> connectionToTables,
+            DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -244,7 +248,7 @@ public class TableServiceImpl implements TableService {
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
-            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
             results.add(jobResult);
         }
 

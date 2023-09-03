@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -69,6 +70,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         this.cloudSynchronizationService.synchronizeFolder(
                 this.parameters.getSynchronizationParameter().getFolder(),
                 this.parameters.getSynchronizationParameter().getDirection(),

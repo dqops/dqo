@@ -71,7 +71,8 @@ public class CheckCliServiceImpl implements CheckCliService {
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
-        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun);
+        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.createUserPrincipal();
+        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun, principal);
     }
 
     /**

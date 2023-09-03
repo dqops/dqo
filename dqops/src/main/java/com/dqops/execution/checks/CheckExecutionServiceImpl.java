@@ -18,6 +18,7 @@ package com.dqops.execution.checks;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
@@ -87,6 +88,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
      * @param parentJobId Parent job id for the parent job.
      * @param jobCancellationToken Job cancellation token.
+     * @param principal Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
@@ -97,7 +99,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                boolean dummySensorExecution,
                                                boolean startChildJobsPerTable,
                                                DqoQueueJobId parentJobId,
-                                               JobCancellationToken jobCancellationToken) {
+                                               JobCancellationToken jobCancellationToken,
+                                               DqoUserPrincipal principal) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
@@ -123,7 +126,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 childTableJobs.add(runChecksOnTableJob);
             }
 
-            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId, principal);
             List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
             checkExecutionSummaries.forEach(checkExecutionSummary::append);
         }
@@ -151,6 +154,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param progressListener      Progress listener that receives progress calls.
      * @param parentJobId           Parent job id.
      * @param jobCancellationToken  Job cancellation token.
+     * @param principal             Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
@@ -158,7 +162,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                           MonitoringScheduleSpec targetSchedule,
                                                           CheckExecutionProgressListener progressListener,
                                                           DqoQueueJobId parentJobId,
-                                                          JobCancellationToken jobCancellationToken) {
+                                                          JobCancellationToken jobCancellationToken,
+                                                          DqoUserPrincipal principal) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
@@ -187,7 +192,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             childTableJobs.add(runChecksOnTableJob);
         }
 
-        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId, principal);
         List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
         checkExecutionSummaries.forEach(checkExecutionSummary::append);
 

@@ -154,7 +154,7 @@ public class JobsController {
         runChecksParameters.setProgressListener(progressListener);
         runChecksJob.setParameters(runChecksParameters);
 
-        PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob);
+        PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob, principal);
 
         if (wait.isPresent() && wait.get()) {
             // wait for the result
@@ -253,7 +253,7 @@ public class JobsController {
                 false);
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -284,7 +284,7 @@ public class JobsController {
                 false);
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -452,7 +452,7 @@ public class JobsController {
         // TODO: Add listener.
         ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
         importTablesJob.setImportParameters(importParameters);
-        PushJobResult<ImportTablesQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob);
+        PushJobResult<ImportTablesQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob, principal);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -475,7 +475,7 @@ public class JobsController {
             @RequestBody DeleteStoredDataQueueJobParameters deleteStoredDataParameters) {
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
-        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -499,7 +499,7 @@ public class JobsController {
             @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters) {
         SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
         synchronizeMultipleFoldersJob.setParameters(synchronizeFolderParameters);
-        PushJobResult<Void> jobPushResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
+        PushJobResult<Void> jobPushResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
 
         return new ResponseEntity<>(Mono.just(jobPushResult.getJobId()), HttpStatus.CREATED); // 201
     }

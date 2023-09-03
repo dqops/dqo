@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
@@ -159,6 +160,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      */
     @Override
     public DeleteStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         if (this.deletionParameters.getConnectionName() == null) {
             throw new IllegalArgumentException("Connection not specified for data delete job.");
         }

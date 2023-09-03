@@ -26,6 +26,8 @@ import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +42,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "remove", header = "Remove the column(s) that match a given condition", description = "Remove one or more columns from a table that match a specified condition. Users can filter the column.")
 public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnCliService columnCliService;
+	private DqoCloudApiKeyPrincipalProvider principalProvider;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -48,11 +51,13 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 
 	@Autowired
 	public ColumnRemoveCliCommand(TerminalReader terminalReader,
-							   TerminalWriter terminalWriter,
-							   ColumnCliService columnCliService) {
+								  TerminalWriter terminalWriter,
+								  ColumnCliService columnCliService,
+								  DqoCloudApiKeyPrincipalProvider principalProvider) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.columnCliService = columnCliService;
+		this.principalProvider = principalProvider;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -123,7 +128,8 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName);
+		DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName, principal);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

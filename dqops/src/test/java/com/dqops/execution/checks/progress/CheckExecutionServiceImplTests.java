@@ -33,6 +33,8 @@ import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObject
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
 import com.dqops.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryObjectMother;
@@ -181,19 +183,21 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         CheckSearchFilters partitionedFilters = allFilters.clone();
         partitionedFilters.setCheckType(CheckType.partitioned);
 
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary monitoringSummary = this.sut.executeChecks(
                 this.executionContext, monitoringFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
                 this.executionContext, partitionedFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
                 this.executionContext, allFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());

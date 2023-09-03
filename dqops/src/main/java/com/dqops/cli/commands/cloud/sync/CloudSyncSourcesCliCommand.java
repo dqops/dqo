@@ -22,6 +22,8 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -40,15 +42,18 @@ import picocli.CommandLine;
 public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     public CloudSyncSourcesCliCommand() {
     }
 
     @Autowired
     public CloudSyncSourcesCliCommand(CloudSynchronizationService cloudSynchronizationService,
-                                      TerminalFactory terminalFactory) {
+                                      TerminalFactory terminalFactory,
+                                      DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.cloudSynchronizationService = cloudSynchronizationService;
         this.terminalFactory = terminalFactory;
+        this.principalProvider = principalProvider;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -98,8 +103,9 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     @Override
     public Integer call() throws Exception {
         try {
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
             return this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true);
+                    DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true, principal);
         }
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
