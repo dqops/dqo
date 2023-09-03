@@ -56,4 +56,10 @@ public class TableStatisticsModel {
      */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.")
     private StatisticsCollectorSearchFilters collectTableAndColumnStatisticsJobTemplate;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
 }

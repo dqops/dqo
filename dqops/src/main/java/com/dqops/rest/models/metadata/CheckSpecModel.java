@@ -62,13 +62,19 @@ public class CheckSpecModel {
      * True when the check is a custom check or is customized by the user.
      */
     @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
-    public boolean custom;
+    private boolean custom;
 
     /**
      * True when this check is provided with DQO as a built-in check.
      */
     @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
-    public boolean builtIn;
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
 
     /**
      * Default constructor for CheckModel.
@@ -82,14 +88,16 @@ public class CheckSpecModel {
      * @param checkDefinitionWrapper The check definition wrapper to use.
      * @param custom Whether the check is a custom check.
      * @param builtIn Whether the check is a built-in check.
+     * @param canEdit The current user can edit the check definition.
      */
-    public CheckSpecModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn) {
+    public CheckSpecModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.checkName = checkDefinitionWrapper.getCheckName();
         this.sensorName = checkDefinitionWrapper.getSpec().getSensorName();
         this.ruleName = checkDefinitionWrapper.getSpec().getRuleName();
         this.helpText = checkDefinitionWrapper.getSpec().getHelpText();
         this.custom = custom;
         this.builtIn = builtIn;
+        this.canEdit = canEdit;
     }
 
     /**

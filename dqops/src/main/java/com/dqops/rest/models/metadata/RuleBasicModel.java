@@ -38,10 +38,16 @@ public class RuleBasicModel {
     private String fullRuleName;
 
     @JsonPropertyDescription("This rule has is a custom rule or was customized by the user.")
-    public boolean custom;
+    private boolean custom;
 
     @JsonPropertyDescription("This rule is provided with DQO as a built-in rule.")
-    public boolean builtIn;
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
 
     public RuleBasicModel() {
     }

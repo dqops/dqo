@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.dqops.rest.server.authentication;
+package com.dqops.core.principal;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserRole;
-import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
-import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;

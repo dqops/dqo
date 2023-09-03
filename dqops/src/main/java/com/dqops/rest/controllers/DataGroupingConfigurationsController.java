@@ -15,6 +15,7 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
@@ -91,6 +92,7 @@ public class DataGroupingConfigurationsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
+        boolean canEditConfiguration = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         List<DataGroupingConfigurationBasicModel> result = new LinkedList<>();
         List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
         for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
@@ -102,6 +104,7 @@ public class DataGroupingConfigurationsController {
                 setTableName(tableName);
                 setDataGroupingConfigurationName(groupingConfigurationName);
                 setDefaultDataGroupingConfiguration(isDefaultDataGrouping);
+                setCanEdit(canEditConfiguration);
             }});
         }
 
@@ -143,6 +146,7 @@ public class DataGroupingConfigurationsController {
             setTableName(tableName);
             setDataGroupingConfigurationName(groupingConfigurationName);
             setSpec(dataGroupingMapping.get(groupingConfigurationName));
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         }};
         return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
     }

@@ -28,6 +28,7 @@ import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -136,12 +137,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
         }
 
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         Stream<ColumnBasicModel> columnSpecs = tableWrapper.getSpec().getColumns()
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
                 .map(kv -> ColumnBasicModel.fromColumnSpecificationForListEntry(
-                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue()));
+                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(columnSpecs), HttpStatus.OK);
     }
@@ -188,6 +192,7 @@ public class ColumnsController {
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
                         CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true);
+        boolean canCollectStatistics = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()
@@ -197,13 +202,15 @@ public class ColumnsController {
                         connectionName, tableWrapper.getPhysicalTableName(),
                         kv.getKey(), // column name
                         kv.getValue(), // column specification
-                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey())))
+                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey()),
+                        canCollectStatistics))
                 .collect(Collectors.toList());
 
         TableColumnsStatisticsModel resultModel = new TableColumnsStatisticsModel();
         resultModel.setConnectionName(connectionName);
         resultModel.setTable(physicalTableName);
         resultModel.setColumnStatistics(columnModels);
+        resultModel.setCanCollectStatistics(canCollectStatistics);
 
         resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
@@ -258,6 +265,7 @@ public class ColumnsController {
             setColumnName(columnName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setSpec(columnSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
@@ -300,7 +308,9 @@ public class ColumnsController {
         }
 
         ColumnBasicModel columnBasicModel = ColumnBasicModel.fromColumnSpecification(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec);
+                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(columnBasicModel), HttpStatus.OK); // 200
     }
@@ -348,9 +358,11 @@ public class ColumnsController {
                         connectionName, tableWrapper.getPhysicalTableName(), columnName,
                         CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
 
+        boolean canRunStatisticsJob = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
                 connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
-                mostRecentStatisticsMetricsForColumn);
+                mostRecentStatisticsMetricsForColumn, canRunStatisticsJob);
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
     }
@@ -668,7 +680,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -735,7 +748,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -803,7 +817,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -857,7 +872,8 @@ public class ColumnsController {
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -912,7 +928,8 @@ public class ColumnsController {
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -967,7 +984,8 @@ public class ColumnsController {
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -1039,7 +1057,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1112,7 +1131,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1185,7 +1205,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }

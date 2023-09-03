@@ -19,6 +19,7 @@ package com.dqops.services.metadata;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -93,6 +94,7 @@ public class SchemaServiceImpl implements SchemaService {
      * @param checkTarget    (Optional) Check target.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of check templates in the requested schema, matching the optional filters. Null if schema doesn't exist.
      */
     @Override
@@ -102,7 +104,8 @@ public class SchemaServiceImpl implements SchemaService {
                                                  CheckTimeScale checkTimeScale,
                                                  CheckTarget checkTarget,
                                                  String checkCategory,
-                                                 String checkName) {
+                                                 String checkName,
+                                                 DqoUserPrincipal principal) {
         if (Strings.isNullOrEmpty(connectionName)
                 || Strings.isNullOrEmpty(schemaName)
                 || checkType == null) {
@@ -123,7 +126,7 @@ public class SchemaServiceImpl implements SchemaService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
 
         Stream<CheckContainerModel> columnCheckContainers = allChecksModels.stream()
                 .map(AllChecksModel::getColumnChecksModel)
@@ -172,6 +175,7 @@ public class SchemaServiceImpl implements SchemaService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @Override
@@ -185,7 +189,8 @@ public class SchemaServiceImpl implements SchemaService {
                                                                         String checkCategory,
                                                                         String checkName,
                                                                         Boolean checkEnabled,
-                                                                        Boolean checkConfigured) {
+                                                                        Boolean checkConfigured,
+                                                                        DqoUserPrincipal principal) {
         String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
                 new PhysicalTableName(schemaName, Optional.ofNullable(tableNamePattern).orElse(""))
                         .toTableSearchFilter()
@@ -204,7 +209,7 @@ public class SchemaServiceImpl implements SchemaService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
+        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
     }
 
     /**

@@ -66,10 +66,16 @@ public class RuleModel {
     private Map<String, String> parameters;
 
     @JsonPropertyDescription("This rule has a custom (user level) definition.")
-    public boolean custom;
+    private boolean custom;
 
     @JsonPropertyDescription("This rule has is a built-in rule.")
-    public boolean builtIn;
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
 
     /**
      * Default constructor for RuleModel.
@@ -83,8 +89,9 @@ public class RuleModel {
      * @param ruleDefinitionWrapper The RuleDefinitionWrapper to use.
      * @param custom Whether the rule is a custom rule.
      * @param builtIn Whether the rule is a built-in rule.
+     * @param canEdit The current user can edit the definition of the rule.
      */
-    public RuleModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn) {
+    public RuleModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.ruleName = ruleDefinitionWrapper.getRuleName();
         this.rulePythonModuleContent = ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent();
         this.type = ruleDefinitionWrapper.getSpec().getType();
@@ -95,6 +102,7 @@ public class RuleModel {
         this.parameters = ruleDefinitionWrapper.getSpec().getParameters();
         this.custom = custom;
         this.builtIn = builtIn;
+        this.canEdit = canEdit;
     }
 
     /**

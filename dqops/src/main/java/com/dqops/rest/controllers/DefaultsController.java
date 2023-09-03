@@ -20,6 +20,7 @@ import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSetting
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -93,7 +94,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -127,7 +129,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -161,7 +164,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -195,7 +199,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -229,7 +234,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -263,7 +269,8 @@ public class DefaultsController {
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }

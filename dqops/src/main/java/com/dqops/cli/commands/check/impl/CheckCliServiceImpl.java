@@ -16,6 +16,8 @@
 package com.dqops.cli.commands.check.impl;
 
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -41,6 +43,7 @@ import java.util.*;
 public class CheckCliServiceImpl implements CheckCliService {
     private final CheckService checkService;
     private final AllChecksModelFactory allChecksModelFactory;
+    private final DqoCloudApiKeyPrincipalProvider apiKeyPrincipalProvider;
 
     /**
      * Default injection constructor.
@@ -48,9 +51,11 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Autowired
     public CheckCliServiceImpl(CheckService checkService,
-                               AllChecksModelFactory allChecksModelFactory) {
+                               AllChecksModelFactory allChecksModelFactory,
+                               DqoCloudApiKeyPrincipalProvider apiKeyPrincipalProvider) {
         this.checkService = checkService;
         this.allChecksModelFactory = allChecksModelFactory;
+        this.apiKeyPrincipalProvider = apiKeyPrincipalProvider;
     }
 
     /**
@@ -88,7 +93,8 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters) {
-        CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters());
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.createUserPrincipal();
+        CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters(), userPrincipal);
         prepareSampleCheckModelForUpdates(sampleModel);
         patchCheckModel(sampleModel, parameters);
 
@@ -99,11 +105,11 @@ public class CheckCliServiceImpl implements CheckCliService {
             setCheckModelPatch(sampleModel);
         }};
 
-        return this.checkService.updateAllChecksPatch(allChecksPatchParameters);
+        return this.checkService.updateAllChecksPatch(allChecksPatchParameters, userPrincipal);
     }
 
-    protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters) {
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+    protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
+        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
         Optional<CheckModel> sampleCheckModelFromTables = patches.stream()
                 .map(AllChecksModel::getTableChecksModel)
                 .flatMap(allTableChecksModel -> allTableChecksModel.getSchemaTableChecksModels().stream())

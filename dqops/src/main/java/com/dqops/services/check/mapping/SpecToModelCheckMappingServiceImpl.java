@@ -128,6 +128,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
+     * @param canManageChecks The user is an operator and can rul any operation.
      * @return Model of data quality checks' container.
      */
     @Override
@@ -136,8 +137,13 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                            ConnectionSpec connectionSpec,
                                            TableSpec tableSpec,
                                            ExecutionContext executionContext,
-                                           ProviderType providerType) {
+                                           ProviderType providerType,
+                                           boolean canManageChecks) {
         CheckContainerModel checkContainerModel = new CheckContainerModel();
+        checkContainerModel.setCanEdit(canManageChecks);
+        checkContainerModel.setCanRunChecks(canManageChecks);
+        checkContainerModel.setCanDeleteData(canManageChecks);
+
         if (runChecksTemplate != null) {
             checkContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
 
@@ -193,7 +199,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                 providerType,
                                 checkCategoriesSpec.getCheckTarget(),
                                 checkType,
-                                checkTimeScale);
+                                checkTimeScale,
+                                canManageChecks);
                         if (comparisonCategoryModel != null && comparisonCategoryModel.getChecks().size() > 0) {
                             checkContainerModel.getCategories().add(comparisonCategoryModel);
                         }
@@ -219,7 +226,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                             providerType,
                             checkCategoriesSpec.getCheckTarget(),
                             checkType,
-                            checkTimeScale);
+                            checkTimeScale,
+                            canManageChecks);
                     if (comparisonCategoryModel != null && comparisonCategoryModel.getChecks().size() > 0) {
                         checkContainerModel.getCategories().add(comparisonCategoryModel);
                     }
@@ -237,7 +245,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     providerType,
                     checkCategoriesSpec.getCheckTarget(),
                     checkType,
-                    checkTimeScale);
+                    checkTimeScale,
+                    canManageChecks);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 checkContainerModel.getCategories().add(categoryModel);
             }
@@ -313,13 +322,19 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, monitoring or partitioned check (for a specific timescale).
      * @param executionContext Check execution context with access to the check information.
      * @param providerType Provider type.
+     * @param canManageChecks The user is an operator and can rul any operation.
      * @return Simplistic model of data quality checks' container.
      */
     @Override
     public CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                                      ExecutionContext executionContext,
-                                                     ProviderType providerType) {
+                                                     ProviderType providerType,
+                                                     boolean canManageChecks) {
         CheckContainerBasicModel checkContainerBasicModel = new CheckContainerBasicModel();
+        checkContainerBasicModel.setCanEdit(canManageChecks);
+        checkContainerBasicModel.setCanRunChecks(canManageChecks);
+        checkContainerBasicModel.setCanDeleteData(canManageChecks);
+
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
         CheckType checkType = checkCategoriesSpec.getCheckType();
@@ -380,7 +395,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                        ProviderType providerType,
                                                        CheckTarget checkTarget,
                                                        CheckType checkType,
-                                                       CheckTimeScale checkTimeScale) {
+                                                       CheckTimeScale checkTimeScale,
+                                                       boolean isOperator) {
         QualityCategoryModel categoryModel = new QualityCategoryModel();
         CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate != null ? runChecksTemplate.clone() : null;
 
@@ -433,7 +449,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                         providerType,
                         checkTarget,
                         checkType,
-                        checkTimeScale);
+                        checkTimeScale,
+                        isOperator);
                 if (checkModel == null) {
                     continue;
                 }
@@ -463,7 +480,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     providerType,
                     checkTarget,
                     checkType,
-                    checkTimeScale);
+                    checkTimeScale,
+                    isOperator);
         }
 
         return categoryModel;
@@ -480,6 +498,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkTarget Check target.
      * @param checkType Check type.
      * @param checkTimeScale Check time scale.
+     * @param isOperator The current user is the operator and can manage the check.
      */
     protected void addCustomChecksToCategoryModel(CustomCheckSpecMap customCheckSpecMap,
                                                   QualityCategoryModel targetCategoryModel,
@@ -489,7 +508,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                   ProviderType providerType,
                                                   CheckTarget checkTarget,
                                                   CheckType checkType,
-                                                  CheckTimeScale checkTimeScale) {
+                                                  CheckTimeScale checkTimeScale,
+                                                  boolean isOperator) {
         String category = targetCategoryModel.getCategory();
         if (executionContext == null || executionContext.getUserHomeContext() == null) {
             return;
@@ -521,7 +541,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     providerType,
                     checkTarget,
                     checkType,
-                    checkTimeScale);
+                    checkTimeScale,
+                    isOperator);
 
             if (customCheckModel == null) {
                 continue;
@@ -558,8 +579,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                        ProviderType providerType,
                                        CheckTarget checkTarget,
                                        CheckType checkType,
-                                       CheckTimeScale checkTimeScale) {
+                                       CheckTimeScale checkTimeScale,
+                                       boolean canManageChecks) {
         CheckModel checkModel = new CheckModel();
+        checkModel.setCanEdit(canManageChecks);
+        checkModel.setCanRunChecks(canManageChecks);
+        checkModel.setCanDeleteData(canManageChecks);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");

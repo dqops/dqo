@@ -16,6 +16,8 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -104,7 +106,8 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setConnectionName(this.connectionSpec.getConnectionName());
 
-        List<AllChecksModel> allChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters, principal);
         Assertions.assertNotNull(allChecksModels);
         Assertions.assertEquals(1, allChecksModels.size());
     }

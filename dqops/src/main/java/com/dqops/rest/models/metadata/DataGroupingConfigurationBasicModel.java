@@ -44,4 +44,13 @@ public class DataGroupingConfigurationBasicModel {
 
     @JsonPropertyDescription("True when this is the default data grouping configuration for the table.")
     private boolean defaultDataGroupingConfiguration;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public DataGroupingConfigurationBasicModel() {
+    }
 }

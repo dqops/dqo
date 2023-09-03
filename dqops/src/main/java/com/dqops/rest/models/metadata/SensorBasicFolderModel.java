@@ -32,7 +32,6 @@ import java.util.*;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "SensorBasicFolderModel", description = "Sensor basic folder model")
 public class SensorBasicFolderModel {
-
     @JsonPropertyDescription("A map of folder-level children sensors.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, SensorBasicFolderModel> folders;
@@ -54,10 +53,12 @@ public class SensorBasicFolderModel {
      * @param fullSensorName the path of the sensor
      * @param providerSensorBasicModelList  List of provider specific sensor definitions.
      * @param sensorDefinitionSource Sensor source (custom or built-in).
+     * @param canEdit The current user can edit the sensor definition.
      */
     public void addSensor(String fullSensorName,
                           List<ProviderSensorBasicModel> providerSensorBasicModelList,
-                          SensorDefinitionSource sensorDefinitionSource) {
+                          SensorDefinitionSource sensorDefinitionSource,
+                          boolean canEdit) {
 
         String[] sensorFolders = fullSensorName.split("/");
         String sensorName = sensorFolders[sensorFolders.length - 1];
@@ -94,6 +95,7 @@ public class SensorBasicFolderModel {
             sensorBasicModel.setFullSensorName(fullSensorName);
             sensorBasicModel.setSensorSource(sensorDefinitionSource);
             sensorBasicModel.setProviderSensorBasicModels(providerSensorBasicModelList);
+            sensorBasicModel.setCanEdit(canEdit);
             folderModel.sensors.add(sensorBasicModel);
         }
     }

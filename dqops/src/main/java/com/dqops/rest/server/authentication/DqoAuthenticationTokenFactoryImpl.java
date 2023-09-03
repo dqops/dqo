@@ -17,6 +17,7 @@
 package com.dqops.rest.server.authentication;
 
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

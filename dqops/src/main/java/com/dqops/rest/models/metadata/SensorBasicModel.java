@@ -32,7 +32,6 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
 public class SensorBasicModel {
-
     @JsonPropertyDescription("Sensor name")
     private String sensorName;
 
@@ -45,18 +44,25 @@ public class SensorBasicModel {
     @JsonPropertyDescription("This sensor is provided with DQO as a built-in sensor.")
     private boolean builtIn;
 
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
     @JsonPropertyDescription("Provider sensor basic model list")
     private List<ProviderSensorBasicModel> providerSensorBasicModels;
 
     public SensorBasicModel() {
     }
 
-    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn,
+    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn, boolean canEdit,
                             List<ProviderSensorBasicModel> providerSensorBasicModels) {
         this.sensorName = sensorName;
         this.fullSensorName = fullSensorName;
         this.custom = custom;
         this.builtIn = builtIn;
+        this.canEdit = canEdit;
         this.providerSensorBasicModels = providerSensorBasicModels;
     }
 

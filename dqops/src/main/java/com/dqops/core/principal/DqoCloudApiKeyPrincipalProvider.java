@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.rest.server.authentication;
-
-import com.dqops.core.principal.DqoUserPrincipal;
+package com.dqops.core.principal;
 
 /**
  * Service that returns the user principal of the user identified by the DQO Cloud API Key.

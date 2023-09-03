@@ -16,6 +16,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
@@ -105,7 +106,8 @@ public class ChecksController {
 
         boolean isCustom = userCheckDefinitionWrapper != null;
         boolean isBuiltIn = builtinCheckDefinitionWrapper != null;
-        CheckSpecModel checkSpecModel = new CheckSpecModel(effectiveCheckDefinition, isCustom, isBuiltIn);
+        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        CheckSpecModel checkSpecModel = new CheckSpecModel(effectiveCheckDefinition, isCustom, isBuiltIn, canEdit);
 
         return new ResponseEntity<>(Mono.just(checkSpecModel), HttpStatus.OK);
     }
@@ -300,15 +302,16 @@ public class ChecksController {
         List<CheckDefinitionWrapper> checkDefinitionWrapperListUserHome = new ArrayList<>(userHome.getChecks().toList());
         checkDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
         Set<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
         for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
             String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkSpecFolderBasicModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome));
+            checkSpecFolderBasicModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions);
         }
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
-            checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
+            checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions);
         }
 
         checkSpecFolderBasicModel.addFolderIfMissing("table/profiling/custom");

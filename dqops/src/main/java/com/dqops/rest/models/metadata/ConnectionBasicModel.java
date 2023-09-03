@@ -146,12 +146,42 @@ public class ConnectionBasicModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the connection to the data source.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the connection to the data source.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
      * @param connectionSpec Source connection specification.
+     * @param isEditor       The current user has the editor permission.
+     * @param isOperator     The current user has the operator permission.
      * @return Basic connection model.
      */
-    public static ConnectionBasicModel fromConnectionSpecification(String connectionName, ConnectionSpec connectionSpec) {
+    public static ConnectionBasicModel fromConnectionSpecification(
+            String connectionName,
+            ConnectionSpec connectionSpec,
+            boolean isEditor,
+            boolean isOperator) {
         return new ConnectionBasicModel() {{
             setConnectionName(connectionName);
             setParallelRunsLimit(connectionSpec.getParallelRunsLimit());
@@ -164,6 +194,10 @@ public class ConnectionBasicModel {
             setSqlserver(connectionSpec.getSqlserver());
             setMysql(connectionSpec.getMysql());
             setOracle(connectionSpec.getOracle());
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);

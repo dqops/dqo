@@ -200,6 +200,28 @@ public class CheckModel implements Cloneable {
      */
     @JsonPropertyDescription("List of similar checks in other check types or in other time scales.")
     private List<SimilarCheckModel> similarChecks;
+
+    /**
+     * Boolean flag that decides if the current user can edit the check.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    public CheckModel() {
+    }
+
     /**
      * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
      * @return Check sensor rule key.

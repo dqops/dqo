@@ -30,6 +30,8 @@ import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProviderStub;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
@@ -106,9 +108,13 @@ public class CheckCliServiceImplTests extends BaseTest {
                 parentDqoJobQueue,
                 userHomeContextFactory);
 
+        DqoCloudApiKeyPrincipalProviderStub principalProviderStub = new DqoCloudApiKeyPrincipalProviderStub(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin());
+
         this.sut = new CheckCliServiceImpl(
                 checkService,
-                allChecksModelFactory);
+                allChecksModelFactory,
+                principalProviderStub);
     }
 
     private ColumnSpec createColumn(String type, boolean nullable) {

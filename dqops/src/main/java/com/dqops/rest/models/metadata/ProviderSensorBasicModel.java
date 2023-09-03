@@ -31,7 +31,6 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor basic model")
 public class ProviderSensorBasicModel {
-
     @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;
 
@@ -40,6 +39,15 @@ public class ProviderSensorBasicModel {
 
     @JsonPropertyDescription("This connection specific template is provided with DQO as a built-in sensor.")
     private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public ProviderSensorBasicModel() {
+    }
 
     /**
      * Sets the custom or builtIn flag to true to match the source of the sensor definition.

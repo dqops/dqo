@@ -51,9 +51,9 @@ public class RuleBasicFolderModel {
      * @param fullRuleName the path of the rule
      * @param isCustom The rule has a custom definition.
      * @param isBuiltIn The rule is provided (built-in) with DQO.
+     * @param canEdit The current user can edit the rule.
      */
-    public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn) {
-
+    public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {
         String[] ruleFolders = fullRuleName.split("/");
         String ruleName = ruleFolders[ruleFolders.length - 1];
         RuleBasicFolderModel folderModel = this;
@@ -76,6 +76,7 @@ public class RuleBasicFolderModel {
             ruleBasicModel.setFullRuleName(fullRuleName);
             ruleBasicModel.setCustom(isCustom);
             ruleBasicModel.setBuiltIn(isBuiltIn);
+            ruleBasicModel.setCanEdit(canEdit);
             folderModel.rules.add(ruleBasicModel);
         } else {
             if (isCustom){

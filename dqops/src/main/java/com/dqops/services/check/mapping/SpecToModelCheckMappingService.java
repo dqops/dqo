@@ -46,6 +46,7 @@ public interface SpecToModelCheckMappingService {
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
+     * @param canManageChecks The user is an operator and can run any operation.
      * @return Model of data quality checks' container.
      */
     CheckContainerModel createModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
@@ -53,7 +54,8 @@ public interface SpecToModelCheckMappingService {
                                     ConnectionSpec connectionSpec,
                                     TableSpec tableSpec,
                                     ExecutionContext executionContext,
-                                    ProviderType providerType);
+                                    ProviderType providerType,
+                                    boolean canManageChecks);
 
     /**
      * Creates a simplistic model of every data quality check on table level or column level, divided into categories.
@@ -61,11 +63,13 @@ public interface SpecToModelCheckMappingService {
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, monitoring or partitioned check (for a specific timescale).
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
+     * @param canManageChecks The user is an operator and can run any operation.
      * @return Simplistic model of data quality checks' container.
      */
     CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                               ExecutionContext executionContext,
-                                              ProviderType providerType);
+                                              ProviderType providerType,
+                                              boolean canManageChecks);
 
     /**
      * Creates a list of fields to edit all values in the sensor parameters specification.
@@ -87,6 +91,7 @@ public interface SpecToModelCheckMappingService {
      * @param checkTarget               Check target.
      * @param checkType                 Check type (profiling, recurring, ...).
      * @param checkTimeScale            Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
+     * @param canManageChecks           The user is an operator and can run any operation.
      * @return Check model.
      */
     CheckModel createCheckModel(FieldInfo checkFieldInfo,
@@ -99,7 +104,8 @@ public interface SpecToModelCheckMappingService {
                                 ProviderType providerType,
                                 CheckTarget checkTarget,
                                 CheckType checkType,
-                                CheckTimeScale checkTimeScale);
+                                CheckTimeScale checkTimeScale,
+                                boolean canManageChecks);
 
     /**
      * Creates a list of fields to edit all values in the rule parameters specification.

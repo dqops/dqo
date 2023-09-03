@@ -53,8 +53,9 @@ public class CheckSpecFolderBasicModel {
      * @param fullCheckName the path of the check
      * @param isCustom The check has a custom definition.
      * @param isBuiltIn The check is provided (built-in) with DQO.
+     * @param canEdit The current user can edit the check.
      */
-    public void addCheck(String fullCheckName, boolean isCustom, boolean isBuiltIn) {
+    public void addCheck(String fullCheckName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {
 
         String[] checkFolders = fullCheckName.split("/");
         String checkName = checkFolders[checkFolders.length - 1];
@@ -81,6 +82,7 @@ public class CheckSpecFolderBasicModel {
             checkSpecBasicModel.setFullCheckName(fullCheckName);
             checkSpecBasicModel.setCustom(isCustom);
             checkSpecBasicModel.setBuiltIn(isBuiltIn);
+            checkSpecBasicModel.setCanEdit(canEdit);
             if (folderModel.checks == null) {
                 folderModel.checks = new ArrayList<>();
             }

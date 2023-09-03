@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
@@ -99,6 +100,8 @@ public class TableComparisonsController {
         }
 
         List<TableComparisonConfigurationModel> result = new LinkedList<>();
+        boolean canCompareTables = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
             if (checkType.isPresent() && checkType.get() != tableComparisonConfigurationSpec.getCheckType()) {
                 continue;
@@ -108,7 +111,8 @@ public class TableComparisonsController {
                 continue;
             }
 
-            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
+            TableComparisonConfigurationModel tableComparisonConfigurationModel =
+                    TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec, canCompareTables);
             result.add(tableComparisonConfigurationModel);
         }
 
@@ -149,7 +153,8 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
+        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(
+                tableComparisonConfigurationSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
     }
 
@@ -368,7 +373,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.profiling, null);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.profiling, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -411,7 +418,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -454,7 +463,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -497,7 +508,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -540,7 +553,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 

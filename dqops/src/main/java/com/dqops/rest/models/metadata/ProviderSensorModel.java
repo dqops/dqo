@@ -51,18 +51,26 @@ public class ProviderSensorModel {
     @JsonPropertyDescription("This is a DQO built-in provider sensor, whose parameters cannot be changed.")
     public boolean builtIn;
 
-    public ProviderSensorModel(){}
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public ProviderSensorModel() {}
 
     public ProviderSensorModel(ProviderType providerType,
                                ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
                                String sqlTemplate,
                                boolean custom,
-                               boolean builtIn) {
+                               boolean builtIn,
+                               boolean canEdit) {
         this.providerType = providerType;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplate = sqlTemplate;
         this.custom = custom;
         this.builtIn = builtIn;
+        this.canEdit = canEdit;
     }
 
     /**

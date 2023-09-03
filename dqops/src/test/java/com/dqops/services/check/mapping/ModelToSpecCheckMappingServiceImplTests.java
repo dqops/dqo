@@ -83,7 +83,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, null, null);
+                this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
         this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
     }
@@ -92,7 +92,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, null, null);
+                this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
         this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
     }
@@ -101,7 +101,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     void updateAllChecksSpec_whenChangesAppliedToDefaultProfilingObservabilityChecks_thenEnablesCheck() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingObservabilityChecksSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec.getTable(), null,
-                null, null, null, null);
+                null, null, null, null, true);
 
         QualityCategoryModel tableVolumeCategoryModel = uiModel.getCategories().stream()
                 .filter(cm -> cm.getCategory().equals("volume")).findFirst().get();

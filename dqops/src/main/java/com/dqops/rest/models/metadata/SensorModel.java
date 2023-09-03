@@ -51,7 +51,13 @@ public class SensorModel {
     private boolean custom;
 
     @JsonPropertyDescription("This is a DQO built-in sensor, whose parameters cannot be changed.")
-    public boolean builtIn;
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
 
     public SensorModel() {
     }

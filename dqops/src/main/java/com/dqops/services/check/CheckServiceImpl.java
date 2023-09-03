@@ -18,6 +18,7 @@ package com.dqops.services.check;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
@@ -161,10 +162,11 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Update checks configuration based on provided parameters.
      * @param parameters Parameters for creating the patches and updating.
+     * @param principal  User principal.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters) {
+    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal) {
         if (parameters == null
                 || parameters.getCheckSearchFilters() == null
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnectionName())
@@ -174,7 +176,7 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters(), principal);
         if (parameters.getSelectedTablesToColumns() != null) {
             for (AllChecksModel patch: patches) {
                 AllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);

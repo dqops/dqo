@@ -29,6 +29,7 @@ import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -160,8 +161,11 @@ public class TablesController {
                 .map(TableWrapper::getSpec)
                 .collect(Collectors.toList());
 
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
         Stream<TableBasicModel> modelStream = tableSpecs.stream()
-                .map(ts -> TableBasicModel.fromTableSpecificationForListEntry(connectionName, ts));
+                .map(ts -> TableBasicModel.fromTableSpecificationForListEntry(
+                        connectionName, ts, isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }
@@ -207,6 +211,7 @@ public class TablesController {
             setConnectionName(connectionWrapper.getName());
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setSpec(tableSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
@@ -249,7 +254,10 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableBasicModel tableBasicModel = TableBasicModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
+        TableBasicModel tableBasicModel = TableBasicModel.fromTableSpecification(
+                connectionWrapper.getName(), tableSpec,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(tableBasicModel), HttpStatus.OK); // 200
     }
@@ -291,7 +299,8 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
+        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(
+                connectionWrapper.getName(), tableSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(tablePartitioningModel), HttpStatus.OK); // 200
     }
@@ -800,7 +809,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                  new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -862,7 +872,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -924,7 +935,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -974,7 +986,8 @@ public class TablesController {
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -1026,7 +1039,8 @@ public class TablesController {
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -1077,7 +1091,8 @@ public class TablesController {
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -1145,7 +1160,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1214,7 +1230,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1283,7 +1300,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -1334,6 +1352,7 @@ public class TablesController {
         resultModel.setConnectionName(connectionName);
         resultModel.setTable(physicalTableName);
         resultModel.setStatistics(mostRecentStatisticsMetricsForTable.getMetrics());
+        resultModel.setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
@@ -1409,7 +1428,8 @@ public class TablesController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -1473,7 +1493,8 @@ public class TablesController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -1537,7 +1558,8 @@ public class TablesController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -1579,7 +1601,7 @@ public class TablesController {
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
                 connectionName, fullTableName, CheckType.profiling,
-                null, checkCategory.orElse(null), checkName.orElse(null));
+                null, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -1622,7 +1644,7 @@ public class TablesController {
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
                 connectionName, fullTableName, CheckType.monitoring,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
+                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -1665,7 +1687,7 @@ public class TablesController {
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
                 connectionName, fullTableName, CheckType.partitioned,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
+                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }

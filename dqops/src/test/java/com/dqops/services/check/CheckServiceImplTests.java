@@ -30,6 +30,8 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -389,7 +391,8 @@ public class CheckServiceImplTests extends BaseTest {
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -408,7 +411,7 @@ public class CheckServiceImplTests extends BaseTest {
         CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
         allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
@@ -433,7 +436,8 @@ public class CheckServiceImplTests extends BaseTest {
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -462,7 +466,7 @@ public class CheckServiceImplTests extends BaseTest {
         selectedTablesToColumns.put("tab2", selectedColumns2);
         allChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);

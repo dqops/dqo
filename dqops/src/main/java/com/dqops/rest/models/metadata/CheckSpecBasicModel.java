@@ -46,13 +46,19 @@ public class CheckSpecBasicModel {
      * True when the check is a custom check or is customized by the user.
      */
     @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
-    public boolean custom;
+    private boolean custom;
 
     /**
      * True when this check is provided with DQO as a built-in check.
      */
     @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
-    public boolean builtIn;
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
 
     public CheckSpecBasicModel() {
     }

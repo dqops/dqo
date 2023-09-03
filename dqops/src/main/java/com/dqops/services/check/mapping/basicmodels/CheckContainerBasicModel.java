@@ -35,4 +35,25 @@ import java.util.List;
 public class CheckContainerBasicModel {
     @JsonPropertyDescription("Simplistic list of all data quality checks.")
     private List<CheckBasicModel> checks = new ArrayList<>();
+
+    /**
+     * Boolean flag that decides if the current user can edit the check.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    public CheckContainerBasicModel() {
+    }
 }

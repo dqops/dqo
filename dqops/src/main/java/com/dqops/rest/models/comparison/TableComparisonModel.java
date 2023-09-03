@@ -28,7 +28,6 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -117,19 +116,39 @@ public class TableComparisonModel {
     private DeleteStoredDataQueueJobParameters compareTableCleanDataJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the table comparison.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the table comparison.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run comparison checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run comparison checks.")
+    private boolean canRunCompareChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a table comparison model, copying the configuration of all comparison checks on the table level and on the column level.
      * @param comparedTableSpec Source table specification (the compared table).
      * @param referenceTableSpec Reference table specification.
      * @param tableComparisonConfigurationName The table comparison name (the reference table configuration name).
      * @param checkType Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Check time scale for monitoring and partitioned checks.
+     * @param canCompareTables True if the user can edit, compare tables, delete data.
      * @return Table comparison mode.
      */
     public static TableComparisonModel fromTableSpec(TableSpec comparedTableSpec,
                                                      TableSpec referenceTableSpec,
                                                      String tableComparisonConfigurationName,
                                                      CheckType checkType,
-                                                     CheckTimeScale checkTimeScale) {
+                                                     CheckTimeScale checkTimeScale,
+                                                     boolean canCompareTables) {
         TableComparisonModel tableComparisonModel = new TableComparisonModel();
         HierarchyId comparedTableHierarchyId = comparedTableSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
@@ -146,6 +165,9 @@ public class TableComparisonModel {
         tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
         tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
         tableComparisonModel.referenceTable = new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName());
+        tableComparisonModel.setCanEdit(canCompareTables);
+        tableComparisonModel.setCanRunCompareChecks(canCompareTables);
+        tableComparisonModel.setCanDeleteData(canCompareTables);
 
         for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
             TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =

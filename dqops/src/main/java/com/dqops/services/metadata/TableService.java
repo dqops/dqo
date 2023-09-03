@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
@@ -53,6 +54,7 @@ public interface TableService {
      * @param checkTimeScale (Optional) Check time-scale.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
      */
     List<CheckTemplate> getCheckTemplates(String connectionName,
@@ -60,7 +62,8 @@ public interface TableService {
                                           CheckType checkType,
                                           CheckTimeScale checkTimeScale,
                                           String checkCategory,
-                                          String checkName);
+                                          String checkName,
+                                          DqoUserPrincipal principal);
 
     /**
      * Retrieves a UI friendly data quality profiling check configuration list on a requested table.
@@ -74,6 +77,7 @@ public interface TableService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     List<CheckConfigurationModel> getCheckConfigurationsOnTable(
@@ -86,7 +90,8 @@ public interface TableService {
             String checkCategory,
             String checkName,
             Boolean checkEnabled,
-            Boolean checkConfigured);
+            Boolean checkConfigured,
+            DqoUserPrincipal principal);
 
     /**
      * Deletes table from metadata and flushes user context.

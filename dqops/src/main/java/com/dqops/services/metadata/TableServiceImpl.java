@@ -24,6 +24,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -97,6 +98,7 @@ public class TableServiceImpl implements TableService {
      * @param checkTimeScale (Optional) Check time-scale.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
      */
     @Override
@@ -105,7 +107,8 @@ public class TableServiceImpl implements TableService {
                                                  CheckType checkType,
                                                  CheckTimeScale checkTimeScale,
                                                  String checkCategory,
-                                                 String checkName) {
+                                                 String checkName,
+                                                 DqoUserPrincipal principal) {
         if (Strings.isNullOrEmpty(connectionName)
                 || tableName == null
                 || checkType == null) {
@@ -126,7 +129,7 @@ public class TableServiceImpl implements TableService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
@@ -165,7 +168,8 @@ public class TableServiceImpl implements TableService {
                                                                        String checkCategory,
                                                                        String checkName,
                                                                        Boolean checkEnabled,
-                                                                       Boolean checkConfigured) {
+                                                                       Boolean checkConfigured,
+                                                                       DqoUserPrincipal principal) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
         filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
@@ -179,7 +183,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
+        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
     }
 
     /**

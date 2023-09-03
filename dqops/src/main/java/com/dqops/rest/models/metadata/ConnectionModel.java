@@ -48,4 +48,13 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Full connection specification, including all nested objects (but not a list of tables).")
     private ConnectionSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public ConnectionModel() {
+    }
 }

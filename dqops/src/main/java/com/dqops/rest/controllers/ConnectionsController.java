@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -95,8 +96,10 @@ public class ConnectionsController {
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
         Stream<ConnectionBasicModel> modelStream = connections.toList().stream()
-                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec()));
+                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }
@@ -132,6 +135,7 @@ public class ConnectionsController {
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setSpec(connectionSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
@@ -164,7 +168,10 @@ public class ConnectionsController {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionBasicModel connectionBasicModel = ConnectionBasicModel.fromConnectionSpecification(connectionName, connectionSpec);
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+        ConnectionBasicModel connectionBasicModel = ConnectionBasicModel.fromConnectionSpecification(
+                connectionName, connectionSpec, isEditor, isOperator);
 
         return new ResponseEntity<>(Mono.just(connectionBasicModel), HttpStatus.OK); // 200
     }
@@ -825,7 +832,7 @@ public class ConnectionsController {
 
         updatePatchParameters.getCheckSearchFilters().setConnectionName(connectionName);
         updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
-        checkService.updateAllChecksPatch(updatePatchParameters);
+        checkService.updateAllChecksPatch(updatePatchParameters, principal);
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }

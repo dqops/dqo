@@ -95,18 +95,46 @@ public class ColumnBasicModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the column.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the column.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a basic column model from a column specification by cherry-picking relevant fields.
      * This model is used for the column list screen and it has even less fields.
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnName        Column name.
      * @param columnSpec        Source column specification.
+     * @param isEditor          The current user has the editor permission.
+     * @param isOperator        The current user has the operator permission.
      * @return Basic column model.
      */
     public static ColumnBasicModel fromColumnSpecificationForListEntry(String connectionName,
                                                                        PhysicalTableName physicalTableName,
                                                                        String columnName,
-                                                                       ColumnSpec columnSpec) {
+                                                                       ColumnSpec columnSpec,
+                                                                       boolean isEditor,
+                                                                       boolean isOperator) {
         return new ColumnBasicModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
@@ -119,6 +147,11 @@ public class ColumnBasicModel {
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
             setHasAnyConfiguredMonitoringChecks(columnSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.partitioned));
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
+
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -180,12 +213,16 @@ public class ColumnBasicModel {
      * @param physicalTableName Physical table name.
      * @param columnName        Column name.
      * @param columnSpec        Source column specification.
+     * @param isEditor          The current user has the editor permission.
+     * @param isOperator        The current user has the operator permission.
      * @return Basic column model.
      */
     public static ColumnBasicModel fromColumnSpecification(String connectionName,
                                                            PhysicalTableName physicalTableName,
                                                            String columnName,
-                                                           ColumnSpec columnSpec) {
+                                                           ColumnSpec columnSpec,
+                                                           boolean isEditor,
+                                                           boolean isOperator) {
         return new ColumnBasicModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
@@ -198,6 +235,10 @@ public class ColumnBasicModel {
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
             setHasAnyConfiguredMonitoringChecks(columnSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.partitioned));
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
         }};
     }
 

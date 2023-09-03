@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -100,8 +101,10 @@ public class SchemasController {
                 .sorted()
                 .collect(Collectors.toList());
 
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
         Stream<SchemaModel> modelStream = schemaNameList.stream()
-                .map(s -> SchemaModel.fromSchemaNameStrings(connectionName, s));
+                .map(s -> SchemaModel.fromSchemaNameStrings(connectionName, s, isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
     }
@@ -166,7 +169,8 @@ public class SchemasController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -234,7 +238,8 @@ public class SchemasController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -302,7 +307,8 @@ public class SchemasController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -343,7 +349,7 @@ public class SchemasController {
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.profiling,
-                null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
+                null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -385,7 +391,7 @@ public class SchemasController {
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.monitoring,
-                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
+                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -427,7 +433,7 @@ public class SchemasController {
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.partitioned,
-                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
+                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }

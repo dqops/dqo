@@ -16,6 +16,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
@@ -114,6 +115,8 @@ public class SensorsController {
 
         SensorModel sensorModel = new SensorModel();
 
+        boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+
         dqoHomeSensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
             sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
             sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
@@ -125,7 +128,8 @@ public class SensorsController {
                             providerSensorWrapper.getSpec(),
                             providerSensorWrapper.getSqlTemplate(),
                             userHomeSensorDefinitionWrapperOptional.isPresent(),
-                            dqoHomeSensorDefinitionWrapperOptional.isPresent()))
+                            dqoHomeSensorDefinitionWrapperOptional.isPresent(),
+                            canEditDefinitions))
                     .collect(Collectors.toList());
             sensorModel.addProviderSensorModel(providerSensorBasicModelList);
         });
@@ -141,7 +145,8 @@ public class SensorsController {
                             providerSensorWrapper.getSpec(),
                             providerSensorWrapper.getSqlTemplate(),
                             userHomeSensorDefinitionWrapperOptional.isPresent(),
-                            dqoHomeSensorDefinitionWrapperOptional.isPresent()))
+                            dqoHomeSensorDefinitionWrapperOptional.isPresent(),
+                            canEditDefinitions))
                     .collect(Collectors.toList());
             sensorModel.addProviderSensorModel(providerSensorBasicModelList);
         });
@@ -374,7 +379,7 @@ public class SensorsController {
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
 
         SensorBasicFolderModel sensorFolderModel = new SensorBasicFolderModel();
-
+        boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
         dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
             SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper =
@@ -388,11 +393,11 @@ public class SensorsController {
                     ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
                     providerSensorBasicModel.setProviderType(providerType);
                     providerSensorBasicModel.setSensorSource(SensorDefinitionSource.BUILT_IN);
+                    providerSensorBasicModel.setCanEdit(canEditDefinitions);
                     providerSensorBasicModelList.add(providerSensorBasicModel);
-
                 }
             }
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.BUILT_IN);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.BUILT_IN, canEditDefinitions);
         });
 
         userHome.getSensors().forEach(sensorDefinitionWrapper -> {
@@ -402,11 +407,12 @@ public class SensorsController {
                 if (providerSensorDefinitionWrapper != null) {
                     providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
                     providerSensorBasicModel.setSensorSource(SensorDefinitionSource.CUSTOM);
+                    providerSensorBasicModel.setCanEdit(canEditDefinitions);
                 }
                 providerSensorBasicModelList.add(providerSensorBasicModel);
             });
 
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions);
         });
         return sensorFolderModel;
     }

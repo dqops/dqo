@@ -171,13 +171,43 @@ public class TableBasicModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
      * This model is used for the table list screen and it has even less fields.
      * @param connectionName Connection name to store in the model.
      * @param tableSpec      Source table specification.
+     * @param isEditor       The current user has the editor permission.
+     * @param isOperator     The current user has the operator permission.
      * @return Basic table model.
      */
-    public static TableBasicModel fromTableSpecificationForListEntry(String connectionName, TableSpec tableSpec) {
+    public static TableBasicModel fromTableSpecificationForListEntry(
+            String connectionName,
+            TableSpec tableSpec,
+            boolean isEditor,
+            boolean isOperator) {
         return new TableBasicModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
@@ -190,6 +220,10 @@ public class TableBasicModel {
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
             setHasAnyConfiguredMonitoringChecks(tableSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -230,9 +264,15 @@ public class TableBasicModel {
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
      * @param tableSpec      Source table specification.
+     * @param isEditor       The current user has the editor permission.
+     * @param isOperator     The current user has the operator permission.
      * @return Basic table model.
      */
-    public static TableBasicModel fromTableSpecification(String connectionName, TableSpec tableSpec) {
+    public static TableBasicModel fromTableSpecification(
+            String connectionName,
+            TableSpec tableSpec,
+            boolean isEditor,
+            boolean isOperator) {
         return new TableBasicModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
@@ -249,6 +289,10 @@ public class TableBasicModel {
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
             setHasAnyConfiguredMonitoringChecks(tableSpec.hasAnyChecksConfigured(CheckType.monitoring));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);

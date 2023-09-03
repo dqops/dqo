@@ -73,19 +73,27 @@ public class ColumnStatisticsModel {
     private StatisticsCollectorSearchFilters collectColumnStatisticsJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
      * Creates a column profile model from a column specification for a requested profile.
      * This model is used on a profiler summary screen.
      * @param physicalTableName Physical table name.
      * @param columnName        Column name.
      * @param columnSpec        Source column specification.
      * @param statisticsResultsForColumn List of column metrics.
+     * @param canRunStatisticsJob The current user can collect statistics.
      * @return Column statistics model.
      */
     public static ColumnStatisticsModel fromColumnSpecificationAndStatistic(String connectionName,
                                                                             PhysicalTableName physicalTableName,
                                                                             String columnName,
                                                                             ColumnSpec columnSpec,
-                                                                            StatisticsResultsForColumnModel statisticsResultsForColumn) {
+                                                                            StatisticsResultsForColumnModel statisticsResultsForColumn,
+                                                                            boolean canRunStatisticsJob) {
         return new ColumnStatisticsModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
@@ -94,6 +102,7 @@ public class ColumnStatisticsModel {
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
+            setCanCollectStatistics(canRunStatisticsJob);
             setStatistics(statisticsResultsForColumn != null ? statisticsResultsForColumn.getMetrics() : null);
             setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{

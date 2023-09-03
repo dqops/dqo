@@ -86,11 +86,32 @@ public class TableComparisonConfigurationModel {
     private List<TableComparisonGroupingColumnPairModel> groupingColumns = new ArrayList<>();
 
     /**
+     * Boolean flag that decides if the current user can update or delete the table comparison.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the table comparison.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run comparison checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run comparison checks.")
+    private boolean canRunCompareChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a basic model with the comparison from the comparison specification.
      * @param comparisonSpec Comparison specification.
+     * @param canCompareTables User can compare tables, edit the comparison definition, run comparison checks.
      * @return Table comparison model with the basic information.
      */
-    public static TableComparisonConfigurationModel fromTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
+    public static TableComparisonConfigurationModel fromTableComparisonSpec(
+            TableComparisonConfigurationSpec comparisonSpec,
+            boolean canCompareTables) {
         HierarchyId comparedTableHierarchyId = comparisonSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
             throw new DqoRuntimeException("Cannot map a detached comparison, because the connection and table name is unknown");
@@ -104,6 +125,9 @@ public class TableComparisonConfigurationModel {
         model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
         model.setCheckType(comparisonSpec.getCheckType());
         model.setTimeScale(comparisonSpec.getTimeScale());
+        model.setCanEdit(canCompareTables);
+        model.setCanRunCompareChecks(canCompareTables);
+        model.setCanDeleteData(canCompareTables);
 
         for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
             TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
