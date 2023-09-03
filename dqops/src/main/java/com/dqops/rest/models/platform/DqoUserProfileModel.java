@@ -17,14 +17,15 @@ package com.dqops.rest.models.platform;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
+import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
-import java.time.Instant;
 
 /**
  * The model that describes the current user and his access rights.
@@ -95,13 +96,98 @@ public class DqoUserProfileModel {
     private Integer jobsLimit;
 
     /**
+     * User role that limits possible operations that the current user can perform.
+     */
+    @JsonPropertyDescription("User role that limits possible operations that the current user can perform.")
+    private DqoUserRole accountRole;
+
+    /**
+     * User is the administrator of the account and can perform security related actions, such as managing users.
+     */
+    @JsonPropertyDescription("User is the administrator of the account and can perform security related actions, such as managing users.")
+    private boolean canManageAccount;
+
+    /**
+     * User can view any object and view all results.
+     */
+    @JsonPropertyDescription("User can view any object and view all results.")
+    private boolean canViewAnyObject;
+
+    /**
+     * User can start and stop the job scheduler.
+     */
+    @JsonPropertyDescription("User can start and stop the job scheduler.")
+    private boolean canManageScheduler;
+
+    /**
+     * User can cancel running jobs.
+     */
+    @JsonPropertyDescription("User can cancel running jobs.")
+    private boolean canCancelJobs;
+
+    /**
+     * User can run data quality checks.
+     */
+    @JsonPropertyDescription("User can run data quality checks.")
+    private boolean canRunChecks;
+
+    /**
+     * User can delete data quality results.
+     */
+    @JsonPropertyDescription("User can delete data quality results.")
+    private boolean canDeleteData;
+
+    /**
+     * User can collect statistics.
+     */
+    @JsonPropertyDescription("User can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * User can manage data sources: create connections, import tables, change the configuration of connections, tables, columns. Change any settings in the Data Sources section.
+     */
+    @JsonPropertyDescription("User can manage data sources: create connections, import tables, change the configuration of connections, tables, columns. Change any settings in the Data Sources section.")
+    private boolean canManageDataSources;
+
+    /**
+     * User can trigger the synchronization with DQO Cloud.
+     */
+    @JsonPropertyDescription("User can trigger the synchronization with DQO Cloud.")
+    private boolean canSynchronize;
+
+    /**
+     * User can edit comments on connections, tables, columns.
+     */
+    @JsonPropertyDescription("User can edit comments on connections, tables, columns.")
+    private boolean canEditComments;
+
+    /**
+     * User can edit labels on connections, tables, columns.
+     */
+    @JsonPropertyDescription("User can edit labels on connections, tables, columns.")
+    private boolean canEditLabels;
+
+    /**
+     * User can manage definitions of sensors, rules, checks and the default data quality check configuration that is applied on imported tables.
+     */
+    @JsonPropertyDescription("User can manage definitions of sensors, rules, checks and the default data quality check configuration that is applied on imported tables.")
+    private boolean canManageDefinitions;
+
+    /**
+     * User can define table comparison configurations and compare tables.
+     */
+    @JsonPropertyDescription("User can define table comparison configurations and compare tables.")
+    private boolean canCompareTables;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQO cloud api key.
      * @return User profile.
      */
-    public static DqoUserProfileModel fromApiKey(DqoCloudApiKey dqoCloudApiKey) {
+    public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
-            setUser(dqoCloudApiKey.getApiKeyPayload().getSubject());
+            setUser(principal.getName());
+            setAccountRole(principal.getAccountRole());
             setTenant(dqoCloudApiKey.getApiKeyPayload().getTenantId() + "/" + dqoCloudApiKey.getApiKeyPayload().getTenantGroup());
             setLicenseType(dqoCloudApiKey.getApiKeyPayload().getLicenseType());
             setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt() != null ? dqoCloudApiKey.getApiKeyPayload().getExpiresAt().toString() : null);
@@ -111,6 +197,20 @@ public class DqoUserProfileModel {
             setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+
+            setCanManageAccount(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
+            setCanViewAnyObject(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
+            setCanManageScheduler(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setCanCancelJobs(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanRunChecks(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanDeleteData(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanManageDataSources(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setCanSynchronize(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanEditComments(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
+            setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
+            setCanManageDefinitions(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         }};
         return model;
     }

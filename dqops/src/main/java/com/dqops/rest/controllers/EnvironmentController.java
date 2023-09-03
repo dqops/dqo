@@ -135,7 +135,7 @@ public class EnvironmentController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKey(apiKey);
+        DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
         return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
     }
 }
