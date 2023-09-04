@@ -47,6 +47,10 @@ const tabs = [
   {
     label: 'MySQL',
     value: ProviderSensorModelProviderTypeEnum.mysql
+  },
+  {
+    label: "Oracle",
+    value: ProviderSensorModelProviderTypeEnum.oracle
   }
 ];
 
