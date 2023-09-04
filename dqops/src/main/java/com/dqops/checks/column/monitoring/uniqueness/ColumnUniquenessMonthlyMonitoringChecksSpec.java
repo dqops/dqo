@@ -20,6 +20,7 @@ import com.dqops.checks.column.checkspecs.uniqueness.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -68,13 +69,14 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
 
     @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnDuplicatePercentCheckSpec monthlyDuplicatePercent;
-
+    @JsonProperty("monthly_anomaly_differencing_distinct_count_30_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
     private ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec monthlyAnomalyDifferencingDistinctCount30Days;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
     private ColumnAnomalyDifferencingDistinctCountCheckSpec monthlyAnomalyDifferencingDistinctCount;
 
+    @JsonProperty("monthly_anomaly_stationary_distinct_percent_30_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
     private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec monthlyAnomalyStationaryDistinctPercent30Days;
 
@@ -84,9 +86,11 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctCountCheckSpec monthlyChangeDistinctCount;
 
+    @JsonProperty("monthly_change_distinct_count_since_7_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.")
     private ColumnChangeDistinctCountSince7DaysCheckSpec monthlyChangeDistinctCountSince7Days;
 
+    @JsonProperty("monthly_change_distinct_count_since_30_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.")
     private ColumnChangeDistinctCountSince30DaysCheckSpec monthlyChangeDistinctCountSince30Days;
 
@@ -96,9 +100,11 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctPercentCheckSpec monthlyChangeDistinctPercent;
 
+    @JsonProperty("monthly_change_distinct_percent_since_7_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.")
     private ColumnChangeDistinctPercentSince7DaysCheckSpec monthlyChangeDistinctPercentSince7Days;
 
+    @JsonProperty("monthly_change_distinct_percent_since_30_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.")
     private ColumnChangeDistinctPercentSince30DaysCheckSpec monthlyChangeDistinctPercentSince30Days;
 
