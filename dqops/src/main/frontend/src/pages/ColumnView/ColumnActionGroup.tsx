@@ -58,6 +58,7 @@ const ColumnActionGroup = ({
           variant="outlined"
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
       {shouldDelete && (
@@ -67,6 +68,7 @@ const ColumnActionGroup = ({
           variant="outlined"
           label="Delete Column"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
 
@@ -94,7 +96,8 @@ const ColumnActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          
         />
       )}
       <ConfirmDialog

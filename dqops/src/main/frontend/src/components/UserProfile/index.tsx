@@ -45,8 +45,6 @@ export default function UserProfile({ name, email }: UserProfile) {
     }
   };
 
-  console.log(userProfile)
-
   useEffect(() => {
     fetchUserProfile().then(
       () => userProfile?.license_type === 'FREE' && setLicenseFreeFunc()
@@ -152,7 +150,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             rel="noreferrer"
             className="block text-gray-700 mb-3"
           >
-            <Button label="Manage account" color="primary" />
+            <Button label="Manage account" color="primary" disabled={userProfile.can_manage_account}/>
           </a>
         </div>
       </PopoverContent>
