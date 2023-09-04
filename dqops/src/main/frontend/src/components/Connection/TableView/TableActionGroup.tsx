@@ -122,9 +122,10 @@ const TableActionGroup = ({
       )}
       {createDataStream && (
         <Button
-          label="Create Data Stream"
+          label="Create Data Grouping"
           color="primary"
           onClick={createDataStreamFunc}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
       {maxToCreateDataStream && (
