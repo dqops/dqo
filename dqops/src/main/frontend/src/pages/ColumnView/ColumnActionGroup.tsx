@@ -7,6 +7,8 @@ import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
 import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -34,6 +36,7 @@ const ColumnActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -42,6 +45,8 @@ const ColumnActionGroup = ({
       column ?? ''
     );
   };
+
+  console.log(userProfile)
 
   const columnPath = `${connection}.${schema}.${table}.${column}`
   return (
@@ -78,7 +83,7 @@ const ColumnActionGroup = ({
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
             )}
             onClick={onCollectStatistics}
-            disabled={runningStatistics}
+            disabled={runningStatistics || userProfile.can_collect_statistics === false}
           />
         </div>
       ) : (

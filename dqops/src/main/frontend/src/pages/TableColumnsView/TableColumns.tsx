@@ -106,7 +106,7 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
       ...prevStates,
@@ -690,6 +690,7 @@ const TableColumns = ({
             <div>
               <IconButton
                 size="sm"
+                disabled={userProfile.can_collect_statistics === false}
                 className={
                   filteredColumns?.find((x) => x === column.nameOfCol)
                     ? 'group bg-gray-400 ml-1.5'
@@ -707,6 +708,7 @@ const TableColumns = ({
               <IconButton
                 size="sm"
                 className="group bg-teal-500 ml-3"
+                disabled={userProfile.can_manage_data_sources === false}
                 onClick={() => {
                   rewriteData(column.columnHash);
                 }}

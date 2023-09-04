@@ -43,7 +43,7 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -207,6 +207,7 @@ const TableColumnsView = () => {
               collectStatistics();
             }}
             loading={loadingJob}
+            disabled={userProfile.can_collect_statistics === false}
           />
         </div>
       </div>
