@@ -173,7 +173,7 @@ const LeftView = () => {
       <div
         className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-20 top-16"
         onMouseDown={startResizing}
-        style={{ left: sidebarWidth }}
+        style={{ left: sidebarWidth, userSelect: "none" }}
       />
     </div>
   );
