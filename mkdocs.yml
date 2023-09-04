@@ -38,10 +38,10 @@ nav:
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
-          - Percentage of valid USA zipcodes: "examples/data-validity/percentage-of-valid-usa-zipcodes.md"
-          - Percentage of valid emails: "examples/data-validity/percentage-of-valid-emails.md"
+          - Percentage of rows containing USA zipcodes: "examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md"
+          - Number of invalid emails: "examples/data-validity/number-of-invalid-emails.md"
           - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
-          - Percentage of valid IP4 address: "examples/data-validity/percentage-of-valid-IP4-address.md"
+          - Number of invalid IP4 address: "examples/data-validity/number-of-invalid-IP4-address.md"
           - Percentage of strings matching date regex: "examples/data-validity/percentage-of-strings-matching-date-regex.md"
           - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
           - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"

@@ -16,6 +16,7 @@ Here is a table with some sample customer data. When working with a large datase
 However, it is important to ensure that these tables are available and actually exist. This can be achieved using a table availability check, which helps ensure that the necessary data is readily available for analysis.
 
 Typical table availability issues are:
+
 - the table does not exist because it has been deleted,
 - the table is corrupted and cannot be queried,
 - the database is down or is unreachable,

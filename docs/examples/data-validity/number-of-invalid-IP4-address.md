@@ -1,29 +1,29 @@
-# Percentage of valid IP4 address
+# Number of invalid IP4 address
 
-Verifies that the percentage of valid IP4 address in a column does not fall below the minimum accepted percentage.
+Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.
 
 **PROBLEM**
 
-Here is a table with some sample customer data. In this example, we will monitor the `ip4` column and verify that each IP4 address is in the correct format.
+Here is a table with some sample customer data. In this example, we will monitor the `ip4` column.
 
-The `ip4` column contains IP4 address values. We want to verify the percent of valid IP4 address values on `ip4` column.
+The `ip4` column contains IP4 address values. We want to verify the number of invalid IP4 address values on `ip4` column.
 
 **SOLUTION**
 
-We will verify the data using profiling [valid_ip4_address_percent](../../checks/column/pii/valid-ip4-address-percent.md) column check.
-Our goal is to verify if the percentage of valid IP4 address values in `ip4` column does not fall below set thresholds.
+We will verify the data using profiling [string_invalid_ip4_address_count](../../checks/column/strings/string-invalid-ip4-address-count.md) column check.
+Our goal is to verify if the number of invalid IP4 address values in `ip4` column does not exceed set thresholds.
 
-In this example, we will set three minimum percentage thresholds levels for the check:
+In this example, we will set three maximum count thresholds levels for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- warning: 0
+- error: 5
+- fatal: 10
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the percentage of IP4 address values falls below 99.0%, a warning alert will be triggered.
+If the number of IP4 address values exceed 0, a warning alert will be triggered.
 
 ## Data structure
 
@@ -56,13 +56,13 @@ The `ip4` column of interest contains both valid and invalid IP4 address values.
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three minimum percentage thresholds levels for the check:
+In this example, we have set three maximum count thresholds levels for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- warning: 0
+- error: 5
+- fatal: 10
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `valid_ip4_address_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `string_invalid_ip4_address_count` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
@@ -79,19 +79,19 @@ spec:
         column_type: STRING
         nullable: true
       profiling_checks:
-        pii:
-          profile_valid_ip4_address_percent:
+        strings:
+          profile_string_invalid_ip4_address_count:
             comments:
-            - date: 2023-05-11T08:28:27.484+00:00
+            - date: 2023-09-01T09:56:57.736
               comment_by: user
-              comment: "\"In this example, values in \"ip4\" column are verified whether\
-                \ the percentage of IP4 address values reaches the indicated thresholds.\""
+              comment: "In this example, values in \"ip4\" column are verified whether\
+                \ the number of IP4 address values does not exceed the indicated thresholds."
             warning:
-              min_percent: 99.0
+              max_count: 0
             error:
-              min_percent: 98.0
+              max_count: 5
             fatal:
-              min_percent: 95.0
+              max_count: 10
     result:
       type_snapshot:
         column_type: INT64
@@ -107,7 +107,7 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-valid-ip4-address-percent-check.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-invalid-IP4-address-check.png)
 
 1. Go to **Profiling** section.
 
@@ -116,16 +116,16 @@ To execute the check prepared in the example using the [graphical interface](../
 3. Select **Profiling Checks** tab.
 
 4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/valid-ip4-address-percent-run-check.png)
+   ![Run check](https://dqops.com/docs/images/examples/invalid-IP4-address-run-check.png)
 
 5. Review the results by opening the **Check details** button.
-   ![Check details](https://dqops.com/docs/images/examples/valid-ip4-address-percent-check-details.png)
+   ![Check details](https://dqops.com/docs/images/examples/invalid-IP4-address-check-details.png)
 
 6. You should see the results as the one below.
-   The actual value in this example is 50, which is below the minimum threshold level set in the warning (99.0%).
-   The check gives a fatal error (notice the red square on the left of the name of the check).
+   The actual value in this example is 10, which is above the maximum threshold level set in the warning (0).
+   The check gives an error (notice the orange square on the left of the name of the check).
 
-   ![Valid-ip4-address-percent check results](https://dqops.com/docs/images/examples/valid-ip4-address-percent-check-results.png)
+   ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/invalid-IP4-address-check-results.png)
 
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
@@ -134,7 +134,7 @@ To execute the check prepared in the example using the [graphical interface](../
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
    the results displayed on the Current column status by dimension dashboard showing results by connection, schema, dimension and data group.
 
-   ![Valid-ip4-address-percent check on Current column status by dimension dashboard](https://dqops.com/docs/images/examples/valid-ip4-address-percent-on-current-column-status-by-dimension-dashboard.png)
+   ![String-invalid-ip4-address-count check on Current column status by dimension dashboard](https://dqops.com/docs/images/examples/invalid-ip4-address-on-current-column-status-by-dimension-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
@@ -146,13 +146,12 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of the valid IP4 address values in the `ip4` column is below 95.0% and the check raised fatal error.
+The number of the invalid IP4 address values in the `ip4` column is above 0 and the check raised an error.
 ```
-Check evaluation summary per table:
 +-----------+------------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 |Connection |Table                                                 |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
 +-----------+------------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|ip4_percent|dqo_ai_test_data.contains_ip4_test_8451858895743974825|1     |1             |0            |0       |0     |1           |0               |
+|ip4_percent|dqo_ai_test_data.contains_ip4_test_8451858895743974825|1     |1             |0            |0       |1     |0           |0               |
 +-----------+------------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
@@ -169,35 +168,33 @@ In the debug mode you can view the SQL query (sensor) executed in the check.
 Executing SQL on connection ip4_percent (bigquery)
 SQL to be executed on the connection:
 SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`ip4` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    SUM(
+        CASE
+            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`ip4` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                THEN 0
+            ELSE 1
+        END
+    ) AS actual_value,
+    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
 FROM `dqo-ai-testing`.`dqo_ai_test_data`.`contains_ip4_test_8451858895743974825` AS analyzed_table
 GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 50.0%, which is below the minimal
-threshold level set in the warning (99.0%).
+You can also see the results returned by the sensor. The actual value in this example is 10, which is above the maximum
+threshold level set in the warning (0).
 
 ```
+
 **************************************************
-Finished executing a sensor for a check valid_ip4_address_percent on the table dqo_ai_test_data.contains_ip4_test_8451858895743974825 using a sensor definition column/pii/valid_ip4_address_percent, sensor result count: 1
+Finished executing a sensor for a check profile_string_invalid_ip4_address_count on the table dqo_ai_test_data.contains_ip4_test_8451858895743974825 using a sensor definition column/strings/string_invalid_ip4_address_count, sensor result count: 1
 
 Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|50.0        |2023-05-11T08:28:47.548Z|2023-05-11T08:28:47.548Z|
-+------------+------------------------+------------------------+
++------------+-----------+--------------------+
+|actual_value|time_period|time_period_utc     |
++------------+-----------+--------------------+
+|10          |2023-09-01 |2023-09-01T00:00:00Z|
++------------+-----------+--------------------+
 **************************************************
 ```
