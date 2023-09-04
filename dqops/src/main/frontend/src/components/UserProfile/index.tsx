@@ -5,7 +5,7 @@ import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleProfile, setLicenseFree } from '../../redux/actions/job.actions';
+import { toggleProfile, setLicenseFree, setUserProfile } from '../../redux/actions/job.actions';
 import {
   Popover,
   PopoverHandler,
@@ -22,7 +22,7 @@ interface UserProfile {
 }
 
 export default function UserProfile({ name, email }: UserProfile) {
-  const { isProfileOpen } = useSelector((state: IRootState) => state.job || {});
+  const { isProfileOpen, userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
 
@@ -34,17 +34,18 @@ export default function UserProfile({ name, email }: UserProfile) {
     dispatch(setLicenseFree(true));
   };
 
-  const [userProfile, setUserProfile] = useState<DqoUserProfileModel>();
 
   const fetchUserProfile = async () => {
     try {
       const res: AxiosResponse<DqoUserProfileModel> =
         await EnviromentApiClient.getUserProfile();
-      setUserProfile(res.data);
+      dispatch(setUserProfile(res.data))
     } catch (err) {
       console.error(err);
     }
   };
+
+  console.log(userProfile)
 
   useEffect(() => {
     fetchUserProfile().then(
