@@ -20,6 +20,7 @@ import com.dqops.checks.column.checkspecs.uniqueness.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -69,12 +70,14 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.")
     private ColumnDuplicatePercentCheckSpec profileDuplicatePercent;
 
+    @JsonProperty("profile_anomaly_differencing_distinct_count_30_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
     private ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec profileAnomalyDifferencingDistinctCount30Days;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
     private ColumnAnomalyDifferencingDistinctCountCheckSpec profileAnomalyDifferencingDistinctCount;
 
+    @JsonProperty("profile_anomaly_stationary_distinct_percent_30_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
     private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec profileAnomalyStationaryDistinctPercent30Days;
 
@@ -84,9 +87,11 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctCountCheckSpec profileChangeDistinctCount;
 
+    @JsonProperty("profile_change_distinct_count_since_7_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.")
     private ColumnChangeDistinctCountSince7DaysCheckSpec profileChangeDistinctCountSince7Days;
 
+    @JsonProperty("profile_change_distinct_count_since_30_days")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.")
     private ColumnChangeDistinctCountSince30DaysCheckSpec profileChangeDistinctCountSince30Days;
 
@@ -96,9 +101,11 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnChangeDistinctPercentCheckSpec profileChangeDistinctPercent;
 
+    @JsonProperty("profile_change_distinct_percent_since_7_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.")
     private ColumnChangeDistinctPercentSince7DaysCheckSpec profileChangeDistinctPercentSince7Days;
 
+    @JsonProperty("profile_change_distinct_percent_since_30_days")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.")
     private ColumnChangeDistinctPercentSince30DaysCheckSpec profileChangeDistinctPercentSince30Days;
 
@@ -217,7 +224,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
      * Returns a distinct percent value anomaly 30 days check specification.
      * @return Distinct percent value anomaly 30 days check specification.
      */
-    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getProfileAnomalyDifferencingDistinctPercent30Days() {
+    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getProfileAnomalyStationaryDistinctPercent30Days() {
         return profileAnomalyStationaryDistinctPercent30Days;
     }
 
