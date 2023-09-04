@@ -46,6 +46,7 @@ type EditProfilingReferenceTableProps = {
   getNewTableComparison: () => void;
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
+  canUserCompareTables?: boolean
 };
 
 export const EditProfilingReferenceTable = ({
@@ -57,7 +58,8 @@ export const EditProfilingReferenceTable = ({
   isCreating,
   getNewTableComparison,
   onChangeSelectedReference,
-  listOfExistingReferences
+  listOfExistingReferences,
+  canUserCompareTables
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -558,6 +560,7 @@ export const EditProfilingReferenceTable = ({
           onChangeRefTableChanged={onChangeRefTableChanged}
           refTableChanged={refTableChanged}
           listOfExistingReferences={listOfExistingReferences}
+          canUserCompareTables={canUserCompareTables}
         />
       </div>
       {reference &&

@@ -50,6 +50,7 @@ type EditReferenceTableProps = {
   onChangeRefTableChanged: (arg: boolean) => void
   refTableChanged: boolean
   listOfExistingReferences: Array<string | undefined>
+  canUserCompareTables?: boolean
 };
 
 const EditReferenceTable = ({
@@ -69,7 +70,8 @@ const EditReferenceTable = ({
   isDataDeleted,
   onChangeRefTableChanged,
   refTableChanged,
-  listOfExistingReferences
+  listOfExistingReferences,
+  canUserCompareTables
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -662,7 +664,7 @@ const EditReferenceTable = ({
               color="primary"
               variant="contained"
               onClick={saveRun}
-              disabled={disabledDeleting || deletingData || disabled}
+              disabled={disabledDeleting || deletingData || disabled || canUserCompareTables === false}
             />
           )}
           <Button

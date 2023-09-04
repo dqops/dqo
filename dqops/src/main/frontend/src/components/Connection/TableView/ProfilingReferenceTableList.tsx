@@ -12,12 +12,14 @@ type ProfilingReferenceTableListProps = {
   onCreate: () => void;
   selectReference: (reference: TableComparisonModel) => void;
   onEdit: (reference: TableComparisonModel) => void;
+  canUserCreateTableComparison?: boolean;
 };
 
 export const ProfilingReferenceTableList = ({
   references,
   onCreate,
-  selectReference
+  selectReference,
+  canUserCreateTableComparison
 }: ProfilingReferenceTableListProps) => {
   const {
     connection,
@@ -96,6 +98,7 @@ export const ProfilingReferenceTableList = ({
         label="New table comparison configuration"
         className="text-sm"
         onClick={onCreate}
+        disabled={canUserCreateTableComparison === false}
       />
       <ConfirmDialog
         open={isOpen}
