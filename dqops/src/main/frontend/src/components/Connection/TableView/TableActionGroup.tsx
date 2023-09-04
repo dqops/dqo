@@ -59,7 +59,7 @@ const TableActionGroup = ({
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -107,6 +107,7 @@ const TableActionGroup = ({
           variant="outlined"
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
       {shouldDelete && (
@@ -116,6 +117,7 @@ const TableActionGroup = ({
           variant="outlined"
           label="Delete Table"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
       {createDataStream && (
@@ -130,9 +132,10 @@ const TableActionGroup = ({
           {' '}
           (You can choose max 9 columns)
           <Button
-            label="Create Data Stream"
+            label="Create Data Grouping"
             color="secondary"
             className="text-black "
+            disabled={userProfile.can_manage_data_sources === false}
           />
         </div>
       )}
@@ -173,6 +176,7 @@ const TableActionGroup = ({
           }
           onClick={collectStatistics}
           loading={loadingJob}
+          disabled={userProfile.can_collect_statistics === false}
         />
       )}
       {addSaveButton && (
@@ -183,7 +187,7 @@ const TableActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources === false}
         />
       )}
 
