@@ -15,6 +15,7 @@ import { CheckTypes } from '../../shared/routes';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { IRootState } from '../../redux/reducers';
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -48,6 +49,8 @@ const CheckCategoriesView = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);
+
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
     if (category.checks?.some((x) => x.configured === true)) {
@@ -171,6 +174,7 @@ const CheckCategoriesView = ({
             category={category.category}
             comparisonName={category.comparison_name}
             isDefaultEditing={isDefaultEditing}
+            canUserRunChecks={userProfile.can_run_checks}
           />
         ))}
       <DeleteOnlyDataDialog

@@ -47,6 +47,7 @@ interface ICheckListItemProps {
   checkedCopyUI?: boolean;
   comparisonName?: string;
   isDefaultEditing?: boolean;
+  canUserRunChecks?: boolean;
 }
 
 const CheckListItem = ({
@@ -61,7 +62,8 @@ const CheckListItem = ({
   checkedCopyUI,
   category,
   comparisonName,
-  isDefaultEditing
+  isDefaultEditing,
+  canUserRunChecks
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
@@ -409,8 +411,8 @@ const CheckListItem = ({
                   <div>
                     <SvgIcon
                       name="play"
-                      className="text-primary h-5 cursor-pointer"
-                      onClick={onRunCheck}
+                      className={clsx("h-5 ", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
+                      onClick={canUserRunChecks!==false ? onRunCheck : undefined}
                     />
                   </div>
                 </Tooltip>
