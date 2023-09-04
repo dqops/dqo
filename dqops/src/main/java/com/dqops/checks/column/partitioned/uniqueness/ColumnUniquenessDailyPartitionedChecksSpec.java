@@ -16,10 +16,7 @@
 package com.dqops.checks.column.partitioned.uniqueness;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
+import com.dqops.checks.column.checkspecs.uniqueness.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,20 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
             put("daily_partition_distinct_percent", o -> o.dailyPartitionDistinctPercent);
             put("daily_partition_duplicate_count", o -> o.dailyPartitionDuplicateCount);
             put("daily_partition_duplicate_percent", o -> o.dailyPartitionDuplicatePercent);
+
+            put("daily_partition_anomaly_stationary_distinct_count_30_days", o -> o.dailyPartitionAnomalyStationaryDistinctCount30Days);
+            put("daily_partition_anomaly_stationary_distinct_count", o -> o.dailyPartitionAnomalyStationaryDistinctCount);
+            put("daily_partition_anomaly_stationary_distinct_percent_30_days", o -> o.dailyPartitionAnomalyStationaryDistinctPercent30Days);
+            put("daily_partition_anomaly_stationary_distinct_percent", o -> o.dailyPartitionAnomalyStationaryDistinctPercent);
+            put("daily_partition_change_distinct_count", o -> o.dailyPartitionChangeDistinctCount);
+            put("daily_partition_change_distinct_count_since_7_days", o -> o.dailyPartitionChangeDistinctCountSince7Days);
+            put("daily_partition_change_distinct_count_since_30_days", o -> o.dailyPartitionChangeDistinctCountSince30Days);
+            put("daily_partition_change_distinct_count_since_yesterday", o -> o.dailyPartitionChangeDistinctCountSinceYesterday);
+            put("daily_partition_change_distinct_percent", o -> o.dailyPartitionChangeDistinctPercent);
+            put("daily_partition_change_distinct_percent_since_7_days", o -> o.dailyPartitionChangeDistinctPercentSince7Days);
+            put("daily_partition_change_distinct_percent_since_30_days", o -> o.dailyPartitionChangeDistinctPercentSince30Days);
+            put("daily_partition_change_distinct_percent_since_yesterday", o -> o.dailyPartitionChangeDistinctPercentSinceYesterday);
+
         }
     };
 
@@ -57,6 +68,42 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnDuplicatePercentCheckSpec dailyPartitionDuplicatePercent;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
+    private ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec dailyPartitionAnomalyStationaryDistinctCount30Days;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
+    private ColumnAnomalyStationaryPartitionDistinctCountCheckSpec dailyPartitionAnomalyStationaryDistinctCount;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
+    private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec dailyPartitionAnomalyStationaryDistinctPercent30Days;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
+    private ColumnAnomalyStationaryDistinctPercentCheckSpec dailyPartitionAnomalyStationaryDistinctPercent;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
+    private ColumnChangeDistinctCountCheckSpec dailyPartitionChangeDistinctCount;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.")
+    private ColumnChangeDistinctCountSince7DaysCheckSpec dailyPartitionChangeDistinctCountSince7Days;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.")
+    private ColumnChangeDistinctCountSince30DaysCheckSpec dailyPartitionChangeDistinctCountSince30Days;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.")
+    private ColumnChangeDistinctCountSinceYesterdayCheckSpec dailyPartitionChangeDistinctCountSinceYesterday;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.")
+    private ColumnChangeDistinctPercentCheckSpec dailyPartitionChangeDistinctPercent;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.")
+    private ColumnChangeDistinctPercentSince7DaysCheckSpec dailyPartitionChangeDistinctPercentSince7Days;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.")
+    private ColumnChangeDistinctPercentSince30DaysCheckSpec dailyPartitionChangeDistinctPercentSince30Days;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.")
+    private ColumnChangeDistinctPercentSinceYesterdayCheckSpec dailyPartitionChangeDistinctPercentSinceYesterday;
 
     /**
      * Returns a distinct values count check specification.
@@ -128,6 +175,223 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.dailyPartitionDuplicatePercent, dailyPartitionDuplicatePercent));
         this.dailyPartitionDuplicatePercent = dailyPartitionDuplicatePercent;
         propagateHierarchyIdToField(dailyPartitionDuplicatePercent, "daily_partition_duplicate_percent");
+    }
+
+
+    /**
+     * Returns a distinct count value anomaly 30 days check specification.
+     * @return Distinct count value anomaly 30 days check specification.
+     */
+    public ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec getDailyPartitionAnomalyDifferencingDistinctCount30Days() {
+        return dailyPartitionAnomalyStationaryDistinctCount30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value anomaly 30 days check.
+     * @param dailyPartitionAnomalyStationaryDistinctCount30Days Distinct count value anomaly 30 days check specification.
+     */
+    public void setDailyPartitionAnomalyStationaryDistinctCount30Days(ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec dailyPartitionAnomalyStationaryDistinctCount30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionAnomalyStationaryDistinctCount30Days, dailyPartitionAnomalyStationaryDistinctCount30Days));
+        this.dailyPartitionAnomalyStationaryDistinctCount30Days = dailyPartitionAnomalyStationaryDistinctCount30Days;
+        propagateHierarchyIdToField(dailyPartitionAnomalyStationaryDistinctCount30Days, "daily_partition_anomaly_stationary_distinct_count_30_days");
+    }
+
+    /**
+     * Returns a distinct count value anomaly check specification.
+     * @return Distinct count value anomaly check specification.
+     */
+    public ColumnAnomalyStationaryPartitionDistinctCountCheckSpec getDailyPartitionAnomalyStationaryDistinctCount() {
+        return dailyPartitionAnomalyStationaryDistinctCount;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value anomaly check.
+     * @param dailyPartitionAnomalyStationaryDistinctCount Distinct count value anomaly check specification.
+     */
+    public void setDailyPartitionAnomalyStationaryDistinctCount(ColumnAnomalyStationaryPartitionDistinctCountCheckSpec dailyPartitionAnomalyStationaryDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionAnomalyStationaryDistinctCount, dailyPartitionAnomalyStationaryDistinctCount));
+        this.dailyPartitionAnomalyStationaryDistinctCount = dailyPartitionAnomalyStationaryDistinctCount;
+        propagateHierarchyIdToField(dailyPartitionAnomalyStationaryDistinctCount, "daily_partition_anomaly_stationary_distinct_count");
+    }
+
+    /**
+     * Returns a distinct percent value anomaly 30 days check specification.
+     * @return Distinct percent value anomaly 30 days check specification.
+     */
+    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getDailyPartitionAnomalyStationaryDistinctPercent30Days() {
+        return dailyPartitionAnomalyStationaryDistinctPercent30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct percent value anomaly 30 days check.
+     * @param dailyPartitionAnomalyStationaryDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
+     */
+    public void setDailyPartitionAnomalyStationaryDistinctPercent30Days(ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec dailyPartitionAnomalyStationaryDistinctPercent30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionAnomalyStationaryDistinctPercent30Days, dailyPartitionAnomalyStationaryDistinctPercent30Days));
+        this.dailyPartitionAnomalyStationaryDistinctPercent30Days = dailyPartitionAnomalyStationaryDistinctPercent30Days;
+        propagateHierarchyIdToField(dailyPartitionAnomalyStationaryDistinctPercent30Days, "daily_partition_anomaly_stationary_distinct_percent_30_days");
+    }
+
+    /**
+     * Returns a distinct percent value anomaly check specification.
+     * @return Distinct percent value anomaly check specification.
+     */
+    public ColumnAnomalyStationaryDistinctPercentCheckSpec getDailyPartitionAnomalyStationaryDistinctPercent() {
+        return dailyPartitionAnomalyStationaryDistinctPercent;
+    }
+
+    /**
+     * Sets a new specification of a distinct percent value anomaly check.
+     * @param dailyPartitionAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
+     */
+    public void setDailyPartitionAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec dailyPartitionAnomalyStationaryDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionAnomalyStationaryDistinctPercent, dailyPartitionAnomalyStationaryDistinctPercent));
+        this.dailyPartitionAnomalyStationaryDistinctPercent = dailyPartitionAnomalyStationaryDistinctPercent;
+        propagateHierarchyIdToField(dailyPartitionAnomalyStationaryDistinctPercent, "daily_partition_anomaly_stationary_distinct_percent");
+    }
+
+    /**
+     * Returns the distinct count value change check specification.
+     * @return Distinct count value change check specification.
+     */
+    public ColumnChangeDistinctCountCheckSpec getDailyPartitionChangeDistinctCount() {
+        return dailyPartitionChangeDistinctCount;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change check.
+     * @param dailyPartitionChangeDistinctCount Distinct count value change check specification.
+     */
+    public void setDailyPartitionChangeDistinctCount(ColumnChangeDistinctCountCheckSpec dailyPartitionChangeDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctCount, dailyPartitionChangeDistinctCount));
+        this.dailyPartitionChangeDistinctCount = dailyPartitionChangeDistinctCount;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctCount, "daily_partition_change_distinct_count");
+    }
+
+    /**
+     * Returns the distinct count value change since 7 days check specification.
+     * @return Distinct count value change since 7 days check specification.
+     */
+    public ColumnChangeDistinctCountSince7DaysCheckSpec getDailyPartitionChangeDistinctCountSince7Days() {
+        return dailyPartitionChangeDistinctCountSince7Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change since 7 days check.
+     * @param dailyPartitionChangeDistinctCountSince7Days Distinct count value change since 7 days check specification.
+     */
+    public void setDailyPartitionChangeDistinctCountSince7Days(ColumnChangeDistinctCountSince7DaysCheckSpec dailyPartitionChangeDistinctCountSince7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctCountSince7Days, dailyPartitionChangeDistinctCountSince7Days));
+        this.dailyPartitionChangeDistinctCountSince7Days = dailyPartitionChangeDistinctCountSince7Days;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctCountSince7Days, "daily_partition_change_distinct_count_since_7_days");
+    }
+
+    /**
+     * Returns the distinct count value change since 30 days check specification.
+     * @return Distinct count value change since 30 days check specification.
+     */
+    public ColumnChangeDistinctCountSince30DaysCheckSpec getDailyPartitionChangeDistinctCountSince30Days() {
+        return dailyPartitionChangeDistinctCountSince30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change since 30 days check.
+     * @param dailyPartitionChangeDistinctCountSince30Days Distinct count value change since 30 days check specification.
+     */
+    public void setDailyPartitionChangeDistinctCountSince30Days(ColumnChangeDistinctCountSince30DaysCheckSpec dailyPartitionChangeDistinctCountSince30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctCountSince30Days, dailyPartitionChangeDistinctCountSince30Days));
+        this.dailyPartitionChangeDistinctCountSince30Days = dailyPartitionChangeDistinctCountSince30Days;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctCountSince30Days, "daily_partition_change_distinct_count_since_30_days");
+    }
+
+    /**
+     * Returns the distinct count value change since yesterday check specification.
+     * @return Distinct count value change since yesterday check specification.
+     */
+    public ColumnChangeDistinctCountSinceYesterdayCheckSpec getDailyPartitionChangeDistinctCountSinceYesterday() {
+        return dailyPartitionChangeDistinctCountSinceYesterday;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change since yesterday check .
+     * @param dailyPartitionChangeDistinctCountSinceYesterday Distinct count value change since yesterday check specification.
+     */
+    public void setDailyPartitionChangeDistinctCountSinceYesterday(ColumnChangeDistinctCountSinceYesterdayCheckSpec dailyPartitionChangeDistinctCountSinceYesterday) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctCountSinceYesterday, dailyPartitionChangeDistinctCountSinceYesterday));
+        this.dailyPartitionChangeDistinctCountSinceYesterday = dailyPartitionChangeDistinctCountSinceYesterday;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctCountSinceYesterday, "daily_partition_change_distinct_count_since_yesterday");
+    }
+
+    /**
+     * Returns the distinct percent value change check specification.
+     * @return Distinct percent value change check specification.
+     */
+    public ColumnChangeDistinctPercentCheckSpec getDailyPartitionChangeDistinctPercent() {
+        return dailyPartitionChangeDistinctPercent;
+    }
+
+    /**
+     * Sets a new specification of a distinct percent value change check.
+     * @param dailyPartitionChangeDistinctPercent Distinct percent value change check specification.
+     */
+    public void setDailyPartitionChangeDistinctPercent(ColumnChangeDistinctPercentCheckSpec dailyPartitionChangeDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctPercent, dailyPartitionChangeDistinctPercent));
+        this.dailyPartitionChangeDistinctPercent = dailyPartitionChangeDistinctPercent;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctPercent, "daily_partition_change_distinct_percent");
+    }
+
+    /**
+     * Returns the distinct percent value change since 7 days check specification.
+     * @return Distinct count percent change since 7 days check specification.
+     */
+    public ColumnChangeDistinctPercentSince7DaysCheckSpec getDailyPartitionChangeDistinctPercentSince7Days() {
+        return dailyPartitionChangeDistinctPercentSince7Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count percent change since 7 days check.
+     * @param dailyPartitionChangeDistinctPercentSince7Days Distinct count percent change since 7 days check specification.
+     */
+    public void setDailyPartitionChangeDistinctPercentSince7Days(ColumnChangeDistinctPercentSince7DaysCheckSpec dailyPartitionChangeDistinctPercentSince7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctPercentSince7Days, dailyPartitionChangeDistinctPercentSince7Days));
+        this.dailyPartitionChangeDistinctPercentSince7Days = dailyPartitionChangeDistinctPercentSince7Days;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctPercentSince7Days, "daily_partition_change_distinct_percent_since_7_days");
+    }
+
+    /**
+     * Returns the distinct percent value change since 30 days check specification.
+     * @return Distinct count percent change since 30 days check specification.
+     */
+    public ColumnChangeDistinctPercentSince30DaysCheckSpec getDailyPartitionChangeDistinctPercentSince30Days() {
+        return dailyPartitionChangeDistinctPercentSince30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count percent change since 30 days check specification.
+     * @param dailyPartitionChangeDistinctPercentSince30Days Distinct count percent change since 30 days check specification.
+     */
+    public void setDailyPartitionChangeDistinctPercentSince30Days(ColumnChangeDistinctPercentSince30DaysCheckSpec dailyPartitionChangeDistinctPercentSince30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctPercentSince30Days, dailyPartitionChangeDistinctPercentSince30Days));
+        this.dailyPartitionChangeDistinctPercentSince30Days = dailyPartitionChangeDistinctPercentSince30Days;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctPercentSince30Days, "daily_partition_change_distinct_percent_since_30_days");
+    }
+
+    /**
+     * Returns the distinct percent value change since yesterday check specification.
+     * @return Distinct count percent change since yesterday check specification.
+     */
+    public ColumnChangeDistinctPercentSinceYesterdayCheckSpec getDailyPartitionChangeDistinctPercentSinceYesterday() {
+        return dailyPartitionChangeDistinctPercentSinceYesterday;
+    }
+
+    /**
+     * Sets a new specification of a distinct count percent change since yesterday check specification.
+     * @param dailyPartitionChangeDistinctPercentSinceYesterday Distinct count percent change since yesterday check specification.
+     */
+    public void setDailyPartitionChangeDistinctPercentSinceYesterday(ColumnChangeDistinctPercentSinceYesterdayCheckSpec dailyPartitionChangeDistinctPercentSinceYesterday) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionChangeDistinctPercentSinceYesterday, dailyPartitionChangeDistinctPercentSinceYesterday));
+        this.dailyPartitionChangeDistinctPercentSinceYesterday = dailyPartitionChangeDistinctPercentSinceYesterday;
+        propagateHierarchyIdToField(dailyPartitionChangeDistinctPercentSinceYesterday, "daily_partition_change_distinct_percent_since_yesterday");
     }
 
     /**
