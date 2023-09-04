@@ -83,7 +83,7 @@ const setActiveTabState = (
   action: Action,
   data: Record<string, unknown>
 ) => {
-  const newState = state ? Object.assign({} , state) : state;
+  const newState = state ? structuredClone(state) : state;
   const activeTab = action?.activeTab || newState[action.checkType]?.activeTab;
 
   return {
