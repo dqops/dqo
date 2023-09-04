@@ -19,7 +19,7 @@ const AdvisorConfirmDialog = ({
     <div>
       <Dialog open={open} handler={onClose}>
         <DialogBody className="pt-10 pb-2 px-8">
-          <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
+          <div className="text-2xl text-gray-700 text-center whitespace-normal">
             Not all configuration actions were performed on a connection, do you want to close the advisor?
           </div>
         </DialogBody>
