@@ -1,6 +1,6 @@
-# Percentage of valid USA zipcodes
+# Percentage of rows containing USA zipcodes
 
-Verifies that the percentage of valid USA zip code in a column does not fall below the minimum accepted percentage.
+Calculates the  percentage of rows that contains USA zipcodes values in a column.
 
 **PROBLEM**
 
@@ -9,25 +9,25 @@ Verifies that the percentage of valid USA zip code in a column does not fall bel
 What started as police non-emergency line for the City of Austin has become a robust Citywide Information Center
 where ambassadors are available to answer residents’ concerns 24 hours a day, 7 days a week, and 365 days a year.
 
-The `incident_zip` column contains USA zipcode data. We want to verify the percent of valid USA zipcode on `incident_zip` column.
+The `incident_zip` column contains USA zipcode data. We want to verify the percentage of rows that contains USA zipcode values on `incident_zip` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
-[valid_usa_zipcode_percent](../../checks/column/pii/valid-usa-zipcode-percent.md) column check.
-Our goal is to verify if the percentage of valid USA zipcode values in the `incident_zip` column does not fall below the setup thresholds.
+[contains_usa_zipcode_percent](../../checks/column/pii/contains-usa-zipcode-percent.md) column check.
+Our goal is to verify if the percentage of rows containing USA zipcode values in the `incident_zip` column does not exceed the setup thresholds.
 
-In this example, we will set three minimum percentage thresholds levels for the check:
+In this example, we will set three maximum percentage thresholds levels for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- warning: 10.0%
+- error: 25.0%
+- fatal: 35.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the percentage of zipcode values falls below 99.0%, a warning alert will be triggered.
+If the percentage of zipcode values exceed 10.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -50,13 +50,13 @@ The `incident_zip` column of interest contains valid USA zipcode values.
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three minimum percentage thresholds levels for the check:
+In this example, we have set three maximum percentage thresholds levels for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- warning: 10.0%
+- error: 25.0%
+- fatal: 35.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `valid_usa_zipcode_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `contains_usa_zipcode_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
@@ -74,19 +74,19 @@ spec:
         nullable: true
       profiling_checks:
         pii:
-          profile_valid_usa_zipcode_percent:
+          profile_contains_usa_zipcode_percent:
             comments:
-              - date: 2023-04-14T09:06:29.764+00:00
-                comment_by: user
-                comment: In this example, values in "incident_zip" column are verified
-                  whether the percentage of USA zip-code values reaches the indicated
-                  thresholds.
+            - date: 2023-08-30T11:25:25.292
+              comment_by: user
+              comment: "In this example, values in \"incident_zip\" column are verified\
+                \ whether the percentage of USA zipcode values does not exceed the\
+                \ indicated thresholds."
             warning:
-              min_percent: 99.0
+              max_percent: 10.0
             error:
-              min_percent: 98.0
+              max_percent: 25.0
             fatal:
-              min_percent: 95.0
+              max_percent: 35.0
     county:
       type_snapshot:
         column_type: STRING
@@ -110,7 +110,7 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-valid-usa-zipcode-percent-check.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-contains-usa-zipcode-percent.png)
 
 1. Go to **Profiling** section.
 
@@ -119,16 +119,16 @@ To execute the check prepared in the example using the [graphical interface](../
 3. Select **Profiling Checks** tab.
 
 4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/valid-usa-zipcode-percent-run-check.png)
+   ![Run check](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-run-check.png)
 
 5. Review the results by opening the **Check details** button.
-   ![Check details](https://dqops.com/docs/images/examples/valid-usa-zipcode-percent-check-details.png)
+   ![Check details](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-check-details.png)
 
 6. You should see the results as the one below.
-   The actual value in this example is 98, which is below the minimum threshold level set in the warning (99.0%).
-   The check gives a warning (notice the yellow square on the left of the name of the check).
+   The actual value in this example is 98, which is above the maximum threshold level set in the warning (10.0%).
+   The check gives a fatal error (notice the red square on the left of the name of the check).
 
-   ![Valid-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/valid-usa-zipcode-percent-check-results.png)
+   ![Contains-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-check-results.png)
 
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
@@ -137,7 +137,7 @@ To execute the check prepared in the example using the [graphical interface](../
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
    the results displayed on the Daily tests per column dashboard showing results by connections, schemas, tables, data groups and checks executed per column and day of month.
 
-   ![Valid-usa-zipcode-percent check results on Daily tests per column dashboard](https://dqops.com/docs/images/examples/valid-usa-zipcode-percent-check-results-on-daily-tests-per-column-dashboard.png)
+   ![Contains-usa-zipcode-percent check results on Daily tests per column dashboard](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-check-results-on-daily-tests-per-column-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
@@ -149,13 +149,13 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of the valid USA zipcode values in the `incident_zip` column is below 99.0% and the check raised a warning.
+The percentage of the USA zipcode values in the `incident_zip` column is above 10.0% and the check raised a fatal error.
 ```
 Check evaluation summary per table:
 +----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 |Connection|Table                          |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
 +----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|austin_311|austin_311.311_service_requests|1     |1             |1            |1       |0     |0           |0               |
+|austin_311|austin_311.311_service_requests|1     |1             |0            |0       |0     |1           |0               |
 +----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
@@ -173,36 +173,36 @@ Executing SQL on connection austin_311 (bigquery)
 SQL to be executed on the connection:
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN 100.0
+        WHEN COUNT(*) = 0 THEN 0.0
         ELSE 100.0 * SUM(
             CASE
                 WHEN REGEXP_CONTAINS(
                     CAST(analyzed_table.`incident_zip` AS STRING),
-                    r"^[0-9]{5}(?:-[0-9]{4})?$"
+                    r"[0-9]{5}(?:-[0-9]{4})?"
                 ) THEN 1
                 ELSE 0
             END
         ) / COUNT(*)
     END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
 FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
 GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 98.89%, which is below the minimal
-threshold level set in the warning (99.0%).
+You can also see the results returned by the sensor. The actual value in this example is 98%, which is above the maximum
+threshold level set in the warning (10.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check valid_usa_zipcode_percent on the table austin_311.311_service_requests using a sensor definition column/pii/valid_usa_zipcode_percent, sensor result count: 1
+Finished executing a sensor for a check profile_contains_usa_zipcode_percent on the table austin_311.311_service_requests using a sensor definition column/pii/contains_usa_zipcode_percent, sensor result count: 1
 
 Results returned by the sensor:
-+----------------+------------------------+------------------------+
-|actual_value    |time_period             |time_period_utc         |
-+----------------+------------------------+------------------------+
-|98.8902793912375|2023-04-25T13:28:04.147Z|2023-04-25T13:28:04.147Z|
-+----------------+------------------------+------------------------+
++-----------------+-----------+--------------------+
+|actual_value     |time_period|time_period_utc     |
++-----------------+-----------+--------------------+
+|98.94633469908392|2023-08-01 |2023-08-01T00:00:00Z|
++-----------------+-----------+--------------------+
 **************************************************
 ```

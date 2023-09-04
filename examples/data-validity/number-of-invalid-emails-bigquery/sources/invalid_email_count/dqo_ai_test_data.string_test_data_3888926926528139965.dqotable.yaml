@@ -1,0 +1,605 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count: {}
+        daily_row_count_change:
+          warning:
+            max_percent: 10.0
+        daily_row_count_anomaly_differencing_30_days:
+          warning:
+            anomaly_percent: 1.0
+      availability:
+        daily_table_availability:
+          warning:
+            max_failures: 0
+      schema:
+        daily_column_count_changed:
+          warning: {}
+        daily_column_list_changed:
+          warning: {}
+        daily_column_list_or_order_changed:
+          warning: {}
+        daily_column_types_changed:
+          warning: {}
+  columns:
+    id:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    email:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        strings:
+          profile_string_invalid_email_count:
+            warning:
+              max_count: 0
+            error:
+              max_count: 10
+            fatal:
+              max_count: 15
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    email_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    surrounded_by_whitespace:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    surrounded_by_whitespace_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    null_placeholder:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    null_placeholder_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    boolean_placeholder:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    boolean_placeholder_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    empty_percent:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    empty_percent_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    range_numeric:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    range_integers:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          anomaly:
+            daily_mean_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_sum_anomaly_differencing:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
+    boolean_type_placeholder:
+      type_snapshot:
+        column_type: BOOL
+        nullable: true
+      profiling_checks:
+        nulls:
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+          profile_nulls_percent_anomaly_stationary_30_days:
+            warning:
+              anomaly_percent: 1.0
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+            daily_nulls_percent_anomaly_stationary_30_days:
+              warning:
+                anomaly_percent: 1.0
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
