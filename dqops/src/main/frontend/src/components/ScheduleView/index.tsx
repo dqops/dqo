@@ -201,7 +201,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
             <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className="px-4 py-2 text-sm">
+            <td className={clsx("px-4 py-2 text-sm", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
