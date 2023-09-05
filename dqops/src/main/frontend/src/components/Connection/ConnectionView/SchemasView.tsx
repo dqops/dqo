@@ -60,7 +60,7 @@ const SchemasView = () => {
                   label="Import tables"
                   color="primary"
                   onClick={() => onImportTables(item)}
-                  disabled={userProfile.can_manage_data_sources === false}
+                  disabled={userProfile.can_manage_data_sources !== true}
                 />
               </td>
             </tr>
@@ -74,7 +74,7 @@ const SchemasView = () => {
           label="Import more schemas"
           className="mt-4"
           onClick={goToSchemas}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
     </div>

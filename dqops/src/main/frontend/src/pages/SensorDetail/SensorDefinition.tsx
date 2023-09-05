@@ -6,6 +6,8 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import RuleFields from '../../components/Sensors/RuleFields';
 import RuleParameters from '../../components/Sensors/RuleParameters';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 type SensorDefinitionProps = {
   sensor: SensorModel;
@@ -13,6 +15,9 @@ type SensorDefinitionProps = {
 
 export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
   const dispatch = useActionDispatch();
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const onChange = (obj: Partial<SensorModel>) => {
     dispatch(
@@ -50,6 +55,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                 }
               })
             }
+            disabled={userProfile.can_manage_definitions === false}
           />
         </div>
         <div className="flex gap-4 text-sm items-center mb-4">
@@ -66,13 +72,14 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                 }
               })
             }
+            disabled={userProfile.can_manage_definitions === false}
           />
         </div>
       </div>
 
       <SectionWrapper title="Sensor Fields">
         <RuleFields
-          isReadOnly={sensor?.built_in}
+          isReadOnly={sensor?.built_in || userProfile.can_manage_definitions === false}
           fields={sensor?.sensor_definition_spec?.fields || []}
           onChange={(fields) =>
             onChange({
@@ -96,6 +103,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
               }
             })
           }
+          canUserEdit={userProfile.can_manage_definitions}
         />
       </SectionWrapper>
     </div>

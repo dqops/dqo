@@ -10,6 +10,9 @@ import Button from "../Button";
 import Input from "../Input";
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface ICheckSettingsTabProps {
   check?: CheckModel;
@@ -22,6 +25,9 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
   const history = useHistory()
   const dispatch = useActionDispatch();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   useEffect(() => {
     if(isDefaultEditing !== true){
@@ -72,7 +78,7 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
 
   return (
     <div>
-      <div className="">
+      <div className={clsx("", userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
         <table className="w-full">
           <tbody>
             <tr>

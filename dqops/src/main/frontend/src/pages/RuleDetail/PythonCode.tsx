@@ -5,6 +5,8 @@ import { setUpdatedRule } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { StreamLanguage } from '@codemirror/language';
 import { python } from '@codemirror/legacy-modes/mode/python';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 type PythonCodeProps = {
   rule: RuleModel;
@@ -12,6 +14,9 @@ type PythonCodeProps = {
 
 const PythonCode = ({ rule }: PythonCodeProps) => {
   const dispatch = useActionDispatch();
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const onChange = useCallback((value: string) => {
     dispatch(
@@ -31,6 +36,7 @@ const PythonCode = ({ rule }: PythonCodeProps) => {
         value={rule?.rule_python_module_content}
         onChange={onChange}
         extensions={[StreamLanguage.define(python)]}
+        readOnly={userProfile.can_manage_definitions === false}
       />
     </div>
   );

@@ -29,6 +29,8 @@ import OracleConnection from "../../Dashboard/DatabaseConnection/OracleConnectio
 import MySQLConnection from "../../Dashboard/DatabaseConnection/MySQLConnection";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -40,6 +42,9 @@ const ConnectionDetail = () => {
     isUpdatedConnectionBasic?: boolean;
     isUpdating?: boolean;
   } = useSelector(getFirstLevelState(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
@@ -112,7 +117,7 @@ const ConnectionDetail = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className={clsx("p-4",userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
@@ -218,7 +223,7 @@ const ConnectionDetail = () => {
           variant="outlined"
           label="Test Connection"
           onClick={onTestConnection}
-          disabled={isTesting}
+          disabled={isTesting || userProfile.can_manage_data_sources===false}
         />
       </div>
       <ErrorModal

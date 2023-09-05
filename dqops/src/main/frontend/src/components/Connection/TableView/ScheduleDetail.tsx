@@ -38,7 +38,7 @@ const pageTabs = [
   },
 ]
 
-const ScheduleDetail = () => {
+const ScheduleDetail = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
   const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
@@ -100,7 +100,7 @@ const ScheduleDetail = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} canUserEdit={canUserEdit}/>
     </div>
   );
 };

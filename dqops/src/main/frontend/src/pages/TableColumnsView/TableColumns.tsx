@@ -708,7 +708,7 @@ const TableColumns = ({
               <IconButton
                 size="sm"
                 className="group bg-teal-500 ml-3"
-                disabled={userProfile.can_manage_data_sources === false}
+                disabled={userProfile.can_manage_data_sources !== true}
                 onClick={() => {
                   rewriteData(column.columnHash);
                 }}
