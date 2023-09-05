@@ -3,6 +3,8 @@ import LabelItem from './LabelItem';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface ILabelsViewProps {
   labels: string[];
@@ -11,6 +13,8 @@ interface ILabelsViewProps {
 }
 
 const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const onChangeLabel = (key: number, value: string) => {
     onChange(labels.map((label, index) => (key === index ? value : label)));
   };
@@ -58,6 +62,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
               idx={index}
               onChange={onChangeLabel}
               onRemove={onRemoveLabel}
+              canUserEditLabel={userProfile.can_edit_labels}
             />
           ))}
           <tr>
@@ -72,7 +77,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
             {hasAdd && (
               <td className="px-8 max-w-34 min-w-34 py-2">
                 <div className="flex justify-center">
-                  <IconButton size="sm" className="bg-teal-500" onClick={onAdd}>
+                  <IconButton size="sm" className="bg-teal-500" onClick={onAdd} disabled={userProfile.can_edit_labels === false}>
                     <SvgIcon name="add" className="w-4" />
                   </IconButton>
                 </div>

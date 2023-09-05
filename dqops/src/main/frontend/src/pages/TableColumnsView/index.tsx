@@ -43,7 +43,7 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -154,16 +154,17 @@ const TableColumnsView = () => {
         <div className="flex items-center gap-x-2 justify-center">
           {selected !== 0 && selected <= 9 && (
             <Button
-              label="Create Data Stream"
+              label="Create Data Grouping"
               color="primary"
               onClick={postDataStream}
+              disabled={userProfile.can_manage_data_sources === false}
             />
           )}
           {selected > 9 && (
             <div className="flex items-center gap-x-2 justify-center text-red-500">
               (You can choose max 9 columns)
               <Button
-                label="Create Data Stream"
+                label="Create Data Grouping"
                 color="secondary"
                 className="text-black "
               />
@@ -207,6 +208,7 @@ const TableColumnsView = () => {
               collectStatistics();
             }}
             loading={loadingJob}
+            disabled={userProfile.can_collect_statistics === false}
           />
         </div>
       </div>

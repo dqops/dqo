@@ -21,6 +21,7 @@ import {
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobQueueInitialSnapshotModel,
+  DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
 import moment from 'moment';
@@ -48,6 +49,7 @@ export interface IJobsState {
   advisorJobId: number;
   isCronScheduled: boolean;
   isLicenseFree: boolean;
+  userProfile: DqoUserProfileModel;
 }
 
 const initialState: IJobsState = {
@@ -68,7 +70,8 @@ const initialState: IJobsState = {
   advisorListener: false,
   advisorJobId: 0,
   isCronScheduled: true,
-  isLicenseFree: false
+  isLicenseFree: false,
+  userProfile: {}
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -242,6 +245,12 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         isLicenseFree: action.isLicenseFree
       };
+    }
+    case JOB_ACTION.SET_USER_PROFILE: {
+      return {
+        ...state,
+        userProfile: action.userProfile
+      }
     }
     default:
       return state;

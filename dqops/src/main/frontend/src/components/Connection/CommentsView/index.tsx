@@ -5,6 +5,8 @@ import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import { CommentSpec } from '../../../api';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface ICommentsViewProps {
   comments: CommentSpec[];
@@ -25,6 +27,8 @@ const CommentsView = ({
   text,
   setText
 }: ICommentsViewProps) => {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const onAdd = () => {
     onChange([
       ...comments,
@@ -88,7 +92,7 @@ const CommentsView = ({
             : ''}
         </tbody>
       </table>
-      <div className="flex items-center py-2">
+      <div className={clsx("flex items-center py-2", userProfile.can_edit_comments === false ? "pointer-events-none cursor-not-allowed" : "")}>
         <div className="flex-1 pr-4">
           <Input
             className="h-10 focus:!ring-0 focus:!border"

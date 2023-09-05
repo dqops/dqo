@@ -58,7 +58,7 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId } =
+  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId, userProfile } =
     useSelector((state: IRootState) => state.job);
 
   const onClick = (newCheckTypes: CheckTypes) => () => {

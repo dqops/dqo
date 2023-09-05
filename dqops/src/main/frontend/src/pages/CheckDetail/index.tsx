@@ -31,6 +31,9 @@ export const SensorDetail = () => {
   const {tabs, activeTab } = useSelector(
     (state: IRootState) => state.definition
   );
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)
@@ -174,7 +177,7 @@ export const SensorDetail = () => {
             variant="contained"
             label={isCreating === true ? 'Create' : 'Update'}
             className="w-40 !h-10"
-            disabled={!isUpdated}
+            disabled={!isUpdated || userProfile.can_manage_definitions === false}
             onClick={onCreateUpdateCheck}
             loading={isUpdating}
           />

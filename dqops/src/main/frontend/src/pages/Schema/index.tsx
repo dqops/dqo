@@ -12,6 +12,8 @@ import { SchemaTables } from './SchemaTables';
 import { MultiChecks } from './MultiChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 const SchemaPage = () => {
   const {
@@ -29,7 +31,9 @@ const SchemaPage = () => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();
-
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const history = useHistory();
 
   const tabs = useMemo(
@@ -91,6 +95,7 @@ const SchemaPage = () => {
             variant="outlined"
             label="Import more tables"
             onClick={onImportMoreTables}
+            disabled={userProfile.can_manage_data_sources === false}
           />
 
           {isSourceScreen && (
@@ -100,6 +105,7 @@ const SchemaPage = () => {
               variant="outlined"
               label="Add Table"
               onClick={() => setAddTableDialogOpen(true)}
+              disabled={userProfile.can_manage_data_sources === false}
             />
           )}
         </div>

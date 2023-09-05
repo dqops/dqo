@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DqoUserProfileModel } from '../../api';
 import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleProfile, setLicenseFree } from '../../redux/actions/job.actions';
+import { toggleProfile, setLicenseFree, setUserProfile } from '../../redux/actions/job.actions';
 import {
   Popover,
   PopoverHandler,
@@ -22,7 +22,7 @@ interface UserProfile {
 }
 
 export default function UserProfile({ name, email }: UserProfile) {
-  const { isProfileOpen } = useSelector((state: IRootState) => state.job || {});
+  const { isProfileOpen, userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
 
@@ -34,13 +34,12 @@ export default function UserProfile({ name, email }: UserProfile) {
     dispatch(setLicenseFree(true));
   };
 
-  const [userProfile, setUserProfile] = useState<DqoUserProfileModel>();
 
   const fetchUserProfile = async () => {
     try {
       const res: AxiosResponse<DqoUserProfileModel> =
         await EnviromentApiClient.getUserProfile();
-      setUserProfile(res.data);
+      dispatch(setUserProfile(res.data))
     } catch (err) {
       console.error(err);
     }
@@ -151,7 +150,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             rel="noreferrer"
             className="block text-gray-700 mb-3"
           >
-            <Button label="Manage account" color="primary" />
+            <Button label="Manage account" color="primary" disabled={userProfile.can_manage_account === false}/>
           </a>
         </div>
       </PopoverContent>

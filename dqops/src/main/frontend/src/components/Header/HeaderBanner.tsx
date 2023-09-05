@@ -34,7 +34,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [scheduleConfigured, setScheduleConfigured] = useState(false);
   const [isCollected, setIsCollected] = useState(false);
   const [isProfilingChecked, setIsProfilingChecked] = useState(false);
-  const { advisorObject } = useSelector((state: IRootState) => state.job);
+  const { advisorObject, userProfile } = useSelector((state: IRootState) => state.job);
 
   const collectStatistics = () => {
     setIsCollected(true);
@@ -110,6 +110,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
                 label="Collect statistics"
                 className="text-sm px-2 w-40"
                 onClick={isCollected ? undefined : collectStatistics}
+                disabled={userProfile.can_collect_statistics === false}
               />
 
               <div className="pr-4 flex items-center">
@@ -132,6 +133,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
                 label="Run profiling checks"
                 className="text-sm px-2 w-40"
                 onClick={isProfilingChecked ? undefined : runProfilingChecks}
+                disabled={userProfile.can_run_checks === false}
               />
 
               <div className="pr-4 flex items-center">

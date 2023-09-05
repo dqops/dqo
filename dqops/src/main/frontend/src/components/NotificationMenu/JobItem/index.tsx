@@ -17,6 +17,7 @@ import JobChild from '../JobChild';
 import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
+import clsx from 'clsx';
 
 interface jobInterface {
   errorMessage?: string | undefined;
@@ -33,10 +34,12 @@ interface jobInterface {
 
 const JobItem = ({
   job,
-  notifnumber
+  notifnumber,
+  canUserCancelJobs
 }: {
   job: jobInterface;
   notifnumber?: number;
+  canUserCancelJobs?: boolean
 }) => {
   const dispatch = useActionDispatch();
 
@@ -115,7 +118,7 @@ const JobItem = ({
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
-              <div
+              <div className={clsx(canUserCancelJobs === false ? "pointer-events-none cursor-not-allowed" : "")}
                 onClick={() =>
                   cancelJob(job.jobId.jobId ? Number(job.jobId?.jobId) : 0)
                 }

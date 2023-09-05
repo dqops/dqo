@@ -7,6 +7,8 @@ import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
 import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -34,6 +36,7 @@ const ColumnActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -53,6 +56,7 @@ const ColumnActionGroup = ({
           variant="outlined"
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
       {shouldDelete && (
@@ -62,6 +66,7 @@ const ColumnActionGroup = ({
           variant="outlined"
           label="Delete Column"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       )}
 
@@ -78,7 +83,7 @@ const ColumnActionGroup = ({
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
             )}
             onClick={onCollectStatistics}
-            disabled={runningStatistics}
+            disabled={runningStatistics || userProfile.can_collect_statistics === false}
           />
         </div>
       ) : (
@@ -89,7 +94,8 @@ const ColumnActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          
         />
       )}
       <ConfirmDialog

@@ -2,12 +2,14 @@ import React from 'react';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
+import clsx from 'clsx';
 
 interface ILabelItemProps {
   idx: number;
   label: string;
   onChange: (key: number, value: string) => void;
   onRemove: (key: number) => void;
+  canUserEditLabel?: boolean
 }
 
 const LabelItem = ({
@@ -15,9 +17,10 @@ const LabelItem = ({
   label,
   onChange,
   onRemove,
+  canUserEditLabel
 }: ILabelItemProps) => {
   return (
-    <tr>
+    <tr className={clsx(canUserEditLabel === false ? "pointer-events-none cursor-not-allowed" : "")}>
       <td className="pr-4 min-w-40 py-2">
         <div>
           <Input
@@ -35,6 +38,7 @@ const LabelItem = ({
             size="sm"
             onClick={() => onRemove(idx)}
             className="!shadow-none"
+            disabled={canUserEditLabel === false}
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
