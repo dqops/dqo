@@ -5,6 +5,8 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
 import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -26,6 +28,8 @@ const ConnectionActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
 
   const removeConnection = async () => {
     await ConnectionApiClient.deleteConnection(
@@ -50,6 +54,7 @@ const ConnectionActionGroup = ({
             color="primary"
             label="Add Schema"
             onClick={() => setAddSchemaDialogOpen(true)}
+            disabled={userProfile.can_manage_data_sources === false}
           />
           <Button
             className="!h-10"
@@ -57,6 +62,7 @@ const ConnectionActionGroup = ({
             color="primary"
             label="Delete Connection"
             onClick={() => setIsOpen(true)}
+            disabled={userProfile.can_manage_data_sources === false}
           />
           <Button
             className="!h-10"
@@ -64,6 +70,7 @@ const ConnectionActionGroup = ({
             color="primary"
             variant="outlined"
             onClick={() => goToSchemas()}
+            disabled={userProfile.can_manage_data_sources === false}
           />
         </>
       ) : (
@@ -74,6 +81,7 @@ const ConnectionActionGroup = ({
             color="primary"
             variant="outlined"
             onClick={() => goToSchemas()}
+            disabled={userProfile.can_manage_data_sources === false}
           />
         ) : null
       )}
@@ -86,7 +94,8 @@ const ConnectionActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          
         />
       )}
       <ConfirmDialog

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DqoUserProfileModel } from '../../api';
 import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
@@ -150,7 +150,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             rel="noreferrer"
             className="block text-gray-700 mb-3"
           >
-            <Button label="Manage account" color="primary" disabled={userProfile.can_manage_account}/>
+            <Button label="Manage account" color="primary" disabled={userProfile.can_manage_account === false}/>
           </a>
         </div>
       </PopoverContent>

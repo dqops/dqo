@@ -24,7 +24,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
 
-  const { isCronScheduled } = useSelector(
+  const { isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const dispatch = useActionDispatch();
@@ -170,7 +170,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   return (
     <div>
       {isCronScheduled === false ? (
-        <div className="w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300">
+        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
           Warning: the job scheduler is disabled and no scheduled jobs will be
           executed, enable the job scheduler?{' '}
           <Switch
