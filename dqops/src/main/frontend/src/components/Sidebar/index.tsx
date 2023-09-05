@@ -65,7 +65,7 @@ const Sidebar = () => {
             className="px-4"
             leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
             onClick={() => history.push('/create')}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : (
           <div />

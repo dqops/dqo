@@ -18,8 +18,9 @@ import { CheckTypes } from '../../../shared/routes';
 import Select from '../../Select';
 import { TableBasicModelProfilingChecksResultTruncationEnum } from '../../../api';
 import NumberInput from '../../NumberInput';
+import clsx from 'clsx';
 
-const TableDetails = () => {
+const TableDetails = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
   const {
     checkTypes,
     connection,
@@ -79,7 +80,7 @@ const TableDetails = () => {
         isUpdating={isUpdating}
       />
 
-      <table className="mb-6 w-160 text-sm">
+      <table  className={clsx("mb-6 w-160 text-sm", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>

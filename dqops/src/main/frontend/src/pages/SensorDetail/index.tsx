@@ -143,6 +143,7 @@ export const SensorDetail = () => {
                 value={sensorName}
                 onChange={onChangeSensorName}
                 error={!sensorName}
+                
               />
             </div>
           </div>

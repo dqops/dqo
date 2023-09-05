@@ -6,19 +6,22 @@ import {
 import DataGroupingDimensionItem from '../../DataQualityChecks/DataGroupingDimensionItem';
 import { Errors } from '../TableView/DataGroupingConfigurationEditView';
 import { useParams } from 'react-router-dom';
+import clsx from 'clsx';
 
 interface IDataGroupingConfigurationViewProps {
   dataGroupingConfiguration?: DataGroupingConfigurationSpec;
   onChange: (value: DataGroupingConfigurationSpec) => void;
   errors?: Errors;
   onClearError?: (idx: number) => void;
+  canUserEdit?: boolean;
 }
 
 const DataGroupingConfigurationView = ({
   dataGroupingConfiguration,
   onChange,
   errors,
-  onClearError
+  onClearError,
+  canUserEdit
 }: IDataGroupingConfigurationViewProps) => {
   const { table }: { table: string } = useParams();
 
@@ -45,7 +48,7 @@ const DataGroupingConfigurationView = ({
   };
 
   return (
-    <div className="py-4 px-4 text-sm">
+    <div className={clsx("py-4 px-4 text-sm", canUserEdit === true ? "" : "pointer-events-none cursor-not-allowed"  )}>
       {Array(9)
         .fill(0)
         .map((item, index) => (

@@ -20,7 +20,7 @@ const LabelItem = ({
   canUserEditLabel
 }: ILabelItemProps) => {
   return (
-    <tr className={clsx(canUserEditLabel === false ? "pointer-events-none cursor-not-allowed" : "")}>
+    <tr className={clsx(canUserEditLabel !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <td className="pr-4 min-w-40 py-2">
         <div>
           <Input
@@ -38,7 +38,7 @@ const LabelItem = ({
             size="sm"
             onClick={() => onRemove(idx)}
             className="!shadow-none"
-            disabled={canUserEditLabel === false}
+            disabled={canUserEditLabel !== true}
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>

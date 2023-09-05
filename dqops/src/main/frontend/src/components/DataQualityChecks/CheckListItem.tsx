@@ -68,7 +68,7 @@ const CheckListItem = ({
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
@@ -352,7 +352,7 @@ const CheckListItem = ({
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
-              <div>
+              <div className={clsx(userProfile.can_manage_data_sources===false ? "cursor-not-allowed pointer-events-none" : ""  )}>
                 <SvgIcon
                   name={!check?.disabled ? 'stop' : 'disable'}
                   className={clsx(
