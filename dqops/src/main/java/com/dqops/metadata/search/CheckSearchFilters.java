@@ -298,6 +298,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>columnName</code>.
      */
+    @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
         if (columnNameSearchPattern == null && columnName != null) {
             columnNameSearchPattern = SearchPattern.create(false, columnName);
@@ -311,6 +312,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>sensorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
         if (sensorNameSearchPattern == null && sensorName != null) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
@@ -324,6 +326,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      * Lazy getter, parses <code>checkName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>checkName</code>.
      */
+    @JsonIgnore
     public SearchPattern getCheckNameSearchPattern() {
         if (checkNameSearchPattern == null && checkName != null) {
             checkNameSearchPattern = SearchPattern.create(false, checkName);

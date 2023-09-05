@@ -151,7 +151,7 @@ const TableActionGroup = ({
                 schema + '.' + table
             )
               ? 'Collecting...'
-              : 'Collect Statistic'
+              : 'Collect Statistics'
           }
           color={
             filteredJobs?.find(

@@ -108,7 +108,7 @@ public class ColumnStatisticsModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                getColumnNames().add(columnName);
                 setEnabled(true);
             }});
         }};

@@ -180,7 +180,7 @@ const TableColumnsView = () => {
                   schemaName + '.' + tableName
               )
                 ? 'Collecting...'
-                : 'Collect Statistic'
+                : 'Collect Statistics'
             }
             color={
               filteredJobs?.find(

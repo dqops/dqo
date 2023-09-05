@@ -302,13 +302,13 @@ const ContextMenu = ({
                   deleteStoredData(
                     node,
                     params,
-                    node.collect_statistics_job_template?.columnName && [
-                      node.collect_statistics_job_template?.columnName
+                    node.run_checks_job_template?.columnName && [
+                      node.run_checks_job_template?.columnName
                     ]
                   );
                   setOpen(false);
                 }}
-                nameOfCol={node.collect_statistics_job_template?.columnName}
+                nameOfCol={node.run_checks_job_template?.columnName}
               />
             </>
           )}

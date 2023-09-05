@@ -75,6 +75,7 @@ public class RuleDefinitionSearchFilters {
      * Lazy getter, parses <code>ruleName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>ruleName</code>.
      */
+    @JsonIgnore
     public SearchPattern getRuleNameSearchPattern() {
         if (ruleNameSearchPattern == null && ruleName != null) {
             ruleNameSearchPattern = SearchPattern.create(false, ruleName);

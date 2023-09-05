@@ -266,10 +266,10 @@ const TableColumns = ({
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
   );
-  const filteredColumns = filteredJobs?.map(
+  const filteredColumns = filteredJobs?.flatMap(
     (x) =>
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.columnName
+        ?.statisticsCollectorSearchFilters?.columnNames
   );
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>

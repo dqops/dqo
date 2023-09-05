@@ -90,7 +90,7 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
             Collection<StatisticsSnapshot> statisticsSnapshots = tables.stream()
                     .filter(schemaTableName ->
                             filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                                    && filter.getTableSearchFilters().getTableNameSearchPattern().match(schemaTableName.getTableName()))
                     .map(tableName -> this.statisticsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName
