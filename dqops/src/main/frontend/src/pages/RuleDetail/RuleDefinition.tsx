@@ -13,6 +13,8 @@ import RuleFields from '../../components/Sensors/RuleFields';
 import RuleParameters from '../../components/Sensors/RuleParameters';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setUpdatedRule } from '../../redux/actions/definition.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 type RuleDefinitionProps = {
   rule: RuleModel;
@@ -28,6 +30,9 @@ const modeOptions = Object.values(RuleModelModeEnum).map((item) => ({
 }));
 
 export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const dispatch = useActionDispatch();
 
   const onChange = (obj: Partial<RuleModel>) => {
@@ -59,6 +64,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                 value={rule.type}
                 onChange={(type) => onChange({ type })}
                 options={typeOptions}
+                disabled={userProfile.can_manage_definitions === false}
               />
             </div>
             <div className="flex gap-4 text-sm items-center mb-4">
@@ -69,6 +75,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                   onChange={(e) =>
                     onChange({ java_class_name: e.target.value })
                   }
+                  disabled={userProfile.can_manage_definitions === false}
                 />
               </div>
             </div>
@@ -78,6 +85,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                 value={rule.mode}
                 onChange={(mode) => onChange({ mode })}
                 options={modeOptions}
+                disabled={userProfile.can_manage_definitions === false}
               />
             </div>
             <div className="flex gap-4 text-sm items-center mb-4">
@@ -93,6 +101,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                       }
                     })
                   }
+                  disabled={userProfile.can_manage_definitions === false}
                   step={1}
                 />
               </div>
@@ -110,6 +119,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                       }
                     })
                   }
+                  disabled={userProfile.can_manage_definitions === false}
                   step={1}
                 />
               </div>
@@ -121,13 +131,14 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
               fields={rule.fields || []}
               onChange={(fields) => onChange({ fields })}
               onAdd={onAdd}
-              isReadOnly={rule?.built_in}
+              isReadOnly={rule?.built_in || userProfile.can_manage_definitions === false}
             />
           </SectionWrapper>
           <SectionWrapper className="mt-8" title="Rule Parameters">
             <RuleParameters
               parameters={rule.parameters}
               onChange={(parameters) => onChange({ parameters })}
+              canUserEdit = {userProfile.can_manage_definitions}
             />
           </SectionWrapper>
         </>

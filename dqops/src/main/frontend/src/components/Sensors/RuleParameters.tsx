@@ -6,9 +6,10 @@ import SvgIcon from "../SvgIcon";
 type RuleParametersProps = {
   parameters?: Record<string, string>;
   onChange: (parameters: Record<string, string>) => void;
+  canUserEdit ?: boolean
 }
 
-const RuleParameters = ({ parameters, onChange }: RuleParametersProps) => {
+const RuleParameters = ({ parameters, onChange, canUserEdit }: RuleParametersProps) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
 
@@ -55,12 +56,14 @@ const RuleParameters = ({ parameters, onChange }: RuleParametersProps) => {
                 <Input
                   value={key}
                   onChange={(e) => {}}
+                  disabled={canUserEdit === false}
                 />
               </td>
               <td className="px-4 py-2">
                 <Input
                   value={parameters[key]}
                   onChange={(e) => {}}
+                  disabled={canUserEdit === false}
                 />
               </td>
               <td className="px-4 py-2  align-top w-20">
@@ -69,6 +72,7 @@ const RuleParameters = ({ parameters, onChange }: RuleParametersProps) => {
                   size="sm"
                   onClick={() => onDelete(key)}
                   className="!shadow-none"
+                  disabled={canUserEdit === false}
                 >
                   <SvgIcon name="delete" className="w-4" />
                 </IconButton>
@@ -80,12 +84,14 @@ const RuleParameters = ({ parameters, onChange }: RuleParametersProps) => {
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                disabled={canUserEdit === false}
               />
             </td>
             <td className="px-4 py-2">
               <Input
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+                disabled={canUserEdit === false}
               />
             </td>
             <td className="px-4 py-2  align-top w-20">
@@ -94,6 +100,7 @@ const RuleParameters = ({ parameters, onChange }: RuleParametersProps) => {
                 size="sm"
                 onClick={onAdd}
                 className="!shadow-none"
+                disabled={canUserEdit === false}
               >
                 <SvgIcon name="add" className="w-4" />
               </IconButton>
