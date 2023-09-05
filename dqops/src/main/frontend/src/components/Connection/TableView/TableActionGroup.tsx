@@ -103,29 +103,29 @@ const TableActionGroup = ({
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {shouldDelete && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Delete Table"
           onClick={() => setIsOpen(true)}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {createDataStream && (
         <Button
           label="Create Data Grouping"
-          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           onClick={createDataStreamFunc}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {maxToCreateDataStream && (
@@ -136,7 +136,7 @@ const TableActionGroup = ({
             label="Create Data Grouping"
             color="secondary"
             className="text-black "
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </div>
       )}
@@ -182,13 +182,13 @@ const TableActionGroup = ({
       )}
       {addSaveButton && (
         <Button
-          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
         />
       )}
 

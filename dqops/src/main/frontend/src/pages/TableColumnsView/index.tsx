@@ -157,7 +157,7 @@ const TableColumnsView = () => {
               label="Create Data Grouping"
               color="primary"
               onClick={postDataStream}
-              disabled={userProfile.can_manage_data_sources === false}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
           )}
           {selected > 9 && (

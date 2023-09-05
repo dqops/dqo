@@ -91,21 +91,21 @@ const SchemaPage = () => {
         <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
-            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             label="Import more tables"
             onClick={onImportMoreTables}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
 
           {isSourceScreen && (
             <Button
               className="!h-10"
-              color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-              variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+              color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+              variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
               label="Add Table"
               onClick={() => setAddTableDialogOpen(true)}
-              disabled={userProfile.can_manage_data_sources === false}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
           )}
         </div>

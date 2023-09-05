@@ -115,7 +115,7 @@ const DataGroupingConfigurationListView = ({
         </thead>
         <tbody>
           <div className="pr-2 py-2 relative flex items-center gap-2  ">
-          <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources === false ? "pointer-events-none cursor-not-allowed" : "")}>
+          <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources !== true ? "pointer-events-none cursor-not-allowed" : "")}>
               {' '}
               <RadioButton
                 checked={
@@ -142,7 +142,7 @@ const DataGroupingConfigurationListView = ({
                 ) : (
                   <div className="w-5 h-5"></div>
                 )} */}
-                <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources === false ? "pointer-events-none cursor-not-allowed" : "")}>
+                <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources !== true ? "pointer-events-none cursor-not-allowed" : "")}>
                   <RadioButton
                     checked={
                       groupingConfiguration.default_data_grouping_configuration
@@ -170,9 +170,9 @@ const DataGroupingConfigurationListView = ({
                   onClick={() => 
                     onEdit(groupingConfiguration)
                   }
-                  disabled={userProfile.can_manage_data_sources === false}
+                  // disabled={userProfile.can_manage_data_sources !== true}
                 >
-                  <SvgIcon name="edit" className="w-4" />                
+                  <SvgIcon name={userProfile.can_manage_data_sources=== false ? "info" : "edit"} className="w-4" />                
                 </IconButton>
                 <IconButton
                   size="sm"
@@ -180,7 +180,7 @@ const DataGroupingConfigurationListView = ({
                   onClick={() => {
                     openConfirmDeleteModal(groupingConfiguration);
                   }}
-                  disabled={userProfile.can_manage_data_sources === false}
+                  disabled={userProfile.can_manage_data_sources !== true}
                 >
                   <SvgIcon name="delete" className="w-4" />
                 </IconButton>
@@ -195,7 +195,7 @@ const DataGroupingConfigurationListView = ({
         className="text-sm"
         color="primary"
         onClick={onCreate}
-        disabled={userProfile.can_manage_data_sources === false}
+        disabled={userProfile.can_manage_data_sources !== true}
       />
       <ConfirmDialog
         open={open}

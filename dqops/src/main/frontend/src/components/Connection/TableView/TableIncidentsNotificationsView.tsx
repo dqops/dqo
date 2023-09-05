@@ -66,7 +66,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             value={incidentGrouping?.grouping_level}
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
-            disabled={canUserEdit === false}
+            disabled={canUserEdit !== true}
           />
         </div>
         <div className="flex mb-4">
@@ -75,7 +75,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
-            disabled={canUserEdit === false}
+            disabled={canUserEdit !== true}
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
@@ -93,7 +93,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             <NumberInput
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
             <span>days. After this time, the DQO creates a new incident.</span>
           </div>
@@ -104,7 +104,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             <NumberInput
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
             <span> days. If the incident is muted, DQO will not create a new one.</span>
           </div>

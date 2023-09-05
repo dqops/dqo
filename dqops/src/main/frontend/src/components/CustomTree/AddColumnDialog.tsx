@@ -84,7 +84,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           onClick={handleSubmit}
           label="Save"
           loading={loading}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       </DialogFooter>
     </Dialog>

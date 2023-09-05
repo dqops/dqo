@@ -52,21 +52,21 @@ const ColumnActionGroup = ({
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {shouldDelete && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Delete Column"
           onClick={() => setIsOpen(true)}
-          disabled={userProfile.can_manage_data_sources === false}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
 
@@ -76,8 +76,8 @@ const ColumnActionGroup = ({
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           <Button
-             color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+             color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             label="Collect Statistics"
             className={clsx(
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
@@ -94,7 +94,7 @@ const ColumnActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
           
         />
       )}

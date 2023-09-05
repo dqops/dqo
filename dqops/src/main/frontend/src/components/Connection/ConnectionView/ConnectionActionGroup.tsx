@@ -50,27 +50,27 @@ const ConnectionActionGroup = ({
         <>
           <Button
             className="!h-10"
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
-            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
             label="Add Schema"
             onClick={() => setAddSchemaDialogOpen(true)}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
           <Button
             className="!h-10"
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
-            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
             label="Delete Connection"
             onClick={() => setIsOpen(true)}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
           <Button
             className="!h-10"
             label="Import metadata"
-            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </>
       ) : (
@@ -78,23 +78,23 @@ const ConnectionActionGroup = ({
           <Button
             className="!h-10"
             label="Manage metadata"
-            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
-            disabled={userProfile.can_manage_data_sources === false}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : null
       )}
 
       {onUpdate && (
         <Button
-          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled || userProfile.can_manage_data_sources === false}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
           
         />
       )}

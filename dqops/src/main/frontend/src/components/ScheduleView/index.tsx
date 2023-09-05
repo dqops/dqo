@@ -193,7 +193,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
                 className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
-                disabled={canUserEdit === false}
+                disabled={canUserEdit !== true}
               />
             </td>
           </tr>
@@ -206,7 +206,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
                 <Checkbox
                   checked={schedule?.disabled}
                   onChange={(value) => handleChange({ disabled: value })}
-                  disabled={canUserEdit === false}
+                  disabled={canUserEdit !== true}
                 />
               </div>
             </td>
@@ -247,7 +247,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
             <div>minutes</div>
           </div>
@@ -270,7 +270,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
             <div>minutes past every hour</div>
           </div>
@@ -293,7 +293,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={hour}
               onChange={onChangeHour}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
             <div>:</div>
             <NumberInput
@@ -302,7 +302,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit === false}
+              disabled={canUserEdit !== true}
             />
           </div>
         </div>
