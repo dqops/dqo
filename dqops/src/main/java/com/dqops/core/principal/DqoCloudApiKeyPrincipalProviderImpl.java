@@ -51,23 +51,23 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
     @Override
     public DqoUserPrincipal createUserPrincipal() {
         /******** Uncomment the following code and comment the rest to use a hardcoded principal with limited access rights for testing purposes */
-       DqoUserRole testedRole = DqoUserRole.VIEWER;
-       List<GrantedAuthority> testPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(testedRole);
-       DqoUserPrincipal dqoUserPrincipalTest = new DqoUserPrincipal("", testedRole, testPrivileges);
-       return dqoUserPrincipalTest;
+    //    DqoUserRole testedRole = DqoUserRole.VIEWER;
+    //    List<GrantedAuthority> testPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(testedRole);
+    //    DqoUserPrincipal dqoUserPrincipalTest = new DqoUserPrincipal("", testedRole, testPrivileges);
+    //    return dqoUserPrincipalTest;
         /******** end of testing code */
 
 
-        // DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
-        // if (dqoCloudApiKey == null) {
-        //     // user not authenticated to DQO Cloud, so we use a default token
-        //     List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
-        //     DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges);
-        //     return dqoUserPrincipalLocal;
-        // }
+        DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
+        if (dqoCloudApiKey == null) {
+            // user not authenticated to DQO Cloud, so we use a default token
+            List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
+            DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges);
+            return dqoUserPrincipalLocal;
+        }
 
-        // DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
-        // DqoUserPrincipal userPrincipalFromApiKey = apiKeyPayload.createUserPrincipal();
-        // return userPrincipalFromApiKey;
+        DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
+        DqoUserPrincipal userPrincipalFromApiKey = apiKeyPayload.createUserPrincipal();
+        return userPrincipalFromApiKey;
     }
 }
