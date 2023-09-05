@@ -3,6 +3,8 @@ import { IconButton, Popover, PopoverContent, PopoverHandler } from "@material-t
 import SvgIcon from "../../SvgIcon";
 import Button from "../../Button";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../redux/reducers";
 
 export type CategoryMenuProps = {
   onRunChecks: () => void;
@@ -12,6 +14,9 @@ export type CategoryMenuProps = {
 const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { column }: { column: string } = useParams();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -31,11 +36,13 @@ const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
           onClick={onRunChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label={column ? "Run all column checks" : "Run all table checks"}
+          disabled={userProfile.can_run_checks === false}
         />
         <Button
           onClick={onDeleteChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label={column ? "Delete data for all column checks" : "Delete data for all table checks"}
+          disabled={userProfile.can_delete_data === false}
         />
       </PopoverContent>
     </Popover>

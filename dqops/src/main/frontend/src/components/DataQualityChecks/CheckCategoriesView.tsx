@@ -16,6 +16,7 @@ import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { IRootState } from '../../redux/reducers';
+import { clsx } from 'clsx';
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -130,7 +131,7 @@ const CheckCategoriesView = ({
                 <SvgIcon
                   name="play"
                   width={20}
-                  className="text-primary cursor-pointer"
+                  className={clsx("text-primary", userProfile.can_run_checks === false ? "pointer-events-none cursor-not-allowed" : "cursor-pointer")}
                   onClick={onRunChecks}
                 />
                 <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
