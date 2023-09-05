@@ -690,7 +690,7 @@ const TableColumns = ({
             <div>
               <IconButton
                 size="sm"
-                disabled={userProfile.can_collect_statistics === false}
+                disabled={userProfile.can_collect_statistics  !== true}
                 className={
                   filteredColumns?.find((x) => x === column.nameOfCol)
                     ? 'group bg-gray-400 ml-1.5'

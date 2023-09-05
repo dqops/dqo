@@ -171,7 +171,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
   return (
     <div>
       {isCronScheduled === false ? (
-        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
+        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
           Warning: the job scheduler is disabled and no scheduled jobs will be
           executed, enable the job scheduler?{' '}
           <Switch

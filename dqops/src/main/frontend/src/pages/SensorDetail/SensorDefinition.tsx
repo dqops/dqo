@@ -55,7 +55,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                 }
               })
             }
-            disabled={userProfile.can_manage_definitions === false}
+            disabled={userProfile.can_manage_definitions !== true}
           />
         </div>
         <div className="flex gap-4 text-sm items-center mb-4">
@@ -72,14 +72,14 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                 }
               })
             }
-            disabled={userProfile.can_manage_definitions === false}
+            disabled={userProfile.can_manage_definitions !== true}
           />
         </div>
       </div>
 
       <SectionWrapper title="Sensor Fields">
         <RuleFields
-          isReadOnly={sensor?.built_in || userProfile.can_manage_definitions === false}
+          isReadOnly={sensor?.built_in || userProfile.can_manage_definitions !== true}
           fields={sensor?.sensor_definition_spec?.fields || []}
           onChange={(fields) =>
             onChange({

@@ -191,7 +191,7 @@ const NotificationMenu = () => {
           </div>
           <div className="flex items-center gap-x-3 text-sm">
             <div className="whitespace-no-wrap">Jobs scheduler </div>
-            <div className={clsx(userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
+            <div className={clsx(userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
               <Switch
                 checked={isCronScheduled ? isCronScheduled : false}
                 onChange={() => changeStatus()}

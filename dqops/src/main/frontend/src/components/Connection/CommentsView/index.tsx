@@ -92,7 +92,7 @@ const CommentsView = ({
             : ''}
         </tbody>
       </table>
-      <div className={clsx("flex items-center py-2", userProfile.can_edit_comments === false ? "pointer-events-none cursor-not-allowed" : "")}>
+      <div className={clsx("flex items-center py-2", userProfile.can_edit_comments !== true ? "pointer-events-none cursor-not-allowed" : "")}>
         <div className="flex-1 pr-4">
           <Input
             className="h-10 focus:!ring-0 focus:!border"

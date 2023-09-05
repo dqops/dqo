@@ -208,7 +208,7 @@ const TableColumnsView = () => {
               collectStatistics();
             }}
             loading={loadingJob}
-            disabled={userProfile.can_collect_statistics === false}
+            disabled={userProfile.can_collect_statistics  !== true}
           />
         </div>
       </div>

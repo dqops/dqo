@@ -83,7 +83,7 @@ const ColumnActionGroup = ({
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
             )}
             onClick={onCollectStatistics}
-            disabled={runningStatistics || userProfile.can_collect_statistics === false}
+            disabled={runningStatistics || userProfile.can_collect_statistics  !== true}
           />
         </div>
       ) : (

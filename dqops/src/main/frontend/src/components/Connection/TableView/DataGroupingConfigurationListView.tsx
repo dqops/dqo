@@ -172,7 +172,7 @@ const DataGroupingConfigurationListView = ({
                   }
                   // disabled={userProfile.can_manage_data_sources !== true}
                 >
-                  <SvgIcon name={userProfile.can_manage_data_sources=== false ? "info" : "edit"} className="w-4" />                
+                  <SvgIcon name={userProfile.can_manage_data_sources!== true ? "info" : "edit"} className="w-4" />                
                 </IconButton>
                 <IconButton
                   size="sm"

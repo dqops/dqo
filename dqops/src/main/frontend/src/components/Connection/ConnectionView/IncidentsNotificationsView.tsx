@@ -68,7 +68,7 @@ export const IncidentsNotificationsView = () => {
   };
 
   return (
-    <div className={clsx("px-8 py-6", userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
+    <div className={clsx("px-8 py-6", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedIncidentGroup}

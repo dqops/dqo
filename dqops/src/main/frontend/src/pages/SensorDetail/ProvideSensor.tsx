@@ -66,7 +66,7 @@ const ProvideSensor = ({
           options={runnerTypeOptions}
           value={providerSensor?.providerSensorDefinitionSpec?.type}
           onChange={(type) => handleChange({ type })}
-          disabled={userProfile.can_manage_definitions === false}
+          disabled={userProfile.can_manage_definitions !== true}
 
         />
       </div>
@@ -76,7 +76,7 @@ const ProvideSensor = ({
           <Input
             value={providerSensor?.providerSensorDefinitionSpec?.java_class_name}
             onChange={(e) => handleChange({ java_class_name: e.target.value })}
-            disabled={userProfile.can_manage_definitions === false}
+            disabled={userProfile.can_manage_definitions !== true}
 
           />
         </div>
@@ -89,7 +89,7 @@ const ProvideSensor = ({
           onChange={(checked) => handleChange({
             supports_grouping: checked
           })}
-          disabled={userProfile.can_manage_definitions === false}
+          disabled={userProfile.can_manage_definitions !== true}
 
         />
       </div>
@@ -101,7 +101,7 @@ const ProvideSensor = ({
           onChange={(checked) => handleChange({
             supports_partitioned_checks: checked
           })}
-          disabled={userProfile.can_manage_definitions === false}
+          disabled={userProfile.can_manage_definitions !== true}
 
         />
       </div>

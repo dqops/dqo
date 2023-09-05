@@ -78,7 +78,7 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
 
   return (
     <div>
-      <div className={clsx("", userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
+      <div className={clsx("", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
         <table className="w-full">
           <tbody>
             <tr>
