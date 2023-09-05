@@ -91,8 +91,8 @@ const SchemaPage = () => {
         <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
-            color="primary"
-            variant="outlined"
+            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
             label="Import more tables"
             onClick={onImportMoreTables}
             disabled={userProfile.can_manage_data_sources === false}
@@ -101,8 +101,8 @@ const SchemaPage = () => {
           {isSourceScreen && (
             <Button
               className="!h-10"
-              color="primary"
-              variant="outlined"
+              color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+              variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
               label="Add Table"
               onClick={() => setAddTableDialogOpen(true)}
               disabled={userProfile.can_manage_data_sources === false}

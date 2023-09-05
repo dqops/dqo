@@ -52,8 +52,8 @@ const ColumnActionGroup = ({
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
           disabled={userProfile.can_manage_data_sources === false}
@@ -62,8 +62,8 @@ const ColumnActionGroup = ({
       {shouldDelete && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
           label="Delete Column"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources === false}
@@ -76,8 +76,8 @@ const ColumnActionGroup = ({
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           <Button
-            color="primary"
-            variant="outlined"
+             color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
             label="Collect Statistics"
             className={clsx(
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'

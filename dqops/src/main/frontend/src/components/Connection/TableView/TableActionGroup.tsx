@@ -103,8 +103,8 @@ const TableActionGroup = ({
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
           disabled={userProfile.can_manage_data_sources === false}
@@ -113,8 +113,8 @@ const TableActionGroup = ({
       {shouldDelete && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
           label="Delete Table"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources === false}
@@ -123,7 +123,7 @@ const TableActionGroup = ({
       {createDataStream && (
         <Button
           label="Create Data Grouping"
-          color="primary"
+          color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
           onClick={createDataStreamFunc}
           disabled={userProfile.can_manage_data_sources === false}
         />
@@ -182,7 +182,7 @@ const TableActionGroup = ({
       )}
       {addSaveButton && (
         <Button
-          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"

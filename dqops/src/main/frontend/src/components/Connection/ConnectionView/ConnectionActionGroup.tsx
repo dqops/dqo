@@ -50,16 +50,16 @@ const ConnectionActionGroup = ({
         <>
           <Button
             className="!h-10"
-            variant="outlined"
-            color="primary"
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
             label="Add Schema"
             onClick={() => setAddSchemaDialogOpen(true)}
             disabled={userProfile.can_manage_data_sources === false}
           />
           <Button
             className="!h-10"
-            variant="outlined"
-            color="primary"
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
             label="Delete Connection"
             onClick={() => setIsOpen(true)}
             disabled={userProfile.can_manage_data_sources === false}
@@ -67,8 +67,8 @@ const ConnectionActionGroup = ({
           <Button
             className="!h-10"
             label="Import metadata"
-            color="primary"
-            variant="outlined"
+            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
             disabled={userProfile.can_manage_data_sources === false}
           />
@@ -78,8 +78,8 @@ const ConnectionActionGroup = ({
           <Button
             className="!h-10"
             label="Manage metadata"
-            color="primary"
-            variant="outlined"
+            color={!(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources === false) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
             disabled={userProfile.can_manage_data_sources === false}
           />
@@ -88,7 +88,7 @@ const ConnectionActionGroup = ({
 
       {onUpdate && (
         <Button
-          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources === false) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"
