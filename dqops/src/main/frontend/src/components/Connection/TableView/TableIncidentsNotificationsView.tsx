@@ -13,11 +13,12 @@ import {
 import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
-  ConnectionIncidentGroupingSpecMinimumSeverityEnum, IncidentWebhookNotificationsSpec
+  ConnectionIncidentGroupingSpecMinimumSeverityEnum
 } from "../../../api";
 import Checkbox from "../../Checkbox";
 import NumberInput from "../../NumberInput";
 import TableActionGroup from "./TableActionGroup";
+import clsx from "clsx";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
@@ -29,7 +30,7 @@ const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinim
   value: item
 }));
 
-export const TableIncidentsNotificationsView = () => {
+export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
   const { connection, schema, table, checkTypes }: { connection: string, schema: string, table: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
@@ -57,7 +58,7 @@ export const TableIncidentsNotificationsView = () => {
         isUpdated={isUpdatedIncidentGroup}
         isUpdating={isUpdating}
       />
-      <div className="flex flex-col">
+      <div className={clsx("flex flex-col", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <div className="flex mb-4">
           <Select
             label="Data quality incident grouping level:"
@@ -65,6 +66,7 @@ export const TableIncidentsNotificationsView = () => {
             value={incidentGrouping?.grouping_level}
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
+            disabled={canUserEdit === false}
           />
         </div>
         <div className="flex mb-4">
@@ -73,6 +75,7 @@ export const TableIncidentsNotificationsView = () => {
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
+            disabled={canUserEdit === false}
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
@@ -90,6 +93,7 @@ export const TableIncidentsNotificationsView = () => {
             <NumberInput
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
+              disabled={canUserEdit === false}
             />
             <span>days. After this time, the DQO creates a new incident.</span>
           </div>
@@ -100,6 +104,7 @@ export const TableIncidentsNotificationsView = () => {
             <NumberInput
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
+              disabled={canUserEdit === false}
             />
             <span> days. If the incident is muted, DQO will not create a new one.</span>
           </div>
