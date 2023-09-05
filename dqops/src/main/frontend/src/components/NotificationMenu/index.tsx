@@ -213,6 +213,7 @@ const NotificationMenu = () => {
                 job={notification}
                 key={index}
                 notifnumber={data.length}
+                canUserCancelJobs={userProfile.can_cancel_jobs}
               />
             )
           )}
