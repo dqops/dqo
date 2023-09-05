@@ -102,7 +102,7 @@ const TableColumnsView = () => {
       connectionName,
       schemaName,
       tableName,
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       'sources',
