@@ -43,7 +43,7 @@ const initTabs = [
   },
   {
     label: 'Data Groupings',
-    value: 'data-streams'
+    value: 'data-groupings'
   },
   {
     label: 'Date and time columns',
@@ -143,7 +143,7 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'data-streams'
+        item.value === 'data-groupings'
           ? { ...item, isUpdated: isUpdatedDataGroupingConfiguration }
           : item
       )
@@ -259,7 +259,7 @@ const TablePage = () => {
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>
-              {activeTab === 'data-streams' && (
+              {activeTab === 'data-groupings' && (
                 <TableDataGroupingConfiguration />
               )}
             </div>

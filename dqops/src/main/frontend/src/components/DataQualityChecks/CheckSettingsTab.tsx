@@ -58,7 +58,7 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
       connection,
       schema,
       table,
-      'data-streams'
+      'data-groupings'
     );
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
