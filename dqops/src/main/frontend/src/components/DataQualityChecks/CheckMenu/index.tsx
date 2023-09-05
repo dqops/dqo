@@ -35,7 +35,7 @@ const CheckMenu = ({ onRunChecks, onDeleteChecks }: CheckMenuProps) => {
           onClick={onRunChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label="Run checks for the category"
-          disabled={userProfile.can_run_checks === false}
+          disabled={userProfile.can_run_checks !== true}
         />
         <Button
           onClick={onDeleteChecks}

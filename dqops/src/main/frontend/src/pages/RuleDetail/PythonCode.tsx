@@ -36,7 +36,7 @@ const PythonCode = ({ rule }: PythonCodeProps) => {
         value={rule?.rule_python_module_content}
         onChange={onChange}
         extensions={[StreamLanguage.define(python)]}
-        readOnly={userProfile.can_manage_definitions === false}
+        readOnly={userProfile.can_manage_definitions !== true}
       />
     </div>
   );

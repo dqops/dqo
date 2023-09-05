@@ -36,7 +36,7 @@ const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
           onClick={onRunChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label={column ? "Run all column checks" : "Run all table checks"}
-          disabled={userProfile.can_run_checks === false}
+          disabled={userProfile.can_run_checks !== true}
         />
         <Button
           onClick={onDeleteChecks}

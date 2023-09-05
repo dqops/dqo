@@ -41,7 +41,7 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
           variant="outlined"
           label="Delete Sensor"
           className="w-40 !h-10"
-          disabled={userProfile.can_manage_definitions === false}
+          disabled={userProfile.can_manage_definitions !== true}
         />
       )}
       <Button
@@ -49,7 +49,7 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedSensorDetail || userProfile.can_manage_definitions === false}
+        disabled={!isUpdatedSensorDetail || userProfile.can_manage_definitions !== true}
         onClick={handleSave}
         loading={isUpdating}
       />

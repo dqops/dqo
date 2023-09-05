@@ -132,7 +132,7 @@ const ContextMenu = ({
             checkTypes !== 'partitioned' && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={userProfile.can_run_checks!== false ? handleRunChecks : undefined}
+                onClick={userProfile.can_run_checks=== true ? handleRunChecks : undefined}
               >
                 Run checks
               </div>
@@ -176,7 +176,7 @@ const ContextMenu = ({
           ].includes(node.level) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={userProfile.can_collect_statistics!== false ? handleCollectStatisticsOnTable : undefined}
+              onClick={userProfile.can_collect_statistics=== true ? handleCollectStatisticsOnTable : undefined}
             >
               Collect statistics
             </div>
@@ -184,7 +184,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={ userProfile.can_manage_data_sources !== false ? importMetaData : undefined}
+              onClick={ userProfile.can_manage_data_sources === true ? importMetaData : undefined}
             >
               Import metadata
             </div>
@@ -192,7 +192,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ? openAddSchemaDialog(node) : undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ? openAddSchemaDialog(node) : undefined}}
             >
               Add schema
             </div>
@@ -200,7 +200,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.SCHEMA && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={ userProfile.can_manage_data_sources!== false ? importTables : undefined}
+              onClick={ userProfile.can_manage_data_sources=== true ? importTables : undefined}
             >
               Import tables
             </div>
@@ -225,7 +225,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ? openConfirm(node) : undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node) : undefined}}
             >
               Delete connection
             </div>
@@ -233,7 +233,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.TABLE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ? openConfirm(node): undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node): undefined}}
             >
               Delete table
             </div>
@@ -241,7 +241,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.COLUMN && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ? openConfirm(node): undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node): undefined}}
             >
               Delete column
             </div>
@@ -249,7 +249,7 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.SCHEMA && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ? openAddTableDialog(node): undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ? openAddTableDialog(node): undefined}}
             >
               Add table
             </div>
@@ -258,7 +258,7 @@ const ContextMenu = ({
             node.level === TREE_LEVEL.COLUMN) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources!== false ?openAddColumnDialog(node): undefined}}
+              onClick={() =>{userProfile.can_manage_data_sources=== true ?openAddColumnDialog(node): undefined}}
             >
               Add column
             </div>

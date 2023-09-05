@@ -75,7 +75,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
             className={clsx(
               'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
             )}
-            onClick={userProfile.can_manage_definitions === false ? undefined :  openAddNewCheck}
+            onClick={userProfile.can_manage_definitions !== true ? undefined :  openAddNewCheck}
           >
             Add new check
           </div>

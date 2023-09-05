@@ -110,7 +110,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
                 label="Collect statistics"
                 className="text-sm px-2 w-40"
                 onClick={isCollected ? undefined : collectStatistics}
-                disabled={userProfile.can_collect_statistics === false}
+                disabled={userProfile.can_collect_statistics  !== true}
               />
 
               <div className="pr-4 flex items-center">
@@ -133,7 +133,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
                 label="Run profiling checks"
                 className="text-sm px-2 w-40"
                 onClick={isProfilingChecked ? undefined : runProfilingChecks}
-                disabled={userProfile.can_run_checks === false}
+                disabled={userProfile.can_run_checks !== true}
               />
 
               <div className="pr-4 flex items-center">

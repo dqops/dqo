@@ -117,7 +117,7 @@ const ConnectionDetail = () => {
   };
 
   return (
-    <div className={clsx("p-4",userProfile.can_manage_scheduler === false ? "pointer-events-none cursor-not-allowed" : "")}>
+    <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
@@ -223,7 +223,7 @@ const ConnectionDetail = () => {
           variant="outlined"
           label="Test Connection"
           onClick={onTestConnection}
-          disabled={isTesting || userProfile.can_manage_data_sources===false}
+          disabled={isTesting || userProfile.can_manage_data_sources !== true}
         />
       </div>
       <ErrorModal

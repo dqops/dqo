@@ -171,7 +171,7 @@ const DeleteOnlyDataDialog = ({
           className="px-8"
           onClick={onConfirm}
           label="Delete"
-          disabled={userProfile.can_delete_data === false}
+          disabled={userProfile.can_delete_data !== true}
         />
       </DialogFooter>
     </Dialog>

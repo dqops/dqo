@@ -165,20 +165,20 @@ export const SensorDetail = () => {
         <div className="flex space-x-4 items-center absolute right-2 top-2">
           {custom !== false && isCreating === false && (
             <Button
-            color={!(userProfile.can_manage_definitions === false) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_definitions === false) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_definitions !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_definitions !== true) ? "outlined" : "contained"}
               label="Delete check"
               className="w-40 !h-10"
               onClick={() => setDialogOpen(true)}
-              disabled={userProfile.can_manage_definitions === false}
+              disabled={userProfile.can_manage_definitions !== true}
             />
           )}
           <Button
-           color={!(userProfile.can_manage_definitions === false) ? 'primary' : 'secondary'}
+           color={!(userProfile.can_manage_definitions !== true) ? 'primary' : 'secondary'}
             variant="contained"
             label={isCreating === true ? 'Create' : 'Update'}
             className="w-40 !h-10"
-            disabled={!isUpdated || userProfile.can_manage_definitions === false}
+            disabled={!isUpdated || userProfile.can_manage_definitions !== true}
             onClick={onCreateUpdateCheck}
             loading={isUpdating}
           />

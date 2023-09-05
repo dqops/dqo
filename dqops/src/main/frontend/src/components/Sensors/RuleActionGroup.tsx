@@ -36,7 +36,7 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
           variant="outlined"
           label="Delete rule"
           className="w-40 !h-10"
-          disabled={userProfile.can_manage_definitions === false}
+          disabled={userProfile.can_manage_definitions !== true}
         />
       )}
       <Button
@@ -44,7 +44,7 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedRuleDetail || userProfile.can_manage_definitions === false}
+        disabled={!isUpdatedRuleDetail || userProfile.can_manage_definitions !== true}
         onClick={handleSave}
         loading={isUpdating}
       />

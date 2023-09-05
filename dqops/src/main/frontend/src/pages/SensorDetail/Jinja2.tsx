@@ -21,7 +21,7 @@ const Jinja2Code = ({ providerSensor, onChange }: Jinja2Props) => {
         value={providerSensor?.sqlTemplate}
         onChange={(value) => onChange({ sqlTemplate: value })}
         extensions={[StreamLanguage.define(jinja2)]}
-        readOnly={userProfile.can_manage_definitions === false}
+        readOnly={userProfile.can_manage_definitions !== true}
       />
     </div>
   );
