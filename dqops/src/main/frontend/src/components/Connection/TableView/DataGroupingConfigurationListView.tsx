@@ -7,6 +7,9 @@ import RadioButton from '../../RadioButton';
 import SetDefaultDialog from './SetDefaultDialog';
 import SvgIcon from '../../SvgIcon';
 import { IconButton } from '@material-tailwind/react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 interface IDataGroupingConfigurationListViewProps {
   dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
@@ -26,6 +29,7 @@ const DataGroupingConfigurationListView = ({
   const [selectedGroupingConfiguration, setSelectedGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
   const [messageBox, setMessageBox] = useState<boolean>(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const setDefaultGroupingConfiguration = async (
     groupingConfiguration: DataGroupingConfigurationBasicModel,
     nameOfGrouping?: string
@@ -111,7 +115,7 @@ const DataGroupingConfigurationListView = ({
         </thead>
         <tbody>
           <div className="pr-2 py-2 relative flex items-center gap-2  ">
-            <div className="w-5 h-5">
+          <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources === false ? "pointer-events-none cursor-not-allowed" : "")}>
               {' '}
               <RadioButton
                 checked={
@@ -122,6 +126,7 @@ const DataGroupingConfigurationListView = ({
                 onClick={() =>
                   elem ? setDefaultGroupingConfiguration(elem) : undefined
                 }
+                
               />
             </div>
             <div>Disable data grouping</div>
@@ -137,7 +142,7 @@ const DataGroupingConfigurationListView = ({
                 ) : (
                   <div className="w-5 h-5"></div>
                 )} */}
-                <div className="w-5 h-5">
+                <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources === false ? "pointer-events-none cursor-not-allowed" : "")}>
                   <RadioButton
                     checked={
                       groupingConfiguration.default_data_grouping_configuration
@@ -150,6 +155,7 @@ const DataGroupingConfigurationListView = ({
                             groupingConfiguration.data_grouping_configuration_name
                           )
                     }
+                    
                   />
                 </div>
                 <span>
@@ -164,8 +170,9 @@ const DataGroupingConfigurationListView = ({
                   onClick={() => 
                     onEdit(groupingConfiguration)
                   }
+                  disabled={userProfile.can_manage_data_sources === false}
                 >
-                  <SvgIcon name="edit" className="w-4" />
+                  <SvgIcon name="edit" className="w-4" />                
                 </IconButton>
                 <IconButton
                   size="sm"
@@ -173,6 +180,7 @@ const DataGroupingConfigurationListView = ({
                   onClick={() => {
                     openConfirmDeleteModal(groupingConfiguration);
                   }}
+                  disabled={userProfile.can_manage_data_sources === false}
                 >
                   <SvgIcon name="delete" className="w-4" />
                 </IconButton>
@@ -187,6 +195,7 @@ const DataGroupingConfigurationListView = ({
         className="text-sm"
         color="primary"
         onClick={onCreate}
+        disabled={userProfile.can_manage_data_sources === false}
       />
       <ConfirmDialog
         open={open}

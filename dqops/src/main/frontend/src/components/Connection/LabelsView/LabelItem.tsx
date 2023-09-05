@@ -19,7 +19,6 @@ const LabelItem = ({
   onRemove,
   canUserEditLabel
 }: ILabelItemProps) => {
-  console.log(canUserEditLabel)
   return (
     <tr className={clsx(canUserEditLabel === false ? "pointer-events-none cursor-not-allowed" : "")}>
       <td className="pr-4 min-w-40 py-2">

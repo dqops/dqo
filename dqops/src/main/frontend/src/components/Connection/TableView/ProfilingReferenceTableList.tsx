@@ -81,6 +81,7 @@ export const ProfilingReferenceTableList = ({
                       ),
                         setIsOpen(true);
                     }}
+                    disabled={canUserCreateTableComparison === false}
                   >
                     <SvgIcon name="delete" className="w-4" />
 

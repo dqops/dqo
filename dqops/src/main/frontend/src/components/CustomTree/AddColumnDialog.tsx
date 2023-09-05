@@ -6,6 +6,8 @@ import { ColumnApiClient } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -23,6 +25,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
     table,
     schema
   }: { connection: string; schema: string; table: string } = useParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const handleSubmit = async () => {
     try {
@@ -81,6 +84,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           onClick={handleSubmit}
           label="Save"
           loading={loading}
+          disabled={userProfile.can_manage_data_sources === false}
         />
       </DialogFooter>
     </Dialog>
