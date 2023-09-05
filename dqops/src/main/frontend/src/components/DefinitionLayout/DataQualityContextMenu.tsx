@@ -14,6 +14,8 @@ import AddFolderDialog from './AddFolderDialog';
 import { ChecksApi } from '../../services/apiClient';
 import CreateCheckDialog from './CreateChecksDialog';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
@@ -25,6 +27,9 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false);
   const dispatch = useActionDispatch();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -70,7 +75,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
             className={clsx(
               'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
             )}
-            onClick={openAddNewCheck}
+            onClick={userProfile.can_manage_definitions === false ? undefined :  openAddNewCheck}
           >
             Add new check
           </div>

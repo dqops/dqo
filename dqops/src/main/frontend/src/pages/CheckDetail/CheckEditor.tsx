@@ -17,6 +17,7 @@ interface CreateCheckProps {
   onChangeHelpText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   custom: any;
   helpText?: string;
+  canEditDefinitions?: boolean
 }
 
 const CheckEditor = ({
@@ -27,7 +28,8 @@ const CheckEditor = ({
   setIsUpdated,
   custom,
   helpText,
-  onChangeHelpText
+  onChangeHelpText,
+  canEditDefinitions
 }: CreateCheckProps) => {
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>();
   const [allRules, setAllRules] = useState<RuleBasicModel[]>();
@@ -135,7 +137,7 @@ const CheckEditor = ({
                     }))) ||
                   []
                 }
-                disabled={custom === false ? true : false}
+                disabled={(custom === false || canEditDefinitions === false) ? true : false}
                 value={selectedSensor}
                 onChange={(selected) => {
                   onChangeSensor(selected), setIsUpdated(true);
@@ -165,7 +167,7 @@ const CheckEditor = ({
                   []
                 }
                 value={selectedRule}
-                disabled={custom === false ? true : false}
+                disabled={(custom === false || canEditDefinitions===false) ? true : false}
                 onChange={(selected) => {
                   onChangeRule(selected), setIsUpdated(true);
                 }}
@@ -189,7 +191,7 @@ const CheckEditor = ({
                 onChange={(e) => {
                   onChangeHelpText(e), setIsUpdated(true);
                 }}
-                disabled={custom === false ? true : false}
+                disabled={(custom === false || canEditDefinitions === false) ? true : false}
               ></textarea>
             </div>
           </div>
