@@ -208,7 +208,7 @@ public class DqoUserProfileModel {
             setCanManageDataSources(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanSynchronize(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanEditComments(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-            setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageDefinitions(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         }};
