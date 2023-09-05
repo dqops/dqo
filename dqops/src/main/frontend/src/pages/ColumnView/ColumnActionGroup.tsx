@@ -46,8 +46,6 @@ const ColumnActionGroup = ({
     );
   };
 
-  console.log(userProfile)
-
   const columnPath = `${connection}.${schema}.${table}.${column}`
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
