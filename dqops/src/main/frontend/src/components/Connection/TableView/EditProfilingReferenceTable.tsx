@@ -35,6 +35,7 @@ import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
 import EditReferenceTable from './EditReferenceTable';
+import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -98,6 +99,12 @@ export const EditProfilingReferenceTable = ({
   const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [refTableChanged, setRefTableChanged] = useState(false);
 
+  const { tableExist, schemaExist, connectionExist }
+   = useConnectionSchemaTableExists(reference?.reference_connection ?? "",
+    reference?.reference_table?.schema_name ?? "",
+    reference?.reference_table?.table_name ?? "");
+
+  console.log(tableExist, schemaExist, connectionExist)
   const onChangeRefTableChanged = (arg: boolean) => {
     setRefTableChanged(arg);
   };
@@ -217,11 +224,13 @@ export const EditProfilingReferenceTable = ({
     }
   }, [selectedReference]);
 
+
   useEffect(() => {
     if (
       reference !== undefined &&
       Object.keys(reference).length > 0 &&
-      isCreating === false
+      isCreating === false && 
+      tableExist === true && schemaExist === true && tableExist ===true
     ) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? connection,
