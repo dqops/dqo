@@ -1305,7 +1305,6 @@ const connectionReducer = (state = initialState, action: Action) => {
       const checksState: Record<string, boolean> =
         firstState.checksState || ({} as any);
 
-      console.log('firstAte', checksState);
       return setActiveTabState(state, action, {
         checksState: {
           ...checksState,
