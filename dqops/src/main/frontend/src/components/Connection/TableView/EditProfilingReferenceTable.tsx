@@ -97,17 +97,12 @@ export const EditProfilingReferenceTable = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
-  const [refTableChanged, setRefTableChanged] = useState(false);
 
   const { tableExist, schemaExist, connectionExist }
    = useConnectionSchemaTableExists(reference?.reference_connection ?? "",
     reference?.reference_table?.schema_name ?? "",
     reference?.reference_table?.table_name ?? "");
 
-  console.log(tableExist, schemaExist, connectionExist)
-  const onChangeRefTableChanged = (arg: boolean) => {
-    setRefTableChanged(arg);
-  };
 
   const onChangeIsDataDeleted = (arg: boolean): void => {
     setIsDataDeleted(arg);
@@ -210,8 +205,12 @@ export const EditProfilingReferenceTable = ({
       isCreating === false &&
        tableExist === true && 
       schemaExist === true && 
-      tableExist === true
+      tableExist === true &&
+       reference.reference_connection?.length!== 0 &&
+      reference.reference_table?.schema_name?.length!== 0 &&
+      reference.reference_table?.table_name?.length!== 0
     ) {
+      console.log("231321321")
       ColumnApiClient.getColumns(
         reference.reference_connection ?? connection,
         reference.reference_table?.schema_name ?? schema,
@@ -235,12 +234,15 @@ export const EditProfilingReferenceTable = ({
       isCreating === false && 
       tableExist === true && 
       schemaExist === true && 
-      tableExist === true
+      tableExist === true  &&
+      reference.reference_connection?.length!== 0 &&
+     reference.reference_table?.schema_name?.length!== 0 &&
+     reference.reference_table?.table_name?.length!== 0
     ) {
       ColumnApiClient.getColumns(
-        reference.reference_connection ?? connection,
-        reference.reference_table?.schema_name ?? schema,
-        reference.reference_table?.table_name ?? table
+        reference.reference_connection ?? "",
+        reference.reference_table?.schema_name ?? "",
+        reference.reference_table?.table_name ?? ""
       )?.then((columnRes) => {
         if(columnRes){
           setColumnOptions(
@@ -533,25 +535,7 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     getResultsData();
   }, [isDataDeleted]);
-
-  const replaceStringWithUndefined = (
-    arr: TableComparisonModel
-  ): TableComparisonModel => {
-    // const columnValues = columnOptions.map((x) => x.value)
-    if (arr.columns) {
-      arr.columns = arr.columns.map((obj) => {
-        // if(!columnValues.includes(obj.reference_column_name)){
-        return { ...obj, reference_column_name: undefined };
-        // }else{
-        //   return {...obj}
-        // }
-      });
-    }
-    return arr;
-  };
-  useEffect(() => {
-    setReference(replaceStringWithUndefined(reference ?? {}));
-  }, [refTableChanged]);
+  
 
   return (
     <div className="text-sm">
@@ -573,8 +557,6 @@ export const EditProfilingReferenceTable = ({
           cleanDataTemplate={reference?.compare_table_clean_data_job_template}
           onChangeIsDataDeleted={onChangeIsDataDeleted}
           isDataDeleted={isDataDeleted}
-          onChangeRefTableChanged={onChangeRefTableChanged}
-          refTableChanged={refTableChanged}
           listOfExistingReferences={listOfExistingReferences}
           canUserCompareTables={canUserCompareTables}
         />

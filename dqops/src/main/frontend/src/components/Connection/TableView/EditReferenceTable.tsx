@@ -48,8 +48,6 @@ type EditReferenceTableProps = {
   onChangeIsDataDeleted: (arg: boolean) => void;
   onChange: (obj: Partial<TableComparisonModel>) => void
   isDataDeleted : boolean
-  onChangeRefTableChanged: (arg: boolean) => void
-  refTableChanged: boolean
   listOfExistingReferences: Array<string | undefined>
   canUserCompareTables?: boolean
 
@@ -70,8 +68,6 @@ const EditReferenceTable = ({
   onChangeIsDataDeleted,
   onChange,
   isDataDeleted,
-  onChangeRefTableChanged,
-  refTableChanged,
   listOfExistingReferences,
   canUserCompareTables,
 }: EditReferenceTableProps) => {
