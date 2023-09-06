@@ -642,6 +642,23 @@ spec:
           height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
+    - folder_name: Availability
+      dashboards:
+        - dashboard_name: Table availability
+          url: https://lookerstudio.google.com/reporting/22de9488-a7bd-4b34-9d4e-131601cdc25b
+          width: 1400
+          height: 1600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: daily_table_availability
+      dashboards:
+        - dashboard_name: History of table availability issues
+          url: https://lookerstudio.google.com/reporting/85f323d9-422a-4b23-9f2c-b158502ddc7e
+          width: 1400
+          height: 1900
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: daily_table_availability
       #- dashboard_name: Table ingestion delay
       #  url: https://lookerstudio.google.com/embed/reporting/85dc0bb8-e187-406b-b4f0-a343df5fb52a/page/c5B8C
       #  width: 1400
@@ -662,6 +679,7 @@ spec:
           height: 1300
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
+
 
       #- dashboard_name: Most incomplete columns - percent completeness
       #  url: https://lookerstudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c
