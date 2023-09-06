@@ -207,7 +207,10 @@ export const EditProfilingReferenceTable = ({
     if (
       reference !== undefined &&
       Object.keys(reference).length > 0 &&
-      isCreating === false
+      isCreating === false &&
+       tableExist === true && 
+      schemaExist === true && 
+      tableExist === true
     ) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? connection,
@@ -230,7 +233,9 @@ export const EditProfilingReferenceTable = ({
       reference !== undefined &&
       Object.keys(reference).length > 0 &&
       isCreating === false && 
-      tableExist === true && schemaExist === true && tableExist ===true
+      tableExist === true && 
+      schemaExist === true && 
+      tableExist === true
     ) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? connection,
