@@ -104,6 +104,12 @@ public class TableComparisonModel {
     private CompareThresholdsModel compareColumnCount;
 
     /**
+     * Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.")
+    private boolean supportsCompareColumnCount;
+
+    /**
      * The list of compared columns, their matching reference column and the enabled comparisons.
      */
     @JsonPropertyDescription("The list of compared columns, their matching reference column and the enabled comparisons.")
@@ -184,6 +190,7 @@ public class TableComparisonModel {
         AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
         AbstractComparisonCheckCategorySpecMap<?> comparisons = tableCheckRootContainer.getComparisons();
+        tableComparisonModel.supportsCompareColumnCount = tableCheckRootContainer.getCheckType() != CheckType.partitioned;
 
         if (comparisons instanceof AbstractTableComparisonCheckCategorySpecMap) {
             AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap =
