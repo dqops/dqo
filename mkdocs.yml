@@ -82,7 +82,9 @@ nav:
           - Configuring the schedules by modifying the YAML files: "working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md"
           - Time zone configuration: "working-with-dqo/schedules/timezone-configuration.md"
           - Cron formatting: "working-with-dqo/schedules/cron-formatting.md"
-      - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents-and-notifications.md"
+      - Incidents and notifications:
+          - "working-with-dqo/incidents-and-notifications/index.md"
+          - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
       - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY

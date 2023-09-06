@@ -17,7 +17,7 @@ The navigation bar allows you to select the specific sections that you want to f
 - The **Data Sources** section allows you to [add new connections](../adding-data-source-connection/index.md), import schemas and 
     tables, [set up schedules](../schedules/index.md), add comments and labels, [configure data streams](../set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
-    and [modify the settings of the incidents and notifications](../incidents-and-notifications/incidents-and-notifications.md).
+    and [modify the settings of the incidents and notifications](../incidents-and-notifications/index.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../basic-data-statistics/basic-data-statistics.md),
     as well as [enable and run profiling data quality checks](../run-data-quality-checks/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
@@ -26,7 +26,7 @@ The navigation bar allows you to select the specific sections that you want to f
 - The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../run-data-quality-checks/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
 - The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
-- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../incidents-and-notifications/incidents-and-notifications.md).
+- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../incidents-and-notifications/index.md).
 - The **Definitions** section lets you customize built-in data quality sensors and rules.  
 
 
