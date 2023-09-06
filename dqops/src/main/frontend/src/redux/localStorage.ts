@@ -15,7 +15,7 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         value: item.value,
         label: item.label,
         state: {}
-      })) ?? [ { state: {}}]
+      })) ?? []
     },
     [CheckTypes.PROFILING]: {
       activeTab: newState[CheckTypes.PROFILING]?.activeTab,
@@ -24,7 +24,7 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         value: item.value,
         label: item.label,
         state: {}
-      })) ?? [ { state: {}}]
+      })) ?? []
     },
     [CheckTypes.MONITORING]: {
       activeTab: newState[CheckTypes.MONITORING]?.activeTab,
@@ -33,7 +33,7 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         value: item.value,
         label: item.label,
         state: {}
-      })) ?? [ { state: {}}]
+      })) ?? []
     },
     [CheckTypes.PARTITIONED]: {
       activeTab: newState[CheckTypes.PARTITIONED]?.activeTab,
@@ -42,7 +42,7 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         value: item.value,
         label: item.label,
         state: {}
-      })) ?? [ { state: {}}]
+      })) ?? []
     }
   };
 };
