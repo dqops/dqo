@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ConnectionApiClient, SchemaApiClient, TableApiClient } from '../services/apiClient';
 
 
  function useConnectionSchemaTableExists(connection : string, schema: string, table: string) {
-    const [tableExist, setTableExist] = useState(true)
-    const [schemaExist, setSchemaExist] = useState(true)
-    const [connectionExist, setConnectionExist] = useState(true)
+    const [tableExist, setTableExist] = useState<boolean>()
+    const [schemaExist, setSchemaExist] = useState<boolean>()
+    const [connectionExist, setConnectionExist] = useState<boolean>()
     useEffect(() => {
     const fetchData = async () => {
-        console.log("inside")
-     await TableApiClient.getTable(connection, schema, table).then((res) => console.log(res.data) ).catch(() => {setTableExist(false)});
-     await SchemaApiClient.getSchemas(connection).then((res) => console.log(res.data) ).catch(() => { setTableExist(false)} );
-      await ConnectionApiClient.getConnection(connection).then((res) => console.log(res.data) ).catch(() => { setTableExist(false), setSchemaExist(false), setConnectionExist(false) } );
+         const validate404Status = (status : number) : boolean => {
+            return status === 200 || status === 404;
+        } 
+    setSchemaExist(true)
+    setTableExist(true)
+    setConnectionExist(true)    
+     TableApiClient.getTable(connection, schema, table,  {validateStatus: validate404Status})
+        .then((res) => res.status === 404 && setTableExist(false))
+        .catch(() => {setTableExist(false)});
+   SchemaApiClient.getSchemas(connection, {validateStatus: validate404Status})
+        .then((res) => res.status === 404 && (setTableExist(false), setSchemaExist(false)))
+        .catch(() => { setTableExist(false), setSchemaExist(false)} );
+     ConnectionApiClient.getConnection(connection, {validateStatus: validate404Status})
+        .then((res) => res.status === 404 && (setTableExist(false), setSchemaExist(false), setConnectionExist(false)))
+        .catch(() => { setTableExist(false), setSchemaExist(false), setConnectionExist(false) } );
     };
 
     fetchData();

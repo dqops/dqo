@@ -31,6 +31,7 @@ import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -51,6 +52,7 @@ type EditReferenceTableProps = {
   refTableChanged: boolean
   listOfExistingReferences: Array<string | undefined>
   canUserCompareTables?: boolean
+
 };
 
 const EditReferenceTable = ({
@@ -71,7 +73,7 @@ const EditReferenceTable = ({
   onChangeRefTableChanged,
   refTableChanged,
   listOfExistingReferences,
-  canUserCompareTables
+  canUserCompareTables,
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -120,6 +122,8 @@ const EditReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
 
+  const { tableExist, schemaExist, connectionExist }
+  = useConnectionSchemaTableExists(refConnection, refSchema, refTable);
   const onSetNormalList = (obj: Array<string>): void => {
     setNormalList(obj);
   };
@@ -153,10 +157,10 @@ const EditReferenceTable = ({
         setTrueArray(res.data.grouping_columns ?? []);
       });
     }
-  }, [selectedReference, refTable]);
+  }, [selectedReference]);
 
   useEffect(() => {
-    if (refConnection) {
+    if (refConnection && connectionExist) {
       SchemaApiClient.getSchemas(refConnection).then((res) => {
         setSchemaOptions(
           res.data.map((item) => ({
@@ -166,10 +170,10 @@ const EditReferenceTable = ({
         );
       });
     }
-  }, [refConnection]);
+  }, [refConnection, connectionExist]);
 
   useEffect(() => {
-    if (refConnection && refSchema) {
+    if (refConnection && refSchema && connectionExist && schemaExist ) {
       TableApiClient.getTables(refConnection, refSchema).then((res) => {
         setTableOptions(
           res.data.map((item) => ({
@@ -179,7 +183,7 @@ const EditReferenceTable = ({
         );
       });
     }
-  }, [refConnection, refSchema]);
+  }, [refConnection, refSchema, connectionExist, schemaExist]);
 
   const goToCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -422,10 +426,10 @@ const EditReferenceTable = ({
         onChange({reference_connection : refConnection, 
           reference_table: {schema_name: refSchema, table_name: value}},
           )
-          if(value !== refTable){
-            setDeleteDataDialogOpened(true)
-            onChangeRefTableChanged(!refTableChanged)
-           }   
+          // if(value !== refTable){
+          //   setDeleteDataDialogOpened(true)
+          //   onChangeRefTableChanged(!refTableChanged)
+          //  }   
         }
   };
   const changePropsSchema = (value: string) => {
@@ -613,6 +617,27 @@ const EditReferenceTable = ({
   }, [job?.status]);
 
 
+
+  // console.log(refConnection, refSchema, refTable)
+
+  // useEffect(() => {}, [refConnection, refSchema, refTable])
+
+  // useEffect(() => {
+  //   if(tableExist === false){
+  //     setRefTable("")
+  //   }
+  //   else if(schemaExist === false){
+  //     setRefSchema("")
+  //   } 
+  //   else if(connectionExist === false){
+  //     setRefConnection("")
+  //   }
+  // }, [])
+  console.log(tableExist, schemaExist, connectionExist)
+  console.log(refConnection, refSchema, refTable)
+
+
+
   return (
     <div className="w-full">
       <TableActionGroup
@@ -686,7 +711,7 @@ const EditReferenceTable = ({
             svgIcon={isCreating ? false : true}
             onClick={() => setExtendRefnames(false)}
           >
-            <div className="flex flex-col gap-2 w-1/4 mb-3">
+            <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
               <div>Connection</div>
               <Select
                 className="flex-1"
@@ -695,7 +720,7 @@ const EditReferenceTable = ({
                 onChange={changePropsConnection}
               />
             </div>
-            <div className="flex flex-col gap-2  w-1/4 mb-3">
+            <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
               <div> Schema</div>
               <Select
                 className="flex-1"
@@ -704,7 +729,7 @@ const EditReferenceTable = ({
                 onChange={changePropsSchema}
               />
             </div>
-            <div className="flex flex-col gap-2  w-1/4 mb-3">
+            <div className="flex flex-col gap-2 w-1/3 mb-3">
               <div>Table</div>
               <Select
                 className="flex-1"

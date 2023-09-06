@@ -241,13 +241,15 @@ export const EditProfilingReferenceTable = ({
         reference.reference_connection ?? connection,
         reference.reference_table?.schema_name ?? schema,
         reference.reference_table?.table_name ?? table
-      ).then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
+      )?.then((columnRes) => {
+        if(columnRes){
+          setColumnOptions(
+            columnRes.data.map((item) => ({
+              label: item.column_name ?? '',
+              value: item.column_name ?? ''
+            }))
+            );
+          }
       });
     }
   }, [reference, selectedReference]);
