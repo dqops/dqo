@@ -24,6 +24,7 @@ import com.dqops.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSys
 import com.dqops.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 import com.dqops.metadata.fileindices.FileIndexName;
+import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.fileindices.FileIndexWrapper;
 import com.dqops.metadata.fileindices.FileLocation;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -82,6 +83,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                                   FileSynchronizationDirection synchronizationDirection,
                                   boolean forceRefreshNativeTable,
                                   FileSystemSynchronizationListener synchronizationListener) {
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -89,6 +91,18 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         FileIndexWrapper localFileIndexWrapper = userHome.getFileIndices().getByObjectName(localIndexName, true);
         if (localFileIndexWrapper == null) {
             localFileIndexWrapper = userHome.getFileIndices().createAndAddNew(localIndexName);
+            localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+            localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+        } else {
+            if (localFileIndexWrapper.getSpec().getTenantId() == null) {
+                localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            } else if (!Objects.equals(localFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
+                       !Objects.equals(localFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                localFileIndexWrapper.setSpec(new FileIndexSpec());
+                localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            }
         }
 
         FileIndexName remoteIndexName = new FileIndexName(dqoRoot, FileLocation.REMOTE);
@@ -96,6 +110,18 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteIndexName, true);
         if (remoteFileIndexWrapper == null) {
             remoteFileIndexWrapper = userHome.getFileIndices().createAndAddNew(remoteIndexName);
+            remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+            remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+        } else {
+            if (remoteFileIndexWrapper.getSpec().getTenantId() == null) {
+                remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            } else if (!Objects.equals(remoteFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
+                    !Objects.equals(remoteFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                remoteFileIndexWrapper.setSpec(new FileIndexSpec());
+                remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            }
         }
 
         SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot);
@@ -111,7 +137,6 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteFileIndexWrapper.getSpec().getFolder(),
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
                 sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, apiKey, synchronizationListener);
 
