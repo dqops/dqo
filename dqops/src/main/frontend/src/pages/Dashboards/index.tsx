@@ -10,9 +10,22 @@ import { AuthenticatedDashboardModel } from '../../api';
 import { TabOption } from '../../components/PageTabs/tab';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import axios from 'axios';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
+
+  const [objectNotFound, setObjectNotFound] = React.useState(false)
+ 
+
+  axios.interceptors.response.use(undefined, function (error) {
+    const statusCode = error.response ? error.response.status : null;
+    if (statusCode === 404 ) {
+      setObjectNotFound(true)
+    }
+    return Promise.reject(error);
+  });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
   const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error } =
     useDashboard();
@@ -89,6 +102,12 @@ const Dashboards = () => {
           </div>
         )}
       </div>
+      <ConfirmDialog
+      open={objectNotFound}
+      onConfirm={() => new Promise(() => {closeTab(activeTab), setObjectNotFound(false)})}
+      isCancelExcluded={true} 
+      onClose={() => {closeTab(activeTab), setObjectNotFound(false)}}
+      message='The definition of this object was deleted in DQO user home, closing the tab'/>
     </DashboardLayout>
   );
 };
