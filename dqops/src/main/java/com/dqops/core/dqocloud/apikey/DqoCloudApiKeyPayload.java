@@ -53,7 +53,7 @@ public class DqoCloudApiKeyPayload {
 
     @JsonProperty("lic")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String licenseType;
+    private DqoCloudLicenseType licenseType;
 
     @JsonProperty("lm")
     private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
@@ -160,7 +160,7 @@ public class DqoCloudApiKeyPayload {
      * Returns the license type.
      * @return License type.
      */
-    public String getLicenseType() {
+    public DqoCloudLicenseType getLicenseType() {
         return licenseType;
     }
 
@@ -168,7 +168,7 @@ public class DqoCloudApiKeyPayload {
      * Sets the license type.
      * @param licenseType License type.
      */
-    public void setLicenseType(String licenseType) {
+    public void setLicenseType(DqoCloudLicenseType licenseType) {
         this.licenseType = licenseType;
     }
 
