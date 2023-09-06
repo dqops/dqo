@@ -109,8 +109,8 @@ const setActiveTabState = (
 const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state?.[action.checkType]?.tabs?.find(
-        (item) => item?.value === action?.data?.value
+      const existing = state[action.checkType]?.tabs.find(
+        (item) => item.value === action.data.value
       );
       const { state: actionState, ...data } = action.data;
 
@@ -134,9 +134,9 @@ const connectionReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         [action.checkType]: {
-          ...state?.[action?.checkType],
-          activeTab: action?.data?.value,
-          tabs: [state[action?.checkType]?.tabs ? {...state[action?.checkType]?.tabs} : [], action.data]
+          ...state[action.checkType],
+          activeTab: action.data.value,
+          tabs: [...state[action.checkType].tabs, action.data]
         }
       };
     }
@@ -144,7 +144,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         [action.checkType]: {
-          ...state?.[action?.checkType],
+          ...state[action.checkType],
           activeTab: action.data
         }
       };
@@ -1302,9 +1302,10 @@ const connectionReducer = (state = initialState, action: Action) => {
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
-      console.log('firstAte', checksState)
+      console.log('firstAte', checksState);
       return setActiveTabState(state, action, {
         checksState: {
           ...checksState,
@@ -1318,7 +1319,8 @@ const connectionReducer = (state = initialState, action: Action) => {
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
       return setActiveTabState(state, action, {
         checksState: {
