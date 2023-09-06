@@ -47,4 +47,12 @@ public abstract class AbstractTableComparisonCheckCategorySpec extends AbstractC
      * @param tableCompareCheckType Check type.
      */
     public abstract void removeCheckSpec(TableCompareCheckType tableCompareCheckType);
+
+    /**
+     * Returns true if this type of comparison checks support a column count comparison.
+     * Profiling and monitoring checks that compare the whole table support also comparing the column count.
+     * Partitioned checks do not support comparing row count and their comparison check containers return false.
+     * @return True - the column count match check is supported for this type of checks, false when it is not supported.
+     */
+    public abstract boolean supportsColumnComparisonCheck();
 }

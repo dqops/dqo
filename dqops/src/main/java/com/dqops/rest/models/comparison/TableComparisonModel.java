@@ -98,6 +98,12 @@ public class TableComparisonModel {
     private CompareThresholdsModel compareRowCount;
 
     /**
+     * The column count comparison configuration.
+     */
+    @JsonPropertyDescription("The column count comparison configuration.")
+    private CompareThresholdsModel compareColumnCount;
+
+    /**
      * The list of compared columns, their matching reference column and the enabled comparisons.
      */
     @JsonPropertyDescription("The list of compared columns, their matching reference column and the enabled comparisons.")
@@ -187,6 +193,11 @@ public class TableComparisonModel {
             if (tableCheckComparisonChecks != null) {
                 ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, false);
                 tableComparisonModel.setCompareRowCount(CompareThresholdsModel.fromComparisonCheckSpec(rowCountMatch));
+
+                if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+                    ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, false);
+                    tableComparisonModel.setCompareColumnCount(CompareThresholdsModel.fromComparisonCheckSpec(columnCountMatch));
+                }
             }
         }
 
@@ -269,6 +280,15 @@ public class TableComparisonModel {
             this.compareRowCount.copyToComparisonCheckSpec(rowCountMatch);
         } else {
             tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.row_count_match);
+        }
+
+        if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+            if (this.compareColumnCount != null) {
+                ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+                this.compareColumnCount.copyToComparisonCheckSpec(columnCountMatch);
+            } else {
+                tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.column_count_match);
+            }
         }
 
         for (ColumnComparisonModel columnComparisonModel : this.columns) {

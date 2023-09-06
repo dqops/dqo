@@ -18,6 +18,7 @@ package com.dqops.checks.table.monitoring.comparison;
 import com.dqops.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ComparisonCheckRules;
 import com.dqops.checks.comparison.TableCompareCheckType;
+import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -40,11 +41,15 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
     public static final ChildHierarchyNodeFieldMapImpl<TableComparisonDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
         {
             put("daily_row_count_match", o -> o.dailyRowCountMatch);
+            put("daily_column_count_match", o -> o.dailyColumnCountMatch);
         }
     };
 
     @JsonPropertyDescription("Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private TableComparisonRowCountMatchCheckSpec dailyRowCountMatch;
+
+    @JsonPropertyDescription("Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private TableComparisonColumnCountMatchCheckSpec dailyColumnCountMatch;
 
     /**
      * Returns the row count match check.
@@ -62,6 +67,24 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
         this.setDirtyIf(!Objects.equals(this.dailyRowCountMatch, dailyRowCountMatch));
         this.dailyRowCountMatch = dailyRowCountMatch;
         propagateHierarchyIdToField(dailyRowCountMatch, "daily_row_count_match");
+    }
+
+    /**
+     * Returns the column count match check.
+     * @return Column count match check.
+     */
+    public TableComparisonColumnCountMatchCheckSpec getDailyColumnCountMatch() {
+        return dailyColumnCountMatch;
+    }
+
+    /**
+     * Sets a new column count match check.
+     * @param dailyColumnCountMatch Column count match check.
+     */
+    public void setDailyColumnCountMatch(TableComparisonColumnCountMatchCheckSpec dailyColumnCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnCountMatch, dailyColumnCountMatch));
+        this.dailyColumnCountMatch = dailyColumnCountMatch;
+        propagateHierarchyIdToField(dailyColumnCountMatch, "daily_column_count_match");
     }
 
     /**
@@ -83,6 +106,17 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
 
                 return this.dailyRowCountMatch;
             }
+
+            case column_count_match: {
+                if (this.dailyColumnCountMatch == null) {
+                    if (createWhenMissing) {
+                        this.setDailyColumnCountMatch(new TableComparisonColumnCountMatchCheckSpec());
+                    }
+                }
+
+                return this.dailyColumnCountMatch;
+            }
+
             default:
                 return null;
         }
@@ -99,6 +133,10 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
             case row_count_match:
                 this.setDailyRowCountMatch(null);
                 break;
+
+            case column_count_match:
+                this.setDailyColumnCountMatch(null);
+                break;
         }
     }
 
@@ -110,5 +148,17 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this type of comparison checks support a column count comparison.
+     * Profiling and monitoring checks that compare the whole table support also comparing the column count.
+     * Partitioned checks do not support comparing row count and their comparison check containers return false.
+     *
+     * @return True - the column count match check is supported for this type of checks, false when it is not supported.
+     */
+    @Override
+    public boolean supportsColumnComparisonCheck() {
+        return true;
     }
 }

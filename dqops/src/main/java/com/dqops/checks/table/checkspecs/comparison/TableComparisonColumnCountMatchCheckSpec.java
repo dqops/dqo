@@ -23,6 +23,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxDiffPercentRule0ParametersSpec;
 import com.dqops.rules.comparison.MaxDiffPercentRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxDiffPercentRule5ParametersSpec;
+import com.dqops.sensors.table.schema.TableColumnCountSensorParametersSpec;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,37 +36,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level comparison check compares the row count of the current (parent) table to the row count of the reference table.
+ * Table level comparison check compares the row count of the current (parent) table to the column count in the reference table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableComparisonRowCountMatchCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec>
+public class TableComparisonColumnCountMatchCheckSpec
+        extends AbstractCheckSpec<TableColumnCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec>
         implements ComparisonCheckRules {
-    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonRowCountMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonColumnCountMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Row count data quality sensor.")
+    @JsonPropertyDescription("Column count data quality sensor.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
+    private TableColumnCountSensorParametersSpec parameters = new TableColumnCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Warning level threshold to raise a data quality incident with a warning severity level when the row count in the parent table " +
+    @JsonPropertyDescription("Warning level threshold to raise a data quality incident with a warning severity level when the column count in the parent table " +
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDiffPercentRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Error level threshold to raise a data quality incident with an error severity level when the row count in the parent table " +
+    @JsonPropertyDescription("Error level threshold to raise a data quality incident with an error severity level when the column count in the parent table " +
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDiffPercentRule1ParametersSpec error;
 
-    @JsonPropertyDescription("Fatal level threshold to raise a data quality incident with a fatal severity level when the row count in the parent table " +
+    @JsonPropertyDescription("Fatal level threshold to raise a data quality incident with a fatal severity level when the column count in the parent table " +
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -76,7 +77,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public TableVolumeRowCountSensorParametersSpec getParameters() {
+    public TableColumnCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -84,7 +85,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
+    public void setParameters(TableColumnCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

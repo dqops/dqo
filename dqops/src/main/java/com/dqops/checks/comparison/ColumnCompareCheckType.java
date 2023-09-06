@@ -21,10 +21,33 @@ package com.dqops.checks.comparison;
  * with slightly different names from profiling, daily monitoring, and other check types.
  */
 public enum ColumnCompareCheckType {
+    /**
+     * Min value match check.
+     */
     min_match,
+
+    /**
+     * Max value match check.
+     */
     max_match,
+
+    /**
+     * Sum of values match check.
+     */
     sum_match,
+
+    /**
+     * Mean of values match check.
+     */
     mean_match,
+
+    /**
+     * Count of nulls match check.
+     */
     null_count_match,
+
+    /**
+     * Count of not nulls match check.
+     */
     not_null_count_match
 }
