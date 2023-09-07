@@ -206,7 +206,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                monitoring, new ErrorsDetailedFilterParameters());
+                monitoring, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 

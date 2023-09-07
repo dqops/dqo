@@ -280,7 +280,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, new SensorReadoutsDetailedFilterParameters());
+                partitionedCheckPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
