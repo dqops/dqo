@@ -65,8 +65,6 @@ export default function UserProfile({ name, email }: UserProfile) {
     setCopied(true)
   }
 
-  console.log(apiKey)
-
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
