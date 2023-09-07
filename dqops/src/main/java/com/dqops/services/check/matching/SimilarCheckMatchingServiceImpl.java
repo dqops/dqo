@@ -15,6 +15,8 @@
  */
 package com.dqops.services.check.matching;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
@@ -24,6 +26,7 @@ import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategories
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableComparisonProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
@@ -95,6 +98,31 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         timestampColumns.setEventTimestampColumn("col_event_timestamp");
         timestampColumns.setIngestionTimestampColumn("col_inserted_at");
 
+        tableSpec.getTableComparisons().put("comparison_to_source_of_truth_profiling",
+                new TableComparisonConfigurationSpec() {{
+                    setCheckType(CheckType.profiling);
+                }});
+        tableSpec.getTableComparisons().put("comparison_to_source_of_truth_monitoring_daily",
+                new TableComparisonConfigurationSpec() {{
+                    setCheckType(CheckType.monitoring);
+                    setTimeScale(CheckTimeScale.daily);
+                }});
+        tableSpec.getTableComparisons().put("comparison_to_source_of_truth_monitoring_monthly",
+                new TableComparisonConfigurationSpec() {{
+                    setCheckType(CheckType.monitoring);
+                    setTimeScale(CheckTimeScale.monthly);
+                }});
+        tableSpec.getTableComparisons().put("comparison_to_source_of_truth_partitioned_daily",
+                new TableComparisonConfigurationSpec() {{
+                    setCheckType(CheckType.partitioned);
+                    setTimeScale(CheckTimeScale.daily);
+                }});
+        tableSpec.getTableComparisons().put("comparison_to_source_of_truth_partitioned_monthly",
+                new TableComparisonConfigurationSpec() {{
+                    setCheckType(CheckType.partitioned);
+                    setTimeScale(CheckTimeScale.monthly);
+                }});
+
         return tableSpec;
     }
 
@@ -108,13 +136,11 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
-        tableSpec.getTableComparisons().put("comparison_to_source_of_truth", new TableComparisonConfigurationSpec());
-        tableWrapper.setSpec(tableSpec);
 
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setEnabled(true);
-            // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
+            // TODO: we could add additional filters on the connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
         ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());
@@ -158,7 +184,6 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);
         tableWrapper.setSpec(tableSpec);
-        tableSpec.getTableComparisons().put("comparison_to_source_of_truth", new TableComparisonConfigurationSpec());
         ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
 
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
