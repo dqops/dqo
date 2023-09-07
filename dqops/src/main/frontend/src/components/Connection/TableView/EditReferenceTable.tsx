@@ -31,6 +31,7 @@ import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -45,12 +46,10 @@ type EditReferenceTableProps = {
   combinedFunc: (name: string) => void;
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
   onChangeIsDataDeleted: (arg: boolean) => void;
-  onChange: (obj: Partial<TableComparisonModel>) => void
-  isDataDeleted : boolean
-  onChangeRefTableChanged: (arg: boolean) => void
-  refTableChanged: boolean
-  listOfExistingReferences: Array<string | undefined>
-  canUserCompareTables?: boolean
+  onChange: (obj: Partial<TableComparisonModel>) => void;
+  isDataDeleted: boolean;
+  listOfExistingReferences: Array<string | undefined>;
+  canUserCompareTables?: boolean;
 };
 
 const EditReferenceTable = ({
@@ -68,8 +67,6 @@ const EditReferenceTable = ({
   onChangeIsDataDeleted,
   onChange,
   isDataDeleted,
-  onChangeRefTableChanged,
-  refTableChanged,
   listOfExistingReferences,
   canUserCompareTables
 }: EditReferenceTableProps) => {
@@ -112,7 +109,7 @@ const EditReferenceTable = ({
     (state: IRootState) => state.job || {}
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-  const [popUp, setPopUp] = useState(false)
+  const [popUp, setPopUp] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
@@ -120,6 +117,8 @@ const EditReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
 
+  const { tableExist, schemaExist, connectionExist } =
+    useConnectionSchemaTableExists(refConnection, refSchema, refTable);
   const onSetNormalList = (obj: Array<string>): void => {
     setNormalList(obj);
   };
@@ -146,40 +145,57 @@ const EditReferenceTable = ({
         table,
         selectedReference
       ).then((res) => {
-        setName(res.data?.table_comparison_configuration_name ?? '');
-        setRefConnection(res.data?.reference_connection ?? '');
-        setRefSchema(res.data?.reference_table?.schema_name ?? '');
-        setRefTable(res.data?.reference_table?.table_name ?? '');
-        setTrueArray(res.data.grouping_columns ?? []);
+        if (res && res?.data) {
+          setName(res.data?.table_comparison_configuration_name ?? '');
+          setRefConnection(res.data?.reference_connection ?? '');
+          setRefSchema(res.data?.reference_table?.schema_name ?? '');
+          setRefTable(res.data?.reference_table?.table_name ?? '');
+          setTrueArray(res.data.grouping_columns ?? []);
+        }
       });
     }
-  }, [selectedReference, refTable]);
+  }, [selectedReference]);
 
   useEffect(() => {
-    if (refConnection) {
+    if (
+      refConnection &&
+      refConnection.length !== 0 &&
+      connectionExist === true
+    ) {
       SchemaApiClient.getSchemas(refConnection).then((res) => {
-        setSchemaOptions(
-          res.data.map((item) => ({
-            label: item.schema_name ?? '',
-            value: item.schema_name ?? ''
-          }))
-        );
+        if (res !== undefined) {
+          setSchemaOptions(
+            res.data.map((item) => ({
+              label: item.schema_name ?? '',
+              value: item.schema_name ?? ''
+            }))
+          );
+        }
       });
     }
-  }, [refConnection]);
+  }, [refConnection, connectionExist]);
 
   useEffect(() => {
-    if (refConnection && refSchema) {
+    if (
+      refConnection &&
+      refConnection.length !== 0 &&
+      refSchema &&
+      refSchema.length !== 0 &&
+      connectionExist === true &&
+      schemaExist === true
+    ) {
       TableApiClient.getTables(refConnection, refSchema).then((res) => {
-        setTableOptions(
-          res.data.map((item) => ({
-            label: item.target?.table_name ?? '',
-            value: item.target?.table_name ?? ''
-          }))
-        );
+        if (res !== undefined) {
+          setTableOptions(
+            res.data.map((item) => ({
+              label: item.target?.table_name ?? '',
+              value: item.target?.table_name ?? ''
+            }))
+          );
+        }
       });
     }
-  }, [refConnection, refSchema]);
+  }, [refConnection, refSchema, connectionExist, schemaExist]);
 
   const goToCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -253,156 +269,155 @@ const EditReferenceTable = ({
         });
     } else {
       if (listOfExistingReferences.includes(name.toString())) {
-        setPopUp(true)
+        setPopUp(true);
+      } else {
+        if (checkTypes === CheckTypes.PROFILING) {
+          await TableComparisonsApi.createTableComparisonProfiling(
+            connection,
+            schema,
+            table,
+            {
+              table_comparison_configuration_name: name,
+              compared_connection: connection,
+              compared_table: {
+                schema_name: schema,
+                table_name: table
+              },
+              reference_connection: refConnection,
+              reference_table: {
+                schema_name: refSchema,
+                table_name: refTable
+              },
+              grouping_columns: doubleArray ?? []
+            }
+          )
+            .then(() => {
+              onBack(false);
+            })
+            .finally(() => {
+              setIsUpdating(false);
+            });
+        } else if (
+          checkTypes === CheckTypes.PARTITIONED &&
+          timePartitioned === 'daily'
+        ) {
+          await TableComparisonsApi.createTableComparisonPartitionedDaily(
+            connection,
+            schema,
+            table,
+            {
+              table_comparison_configuration_name: name,
+              compared_connection: connection,
+              compared_table: {
+                schema_name: schema,
+                table_name: table
+              },
+              reference_connection: refConnection,
+              reference_table: {
+                schema_name: refSchema,
+                table_name: refTable
+              },
+              grouping_columns: doubleArray ?? []
+            }
+          )
+            .then(() => {
+              onBack(false);
+            })
+            .finally(() => {
+              setIsUpdating(false);
+            });
+        } else if (
+          checkTypes === CheckTypes.PARTITIONED &&
+          timePartitioned === 'monthly'
+        ) {
+          await TableComparisonsApi.createTableComparisonPartitionedMonthly(
+            connection,
+            schema,
+            table,
+            {
+              table_comparison_configuration_name: name,
+              compared_connection: connection,
+              compared_table: {
+                schema_name: schema,
+                table_name: table
+              },
+              reference_connection: refConnection,
+              reference_table: {
+                schema_name: refSchema,
+                table_name: refTable
+              },
+              grouping_columns: doubleArray ?? []
+            }
+          )
+            .then(() => {
+              onBack(false);
+            })
+            .finally(() => {
+              setIsUpdating(false);
+            });
+        } else if (
+          checkTypes === CheckTypes.MONITORING &&
+          timePartitioned === 'daily'
+        ) {
+          await TableComparisonsApi.createTableComparisonMonitoringDaily(
+            connection,
+            schema,
+            table,
+            {
+              table_comparison_configuration_name: name,
+              compared_connection: connection,
+              compared_table: {
+                schema_name: schema,
+                table_name: table
+              },
+              reference_connection: refConnection,
+              reference_table: {
+                schema_name: refSchema,
+                table_name: refTable
+              },
+              grouping_columns: doubleArray ?? []
+            }
+          )
+            .then(() => {
+              onBack(false);
+            })
+            .finally(() => {
+              setIsUpdating(false);
+            });
+        } else if (
+          checkTypes === CheckTypes.MONITORING &&
+          timePartitioned === 'monthly'
+        ) {
+          await TableComparisonsApi.createTableComparisonMonitoringMonthly(
+            connection,
+            schema,
+            table,
+            {
+              table_comparison_configuration_name: name,
+              compared_connection: connection,
+              compared_table: {
+                schema_name: schema,
+                table_name: table
+              },
+              reference_connection: refConnection,
+              reference_table: {
+                schema_name: refSchema,
+                table_name: refTable
+              },
+              grouping_columns: doubleArray ?? []
+            }
+          )
+            .then(() => {
+              onBack(false);
+            })
+            .finally(() => {
+              setIsUpdating(false);
+            });
+        }
+        combinedFunc(name);
+        setPopUp(false);
       }
-      else{
-      if (checkTypes === CheckTypes.PROFILING) {
-        await TableComparisonsApi.createTableComparisonProfiling(
-          connection,
-          schema,
-          table,
-          {
-            table_comparison_configuration_name: name,
-            compared_connection: connection,
-            compared_table: {
-              schema_name: schema,
-              table_name: table
-            },
-            reference_connection: refConnection,
-            reference_table: {
-              schema_name: refSchema,
-              table_name: refTable
-            },
-            grouping_columns: doubleArray ?? []
-          }
-        )
-          .then(() => {
-            onBack(false);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
-      } else if (
-        checkTypes === CheckTypes.PARTITIONED &&
-        timePartitioned === 'daily'
-      ) {
-        await TableComparisonsApi.createTableComparisonPartitionedDaily(
-          connection,
-          schema,
-          table,
-          {
-            table_comparison_configuration_name: name,
-            compared_connection: connection,
-            compared_table: {
-              schema_name: schema,
-              table_name: table
-            },
-            reference_connection: refConnection,
-            reference_table: {
-              schema_name: refSchema,
-              table_name: refTable
-            },
-            grouping_columns: doubleArray ?? []
-          }
-        )
-          .then(() => {
-            onBack(false);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
-      } else if (
-        checkTypes === CheckTypes.PARTITIONED &&
-        timePartitioned === 'monthly'
-      ) {
-        await TableComparisonsApi.createTableComparisonPartitionedMonthly(
-          connection,
-          schema,
-          table,
-          {
-            table_comparison_configuration_name: name,
-            compared_connection: connection,
-            compared_table: {
-              schema_name: schema,
-              table_name: table
-            },
-            reference_connection: refConnection,
-            reference_table: {
-              schema_name: refSchema,
-              table_name: refTable
-            },
-            grouping_columns: doubleArray ?? []
-          }
-        )
-          .then(() => {
-            onBack(false);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
-      } else if (
-        checkTypes === CheckTypes.MONITORING &&
-        timePartitioned === 'daily'
-      ) {
-        await TableComparisonsApi.createTableComparisonMonitoringDaily(
-          connection,
-          schema,
-          table,
-          {
-            table_comparison_configuration_name: name,
-            compared_connection: connection,
-            compared_table: {
-              schema_name: schema,
-              table_name: table
-            },
-            reference_connection: refConnection,
-            reference_table: {
-              schema_name: refSchema,
-              table_name: refTable
-            },
-            grouping_columns: doubleArray ?? []
-          }
-        )
-          .then(() => {
-            onBack(false);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
-      } else if (
-        checkTypes === CheckTypes.MONITORING &&
-        timePartitioned === 'monthly'
-      ) {
-        await TableComparisonsApi.createTableComparisonMonitoringMonthly(
-          connection,
-          schema,
-          table,
-          {
-            table_comparison_configuration_name: name,
-            compared_connection: connection,
-            compared_table: {
-              schema_name: schema,
-              table_name: table
-            },
-            reference_connection: refConnection,
-            reference_table: {
-              schema_name: refSchema,
-              table_name: refTable
-            },
-            grouping_columns: doubleArray ?? []
-          }
-        )
-          .then(() => {
-            onBack(false);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
-      }
-      combinedFunc(name);
-      setPopUp(false)
     }
-  }
     setIsButtonEnabled(false);
     onChangeUpdatedParent(false);
   };
@@ -411,30 +426,30 @@ const EditReferenceTable = ({
     if (selectedReference === undefined || selectedReference.length === 0) {
       setName(e.target.value);
       setIsUpdated(true);
- 
     }
   };
 
   const changePropsTable = (value: string) => {
-      setRefTable(value);
-      setIsUpdated(true);
-      if(isCreating === false){
-        onChange({reference_connection : refConnection, 
-          reference_table: {schema_name: refSchema, table_name: value}},
-          )
-          if(value !== refTable){
-            setDeleteDataDialogOpened(true)
-            onChangeRefTableChanged(!refTableChanged)
-           }   
-        }
+    setRefTable(value);
+    setIsUpdated(true);
+    if (isCreating === false) {
+      onChange({
+        reference_connection: refConnection,
+        reference_table: { schema_name: refSchema, table_name: value }
+      });
+      // if(value !== refTable){
+      //   setDeleteDataDialogOpened(true)
+      //   onChangeRefTableChanged(!refTableChanged)
+      //  }
+    }
   };
   const changePropsSchema = (value: string) => {
-      setRefSchema(value);
-      setIsUpdated(true);
+    setRefSchema(value);
+    setIsUpdated(true);
   };
   const changePropsConnection = (value: string) => {
-      setRefConnection(value);
-      setIsUpdated(true); 
+    setRefConnection(value);
+    setIsUpdated(true);
   };
 
   const workOnMyObj = (
@@ -442,24 +457,23 @@ const EditReferenceTable = ({
   ): { [key: number]: number } => {
     const initialObject: { [key: number]: number } = {};
     let check = false;
-    if(listOfColumns && listOfColumns.length){
-
+    if (listOfColumns && listOfColumns.length) {
       for (let i = listOfColumns.length - 1; i >= 0; i--) {
         if (listOfColumns[i]?.length === 0 && !check) {
           initialObject[i] = 2;
-      } else if (listOfColumns[i]?.length !== 0 && !check) {
-        check = true;
-        initialObject[i] = 2;
-      } else if (check && listOfColumns[i]?.length === 0) {
-        initialObject[i] = 1;
-      } else if (check && listOfColumns[i]?.length !== 0) {
-        initialObject[i] = 2;
-      }
-      if (listOfColumns[i]?.length !== 0) {
-        initialObject[i] = 3;
+        } else if (listOfColumns[i]?.length !== 0 && !check) {
+          check = true;
+          initialObject[i] = 2;
+        } else if (check && listOfColumns[i]?.length === 0) {
+          initialObject[i] = 1;
+        } else if (check && listOfColumns[i]?.length !== 0) {
+          initialObject[i] = 2;
+        }
+        if (listOfColumns[i]?.length !== 0) {
+          initialObject[i] = 3;
+        }
       }
     }
-  }
     return initialObject;
   };
 
@@ -510,7 +524,7 @@ const EditReferenceTable = ({
           item.compared_table_column_name !== '' ||
           item.reference_table_column_name !== ''
       );
-      
+
       setDoubleArray(trim);
       if (
         trim.find(
@@ -525,9 +539,9 @@ const EditReferenceTable = ({
       } else {
         setBool(true);
       }
-      return trim
+      return trim;
     }
-    return []
+    return [];
   };
 
   const splitArrays = () => {
@@ -537,19 +551,26 @@ const EditReferenceTable = ({
           ? x.compared_table_column_name
           : ''
       );
-        const refArr = trueArray.map((x) =>
+      const refArr = trueArray.map((x) =>
         typeof x.reference_table_column_name === 'string'
-        ? x.reference_table_column_name
-        : ''
-        );
-        return { comparedArr, refArr };
+          ? x.reference_table_column_name
+          : ''
+      );
+      return { comparedArr, refArr };
     }
   };
 
   useEffect(() => {
-    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
-    splitArrays();
-    onChange({grouping_columns: combinedArray()})
+    if (
+      normalList &&
+      refList &&
+      normalList.length !== 0 &&
+      refList.length !== 0
+    ) {
+      algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+      splitArrays();
+      onChange({ grouping_columns: combinedArray() });
+    }
   }, [normalList, refList]);
 
   const saveRun = () => {
@@ -612,7 +633,6 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
-
   return (
     <div className="w-full">
       <TableActionGroup
@@ -627,13 +647,19 @@ const EditReferenceTable = ({
             Table comparison configuration name:{' '}
           </div>
           <Input
-            className="min-w-80"
+            className={
+              name.length === 0 ? 'min-w-80 border border-red-500' : 'min-w-80'
+            }
             value={name}
             onChange={onChangeName}
             placeholder="Table comparison configuration name"
           />
         </div>
-        { popUp===true && <div className='bg-red-300 p-4 rounded-lg text-white border-2 border-red-500'>A table comparison with this name already exists</div>}
+        {popUp === true && (
+          <div className="bg-red-300 p-4 rounded-lg text-white border-2 border-red-500">
+            A table comparison with this name already exists
+          </div>
+        )}
         <div className="flex justify-center items-center gap-x-2">
           <SvgIcon
             name="sync"
@@ -642,15 +668,15 @@ const EditReferenceTable = ({
               disabledDeleting || deletingData ? 'animate-spin' : 'hidden'
             )}
           />
-          {isCreating === false &&
+          {isCreating === false && (
             <Button
-            color="primary"
-            variant="contained"
-            disabled={  disabledDeleting || deletingData || disabled}
-            label="Delete results"
-            onClick={() => setDeleteDataDialogOpened(true)}
+              color="primary"
+              variant="contained"
+              disabled={disabledDeleting || deletingData || disabled}
+              label="Delete results"
+              onClick={() => setDeleteDataDialogOpened(true)}
             />
-          }
+          )}
           <SvgIcon
             name="sync"
             className={clsx(
@@ -664,7 +690,12 @@ const EditReferenceTable = ({
               color="primary"
               variant="contained"
               onClick={saveRun}
-              disabled={disabledDeleting || deletingData || disabled || canUserCompareTables === false}
+              disabled={
+                disabledDeleting ||
+                deletingData ||
+                disabled ||
+                canUserCompareTables === false
+              }
             />
           )}
           <Button
@@ -679,38 +710,45 @@ const EditReferenceTable = ({
       </div>
 
       <div className="px-8 py-4">
-        {isCreating === true || extendRefnames === true ? (
+        {isCreating === true ||
+        extendRefnames === true ||
+        tableExist !== true ? (
           <SectionWrapper
             title="Reference table (the source of truth)"
             className="py-8 mb-10 flex w-full items-center justify-between"
             svgIcon={isCreating ? false : true}
             onClick={() => setExtendRefnames(false)}
           >
-            <div className="flex flex-col gap-2 w-1/4 mb-3">
+            <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
               <div>Connection</div>
               <Select
                 className="flex-1"
                 options={connectionOptions}
                 value={refConnection}
                 onChange={changePropsConnection}
+                triggerClassName={
+                  connectionExist ? '' : 'border border-red-500'
+                }
               />
             </div>
-            <div className="flex flex-col gap-2  w-1/4 mb-3">
+            <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
               <div> Schema</div>
               <Select
                 className="flex-1"
                 options={schemaOptions}
                 value={refSchema}
                 onChange={changePropsSchema}
+                triggerClassName={schemaExist ? '' : 'border border-red-500'}
               />
             </div>
-            <div className="flex flex-col gap-2  w-1/4 mb-3">
+            <div className="flex flex-col gap-2 w-1/3 mb-3">
               <div>Table</div>
               <Select
                 className="flex-1"
                 options={tableOptions}
                 value={refTable}
                 onChange={changePropsTable}
+                triggerClassName={tableExist ? '' : 'border border-red-500'}
               />
             </div>
           </SectionWrapper>
@@ -728,7 +766,7 @@ const EditReferenceTable = ({
           </div>
         )}
 
-        {isCreating || extendDg ? (
+        {(isCreating || extendDg) && tableExist ? (
           <div className="flex gap-4">
             <div className="mr-20 mt-0 relative">
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
@@ -778,7 +816,6 @@ const EditReferenceTable = ({
               onSetRefList={onSetRefList}
               object={refObj}
               responseList={splitArrays()?.refArr}
-              
             />
           </div>
         ) : (

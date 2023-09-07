@@ -62,6 +62,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 axios.interceptors.response.use(undefined, function (error) {
   const statusCode = error.response ? error.response.status : null;
   if (statusCode === 404 ) {
+    console.log(error)
     setObjectNotFound(true)
   }
   return Promise.reject(error);

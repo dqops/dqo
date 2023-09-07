@@ -6,6 +6,7 @@ import {
 } from '../../../api';
 import clsx from 'clsx';
 import Input from '../../Input';
+import { CheckName } from './ResultPanel';
 
 interface data {
   item: ComparisonCheckResultModel;
@@ -14,13 +15,7 @@ interface data {
   type?: string;
   onChange: (obj: Partial<TableComparisonModel>) => void;
   reference?: TableComparisonModel;
-  checkName?:
-    | 'compare_max'
-    | 'compare_min'
-    | 'compare_sum'
-    | 'compare_mean'
-    | 'compare_null_count'
-    | 'compare_not_null_count';
+  checkName?: CheckName;
   index: number;
 }
 
@@ -35,13 +30,7 @@ const ResultBox = ({
 }: data) => {
   const onChangeCompare = (
     obj: Partial<CompareThresholdsModel>,
-    checkName?:
-      | 'compare_max'
-      | 'compare_min'
-      | 'compare_sum'
-      | 'compare_mean'
-      | 'compare_null_count'
-      | 'compare_not_null_count'
+    checkName?: CheckName
   ) => {
     const updatedColumns = reference?.columns?.map((column, i) =>
       i === index
@@ -60,9 +49,6 @@ const ResultBox = ({
         columns: updatedColumns
       });
   };
-
-  console.log(item)
-  console.log(secondBool)
 
   return (
     <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
