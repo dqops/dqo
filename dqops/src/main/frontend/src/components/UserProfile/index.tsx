@@ -65,6 +65,10 @@ export default function UserProfile({ name, email }: UserProfile) {
     setCopied(true)
   }
 
+  const copyWhole = (e: any) => {
+    e.target.select();
+  }
+
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
@@ -155,7 +159,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </div>
         <div className='my-2'>{apiKey.length!==0 ?
-         <div className='flex items-center justify-between'><TextArea label='User API Key:' value={apiKey}/>
+         <div className='flex items-center justify-between select-all' ><TextArea label='User API Key:' value={apiKey} className='select-all' onClick={copyWhole}/>
           <SvgIcon name={copied ? 'done' : 'copytext' } className='cursor-pointer' onClick={() => copyToClipboard()}/>
           </div> 
         : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}

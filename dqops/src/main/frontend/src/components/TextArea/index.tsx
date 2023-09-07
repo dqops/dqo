@@ -20,6 +20,7 @@ interface ITextAreaProps {
   dataTestId?: string;
   tooltipText?: string;
   disabled?: boolean;
+  onClick?: (e: any) => void 
 }
 
 const TextArea = ({
@@ -36,7 +37,8 @@ const TextArea = ({
   rows,
   dataTestId,
   tooltipText,
-  disabled
+  disabled,
+  onClick
 }: ITextAreaProps) => (
   <div>
     {label && (
@@ -75,6 +77,7 @@ const TextArea = ({
         onBlur={onBlur}
         rows={rows}
         disabled={disabled}
+        onClick={onClick}
       />
       {value && (
         <SvgIcon
