@@ -4,10 +4,7 @@ Verifies the availability of a table in the database using a simple row count.
 
 **PROBLEM**
 
-[America’s Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) provides an analysis of national health on a state-by-state basis
-by evaluating a historical and comprehensive set of health, environmental and socioeconomic data to determine national health benchmarks and state rankings.
-
-However, it is important to ensure that these tables are available and actually exist. This can be achieved using a table availability check, which helps ensure that the necessary data is readily available for analysis.
+For any database analysis, it is important that the tables exist and are available.
 
 Typical table availability issues are:
 
@@ -17,22 +14,28 @@ Typical table availability issues are:
 - database credentials are incorrect,
 - access rights to the table have changed.
 
-In this example, we will verify table availability in database using a simple row count.
+In this example, we will use a simple row count to verify table availability in the database and ensure that queries 
+can be executed without errors.
 
-We want to verify that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
+As an example we use [America’s Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) database. 
+This database provides an analysis of national health on a state-by-state basis by evaluating a historical and comprehensive set of health, 
+environmental and socioeconomic data to determine national health benchmarks and state rankings.
 
 **SOLUTION**
 
-We will verify the data using profiling [table_availability](../../checks/table/availability/table-availability.md) check.
+We will verify the data using monitoring [table_availability](../../checks/table/availability/table-availability.md) check.
 Our goal is to verify that table availability check failures do not exceed the set thresholds.
-In this check, you can only get two values in the result 1 or 0. If you get a value of 1, it means the table is fully available and exists, so the result is valid. 
+In this check, you can only get two values in the result 1 or 0. If you get a value of 1, it means the table exists and is available, so the result is valid. 
 
 However, if you receive a value of 0, then there is a problem, and you need to run this check again after fixing the issue with the table. 
 The number of failed attempts are failures, which we set in thresholds.
 
-In this example, we will set maximum failures for the check:
+Table availability checks has a max_failures parameter which indicates a maximum number of consecutive check failures.
+A check is failed when the sensor's query failed to execute due to a connection error, missing table or a corrupted table.
 
-- warning: 0 - max_failures means that data quality issue is raised instantly when the table_availability check falls for the first time, because we are accepting 0 failures
+In this example, we will set the following maximum failures for the check:
+
+- warning: 0
 - error: 5
 - fatal: 10
 
