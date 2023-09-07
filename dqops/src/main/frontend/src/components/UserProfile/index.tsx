@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DqoUserProfileModel } from '../../api';
 import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import {
 import SvgIcon from '../SvgIcon';
 import Button from '../Button';
 import moment from 'moment';
+import TextArea from '../TextArea';
 
 interface UserProfile {
   name?: string;
@@ -23,7 +24,7 @@ interface UserProfile {
 
 export default function UserProfile({ name, email }: UserProfile) {
   const { isProfileOpen, userProfile } = useSelector((state: IRootState) => state.job || {});
-
+  const [apiKey, setApiKey] = useState("");
   const dispatch = useActionDispatch();
 
   const toggleOpen = () => {
@@ -54,6 +55,12 @@ export default function UserProfile({ name, email }: UserProfile) {
   const sampleData = moment(userProfile?.trial_period_expires_at);
   const dayDiff = sampleData.diff(today, 'days');
 
+  const generateApiKey =async () => {
+    await EnviromentApiClient.issueApiKey().then((res) => setApiKey(res.data))
+  }
+
+  console.log(apiKey)
+
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
@@ -67,7 +74,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-83 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
+      <PopoverContent className="bg-white h-108 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
         <div className="flex justify-between items-center h-12 ">
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
@@ -143,6 +150,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             {userProfile?.months_limit ? userProfile.months_limit : '-'}
           </div>
         </div>
+        <div className='my-2'>{apiKey.length!==0 ? <div><TextArea label='User API Key:' value={apiKey}/></div> : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}</div>
         <div className="w-full text-center flex justify-center items-center h-20 text-black">
           <a
             href="https://cloud.dqo.ai/account"
