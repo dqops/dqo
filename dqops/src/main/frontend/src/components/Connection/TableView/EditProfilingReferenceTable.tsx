@@ -740,35 +740,27 @@ export const EditProfilingReferenceTable = ({
                           </div>
                         )}
                       </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                     </tr>
                   </thead>
                   <thead>
                     <tr>
                       <th className="text-left pr-4 py-1.5">Compared column</th>
                       <th className="text-left px-4 py-1.5"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Min
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Max
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Sum
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Mean
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Null count
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Not null count
-                      </th>
+                      {[
+                        'Min',
+                        'Max',
+                        'Sum',
+                        'Mean',
+                        'Null count',
+                        'Not null count'
+                      ].map((x, index) => (
+                        <th
+                          className="text-center px-4 py-1.5 pr-1 w-1/12"
+                          key={index}
+                        >
+                          {x}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
 
@@ -867,48 +859,14 @@ export const EditProfilingReferenceTable = ({
                         <ResultPanel
                           obj={prepareData(item.compared_column_name ?? '')}
                           onChange={onChange}
-                          minBool={
-                            !!item.compare_min &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          maxBool={
-                            !!item.compare_max &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          sumBool={
-                            !!item.compare_sum &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          meanBool={
-                            !!item.compare_mean &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          nullCount={
-                            !!item.compare_null_count &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          notNullCount={
-                            !!item.compare_not_null_count &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
+                          bools={[
+                            !!item.compare_min,
+                            !!item.compare_max,
+                            !!item.compare_sum,
+                            !!item.compare_mean,
+                            !!item.compare_null_count,
+                            !!item.compare_not_null_count
+                          ]}
                           reference={reference}
                           index={index}
                         />
