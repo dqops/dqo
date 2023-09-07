@@ -25,6 +25,7 @@ interface UserProfile {
 export default function UserProfile({ name, email }: UserProfile) {
   const { isProfileOpen, userProfile } = useSelector((state: IRootState) => state.job || {});
   const [apiKey, setApiKey] = useState("");
+  const [copied, setCopied] = useState(false)
   const dispatch = useActionDispatch();
 
   const toggleOpen = () => {
@@ -57,6 +58,11 @@ export default function UserProfile({ name, email }: UserProfile) {
 
   const generateApiKey =async () => {
     await EnviromentApiClient.issueApiKey().then((res) => setApiKey(res.data))
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(apiKey)
+    setCopied(true)
   }
 
   console.log(apiKey)
@@ -150,7 +156,12 @@ export default function UserProfile({ name, email }: UserProfile) {
             {userProfile?.months_limit ? userProfile.months_limit : '-'}
           </div>
         </div>
-        <div className='my-2'>{apiKey.length!==0 ? <div><TextArea label='User API Key:' value={apiKey}/></div> : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}</div>
+        <div className='my-2'>{apiKey.length!==0 ?
+         <div className='flex items-center justify-between'><TextArea label='User API Key:' value={apiKey}/>
+          <SvgIcon name={copied ? 'done' : 'copytext' } className='cursor-pointer' onClick={() => copyToClipboard()}/>
+          </div> 
+        : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}
+        </div>
         <div className="w-full text-center flex justify-center items-center h-20 text-black">
           <a
             href="https://cloud.dqo.ai/account"
