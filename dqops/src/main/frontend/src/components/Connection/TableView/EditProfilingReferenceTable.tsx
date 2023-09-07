@@ -183,7 +183,9 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
-        setReference(res.data);
+        if (res && res?.data) {
+          setReference(res.data);
+        }
       };
       if (checkTypes === CheckTypes.PROFILING) {
         TableComparisonsApi.getTableComparisonProfiling(
@@ -541,6 +543,8 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     getResultsData();
   }, [isDataDeleted]);
+
+  console.log(reference);
 
   return (
     <div className="text-sm">

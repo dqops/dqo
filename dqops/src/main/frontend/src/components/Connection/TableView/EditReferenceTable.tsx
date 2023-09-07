@@ -145,11 +145,13 @@ const EditReferenceTable = ({
         table,
         selectedReference
       ).then((res) => {
-        setName(res.data?.table_comparison_configuration_name ?? '');
-        setRefConnection(res.data?.reference_connection ?? '');
-        setRefSchema(res.data?.reference_table?.schema_name ?? '');
-        setRefTable(res.data?.reference_table?.table_name ?? '');
-        setTrueArray(res.data.grouping_columns ?? []);
+        if (res && res?.data) {
+          setName(res.data?.table_comparison_configuration_name ?? '');
+          setRefConnection(res.data?.reference_connection ?? '');
+          setRefSchema(res.data?.reference_table?.schema_name ?? '');
+          setRefTable(res.data?.reference_table?.table_name ?? '');
+          setTrueArray(res.data.grouping_columns ?? []);
+        }
       });
     }
   }, [selectedReference]);
@@ -559,9 +561,16 @@ const EditReferenceTable = ({
   };
 
   useEffect(() => {
-    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
-    splitArrays();
-    onChange({ grouping_columns: combinedArray() });
+    if (
+      normalList &&
+      refList &&
+      normalList.length !== 0 &&
+      refList.length !== 0
+    ) {
+      algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+      splitArrays();
+      onChange({ grouping_columns: combinedArray() });
+    }
   }, [normalList, refList]);
 
   const saveRun = () => {
