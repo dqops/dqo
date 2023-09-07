@@ -317,7 +317,7 @@ const Header = () => {
               )}
               onClick={() => history.push('/definitions')}
               >
-            Definitions
+            Configuration
             </div>
           </Tooltip>
         </div>
