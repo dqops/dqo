@@ -236,6 +236,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
             }
+
+
+            Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
+            if (!Files.exists(rulesRequirementTxtPath)) {
+                Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQO starts\n");
+            }
         }
         catch (Exception ex) {
             throw new LocalFileSystemException("Cannot initialize a DQO User home at " + userHomePathString, ex);
