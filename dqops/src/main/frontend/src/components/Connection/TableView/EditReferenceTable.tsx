@@ -647,7 +647,9 @@ const EditReferenceTable = ({
             Table comparison configuration name:{' '}
           </div>
           <Input
-            className="min-w-80"
+            className={
+              name.length === 0 ? 'min-w-80 border border-red-500' : 'min-w-80'
+            }
             value={name}
             onChange={onChangeName}
             placeholder="Table comparison configuration name"
@@ -708,7 +710,9 @@ const EditReferenceTable = ({
       </div>
 
       <div className="px-8 py-4">
-        {isCreating === true || extendRefnames === true ? (
+        {isCreating === true ||
+        extendRefnames === true ||
+        tableExist !== true ? (
           <SectionWrapper
             title="Reference table (the source of truth)"
             className="py-8 mb-10 flex w-full items-center justify-between"
@@ -722,6 +726,9 @@ const EditReferenceTable = ({
                 options={connectionOptions}
                 value={refConnection}
                 onChange={changePropsConnection}
+                triggerClassName={
+                  connectionExist ? '' : 'border border-red-500'
+                }
               />
             </div>
             <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
@@ -731,6 +738,7 @@ const EditReferenceTable = ({
                 options={schemaOptions}
                 value={refSchema}
                 onChange={changePropsSchema}
+                triggerClassName={schemaExist ? '' : 'border border-red-500'}
               />
             </div>
             <div className="flex flex-col gap-2 w-1/3 mb-3">
@@ -740,6 +748,7 @@ const EditReferenceTable = ({
                 options={tableOptions}
                 value={refTable}
                 onChange={changePropsTable}
+                triggerClassName={tableExist ? '' : 'border border-red-500'}
               />
             </div>
           </SectionWrapper>
@@ -757,7 +766,7 @@ const EditReferenceTable = ({
           </div>
         )}
 
-        {isCreating || extendDg ? (
+        {(isCreating || extendDg) && tableExist ? (
           <div className="flex gap-4">
             <div className="mr-20 mt-0 relative">
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
