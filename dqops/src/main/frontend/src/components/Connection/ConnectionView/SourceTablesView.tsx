@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
-import { TableRemoteBasicModel } from '../../../api';
+import { RemoteTableBasicModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import Loader from '../../Loader';
 import ConnectionActionGroup from './ConnectionActionGroup';
@@ -33,7 +33,7 @@ const SourceTablesView = ({
   } = useParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
-  const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
+  const [tables, setTables] = useState<RemoteTableBasicModel[]>([]);
  
   const dispatch = useActionDispatch();
   const { job_dictionary_state } =

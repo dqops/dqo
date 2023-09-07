@@ -21,16 +21,22 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Connection Status Model returned from REST API. Describes a connection status for the source database with specified connection.
+ * Connection test status result model returned from REST API. Describes the status of testing a connection
+ * (opening a connection to verify if it usable, credentials are approved and the access was granted by the tested data source).
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "ConnectionRemoteModel", description = "Connection status remote management")
+@ApiModel(value = "ConnectionTestModel", description = "Connection test status result")
 public class ConnectionTestModel {
+    /**
+     * Connection test result.
+     */
+    @JsonPropertyDescription("Connection test result")
+    private ConnectionTestStatus connectionTestResult;
 
-    @JsonPropertyDescription("Connection status")
-    private ConnectionStatusRemote connectionStatus;
-
-    @JsonPropertyDescription("Error message")
+    /**
+     * Optional error message when the status is not "SUCCESS".
+     */
+    @JsonPropertyDescription("Optional error message when the status is not \"SUCCESS\"")
     private String errorMessage;
 }

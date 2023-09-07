@@ -22,7 +22,7 @@ import com.dqops.rest.models.metadata.ConnectionBasicModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.models.remote.ConnectionTestModel;
 import com.dqops.rest.models.remote.SchemaRemoteModel;
-import com.dqops.rest.models.remote.TableRemoteBasicModel;
+import com.dqops.rest.models.remote.RemoteTableBasicModel;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.remote.connections.SourceConnectionsService;
 import com.dqops.services.remote.schemas.SourceSchemasService;
@@ -85,7 +85,7 @@ public class DataSourcesController {
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK",  response = ConnectionTestModel.class),
+            @ApiResponse(code = 200, message = "Connection was tested, check the status code to see the connection's test status",  response = ConnectionTestModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
@@ -150,24 +150,24 @@ public class DataSourcesController {
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
-            response = TableRemoteBasicModel[].class,
+            response = RemoteTableBasicModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The list of tables on a remote data source was introspected and is returned",
-                    response = TableRemoteBasicModel[].class),
+                    response = RemoteTableBasicModel[].class),
             @ApiResponse(code = 400, message = "Error accessing the remote source database", response = SpringErrorPayload.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Flux<TableRemoteBasicModel>> getRemoteDataSourceTables(
+    public ResponseEntity<Flux<RemoteTableBasicModel>> getRemoteDataSourceTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName) {
-        List<TableRemoteBasicModel> result;
+        List<RemoteTableBasicModel> result;
         try {
             result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName);
         }

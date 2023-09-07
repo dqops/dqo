@@ -19,15 +19,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Tabular output format for printing the tabular results.
  */
-public enum ConnectionStatusRemote {
+public enum ConnectionTestStatus {
     /**
      * An enumeration for Success connection status.
      */
     @JsonProperty("SUCCESS")
     SUCCESS,
+
     /**
      * An enumeration for FAILURE connection status.
      */
     @JsonProperty("FAILURE")
     FAILURE,
+
+    /**
+     * An enumeration for CONNECTION_ALREADY_EXISTS connection status.
+     */
+    @JsonProperty("CONNECTION_ALREADY_EXISTS")
+    CONNECTION_ALREADY_EXISTS,
 }

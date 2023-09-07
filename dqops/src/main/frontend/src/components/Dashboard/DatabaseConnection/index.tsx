@@ -4,8 +4,8 @@ import Input from '../../Input';
 import {
   ConnectionBasicModel,
   ConnectionBasicModelProviderTypeEnum,
-  ConnectionRemoteModel,
-  ConnectionRemoteModelConnectionStatusEnum
+  ConnectionTestModel,
+  ConnectionTestModelConnectionTestResultEnum
 } from '../../../api';
 import {
   ConnectionApiClient,
@@ -45,7 +45,7 @@ const DatabaseConnection = ({
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -93,21 +93,21 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    let testRes;
+    let testRes : ConnectionTestModel | null = null;
     try {
-      testRes = await DataSourcesApi.testConnection(true, database);
+      testRes = (await DataSourcesApi.testConnection(true, database)).data;
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
     } finally {
       if (
-        testRes?.data?.connectionStatus ===
-        ConnectionRemoteModelConnectionStatusEnum.SUCCESS
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.SUCCESS
       ) {
         await onConfirmSave();
-      } else {
-        setShowConfirm(true);
-        setMessage(testRes?.data?.errorMessage);
+      } else if (testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS) {
+        setMessage(testRes?.errorMessage);
       }
     }
   };
@@ -255,12 +255,18 @@ const DatabaseConnection = ({
           {isTesting && (
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.SUCCESS && (
             <div className="text-primary text-sm">Connection successful</div>
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS && (
+            <div className="text-red-700 text-sm">
+              <span>Connection already exists</span>
+            </div>
+          )}
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.FAILURE && (
             <div className="text-red-700 text-sm">
               <span>Connection failed</span>
               <span
