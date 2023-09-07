@@ -117,15 +117,15 @@ export const EditProfilingReferenceTable = ({
       values = Object.values(checksUI);
     } else if (checkTypes === CheckTypes.PARTITIONED) {
       if (timePartitioned === 'daily') {
-        values = Object.values(dailyPartitionedChecks);
+        values = Object.values(dailyPartitionedChecks ?? {});
       } else {
-        values = Object.values(monthlyPartitionedChecks);
+        values = Object.values(monthlyPartitionedChecks ?? {});
       }
     } else if (checkTypes === CheckTypes.MONITORING) {
       if (timePartitioned === 'daily') {
-        values = Object.values(dailyMonitoring);
+        values = Object.values(dailyMonitoring ?? {});
       } else {
-        values = Object.values(monthlyMonitoring);
+        values = Object.values(monthlyMonitoring ?? {});
       }
     }
 
@@ -199,30 +199,6 @@ export const EditProfilingReferenceTable = ({
       }
       checkIfRowCountClicked();
     }
-    if (
-      reference !== undefined &&
-      Object.keys(reference).length > 0 &&
-      isCreating === false &&
-       tableExist === true && 
-      schemaExist === true && 
-      tableExist === true &&
-       reference.reference_connection?.length!== 0 &&
-      reference.reference_table?.schema_name?.length!== 0 &&
-      reference.reference_table?.table_name?.length!== 0
-    ) {
-      ColumnApiClient.getColumns(
-        reference.reference_connection ?? connection,
-        reference.reference_table?.schema_name ?? schema,
-        reference.reference_table?.table_name ?? table
-      ).then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
-      });
-    }
   }, [selectedReference]);
 
 
@@ -253,7 +229,7 @@ export const EditProfilingReferenceTable = ({
           }
       });
     }
-  }, [reference, selectedReference]);
+  }, [reference, selectedReference, tableExist, schemaExist, connectionExist]);
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(

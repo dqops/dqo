@@ -25,7 +25,11 @@ import { ConnectionApiClient, SchemaApiClient, TableApiClient } from '../service
            connection,
            { validateStatus: validate404Status }
          );
-         setSchemaExist(schemaResponse.status === 200);
+         if(schemaResponse.status === 200){
+            if(schemaResponse.data.find((x) => x.schema_name === schema)){  
+               setSchemaExist(true);
+            }
+         }
  
          const connectionResponse = await ConnectionApiClient.getConnection(
            connection,
