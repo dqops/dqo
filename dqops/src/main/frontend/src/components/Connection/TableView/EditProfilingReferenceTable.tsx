@@ -97,7 +97,7 @@ export const EditProfilingReferenceTable = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
-
+  
   const { tableExist, schemaExist, connectionExist }
    = useConnectionSchemaTableExists(reference?.reference_connection ?? "",
     reference?.reference_table?.schema_name ?? "",
@@ -210,7 +210,6 @@ export const EditProfilingReferenceTable = ({
       reference.reference_table?.schema_name?.length!== 0 &&
       reference.reference_table?.table_name?.length!== 0
     ) {
-      console.log("231321321")
       ColumnApiClient.getColumns(
         reference.reference_connection ?? connection,
         reference.reference_table?.schema_name ?? schema,
@@ -232,7 +231,7 @@ export const EditProfilingReferenceTable = ({
       reference !== undefined &&
       Object.keys(reference).length > 0 &&
       isCreating === false && 
-      tableExist === true && 
+      connectionExist === true && 
       schemaExist === true && 
       tableExist === true  &&
       reference.reference_connection?.length!== 0 &&
@@ -244,7 +243,7 @@ export const EditProfilingReferenceTable = ({
         reference.reference_table?.schema_name ?? "",
         reference.reference_table?.table_name ?? ""
       )?.then((columnRes) => {
-        if(columnRes){
+        if(columnRes && columnRes.data.length!== 0 && Array.isArray(columnRes.data) ){
           setColumnOptions(
             columnRes.data.map((item) => ({
               label: item.column_name ?? '',
@@ -536,6 +535,7 @@ export const EditProfilingReferenceTable = ({
     getResultsData();
   }, [isDataDeleted]);
   
+  console.log(reference?.reference_connection, reference?.reference_table?.schema_name, reference?.reference_table?.table_name)
 
   return (
     <div className="text-sm">

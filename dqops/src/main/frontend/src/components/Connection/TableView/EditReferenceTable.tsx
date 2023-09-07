@@ -156,27 +156,32 @@ const EditReferenceTable = ({
   }, [selectedReference]);
 
   useEffect(() => {
-    if (refConnection && connectionExist) {
+    if (refConnection && refConnection.length!==0 && connectionExist === true) {
       SchemaApiClient.getSchemas(refConnection).then((res) => {
-        setSchemaOptions(
-          res.data.map((item) => ({
-            label: item.schema_name ?? '',
-            value: item.schema_name ?? ''
-          }))
-        );
+        if(res !== undefined){
+          setSchemaOptions(
+            res.data.map((item) => ({
+              label: item.schema_name ?? '',
+              value: item.schema_name ?? ''
+            }))
+            );
+          }
       });
     }
   }, [refConnection, connectionExist]);
 
   useEffect(() => {
-    if (refConnection && refSchema && connectionExist && schemaExist ) {
+    if (refConnection && refConnection.length!==0 && refSchema 
+      && refSchema.length!==0 && connectionExist === true && schemaExist === true ) {
       TableApiClient.getTables(refConnection, refSchema).then((res) => {
-        setTableOptions(
-          res.data.map((item) => ({
-            label: item.target?.table_name ?? '',
-            value: item.target?.table_name ?? ''
-          }))
-        );
+        if(res!== undefined){
+          setTableOptions(
+            res.data.map((item) => ({
+              label: item.target?.table_name ?? '',
+              value: item.target?.table_name ?? ''
+            }))
+            );
+          }
       });
     }
   }, [refConnection, refSchema, connectionExist, schemaExist]);
