@@ -5,7 +5,8 @@ import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
 import {
   BigQueryParametersSpec,
-  BigQueryParametersSpecAuthenticationModeEnum
+  BigQueryParametersSpecAuthenticationModeEnum,
+  BigQueryParametersSpecJobsCreateProjectEnum
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
@@ -52,22 +53,33 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.source_project_id}
         onChange={(value) => handleChange({ source_project_id: value })}
       />
+        <Select
+          label="Authentication mode to the Google Cloud"
+          options={options}
+          className="mb-4"
+          value={
+            bigquery?.authentication_mode ||
+            BigQueryAuthenticationMode.google_application_credentials
+          }
+          onChange={(value) => handleChange({ authentication_mode: value })}
+        />
+        <Select
+         label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
+         options={Object.values(BigQueryParametersSpecJobsCreateProjectEnum).map((x) => ({label: x, value: x}))}
+         className="mb-4"
+         value={
+           bigquery?.jobs_create_project ||
+           BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_source_project
+         }
+         onChange={(value) => handleChange({ jobs_create_project: value })}
+       />
       <FieldTypeInput
-        className="mb-4"
+        className={bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id ?
+           "mb-4" : "mb-4 pointer-events-none"}
         label="Billing GCP project ID"
         name="billing_project_id"
         value={bigquery?.billing_project_id}
         onChange={(value) => handleChange({ billing_project_id: value })}
-      />
-      <Select
-        label="Authentication mode to the Google Cloud"
-        options={options}
-        className="mb-4"
-        value={
-          bigquery?.authentication_mode ||
-          BigQueryAuthenticationMode.google_application_credentials
-        }
-        onChange={(value) => handleChange({ authentication_mode: value })}
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
