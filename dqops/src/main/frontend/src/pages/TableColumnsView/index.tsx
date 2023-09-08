@@ -191,6 +191,8 @@ const TableColumnsView = () => {
                   x.parameters?.collectStatisticsParameters
                     ?.statisticsCollectorSearchFilters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  connectionName
               )
                 ? 'Collecting...'
                 : 
@@ -204,6 +206,8 @@ const TableColumnsView = () => {
                   x.parameters?.collectStatisticsParameters
                     ?.statisticsCollectorSearchFilters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  connectionName
               )
                 ? 'secondary'
                 : 'primary'
@@ -214,6 +218,8 @@ const TableColumnsView = () => {
                   x.parameters?.collectStatisticsParameters
                     ?.statisticsCollectorSearchFilters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  connectionName
               ) ? (
                 <SvgIcon name="sync" className="w-4 h-4" />
               ) : (
