@@ -49,7 +49,7 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--bigquery-jobs-create-project"}, description = "Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.")
     @JsonPropertyDescription("Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.")
-    private BigQueryJobsCreateProject jobsCreateProject = BigQueryJobsCreateProject.run_on_source_project;
+    private BigQueryJobsCreateProject jobsCreateProject = BigQueryJobsCreateProject.create_jobs_in_source_project;
 
     @CommandLine.Option(names = {"--bigquery-billing-project-id"}, description = "Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     @JsonPropertyDescription("Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
@@ -238,7 +238,7 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
             return false;
         }
 
-        return (this.jobsCreateProject == null || this.jobsCreateProject == BigQueryJobsCreateProject.run_on_source_project) &&
+        return (this.jobsCreateProject == null || this.jobsCreateProject == BigQueryJobsCreateProject.create_jobs_in_source_project) &&
                 (this.authenticationMode == null || this.authenticationMode == BigQueryAuthenticationMode.google_application_credentials) &&
                 this.sourceProjectId == null &&
 				this.billingProjectId == null &&

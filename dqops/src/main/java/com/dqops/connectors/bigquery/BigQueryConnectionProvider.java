@@ -151,17 +151,17 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             bigquerySpec.setSourceProjectId(terminalReader.prompt("Source GCP project ID (--bigquery-source-project-id\")", defaultGcpProject, false));
         }
 
-        if (bigquerySpec.getJobsCreateProject() == null || bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_source_project) {
+        if (bigquerySpec.getJobsCreateProject() == null || bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.create_jobs_in_source_project) {
             if (bigquerySpec.getJobsCreateProject() == null && isHeadless) {
                 throw new CliRequiredParameterMissingException("--bigquery-jobs-create-project");
             }
 
             BigQueryJobsCreateProject jobsCreateProject = terminalReader.promptEnum("GCP project with bigquery.jobs.create permission selection mode (--bigquery-jobs-create-project)",
-                    BigQueryJobsCreateProject.class, BigQueryJobsCreateProject.run_on_selected_billing_project_id, false);
+                    BigQueryJobsCreateProject.class, BigQueryJobsCreateProject.create_jobs_in_selected_billing_project_id, false);
             bigquerySpec.setJobsCreateProject(jobsCreateProject);
         }
 
-        if (bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_selected_billing_project_id && Strings.isNullOrEmpty(bigquerySpec.getBillingProjectId())) {
+        if (bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.create_jobs_in_selected_billing_project_id && Strings.isNullOrEmpty(bigquerySpec.getBillingProjectId())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--bigquery-billing-project-id");
             }
@@ -181,7 +181,7 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
         }
 
         if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.google_application_credentials &&
-                bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_default_project_from_credentials) {
+                bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.create_jobs_in_default_project_from_credentials) {
             // checking if the default credentials are present
             String billingProjectId = tryGetCurrentGcpProject();
             if (billingProjectId == null) {

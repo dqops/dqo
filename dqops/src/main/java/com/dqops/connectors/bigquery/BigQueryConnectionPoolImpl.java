@@ -116,15 +116,15 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
 
             String effectiveJobProjectId = null;
             switch (bigQueryParametersSpec.getJobsCreateProject()) {
-                case run_on_source_project:
+                case create_jobs_in_source_project:
                     effectiveJobProjectId = bigQueryParametersSpec.getSourceProjectId();
                     break;
 
-                case run_on_default_project_from_credentials:
+                case create_jobs_in_default_project_from_credentials:
                     effectiveJobProjectId = defaultProjectFromCredentials;
                     break;
 
-                case run_on_selected_billing_project_id:
+                case create_jobs_in_selected_billing_project_id:
                     effectiveJobProjectId = bigQueryParametersSpec.getBillingProjectId();
                     break;
 
