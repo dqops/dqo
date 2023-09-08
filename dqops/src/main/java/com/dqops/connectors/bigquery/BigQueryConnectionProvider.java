@@ -151,7 +151,17 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             bigquerySpec.setSourceProjectId(terminalReader.prompt("Source GCP project ID (--bigquery-source-project-id\")", defaultGcpProject, false));
         }
 
-        if (Strings.isNullOrEmpty(bigquerySpec.getBillingProjectId())) {
+        if (bigquerySpec.getJobsCreateProject() == null || bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_source_project) {
+            if (bigquerySpec.getJobsCreateProject() == null && isHeadless) {
+                throw new CliRequiredParameterMissingException("--bigquery-jobs-create-project");
+            }
+
+            BigQueryJobsCreateProject jobsCreateProject = terminalReader.promptEnum("GCP project with bigquery.jobs.create permission selection mode (--bigquery-jobs-create-project)",
+                    BigQueryJobsCreateProject.class, BigQueryJobsCreateProject.run_on_selected_billing_project_id, false);
+            bigquerySpec.setJobsCreateProject(jobsCreateProject);
+        }
+
+        if (bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_selected_billing_project_id && Strings.isNullOrEmpty(bigquerySpec.getBillingProjectId())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--bigquery-billing-project-id");
             }
@@ -161,8 +171,8 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             bigquerySpec.setBillingProjectId(terminalReader.prompt("Billing GCP project ID (--bigquery-billing-project-id), leave null to use the default GCP project from credentials" + defaultProjectMessage, null, true));
         }
 
-        if (bigquerySpec.getAuthenticationMode() == null) {
-            if (isHeadless) {
+        if (bigquerySpec.getAuthenticationMode() == null || bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.google_application_credentials) {
+            if (bigquerySpec.getAuthenticationMode() == null && isHeadless) {
                 throw new CliRequiredParameterMissingException("--bigquery-authentication-mode");
             }
 
@@ -170,7 +180,8 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             bigquerySpec.setAuthenticationMode(authenticationMode);
         }
 
-        if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.google_application_credentials) {
+        if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.google_application_credentials &&
+                bigquerySpec.getJobsCreateProject() == BigQueryJobsCreateProject.run_on_default_project_from_credentials) {
             // checking if the default credentials are present
             String billingProjectId = tryGetCurrentGcpProject();
             if (billingProjectId == null) {
@@ -200,15 +211,15 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             bigquerySpec.setJsonKeyPath(terminalReader.prompt("JSON key path (--bigquery-json-key-path)", "${GOOGLE_APPLICATION_CREDENTIALS}", false));
         }
 
-        if (Strings.isNullOrEmpty(bigquerySpec.getQuotaProjectId())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--bigquery-quota-project-id");
-            }
-
-            String billingProjectId = bigquerySpec.getBillingProjectId() != null ? bigquerySpec.getBillingProjectId() : tryGetCurrentGcpProject();
-            String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
-            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (--bigquery-quota-project-id), leave blank to use the default GCP project from credentials" + defaultProjectMessage, null, true));
-        }
+//        if (Strings.isNullOrEmpty(bigquerySpec.getQuotaProjectId())) {
+//            if (isHeadless) {
+//                throw new CliRequiredParameterMissingException("--bigquery-quota-project-id");
+//            }
+//
+//            String billingProjectId = bigquerySpec.getBillingProjectId() != null ? bigquerySpec.getBillingProjectId() : tryGetCurrentGcpProject();
+//            String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
+//            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (--bigquery-quota-project-id), leave blank to use the default GCP project from credentials" + defaultProjectMessage, null, true));
+//        }
     }
 
     /**

@@ -25,6 +25,7 @@ public class CollectorExecutionStatistics {
     private int collectorsResultsCount = 0;
     private int profiledColumnsCount = 0;
     private int profiledColumnSuccessfullyCount = 0;
+    private Throwable firstException;
 
     /**
      * Returns the number of collectors that were executed.
@@ -51,11 +52,14 @@ public class CollectorExecutionStatistics {
     }
 
     /**
-     * Increments the count of failed collectors.
-     * @param increment The increment to add to the current count.
+     * Increments the count of failed collectors and reports the first exception.
+     * @param exception The exception that was thrown. The first exception is stored.
      */
-    public void incrementCollectorsFailedCount(int increment) {
-        this.collectorsFailedCount += increment;
+    public void incrementCollectorsFailedCount(Throwable exception) {
+        this.collectorsFailedCount++;
+        if (this.firstException == null) {
+            this.firstException = exception;
+        }
     }
 
     /**
@@ -104,5 +108,13 @@ public class CollectorExecutionStatistics {
      */
     public void incrementProfiledColumnSuccessfullyCount(int increment) {
         this.profiledColumnSuccessfullyCount += increment;
+    }
+
+    /**
+     * Returns the first exception that was thrown.
+     * @return The first exception that was thrown and reported as a failure.
+     */
+    public Throwable getFirstException() {
+        return firstException;
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
+import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
@@ -49,6 +50,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
@@ -69,6 +71,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
     private StatisticsResultsNormalizationService statisticsResultsNormalizationService;
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
     private DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
+    private DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties;
 
     /**
      * Creates a statistics collectors execution service with given dependencies.
@@ -79,6 +82,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param statisticsResultsNormalizationService Normalization service that creates profiling results.
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
      * @param dqoSensorLimitsConfigurationProperties DQO sensor limits configuration.
+     * @param statisticsCollectorConfigurationProperties Statistics collector configuration properties.
      */
     @Autowired
     public TableStatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -87,7 +91,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                          ConnectionProviderRegistry connectionProviderRegistry,
                                                          StatisticsResultsNormalizationService statisticsResultsNormalizationService,
                                                          StatisticsSnapshotFactory statisticsSnapshotFactory,
-                                                         DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
+                                                         DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
+                                                         DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -95,6 +100,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         this.statisticsResultsNormalizationService = statisticsResultsNormalizationService;
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
+        this.statisticsCollectorConfigurationProperties = statisticsCollectorConfigurationProperties;
     }
 
     /**
@@ -253,7 +259,12 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
                 if (!sensorPrepareResult.isSuccess()) {
-                    executionStatistics.incrementCollectorsFailedCount(1);
+                    log.atLevel(this.statisticsCollectorConfigurationProperties.getLogLevel())
+                            .log("Failed to prepare a sensor for statistics collector, error: " +
+                                ((sensorPrepareResult.getPrepareException() != null) ? sensorPrepareResult.getPrepareException().getMessage() : ""),
+                                sensorPrepareResult.getPrepareException());
+
+                    executionStatistics.incrementCollectorsFailedCount(sensorPrepareResult.getPrepareException());
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
                             sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
@@ -319,7 +330,12 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                 sensorPrepareResult, progressListener, jobCancellationToken);
 
                         if (!sensorExecuteResult.isSuccess()) {
-                            executionStatistics.incrementCollectorsFailedCount(1);
+                            log.atLevel(this.statisticsCollectorConfigurationProperties.getLogLevel())
+                                    .log("Failed to execute a sensor for statistics collector, error: " +
+                                                    ((sensorExecuteResult.getException() != null) ? sensorExecuteResult.getException().getMessage() : ""),
+                                            sensorExecuteResult.getException());
+
+                            executionStatistics.incrementCollectorsFailedCount(sensorExecuteResult.getException());
                             progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
                                     sensorExecuteResult, sensorExecuteResult.getException()));
                             continue;

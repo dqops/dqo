@@ -87,6 +87,15 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                 jobExecutionContext.getCancellationToken(),
                 this.getPrincipal());
 
+        if (statisticsCollectionExecutionSummary.getAllChecksFailed()) {
+            String firstConnectionName = statisticsCollectionExecutionSummary.getFirstConnectionName();
+            String firstErrorMessage = statisticsCollectionExecutionSummary.getFirstException() != null ?
+                    statisticsCollectionExecutionSummary.getFirstException().getMessage() : "";
+            throw new DqoStatisticsCollectionJobFailedException("Cannot collect statistics on the connection " + firstConnectionName +
+                    ", the first error: " + firstErrorMessage,
+                    statisticsCollectionExecutionSummary.getFirstException());
+        }
+
         CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
                 CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
         CollectStatisticsQueueJobParameters clonedParameters = this.getParameters().clone();

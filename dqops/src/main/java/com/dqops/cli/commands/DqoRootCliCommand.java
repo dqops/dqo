@@ -34,6 +34,7 @@ import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.synchronize.ScheduledSynchronizationFolderSelectionMode;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -301,6 +302,18 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.sensor.limit.max-merged-queries"},
             description = "The maximum number of queries that are merged into a bigger query, to calculate multiple sensors on the same table and to analyze multiple columns from the same table.", defaultValue = "100")
     private int dqoSensorLimitMaxMergedQueries;
+
+    @CommandLine.Option(names = {"--dqo.statistics.truncated-strings-length"},
+            description = "The length of samples captured from text columns (varchar, string, text, etc.) that are stored as samples. DQO truncates longer column values and stores only the first few characters, up to the character count limit defined by this parameter.", defaultValue = "50")
+    private int dqoStatisticsTruncatedStringsLength;
+
+    @CommandLine.Option(names = {"--dqo.statistics.viewed-statistics-age-months"},
+            description = "The maximum age (in months) of the basic statistics that are shown on the basic statistics screen. Statistics values captured earlier are still stored, but are not shown in the DQO UI.", defaultValue = "3")
+    private int dqoStatisticsViewedStatisticsAgeMonths;
+
+    @CommandLine.Option(names = {"--dqo.statistics.log-level"},
+            description = "The logging level at which any errors captured during the statistics collection are reported. The logging level for the whole application must be equal or higher to this level for effective logging.", defaultValue = "WARN")
+    private Level dqoStatisticsLogLevel;
 
     @CommandLine.Option(names = {"--dqo.cache.expire-after-seconds"},
             description = "The time in seconds to expire the cache entries since they were added to the cache.", defaultValue = "86400")
