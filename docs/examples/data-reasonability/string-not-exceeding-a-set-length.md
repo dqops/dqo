@@ -133,16 +133,16 @@ To execute the check prepared in the example using the [graphical interface](../
 4. Run the enabled check using the **Run check** button.
    ![Run check](https://dqops.com/docs/images/examples/string-max-length-run-check.png)
 
-5. Review the results by opening the **Check details** button.
+5. Access the results by clicking the **Results** button.
    ![Check details](https://dqops.com/docs/images/examples/string-max-length-check-details.png)
 
-6. You should see the results as the one below.
+6. Review the results which should be similar to the one below.
    The actual value in this example is 31, which is above the maximum threshold level set in the eroor (30).
    The check gives an error(notice the orange square on the left of the name of the check).
 
    ![String-max-length check results](https://dqops.com/docs/images/examples/string-max-length-check-results.png)
 
-7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
+7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
@@ -160,7 +160,7 @@ To execute the check prepared in the example, run the following command in DQO S
 ``` 
 check run
 ```
-You should see the results as the one below.
+Review the results which should be similar to the one below.
 The number of the valid string length in the `measure_name` column is above 30.0 and the check raised an error.
 ```
 Check evaluation summary per table:

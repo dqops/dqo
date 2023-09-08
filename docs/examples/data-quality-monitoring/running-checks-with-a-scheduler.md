@@ -330,7 +330,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 
-You should see the results as the one below.
+Review the results which should be similar to the one below.
 Results from all checks appear to be valid except for one that indicates a fatal error.
 
 
