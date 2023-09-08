@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
-    private Set<String> columnNames = new LinkedHashSet<>();
+    private Collection<String> columnNames = new LinkedHashSet<>();
     private String collectorName;
     private String sensorName;
     private String collectorCategory;
@@ -63,7 +63,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Returns a set of target column names. When the collection of column names is not empty, only column level statistics are collected.
      * @return Collection of target column names.
      */
-    public Set<String> getColumnNames() {
+    public Collection<String> getColumnNames() {
         return columnNames;
     }
 
@@ -71,7 +71,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Sets a set of target column names.
      * @param columnNames Set of target column names.
      */
-    public void setColumnNames(Set<String> columnNames) {
+    public void setColumnNames(Collection<String> columnNames) {
         this.columnNames = columnNames;
     }
 

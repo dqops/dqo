@@ -12,6 +12,7 @@ import {
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
+  StatisticsCollectorSearchFilters,
   TableColumnsStatisticsModel
 } from '../../api';
 import { AxiosResponse } from 'axios';
@@ -43,8 +44,10 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
+  const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
+    console.log("fetching")
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
         await ColumnApiClient.getColumnsStatistics(
@@ -65,6 +68,9 @@ const TableColumnsView = () => {
   const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
+  const onChangeSelectedColumns = (columns: Array<string>): void => {
+    setSelectedColumns(columns);
+  };
 
   const setNumberOfSelected = (param: number): void => {
     setSelected(param);
@@ -78,13 +84,23 @@ const TableColumnsView = () => {
     try {
       setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
-        statistics?.collect_column_statistics_job_template
-      );
-    } finally {
+         collectStiatisticsObject
+         ).then(() => fetchColumns())
+      }catch (err){
+      console.error(err)
+    }
+     finally {
       setLoadingJob(false);
+      fetchColumns()
     }
   };
 
+  const collectStiatisticsObject : StatisticsCollectorSearchFilters = {
+    connectionName: connectionName,
+    schemaTableName: schemaName + "." + tableName,
+    enabled: true,
+     columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
+  }
   const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
@@ -144,6 +160,8 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
+  console.log(statistics)
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -180,7 +198,10 @@ const TableColumnsView = () => {
                   schemaName + '.' + tableName
               )
                 ? 'Collecting...'
-                : 'Collect Statistics'
+                : 
+                selectedColumns?.length!== 0 ? 
+                'Collect statistics on selected' : 
+                'Collect Statistics'
             }
             color={
               filteredJobs?.find(
@@ -204,9 +225,7 @@ const TableColumnsView = () => {
                 ''
               )
             }
-            onClick={() => {
-              collectStatistics();
-            }}
+            onClick={collectStatistics}
             loading={loadingJob}
             disabled={userProfile.can_collect_statistics  !== true}
           />
@@ -221,6 +240,7 @@ const TableColumnsView = () => {
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
+          onChangeSelectedColumns = {onChangeSelectedColumns}
         />
       </div>
     </ConnectionLayout>
