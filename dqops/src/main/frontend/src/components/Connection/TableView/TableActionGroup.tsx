@@ -150,6 +150,8 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             )
               ? 'Collecting...'
               : 
@@ -163,6 +165,8 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             )
               ? 'secondary'
               : 'primary'
@@ -173,6 +177,8 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             ) ? (
               <SvgIcon name="sync" className="w-4 h-4" />
             ) : (
