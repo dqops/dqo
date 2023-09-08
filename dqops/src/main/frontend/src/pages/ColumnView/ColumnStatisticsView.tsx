@@ -6,6 +6,7 @@ import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
 import { formatNumber } from '../../shared/constants';
 import moment from 'moment';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 
 const ColumnStatisticsView = () => {
   const {
@@ -139,7 +140,7 @@ const ColumnStatisticsView = () => {
       </div>
 
       <div className="w-full flex gap-8 flex-wrap">
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
+        <SectionWrapper title='Nulls' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Null count</div>
             <div>
@@ -198,8 +199,8 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-        </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
+        </SectionWrapper>
+        <SectionWrapper title='Uniqueness' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Distinct count</div>
             <div>
@@ -258,8 +259,8 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-        </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50">
+        </SectionWrapper>
+        <SectionWrapper title='Range' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light font-bold">Minimum</div>
             <div>
@@ -316,8 +317,8 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-        </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
+        </SectionWrapper>
+        <SectionWrapper title='String length' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Minimum string length</div>
             <div>
@@ -375,9 +376,9 @@ const ColumnStatisticsView = () => {
               )}
             </div>
           </div>
-        </div>
+        </SectionWrapper>
         {statistics?.statistics?.find((x) => x.category === 'sampling') ? (
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          <SectionWrapper title='Top 10 most common values' className="text-sm bg-white rounded-lg p-4 border border-gray-200">
             {statistics &&
               statistics.statistics?.map((x, index) =>
                 x.category === 'sampling' ? (
@@ -420,7 +421,7 @@ const ColumnStatisticsView = () => {
                   <></>
                 )
               )}
-          </div>
+          </SectionWrapper>
         ) : (
           <></>
         )}
