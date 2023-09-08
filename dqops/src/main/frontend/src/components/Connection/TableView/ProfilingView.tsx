@@ -75,6 +75,7 @@ const ProfilingView = () => {
   const [selected, setSelected] = useState<number>(0);
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
   const fetchColumns = async () => {
        try{
          await ColumnApiClient.getColumnsStatistics(
@@ -87,6 +88,10 @@ const ProfilingView = () => {
             console.error(err)
           }
   };
+
+  const onChangeSelectedColumns = (columns: string[]) : void  => {
+    setSelectedColumns(columns)
+  }
 
   useEffect(() => {
     if (activeTab === 'statistics') {
@@ -213,6 +218,8 @@ const ProfilingView = () => {
     setActiveTab(tab);
   };
 
+  console.log(selectedColumns)
+
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       {activeTab === 'statistics' && (
@@ -227,6 +234,7 @@ const ProfilingView = () => {
           createDataStreamFunc={postDataStream}
           maxToCreateDataStream={selected > 9 && true}
           statistics={statistics}
+          selectedColumns={selectedColumns}
         />
       )}
       {activeTab === 'advanced' && (
@@ -247,6 +255,7 @@ const ProfilingView = () => {
           setLevelsData2={setLevelsData2}
           setNumberOfSelected2={setNumberOfSelected2}
           statistics={statistics}
+          onChangeSelectedColumns= {onChangeSelectedColumns}
         />
       )}
       {activeTab === 'advanced' && <TableProfilingChecks />}

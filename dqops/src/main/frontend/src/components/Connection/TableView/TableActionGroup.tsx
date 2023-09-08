@@ -27,6 +27,7 @@ interface ITableActionGroupProps {
   maxToCreateDataStream?: boolean;
   createDataStreamFunc?: () => void;
   statistics?: TableColumnsStatisticsModel;
+  selectedColumns?: string[]
 }
 
 const TableActionGroup = ({
@@ -40,7 +41,8 @@ const TableActionGroup = ({
   createDataStream,
   maxToCreateDataStream,
   createDataStreamFunc,
-  statistics
+  statistics,
+  selectedColumns
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -76,16 +78,15 @@ const TableActionGroup = ({
   };
 
   const collectStatistics = async () => {
-    if (statistics) {
       try {
         setLoadingJob(true);
-        await JobApiClient.collectStatisticsOnTable(
-          statistics?.collect_column_statistics_job_template
-        );
+        await JobApiClient.collectStatisticsOnTable({
+          ...statistics?.collect_column_statistics_job_template,
+           columnNames: selectedColumns
+      });
       } finally {
         setLoadingJob(false);
       }
-    }
   };
 
   const filteredJobs = Object.values(job_dictionary_state).filter(
@@ -151,7 +152,10 @@ const TableActionGroup = ({
                 schema + '.' + table
             )
               ? 'Collecting...'
-              : 'Collect Statistics'
+              : 
+              selectedColumns?.length!== 0 ? 
+              'Collect statistics on selected' : 
+              'Collect Statistics'
           }
           color={
             filteredJobs?.find(

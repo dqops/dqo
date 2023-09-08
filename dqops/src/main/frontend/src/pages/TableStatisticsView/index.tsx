@@ -23,7 +23,8 @@ export default function TableStatisticsView({
   updateData2,
   setLevelsData2,
   setNumberOfSelected2,
-  statistics
+  statistics,
+  onChangeSelectedColumns
 }: {
   connectionName: string;
   schemaName: string;
@@ -32,6 +33,7 @@ export default function TableStatisticsView({
   setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: string[]) => void
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -145,6 +147,7 @@ export default function TableStatisticsView({
         setLevelsData={setLevelsData}
         setNumberOfSelected={setNumberOfSelected}
         statistics={statistics}
+        onChangeSelectedColumns={onChangeSelectedColumns}
       />
     </div>
   );
