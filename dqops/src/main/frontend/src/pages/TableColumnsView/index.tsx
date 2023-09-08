@@ -39,7 +39,6 @@ const TableColumnsView = () => {
   );
   const dispatch = useDispatch();
   const history = useHistory();
-  const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
@@ -76,22 +75,17 @@ const TableColumnsView = () => {
     setSelected(param);
   };
 
-  useEffect(() => {
-    fetchColumns();
-  }, [connectionName, schemaName, tableName]);
+  // useEffect(() => {
+  //   fetchColumns();
+  // }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
-      setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
          collectStiatisticsObject
-         ).then(() => fetchColumns())
+         )
       }catch (err){
       console.error(err)
-    }
-     finally {
-      setLoadingJob(false);
-      fetchColumns()
     }
   };
 
@@ -162,6 +156,12 @@ const TableColumnsView = () => {
 
   console.log(statistics)
 
+  useEffect(() => {
+    if(filteredJobs !== undefined){
+      fetchColumns()
+      }
+  }, [job_dictionary_state])
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -226,7 +226,6 @@ const TableColumnsView = () => {
               )
             }
             onClick={collectStatistics}
-            loading={loadingJob}
             disabled={userProfile.can_collect_statistics  !== true}
           />
         </div>
