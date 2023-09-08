@@ -46,7 +46,6 @@ const TableColumnsView = () => {
   const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
-    console.log("fetching")
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
         await ColumnApiClient.getColumnsStatistics(
@@ -75,9 +74,6 @@ const TableColumnsView = () => {
     setSelected(param);
   };
 
-  // useEffect(() => {
-  //   fetchColumns();
-  // }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
@@ -154,7 +150,6 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
-  console.log(statistics)
 
   useEffect(() => {
     if(filteredJobs !== undefined){

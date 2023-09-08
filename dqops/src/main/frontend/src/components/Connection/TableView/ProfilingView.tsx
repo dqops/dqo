@@ -21,6 +21,7 @@ import Tabs from '../../Tabs';
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
+  DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
 
@@ -31,6 +32,7 @@ import {
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { IRootState } from '../../../redux/reducers';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -76,6 +78,10 @@ const ProfilingView = () => {
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
+  
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const fetchColumns = async () => {
        try{
          await ColumnApiClient.getColumnsStatistics(
@@ -217,8 +223,22 @@ const ProfilingView = () => {
     );
     setActiveTab(tab);
   };
+  const filteredJobs = Object.values(job_dictionary_state)?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schemaName + '.' + tableName &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
 
-  console.log(selectedColumns)
+  useEffect(() => {
+    if(filteredJobs !== undefined){
+      fetchColumns()
+    }
+  }, [job_dictionary_state])
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">

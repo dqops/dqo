@@ -577,7 +577,6 @@ const TableColumns = ({
     onChangeSelectedColumns && onChangeSelectedColumns(keysWithTrueValues)
   }
 
-  console.log(statistics)
 
   useEffect(() => {
     const joinedValues = fixString();
