@@ -378,7 +378,7 @@ const ColumnStatisticsView = () => {
           </div>
         </SectionWrapper>
         {statistics?.statistics?.find((x) => x.category === 'sampling') ? (
-          <SectionWrapper title='Top 10 must common values' className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          <SectionWrapper title='Top 10 most common values' className="text-sm bg-white rounded-lg p-4 border border-gray-200">
             {statistics &&
               statistics.statistics?.map((x, index) =>
                 x.category === 'sampling' ? (
