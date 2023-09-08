@@ -121,16 +121,16 @@ To execute the check prepared in the example using the [graphical interface](../
 4. Run the enabled check using the **Run check** button.
    ![Run check](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-run-check.png)
 
-5. Review the results by opening the **Check details** button.
+5. Access the results by clicking the **Results** button.
    ![Check details](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-check-details.png)
 
-6. You should see the results as the one below.
+6. Review the results which should be similar to the one below.
    The actual value in this example is 98, which is above the maximum threshold level set in the warning (10.0%).
    The check gives a fatal error (notice the red square on the left of the name of the check).
 
    ![Contains-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/contains-usa-zipcode-percent-check-results.png)
 
-7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
+7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
@@ -148,7 +148,7 @@ To execute the check prepared in the example, run the following command in DQO S
 ``` 
 check run
 ```
-You should see the results as the one below.
+Access the results which should be similar as the one below.
 The percentage of the USA zipcode values in the `incident_zip` column is above 10.0% and the check raised a fatal error.
 ```
 Check evaluation summary per table:

@@ -83,7 +83,7 @@ To run the examples, follow the steps below.
     Run the enabled check using the **Run check** button.
     ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
 
-    Review the results by opening the **Check details** button.
+    Access the results by clicking the **Results** button.
     ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
 
 
