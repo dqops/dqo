@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * Object passed to the python rule evaluation module. Specifies the path to the python file with the rule implementation and the parameters.
  */
@@ -29,6 +31,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class PythonRuleCallInput {
     private String ruleModulePath;
+    private Instant ruleModuleLastModified;
     private RuleExecutionRunParameters ruleParameters;
 
     /**
@@ -45,6 +48,22 @@ public class PythonRuleCallInput {
      */
     public void setRuleModulePath(String ruleModulePath) {
         this.ruleModulePath = ruleModulePath;
+    }
+
+    /**
+     * Returns the timestamp when the Python rule file was last modified.
+     * @return The last modification timestamp of the rule module.
+     */
+    public Instant getRuleModuleLastModified() {
+        return ruleModuleLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the rule module was modified for the last time.
+     * @param ruleModuleLastModified Rule module last modification timestamp.
+     */
+    public void setRuleModuleLastModified(Instant ruleModuleLastModified) {
+        this.ruleModuleLastModified = ruleModuleLastModified;
     }
 
     /**

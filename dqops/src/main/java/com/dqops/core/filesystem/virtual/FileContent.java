@@ -39,6 +39,7 @@ public class FileContent implements Cloneable {
      * Creates an empty file content with no content.
      */
     public FileContent() {
+        this.lastModified = Instant.now();
     }
 
     /**

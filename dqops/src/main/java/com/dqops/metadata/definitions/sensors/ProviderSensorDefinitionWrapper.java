@@ -19,6 +19,8 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.basespecs.ObjectName;
 
+import java.time.Instant;
+
 /**
  * Provider specific data quality sensor definition spec wrapper.
  */
@@ -47,4 +49,16 @@ public interface ProviderSensorDefinitionWrapper extends ElementWrapper<Provider
      * @param sqlTemplate Sql template string.
      */
     void setSqlTemplate(String sqlTemplate);
+
+    /**
+     * Returns the file modification timestamp when the SQL template was modified for the last time.
+     * @return Last file modification timestamp.
+     */
+    Instant getSqlTemplateLastModified();
+
+    /**
+     * Sets the timestamp when the SQL template was modified for the last time.
+     * @param sqlTemplateLastModified SQL Template last modified timestamp.
+     */
+    void setSqlTemplateLastModified(Instant sqlTemplateLastModified);
 }

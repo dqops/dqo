@@ -599,7 +599,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
 
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
-                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate,
+                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate, providerSensorDefinitionWrapper.getSqlTemplateLastModified(),
                         providerType, HomeType.DQO_HOME, null);
 
                 ConnectionSpec connectionSpec = new ConnectionSpec();

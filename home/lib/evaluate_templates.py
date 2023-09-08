@@ -22,6 +22,13 @@ from datetime import datetime
 import streaming
 from jinja2 import Environment, FileSystemLoader, ChainableUndefined
 
+class ParsedTemplate:
+    jinja_template: any
+    template_last_modified: any
+
+    def __init__(self, jinja_template, template_last_modified):
+        self.jinja_template = jinja_template
+        self.template_last_modified = template_last_modified
 
 class TemplateRunner:
     templates = {}
@@ -38,18 +45,19 @@ class TemplateRunner:
             template_id = None
             template_text = request.get("template_text")
             template_home_path = request.get("template_home_path")
+            template_last_modified = request.get("template_last_modified")
 
             if template_text is not None:
                 template_id = template_text
-                if template_id not in self.templates:
+                if template_id not in self.templates or self.templates[template_id].template_last_modified != template_last_modified:
                     template_object = self.environment.from_string(template_text)
-                    self.templates[template_id] = template_object
+                    self.templates[template_id] = ParsedTemplate(template_object, template_last_modified)
                 else:
-                    template_object = self.templates[template_id]
+                    template_object = self.templates[template_id].jinja_template
 
             if template_home_path is not None:
                 template_id = template_home_path
-                if template_id not in self.templates:
+                if template_id not in self.templates or self.templates[template_id].template_last_modified != template_last_modified:
                     if request.get("home_type") == "DQO_HOME":
                         template_object = self.environment.get_template(template_home_path)
                     else:
@@ -57,9 +65,10 @@ class TemplateRunner:
                             template_home_path)
                         template_text = Path(template_absolute_path).read_text()
                         template_object = self.environment.from_string(template_text)
-                    self.templates[template_id] = template_object
+                    self.templates[template_id] = ParsedTemplate(template_object, template_last_modified)
                 else:
-                    template_object = self.templates[template_id]
+                    template_object = self.templates[template_id].jinja_template
+
             parsing_millis = int((datetime.now() - parsing_started_at).total_seconds() * 1000)
 
             rendering_started_at = datetime.now()
