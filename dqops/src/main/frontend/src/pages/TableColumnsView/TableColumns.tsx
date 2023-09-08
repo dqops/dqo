@@ -76,6 +76,7 @@ interface ITableColumnsProps {
   setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: Array<string>) => void
 }
 
 const labels = [
@@ -96,7 +97,8 @@ const TableColumns = ({
   updateData,
   setLevelsData,
   setNumberOfSelected,
-  statistics
+  statistics,
+  onChangeSelectedColumns
 }: ITableColumnsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
@@ -565,12 +567,24 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
+  const setAllSelectedColumns = () => {
+    const keysWithTrueValues = [];
+    for (const key in objectStates) {
+      if (objectStates[key] === true) {
+        keysWithTrueValues.push(key);
+      }
+    }
+    onChangeSelectedColumns && onChangeSelectedColumns(keysWithTrueValues)
+  }
+
+
   useEffect(() => {
     const joinedValues = fixString();
     setLevelsData(setSpec2());
     countTrueValues(objectStates);
     updateData(joinedValues);
     setCreatedDataStream(true, fixString(), setSpec2());
+    setAllSelectedColumns()
   }, [spec, objectStates]);
 
   const mapFunc = (column: MyData, index: number): ReactNode => {

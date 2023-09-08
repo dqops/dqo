@@ -28,6 +28,7 @@ import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.google.common.base.Strings;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -198,7 +199,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
-        Set<String> targetColumnNames = this.filters.getColumnNames();
+        Collection<String> targetColumnNames = this.filters.getColumnNames();
         if (targetColumnNames == null || targetColumnNames.isEmpty()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -253,7 +254,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        Set<String> columnNames = this.filters.getColumnNames();
+        Collection<String> columnNames = this.filters.getColumnNames();
         if (columnNames != null && !columnNames.isEmpty()) {
             String columnName = columnSpec.getHierarchyId().getLast().toString();
             boolean columnNameMatch = columnNames.stream()

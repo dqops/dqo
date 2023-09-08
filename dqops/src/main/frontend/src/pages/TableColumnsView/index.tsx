@@ -12,6 +12,7 @@ import {
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
+  StatisticsCollectorSearchFilters,
   TableColumnsStatisticsModel
 } from '../../api';
 import { AxiosResponse } from 'axios';
@@ -38,11 +39,11 @@ const TableColumnsView = () => {
   );
   const dispatch = useDispatch();
   const history = useHistory();
-  const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
+  const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
     try {
@@ -65,26 +66,31 @@ const TableColumnsView = () => {
   const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
+  const onChangeSelectedColumns = (columns: Array<string>): void => {
+    setSelectedColumns(columns);
+  };
 
   const setNumberOfSelected = (param: number): void => {
     setSelected(param);
   };
 
-  useEffect(() => {
-    fetchColumns();
-  }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
-      setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
-        statistics?.collect_column_statistics_job_template
-      );
-    } finally {
-      setLoadingJob(false);
+         collectStiatisticsObject
+         )
+      }catch (err){
+      console.error(err)
     }
   };
 
+  const collectStiatisticsObject : StatisticsCollectorSearchFilters = {
+    connectionName: connectionName,
+    schemaTableName: schemaName + "." + tableName,
+    enabled: true,
+     columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
+  }
   const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
@@ -144,6 +150,13 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
+
+  useEffect(() => {
+    if(filteredJobs !== undefined){
+      fetchColumns()
+      }
+  }, [job_dictionary_state])
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -180,7 +193,10 @@ const TableColumnsView = () => {
                   schemaName + '.' + tableName
               )
                 ? 'Collecting...'
-                : 'Collect Statistics'
+                : 
+                selectedColumns?.length!== 0 ? 
+                'Collect statistics on selected' : 
+                'Collect Statistics'
             }
             color={
               filteredJobs?.find(
@@ -204,10 +220,7 @@ const TableColumnsView = () => {
                 ''
               )
             }
-            onClick={() => {
-              collectStatistics();
-            }}
-            loading={loadingJob}
+            onClick={collectStatistics}
             disabled={userProfile.can_collect_statistics  !== true}
           />
         </div>
@@ -221,6 +234,7 @@ const TableColumnsView = () => {
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
+          onChangeSelectedColumns = {onChangeSelectedColumns}
         />
       </div>
     </ConnectionLayout>
