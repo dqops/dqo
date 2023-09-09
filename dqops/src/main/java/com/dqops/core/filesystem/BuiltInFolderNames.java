@@ -70,6 +70,11 @@ public final class BuiltInFolderNames {
     public static final String INCIDENTS = "incidents";
 
     /**
+     * Folder where configuration files that could be synchronized to the cloud are stored.
+     */
+    public static final String SETTINGS = "settings";
+
+    /**
      * Local index folder.
      */
     public static final String INDEX = ".index";
