@@ -46,6 +46,7 @@ class RuleExecutionRunParameters:
 
 class PythonRuleCallInput:
     rule_module_path: str
+    home_path: str
     rule_parameters: any
     rule_module_last_modified: datetime
 

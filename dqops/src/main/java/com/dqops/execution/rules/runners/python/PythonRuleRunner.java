@@ -76,6 +76,7 @@ public class PythonRuleRunner extends AbstractRuleRunner {
         String pathToHome = this.homeLocationFindService.getHomePath(ruleDefinitionFindResult.getHome());
         String absolutePathToPythonRule = Path.of(pathToHome).resolve(ruleHomeRelativePath.toRelativePath()).toAbsolutePath().toString();
         ruleInput.setRuleModulePath(absolutePathToPythonRule);
+        ruleInput.setHomePath(pathToHome);
         ruleInput.setRuleModuleLastModified(ruleDefinitionFindResult.getRulePythonFileLastModified());
 
         PythonRuleCallOutput output = this.pythonCallerService.executePythonHomeScript(ruleInput, evaluateRulesModule, PythonRuleCallOutput.class);

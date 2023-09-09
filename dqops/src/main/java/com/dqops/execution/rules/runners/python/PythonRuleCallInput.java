@@ -31,6 +31,7 @@ import java.time.Instant;
 @EqualsAndHashCode(callSuper = false)
 public class PythonRuleCallInput {
     private String ruleModulePath;
+    private String homePath;
     private Instant ruleModuleLastModified;
     private RuleExecutionRunParameters ruleParameters;
 
@@ -48,6 +49,22 @@ public class PythonRuleCallInput {
      */
     public void setRuleModulePath(String ruleModulePath) {
         this.ruleModulePath = ruleModulePath;
+    }
+
+    /**
+     * Returns the path to the home (user home or DQO system home) where the rule is defined.
+     * @return Home folder path.
+     */
+    public String getHomePath() {
+        return homePath;
+    }
+
+    /**
+     * Sets a path to the DQO home (user home or dqo system home) where the rule is defined.
+     * @param homePath A full path to the correct home path.
+     */
+    public void setHomePath(String homePath) {
+        this.homePath = homePath;
     }
 
     /**
