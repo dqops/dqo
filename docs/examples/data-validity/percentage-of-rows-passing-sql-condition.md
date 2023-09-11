@@ -66,6 +66,62 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 If the percentage of data falls below 100.0%, a warning alert will be triggered.
 
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-sql-condition-passed-percent-check.png)
+
+1. Go to the **Profiling** section.
+
+    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Profiling Checks** tab.
+
+    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+
+
+4. Run the enabled check using the **Run check** button.
+
+    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+    ![Run check](https://dqops.com/docs/images/examples/sql-condition-passed-percent-run-check.png)
+
+5. Access the results by clicking the **Results** button.
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+ 
+    ![Check details](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-details.png)
+
+6. Review the results which should be similar to the one below.
+   
+    The actual value in this example is 92, which is below the minimum threshold level set in the warning (100.0%).
+    The check gives a fatal error (notice the red square on the left of the name of the check).
+
+    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-results.png)
+
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+
+    Below you can see the results displayed on the Affected tables per KPI dashboard showing results by issues per connection, issues per schema, issues per data quality dimension and issues per check category.
+
+    ![SQL-condition-passed-percent results on Affected tables per KPI dashboard](https://dqops.com/docs/images/examples/sql-condition-passed-percent-results-on-affected-tables-per-KPI-dashboard.png)
+
 ## YAML configuration file
 
 The YAML configuration file stores both the table details and checks configurations.
@@ -79,9 +135,6 @@ In this example, we have set three minimum percentage thresholds levels for the 
 The highlighted fragments in the YAML file below represent the segment where the profiling `sql_condition_passed_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
-
-
-The data quality check must be configured as presented in the following YAML file:
 
 ```yaml hl_lines="9-17"
 apiVersion: dqo/v1
@@ -107,40 +160,6 @@ spec:
         column_type: INT64
         nullable: true
 ```
-## Running the checks in the example and evaluating the results using the graphical interface
-
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
-
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-sql-condition-passed-percent-check.png)
-
-1. Go to **Profiling** section.
-
-2. Select the table or column mentioned in the example description from the tree view on the left.
-
-3. Select **Profiling Checks** tab.
-
-4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/sql-condition-passed-percent-run-check.png)
-
-5. Access the results by clicking the **Results** button.
-   ![Check details](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-details.png)
-
-6. Review the results which should be similar to the one below.
-   The actual value in this example is 92, which is below the minimum threshold level set in the warning (100.0%).
-   The check gives a fatal error (notice the red square on the left of the name of the check).
-
-   ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-results.png)
-
-7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
-   located in the upper right corner of the graphical interface.
-
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the Affected tables per KPI dashboard showing results by issues per connection, issues per schema, issues per data quality dimension and issues per check category.
-
-   ![SQL-condition-passed-percent results on Affected tables per KPI dashboard](https://dqops.com/docs/images/examples/sql-condition-passed-percent-results-on-affected-tables-per-KPI-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
@@ -245,32 +264,53 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-sql-condition-passed-percent-check-valid.png)
 
-1. Go to **Profiling** section.
+1. Go to the **Profiling** section.
 
-2. Select the table or column mentioned in the example description from the tree view on the left.
+    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
 
-3. Select **Profiling Checks** tab.
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Profiling Checks** tab.
+
+    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+
 
 4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/sql-condition-passed-percent-run-check-valid.png)
+
+    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+    ![Run check](https://dqops.com/docs/images/examples/sql-condition-passed-percent-run-check-valid.png)
 
 5. Access the results by clicking the **Results** button.
-   ![Check details](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-details-valid.png)
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+ 
+    ![Check details](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-details-valid.png)
 
 6. Review the results which should be similar to the one below.
-   The actual value in this example is 100.
-   The check gives a valid result (notice the green square on the left of the name of the check).
+   
+    The actual value in this example is 100.
+    The check gives a valid result (notice the green square on the left of the name of the check).
 
-   ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-results-valid.png)
+    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/sql-condition-passed-percent-check-results-valid.png)
 
-7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
-   located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the Total DQ KPIs per category dashboard showing results by KPI, KPI per check category, Datetime category, Pii KPI and Standard KPI.
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-   ![SQL-condition-passed-percent results on Total DQ KPIs per category dashboard](https://dqops.com/docs/images/examples/sql-condition-passed-percent-results-on-total-DQ-KPIs-per-category-dashboard-valid.png)
+    Below you can see the results displayed on the Total DQ KPIs per category dashboard showing results by KPI, KPI per check category, Datetime category, Pii KPI and Standard KPI.
+
+    ![SQL-condition-passed-percent results on Total DQ KPIs per category dashboard](https://dqops.com/docs/images/examples/sql-condition-passed-percent-results-on-total-DQ-KPIs-per-category-dashboard-valid.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 

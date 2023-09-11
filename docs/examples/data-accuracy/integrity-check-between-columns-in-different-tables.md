@@ -70,6 +70,62 @@ a list of all states and other related regions and with their unique codes (`sta
 | **12**          | FL                        | Florida              | 294478       |
 
 
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-foreign-key-match-percent-check.png)
+
+1. Go to the **Profiling** section.
+
+    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Profiling Checks** tab.
+
+    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+
+
+4. Run the enabled check using the **Run check** button.
+
+    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+   ![Run check](https://dqops.com/docs/images/examples/foreign-key-match-percent-run-check.png)
+
+5. Access the results by clicking the **Results** button.
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+ 
+    ![Check details](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-details.png)
+
+6. Access the results which should be similar as the one below.
+   
+    The actual value in this example is 100, which is above the minimum threshold level set in the warning (99.0%).
+    The check gives a valid result (notice the green square on the left of the name of the check).
+
+    ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-results.png)
+
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+    
+    Below you can see the results displayed on the KPI day by day dashboard showing results by check, schema, table, column.
+
+   ![Foreign-key-match-percent results on KPI day by day dashboard](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-results-on-KPI-day-by-day-dashboard.png)
+
 ## YAML configuration file
 
 The YAML configuration file stores both the table details and checks configurations.
@@ -85,7 +141,7 @@ And the following parameters:
 - foreign_table: fips_codes_states
 - foreign_column: state_fips_code
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `foreign_key_match_percent` 
+The highlighted fragments in the YAML file below represent the segment where the profiling `foreign_key_match_percent`
 check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
@@ -151,40 +207,6 @@ spec:
         column_type: STRING
         nullable: true
 ```
-## Running the checks in the example and evaluating the results using the graphical interface
-
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
-
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-foreign-key-match-percent-check.png)
-
-1. Go to **Profiling** section.
-
-2. Select the table or column mentioned in the example description from the tree view on the left.
-
-3. Select **Profiling Checks** tab.
-
-4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/foreign-key-match-percent-run-check.png)
-
-5. Access the results by clicking the **Results** button.
-   ![Check details](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-details.png)
-
-6. Access the results which should be similar as the one below.
-   The actual value in this example is 100, which is above the minimum threshold level set in the warning (99.0%).
-   The check gives a valid result (notice the green square on the left of the name of the check).
-
-   ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-results.png)
-
-7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
-   located in the upper right corner of the graphical interface.
-
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the KPI day by day dashboard showing results by check, schema, table, column.
-
-   ![Foreign-key-match-percent results on KPI day by day dashboard](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-results-on-KPI-day-by-day-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 The detailed explanation of how to run the example is described [here](../#running-the-examples).

@@ -56,7 +56,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-null-count-checks.png)
 
-1. Go to **Profiling** section.
+1. Go to the **Profiling** section.
     
     The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
 
@@ -66,7 +66,7 @@ To execute the check prepared in the example using the [graphical interface](../
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md). 
 
 
-3. Select **Profiling Checks** tab.
+3. Select the **Profiling Checks** tab.
 
     In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
 
@@ -81,10 +81,10 @@ To execute the check prepared in the example using the [graphical interface](../
 5. Access the results by clicking the **Results** button.
 
     Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level 
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error 
-    that occurred during the check's execution.    
-    
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+ 
     ![Check details](https://dqops.com/docs/images/examples/null-count-check-details.png)
 
 
@@ -96,14 +96,14 @@ To execute the check prepared in the example using the [graphical interface](../
     ![Null-count check results](https://dqops.com/docs/images/examples/null-count-check-results.png)
 
 
-7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
-    located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
 
-    Synchronization ensure that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-    the results displayed on the Affected tables dashboard showing results by issues per connection, issues per schema, issues per check category and severity level.
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+ 
+    Below you can see the results displayed on the Affected tables dashboard showing results by issues per connection, issues per schema, issues per check category and severity level.
 
     ![Null-count check results on Affected tables dashboard](https://dqops.com/docs/images/examples/null-count-check-results-on-affected-tables-dashboard.png)
 

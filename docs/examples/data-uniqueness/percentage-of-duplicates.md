@@ -45,6 +45,62 @@ The `unique_key` column of interest contains unique values.
 | **14-00150037** | Street Light Issue- Multiple poles/multiple streets | Phone  | Closed | 7/21/2014 14:52:20  | 7/21/2014 14:36:47  |
 | **14-00181676** | Parking Machine Issue                               | Phone  | Closed | 8/28/2014 10:40:32  | 8/27/2014 11:32:21  |
 
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-duplicate-percent-check.png)
+
+1. Go to the **Profiling** section.
+
+    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Profiling Checks** tab.
+
+    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+
+
+4. Run the enabled check using the **Run check** button.
+
+    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+    ![Run check](https://dqops.com/docs/images/examples/duplicate-percent-run-check.png)
+
+5. Access the results by clicking the **Results** button.
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+ 
+    ![Check details](https://dqops.com/docs/images/examples/duplicate-percent-check-details.png)
+
+6. Review the results which should be similar to the one below.
+   
+    The actual value in this example is 0, which is below the maximum threshold level set in the warning (1.0%).
+    The check gives a valid result (notice the green square on the left of the name of the check).
+
+    ![Duplicate-percent check results](https://dqops.com/docs/images/examples/duplicate-percent-check-results.png)
+
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+ 
+    Below you can see the results displayed on the Daily tests per column dashboard showing results by connections, schemas, data group and tables.
+
+    ![Duplicate-percent check results on daily tests per column dashboard](https://dqops.com/docs/images/examples/duplicate-percent-check-results-on-daily-tests-per-column-dashboard.png)
+
 ## YAML configuration file
 
 The YAML configuration file stores both the table details and checks configurations.
@@ -107,40 +163,6 @@ spec:
         column_type: TIMESTAMP
         nullable: true
 ```
-## Running the checks in the example and evaluating the results using the graphical interface
-
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
-
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-duplicate-percent-check.png)
-
-1. Go to **Profiling** section.
-
-2. Select the table or column mentioned in the example description from the tree view on the left.
-
-3. Select **Profiling Checks** tab.
-
-4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/duplicate-percent-run-check.png)
-
-5. Access the results by clicking the **Results** button.
-   ![Check details](https://dqops.com/docs/images/examples/duplicate-percent-check-details.png)
-
-6. Review the results which should be similar to the one below.
-   The actual value in this example is 0, which is below the maximum threshold level set in the warning (1.0%).
-   The check gives a valid result (notice the green square on the left of the name of the check).
-
-   ![Duplicate-percent check results](https://dqops.com/docs/images/examples/duplicate-percent-check-results.png)
-
-7. After executing the checks, synchronize the results with your DQO cloud account using the **Synchronize** button
-   located in the upper right corner of the graphical interface.
-
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the Daily tests per column dashboard showing results by connections, schemas, data group and tables.
-
-   ![Duplicate-percent check results on daily tests per column dashboard](https://dqops.com/docs/images/examples/duplicate-percent-check-results-on-daily-tests-per-column-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
