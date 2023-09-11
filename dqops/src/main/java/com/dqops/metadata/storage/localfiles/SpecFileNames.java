@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.storage.localfiles;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+
 /**
  * File names used for the spec yaml files.
  */

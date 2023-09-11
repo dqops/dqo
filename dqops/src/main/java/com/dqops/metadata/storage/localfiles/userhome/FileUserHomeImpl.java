@@ -75,16 +75,16 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode rulesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
         FolderTreeNode checksFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
-        FolderTreeNode settingsFolder = userHomeContext.getHomeRoot();
-        FolderTreeNode dashboardsFolder = userHomeContext.getHomeRoot();
+        FolderTreeNode settingsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SETTINGS);
+        FolderTreeNode localSettingsFolder = userHomeContext.getHomeRoot();
 
         FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
         FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
         FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
         FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
-        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(settingsFolder, yamlSerializer);
+        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(localSettingsFolder, yamlSerializer);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
-        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(dashboardsFolder, yamlSerializer);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
 
         return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, fileIndices, dashboards, userHomeContext);
     }

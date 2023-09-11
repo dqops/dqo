@@ -40,6 +40,11 @@ public final class BuiltInFolderNames {
     public static final String CHECKS = "checks";
 
     /**
+     * Folder where configuration files that could be synchronized to the cloud are stored.
+     */
+    public static final String SETTINGS = "settings";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";
@@ -68,11 +73,6 @@ public final class BuiltInFolderNames {
      * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the incidents are stored.
      */
     public static final String INCIDENTS = "incidents";
-
-    /**
-     * Folder where configuration files that could be synchronized to the cloud are stored.
-     */
-    public static final String SETTINGS = "settings";
 
     /**
      * Local index folder.
