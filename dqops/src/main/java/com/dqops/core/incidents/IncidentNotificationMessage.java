@@ -144,21 +144,23 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
-     * Notification text.
+     * Notification text with Markdown format that contains .
      */
     @JsonPropertyDescription("Notification text.")
-    public String text;
+    private String text;
 
     /**
      * Creates a new incident notification message from a single row of the "incidents" table. The column names are defined in {@link com.dqops.data.incidents.factory.IncidentsColumnNames} class.
-     * @param incidentRow Incident row - a row from the Incident's Tablesaw row.
-     * @param connectionName Connection name.
+     * @param messageParameters Incident notification message parameters with Tablesaw row.
      * @return Incident notification message.
      */
-    public static IncidentNotificationMessage fromIncidentRow(Row incidentRow, String connectionName) {
+    public static IncidentNotificationMessage fromIncidentRow(IncidentNotificationMessageParameters messageParameters) {
+
+        Row incidentRow = messageParameters.getIncidentRow();
+
         IncidentNotificationMessage message = new IncidentNotificationMessage();
         message.setIncidentId(incidentRow.getString(IncidentsColumnNames.ID_COLUMN_NAME));
-        message.setConnection(connectionName);
+        message.setConnection(messageParameters.getConnectionName());
         message.setSchema(incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME));
         message.setTable(incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME)) {
@@ -190,8 +192,9 @@ public class IncidentNotificationMessage {
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
-        message.setText(String.format("New data quality issue detected by DQO on the connection: %s", connectionName));
+        message.setText(IncidentNotificationMessageTextCreator.prepareText(messageParameters));
 
         return message;
     }
+
 }

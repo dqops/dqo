@@ -16,6 +16,7 @@
 
 package com.dqops.core.incidents;
 
+import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
@@ -57,17 +58,22 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private IncidentNotificationService incidentNotificationService;
     private final Object connectionsLock = new Object();
     private final Map<String, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
+    private final InstanceCloudLoginService instanceCloudLoginService;
 
     /**
      * Creates an incident import queue service.
-     * @param incidentsSnapshotFactory Incident snapshot factory.
+     *
+     * @param incidentsSnapshotFactory    Incident snapshot factory.
      * @param incidentNotificationService Incident notification service. Sends notifications to webhooks.
+     * @param instanceCloudLoginService   Instance cloud login service.
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
-                                          IncidentNotificationService incidentNotificationService) {
+                                          IncidentNotificationService incidentNotificationService,
+                                          InstanceCloudLoginService instanceCloudLoginService) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
+        this.instanceCloudLoginService = instanceCloudLoginService;
     }
 
     /**
@@ -486,9 +492,15 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
             List<IncidentNotificationMessage> incidentNotificationMessages = newIncidentsRowIndexes.stream()
                     .map(newIncidentRowIndex -> {
-                        Row incidentRow = this.allNewIncidentRows.row(newIncidentRowIndex);
+                        IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                                .builder()
+                                .incidentRow(this.allNewIncidentRows.row(newIncidentRowIndex))
+                                .connectionName(connectionName)
+                                .baseUrlOfDqoInstance(instanceCloudLoginService.getReturnBaseUrl())
+                                .build();
+
                         IncidentNotificationMessage newIncidentNotificationMessage =
-                                IncidentNotificationMessage.fromIncidentRow(incidentRow, connectionName);
+                                IncidentNotificationMessage.fromIncidentRow(messageParameters);
                         return newIncidentNotificationMessage;
                     })
                     .collect(Collectors.toList());
@@ -558,8 +570,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(newRowIndex, newStatusString);
 
-                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(newRowIndex),
-                            incidentStatusChangeParameters.getConnectionName());
+                    IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                            .builder()
+                            .incidentRow(this.allNewIncidentRows.row(newRowIndex))
+                            .connectionName(incidentStatusChangeParameters.getConnectionName())
+                            .baseUrlOfDqoInstance(instanceCloudLoginService.getReturnBaseUrl())
+                            .build();
+                    return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                 }
             } else if (this.allExistingIncidentRows != null) {
                 Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
@@ -589,8 +606,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(targetNewIncidentsRowIndex, newStatusString);
 
-                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex),
-                            incidentStatusChangeParameters.getConnectionName());
+                    IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                            .builder()
+                            .incidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex))
+                            .connectionName(incidentStatusChangeParameters.getConnectionName())
+                            .baseUrlOfDqoInstance(instanceCloudLoginService.getReturnBaseUrl())
+                            .build();
+                    return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                 }
             }
 
