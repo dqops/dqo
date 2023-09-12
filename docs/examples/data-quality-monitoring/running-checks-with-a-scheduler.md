@@ -90,8 +90,7 @@ for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
 If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
 
-```yaml hl_lines="9-11"
-
+```yaml hl_lines="10-12"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source

@@ -1,7 +1,7 @@
 **date match format percent** checks  
 
 **Description**  
-Column check that calculates percentage of values that match the date format in a column.
+Column check that calculates the percentage of values that match the date format in a column.
 
 ___
 
