@@ -194,6 +194,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SENSORS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CHECKS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SETTINGS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
@@ -235,6 +236,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 DashboardYaml dashboardYaml = new DashboardYaml();
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
+            }
+
+
+            Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
+            if (!Files.exists(rulesRequirementTxtPath)) {
+                Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQO starts\n");
             }
         }
         catch (Exception ex) {

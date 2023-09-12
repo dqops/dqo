@@ -21,6 +21,7 @@ import com.dqops.utils.serialization.JsonSerializer;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -32,23 +33,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Service that starts python to execute a givens script.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class PythonCallerServiceImpl implements PythonCallerService {
+public class PythonCallerServiceImpl implements PythonCallerService, DisposableBean {
     private final DqoConfigurationProperties configurationProperties;
-    private DqoPythonConfigurationProperties pythonConfigurationProperties;
+    private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
     private final PythonVirtualEnvService pythonVirtualEnvService;
-    private final Map<String, StreamingPythonProcess> pythonModuleProcesses = new HashMap<>();
-    private final Object processStartLock = new Object();
+    private Map<String, Stack<StreamingPythonProcess>> pythonModuleProcesses = new HashMap<>();
+    private final Object processDictionaryLock = new Object();
 
     /**
      * Default injection constructor.
@@ -108,14 +106,19 @@ public class PythonCallerServiceImpl implements PythonCallerService {
      */
     @Override
     public <I, O> O executePythonHomeScript(I input, String pythonFilePathInHome, Class<O> outputType) {
+        Stack<StreamingPythonProcess> availableProcessesStack = null;
         StreamingPythonProcess streamingPythonProcess = null;
 
-        synchronized (this.processStartLock) {
-            streamingPythonProcess = this.pythonModuleProcesses.get(pythonFilePathInHome);
-            if (streamingPythonProcess == null) {
+        synchronized (this.processDictionaryLock) {
+            availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);
+            if (availableProcessesStack == null) {
+                availableProcessesStack = new Stack<>();
+                this.pythonModuleProcesses.put(pythonFilePathInHome, availableProcessesStack);
+            }
+
+            if (availableProcessesStack.isEmpty()) {
                 String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
                 PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-                // TODO: DRY
                 String commandLineText = String.format(
                         "\"%s\" -u \"%s\"",
                         virtualEnv.getPythonInterpreterPath(),
@@ -123,21 +126,21 @@ public class PythonCallerServiceImpl implements PythonCallerService {
                 );
                 streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
                 streamingPythonProcess.startProcess(virtualEnv);
-				this.pythonModuleProcesses.put(pythonFilePathInHome, streamingPythonProcess);
+            } else {
+                streamingPythonProcess = availableProcessesStack.pop();
             }
         }
 
         try {
             O receiveMessage = streamingPythonProcess.sendReceiveMessage(input, outputType);
+            synchronized (this.processDictionaryLock) {
+                availableProcessesStack.add(streamingPythonProcess); // put it back for the next call
+            }
             return receiveMessage;
         }
         catch (Exception ex) {
             // when the process fails, we want to stat a new process
-            synchronized (this.processStartLock) {
-				this.pythonModuleProcesses.remove(pythonFilePathInHome);
-                streamingPythonProcess.close();
-            }
-
+            streamingPythonProcess.close();
             throw new PythonExecutionException("Python process failed: " + ex.getMessage(), ex);
         }
     }
@@ -156,7 +159,6 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             String fullInputText = serializeInputs(inputs);
             String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-            // TODO: Change string format with clumsy \" additions to some builder.
             String commandLineText = String.format(
                     "\"%s\" -u \"%s\"",
                     virtualEnv.getPythonInterpreterPath(),
@@ -192,6 +194,37 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             }
         } catch (IOException e) {
             throw new PythonExecutionException("Failed to execute python script " + pythonFilePathInHome, e);
+        }
+    }
+
+    /**
+     * Called when DQO stops. Stops all python processes.
+     * @throws Exception Exception thrown when any process failed to stop.
+     */
+    @Override
+    public void destroy() throws Exception {
+        Throwable firstException = null;
+
+        synchronized (this.processDictionaryLock) {
+            for (Stack<StreamingPythonProcess> processesStack : this.pythonModuleProcesses.values()) {
+                StreamingPythonProcess[] processesToStop = processesStack.toArray(StreamingPythonProcess[]::new);
+                for (StreamingPythonProcess pythonProcess : processesToStop) {
+                    try {
+                        pythonProcess.close();
+                    }
+                    catch (Throwable t) {
+                        if (firstException == null) {
+                            firstException = t;
+                        }
+                    }
+                }
+            }
+
+            this.pythonModuleProcesses = null;
+        }
+
+        if (firstException != null) {
+            throw new PythonExecutionException("Cannot stop Python process, error: " + firstException.getMessage(), firstException);
         }
     }
 }

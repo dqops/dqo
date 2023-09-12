@@ -16,15 +16,16 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
+  canUserEdit?: boolean
 }
 
-const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
 
-  const { isCronScheduled } = useSelector(
+  const { isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const dispatch = useActionDispatch();
@@ -170,7 +171,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   return (
     <div>
       {isCronScheduled === false ? (
-        <div className="w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300">
+        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
           Warning: the job scheduler is disabled and no scheduled jobs will be
           executed, enable the job scheduler?{' '}
           <Switch
@@ -192,6 +193,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
                 className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
+                disabled={canUserEdit !== true}
               />
             </td>
           </tr>
@@ -199,11 +201,12 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
             <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className="px-4 py-2 text-sm">
+            <td className={clsx("px-4 py-2 text-sm", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
                   onChange={(value) => handleChange({ disabled: value })}
+                  disabled={canUserEdit !== true}
                 />
               </div>
             </td>
@@ -211,7 +214,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
         </tbody>
       </table>
 
-      <div className="flex flex-col text-sm">
+      <div className={clsx("flex flex-col text-sm" , canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <div
           className={clsx(
             'flex items-center text-sm',
@@ -223,6 +226,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
             checked={mode === ''}
             onClick={() => onChangeMode('')}
             className="mb-4"
+            
           />
         </div>
         <div
@@ -243,6 +247,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
+              disabled={canUserEdit !== true}
             />
             <div>minutes</div>
           </div>
@@ -265,6 +270,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
+              disabled={canUserEdit !== true}
             />
             <div>minutes past every hour</div>
           </div>
@@ -287,6 +293,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={hour}
               onChange={onChangeHour}
+              disabled={canUserEdit !== true}
             />
             <div>:</div>
             <NumberInput
@@ -295,6 +302,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
+              disabled={canUserEdit !== true}
             />
           </div>
         </div>

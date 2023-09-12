@@ -5,7 +5,7 @@
 table/accuracy/total_row_count_match_percent
 ```
 **Description**  
-Table level sensor that calculates percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
+Table level sensor that calculates the percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
 
 **Parameters**  
   

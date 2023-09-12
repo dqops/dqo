@@ -87,6 +87,16 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
                 this.parameters.isDummySensorExecution(),
                 jobExecutionContext.getCancellationToken());
 
+        if (statisticsCollectionExecutionSummary.getAllChecksFailed()) {
+            String firstConnectionName = statisticsCollectionExecutionSummary.getFirstConnectionName();
+            String firstTableName = statisticsCollectionExecutionSummary.getFirstTableName();
+            String firstErrorMessage = statisticsCollectionExecutionSummary.getFirstException() != null ?
+                    statisticsCollectionExecutionSummary.getFirstException().getMessage() : "";
+            throw new DqoStatisticsCollectionJobFailedException("Cannot collect statistics on the table " + firstTableName +
+                    " on the connection " + firstConnectionName + ", the first error: " + firstErrorMessage,
+                    statisticsCollectionExecutionSummary.getFirstException());
+        }
+
         CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
                 CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
         CollectStatisticsOnTableQueueJobParameters clonedParameters = this.getParameters().clone();

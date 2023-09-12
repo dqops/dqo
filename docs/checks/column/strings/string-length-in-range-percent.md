@@ -1,7 +1,7 @@
 **string length in range percent** checks  
 
 **Description**  
-Column check that calculates percentage of strings with a length below the indicated by the user length in a column.
+Column check that calculates the percentage of strings with a length below the indicated by the user length in a column.
 
 ___
 

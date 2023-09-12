@@ -29,6 +29,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.LinkedHashSet;
+
 /**
  * Basic column model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
  */
@@ -43,7 +45,7 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Physical table name including the schema and table names.")
     private PhysicalTableName table;
 
-    @JsonPropertyDescription("Column name.")
+    @JsonPropertyDescription("Column names.")
     private String columnName;
 
     @JsonPropertyDescription("SQL expression.")
@@ -187,7 +189,7 @@ public class ColumnBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                getColumnNames().add(columnName);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()

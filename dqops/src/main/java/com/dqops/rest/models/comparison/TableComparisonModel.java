@@ -98,6 +98,18 @@ public class TableComparisonModel {
     private CompareThresholdsModel compareRowCount;
 
     /**
+     * The column count comparison configuration.
+     */
+    @JsonPropertyDescription("The column count comparison configuration.")
+    private CompareThresholdsModel compareColumnCount;
+
+    /**
+     * Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.")
+    private boolean supportsCompareColumnCount;
+
+    /**
      * The list of compared columns, their matching reference column and the enabled comparisons.
      */
     @JsonPropertyDescription("The list of compared columns, their matching reference column and the enabled comparisons.")
@@ -178,6 +190,7 @@ public class TableComparisonModel {
         AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
         AbstractComparisonCheckCategorySpecMap<?> comparisons = tableCheckRootContainer.getComparisons();
+        tableComparisonModel.supportsCompareColumnCount = tableCheckRootContainer.getCheckType() != CheckType.partitioned;
 
         if (comparisons instanceof AbstractTableComparisonCheckCategorySpecMap) {
             AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap =
@@ -187,6 +200,11 @@ public class TableComparisonModel {
             if (tableCheckComparisonChecks != null) {
                 ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, false);
                 tableComparisonModel.setCompareRowCount(CompareThresholdsModel.fromComparisonCheckSpec(rowCountMatch));
+
+                if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+                    ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, false);
+                    tableComparisonModel.setCompareColumnCount(CompareThresholdsModel.fromComparisonCheckSpec(columnCountMatch));
+                }
             }
         }
 
@@ -269,6 +287,15 @@ public class TableComparisonModel {
             this.compareRowCount.copyToComparisonCheckSpec(rowCountMatch);
         } else {
             tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.row_count_match);
+        }
+
+        if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+            if (this.compareColumnCount != null) {
+                ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+                this.compareColumnCount.copyToComparisonCheckSpec(columnCountMatch);
+            } else {
+                tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.column_count_match);
+            }
         }
 
         for (ColumnComparisonModel columnComparisonModel : this.columns) {

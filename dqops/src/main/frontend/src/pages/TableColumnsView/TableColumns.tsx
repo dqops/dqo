@@ -76,6 +76,7 @@ interface ITableColumnsProps {
   setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: Array<string>) => void
 }
 
 const labels = [
@@ -96,7 +97,8 @@ const TableColumns = ({
   updateData,
   setLevelsData,
   setNumberOfSelected,
-  statistics
+  statistics,
+  onChangeSelectedColumns
 }: ITableColumnsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
@@ -106,7 +108,7 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
       ...prevStates,
@@ -266,10 +268,10 @@ const TableColumns = ({
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
   );
-  const filteredColumns = filteredJobs?.map(
+  const filteredColumns = filteredJobs?.flatMap(
     (x) =>
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.columnName
+        ?.statisticsCollectorSearchFilters?.columnNames
   );
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>
@@ -565,12 +567,24 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
+  const setAllSelectedColumns = () => {
+    const keysWithTrueValues = [];
+    for (const key in objectStates) {
+      if (objectStates[key] === true) {
+        keysWithTrueValues.push(key);
+      }
+    }
+    onChangeSelectedColumns && onChangeSelectedColumns(keysWithTrueValues)
+  }
+
+
   useEffect(() => {
     const joinedValues = fixString();
     setLevelsData(setSpec2());
     countTrueValues(objectStates);
     updateData(joinedValues);
     setCreatedDataStream(true, fixString(), setSpec2());
+    setAllSelectedColumns()
   }, [spec, objectStates]);
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
@@ -690,6 +704,7 @@ const TableColumns = ({
             <div>
               <IconButton
                 size="sm"
+                disabled={userProfile.can_collect_statistics  !== true}
                 className={
                   filteredColumns?.find((x) => x === column.nameOfCol)
                     ? 'group bg-gray-400 ml-1.5'
@@ -707,6 +722,7 @@ const TableColumns = ({
               <IconButton
                 size="sm"
                 className="group bg-teal-500 ml-3"
+                disabled={userProfile.can_manage_data_sources !== true}
                 onClick={() => {
                   rewriteData(column.columnHash);
                 }}

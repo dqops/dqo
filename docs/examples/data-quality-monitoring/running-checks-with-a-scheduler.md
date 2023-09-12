@@ -90,8 +90,7 @@ for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
 If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
 
-```yaml hl_lines="9-11"
-
+```yaml hl_lines="10-12"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
@@ -100,6 +99,7 @@ spec:
   bigquery:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
+    jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
     monitoring_daily:
       cron_expression: 0 8 * * *
@@ -330,7 +330,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 
-You should see the results as the one below.
+Review the results which should be similar to the one below.
 Results from all checks appear to be valid except for one that indicates a fatal error.
 
 

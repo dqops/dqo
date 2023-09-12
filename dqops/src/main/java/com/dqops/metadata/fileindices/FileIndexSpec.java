@@ -29,6 +29,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Objects;
+
 /**
  * File index specification.
  */
@@ -44,6 +46,12 @@ public class FileIndexSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Folder file index.")
     private FolderMetadata folder = new FolderMetadata();
+
+    @JsonPropertyDescription("The tenant id to which the files are synchronized.")
+    private String tenantId;
+
+    @JsonPropertyDescription("The data domain to which the files are synchronized.")
+    private String domain;
 
     /**
      * Default constructor.
@@ -66,6 +74,40 @@ public class FileIndexSpec extends AbstractSpec implements Cloneable {
     public void setFolder(FolderMetadata folder) {
         this.setDirtyIf(this.folder != folder);
         this.folder = folder;
+    }
+
+    /**
+     * Returns the tenant id to which the files are synchronized.
+     * @return Tenant id.
+     */
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    /**
+     * Sets the tenant id to which the files are synchronized.
+     * @param tenantId Tenant id.
+     */
+    public void setTenantId(String tenantId) {
+        this.setDirtyIf(!Objects.equals(this.tenantId, tenantId));
+        this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the data domain to which the files are synchronized.
+     * @return Data domain.
+     */
+    public String getDomain() {
+        return domain;
+    }
+
+    /**
+     * Sets the data domain to which the files are synchronized.
+     * @param domain Data domain.
+     */
+    public void setDomain(String domain) {
+        this.setDirtyIf(!Objects.equals(this.domain, domain));
+        this.domain = domain;
     }
 
     /**

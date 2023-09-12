@@ -22,6 +22,8 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * Sensor definition search result.
  */
@@ -32,6 +34,7 @@ public class SensorDefinitionFindResult {
     private final ProviderSensorDefinitionSpec providerSensorDefinitionSpec;
     private final HomeFilePath templateFilePath;
     private final String sqlTemplateText;
+    private final Instant sqlTemplateLastModified;
     private final ProviderType providerType;
 
     /**
@@ -39,6 +42,7 @@ public class SensorDefinitionFindResult {
      * @param sensorDefinitionSpec Found sensor definition specification (we need just the specification).
      * @param providerSensorDefinitionSpec Provider specific sensor definition.
      * @param sqlTemplateText Jinja sql template text (if the sensor is defined as a Jinja2 template).
+     * @param sqlTemplateLastModified The timestamp when the SQL template file was last modified.
      * @param providerType Provider type.
      * @param home Home type where the template was found.
      * @param templateFilePath Template file path in the home folder.
@@ -46,12 +50,14 @@ public class SensorDefinitionFindResult {
     public SensorDefinitionFindResult(SensorDefinitionSpec sensorDefinitionSpec,
 									  ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
 									  String sqlTemplateText,
+                                      Instant sqlTemplateLastModified,
 									  ProviderType providerType,
 									  HomeType home,
 									  HomeFilePath templateFilePath) {
         this.sensorDefinitionSpec = sensorDefinitionSpec;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplateText = sqlTemplateText;
+        this.sqlTemplateLastModified = sqlTemplateLastModified != null ? sqlTemplateLastModified : Instant.now();
         this.providerType = providerType;
         this.home = home;
         this.templateFilePath = templateFilePath;
@@ -79,6 +85,14 @@ public class SensorDefinitionFindResult {
      */
     public String getSqlTemplateText() {
         return sqlTemplateText;
+    }
+
+    /**
+     * Returns the timestamp when the SQL template file was modified for the last time.
+     * @return SQL Template file last modification timestamp.
+     */
+    public Instant getSqlTemplateLastModified() {
+        return sqlTemplateLastModified;
     }
 
     /**

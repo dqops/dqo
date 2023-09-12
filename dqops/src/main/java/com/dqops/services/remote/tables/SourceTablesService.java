@@ -15,7 +15,7 @@
  */
 package com.dqops.services.remote.tables;
 
-import com.dqops.rest.models.remote.TableRemoteBasicModel;
+import com.dqops.rest.models.remote.RemoteTableBasicModel;
 
 import java.util.List;
 
@@ -30,5 +30,5 @@ public interface SourceTablesService {
      * @param schemaName         Schema name.
      * @return Schema list acquired remotely.
      */
-    List<TableRemoteBasicModel> showTablesOnRemoteSchema(String connectionName, String schemaName);
+    List<RemoteTableBasicModel> showTablesOnRemoteSchema(String connectionName, String schemaName);
 }

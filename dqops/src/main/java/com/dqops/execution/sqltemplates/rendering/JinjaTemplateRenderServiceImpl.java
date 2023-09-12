@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
+import java.time.Instant;
 
 /**
  * SQL template rendering service that will populate the template with the parameters.
@@ -54,9 +55,11 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
      * @param templateRenderParameters Template rendering parameters.
      * @return Filled (rendered) template.
      */
+    @Override
     public String renderTemplate(String templateText, JinjaTemplateRenderParameters templateRenderParameters) {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(templateText);
+        inputDto.setTemplateLastModified(Instant.now());
         inputDto.setParameters(templateRenderParameters);
         String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
@@ -85,6 +88,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
                                  SensorExecutionProgressListener progressListener) {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(sensorFindResult.getSqlTemplateText());
+        inputDto.setTemplateLastModified(sensorFindResult.getSqlTemplateLastModified());
         inputDto.setHomeType(sensorFindResult.getHome());
         String relativePathToTemplate = sensorFindResult.getTemplateFilePath() != null ?
                 sensorFindResult.getTemplateFilePath().toString().replace('\\', '/')

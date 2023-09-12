@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { updateSensor } from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
 
 type SensorActionGroupProps = {
   onSave: () => void;
@@ -18,6 +19,9 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
     type
   } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const handleSave = () => {
     if (type === 'create') {
@@ -37,6 +41,7 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
           variant="outlined"
           label="Delete Sensor"
           className="w-40 !h-10"
+          disabled={userProfile.can_manage_definitions !== true}
         />
       )}
       <Button
@@ -44,7 +49,7 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedSensorDetail}
+        disabled={!isUpdatedSensorDetail || userProfile.can_manage_definitions !== true}
         onClick={handleSave}
         loading={isUpdating}
       />

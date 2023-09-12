@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates percentage of the difference in min of a column in a table and min of a column of another table.
+ * Column level sensor that calculates the percentage of the difference in min of a column in a table and min of a column of another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

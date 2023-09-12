@@ -109,7 +109,7 @@ const setActiveTabState = (
 const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state[action.checkType].tabs.find(
+      const existing = state[action.checkType]?.tabs.find(
         (item) => item.value === action.data.value
       );
       const { state: actionState, ...data } = action.data;
@@ -120,7 +120,7 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.checkType]: {
             ...state[action.checkType],
             activeTab: action.data.value,
-            tabs: state[action.checkType].tabs.map((item) =>
+            tabs: state[action.checkType]?.tabs.map((item) =>
               item.value === action.data.value
                 ? {
                     ...item,
@@ -149,7 +149,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         }
       };
     case SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL: {
-      const newTabs = state[action.checkType].tabs.map((item) =>
+      const newTabs = state[action.checkType]?.tabs.map((item) =>
         item.value === action.activeTab
           ? {
               ...item,
@@ -198,16 +198,16 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
 
     case SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB: {
-      const index = state[action.checkType].tabs.findIndex(
+      const index = state[action.checkType]?.tabs.findIndex(
         (item) => item.value === action.data
       );
       let activeTab = state[action.checkType].activeTab;
 
       if (state[action.checkType].activeTab === action.data) {
         if (index > 0) {
-          activeTab = state[action.checkType].tabs[index - 1].value;
-        } else if (index < state[action.checkType].tabs.length - 1) {
-          activeTab = state[action.checkType].tabs[index + 1].value;
+          activeTab = state[action.checkType]?.tabs[index - 1].value;
+        } else if (index < state[action.checkType]?.tabs.length - 1) {
+          activeTab = state[action.checkType]?.tabs[index + 1].value;
         }
       }
 
@@ -215,7 +215,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         ...state,
         [action.checkType]: {
           ...state[action.checkType],
-          tabs: state[action.checkType].tabs.filter(
+          tabs: state[action.checkType]?.tabs.filter(
             (item) => item.value !== action.data
           ),
           activeTab
@@ -230,7 +230,7 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -341,7 +341,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -364,7 +364,7 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -451,7 +451,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -1167,7 +1167,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_CHECK_RESULTS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -1180,7 +1180,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.SET_SENSOR_READOUTS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -1193,7 +1193,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.SET_SENSOR_ERRORS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -1207,7 +1207,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.SET_CHECK_FILTERS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -1298,13 +1298,13 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.TOGGLE_CHECK: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
-      console.log('firstAte', checksState)
       return setActiveTabState(state, action, {
         checksState: {
           ...checksState,
@@ -1314,11 +1314,12 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.CLOSE_CHECK: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
       return setActiveTabState(state, action, {
         checksState: {

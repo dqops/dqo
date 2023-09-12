@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/schema/column_count
+  rule_name: comparison/diff_percent
+  help_text: "Verifies that the column count of the tested (parent) table matches\
+    \ the column count of the reference table. Only one comparison result is returned,\
+    \ without data grouping."

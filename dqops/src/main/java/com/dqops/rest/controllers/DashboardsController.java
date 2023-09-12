@@ -15,7 +15,10 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.dqocloud.dashboards.LookerStudioUrlService;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.dashboards.DashboardSpec;
@@ -53,22 +56,26 @@ import java.util.Optional;
 @Slf4j
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
-    private DashboardsProvider dashboardsProvider;
-    private UserHomeContextFactory userHomeContextFactory;
+    private final DashboardsProvider dashboardsProvider;
+    private final UserHomeContextFactory userHomeContextFactory;
+    private final DqoCloudApiKeyProvider cloudApiKeyProvider;
 
     /**
      * Default dependency injection constructor.
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
      * @param dashboardsProvider Dashboard tree provider.
      * @param userHomeContextFactory User home factory.
+     * @param dqoCloudApiKeyProvider Cloud DQO key provider.
      */
     @Autowired
     public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
                                 DashboardsProvider dashboardsProvider,
-                                UserHomeContextFactory userHomeContextFactory) {
+                                UserHomeContextFactory userHomeContextFactory,
+                                DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.lookerStudioUrlService = lookerStudioUrlService;
         this.dashboardsProvider = dashboardsProvider;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.cloudApiKeyProvider = dqoCloudApiKeyProvider;
     }
 
     /**
@@ -89,12 +96,15 @@ public class DashboardsController {
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
+        DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList;
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
-
-        DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList.merge(userDashboardsList);
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey();
+        if (cloudApiKey != null && cloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE) {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            UserHome userHome = userHomeContext.getUserHome();
+            DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
+            combinedDefaultAndUserDashboards = dashboardList.merge(userDashboardsList);
+        }
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl
@@ -114,6 +124,11 @@ public class DashboardsController {
      * @return Custom dashboard specification or null, when the dashboard was not found.
      */
     protected DashboardSpec findUserCustomDashboard(DqoUserPrincipal principal, String dashboardName, String... folders) {
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey();
+        if (cloudApiKey == null || cloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.FREE) {
+            return null;
+        }
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();

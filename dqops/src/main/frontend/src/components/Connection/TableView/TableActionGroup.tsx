@@ -27,6 +27,7 @@ interface ITableActionGroupProps {
   maxToCreateDataStream?: boolean;
   createDataStreamFunc?: () => void;
   statistics?: TableColumnsStatisticsModel;
+  selectedColumns?: string[]
 }
 
 const TableActionGroup = ({
@@ -40,7 +41,8 @@ const TableActionGroup = ({
   createDataStream,
   maxToCreateDataStream,
   createDataStreamFunc,
-  statistics
+  statistics,
+  selectedColumns
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -59,7 +61,7 @@ const TableActionGroup = ({
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -76,16 +78,15 @@ const TableActionGroup = ({
   };
 
   const collectStatistics = async () => {
-    if (statistics) {
       try {
         setLoadingJob(true);
-        await JobApiClient.collectStatisticsOnTable(
-          statistics?.collect_column_statistics_job_template
-        );
+        await JobApiClient.collectStatisticsOnTable({
+          ...statistics?.collect_column_statistics_job_template,
+           columnNames: selectedColumns
+      });
       } finally {
         setLoadingJob(false);
       }
-    }
   };
 
   const filteredJobs = Object.values(job_dictionary_state).filter(
@@ -103,26 +104,29 @@ const TableActionGroup = ({
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {shouldDelete && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Delete Table"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {createDataStream && (
         <Button
-          label="Create Data Stream"
-          color="primary"
+          label="Create Data Grouping"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           onClick={createDataStreamFunc}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {maxToCreateDataStream && (
@@ -130,9 +134,10 @@ const TableActionGroup = ({
           {' '}
           (You can choose max 9 columns)
           <Button
-            label="Create Data Stream"
+            label="Create Data Grouping"
             color="secondary"
             className="text-black "
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </div>
       )}
@@ -145,9 +150,14 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             )
               ? 'Collecting...'
-              : 'Collect Statistic'
+              : 
+              selectedColumns?.length!== 0 ? 
+              'Collect statistics on selected' : 
+              'Collect Statistics'
           }
           color={
             filteredJobs?.find(
@@ -155,6 +165,8 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             )
               ? 'secondary'
               : 'primary'
@@ -165,6 +177,8 @@ const TableActionGroup = ({
                 x.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters?.schemaTableName ===
                 schema + '.' + table
+                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                connection
             ) ? (
               <SvgIcon name="sync" className="w-4 h-4" />
             ) : (
@@ -173,17 +187,18 @@ const TableActionGroup = ({
           }
           onClick={collectStatistics}
           loading={loadingJob}
+          disabled={userProfile.can_collect_statistics !== true}
         />
       )}
       {addSaveButton && (
         <Button
-          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
         />
       )}
 

@@ -7,6 +7,8 @@ import SvgIcon from '../SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import Tree from '../MainLayout/Tree';
 import { CheckTypes } from "../../shared/routes";
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 const Sidebar = () => {
   const history = useHistory();
@@ -14,7 +16,9 @@ const Sidebar = () => {
   const [isResizing, setIsResizing] = useState(false);
   const { sidebarWidth, setSidebarWidth } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -61,6 +65,7 @@ const Sidebar = () => {
             className="px-4"
             leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
             onClick={() => history.push('/create')}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : (
           <div />

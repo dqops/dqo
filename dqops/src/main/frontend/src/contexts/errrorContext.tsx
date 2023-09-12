@@ -29,7 +29,7 @@ function ErrorProvider({ children }: any) {
       if (newError.name) {
         setErrors([...errors, newError]);
       }
-      
+
       if (response.status > 500) {
         setIsOpen(true);
       }
@@ -41,7 +41,9 @@ function ErrorProvider({ children }: any) {
           })
         }
       }
-      return Promise.reject(error);
+     if(error && error.response.status!== 404){
+       return Promise.reject(error);
+      }
     });
   }, [errors]);
   const removeError = (error: IError) => {

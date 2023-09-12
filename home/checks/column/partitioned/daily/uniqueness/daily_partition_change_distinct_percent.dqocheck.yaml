@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/uniqueness/distinct_percent
+  rule_name: change/change_percent
+  help_text: Verifies that the distinct percent in a monitored column has changed
+    by a fixed rate since the last readout.

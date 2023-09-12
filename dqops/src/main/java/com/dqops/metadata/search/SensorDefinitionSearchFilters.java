@@ -75,6 +75,7 @@ public class SensorDefinitionSearchFilters {
      * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>sensorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
         if (sensorNameSearchPattern == null && sensorName != null) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);

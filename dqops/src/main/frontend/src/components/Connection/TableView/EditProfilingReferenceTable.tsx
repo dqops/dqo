@@ -35,6 +35,7 @@ import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
 import EditReferenceTable from './EditReferenceTable';
+import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -46,7 +47,35 @@ type EditProfilingReferenceTableProps = {
   getNewTableComparison: () => void;
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
+  canUserCompareTables?: boolean;
 };
+
+const itemsToRender = [
+  {
+    key: 'min_match',
+    prop: 'compare_min'
+  },
+  {
+    key: 'max_match',
+    prop: 'compare_max'
+  },
+  {
+    key: 'sum_match',
+    prop: 'compare_sum'
+  },
+  {
+    key: 'mean_match',
+    prop: 'compare_mean'
+  },
+  {
+    key: 'null_count_match',
+    prop: 'compare_null_count'
+  },
+  {
+    key: 'not_null_count_match',
+    prop: 'compare_not_null_count'
+  }
+];
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
@@ -57,7 +86,8 @@ export const EditProfilingReferenceTable = ({
   isCreating,
   getNewTableComparison,
   onChangeSelectedReference,
-  listOfExistingReferences
+  listOfExistingReferences,
+  canUserCompareTables
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -94,11 +124,13 @@ export const EditProfilingReferenceTable = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
-  const [refTableChanged, setRefTableChanged] = useState(false);
 
-  const onChangeRefTableChanged = (arg: boolean) => {
-    setRefTableChanged(arg);
-  };
+  const { tableExist, schemaExist, connectionExist } =
+    useConnectionSchemaTableExists(
+      reference?.reference_connection ?? '',
+      reference?.reference_table?.schema_name ?? '',
+      reference?.reference_table?.table_name ?? ''
+    );
 
   const onChangeIsDataDeleted = (arg: boolean): void => {
     setIsDataDeleted(arg);
@@ -113,15 +145,15 @@ export const EditProfilingReferenceTable = ({
       values = Object.values(checksUI);
     } else if (checkTypes === CheckTypes.PARTITIONED) {
       if (timePartitioned === 'daily') {
-        values = Object.values(dailyPartitionedChecks);
+        values = Object.values(dailyPartitionedChecks ?? {});
       } else {
-        values = Object.values(monthlyPartitionedChecks);
+        values = Object.values(monthlyPartitionedChecks ?? {});
       }
     } else if (checkTypes === CheckTypes.MONITORING) {
       if (timePartitioned === 'daily') {
-        values = Object.values(dailyMonitoring);
+        values = Object.values(dailyMonitoring ?? {});
       } else {
-        values = Object.values(monthlyMonitoring);
+        values = Object.values(monthlyMonitoring ?? {});
       }
     }
 
@@ -151,7 +183,9 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
-        setReference(res.data);
+        if (res && res?.data) {
+          setReference(res.data);
+        }
       };
       if (checkTypes === CheckTypes.PROFILING) {
         TableComparisonsApi.getTableComparisonProfiling(
@@ -195,46 +229,40 @@ export const EditProfilingReferenceTable = ({
       }
       checkIfRowCountClicked();
     }
-    if (
-      reference !== undefined &&
-      Object.keys(reference).length > 0 &&
-      isCreating === false
-    ) {
-      ColumnApiClient.getColumns(
-        reference.reference_connection ?? connection,
-        reference.reference_table?.schema_name ?? schema,
-        reference.reference_table?.table_name ?? table
-      ).then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
-      });
-    }
   }, [selectedReference]);
 
   useEffect(() => {
     if (
       reference !== undefined &&
       Object.keys(reference).length > 0 &&
-      isCreating === false
+      isCreating === false &&
+      connectionExist === true &&
+      schemaExist === true &&
+      tableExist === true &&
+      reference.reference_connection?.length !== 0 &&
+      reference.reference_table?.schema_name?.length !== 0 &&
+      reference.reference_table?.table_name?.length !== 0
     ) {
       ColumnApiClient.getColumns(
-        reference.reference_connection ?? connection,
-        reference.reference_table?.schema_name ?? schema,
-        reference.reference_table?.table_name ?? table
-      ).then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
+        reference.reference_connection ?? '',
+        reference.reference_table?.schema_name ?? '',
+        reference.reference_table?.table_name ?? ''
+      )?.then((columnRes) => {
+        if (
+          columnRes &&
+          columnRes.data.length !== 0 &&
+          Array.isArray(columnRes.data)
+        ) {
+          setColumnOptions(
+            columnRes.data.map((item) => ({
+              label: item.column_name ?? '',
+              value: item.column_name ?? ''
+            }))
+          );
+        }
       });
     }
-  }, [reference, selectedReference]);
+  }, [reference, selectedReference, tableExist, schemaExist, connectionExist]);
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -516,25 +544,6 @@ export const EditProfilingReferenceTable = ({
     getResultsData();
   }, [isDataDeleted]);
 
-  const replaceStringWithUndefined = (
-    arr: TableComparisonModel
-  ): TableComparisonModel => {
-    // const columnValues = columnOptions.map((x) => x.value)
-    if (arr.columns) {
-      arr.columns = arr.columns.map((obj) => {
-        // if(!columnValues.includes(obj.reference_column_name)){
-        return { ...obj, reference_column_name: undefined };
-        // }else{
-        //   return {...obj}
-        // }
-      });
-    }
-    return arr;
-  };
-  useEffect(() => {
-    setReference(replaceStringWithUndefined(reference ?? {}));
-  }, [refTableChanged]);
-
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -555,9 +564,8 @@ export const EditProfilingReferenceTable = ({
           cleanDataTemplate={reference?.compare_table_clean_data_job_template}
           onChangeIsDataDeleted={onChangeIsDataDeleted}
           isDataDeleted={isDataDeleted}
-          onChangeRefTableChanged={onChangeRefTableChanged}
-          refTableChanged={refTableChanged}
           listOfExistingReferences={listOfExistingReferences}
+          canUserCompareTables={canUserCompareTables}
         />
       </div>
       {reference &&
@@ -733,35 +741,27 @@ export const EditProfilingReferenceTable = ({
                           </div>
                         )}
                       </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                     </tr>
                   </thead>
                   <thead>
                     <tr>
                       <th className="text-left pr-4 py-1.5">Compared column</th>
                       <th className="text-left px-4 py-1.5"></th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Min
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Max
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Sum
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Mean
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Null count
-                      </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                        Not null count
-                      </th>
+                      {[
+                        'Min',
+                        'Max',
+                        'Sum',
+                        'Mean',
+                        'Null count',
+                        'Not null count'
+                      ].map((x, index) => (
+                        <th
+                          className="text-center px-4 py-1.5 pr-1 w-1/12"
+                          key={index}
+                        >
+                          {x}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
 
@@ -802,329 +802,72 @@ export const EditProfilingReferenceTable = ({
                             placeholder=""
                           />
                         </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'min_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_min &&
-                              !(
+                        {itemsToRender.map((itemData, jIndex) => (
+                          <td
+                            key={jIndex}
+                            className={clsx(
+                              'text-center px-4 py-1.5',
+                              calculateColor(
+                                item.compared_column_name ?? '',
+                                itemData.key
+                              )
+                            )}
+                          >
+                            <Checkbox
+                              checked={
+                                !!item[
+                                  itemData.prop as keyof ColumnComparisonModel
+                                ] &&
+                                !(
+                                  item.reference_column_name === undefined ||
+                                  item.reference_column_name.length === 0 ||
+                                  !columnOptions.find(
+                                    (x) =>
+                                      x.label === item.reference_column_name
+                                  )
+                                )
+                              }
+                              onChange={(checked) => {
+                                onChangeColumn(
+                                  {
+                                    [itemData.prop as keyof ColumnComparisonModel]:
+                                      checked
+                                        ? reference?.default_compare_thresholds
+                                        : undefined
+                                  },
+                                  index
+                                );
+                              }}
+                              disabled={
                                 item.reference_column_name === undefined ||
                                 item.reference_column_name.length === 0 ||
                                 !columnOptions.find(
                                   (x) => x.label === item.reference_column_name
                                 )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_min: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'max_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_max &&
-                              !(
+                              }
+                              isDisabled={
                                 item.reference_column_name === undefined ||
                                 item.reference_column_name.length === 0 ||
                                 !columnOptions.find(
                                   (x) => x.label === item.reference_column_name
                                 )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_max: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'sum_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_sum &&
-                              !(
-                                item.reference_column_name === undefined ||
-                                item.reference_column_name.length === 0 ||
-                                !columnOptions.find(
-                                  (x) => x.label === item.reference_column_name
-                                )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_sum: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'mean_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_mean &&
-                              !(
-                                item.reference_column_name === undefined ||
-                                item.reference_column_name.length === 0 ||
-                                !columnOptions.find(
-                                  (x) => x.label === item.reference_column_name
-                                )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_mean: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'null_count_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_null_count &&
-                              !(
-                                item.reference_column_name === undefined ||
-                                item.reference_column_name.length === 0 ||
-                                !columnOptions.find(
-                                  (x) => x.label === item.reference_column_name
-                                )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_null_count: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
-                        <td
-                          className={clsx(
-                            'text-center px-4 py-1.5',
-                            calculateColor(
-                              item.compared_column_name ?? '',
-                              'not_null_count_match'
-                            )
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              !!item.compare_not_null_count &&
-                              !(
-                                item.reference_column_name === undefined ||
-                                item.reference_column_name.length === 0 ||
-                                !columnOptions.find(
-                                  (x) => x.label === item.reference_column_name
-                                )
-                              )
-                            }
-                            onChange={(checked) => {
-                              onChangeColumn(
-                                {
-                                  compare_not_null_count: checked
-                                    ? reference?.default_compare_thresholds
-                                    : undefined
-                                },
-                                index
-                              );
-                            }}
-                            disabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                            isDisabled={
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0 ||
-                              !columnOptions.find(
-                                (x) => x.label === item.reference_column_name
-                              )
-                            }
-                          />
-                        </td>
+                              }
+                            />
+                          </td>
+                        ))}
                       </tr>
                       {isElemExtended.at(index) && (
                         <ResultPanel
                           obj={prepareData(item.compared_column_name ?? '')}
                           onChange={onChange}
-                          minBool={
-                            !!item.compare_min &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          maxBool={
-                            !!item.compare_max &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          sumBool={
-                            !!item.compare_sum &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          meanBool={
-                            !!item.compare_mean &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          nullCount={
-                            !!item.compare_null_count &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
-                          notNullCount={
-                            !!item.compare_not_null_count &&
-                            !(
-                              item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
-                            )
-                          }
+                          bools={[
+                            !!item.compare_min,
+                            !!item.compare_max,
+                            !!item.compare_sum,
+                            !!item.compare_mean,
+                            !!item.compare_null_count,
+                            !!item.compare_not_null_count
+                          ]}
                           reference={reference}
                           index={index}
                         />

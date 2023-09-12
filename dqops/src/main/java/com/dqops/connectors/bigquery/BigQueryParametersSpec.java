@@ -47,6 +47,10 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Source GCP project ID. This is the project that has datasets that will be imported.")
     private String sourceProjectId;
 
+    @CommandLine.Option(names = {"--bigquery-jobs-create-project"}, description = "Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.")
+    @JsonPropertyDescription("Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.")
+    private BigQueryJobsCreateProject jobsCreateProject = BigQueryJobsCreateProject.create_jobs_in_source_project;
+
     @CommandLine.Option(names = {"--bigquery-billing-project-id"}, description = "Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     @JsonPropertyDescription("Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     private String billingProjectId;
@@ -84,6 +88,23 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
     public void setSourceProjectId(String sourceProjectId) {
 		this.setDirtyIf(!Objects.equals(this.sourceProjectId, sourceProjectId));
         this.sourceProjectId = sourceProjectId;
+    }
+
+    /**
+     * Returns the method of selecting the billing project to start BigQuery jobs.
+     * @return The way to select the billing project.
+     */
+    public BigQueryJobsCreateProject getJobsCreateProject() {
+        return jobsCreateProject;
+    }
+
+    /**
+     * Sets the selection method for picking the billing project to run BigQuery jobs.
+     * @param jobsCreateProject Selection of the method for picking the billing (run bigquery job) project.
+     */
+    public void setJobsCreateProject(BigQueryJobsCreateProject jobsCreateProject) {
+        this.setDirtyIf(!Objects.equals(this.jobsCreateProject, jobsCreateProject));
+        this.jobsCreateProject = jobsCreateProject;
     }
 
     /**
@@ -217,7 +238,8 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
             return false;
         }
 
-        return this.authenticationMode == null &&
+        return (this.jobsCreateProject == null || this.jobsCreateProject == BigQueryJobsCreateProject.create_jobs_in_source_project) &&
+                (this.authenticationMode == null || this.authenticationMode == BigQueryAuthenticationMode.google_application_credentials) &&
                 this.sourceProjectId == null &&
 				this.billingProjectId == null &&
                 this.quotaProjectId == null &&

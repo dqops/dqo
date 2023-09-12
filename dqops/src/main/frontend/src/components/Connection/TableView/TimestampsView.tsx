@@ -13,8 +13,9 @@ import NumberInput from "../../NumberInput";
 import Checkbox from "../../Checkbox";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import clsx from 'clsx';
 
-const TimestampsView = () => {
+const TimestampsView = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
@@ -64,7 +65,7 @@ const TimestampsView = () => {
         isDisabled={isDisabled}
       />
 
-      <div className="mb-4">
+      <div className={clsx("mb-4", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
           label="Event timestamp column name for timeliness checks"
           value={tablePartitioning?.timestamp_columns?.event_timestamp_column}
@@ -73,10 +74,11 @@ const TimestampsView = () => {
               event_timestamp_column: column
             })
           }
+          
         />
       </div>
 
-      <div className="mb-4">
+      <div className={clsx("mb-4", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
           label="Ingestion timestamp column name for timeliness checks"
           value={tablePartitioning?.timestamp_columns?.ingestion_timestamp_column}
@@ -88,7 +90,7 @@ const TimestampsView = () => {
         />
       </div>
 
-      <div className="mb-10">
+      <div className={clsx("mb-8", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
           label="Date or datetime column name for partition checks"
           value={tablePartitioning?.timestamp_columns?.partition_by_column}
@@ -103,7 +105,7 @@ const TimestampsView = () => {
         />
       </div>
 
-      <SectionWrapper className="mb-8" title="Incremental daily partitioned checks time window">
+      <SectionWrapper className={clsx("mb-8", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")} title="Incremental daily partitioned checks time window">
         <div className="flex mb-4">
           <span className="w-80 text-sm">Recent days</span>
 
@@ -132,7 +134,7 @@ const TimestampsView = () => {
         </div>
       </SectionWrapper>
 
-      <SectionWrapper title="Incremental monthly partitioned checks time window">
+      <SectionWrapper className={clsx("", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")} title="Incremental monthly partitioned checks time window">
         <div className="flex mb-4 text-sm">
           <span className="w-80">Recent months</span>
 

@@ -30,6 +30,7 @@ spec:
   bigquery:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
+    jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
     profiling:
       cron_expression: 0 12 * * *

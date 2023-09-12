@@ -81,10 +81,10 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
             String userHomePathString = this.userConfigurationProperties.getHome();
             if (Strings.isNullOrEmpty(userHomePathString)) {
-                userHomePathString = Path.of(".").toAbsolutePath().toString();
+                userHomePathString = Path.of(".").toAbsolutePath().normalize().toString();
             }
 
-            Path candidatePathToUserHome = Path.of(userHomePathString).toAbsolutePath();
+            Path candidatePathToUserHome = Path.of(userHomePathString).toAbsolutePath().normalize();
             Path pathToUserHome = detectParentDqoUserHome(candidatePathToUserHome);
 
             if (Files.exists(pathToUserHome) && !Files.isDirectory(pathToUserHome)) {
@@ -120,7 +120,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
         Path pathToDqoHome = Path.of(this.dqoConfigurationProperties.getHome());
         if (Files.isDirectory(pathToDqoHome)) {
-            return pathToDqoHome.toAbsolutePath().toString();
+            return pathToDqoHome.toAbsolutePath().normalize().toString();
         } else {
             throw new LocalFileSystemException("DQO_HOME is not accessible or is not a directory: " + pathToDqoHome);
         }

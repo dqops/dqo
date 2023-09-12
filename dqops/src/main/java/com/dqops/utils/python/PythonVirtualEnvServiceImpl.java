@@ -326,7 +326,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
         try {
             Path pathToLastInstalledRequirements = pythonVirtualEnv.getVirtualEnvPath().resolve("user_requirements.txt");
             String userHome = this.userConfigurationProperties.getHome();
-            Path pathToRequirementsTxt = Path.of(userHome).resolve("requirements.txt");
+            Path pathToRequirementsTxt = Path.of(userHome).resolve("rules/requirements.txt");
 
             if (!Files.exists(pathToRequirementsTxt)) {
                 return; // the user has not configured personal python requirements

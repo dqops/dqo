@@ -41,7 +41,7 @@ const initSourceTabs = [
   },
   {
     label: 'Default grouping template',
-    value: 'data-streams'
+    value: 'data-groupings'
   },
   {
     label: 'Incidents and Notifications',
@@ -176,7 +176,7 @@ const ConnectionPage = () => {
         {activeTab === 'schemas' && (
           import_schema === 'true' ? <SourceSchemasView defaultSchema={schema as string} /> : <SchemasView />
         )}
-        {activeTab === 'data-streams' && <ConnectionDefaultGroupingConfiguration />}
+        {activeTab === 'data-groupings' && <ConnectionDefaultGroupingConfiguration />}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
       </div>
     </ConnectionLayout>

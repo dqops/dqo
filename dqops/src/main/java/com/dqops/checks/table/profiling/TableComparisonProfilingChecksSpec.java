@@ -18,6 +18,7 @@ package com.dqops.checks.table.profiling;
 import com.dqops.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ComparisonCheckRules;
 import com.dqops.checks.comparison.TableCompareCheckType;
+import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -39,11 +40,15 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     public static final ChildHierarchyNodeFieldMapImpl<TableComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
         {
             put("profile_row_count_match", o -> o.profileRowCountMatch);
+            put("profile_column_count_match", o -> o.profileColumnCountMatch);
         }
     };
 
     @JsonPropertyDescription("Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.")
     private TableComparisonRowCountMatchCheckSpec profileRowCountMatch;
+
+    @JsonPropertyDescription("Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.")
+    private TableComparisonColumnCountMatchCheckSpec profileColumnCountMatch;
 
     /**
      * Returns the row count match check.
@@ -61,6 +66,24 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
         this.setDirtyIf(!Objects.equals(this.profileRowCountMatch, profileRowCountMatch));
         this.profileRowCountMatch = profileRowCountMatch;
         propagateHierarchyIdToField(profileRowCountMatch, "profile_row_count_match");
+    }
+
+    /**
+     * Returns the column count match check.
+     * @return Column count match check.
+     */
+    public TableComparisonColumnCountMatchCheckSpec getProfileColumnCountMatch() {
+        return profileColumnCountMatch;
+    }
+
+    /**
+     * Sets a new column count match check.
+     * @param profileColumnCountMatch Column count match check.
+     */
+    public void setProfileColumnCountMatch(TableComparisonColumnCountMatchCheckSpec profileColumnCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnCountMatch, profileColumnCountMatch));
+        this.profileColumnCountMatch = profileColumnCountMatch;
+        propagateHierarchyIdToField(profileColumnCountMatch, "profile_column_count_match");
     }
 
     /**
@@ -82,6 +105,17 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
 
                 return this.profileRowCountMatch;
             }
+
+            case column_count_match: {
+                if (this.profileColumnCountMatch == null) {
+                    if (createWhenMissing) {
+                        this.setProfileColumnCountMatch(new TableComparisonColumnCountMatchCheckSpec());
+                    }
+                }
+
+                return this.profileColumnCountMatch;
+            }
+
             default:
                 return null;
         }
@@ -98,6 +132,10 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
             case row_count_match:
                 this.setProfileRowCountMatch(null);
                 break;
+
+            case column_count_match:
+                this.setProfileColumnCountMatch(null);
+                break;
         }
     }
 
@@ -109,5 +147,17 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this type of comparison checks support a column count comparison.
+     * Profiling and monitoring checks that compare the whole table support also comparing the column count.
+     * Partitioned checks do not support comparing row count and their comparison check containers return false.
+     *
+     * @return True - the column count match check is supported for this type of checks, false when it is not supported.
+     */
+    @Override
+    public boolean supportsColumnComparisonCheck() {
+        return true;
     }
 }

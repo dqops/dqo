@@ -5,7 +5,7 @@
 column/accuracy/total_average_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in average of a column in a table and average of a column of another table.
+Column level sensor that calculates the percentage of the difference in average of a column in a table and average of a column of another table.
 
 **Parameters**  
   
@@ -186,7 +186,7 @@ ___
 column/accuracy/total_max_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in max of a column in a table and max of a column of another table.
+Column level sensor that calculates the percentage of the difference in max of a column in a table and max of a column of another table.
 
 **Parameters**  
   
@@ -363,7 +363,7 @@ ___
 column/accuracy/total_min_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in min of a column in a table and min of a column of another table.
+Column level sensor that calculates the percentage of the difference in min of a column in a table and min of a column of another table.
 
 **Parameters**  
   
@@ -541,7 +541,7 @@ ___
 column/accuracy/total_not_null_count_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in row count of a column in a table and row count of a column of another table.
+Column level sensor that calculates the percentage of the difference in row count of a column in a table and row count of a column of another table.
 
 **Parameters**  
   
@@ -719,7 +719,7 @@ ___
 column/accuracy/total_sum_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in sum of a column in a table and sum of a column of another table.
+Column level sensor that calculates the percentage of the difference in sum of a column in a table and sum of a column of another table.
 
 **Parameters**  
   

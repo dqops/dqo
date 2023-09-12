@@ -31,6 +31,9 @@ export const SensorDetail = () => {
   const {tabs, activeTab } = useSelector(
     (state: IRootState) => state.definition
   );
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const activeCheckDetail : CheckSpecModel = (tabs.find((x) => x.url === activeTab)?.state?.checkDetail as CheckSpecModel)
@@ -162,19 +165,20 @@ export const SensorDetail = () => {
         <div className="flex space-x-4 items-center absolute right-2 top-2">
           {custom !== false && isCreating === false && (
             <Button
-              color="primary"
-              variant="outlined"
+            color={!(userProfile.can_manage_definitions !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_definitions !== true) ? "outlined" : "contained"}
               label="Delete check"
               className="w-40 !h-10"
               onClick={() => setDialogOpen(true)}
+              disabled={userProfile.can_manage_definitions !== true}
             />
           )}
           <Button
-            color="primary"
+           color={!(userProfile.can_manage_definitions !== true) ? 'primary' : 'secondary'}
             variant="contained"
             label={isCreating === true ? 'Create' : 'Update'}
             className="w-40 !h-10"
-            disabled={!isUpdated}
+            disabled={!isUpdated || userProfile.can_manage_definitions !== true}
             onClick={onCreateUpdateCheck}
             loading={isUpdating}
           />
@@ -213,6 +217,7 @@ export const SensorDetail = () => {
           custom={custom}
           helpText={helpText}
           onChangeHelpText={onChangeHelpText}
+          canEditDefinitions = {userProfile.can_manage_definitions}
         />
         {/* )} */}
       </div>

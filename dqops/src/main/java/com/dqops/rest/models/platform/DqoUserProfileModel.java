@@ -16,6 +16,7 @@
 package com.dqops.rest.models.platform;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
@@ -188,16 +189,6 @@ public class DqoUserProfileModel {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
             setUser(principal.getName());
             setAccountRole(principal.getAccountRole());
-            setTenant(dqoCloudApiKey.getApiKeyPayload().getTenantId() + "/" + dqoCloudApiKey.getApiKeyPayload().getTenantGroup());
-            setLicenseType(dqoCloudApiKey.getApiKeyPayload().getLicenseType());
-            setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt() != null ? dqoCloudApiKey.getApiKeyPayload().getExpiresAt().toString() : null);
-            setConnectionsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT));
-            setUsersLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.USERS_LIMIT));
-            setMonthsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.MONTHS_LIMIT));
-            setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
-            setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
-            setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
-
             setCanManageAccount(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanViewAnyObject(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
             setCanManageScheduler(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
@@ -207,11 +198,30 @@ public class DqoUserProfileModel {
             setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageDataSources(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanSynchronize(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-            setCanEditComments(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
-            setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
+            setCanEditComments(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageDefinitions(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         }};
+
+        if (dqoCloudApiKey != null) {
+            model.setTenant(dqoCloudApiKey.getApiKeyPayload().getTenantId() + "/" + dqoCloudApiKey.getApiKeyPayload().getTenantGroup());
+            model.setLicenseType(dqoCloudApiKey.getApiKeyPayload().getLicenseType() != null ?
+                    dqoCloudApiKey.getApiKeyPayload().getLicenseType().toString() : null);
+            model.setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt() != null ?
+                    dqoCloudApiKey.getApiKeyPayload().getExpiresAt().toString() : null);
+            model.setConnectionsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT));
+            model.setUsersLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.USERS_LIMIT));
+            model.setMonthsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.MONTHS_LIMIT));
+            model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
+            model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
+            model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+        } else {
+            model.setTenant("Standalone");
+            model.setLicenseType(DqoCloudLicenseType.FREE.name());
+            model.setJobsLimit(1);
+        }
+
         return model;
     }
 }

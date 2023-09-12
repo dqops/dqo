@@ -8,6 +8,8 @@ import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
@@ -36,6 +38,9 @@ export const TableReferenceComparisons = ({
   const [selectedReference, setSelectedReference] = useState<string>();
   const [isCreating, setIsCreting] = useState(false);
   const location = useLocation();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const onChangeSelectedReference = (arg: string) => {
     setSelectedReference(arg);
@@ -255,6 +260,7 @@ export const TableReferenceComparisons = ({
           onCreate={onCreate}
           selectReference={onEditProfilingReference}
           onEdit={onEditReference}
+          canUserCreateTableComparison={userProfile.can_manage_data_sources}
         />
       )}
     </>

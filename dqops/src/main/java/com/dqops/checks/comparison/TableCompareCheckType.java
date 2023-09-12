@@ -21,5 +21,13 @@ package com.dqops.checks.comparison;
  * with slightly different names from profiling, daily monitoring, and other check types.
  */
 public enum TableCompareCheckType {
-    row_count_match
+    /**
+     * Row count match check.
+     */
+    row_count_match,
+
+    /**
+     * Column count match check.
+     */
+    column_count_match
 }

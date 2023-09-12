@@ -51,9 +51,17 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("tg")
     private int tenantGroup;
 
+    @JsonProperty("ac")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String accountName;
+
+    @JsonProperty("idp")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean idpTenant;
+
     @JsonProperty("lic")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String licenseType;
+    private DqoCloudLicenseType licenseType;
 
     @JsonProperty("lm")
     private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
@@ -157,10 +165,42 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
+     * Returns the account name for personal, team and enterprise accounts.
+     * @return Account name.
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets the account name for persona, team and enterprise accounts.
+     * @param accountName Account name.
+     */
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    /**
+     * Returns true if the account supports managing additional users.
+     * @return True when additional users could be added to the account, false when it is a free standalone account.
+     */
+    public boolean isIdpTenant() {
+        return idpTenant;
+    }
+
+    /**
+     * Sets a boolean flag to identify accounts that are capable of user management.
+     * @param idpTenant True when the account supports additional users (even if the limit is 1 user).
+     */
+    public void setIdpTenant(boolean idpTenant) {
+        this.idpTenant = idpTenant;
+    }
+
+    /**
      * Returns the license type.
      * @return License type.
      */
-    public String getLicenseType() {
+    public DqoCloudLicenseType getLicenseType() {
         return licenseType;
     }
 
@@ -168,7 +208,7 @@ public class DqoCloudApiKeyPayload {
      * Sets the license type.
      * @param licenseType License type.
      */
-    public void setLicenseType(String licenseType) {
+    public void setLicenseType(DqoCloudLicenseType licenseType) {
         this.licenseType = licenseType;
     }
 

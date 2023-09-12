@@ -47,6 +47,7 @@ interface ICheckListItemProps {
   checkedCopyUI?: boolean;
   comparisonName?: string;
   isDefaultEditing?: boolean;
+  canUserRunChecks?: boolean;
 }
 
 const CheckListItem = ({
@@ -61,12 +62,13 @@ const CheckListItem = ({
   checkedCopyUI,
   category,
   comparisonName,
-  isDefaultEditing
+  isDefaultEditing,
+  canUserRunChecks
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
@@ -350,7 +352,7 @@ const CheckListItem = ({
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
-              <div>
+              <div className={clsx(userProfile.can_manage_data_sources===false ? "cursor-not-allowed pointer-events-none" : ""  )}>
                 <SvgIcon
                   name={!check?.disabled ? 'stop' : 'disable'}
                   className={clsx(
@@ -409,8 +411,8 @@ const CheckListItem = ({
                   <div>
                     <SvgIcon
                       name="play"
-                      className="text-primary h-5 cursor-pointer"
-                      onClick={onRunCheck}
+                      className={clsx("h-5 ", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
+                      onClick={canUserRunChecks!==false ? onRunCheck : undefined}
                     />
                   </div>
                 </Tooltip>

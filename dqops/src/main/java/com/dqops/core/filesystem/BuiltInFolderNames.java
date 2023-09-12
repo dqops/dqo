@@ -40,6 +40,11 @@ public final class BuiltInFolderNames {
     public static final String CHECKS = "checks";
 
     /**
+     * Folder where configuration files that could be synchronized to the cloud are stored.
+     */
+    public static final String SETTINGS = "settings";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";

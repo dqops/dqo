@@ -39,7 +39,7 @@ const defaultChecks = [
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
-  const { sensorFolderTree, sensorState, definitionFirstLevelFolder, checksFolderTree, dataQualityChecksState, ruleFolderTree, ruleState, tabs } =
+  const { sensorFolderTree, sensorState, definitionFirstLevelFolder, checksFolderTree, dataQualityChecksState, ruleFolderTree, ruleState, tabs, activeTab } =
     useSelector((state: IRootState) => state.definition);
   const [selected, setSelected] = useState('');
 
@@ -163,36 +163,38 @@ export const DefinitionTree = () => {
         { category: 'Default checks configuration', isOpen: false }
       ]
       for(let i =0; i<tabs.length; i++){
-        if(tabs[i].url.includes("checks")){
-          configuration[2].isOpen = true
-          const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle,0, "checks");
-          }
-        }else if(tabs[i].url.includes("sensors")){
+        if(tabs[i].url.includes("default_checks")){
+          configuration[3].isOpen = true
+        }
+       else if(tabs[i].url.includes("sensors")){
           configuration[0].isOpen = true
           const arrayOfElemsToToggle = (tabs[i].state.full_sensor_name as string)?.split("/");
           if (arrayOfElemsToToggle) {
             toggleFolderRecursively(arrayOfElemsToToggle,0, "sensors");
           }
-
-        }else if(tabs[i].url.includes("rules")){
+        }  
+        else if(tabs[i].url.includes("checks")){
+          configuration[2].isOpen = true
+          const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle,0, "checks");
+          }
+        }
+        else if(tabs[i].url.includes("rules")){
           configuration[1].isOpen = true
           const arrayOfElemsToToggle = (tabs[i].state.full_rule_name as string)?.split("/");
           if (arrayOfElemsToToggle) {
             toggleFolderRecursively(arrayOfElemsToToggle,0, "rules");
           }
-        }else if(tabs[i].url.includes("default_checks")){
-          configuration[3].isOpen = true
-        }
       }
+    }
       dispatch(
         toggleFirstLevelFolder(configuration)
       );
     }
   }, []);
 
-
+console.log(activeTab)
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -240,7 +242,9 @@ export const DefinitionTree = () => {
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                 sensor.custom ? 'font-bold' : '',
-                selected == sensor.sensor_name ? 'bg-gray-300' : ''
+                selected == sensor.sensor_name ? 'bg-gray-300' : '',
+                activeTab?.split("/").at(activeTab?.split("/").length -1 ) === sensor.sensor_name ? 
+                "bg-gray-300" : ""
               )}
               onClick={() => {
                 openSensorFirstLevelTab(sensor),
@@ -307,7 +311,9 @@ export const DefinitionTree = () => {
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
                 rule.custom ? 'font-bold ' : '',
-                selected == rule.rule_name ? 'bg-gray-300' : ''
+                selected == rule.rule_name ? 'bg-gray-300' : '',
+                activeTab?.split("/").at(activeTab?.split("/").length -1 ) === rule.rule_name ? 
+                "bg-gray-300" : ""
               )}
               onClick={() => {
                 openRuleFirstLevelTab(rule),
@@ -379,7 +385,9 @@ export const DefinitionTree = () => {
                   className={clsx(
                     'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                     check.custom ? 'font-bold' : '',
-                    selected == check.check_name ? 'bg-gray-300' : ''
+                    selected == check.check_name ? 'bg-gray-300' : '',
+                    activeTab?.split("/").at(activeTab?.split("/").length -1 ) === check.check_name ? 
+                    "bg-gray-300" : ""
                   )}
                   onClick={() => {
                     openCheckFirstLevelTab(check);
@@ -443,7 +451,8 @@ export const DefinitionTree = () => {
                   <div key={index}>
                     <div
                       className={clsx(
-                        'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300'
+                        'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
+                        activeTab?.split("/").at(activeTab?.split("/").length -1 )?.replace("_", " ") === x ? "bg-gray-300" : ""
                         // check.custom ? 'font-bold' : '',
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}

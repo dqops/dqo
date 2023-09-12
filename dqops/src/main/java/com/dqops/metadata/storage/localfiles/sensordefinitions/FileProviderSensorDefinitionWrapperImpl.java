@@ -29,6 +29,7 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -114,6 +115,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
 				this.setSqlTemplate(textContent);
+                this.setSqlTemplateLastModified(fileContent.getLastModified());
 				clearDirty(false);
 
                return textContent;
@@ -121,6 +123,23 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
         }
 
         return sqlTemplate;
+    }
+
+    /**
+     * Returns the file modification timestamp when the SQL template was modified for the last time.
+     *
+     * @return Last file modification timestamp.
+     */
+    @Override
+    public Instant getSqlTemplateLastModified() {
+        Instant sqlTemplateLastModified = super.getSqlTemplateLastModified();
+        if (sqlTemplateLastModified == null) {
+            this.getSqlTemplate(); // trigger loading
+        } else {
+            return sqlTemplateLastModified;
+        }
+
+        return super.getSqlTemplateLastModified();
     }
 
     /**

@@ -20,6 +20,8 @@ import NumberInput from "../../NumberInput";
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import Input from "../../Input";
 import ConnectionActionGroup from "./ConnectionActionGroup";
+import { IRootState } from "../../../redux/reducers";
+import clsx from "clsx";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
@@ -32,6 +34,9 @@ const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinim
 }));
 
 export const IncidentsNotificationsView = () => {
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
@@ -63,7 +68,7 @@ export const IncidentsNotificationsView = () => {
   };
 
   return (
-    <div className="px-8 py-6">
+    <div className={clsx("px-8 py-6", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedIncidentGroup}

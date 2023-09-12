@@ -13,21 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.rest.models.remote;
+package com.dqops.core.dqocloud.apikey;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 /**
- * Tabular output format for printing the tabular results.
+ * DQO Cloud license type.
  */
-public enum ConnectionStatusRemote {
+public enum DqoCloudLicenseType {
     /**
-     * An enumeration for Success connection status.
+     * Free (community) user.
      */
-    @JsonProperty("SUCCESS")
-    SUCCESS,
+    FREE,
+
     /**
-     * An enumeration for FAILURE connection status.
+     * Personal instance of one user.
      */
-    @JsonProperty("FAILURE")
-    FAILURE,
+    PERSONAL,
+
+    /**
+     * Team instance for a group of users.
+     */
+    TEAM,
+
+    /**
+     * Enterprise instance for bigger teams and additional features on request.
+     */
+    ENTERPRISE
 }

@@ -38,7 +38,7 @@ For more information about different categories of checks, see [DQO concepts sec
     - orange for an error
     - red for a fatal error
 
-   You can view the details by placing the mouse cursor on the square.
+    You can view the details by placing the mouse cursor on the square.
 
 6. Click the "Results" icon to view more details of the results.
 

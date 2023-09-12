@@ -46,7 +46,9 @@ class RuleExecutionRunParameters:
 
 class PythonRuleCallInput:
     rule_module_path: str
+    home_path: str
     rule_parameters: any
+    rule_module_last_modified: datetime
 
 
 class PythonRuleCallOutput:
@@ -59,6 +61,14 @@ class PythonRuleCallOutput:
         self.parameters = parameters
         self.error = error
 
+
+class LoadedModule:
+    rule_module: any
+    rule_module_last_modified: datetime
+
+    def __init__(self, rule_module, rule_module_last_modified):
+        self.rule_module = rule_module
+        self.rule_module_last_modified = rule_module_last_modified
 
 class RuleRunner:
     rule_modules = {}
@@ -79,14 +89,16 @@ class RuleRunner:
         try:
             rule_module_path = request.rule_module_path
             rule_parameters = request.rule_parameters
-            if rule_module_path not in self.rule_modules:
+            rule_module_last_modified = request.rule_module_last_modified
+
+            if rule_module_path not in self.rule_modules or self.rule_modules[rule_module_path].rule_module_last_modified != rule_module_last_modified:
                 rules_folder_index = rule_module_path.rfind('rules')
                 rule_module_name = rule_module_path[rules_folder_index + len('rules') + 1: -3] \
                     .replace('\\', '.').replace('/', '.')
                 rule_module = self.import_source_file(rule_module_path, rule_module_name)
-                self.rule_modules[rule_module_path] = rule_module
+                self.rule_modules[rule_module_path] = LoadedModule(rule_module, rule_module_last_modified)
 
-            rule_module = self.rule_modules[rule_module_path]
+            rule_module = self.rule_modules[rule_module_path].rule_module
             rule_function = getattr(rule_module, 'evaluate_rule')
             rule_result = rule_function(rule_parameters)
             return PythonRuleCallOutput(rule_result, rule_parameters, None)

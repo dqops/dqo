@@ -48,25 +48,25 @@ public class HomeLocationFindServiceImplTests extends BaseTest {
         Assertions.assertNotNull(userHomePath);
         Assertions.assertTrue(Path.of(userHomePath).isAbsolute());
         Assertions.assertTrue(Files.exists(Path.of(userHomePath)));
-        Assertions.assertEquals(Path.of(this.userConfigurationProperties.getHome()).toAbsolutePath().toString(), userHomePath);
+        Assertions.assertEquals(Path.of(this.userConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), userHomePath);
     }
 
     @Test
     void getDqoHomePath_whenDqoPathConfigured_thenReturnsPath() {
         String dqoHomePath = this.sut.getDqoHomePath();
         Assertions.assertNotNull(dqoHomePath);
-        Assertions.assertEquals(Path.of(this.dqoConfigurationProperties.getHome()).toAbsolutePath().toString(), dqoHomePath);
+        Assertions.assertEquals(Path.of(this.dqoConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), dqoHomePath);
     }
 
     @Test
     void getHomePath_whenUserHome_thenReturnsUserHome() {
         String userHomePath = this.sut.getHomePath(HomeType.USER_HOME);
-        Assertions.assertEquals(Path.of(this.userConfigurationProperties.getHome()).toAbsolutePath().toString(), userHomePath);
+        Assertions.assertEquals(Path.of(this.userConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), userHomePath);
     }
 
     @Test
     void getHomePath_whenUDqoHome_thenReturnsDqoHome() {
         String dqoHomePath = this.sut.getHomePath(HomeType.DQO_HOME);
-        Assertions.assertEquals(Path.of(this.dqoConfigurationProperties.getHome()).toAbsolutePath().toString(), dqoHomePath);
+        Assertions.assertEquals(Path.of(this.dqoConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), dqoHomePath);
     }
 }

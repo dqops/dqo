@@ -21,12 +21,12 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Table model returned from REST API. Describes a table on the source database with established connection.
+ * Basic table model that is returned when a data source is introspected to retrieve the list of tables available in a data source.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "TableRemoteBasicModel", description = "Table remote basic model")
-public class TableRemoteBasicModel {
+@ApiModel(value = "RemoteTableBasicModel", description = "Table remote basic model")
+public class RemoteTableBasicModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 

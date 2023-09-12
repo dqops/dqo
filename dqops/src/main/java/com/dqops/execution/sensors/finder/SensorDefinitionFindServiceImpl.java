@@ -59,6 +59,7 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                     return new SensorDefinitionFindResult(userSensorDefinitionWrapper.getSpec(),
                             userProviderSensorDefinitionWrapper.getSpec(),
                             userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getSqlTemplate(),  // return a sql template as a string only when the file is not stored in a file system
+                            userProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
                             providerType,
                             HomeType.USER_HOME,
                             userHomeIsLocalFileSystem ? jinjaFileHomePath : null);
@@ -84,6 +85,7 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                 builtinSensorDefinitionWrapper.getSpec(),
                 builtinProviderSensorDefinitionWrapper.getSpec(),
                 dqoHomeIsLocalFileSystem ? null : builtinProviderSensorDefinitionWrapper.getSqlTemplate(),
+                builtinProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
                 providerType,
                 HomeType.DQO_HOME,
                 dqoHomeIsLocalFileSystem ? jinjaFileHomePath : null);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   ConnectionBasicModel,
-  ConnectionRemoteModel,
-  ConnectionRemoteModelConnectionStatusEnum,
+  ConnectionTestModel,
+  ConnectionTestModelConnectionTestResultEnum,
   ConnectionSpecProviderTypeEnum
 } from '../../../api';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
@@ -29,6 +29,8 @@ import OracleConnection from "../../Dashboard/DatabaseConnection/OracleConnectio
 import MySQLConnection from "../../Dashboard/DatabaseConnection/MySQLConnection";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -40,10 +42,13 @@ const ConnectionDetail = () => {
     isUpdatedConnectionBasic?: boolean;
     isUpdating?: boolean;
   } = useSelector(getFirstLevelState(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
@@ -87,10 +92,12 @@ const ConnectionDetail = () => {
     const testRes = await DataSourcesApi.testConnection(false, connectionBasic);
     setIsTesting(false);
 
-    if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
+    if (testRes.data?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.SUCCESS) {
       await onConfirmSave();
-    } else {
+    } else if (testRes.data?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.FAILURE) {
       setShowConfirm(true);
+      setMessage(testRes.data?.errorMessage);
+    } else {
       setMessage(testRes.data?.errorMessage);
     }
   };
@@ -112,7 +119,7 @@ const ConnectionDetail = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
@@ -194,14 +201,14 @@ const ConnectionDetail = () => {
           <Loader isFull={false} className="w-8 h-8 !text-primary" />
         )}
         {
-          testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.SUCCESS && (
             <div className="text-primary text-sm">
               Connection successful
             </div>
           )
         }
         {
-          testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.FAILURE && (
             <div className="text-red-700 text-sm">
               <span>Connection failed</span>
               <span
@@ -213,12 +220,19 @@ const ConnectionDetail = () => {
             </div>
           )
         }
+        {
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS && (
+            <div className="text-red-700 text-sm">
+              <span>Connection already exists</span>
+            </div>
+          )
+        }
         <Button
           color="primary"
           variant="outlined"
-          label="Test Connection"
+          label="Test connection"
           onClick={onTestConnection}
-          disabled={isTesting}
+          disabled={isTesting || userProfile.can_manage_data_sources !== true}
         />
       </div>
       <ErrorModal

@@ -97,7 +97,7 @@ const SensorReadoutsTab = ({
     >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data group</div>
+          <div className="text-sm">Data group (time series)</div>
           <Select
             value={ dataGroup || sensorReadouts[0]?.dataGroup}
             options={

@@ -2999,7 +2999,7 @@ ___
 column/strings/string_length_in_range_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of strings with a length below the indicated length in a column.
+Column level sensor that calculates the percentage of strings with a length below the indicated length in a column.
 
 **Parameters**  
   

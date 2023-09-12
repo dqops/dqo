@@ -222,7 +222,7 @@ public class ColumnsController {
         {{
             setConnectionName(connectionName);
             setSchemaTableName(physicalTableName.toTableSearchFilter());
-            setTarget(StatisticsCollectorTarget.column);
+//            setTarget(StatisticsCollectorTarget.column);
             setEnabled(true);
         }});
 

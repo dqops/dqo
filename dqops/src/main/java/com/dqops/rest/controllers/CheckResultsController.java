@@ -348,7 +348,7 @@ public class CheckResultsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                partitionedCheckPartition, new CheckResultsDetailedFilterParameters());
+                partitionedCheckPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 

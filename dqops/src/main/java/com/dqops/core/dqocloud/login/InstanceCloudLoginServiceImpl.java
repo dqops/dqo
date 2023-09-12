@@ -162,12 +162,16 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
         }
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         String dqoCloudUiUrlBase = this.dqoCloudConfigurationProperties.getUiBaseUrl();
 
         try {
             URIBuilder uriBuilder = new URIBuilder(dqoCloudUiUrlBase);
             uriBuilder.setPath("/login");
             uriBuilder.addParameter("tgt", ticketGrantingTicket);
+            if (!Strings.isNullOrEmpty(apiKey.getApiKeyPayload().getAccountName())) {
+                uriBuilder.addParameter("account", apiKey.getApiKeyPayload().getAccountName());
+            }
             uriBuilder.addParameter("returnUrl", returnUrl);
 
             String dqoLoginUrl = uriBuilder.build().toString();
