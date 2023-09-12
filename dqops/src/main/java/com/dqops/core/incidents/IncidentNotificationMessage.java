@@ -144,6 +144,12 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
+     * Notification text.
+     */
+    @JsonPropertyDescription("Notification text.")
+    public String text;
+
+    /**
      * Creates a new incident notification message from a single row of the "incidents" table. The column names are defined in {@link com.dqops.data.incidents.factory.IncidentsColumnNames} class.
      * @param incidentRow Incident row - a row from the Incident's Tablesaw row.
      * @param connectionName Connection name.
@@ -183,6 +189,8 @@ public class IncidentNotificationMessage {
         message.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
+
+        message.setText(String.format("New data quality issue detected by DQO on the connection: %s", connectionName));
 
         return message;
     }
