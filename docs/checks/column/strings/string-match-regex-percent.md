@@ -1,7 +1,7 @@
 **string match regex percent** checks  
 
 **Description**  
-Column check that calculates percentage of values that matches the custom regex in a column.
+Column check that calculates the percentage of values that matches the custom regex in a column.
 
 ___
 

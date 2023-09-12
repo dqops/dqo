@@ -1,7 +1,7 @@
 **string match name regex percent** checks  
 
 **Description**  
-Column check that calculates percentage of values that match the name regex in a column.
+Column check that calculates the percentage of values that match the name regex in a column.
 
 ___
 
