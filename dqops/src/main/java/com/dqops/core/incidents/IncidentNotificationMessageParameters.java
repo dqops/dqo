@@ -21,9 +21,4 @@ public class IncidentNotificationMessageParameters {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
-    /**
-     * Base url of DQO instance.
-     */
-    @JsonPropertyDescription("Base url of DQO instance.")
-    private String baseUrlOfDqoInstance;
 }

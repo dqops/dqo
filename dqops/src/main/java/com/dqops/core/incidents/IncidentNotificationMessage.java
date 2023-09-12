@@ -154,7 +154,9 @@ public class IncidentNotificationMessage {
      * @param messageParameters Incident notification message parameters with Tablesaw row.
      * @return Incident notification message.
      */
-    public static IncidentNotificationMessage fromIncidentRow(IncidentNotificationMessageParameters messageParameters) {
+    public static IncidentNotificationMessage fromIncidentRow(
+            IncidentNotificationMessageParameters messageParameters,
+            IncidentNotificationMessageTextCreator textCreator) {
 
         Row incidentRow = messageParameters.getIncidentRow();
 
@@ -192,7 +194,7 @@ public class IncidentNotificationMessage {
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
-        message.setText(IncidentNotificationMessageTextCreator.prepareText(messageParameters));
+        message.setText(textCreator.prepareText(messageParameters));
 
         return message;
     }
