@@ -51,6 +51,14 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("tg")
     private int tenantGroup;
 
+    @JsonProperty("ac")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String accountName;
+
+    @JsonProperty("idp")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean idpTenant;
+
     @JsonProperty("lic")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private DqoCloudLicenseType licenseType;
@@ -154,6 +162,38 @@ public class DqoCloudApiKeyPayload {
      */
     public void setTenantGroup(int tenantGroup) {
         this.tenantGroup = tenantGroup;
+    }
+
+    /**
+     * Returns the account name for personal, team and enterprise accounts.
+     * @return Account name.
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets the account name for persona, team and enterprise accounts.
+     * @param accountName Account name.
+     */
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    /**
+     * Returns true if the account supports managing additional users.
+     * @return True when additional users could be added to the account, false when it is a free standalone account.
+     */
+    public boolean isIdpTenant() {
+        return idpTenant;
+    }
+
+    /**
+     * Sets a boolean flag to identify accounts that are capable of user management.
+     * @param idpTenant True when the account supports additional users (even if the limit is 1 user).
+     */
+    public void setIdpTenant(boolean idpTenant) {
+        this.idpTenant = idpTenant;
     }
 
     /**
