@@ -113,7 +113,7 @@ To change the resolution status, simply chose the status from the dropdown menu.
 
 You can add an **issue tracker link** to an incident by clicking the "+" button in the **Issue Link** column.
 
-![Issue Link](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/issue-link.png)
+![Issue Link](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/issue-link2.png)
 
 
 ## View details of the incident
