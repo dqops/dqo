@@ -14,18 +14,21 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * A creator for text field of incident notification message.
+ */
 @Component
 public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotificationMessageTextCreator {
 
-    private final String keyValueFormat = "*%s*: %s";
-    private final String newLine = " \n";
+    private static final String KEY_VALUE_FORMAT = "*%s*: %s";
+    private static final String NEW_LINE = " \n";
 
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * @param instanceCloudLoginService Instance cloud login service.
-     * @param defaultTimeZoneProvider
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public IncidentNotificationMessageTextCreatorImpl(InstanceCloudLoginService instanceCloudLoginService,
@@ -34,68 +37,63 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
+    /**
+     * Prepares string for text field of notificaiton message, which is built from multiple fields from it's parameters.
+     * @param messageParameters A container with parameters that are used to build text field and make up links to application.
+     * @return Markdown formatted string
+     */
     public String prepareText(IncidentNotificationMessageParameters messageParameters){
 
         Row incidentRow = messageParameters.getIncidentRow();
 
-        String fullTableNameWithLink = "<" + getUrlToFullTableName(messageParameters, incidentRow)
+        String fullTableNameWithLink = "<" + prepareUrlToTable(messageParameters)
                 + "|" + incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
                 + "."
                 + incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME) + ">";
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getBlockQuotedLine(prepareHeaderMessage(
+        stringBuilder.append(getBlockQuotedLine(prepareHeader(
                 IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)),
                 fullTableNameWithLink
         )));
         stringBuilder.append(getBlockQuotedLine(""));
 
-        stringBuilder.append(nameValueCreatorForInstant(incidentRow, IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
+        stringBuilder.append(extractInstantWithFormatting(incidentRow, IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
         if(!incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME).equals(IncidentStatus.open.name())){
-            stringBuilder.append(nameValueCreatorForInstant(incidentRow, IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
+            stringBuilder.append(extractInstantWithFormatting(incidentRow, IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         }
-        if (!incidentRow.isMissing(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
-        }
-
-        if (!incidentRow.isMissing(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
-        }
-        String.format(getBlockQuotedLine(keyValueFormat),
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
+        String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                 readableColumnName(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
                 RuleSeverityLevel.fromSeverityLevel(
                         incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME)).name()
         );
-        stringBuilder.append(nameValueCreatorForInt(incidentRow, IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
+        stringBuilder.append(extractInfWithFormatting(incidentRow, IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
 
-
-        if (!incidentRow.isMissing(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForInt(incidentRow, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
-        }
-        if (!incidentRow.isMissing(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
-        }
-        if (!incidentRow.isMissing(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
-        }
-        if (!incidentRow.isMissing(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
-        }
-        if (!incidentRow.isMissing(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME)) {
-            stringBuilder.append(nameValueCreatorForString(incidentRow, IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
-        }
+        stringBuilder.append(extractInfWithFormatting(incidentRow, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
 
         stringBuilder.append(getBlockQuotedLine(""));
 
         stringBuilder.append("> "
-                + "<" + getUrlToIncident(messageParameters, incidentRow)
+                + "<" + prepareUrlToIncident(messageParameters)
                 + "| *View in DQOps*>");
-        stringBuilder.append(newLine);
+        stringBuilder.append(NEW_LINE);
 
         return stringBuilder.toString();
     }
 
-    private String getUrlToIncident(IncidentNotificationMessageParameters messageParameters, Row incidentRow){
+    /**
+     * Prepares an url to an incident in application UI instance.
+     * @param messageParameters Message parameters
+     * @return A complete URL to an incident
+     */
+    private String prepareUrlToIncident(IncidentNotificationMessageParameters messageParameters){
+        Row incidentRow = messageParameters.getIncidentRow();
         return instanceCloudLoginService.getReturnBaseUrl()
                 + "incidents/"
                 + messageParameters.getConnectionName() + "/"
@@ -106,15 +104,27 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
                 + incidentRow.getString(IncidentsColumnNames.ID_COLUMN_NAME);
     }
 
-    private String getUrlToFullTableName(IncidentNotificationMessageParameters messageParameters, Row incidentRow){
+    /**
+     * Prepares an url to table's details in application UI instance.
+     * @param messageParameters Message parameters
+     * @return A complete URL to table details
+     */
+    private String prepareUrlToTable(IncidentNotificationMessageParameters messageParameters){
         return instanceCloudLoginService.getReturnBaseUrl()
                 + "sources/connection/" + messageParameters.getConnectionName()
-                + "/schema/" + incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
-                + "/table/" + incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME) + "/detail";
+                + "/schema/" + messageParameters.getIncidentRow().getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
+                + "/table/" + messageParameters.getIncidentRow().getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME)
+                + "/detail";
     }
 
-    private String prepareHeaderMessage(IncidentStatus incidentStatus,
-                                        String fullTableName){
+    /**
+     * Prepares header sentence of text field being built. The header is variable depending on incidentStatus
+     * @param incidentStatus Used to choose which header text to use.
+     * @param fullTableName Table name identified with a schema.
+     * @return Header sentence
+     */
+    private String prepareHeader(IncidentStatus incidentStatus,
+                                 String fullTableName){
         String commonPart = String.format("in %s table", fullTableName);
         if(incidentStatus.equals(IncidentStatus.open)){
             return "*New incident detected " + commonPart + ".*";
@@ -122,37 +132,75 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         return "*The incident " + commonPart + " has been " + incidentStatus.name() + ".*";
     }
 
-    private String nameValueCreatorForString(Row incidentRow, String incidentsColumnName){
-        return String.format(getBlockQuotedLine(keyValueFormat),
-                readableColumnName(incidentsColumnName),
-                incidentRow.getString(incidentsColumnName));
+    /**
+     * Extracts a string value from selected column for Row object and applies formatting.
+     * @param incidentRow Row object
+     * @param incidentsColumnName Column name used for extraction
+     * @return A formatted string value from selected column. If it does not exist a blank string is returned.
+     */
+    private String extractStringWithFormatting(Row incidentRow, String incidentsColumnName){
+        if (!incidentRow.isMissing(incidentsColumnName)) {
+            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(incidentsColumnName),
+                    incidentRow.getString(incidentsColumnName));
+        }
+        return "";
     }
 
-    private String nameValueCreatorForInstant(Row incidentRow, String incidentsColumnName){
+    /**
+     * Extracts a string value of instant from selected column for Row object and applies formatting.
+     * @param incidentRow Row object
+     * @param incidentsColumnName Column name used for extraction
+     * @return A formatted date time with GTM from selected column.
+     */
+    private String extractInstantWithFormatting(Row incidentRow, String incidentsColumnName){
         Instant instant = incidentRow.getInstant(incidentsColumnName);
         ZonedDateTime zonedDateTime = instant.atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
         ZoneOffset zoneOffset = this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(instant);
         int hours = zoneOffset.getTotalSeconds() / 3600;
 
-        return String.format(getBlockQuotedLine(keyValueFormat),
+        return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                 readableColumnName(incidentsColumnName),
                 zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                         + " (GTM" + (hours > 0 ? "+":"") + hours + ")");
     }
 
-    private String nameValueCreatorForInt(Row incidentRow, String incidentsColumnName){
-        return String.format(getBlockQuotedLine(keyValueFormat),
+    /**
+     * Extracts a string value of int from selected column for Row object and applies formatting.
+     * @param incidentRow
+     * @param incidentsColumnName
+     * @return A formatted int from selected column
+     */
+    private String extractInfWithFormatting(Row incidentRow, String incidentsColumnName){
+        return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                 readableColumnName(incidentsColumnName),
                 incidentRow.getInt(incidentsColumnName));
     }
 
+    /**
+     * Applies capitalizaiton and removed underscores.
+     * @param columnName
+     * @return User friendly column name
+     */
     private String readableColumnName(String columnName){
-        return columnName.substring(0, 1).toUpperCase()
-                + columnName.substring(1)
-                        .replace("_"," ");
+        return capitalize(columnName).replace("_"," ");
     }
 
+    /**
+     * Capitalizes first word in text
+     * @param text text
+     * @return Modified text
+     */
+    private String capitalize(String text){
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
+
+    /**
+     * Formats a line of text to block
+     * @param text text to be formatted
+     * @return Formatted text
+     */
     private String getBlockQuotedLine(String text){
-        return "> " + text + newLine;
+        return "> " + text + NEW_LINE;
     }
 }
