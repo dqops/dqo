@@ -64,14 +64,15 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         }
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
-        String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+        stringBuilder.append(String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                 readableColumnName(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
                 RuleSeverityLevel.fromSeverityLevel(
-                        incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME)).name()
-        );
-        stringBuilder.append(extractInfWithFormatting(incidentRow, IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
-
-        stringBuilder.append(extractInfWithFormatting(incidentRow, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
+                        incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME)).name()));
+        stringBuilder.append(
+                String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                        "Total data quality issues",
+                        incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME)));
+        stringBuilder.append(extractIntWithFormatting(incidentRow, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
@@ -169,12 +170,16 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
      * Extracts a string value of int from selected column for Row object and applies formatting.
      * @param incidentRow
      * @param incidentsColumnName
-     * @return A formatted int from selected column
+     * @return A formatted int from selected column. If contains a negative value a blank string is returned.
      */
-    private String extractInfWithFormatting(Row incidentRow, String incidentsColumnName){
-        return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
-                readableColumnName(incidentsColumnName),
-                incidentRow.getInt(incidentsColumnName));
+    private String extractIntWithFormatting(Row incidentRow, String incidentsColumnName){
+        int value = incidentRow.getInt(incidentsColumnName);
+        if(value > 0){
+            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(incidentsColumnName),
+                    value);
+        }
+        return "";
     }
 
     /**
