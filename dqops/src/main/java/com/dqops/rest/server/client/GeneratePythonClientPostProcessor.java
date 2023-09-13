@@ -23,6 +23,7 @@ import com.dqops.utils.python.PythonVirtualEnv;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -78,6 +79,12 @@ public class GeneratePythonClientPostProcessor {
                     .directory(projectRoot.resolve("../distribution/python").toFile());
 
             Map<String, String> environment = processBuilder.environment();
+            for (String exitingVarEnvName : new ArrayList<>(environment.keySet())) {
+                if (exitingVarEnvName.startsWith("DQO_")) {
+                    environment.remove(exitingVarEnvName);
+                }
+            }
+
             for (Map.Entry<String, String> envVarKeyPair : pythonVirtualEnv.getEnvironmentVariables().entrySet()) {
                 environment.put(envVarKeyPair.getKey(), envVarKeyPair.getValue());
             }
