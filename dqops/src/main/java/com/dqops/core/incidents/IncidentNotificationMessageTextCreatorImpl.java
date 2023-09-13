@@ -73,7 +73,13 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
                         "Total data quality issues",
                         incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME)));
         stringBuilder.append(extractIntWithFormatting(incidentRow, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
-        stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
+
+        if (!incidentRow.isMissing(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME)) {
+            stringBuilder.append( String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
+                    "<" + incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME) + "| LINK >"));
+        }
+
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
