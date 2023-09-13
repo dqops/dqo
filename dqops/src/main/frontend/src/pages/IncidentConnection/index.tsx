@@ -142,13 +142,13 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="justify-end text-sm"
-          label="Failed checks count"
+          label="Total data quality issues"
           order="failedChecksCount"
           direction={filters.sortBy === 'failedChecksCount' ? filters.sortDirection : undefined}
           onChange={handleSortChange}
         />
       ),
-      label: 'Failed checks count',
+      label: 'Total data quality issues',
       className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },
