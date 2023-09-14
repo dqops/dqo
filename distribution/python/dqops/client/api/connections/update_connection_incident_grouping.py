@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionIncidentGroupingSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/incidentgrouping".format(
@@ -63,7 +63,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionIncidentGroupingSpec,
 ) -> Response[MonoObject]:
     """updateConnectionIncidentGrouping
@@ -100,7 +100,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionIncidentGroupingSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionIncidentGrouping
@@ -130,7 +130,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionIncidentGroupingSpec,
 ) -> Response[MonoObject]:
     """updateConnectionIncidentGrouping
@@ -165,7 +165,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionIncidentGroupingSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionIncidentGrouping

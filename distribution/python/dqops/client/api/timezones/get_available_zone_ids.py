@@ -4,13 +4,13 @@ from typing import Any, Dict, List, Optional, cast
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/timezones".format(client.base_url)
 
@@ -49,7 +49,7 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Lis
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[str]]:
     """getAvailableZoneIds
 
@@ -77,7 +77,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[str]]:
     """getAvailableZoneIds
 
@@ -98,7 +98,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[str]]:
     """getAvailableZoneIds
 
@@ -124,7 +124,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[str]]:
     """getAvailableZoneIds
 

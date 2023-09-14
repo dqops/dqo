@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...types import UNSET, Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault".format(
@@ -72,7 +72,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
 ) -> Response[MonoObject]:
     """setTableDefaultGroupingConfiguration
@@ -114,7 +114,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
 ) -> Optional[MonoObject]:
     """setTableDefaultGroupingConfiguration
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
 ) -> Response[MonoObject]:
     """setTableDefaultGroupingConfiguration
@@ -189,7 +189,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
 ) -> Optional[MonoObject]:
     """setTableDefaultGroupingConfiguration

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.data_grouping_configuration_trimmed_model import (
     DataGroupingConfigurationTrimmedModel,
 )
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
@@ -75,7 +75,7 @@ def sync_detailed(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Response[MonoObject]:
     """updateTableGroupingConfiguration
@@ -121,7 +121,7 @@ def sync(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Optional[MonoObject]:
     """updateTableGroupingConfiguration
@@ -160,7 +160,7 @@ async def asyncio_detailed(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Response[MonoObject]:
     """updateTableGroupingConfiguration
@@ -204,7 +204,7 @@ async def asyncio(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Optional[MonoObject]:
     """updateTableGroupingConfiguration

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.data_grouping_configuration_trimmed_model import (
     DataGroupingConfigurationTrimmedModel,
 )
@@ -17,7 +17,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings".format(
@@ -72,7 +72,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Response[MonoObject]:
     """createTableGroupingConfiguration
@@ -115,7 +115,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Optional[MonoObject]:
     """createTableGroupingConfiguration
@@ -151,7 +151,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Response[MonoObject]:
     """createTableGroupingConfiguration
@@ -192,7 +192,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Optional[MonoObject]:
     """createTableGroupingConfiguration

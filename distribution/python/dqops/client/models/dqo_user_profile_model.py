@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.dqo_user_role import DqoUserRole
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DqoUserProfileModel")
@@ -28,6 +29,23 @@ class DqoUserProfileModel:
             Cloud data quality warehouse.
         jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQO can run in parallel on
             this instance.
+        account_role (Union[Unset, DqoUserRole]):
+        can_manage_account (Union[Unset, bool]): User is the administrator of the account and can perform security
+            related actions, such as managing users.
+        can_view_any_object (Union[Unset, bool]): User can view any object and view all results.
+        can_manage_scheduler (Union[Unset, bool]): User can start and stop the job scheduler.
+        can_cancel_jobs (Union[Unset, bool]): User can cancel running jobs.
+        can_run_checks (Union[Unset, bool]): User can run data quality checks.
+        can_delete_data (Union[Unset, bool]): User can delete data quality results.
+        can_collect_statistics (Union[Unset, bool]): User can collect statistics.
+        can_manage_data_sources (Union[Unset, bool]): User can manage data sources: create connections, import tables,
+            change the configuration of connections, tables, columns. Change any settings in the Data Sources section.
+        can_synchronize (Union[Unset, bool]): User can trigger the synchronization with DQO Cloud.
+        can_edit_comments (Union[Unset, bool]): User can edit comments on connections, tables, columns.
+        can_edit_labels (Union[Unset, bool]): User can edit labels on connections, tables, columns.
+        can_manage_definitions (Union[Unset, bool]): User can manage definitions of sensors, rules, checks and the
+            default data quality check configuration that is applied on imported tables.
+        can_compare_tables (Union[Unset, bool]): User can define table comparison configurations and compare tables.
     """
 
     user: Union[Unset, str] = UNSET
@@ -40,6 +58,20 @@ class DqoUserProfileModel:
     connection_tables_limit: Union[Unset, int] = UNSET
     tables_limit: Union[Unset, int] = UNSET
     jobs_limit: Union[Unset, int] = UNSET
+    account_role: Union[Unset, DqoUserRole] = UNSET
+    can_manage_account: Union[Unset, bool] = UNSET
+    can_view_any_object: Union[Unset, bool] = UNSET
+    can_manage_scheduler: Union[Unset, bool] = UNSET
+    can_cancel_jobs: Union[Unset, bool] = UNSET
+    can_run_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
+    can_collect_statistics: Union[Unset, bool] = UNSET
+    can_manage_data_sources: Union[Unset, bool] = UNSET
+    can_synchronize: Union[Unset, bool] = UNSET
+    can_edit_comments: Union[Unset, bool] = UNSET
+    can_edit_labels: Union[Unset, bool] = UNSET
+    can_manage_definitions: Union[Unset, bool] = UNSET
+    can_compare_tables: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -53,6 +85,23 @@ class DqoUserProfileModel:
         connection_tables_limit = self.connection_tables_limit
         tables_limit = self.tables_limit
         jobs_limit = self.jobs_limit
+        account_role: Union[Unset, str] = UNSET
+        if not isinstance(self.account_role, Unset):
+            account_role = self.account_role.value
+
+        can_manage_account = self.can_manage_account
+        can_view_any_object = self.can_view_any_object
+        can_manage_scheduler = self.can_manage_scheduler
+        can_cancel_jobs = self.can_cancel_jobs
+        can_run_checks = self.can_run_checks
+        can_delete_data = self.can_delete_data
+        can_collect_statistics = self.can_collect_statistics
+        can_manage_data_sources = self.can_manage_data_sources
+        can_synchronize = self.can_synchronize
+        can_edit_comments = self.can_edit_comments
+        can_edit_labels = self.can_edit_labels
+        can_manage_definitions = self.can_manage_definitions
+        can_compare_tables = self.can_compare_tables
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -77,6 +126,34 @@ class DqoUserProfileModel:
             field_dict["tables_limit"] = tables_limit
         if jobs_limit is not UNSET:
             field_dict["jobs_limit"] = jobs_limit
+        if account_role is not UNSET:
+            field_dict["account_role"] = account_role
+        if can_manage_account is not UNSET:
+            field_dict["can_manage_account"] = can_manage_account
+        if can_view_any_object is not UNSET:
+            field_dict["can_view_any_object"] = can_view_any_object
+        if can_manage_scheduler is not UNSET:
+            field_dict["can_manage_scheduler"] = can_manage_scheduler
+        if can_cancel_jobs is not UNSET:
+            field_dict["can_cancel_jobs"] = can_cancel_jobs
+        if can_run_checks is not UNSET:
+            field_dict["can_run_checks"] = can_run_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
+        if can_collect_statistics is not UNSET:
+            field_dict["can_collect_statistics"] = can_collect_statistics
+        if can_manage_data_sources is not UNSET:
+            field_dict["can_manage_data_sources"] = can_manage_data_sources
+        if can_synchronize is not UNSET:
+            field_dict["can_synchronize"] = can_synchronize
+        if can_edit_comments is not UNSET:
+            field_dict["can_edit_comments"] = can_edit_comments
+        if can_edit_labels is not UNSET:
+            field_dict["can_edit_labels"] = can_edit_labels
+        if can_manage_definitions is not UNSET:
+            field_dict["can_manage_definitions"] = can_manage_definitions
+        if can_compare_tables is not UNSET:
+            field_dict["can_compare_tables"] = can_compare_tables
 
         return field_dict
 
@@ -103,6 +180,39 @@ class DqoUserProfileModel:
 
         jobs_limit = d.pop("jobs_limit", UNSET)
 
+        _account_role = d.pop("account_role", UNSET)
+        account_role: Union[Unset, DqoUserRole]
+        if isinstance(_account_role, Unset):
+            account_role = UNSET
+        else:
+            account_role = DqoUserRole(_account_role)
+
+        can_manage_account = d.pop("can_manage_account", UNSET)
+
+        can_view_any_object = d.pop("can_view_any_object", UNSET)
+
+        can_manage_scheduler = d.pop("can_manage_scheduler", UNSET)
+
+        can_cancel_jobs = d.pop("can_cancel_jobs", UNSET)
+
+        can_run_checks = d.pop("can_run_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
+        can_collect_statistics = d.pop("can_collect_statistics", UNSET)
+
+        can_manage_data_sources = d.pop("can_manage_data_sources", UNSET)
+
+        can_synchronize = d.pop("can_synchronize", UNSET)
+
+        can_edit_comments = d.pop("can_edit_comments", UNSET)
+
+        can_edit_labels = d.pop("can_edit_labels", UNSET)
+
+        can_manage_definitions = d.pop("can_manage_definitions", UNSET)
+
+        can_compare_tables = d.pop("can_compare_tables", UNSET)
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -114,6 +224,20 @@ class DqoUserProfileModel:
             connection_tables_limit=connection_tables_limit,
             tables_limit=tables_limit,
             jobs_limit=jobs_limit,
+            account_role=account_role,
+            can_manage_account=can_manage_account,
+            can_view_any_object=can_view_any_object,
+            can_manage_scheduler=can_manage_scheduler,
+            can_cancel_jobs=can_cancel_jobs,
+            can_run_checks=can_run_checks,
+            can_delete_data=can_delete_data,
+            can_collect_statistics=can_collect_statistics,
+            can_manage_data_sources=can_manage_data_sources,
+            can_synchronize=can_synchronize,
+            can_edit_comments=can_edit_comments,
+            can_edit_labels=can_edit_labels,
+            can_manage_definitions=can_manage_definitions,
+            can_compare_tables=can_compare_tables,
         )
 
         dqo_user_profile_model.additional_properties = d

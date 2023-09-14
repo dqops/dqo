@@ -23,6 +23,7 @@ class SensorModel:
             sensor definitions.
         custom (Union[Unset, bool]): Whether the sensor is a User Home sensor
         built_in (Union[Unset, bool]): This is a DQO built-in sensor, whose parameters cannot be changed.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     full_sensor_name: Union[Unset, str] = UNSET
@@ -30,6 +31,7 @@ class SensorModel:
     provider_sensor_list: Union[Unset, List["ProviderSensorModel"]] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,6 +50,7 @@ class SensorModel:
 
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -62,6 +65,8 @@ class SensorModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["built_in"] = built_in
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -95,12 +100,15 @@ class SensorModel:
 
         built_in = d.pop("built_in", UNSET)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         sensor_model = cls(
             full_sensor_name=full_sensor_name,
             sensor_definition_spec=sensor_definition_spec,
             provider_sensor_list=provider_sensor_list,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
         )
 
         sensor_model.additional_properties = d

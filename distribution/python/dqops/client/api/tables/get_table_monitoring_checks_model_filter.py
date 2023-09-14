@@ -4,11 +4,9 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
-from ...models.get_table_monitoring_checks_model_filter_time_scale import (
-    GetTableMonitoringChecksModelFilterTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
 
@@ -16,11 +14,11 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}".format(
         client.base_url,
@@ -73,11 +71,11 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getTableMonitoringChecksModelFilter
 
@@ -88,7 +86,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -122,11 +120,11 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getTableMonitoringChecksModelFilter
 
@@ -137,7 +135,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -164,11 +162,11 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getTableMonitoringChecksModelFilter
 
@@ -179,7 +177,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -211,11 +209,11 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getTableMonitoringChecksModelFilter
 
@@ -226,7 +224,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 

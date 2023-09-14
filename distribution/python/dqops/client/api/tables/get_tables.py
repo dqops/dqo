@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.table_basic_model import TableBasicModel
 from ...types import Response
 
@@ -13,7 +13,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables".format(
         client.base_url, connectionName=connection_name, schemaName=schema_name
@@ -65,7 +65,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["TableBasicModel"]]:
     """getTables
 
@@ -101,7 +101,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["TableBasicModel"]]:
     """getTables
 
@@ -130,7 +130,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["TableBasicModel"]]:
     """getTables
 
@@ -164,7 +164,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["TableBasicModel"]]:
     """getTables
 

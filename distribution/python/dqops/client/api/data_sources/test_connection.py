@@ -4,15 +4,15 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.connection_basic_model import ConnectionBasicModel
-from ...models.connection_remote_model import ConnectionRemoteModel
+from ...models.connection_test_model import ConnectionTestModel
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
@@ -42,9 +42,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[ConnectionRemoteModel]:
+) -> Optional[ConnectionTestModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = ConnectionRemoteModel.from_dict(response.json())
+        response_200 = ConnectionTestModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -55,7 +55,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[ConnectionRemoteModel]:
+) -> Response[ConnectionTestModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,10 +66,10 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Response[ConnectionRemoteModel]:
+) -> Response[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
@@ -84,7 +84,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionRemoteModel]
+        Response[ConnectionTestModel]
     """
 
     kwargs = _get_kwargs(
@@ -103,10 +103,10 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Optional[ConnectionRemoteModel]:
+) -> Optional[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
@@ -121,7 +121,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionRemoteModel
+        ConnectionTestModel
     """
 
     return sync_detailed(
@@ -133,10 +133,10 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Response[ConnectionRemoteModel]:
+) -> Response[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
@@ -151,7 +151,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionRemoteModel]
+        Response[ConnectionTestModel]
     """
 
     kwargs = _get_kwargs(
@@ -168,10 +168,10 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Optional[ConnectionRemoteModel]:
+) -> Optional[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
@@ -186,7 +186,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionRemoteModel
+        ConnectionTestModel
     """
 
     return (

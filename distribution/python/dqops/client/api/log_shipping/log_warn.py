@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.external_log_entry import ExternalLogEntry
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -12,7 +12,7 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ExternalLogEntry,
 ) -> Dict[str, Any]:
     url = "{}api/logs/warn".format(client.base_url)
@@ -59,7 +59,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ExternalLogEntry,
 ) -> Response[MonoObject]:
     """logWarn
@@ -92,7 +92,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ExternalLogEntry,
 ) -> Optional[MonoObject]:
     """logWarn
@@ -118,7 +118,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ExternalLogEntry,
 ) -> Response[MonoObject]:
     """logWarn
@@ -149,7 +149,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ExternalLogEntry,
 ) -> Optional[MonoObject]:
     """logWarn

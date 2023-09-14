@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/defaultgroupingconfiguration".format(
@@ -63,7 +63,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationSpec,
 ) -> Response[MonoObject]:
     """updateConnectionDefaultGroupingConfiguration
@@ -99,7 +99,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionDefaultGroupingConfiguration
@@ -128,7 +128,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationSpec,
 ) -> Response[MonoObject]:
     """updateConnectionDefaultGroupingConfiguration
@@ -162,7 +162,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: DataGroupingConfigurationSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionDefaultGroupingConfiguration

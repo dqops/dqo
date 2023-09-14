@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.data_grouping_configuration_basic_model import (
     DataGroupingConfigurationBasicModel,
 )
@@ -16,7 +16,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings".format(
         client.base_url,
@@ -74,7 +74,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["DataGroupingConfigurationBasicModel"]]:
     """getTableGroupingConfigurations
 
@@ -113,7 +113,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
     """getTableGroupingConfigurations
 
@@ -145,7 +145,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["DataGroupingConfigurationBasicModel"]]:
     """getTableGroupingConfigurations
 
@@ -182,7 +182,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
     """getTableGroupingConfigurations
 

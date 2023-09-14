@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.provider_sensor_basic_model_provider_type import (
-    ProviderSensorBasicModelProviderType,
-)
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ProviderSensorBasicModel")
@@ -15,15 +13,17 @@ class ProviderSensorBasicModel:
     """Provider sensor basic model
 
     Attributes:
-        provider_type (Union[Unset, ProviderSensorBasicModelProviderType]): Provider type.
+        provider_type (Union[Unset, ProviderType]):
         custom (Union[Unset, bool]): This connection specific template is a custom sensor template or was customized by
             the user.
         built_in (Union[Unset, bool]): This connection specific template is provided with DQO as a built-in sensor.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
-    provider_type: Union[Unset, ProviderSensorBasicModelProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -33,6 +33,7 @@ class ProviderSensorBasicModel:
 
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -43,6 +44,8 @@ class ProviderSensorBasicModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["built_in"] = built_in
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -50,20 +53,23 @@ class ProviderSensorBasicModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _provider_type = d.pop("provider_type", UNSET)
-        provider_type: Union[Unset, ProviderSensorBasicModelProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ProviderSensorBasicModelProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         custom = d.pop("custom", UNSET)
 
         built_in = d.pop("built_in", UNSET)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         provider_sensor_basic_model = cls(
             provider_type=provider_type,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
         )
 
         provider_sensor_basic_model.additional_properties = d

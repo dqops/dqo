@@ -20,6 +20,7 @@ class SensorBasicModel:
         full_sensor_name (Union[Unset, str]): Full sensor name
         custom (Union[Unset, bool]): This sensor has is a custom sensor or was customized by the user.
         built_in (Union[Unset, bool]): This sensor is provided with DQO as a built-in sensor.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
         provider_sensor_basic_models (Union[Unset, List['ProviderSensorBasicModel']]): Provider sensor basic model list
     """
 
@@ -27,6 +28,7 @@ class SensorBasicModel:
     full_sensor_name: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     provider_sensor_basic_models: Union[Unset, List["ProviderSensorBasicModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -35,6 +37,7 @@ class SensorBasicModel:
         full_sensor_name = self.full_sensor_name
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
         provider_sensor_basic_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.provider_sensor_basic_models, Unset):
             provider_sensor_basic_models = []
@@ -58,6 +61,8 @@ class SensorBasicModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["built_in"] = built_in
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
         if provider_sensor_basic_models is not UNSET:
             field_dict["provider_sensor_basic_models"] = provider_sensor_basic_models
 
@@ -76,6 +81,8 @@ class SensorBasicModel:
 
         built_in = d.pop("built_in", UNSET)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         provider_sensor_basic_models = []
         _provider_sensor_basic_models = d.pop("provider_sensor_basic_models", UNSET)
         for provider_sensor_basic_models_item_data in (
@@ -92,6 +99,7 @@ class SensorBasicModel:
             full_sensor_name=full_sensor_name,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
             provider_sensor_basic_models=provider_sensor_basic_models,
         )
 

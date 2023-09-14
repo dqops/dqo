@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.check_container_model_effective_schedule_enabled_status import (
-    CheckContainerModelEffectiveScheduleEnabledStatus,
-)
+from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -29,23 +27,26 @@ class CheckContainerModel:
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
-        effective_schedule_enabled_status (Union[Unset, CheckContainerModelEffectiveScheduleEnabledStatus]): State of
-            the effective scheduling on the check container.
+        effective_schedule_enabled_status (Union[Unset, ScheduleEnabledStatusModel]):
         partition_by_column (Union[Unset, str]): The name of the column that partitioned checks will use for the time
             period partitioning. Important only for partitioned checks.
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
+        can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
+        can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     categories: Union[Unset, List["QualityCategoryModel"]] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
-    effective_schedule_enabled_status: Union[
-        Unset, CheckContainerModelEffectiveScheduleEnabledStatus
-    ] = UNSET
+    effective_schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel] = UNSET
     partition_by_column: Union[Unset, str] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,6 +77,10 @@ class CheckContainerModel:
         if not isinstance(self.data_clean_job_template, Unset):
             data_clean_job_template = self.data_clean_job_template.to_dict()
 
+        can_edit = self.can_edit
+        can_run_checks = self.can_run_checks
+        can_delete_data = self.can_delete_data
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -93,6 +98,12 @@ class CheckContainerModel:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_checks is not UNSET:
+            field_dict["can_run_checks"] = can_run_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -123,16 +134,12 @@ class CheckContainerModel:
         _effective_schedule_enabled_status = d.pop(
             "effective_schedule_enabled_status", UNSET
         )
-        effective_schedule_enabled_status: Union[
-            Unset, CheckContainerModelEffectiveScheduleEnabledStatus
-        ]
+        effective_schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel]
         if isinstance(_effective_schedule_enabled_status, Unset):
             effective_schedule_enabled_status = UNSET
         else:
-            effective_schedule_enabled_status = (
-                CheckContainerModelEffectiveScheduleEnabledStatus(
-                    _effective_schedule_enabled_status
-                )
+            effective_schedule_enabled_status = ScheduleEnabledStatusModel(
+                _effective_schedule_enabled_status
             )
 
         partition_by_column = d.pop("partition_by_column", UNSET)
@@ -155,6 +162,12 @@ class CheckContainerModel:
                 _data_clean_job_template
             )
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_checks = d.pop("can_run_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         check_container_model = cls(
             categories=categories,
             effective_schedule=effective_schedule,
@@ -162,6 +175,9 @@ class CheckContainerModel:
             partition_by_column=partition_by_column,
             run_checks_job_template=run_checks_job_template,
             data_clean_job_template=data_clean_job_template,
+            can_edit=can_edit,
+            can_run_checks=can_run_checks,
+            can_delete_data=can_delete_data,
         )
 
         check_container_model.additional_properties = d

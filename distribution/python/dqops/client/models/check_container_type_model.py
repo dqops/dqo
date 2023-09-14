@@ -2,12 +2,8 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.check_container_type_model_check_time_scale import (
-    CheckContainerTypeModelCheckTimeScale,
-)
-from ..models.check_container_type_model_check_type import (
-    CheckContainerTypeModelCheckType,
-)
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckContainerTypeModel")
@@ -18,12 +14,12 @@ class CheckContainerTypeModel:
     """Model identifying the check type and timescale of checks belonging to a container.
 
     Attributes:
-        check_type (Union[Unset, CheckContainerTypeModelCheckType]): Check type.
-        check_time_scale (Union[Unset, CheckContainerTypeModelCheckTimeScale]): Check timescale.
+        check_type (Union[Unset, CheckType]):
+        check_time_scale (Union[Unset, CheckTimeScale]):
     """
 
-    check_type: Union[Unset, CheckContainerTypeModelCheckType] = UNSET
-    check_time_scale: Union[Unset, CheckContainerTypeModelCheckTimeScale] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    check_time_scale: Union[Unset, CheckTimeScale] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -49,18 +45,18 @@ class CheckContainerTypeModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, CheckContainerTypeModelCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = CheckContainerTypeModelCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _check_time_scale = d.pop("check_time_scale", UNSET)
-        check_time_scale: Union[Unset, CheckContainerTypeModelCheckTimeScale]
+        check_time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_check_time_scale, Unset):
             check_time_scale = UNSET
         else:
-            check_time_scale = CheckContainerTypeModelCheckTimeScale(_check_time_scale)
+            check_time_scale = CheckTimeScale(_check_time_scale)
 
         check_container_type_model = cls(
             check_type=check_type,

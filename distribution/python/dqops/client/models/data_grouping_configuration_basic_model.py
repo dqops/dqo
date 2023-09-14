@@ -19,6 +19,7 @@ class DataGroupingConfigurationBasicModel:
             data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
             default_data_grouping_configuration (Union[Unset, bool]): True when this is the default data grouping
                 configuration for the table.
+            can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -26,6 +27,7 @@ class DataGroupingConfigurationBasicModel:
     table_name: Union[Unset, str] = UNSET
     data_grouping_configuration_name: Union[Unset, str] = UNSET
     default_data_grouping_configuration: Union[Unset, bool] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -34,6 +36,7 @@ class DataGroupingConfigurationBasicModel:
         table_name = self.table_name
         data_grouping_configuration_name = self.data_grouping_configuration_name
         default_data_grouping_configuration = self.default_data_grouping_configuration
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,6 +55,8 @@ class DataGroupingConfigurationBasicModel:
             field_dict[
                 "default_data_grouping_configuration"
             ] = default_data_grouping_configuration
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -72,12 +77,15 @@ class DataGroupingConfigurationBasicModel:
             "default_data_grouping_configuration", UNSET
         )
 
+        can_edit = d.pop("can_edit", UNSET)
+
         data_grouping_configuration_basic_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
             data_grouping_configuration_name=data_grouping_configuration_name,
             default_data_grouping_configuration=default_data_grouping_configuration,
+            can_edit=can_edit,
         )
 
         data_grouping_configuration_basic_model.additional_properties = d

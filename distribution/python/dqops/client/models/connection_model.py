@@ -19,11 +19,13 @@ class ConnectionModel:
         connection_name (Union[Unset, str]): Connection name.
         connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
         spec (Union[Unset, ConnectionSpec]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
     spec: Union[Unset, "ConnectionSpec"] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -32,6 +34,8 @@ class ConnectionModel:
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
+
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,6 +46,8 @@ class ConnectionModel:
             field_dict["connection_hash"] = connection_hash
         if spec is not UNSET:
             field_dict["spec"] = spec
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -61,10 +67,13 @@ class ConnectionModel:
         else:
             spec = ConnectionSpec.from_dict(_spec)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         connection_model = cls(
             connection_name=connection_name,
             connection_hash=connection_hash,
             spec=spec,
+            can_edit=can_edit,
         )
 
         connection_model.additional_properties = d

@@ -4,11 +4,9 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_template import CheckTemplate
-from ...models.get_table_monitoring_checks_templates_time_scale import (
-    GetTableMonitoringChecksTemplatesTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import UNSET, Response, Unset
 
 
@@ -16,9 +14,9 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
@@ -84,9 +82,9 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -98,7 +96,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -132,9 +130,9 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -146,7 +144,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -173,9 +171,9 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -187,7 +185,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -219,9 +217,9 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -233,7 +231,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 

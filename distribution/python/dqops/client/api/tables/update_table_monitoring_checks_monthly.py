@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.table_monthly_monitoring_check_categories_spec import (
     TableMonthlyMonitoringCheckCategoriesSpec,
@@ -17,7 +17,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableMonthlyMonitoringCheckCategoriesSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly".format(
@@ -72,7 +72,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableMonthlyMonitoringCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateTableMonitoringChecksMonthly
@@ -114,7 +114,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableMonthlyMonitoringCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateTableMonitoringChecksMonthly
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableMonthlyMonitoringCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateTableMonitoringChecksMonthly
@@ -189,7 +189,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableMonthlyMonitoringCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateTableMonitoringChecksMonthly

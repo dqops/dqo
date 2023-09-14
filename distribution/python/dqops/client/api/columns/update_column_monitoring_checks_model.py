@@ -4,12 +4,10 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
+from ...models.check_time_scale import CheckTimeScale
 from ...models.mono_object import MonoObject
-from ...models.update_column_monitoring_checks_model_time_scale import (
-    UpdateColumnMonitoringChecksModelTimeScale,
-)
 from ...types import Response
 
 
@@ -18,9 +16,9 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: UpdateColumnMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model".format(
@@ -77,9 +75,9 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: UpdateColumnMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateColumnMonitoringChecksModel
@@ -92,7 +90,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (UpdateColumnMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -127,9 +125,9 @@ def sync(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: UpdateColumnMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateColumnMonitoringChecksModel
@@ -142,7 +140,7 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (UpdateColumnMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -170,9 +168,9 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: UpdateColumnMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateColumnMonitoringChecksModel
@@ -185,7 +183,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (UpdateColumnMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -218,9 +216,9 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: UpdateColumnMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateColumnMonitoringChecksModel
@@ -233,7 +231,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (UpdateColumnMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 

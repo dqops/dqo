@@ -4,11 +4,9 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_basic_model import CheckContainerBasicModel
-from ...models.get_column_monitoring_checks_basic_model_time_scale import (
-    GetColumnMonitoringChecksBasicModelTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
 
@@ -17,9 +15,9 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/basic".format(
         client.base_url,
@@ -72,9 +70,9 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerBasicModel]:
     """getColumnMonitoringChecksBasicModel
 
@@ -85,7 +83,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -117,9 +115,9 @@ def sync(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerBasicModel]:
     """getColumnMonitoringChecksBasicModel
 
@@ -130,7 +128,7 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,9 +153,9 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerBasicModel]:
     """getColumnMonitoringChecksBasicModel
 
@@ -168,7 +166,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -198,9 +196,9 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerBasicModel]:
     """getColumnMonitoringChecksBasicModel
 
@@ -211,7 +209,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

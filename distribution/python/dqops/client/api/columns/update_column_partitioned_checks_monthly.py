@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.column_monthly_partitioned_check_categories_spec import (
     ColumnMonthlyPartitionedCheckCategoriesSpec,
 )
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnMonthlyPartitionedCheckCategoriesSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly".format(
@@ -75,7 +75,7 @@ def sync_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnMonthlyPartitionedCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateColumnPartitionedChecksMonthly
@@ -120,7 +120,7 @@ def sync(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnMonthlyPartitionedCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateColumnPartitionedChecksMonthly
@@ -158,7 +158,7 @@ async def asyncio_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnMonthlyPartitionedCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateColumnPartitionedChecksMonthly
@@ -201,7 +201,7 @@ async def asyncio(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnMonthlyPartitionedCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateColumnPartitionedChecksMonthly
