@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
 from ...models.update_connection_scheduling_group_scheduling_group import (
@@ -17,7 +17,7 @@ def _get_kwargs(
     connection_name: str,
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schedules/{schedulingGroup}".format(
@@ -70,7 +70,7 @@ def sync_detailed(
     connection_name: str,
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateConnectionSchedulingGroup
@@ -110,7 +110,7 @@ def sync(
     connection_name: str,
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionSchedulingGroup
@@ -143,7 +143,7 @@ async def asyncio_detailed(
     connection_name: str,
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateConnectionSchedulingGroup
@@ -181,7 +181,7 @@ async def asyncio(
     connection_name: str,
     scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateConnectionSchedulingGroup

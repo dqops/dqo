@@ -26,6 +26,8 @@ class TableColumnsStatisticsModel:
             column_statistics (Union[Unset, List['ColumnStatisticsModel']]): List of collected column level statistics for
                 all columns.
             collect_column_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
+            can_collect_statistics (Union[Unset, bool]): Boolean flag that decides if the current user can collect
+                statistics.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -34,6 +36,7 @@ class TableColumnsStatisticsModel:
     collect_column_statistics_job_template: Union[
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
+    can_collect_statistics: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -56,6 +59,8 @@ class TableColumnsStatisticsModel:
                 self.collect_column_statistics_job_template.to_dict()
             )
 
+        can_collect_statistics = self.can_collect_statistics
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -69,6 +74,8 @@ class TableColumnsStatisticsModel:
             field_dict[
                 "collect_column_statistics_job_template"
             ] = collect_column_statistics_job_template
+        if can_collect_statistics is not UNSET:
+            field_dict["can_collect_statistics"] = can_collect_statistics
 
         return field_dict
 
@@ -114,11 +121,14 @@ class TableColumnsStatisticsModel:
                 )
             )
 
+        can_collect_statistics = d.pop("can_collect_statistics", UNSET)
+
         table_columns_statistics_model = cls(
             connection_name=connection_name,
             table=table,
             column_statistics=column_statistics,
             collect_column_statistics_job_template=collect_column_statistics_job_template,
+            can_collect_statistics=can_collect_statistics,
         )
 
         table_columns_statistics_model.additional_properties = d

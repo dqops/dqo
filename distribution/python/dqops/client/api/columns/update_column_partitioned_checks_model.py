@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.mono_object import MonoObject
 from ...models.update_column_partitioned_checks_model_time_scale import (
@@ -20,7 +20,7 @@ def _get_kwargs(
     column_name: str,
     time_scale: UpdateColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model".format(
@@ -79,7 +79,7 @@ def sync_detailed(
     column_name: str,
     time_scale: UpdateColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateColumnPartitionedChecksModel
@@ -129,7 +129,7 @@ def sync(
     column_name: str,
     time_scale: UpdateColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateColumnPartitionedChecksModel
@@ -172,7 +172,7 @@ async def asyncio_detailed(
     column_name: str,
     time_scale: UpdateColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateColumnPartitionedChecksModel
@@ -220,7 +220,7 @@ async def asyncio(
     column_name: str,
     time_scale: UpdateColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateColumnPartitionedChecksModel

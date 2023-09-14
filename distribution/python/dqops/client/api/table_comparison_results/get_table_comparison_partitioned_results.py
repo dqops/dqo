@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.get_table_comparison_partitioned_results_time_scale import (
     GetTableComparisonPartitionedResultsTimeScale,
 )
@@ -19,7 +19,7 @@ def _get_kwargs(
     time_scale: GetTableComparisonPartitionedResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results".format(
         client.base_url,
@@ -74,7 +74,7 @@ def sync_detailed(
     time_scale: GetTableComparisonPartitionedResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -120,7 +120,7 @@ def sync(
     time_scale: GetTableComparisonPartitionedResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -159,7 +159,7 @@ async def asyncio_detailed(
     time_scale: GetTableComparisonPartitionedResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -203,7 +203,7 @@ async def asyncio(
     time_scale: GetTableComparisonPartitionedResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 

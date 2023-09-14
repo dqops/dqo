@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.authenticated_dashboard_model import AuthenticatedDashboardModel
 from ...types import UNSET, Response, Unset
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     folder2: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/dashboards/{folder1}/{folder2}/{dashboardName}".format(
@@ -69,7 +69,7 @@ def sync_detailed(
     folder2: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel2
@@ -111,7 +111,7 @@ def sync(
     folder2: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel2
@@ -146,7 +146,7 @@ async def asyncio_detailed(
     folder2: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel2
@@ -186,7 +186,7 @@ async def asyncio(
     folder2: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel2

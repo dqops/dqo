@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_configuration_model import CheckConfigurationModel
 from ...models.get_table_columns_partitioned_checks_model_time_scale import (
     GetTableColumnsPartitionedChecksModelTimeScale,
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
@@ -100,7 +100,7 @@ def sync_detailed(
     table_name: str,
     time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
@@ -161,7 +161,7 @@ def sync(
     table_name: str,
     time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
@@ -215,7 +215,7 @@ async def asyncio_detailed(
     table_name: str,
     time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
@@ -274,7 +274,7 @@ async def asyncio(
     table_name: str,
     time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,

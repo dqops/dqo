@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.comment_spec import CommentSpec
 from ...types import Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments".format(
         client.base_url,
@@ -70,7 +70,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CommentSpec"]]:
     """getTableComments
 
@@ -109,7 +109,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CommentSpec"]]:
     """getTableComments
 
@@ -141,7 +141,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CommentSpec"]]:
     """getTableComments
 
@@ -178,7 +178,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CommentSpec"]]:
     """getTableComments
 

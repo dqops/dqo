@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_results_overview_data_model import CheckResultsOverviewDataModel
 from ...models.get_column_monitoring_checks_overview_time_scale import (
     GetColumnMonitoringChecksOverviewTimeScale,
@@ -19,7 +19,7 @@ def _get_kwargs(
     column_name: str,
     time_scale: GetColumnMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview".format(
         client.base_url,
@@ -81,7 +81,7 @@ def sync_detailed(
     column_name: str,
     time_scale: GetColumnMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnMonitoringChecksOverview
 
@@ -127,7 +127,7 @@ def sync(
     column_name: str,
     time_scale: GetColumnMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnMonitoringChecksOverview
 
@@ -166,7 +166,7 @@ async def asyncio_detailed(
     column_name: str,
     time_scale: GetColumnMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnMonitoringChecksOverview
 
@@ -210,7 +210,7 @@ async def asyncio(
     column_name: str,
     time_scale: GetColumnMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnMonitoringChecksOverview
 

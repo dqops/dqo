@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.table_comparison_model import TableComparisonModel
 from ...types import Response
 
@@ -15,7 +15,7 @@ def _get_kwargs(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/partitioned/daily".format(
         client.base_url,
@@ -68,7 +68,7 @@ def sync_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonModel]:
     """getTableComparisonPartitionedDaily
 
@@ -110,7 +110,7 @@ def sync(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonModel]:
     """getTableComparisonPartitionedDaily
 
@@ -145,7 +145,7 @@ async def asyncio_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonModel]:
     """getTableComparisonPartitionedDaily
 
@@ -185,7 +185,7 @@ async def asyncio(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonModel]:
     """getTableComparisonPartitionedDaily
 

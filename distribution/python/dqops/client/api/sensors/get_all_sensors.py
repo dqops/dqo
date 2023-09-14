@@ -4,14 +4,14 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.sensor_basic_model import SensorBasicModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/sensors".format(client.base_url)
 
@@ -59,7 +59,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["SensorBasicModel"]]:
     """getAllSensors
 
@@ -88,7 +88,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["SensorBasicModel"]]:
     """getAllSensors
 
@@ -110,7 +110,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["SensorBasicModel"]]:
     """getAllSensors
 
@@ -137,7 +137,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["SensorBasicModel"]]:
     """getAllSensors
 

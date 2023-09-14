@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.get_column_partitioned_checks_model_filter_time_scale import (
     GetColumnPartitionedChecksModelFilterTimeScale,
@@ -21,7 +21,7 @@ def _get_kwargs(
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}".format(
         client.base_url,
@@ -80,7 +80,7 @@ def sync_detailed(
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getColumnPartitionedChecksModelFilter
 
@@ -132,7 +132,7 @@ def sync(
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getColumnPartitionedChecksModelFilter
 
@@ -177,7 +177,7 @@ async def asyncio_detailed(
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getColumnPartitionedChecksModelFilter
 
@@ -227,7 +227,7 @@ async def asyncio(
     check_category: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getColumnPartitionedChecksModelFilter
 

@@ -4,17 +4,19 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}api/defaults/defaultchecks/dataobservability/monitoring/monthly/table".format(
-        client.base_url
+    url = (
+        "{}api/defaults/defaultchecks/dataobservability/monitoring/daily/table".format(
+            client.base_url
+        )
     )
 
     headers: Dict[str, str] = client.get_headers()
@@ -56,13 +58,12 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
-    """getDefaultDataObservabilityMonthlyMonitoringTableChecks
+    """getDefaultDataObservabilityDailyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the monthly monitoring (Data
-    Observability end of month scores) checks that are configured for all imported tables on a table
-    level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported tables on a table level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -86,13 +87,12 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
-    """getDefaultDataObservabilityMonthlyMonitoringTableChecks
+    """getDefaultDataObservabilityDailyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the monthly monitoring (Data
-    Observability end of month scores) checks that are configured for all imported tables on a table
-    level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported tables on a table level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -109,13 +109,12 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
-    """getDefaultDataObservabilityMonthlyMonitoringTableChecks
+    """getDefaultDataObservabilityDailyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the monthly monitoring (Data
-    Observability end of month scores) checks that are configured for all imported tables on a table
-    level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported tables on a table level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -137,13 +136,12 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
-    """getDefaultDataObservabilityMonthlyMonitoringTableChecks
+    """getDefaultDataObservabilityDailyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the monthly monitoring (Data
-    Observability end of month scores) checks that are configured for all imported tables on a table
-    level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported tables on a table level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

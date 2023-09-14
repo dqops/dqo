@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_template import CheckTemplate
 from ...models.get_schema_partitioned_checks_templates_check_target import (
     GetSchemaPartitionedChecksTemplatesCheckTarget,
@@ -20,7 +20,7 @@ def _get_kwargs(
     schema_name: str,
     time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
     ] = UNSET,
@@ -95,7 +95,7 @@ def sync_detailed(
     schema_name: str,
     time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
     ] = UNSET,
@@ -145,7 +145,7 @@ def sync(
     schema_name: str,
     time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
     ] = UNSET,
@@ -188,7 +188,7 @@ async def asyncio_detailed(
     schema_name: str,
     time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
     ] = UNSET,
@@ -236,7 +236,7 @@ async def asyncio(
     schema_name: str,
     time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
     ] = UNSET,

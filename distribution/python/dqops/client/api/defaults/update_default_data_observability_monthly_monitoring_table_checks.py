@@ -4,39 +4,42 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
+from ...models.mono_object import MonoObject
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
+    json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
-    url = (
-        "{}api/defaults/defaultchecks/dataobservability/monitoring/daily/column".format(
-            client.base_url
-        )
+    url = "{}api/defaults/defaultchecks/dataobservability/monitoring/monthly/table".format(
+        client.base_url
     )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    json_json_body = json_body.to_dict()
+
     return {
-        "method": "get",
+        "method": "put",
         "url": url,
         "headers": headers,
         "cookies": cookies,
         "timeout": client.get_timeout(),
         "follow_redirects": client.follow_redirects,
+        "json": json_json_body,
     }
 
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[CheckContainerModel]:
+) -> Optional[MonoObject]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = CheckContainerModel.from_dict(response.json())
+        response_200 = MonoObject.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -47,7 +50,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[CheckContainerModel]:
+) -> Response[MonoObject]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -58,23 +61,29 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-) -> Response[CheckContainerModel]:
-    """getDefaultDataObservabilityDailyMonitoringColumnChecks
+    client: AuthenticatedClient,
+    json_body: CheckContainerModel,
+) -> Response[MonoObject]:
+    """updateDefaultDataObservabilityMonthlyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the daily monitoring (Data
-    Observability and monitoring) checks that are configured for all imported columns on a column level.
+     New configuration of the default monthly monitoring checkpoints on a table level. These checks will
+    be applied on new tables.
+
+    Args:
+        json_body (CheckContainerModel): Model that returns the form definition and the form data
+            to edit all data quality checks divided by categories.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckContainerModel]
+        Response[MonoObject]
     """
 
     kwargs = _get_kwargs(
         client=client,
+        json_body=json_body,
     )
 
     response = httpx.request(
@@ -87,45 +96,57 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-) -> Optional[CheckContainerModel]:
-    """getDefaultDataObservabilityDailyMonitoringColumnChecks
+    client: AuthenticatedClient,
+    json_body: CheckContainerModel,
+) -> Optional[MonoObject]:
+    """updateDefaultDataObservabilityMonthlyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the daily monitoring (Data
-    Observability and monitoring) checks that are configured for all imported columns on a column level.
+     New configuration of the default monthly monitoring checkpoints on a table level. These checks will
+    be applied on new tables.
+
+    Args:
+        json_body (CheckContainerModel): Model that returns the form definition and the form data
+            to edit all data quality checks divided by categories.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckContainerModel
+        MonoObject
     """
 
     return sync_detailed(
         client=client,
+        json_body=json_body,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
-    client: Client,
-) -> Response[CheckContainerModel]:
-    """getDefaultDataObservabilityDailyMonitoringColumnChecks
+    client: AuthenticatedClient,
+    json_body: CheckContainerModel,
+) -> Response[MonoObject]:
+    """updateDefaultDataObservabilityMonthlyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the daily monitoring (Data
-    Observability and monitoring) checks that are configured for all imported columns on a column level.
+     New configuration of the default monthly monitoring checkpoints on a table level. These checks will
+    be applied on new tables.
+
+    Args:
+        json_body (CheckContainerModel): Model that returns the form definition and the form data
+            to edit all data quality checks divided by categories.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckContainerModel]
+        Response[MonoObject]
     """
 
     kwargs = _get_kwargs(
         client=client,
+        json_body=json_body,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -136,23 +157,29 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
-) -> Optional[CheckContainerModel]:
-    """getDefaultDataObservabilityDailyMonitoringColumnChecks
+    client: AuthenticatedClient,
+    json_body: CheckContainerModel,
+) -> Optional[MonoObject]:
+    """updateDefaultDataObservabilityMonthlyMonitoringTableChecks
 
-     Returns UI model to show and edit the default configuration of the daily monitoring (Data
-    Observability and monitoring) checks that are configured for all imported columns on a column level.
+     New configuration of the default monthly monitoring checkpoints on a table level. These checks will
+    be applied on new tables.
+
+    Args:
+        json_body (CheckContainerModel): Model that returns the form definition and the form data
+            to edit all data quality checks divided by categories.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckContainerModel
+        MonoObject
     """
 
     return (
         await asyncio_detailed(
             client=client,
+            json_body=json_body,
         )
     ).parsed

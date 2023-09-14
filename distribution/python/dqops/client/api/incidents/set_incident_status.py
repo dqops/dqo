@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.set_incident_status_status import SetIncidentStatusStatus
 from ...types import UNSET, Response
@@ -16,7 +16,7 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     status: SetIncidentStatusStatus,
 ) -> Dict[str, Any]:
     url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/status".format(
@@ -78,7 +78,7 @@ def sync_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     status: SetIncidentStatusStatus,
 ) -> Response[MonoObject]:
     """setIncidentStatus
@@ -123,7 +123,7 @@ def sync(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     status: SetIncidentStatusStatus,
 ) -> Optional[MonoObject]:
     """setIncidentStatus
@@ -161,7 +161,7 @@ async def asyncio_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     status: SetIncidentStatusStatus,
 ) -> Response[MonoObject]:
     """setIncidentStatus
@@ -204,7 +204,7 @@ async def asyncio(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     status: SetIncidentStatusStatus,
 ) -> Optional[MonoObject]:
     """setIncidentStatus

@@ -46,6 +46,9 @@ from .big_query_parameters_spec import BigQueryParametersSpec
 from .big_query_parameters_spec_authentication_mode import (
     BigQueryParametersSpecAuthenticationMode,
 )
+from .big_query_parameters_spec_jobs_create_project import (
+    BigQueryParametersSpecJobsCreateProject,
+)
 from .bulk_check_disable_parameters import BulkCheckDisableParameters
 from .bulk_check_disable_parameters_selected_tables_to_columns import (
     BulkCheckDisableParametersSelectedTablesToColumns,
@@ -230,6 +233,12 @@ from .column_anomaly_daily_partitioned_checks_spec import (
 from .column_anomaly_daily_partitioned_checks_spec_custom_checks import (
     ColumnAnomalyDailyPartitionedChecksSpecCustomChecks,
 )
+from .column_anomaly_differencing_distinct_count_30_days_check_spec import (
+    ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec,
+)
+from .column_anomaly_differencing_distinct_count_check_spec import (
+    ColumnAnomalyDifferencingDistinctCountCheckSpec,
+)
 from .column_anomaly_differencing_sum_30_days_check_spec import (
     ColumnAnomalyDifferencingSum30DaysCheckSpec,
 )
@@ -252,6 +261,12 @@ from .column_anomaly_profiling_checks_spec import ColumnAnomalyProfilingChecksSp
 from .column_anomaly_profiling_checks_spec_custom_checks import (
     ColumnAnomalyProfilingChecksSpecCustomChecks,
 )
+from .column_anomaly_stationary_distinct_percent_30_days_check_spec import (
+    ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
+)
+from .column_anomaly_stationary_distinct_percent_check_spec import (
+    ColumnAnomalyStationaryDistinctPercentCheckSpec,
+)
 from .column_anomaly_stationary_mean_30_days_check_spec import (
     ColumnAnomalyStationaryMean30DaysCheckSpec,
 )
@@ -269,6 +284,12 @@ from .column_anomaly_stationary_null_percent_30_days_check_spec import (
 )
 from .column_anomaly_stationary_null_percent_check_spec import (
     ColumnAnomalyStationaryNullPercentCheckSpec,
+)
+from .column_anomaly_stationary_partition_distinct_count_30_days_check_spec import (
+    ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec,
+)
+from .column_anomaly_stationary_partition_distinct_count_check_spec import (
+    ColumnAnomalyStationaryPartitionDistinctCountCheckSpec,
 )
 from .column_anomaly_stationary_partition_sum_30_days_check_spec import (
     ColumnAnomalyStationaryPartitionSum30DaysCheckSpec,
@@ -310,6 +331,28 @@ from .column_bool_profiling_checks_spec_custom_checks import (
 )
 from .column_bool_true_percent_sensor_parameters_spec import (
     ColumnBoolTruePercentSensorParametersSpec,
+)
+from .column_change_distinct_count_check_spec import ColumnChangeDistinctCountCheckSpec
+from .column_change_distinct_count_since_7_days_check_spec import (
+    ColumnChangeDistinctCountSince7DaysCheckSpec,
+)
+from .column_change_distinct_count_since_30_days_check_spec import (
+    ColumnChangeDistinctCountSince30DaysCheckSpec,
+)
+from .column_change_distinct_count_since_yesterday_check_spec import (
+    ColumnChangeDistinctCountSinceYesterdayCheckSpec,
+)
+from .column_change_distinct_percent_check_spec import (
+    ColumnChangeDistinctPercentCheckSpec,
+)
+from .column_change_distinct_percent_since_7_days_check_spec import (
+    ColumnChangeDistinctPercentSince7DaysCheckSpec,
+)
+from .column_change_distinct_percent_since_30_days_check_spec import (
+    ColumnChangeDistinctPercentSince30DaysCheckSpec,
+)
+from .column_change_distinct_percent_since_yesterday_check_spec import (
+    ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
 )
 from .column_change_mean_check_spec import ColumnChangeMeanCheckSpec
 from .column_change_mean_since_7_days_check_spec import (
@@ -1277,12 +1320,12 @@ from .connection_incident_grouping_spec_minimum_severity import (
     ConnectionIncidentGroupingSpecMinimumSeverity,
 )
 from .connection_model import ConnectionModel
-from .connection_remote_model import ConnectionRemoteModel
-from .connection_remote_model_connection_status import (
-    ConnectionRemoteModelConnectionStatus,
-)
 from .connection_spec import ConnectionSpec
 from .connection_spec_provider_type import ConnectionSpecProviderType
+from .connection_test_model import ConnectionTestModel
+from .connection_test_model_connection_test_result import (
+    ConnectionTestModelConnectionTestResult,
+)
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
 from .custom_sensor_parameters_spec import CustomSensorParametersSpec
@@ -1316,6 +1359,7 @@ from .dqo_settings_model_properties_additional_property import (
     DqoSettingsModelPropertiesAdditionalProperty,
 )
 from .dqo_user_profile_model import DqoUserProfileModel
+from .dqo_user_profile_model_account_role import DqoUserProfileModelAccountRole
 from .duration import Duration
 from .effective_schedule_model import EffectiveScheduleModel
 from .effective_schedule_model_schedule_group import EffectiveScheduleModelScheduleGroup
@@ -1596,6 +1640,7 @@ from .provider_sensor_model_provider_type import ProviderSensorModelProviderType
 from .quality_category_model import QualityCategoryModel
 from .redshift_parameters_spec import RedshiftParametersSpec
 from .redshift_parameters_spec_properties import RedshiftParametersSpecProperties
+from .remote_table_basic_model import RemoteTableBasicModel
 from .repair_stored_data_queue_job_parameters import RepairStoredDataQueueJobParameters
 from .rule_basic_folder_model import RuleBasicFolderModel
 from .rule_basic_folder_model_folders import RuleBasicFolderModelFolders
@@ -1744,6 +1789,9 @@ from .table_column_types_hash_sensor_parameters_spec import (
     TableColumnTypesHashSensorParametersSpec,
 )
 from .table_columns_statistics_model import TableColumnsStatisticsModel
+from .table_comparison_column_count_match_check_spec import (
+    TableComparisonColumnCountMatchCheckSpec,
+)
 from .table_comparison_configuration_model import TableComparisonConfigurationModel
 from .table_comparison_configuration_model_check_type import (
     TableComparisonConfigurationModelCheckType,
@@ -1875,7 +1923,6 @@ from .table_profiling_check_categories_spec_custom import (
 from .table_profiling_check_categories_spec_result_truncation import (
     TableProfilingCheckCategoriesSpecResultTruncation,
 )
-from .table_remote_basic_model import TableRemoteBasicModel
 from .table_row_count_check_spec import TableRowCountCheckSpec
 from .table_schema_column_count_changed_check_spec import (
     TableSchemaColumnCountChangedCheckSpec,
@@ -2071,6 +2118,7 @@ __all__ = (
     "BetweenFloatsRuleParametersSpec",
     "BigQueryParametersSpec",
     "BigQueryParametersSpecAuthenticationMode",
+    "BigQueryParametersSpecJobsCreateProject",
     "BulkCheckDisableParameters",
     "BulkCheckDisableParametersSelectedTablesToColumns",
     "ChangePercent1DayRule10ParametersSpec",
@@ -2153,6 +2201,8 @@ __all__ = (
     "ColumnAnomalyDailyMonitoringChecksSpecCustomChecks",
     "ColumnAnomalyDailyPartitionedChecksSpec",
     "ColumnAnomalyDailyPartitionedChecksSpecCustomChecks",
+    "ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec",
+    "ColumnAnomalyDifferencingDistinctCountCheckSpec",
     "ColumnAnomalyDifferencingSum30DaysCheckSpec",
     "ColumnAnomalyDifferencingSumCheckSpec",
     "ColumnAnomalyMonthlyMonitoringChecksSpec",
@@ -2161,12 +2211,16 @@ __all__ = (
     "ColumnAnomalyMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnAnomalyProfilingChecksSpec",
     "ColumnAnomalyProfilingChecksSpecCustomChecks",
+    "ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec",
+    "ColumnAnomalyStationaryDistinctPercentCheckSpec",
     "ColumnAnomalyStationaryMean30DaysCheckSpec",
     "ColumnAnomalyStationaryMeanCheckSpec",
     "ColumnAnomalyStationaryMedian30DaysCheckSpec",
     "ColumnAnomalyStationaryMedianCheckSpec",
     "ColumnAnomalyStationaryNullPercent30DaysCheckSpec",
     "ColumnAnomalyStationaryNullPercentCheckSpec",
+    "ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec",
+    "ColumnAnomalyStationaryPartitionDistinctCountCheckSpec",
     "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec",
     "ColumnAnomalyStationaryPartitionSumCheckSpec",
     "ColumnBasicModel",
@@ -2182,6 +2236,14 @@ __all__ = (
     "ColumnBoolProfilingChecksSpec",
     "ColumnBoolProfilingChecksSpecCustomChecks",
     "ColumnBoolTruePercentSensorParametersSpec",
+    "ColumnChangeDistinctCountCheckSpec",
+    "ColumnChangeDistinctCountSince30DaysCheckSpec",
+    "ColumnChangeDistinctCountSince7DaysCheckSpec",
+    "ColumnChangeDistinctCountSinceYesterdayCheckSpec",
+    "ColumnChangeDistinctPercentCheckSpec",
+    "ColumnChangeDistinctPercentSince30DaysCheckSpec",
+    "ColumnChangeDistinctPercentSince7DaysCheckSpec",
+    "ColumnChangeDistinctPercentSinceYesterdayCheckSpec",
     "ColumnChangeMeanCheckSpec",
     "ColumnChangeMeanSince30DaysCheckSpec",
     "ColumnChangeMeanSince7DaysCheckSpec",
@@ -2552,10 +2614,10 @@ __all__ = (
     "ConnectionIncidentGroupingSpecGroupingLevel",
     "ConnectionIncidentGroupingSpecMinimumSeverity",
     "ConnectionModel",
-    "ConnectionRemoteModel",
-    "ConnectionRemoteModelConnectionStatus",
     "ConnectionSpec",
     "ConnectionSpecProviderType",
+    "ConnectionTestModel",
+    "ConnectionTestModelConnectionTestResult",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
     "CustomSensorParametersSpec",
@@ -2583,6 +2645,7 @@ __all__ = (
     "DqoSettingsModelProperties",
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
+    "DqoUserProfileModelAccountRole",
     "Duration",
     "EffectiveScheduleModel",
     "EffectiveScheduleModelScheduleGroup",
@@ -2739,6 +2802,7 @@ __all__ = (
     "QualityCategoryModel",
     "RedshiftParametersSpec",
     "RedshiftParametersSpecProperties",
+    "RemoteTableBasicModel",
     "RepairStoredDataQueueJobParameters",
     "RuleBasicFolderModel",
     "RuleBasicFolderModelFolders",
@@ -2819,6 +2883,7 @@ __all__ = (
     "TableColumnListUnorderedHashSensorParametersSpec",
     "TableColumnsStatisticsModel",
     "TableColumnTypesHashSensorParametersSpec",
+    "TableComparisonColumnCountMatchCheckSpec",
     "TableComparisonConfigurationModel",
     "TableComparisonConfigurationModelCheckType",
     "TableComparisonConfigurationModelTimeScale",
@@ -2874,7 +2939,6 @@ __all__ = (
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
     "TableProfilingCheckCategoriesSpecResultTruncation",
-    "TableRemoteBasicModel",
     "TableRowCountCheckSpec",
     "TableSchemaColumnCountChangedCheckSpec",
     "TableSchemaColumnCountCheckSpec",

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -15,7 +15,7 @@ def _get_kwargs(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
         client.base_url,
@@ -68,7 +68,7 @@ def sync_detailed(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """deleteTableGroupingConfiguration
 
@@ -110,7 +110,7 @@ def sync(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """deleteTableGroupingConfiguration
 
@@ -145,7 +145,7 @@ async def asyncio_detailed(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """deleteTableGroupingConfiguration
 
@@ -185,7 +185,7 @@ async def asyncio(
     table_name: str,
     data_grouping_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """deleteTableGroupingConfiguration
 

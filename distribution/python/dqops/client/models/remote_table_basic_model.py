@@ -4,11 +4,11 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="TableRemoteBasicModel")
+T = TypeVar("T", bound="RemoteTableBasicModel")
 
 
 @attr.s(auto_attribs=True)
-class TableRemoteBasicModel:
+class RemoteTableBasicModel:
     """Table remote basic model
 
     Attributes:
@@ -55,15 +55,15 @@ class TableRemoteBasicModel:
 
         already_imported = d.pop("alreadyImported", UNSET)
 
-        table_remote_basic_model = cls(
+        remote_table_basic_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
             already_imported=already_imported,
         )
 
-        table_remote_basic_model.additional_properties = d
-        return table_remote_basic_model
+        remote_table_basic_model.additional_properties = d
+        return remote_table_basic_model
 
     @property
     def additional_keys(self) -> List[str]:

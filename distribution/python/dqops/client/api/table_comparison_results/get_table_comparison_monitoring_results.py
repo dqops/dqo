@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.get_table_comparison_monitoring_results_time_scale import (
     GetTableComparisonMonitoringResultsTimeScale,
 )
@@ -19,7 +19,7 @@ def _get_kwargs(
     time_scale: GetTableComparisonMonitoringResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results".format(
         client.base_url,
@@ -74,7 +74,7 @@ def sync_detailed(
     time_scale: GetTableComparisonMonitoringResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonMonitoringResults
 
@@ -119,7 +119,7 @@ def sync(
     time_scale: GetTableComparisonMonitoringResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonMonitoringResults
 
@@ -157,7 +157,7 @@ async def asyncio_detailed(
     time_scale: GetTableComparisonMonitoringResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonMonitoringResults
 
@@ -200,7 +200,7 @@ async def asyncio(
     time_scale: GetTableComparisonMonitoringResultsTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonMonitoringResults
 

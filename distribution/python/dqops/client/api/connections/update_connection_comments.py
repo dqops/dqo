@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.comment_spec import CommentSpec
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List["CommentSpec"],
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/comments".format(
@@ -67,7 +67,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List["CommentSpec"],
 ) -> Response[MonoObject]:
     """updateConnectionComments
@@ -103,7 +103,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List["CommentSpec"],
 ) -> Optional[MonoObject]:
     """updateConnectionComments
@@ -132,7 +132,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List["CommentSpec"],
 ) -> Response[MonoObject]:
     """updateConnectionComments
@@ -166,7 +166,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List["CommentSpec"],
 ) -> Optional[MonoObject]:
     """updateConnectionComments

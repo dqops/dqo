@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_job_queue_initial_snapshot_model import (
     DqoJobQueueInitialSnapshotModel,
 )
@@ -13,7 +13,7 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/jobs".format(client.base_url)
 
@@ -56,7 +56,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoJobQueueInitialSnapshotModel]:
     """getAllJobs
 
@@ -84,7 +84,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoJobQueueInitialSnapshotModel]:
     """getAllJobs
 
@@ -105,7 +105,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoJobQueueInitialSnapshotModel]:
     """getAllJobs
 
@@ -131,7 +131,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoJobQueueInitialSnapshotModel]:
     """getAllJobs
 

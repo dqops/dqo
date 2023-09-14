@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.get_column_partitioned_checks_model_time_scale import (
     GetColumnPartitionedChecksModelTimeScale,
@@ -19,7 +19,7 @@ def _get_kwargs(
     column_name: str,
     time_scale: GetColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model".format(
         client.base_url,
@@ -74,7 +74,7 @@ def sync_detailed(
     column_name: str,
     time_scale: GetColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getColumnPartitionedChecksModel
 
@@ -119,7 +119,7 @@ def sync(
     column_name: str,
     time_scale: GetColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getColumnPartitionedChecksModel
 
@@ -157,7 +157,7 @@ async def asyncio_detailed(
     column_name: str,
     time_scale: GetColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getColumnPartitionedChecksModel
 
@@ -200,7 +200,7 @@ async def asyncio(
     column_name: str,
     time_scale: GetColumnPartitionedChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getColumnPartitionedChecksModel
 

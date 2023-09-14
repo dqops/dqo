@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.incident_issue_histogram_model import IncidentIssueHistogramModel
 from ...types import UNSET, Response, Unset
 
@@ -16,7 +16,7 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     filter_: Union[Unset, None, str] = UNSET,
     days: Union[Unset, None, int] = UNSET,
     date: Union[Unset, None, datetime.date] = UNSET,
@@ -94,7 +94,7 @@ def sync_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     filter_: Union[Unset, None, str] = UNSET,
     days: Union[Unset, None, int] = UNSET,
     date: Union[Unset, None, datetime.date] = UNSET,
@@ -152,7 +152,7 @@ def sync(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     filter_: Union[Unset, None, str] = UNSET,
     days: Union[Unset, None, int] = UNSET,
     date: Union[Unset, None, datetime.date] = UNSET,
@@ -203,7 +203,7 @@ async def asyncio_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     filter_: Union[Unset, None, str] = UNSET,
     days: Union[Unset, None, int] = UNSET,
     date: Union[Unset, None, datetime.date] = UNSET,
@@ -259,7 +259,7 @@ async def asyncio(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     filter_: Union[Unset, None, str] = UNSET,
     days: Union[Unset, None, int] = UNSET,
     date: Union[Unset, None, datetime.date] = UNSET,

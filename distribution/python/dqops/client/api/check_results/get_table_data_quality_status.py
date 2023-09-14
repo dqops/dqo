@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.get_table_data_quality_status_check_time_scale import (
     GetTableDataQualityStatusCheckTimeScale,
 )
@@ -20,7 +20,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
     check_time_scale: Union[
@@ -94,7 +94,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
     check_time_scale: Union[
@@ -148,7 +148,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
     check_time_scale: Union[
@@ -195,7 +195,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
     check_time_scale: Union[
@@ -247,7 +247,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
     check_time_scale: Union[

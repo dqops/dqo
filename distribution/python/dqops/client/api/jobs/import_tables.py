@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
 from ...models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
 from ...types import Response
@@ -12,7 +12,7 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ImportTablesQueueJobParameters,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/importtables".format(client.base_url)
@@ -59,7 +59,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ImportTablesQueueJobParameters,
 ) -> Response[DqoQueueJobId]:
     """importTables
@@ -92,7 +92,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ImportTablesQueueJobParameters,
 ) -> Optional[DqoQueueJobId]:
     """importTables
@@ -118,7 +118,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ImportTablesQueueJobParameters,
 ) -> Response[DqoQueueJobId]:
     """importTables
@@ -149,7 +149,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ImportTablesQueueJobParameters,
 ) -> Optional[DqoQueueJobId]:
     """importTables

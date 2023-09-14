@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_template import CheckTemplate
 from ...models.get_schema_profiling_checks_templates_check_target import (
     GetSchemaProfilingChecksTemplatesCheckTarget,
@@ -16,7 +16,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
     ] = UNSET,
@@ -87,7 +87,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
     ] = UNSET,
@@ -134,7 +134,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
     ] = UNSET,
@@ -174,7 +174,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
     ] = UNSET,
@@ -219,7 +219,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_target: Union[
         Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
     ] = UNSET,

@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_configuration_model import CheckConfigurationModel
 from ...models.get_schema_profiling_checks_model_check_target import (
     GetSchemaProfilingChecksModelCheckTarget,
@@ -16,7 +16,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
@@ -102,7 +102,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
@@ -162,7 +162,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
@@ -215,7 +215,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
@@ -273,7 +273,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,

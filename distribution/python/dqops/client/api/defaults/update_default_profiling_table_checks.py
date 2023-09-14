@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -12,14 +12,10 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
-    url = (
-        "{}api/defaults/defaultchecks/dataobservability/monitoring/daily/column".format(
-            client.base_url
-        )
-    )
+    url = "{}api/defaults/defaultchecks/profiling/table".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -63,13 +59,13 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
-    """updateDefaultDataObservabilityDailyMonitoringColumnChecks
+    """updateDefaultProfilingTableChecks
 
-     New configuration of the default daily monitoring (data observability) checks on a column level.
-    These checks will be applied on new columns.
+     New configuration of the default profiling checks on a table level. These checks will be applied to
+    new tables.
 
     Args:
         json_body (CheckContainerModel): Model that returns the form definition and the form data
@@ -98,13 +94,13 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
-    """updateDefaultDataObservabilityDailyMonitoringColumnChecks
+    """updateDefaultProfilingTableChecks
 
-     New configuration of the default daily monitoring (data observability) checks on a column level.
-    These checks will be applied on new columns.
+     New configuration of the default profiling checks on a table level. These checks will be applied to
+    new tables.
 
     Args:
         json_body (CheckContainerModel): Model that returns the form definition and the form data
@@ -126,13 +122,13 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
-    """updateDefaultDataObservabilityDailyMonitoringColumnChecks
+    """updateDefaultProfilingTableChecks
 
-     New configuration of the default daily monitoring (data observability) checks on a column level.
-    These checks will be applied on new columns.
+     New configuration of the default profiling checks on a table level. These checks will be applied to
+    new tables.
 
     Args:
         json_body (CheckContainerModel): Model that returns the form definition and the form data
@@ -159,13 +155,13 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
-    """updateDefaultDataObservabilityDailyMonitoringColumnChecks
+    """updateDefaultProfilingTableChecks
 
-     New configuration of the default daily monitoring (data observability) checks on a column level.
-    These checks will be applied on new columns.
+     New configuration of the default profiling checks on a table level. These checks will be applied to
+    new tables.
 
     Args:
         json_body (CheckContainerModel): Model that returns the form definition and the form data

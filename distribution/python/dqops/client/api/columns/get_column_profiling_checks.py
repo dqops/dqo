@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.column_profiling_check_categories_spec import (
     ColumnProfilingCheckCategoriesSpec,
 )
@@ -17,7 +17,7 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling".format(
         client.base_url,
@@ -70,7 +70,7 @@ def sync_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[ColumnProfilingCheckCategoriesSpec]:
     """getColumnProfilingChecks
 
@@ -112,7 +112,7 @@ def sync(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[ColumnProfilingCheckCategoriesSpec]:
     """getColumnProfilingChecks
 
@@ -147,7 +147,7 @@ async def asyncio_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[ColumnProfilingCheckCategoriesSpec]:
     """getColumnProfilingChecks
 
@@ -187,7 +187,7 @@ async def asyncio(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[ColumnProfilingCheckCategoriesSpec]:
     """getColumnProfilingChecks
 

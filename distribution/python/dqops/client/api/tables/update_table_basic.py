@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.table_basic_model import TableBasicModel
 from ...types import Response
@@ -15,7 +15,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableBasicModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic".format(
@@ -70,7 +70,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableBasicModel,
 ) -> Response[MonoObject]:
     """updateTableBasic
@@ -113,7 +113,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableBasicModel,
 ) -> Optional[MonoObject]:
     """updateTableBasic
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableBasicModel,
 ) -> Response[MonoObject]:
     """updateTableBasic
@@ -190,7 +190,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableBasicModel,
 ) -> Optional[MonoObject]:
     """updateTableBasic

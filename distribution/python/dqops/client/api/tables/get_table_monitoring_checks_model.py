@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.get_table_monitoring_checks_model_time_scale import (
     GetTableMonitoringChecksModelTimeScale,
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     time_scale: GetTableMonitoringChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model".format(
         client.base_url,
@@ -71,7 +71,7 @@ def sync_detailed(
     table_name: str,
     time_scale: GetTableMonitoringChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getTableMonitoringChecksModel
 
@@ -114,7 +114,7 @@ def sync(
     table_name: str,
     time_scale: GetTableMonitoringChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getTableMonitoringChecksModel
 
@@ -150,7 +150,7 @@ async def asyncio_detailed(
     table_name: str,
     time_scale: GetTableMonitoringChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
     """getTableMonitoringChecksModel
 
@@ -191,7 +191,7 @@ async def asyncio(
     table_name: str,
     time_scale: GetTableMonitoringChecksModelTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
     """getTableMonitoringChecksModel
 

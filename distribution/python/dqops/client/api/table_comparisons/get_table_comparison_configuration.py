@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.table_comparison_configuration_model import (
     TableComparisonConfigurationModel,
 )
@@ -17,7 +17,7 @@ def _get_kwargs(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}".format(
         client.base_url,
@@ -70,7 +70,7 @@ def sync_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonConfigurationModel]:
     """getTableComparisonConfiguration
 
@@ -112,7 +112,7 @@ def sync(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonConfigurationModel]:
     """getTableComparisonConfiguration
 
@@ -147,7 +147,7 @@ async def asyncio_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonConfigurationModel]:
     """getTableComparisonConfiguration
 
@@ -187,7 +187,7 @@ async def asyncio(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonConfigurationModel]:
     """getTableComparisonConfiguration
 

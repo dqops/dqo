@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_results_overview_data_model import CheckResultsOverviewDataModel
 from ...types import Response
 
@@ -15,7 +15,7 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview".format(
         client.base_url,
@@ -75,7 +75,7 @@ def sync_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -118,7 +118,7 @@ def sync(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -154,7 +154,7 @@ async def asyncio_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -195,7 +195,7 @@ async def asyncio(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 

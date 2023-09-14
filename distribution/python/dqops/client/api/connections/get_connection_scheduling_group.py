@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.get_connection_scheduling_group_scheduling_group import (
     GetConnectionSchedulingGroupSchedulingGroup,
 )
@@ -16,7 +16,7 @@ def _get_kwargs(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schedules/{schedulingGroup}".format(
         client.base_url,
@@ -65,7 +65,7 @@ def sync_detailed(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
     """getConnectionSchedulingGroup
 
@@ -101,7 +101,7 @@ def sync(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
     """getConnectionSchedulingGroup
 
@@ -130,7 +130,7 @@ async def asyncio_detailed(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
     """getConnectionSchedulingGroup
 
@@ -164,7 +164,7 @@ async def asyncio(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
     """getConnectionSchedulingGroup
 

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
 from ...types import Response
 
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}".format(
         client.base_url, connectionName=connection_name
@@ -58,7 +58,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoQueueJobId]:
     """deleteConnection
 
@@ -91,7 +91,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoQueueJobId]:
     """deleteConnection
 
@@ -117,7 +117,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoQueueJobId]:
     """deleteConnection
 
@@ -148,7 +148,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoQueueJobId]:
     """deleteConnection
 

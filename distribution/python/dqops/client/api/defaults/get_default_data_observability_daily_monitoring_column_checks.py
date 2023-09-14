@@ -4,16 +4,20 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}api/defaults/defaultchecks/profiling/column".format(client.base_url)
+    url = (
+        "{}api/defaults/defaultchecks/dataobservability/monitoring/daily/column".format(
+            client.base_url
+        )
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -54,12 +58,12 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
-    """getDefaultProfilingColumnChecks
+    """getDefaultDataObservabilityDailyMonitoringColumnChecks
 
-     Returns UI model to show and edit the default configuration of the profiling checks that are
-    configured for all imported column on a column level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported columns on a column level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -83,12 +87,12 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
-    """getDefaultProfilingColumnChecks
+    """getDefaultDataObservabilityDailyMonitoringColumnChecks
 
-     Returns UI model to show and edit the default configuration of the profiling checks that are
-    configured for all imported column on a column level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported columns on a column level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -105,12 +109,12 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerModel]:
-    """getDefaultProfilingColumnChecks
+    """getDefaultDataObservabilityDailyMonitoringColumnChecks
 
-     Returns UI model to show and edit the default configuration of the profiling checks that are
-    configured for all imported column on a column level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported columns on a column level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -132,12 +136,12 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerModel]:
-    """getDefaultProfilingColumnChecks
+    """getDefaultDataObservabilityDailyMonitoringColumnChecks
 
-     Returns UI model to show and edit the default configuration of the profiling checks that are
-    configured for all imported column on a column level.
+     Returns UI model to show and edit the default configuration of the daily monitoring (Data
+    Observability and monitoring) checks that are configured for all imported columns on a column level.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

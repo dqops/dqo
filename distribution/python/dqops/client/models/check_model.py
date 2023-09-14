@@ -74,6 +74,9 @@ class CheckModel:
             configuration errors that must be fixed before the data quality check could be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
             other time scales.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
+        can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
+        can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -101,6 +104,9 @@ class CheckModel:
         Unset, List[CheckModelConfigurationRequirementsErrorsItem]
     ] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -185,6 +191,10 @@ class CheckModel:
 
                 similar_checks.append(similar_checks_item)
 
+        can_edit = self.can_edit
+        can_run_checks = self.can_run_checks
+        can_delete_data = self.can_delete_data
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -236,6 +246,12 @@ class CheckModel:
             ] = configuration_requirements_errors
         if similar_checks is not UNSET:
             field_dict["similar_checks"] = similar_checks
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_checks is not UNSET:
+            field_dict["can_run_checks"] = can_run_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -380,6 +396,12 @@ class CheckModel:
 
             similar_checks.append(similar_checks_item)
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_checks = d.pop("can_run_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         check_model = cls(
             check_name=check_name,
             help_text=help_text,
@@ -404,6 +426,9 @@ class CheckModel:
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,
+            can_edit=can_edit,
+            can_run_checks=can_run_checks,
+            can_delete_data=can_delete_data,
         )
 
         check_model.additional_properties = d

@@ -45,6 +45,11 @@ class TableComparisonConfigurationModel:
                 table and the reference table (the source of truth). The columns are used in the next of the table comparison to
                 join the results of data groups (row counts, sums of columns) between the compared table and the reference table
                 to compare the differences.
+            can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete the table
+                comparison.
+            can_run_compare_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run comparison
+                checks.
+            can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     table_comparison_configuration_name: Union[Unset, str] = UNSET
@@ -57,6 +62,9 @@ class TableComparisonConfigurationModel:
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnPairModel"]
     ] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_compare_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -87,6 +95,10 @@ class TableComparisonConfigurationModel:
 
                 grouping_columns.append(grouping_columns_item)
 
+        can_edit = self.can_edit
+        can_run_compare_checks = self.can_run_compare_checks
+        can_delete_data = self.can_delete_data
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -108,6 +120,12 @@ class TableComparisonConfigurationModel:
             field_dict["time_scale"] = time_scale
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_compare_checks is not UNSET:
+            field_dict["can_run_compare_checks"] = can_run_compare_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -164,6 +182,12 @@ class TableComparisonConfigurationModel:
 
             grouping_columns.append(grouping_columns_item)
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_compare_checks = d.pop("can_run_compare_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         table_comparison_configuration_model = cls(
             table_comparison_configuration_name=table_comparison_configuration_name,
             compared_connection=compared_connection,
@@ -173,6 +197,9 @@ class TableComparisonConfigurationModel:
             check_type=check_type,
             time_scale=time_scale,
             grouping_columns=grouping_columns,
+            can_edit=can_edit,
+            can_run_compare_checks=can_run_compare_checks,
+            can_delete_data=can_delete_data,
         )
 
         table_comparison_configuration_model.additional_properties = d

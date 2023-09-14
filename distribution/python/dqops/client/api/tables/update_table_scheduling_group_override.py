@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
 from ...models.update_table_scheduling_group_override_scheduling_group import (
@@ -19,7 +19,7 @@ def _get_kwargs(
     table_name: str,
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}".format(
@@ -76,7 +76,7 @@ def sync_detailed(
     table_name: str,
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -122,7 +122,7 @@ def sync(
     table_name: str,
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -161,7 +161,7 @@ async def asyncio_detailed(
     table_name: str,
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -205,7 +205,7 @@ async def asyncio(
     table_name: str,
     scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride

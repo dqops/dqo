@@ -4,14 +4,14 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.rule_basic_folder_model import RuleBasicFolderModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/definitions/rules".format(client.base_url)
 
@@ -54,7 +54,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[RuleBasicFolderModel]:
     """getRuleFolderTree
 
@@ -83,7 +83,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[RuleBasicFolderModel]:
     """getRuleFolderTree
 
@@ -105,7 +105,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[RuleBasicFolderModel]:
     """getRuleFolderTree
 
@@ -132,7 +132,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[RuleBasicFolderModel]:
     """getRuleFolderTree
 

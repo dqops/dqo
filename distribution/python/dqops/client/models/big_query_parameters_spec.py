@@ -5,6 +5,9 @@ import attr
 from ..models.big_query_parameters_spec_authentication_mode import (
     BigQueryParametersSpecAuthenticationMode,
 )
+from ..models.big_query_parameters_spec_jobs_create_project import (
+    BigQueryParametersSpecJobsCreateProject,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="BigQueryParametersSpec")
@@ -16,6 +19,9 @@ class BigQueryParametersSpec:
     Attributes:
         source_project_id (Union[Unset, str]): Source GCP project ID. This is the project that has datasets that will be
             imported.
+        jobs_create_project (Union[Unset, BigQueryParametersSpecJobsCreateProject]): Configures the way how to select
+            the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified
+            by the credentials must have bigquery.jobs.create permission in that project.
         billing_project_id (Union[Unset, str]): Billing GCP project ID. This is the project used as the default GCP
             project. The calling user must have a bigquery.jobs.create permission in this project.
         authentication_mode (Union[Unset, BigQueryParametersSpecAuthenticationMode]): Authentication mode to the Google
@@ -28,6 +34,7 @@ class BigQueryParametersSpec:
     """
 
     source_project_id: Union[Unset, str] = UNSET
+    jobs_create_project: Union[Unset, BigQueryParametersSpecJobsCreateProject] = UNSET
     billing_project_id: Union[Unset, str] = UNSET
     authentication_mode: Union[Unset, BigQueryParametersSpecAuthenticationMode] = UNSET
     json_key_content: Union[Unset, str] = UNSET
@@ -37,6 +44,10 @@ class BigQueryParametersSpec:
 
     def to_dict(self) -> Dict[str, Any]:
         source_project_id = self.source_project_id
+        jobs_create_project: Union[Unset, str] = UNSET
+        if not isinstance(self.jobs_create_project, Unset):
+            jobs_create_project = self.jobs_create_project.value
+
         billing_project_id = self.billing_project_id
         authentication_mode: Union[Unset, str] = UNSET
         if not isinstance(self.authentication_mode, Unset):
@@ -51,6 +62,8 @@ class BigQueryParametersSpec:
         field_dict.update({})
         if source_project_id is not UNSET:
             field_dict["source_project_id"] = source_project_id
+        if jobs_create_project is not UNSET:
+            field_dict["jobs_create_project"] = jobs_create_project
         if billing_project_id is not UNSET:
             field_dict["billing_project_id"] = billing_project_id
         if authentication_mode is not UNSET:
@@ -68,6 +81,15 @@ class BigQueryParametersSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         source_project_id = d.pop("source_project_id", UNSET)
+
+        _jobs_create_project = d.pop("jobs_create_project", UNSET)
+        jobs_create_project: Union[Unset, BigQueryParametersSpecJobsCreateProject]
+        if isinstance(_jobs_create_project, Unset):
+            jobs_create_project = UNSET
+        else:
+            jobs_create_project = BigQueryParametersSpecJobsCreateProject(
+                _jobs_create_project
+            )
 
         billing_project_id = d.pop("billing_project_id", UNSET)
 
@@ -88,6 +110,7 @@ class BigQueryParametersSpec:
 
         big_query_parameters_spec = cls(
             source_project_id=source_project_id,
+            jobs_create_project=jobs_create_project,
             billing_project_id=billing_project_id,
             authentication_mode=authentication_mode,
             json_key_content=json_key_content,

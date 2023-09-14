@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_results_overview_data_model import CheckResultsOverviewDataModel
 from ...models.get_table_monitoring_checks_overview_time_scale import (
     GetTableMonitoringChecksOverviewTimeScale,
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     time_scale: GetTableMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview".format(
         client.base_url,
@@ -78,7 +78,7 @@ def sync_detailed(
     table_name: str,
     time_scale: GetTableMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getTableMonitoringChecksOverview
 
@@ -121,7 +121,7 @@ def sync(
     table_name: str,
     time_scale: GetTableMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getTableMonitoringChecksOverview
 
@@ -157,7 +157,7 @@ async def asyncio_detailed(
     table_name: str,
     time_scale: GetTableMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getTableMonitoringChecksOverview
 
@@ -198,7 +198,7 @@ async def asyncio(
     table_name: str,
     time_scale: GetTableMonitoringChecksOverviewTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getTableMonitoringChecksOverview
 

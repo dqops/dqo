@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.errors_list_model import ErrorsListModel
 from ...models.get_column_partitioned_errors_time_scale import (
     GetColumnPartitionedErrorsTimeScale,
@@ -20,7 +20,7 @@ def _get_kwargs(
     column_name: str,
     time_scale: GetColumnPartitionedErrorsTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -113,7 +113,7 @@ def sync_detailed(
     column_name: str,
     time_scale: GetColumnPartitionedErrorsTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -180,7 +180,7 @@ def sync(
     column_name: str,
     time_scale: GetColumnPartitionedErrorsTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -240,7 +240,7 @@ async def asyncio_detailed(
     column_name: str,
     time_scale: GetColumnPartitionedErrorsTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -305,7 +305,7 @@ async def asyncio(
     column_name: str,
     time_scale: GetColumnPartitionedErrorsTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,

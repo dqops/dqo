@@ -1,7 +1,8 @@
 from enum import Enum
 
 
-class ConnectionRemoteModelConnectionStatus(str, Enum):
+class ConnectionTestModelConnectionTestResult(str, Enum):
+    CONNECTION_ALREADY_EXISTS = "CONNECTION_ALREADY_EXISTS"
     FAILURE = "FAILURE"
     SUCCESS = "SUCCESS"
 

@@ -9,14 +9,14 @@ if TYPE_CHECKING:
         ColumnPiiContainsEmailPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
+    from ..models.max_percent_rule_0_parameters_spec import (
+        MaxPercentRule0ParametersSpec,
     )
-    from ..models.min_percent_rule_99_parameters_spec import (
-        MinPercentRule99ParametersSpec,
+    from ..models.max_percent_rule_1_parameters_spec import (
+        MaxPercentRule1ParametersSpec,
     )
-    from ..models.min_percent_rule_100_parameters_spec import (
-        MinPercentRule100ParametersSpec,
+    from ..models.max_percent_rule_5_parameters_spec import (
+        MaxPercentRule5ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -50,9 +50,9 @@ class ColumnPiiContainsEmailPercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnPiiContainsEmailPercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100ParametersSpec]):
-        error (Union[Unset, MinPercentRule99ParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0ParametersSpec]):
+        error (Union[Unset, MaxPercentRule1ParametersSpec]):
+        fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -66,9 +66,9 @@ class ColumnPiiContainsEmailPercentCheckSpec:
     parameters: Union[
         Unset, "ColumnPiiContainsEmailPercentSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MinPercentRule100ParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule99ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0ParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule1ParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -142,14 +142,14 @@ class ColumnPiiContainsEmailPercentCheckSpec:
             ColumnPiiContainsEmailPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
+        from ..models.max_percent_rule_0_parameters_spec import (
+            MaxPercentRule0ParametersSpec,
         )
-        from ..models.min_percent_rule_99_parameters_spec import (
-            MinPercentRule99ParametersSpec,
+        from ..models.max_percent_rule_1_parameters_spec import (
+            MaxPercentRule1ParametersSpec,
         )
-        from ..models.min_percent_rule_100_parameters_spec import (
-            MinPercentRule100ParametersSpec,
+        from ..models.max_percent_rule_5_parameters_spec import (
+            MaxPercentRule5ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -190,25 +190,25 @@ class ColumnPiiContainsEmailPercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100ParametersSpec]
+        warning: Union[Unset, MaxPercentRule0ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100ParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule99ParametersSpec]
+        error: Union[Unset, MaxPercentRule1ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule99ParametersSpec.from_dict(_error)
+            error = MaxPercentRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, MaxPercentRule5ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = MaxPercentRule5ParametersSpec.from_dict(_fatal)
 
         column_pii_contains_email_percent_check_spec = cls(
             schedule_override=schedule_override,

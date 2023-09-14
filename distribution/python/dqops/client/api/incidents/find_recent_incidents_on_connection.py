@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.find_recent_incidents_on_connection_direction import (
     FindRecentIncidentsOnConnectionDirection,
 )
@@ -18,7 +18,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -111,7 +111,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -174,7 +174,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -230,7 +230,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -291,7 +291,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,

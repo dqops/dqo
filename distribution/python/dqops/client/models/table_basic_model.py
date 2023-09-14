@@ -62,6 +62,11 @@ class TableBasicModel:
             identifies which checks on which tables and columns should be executed.
         collect_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
         data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
+        can_collect_statistics (Union[Unset, bool]): Boolean flag that decides if the current user can collect
+            statistics.
+        can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
+        can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -88,6 +93,10 @@ class TableBasicModel:
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
+    can_collect_statistics: Union[Unset, bool] = UNSET
+    can_run_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -147,6 +156,11 @@ class TableBasicModel:
         data_clean_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.data_clean_job_template, Unset):
             data_clean_job_template = self.data_clean_job_template.to_dict()
+
+        can_edit = self.can_edit
+        can_collect_statistics = self.can_collect_statistics
+        can_run_checks = self.can_run_checks
+        can_delete_data = self.can_delete_data
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -209,6 +223,14 @@ class TableBasicModel:
             ] = collect_statistics_job_template
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_collect_statistics is not UNSET:
+            field_dict["can_collect_statistics"] = can_collect_statistics
+        if can_run_checks is not UNSET:
+            field_dict["can_run_checks"] = can_run_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -348,6 +370,14 @@ class TableBasicModel:
                 _data_clean_job_template
             )
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_collect_statistics = d.pop("can_collect_statistics", UNSET)
+
+        can_run_checks = d.pop("can_run_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         table_basic_model = cls(
             connection_name=connection_name,
             table_hash=table_hash,
@@ -369,6 +399,10 @@ class TableBasicModel:
             run_partition_checks_job_template=run_partition_checks_job_template,
             collect_statistics_job_template=collect_statistics_job_template,
             data_clean_job_template=data_clean_job_template,
+            can_edit=can_edit,
+            can_collect_statistics=can_collect_statistics,
+            can_run_checks=can_run_checks,
+            can_delete_data=can_delete_data,
         )
 
         table_basic_model.additional_properties = d

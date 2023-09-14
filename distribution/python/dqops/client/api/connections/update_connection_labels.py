@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List[str],
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/labels".format(
@@ -62,7 +62,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List[str],
 ) -> Response[MonoObject]:
     """updateConnectionLabels
@@ -98,7 +98,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List[str],
 ) -> Optional[MonoObject]:
     """updateConnectionLabels
@@ -127,7 +127,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List[str],
 ) -> Response[MonoObject]:
     """updateConnectionLabels
@@ -161,7 +161,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: List[str],
 ) -> Optional[MonoObject]:
     """updateConnectionLabels

@@ -19,6 +19,7 @@ class CheckSpecModel:
             of the check
         custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
         built_in (Union[Unset, bool]): This check is provided with DQO as a built-in check.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -27,6 +28,7 @@ class CheckSpecModel:
     help_text: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -36,6 +38,7 @@ class CheckSpecModel:
         help_text = self.help_text
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,6 +55,8 @@ class CheckSpecModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["built_in"] = built_in
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -70,6 +75,8 @@ class CheckSpecModel:
 
         built_in = d.pop("built_in", UNSET)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         check_spec_model = cls(
             check_name=check_name,
             sensor_name=sensor_name,
@@ -77,6 +84,7 @@ class CheckSpecModel:
             help_text=help_text,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
         )
 
         check_spec_model.additional_properties = d

@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_result_entry_model import CheckResultEntryModel
 from ...models.get_incident_issues_direction import GetIncidentIssuesDirection
 from ...models.get_incident_issues_order import GetIncidentIssuesOrder
@@ -18,7 +18,7 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -119,7 +119,7 @@ def sync_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -188,7 +188,7 @@ def sync(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -250,7 +250,7 @@ async def asyncio_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -317,7 +317,7 @@ async def asyncio(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,

@@ -4,14 +4,14 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_spec_basic_model import CheckSpecBasicModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/checks".format(client.base_url)
 
@@ -59,7 +59,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
@@ -88,7 +88,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
@@ -110,7 +110,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
@@ -137,7 +137,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["CheckSpecBasicModel"]]:
     """getAllChecks
 

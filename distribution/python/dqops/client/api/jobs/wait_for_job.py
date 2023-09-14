@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
 from ...types import UNSET, Response, Unset
 
@@ -12,7 +12,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/jobs/{jobId}/wait".format(client.base_url, jobId=job_id)
@@ -63,7 +63,7 @@ def _build_response(
 def sync_detailed(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[DqoJobHistoryEntryModel]:
     """waitForJob
@@ -100,7 +100,7 @@ def sync_detailed(
 def sync(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[DqoJobHistoryEntryModel]:
     """waitForJob
@@ -130,7 +130,7 @@ def sync(
 async def asyncio_detailed(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[DqoJobHistoryEntryModel]:
     """waitForJob
@@ -165,7 +165,7 @@ async def asyncio_detailed(
 async def asyncio(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[DqoJobHistoryEntryModel]:
     """waitForJob

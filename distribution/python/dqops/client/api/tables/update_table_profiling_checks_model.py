@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -15,7 +15,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model".format(
@@ -70,7 +70,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateTableProfilingChecksModel
@@ -113,7 +113,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateTableProfilingChecksModel
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Response[MonoObject]:
     """updateTableProfilingChecksModel
@@ -190,7 +190,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: CheckContainerModel,
 ) -> Optional[MonoObject]:
     """updateTableProfilingChecksModel

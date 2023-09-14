@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.get_table_comparison_configurations_check_time_scale import (
     GetTableComparisonConfigurationsCheckTimeScale,
 )
@@ -22,7 +22,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
     check_time_scale: Union[
         Unset, None, GetTableComparisonConfigurationsCheckTimeScale
@@ -100,7 +100,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
     check_time_scale: Union[
         Unset, None, GetTableComparisonConfigurationsCheckTimeScale
@@ -147,7 +147,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
     check_time_scale: Union[
         Unset, None, GetTableComparisonConfigurationsCheckTimeScale
@@ -187,7 +187,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
     check_time_scale: Union[
         Unset, None, GetTableComparisonConfigurationsCheckTimeScale
@@ -232,7 +232,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
     check_time_scale: Union[
         Unset, None, GetTableComparisonConfigurationsCheckTimeScale

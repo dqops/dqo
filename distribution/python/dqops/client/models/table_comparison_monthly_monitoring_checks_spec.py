@@ -5,6 +5,9 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.table_comparison_column_count_match_check_spec import (
+        TableComparisonColumnCountMatchCheckSpec,
+    )
     from ..models.table_comparison_monthly_monitoring_checks_spec_custom_checks import (
         TableComparisonMonthlyMonitoringChecksSpecCustomChecks,
     )
@@ -24,6 +27,7 @@ class TableComparisonMonthlyMonitoringChecksSpec:
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
+        monthly_column_count_match (Union[Unset, TableComparisonColumnCountMatchCheckSpec]):
     """
 
     custom_checks: Union[
@@ -31,6 +35,9 @@ class TableComparisonMonthlyMonitoringChecksSpec:
     ] = UNSET
     monthly_row_count_match: Union[
         Unset, "TableComparisonRowCountMatchCheckSpec"
+    ] = UNSET
+    monthly_column_count_match: Union[
+        Unset, "TableComparisonColumnCountMatchCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -43,6 +50,10 @@ class TableComparisonMonthlyMonitoringChecksSpec:
         if not isinstance(self.monthly_row_count_match, Unset):
             monthly_row_count_match = self.monthly_row_count_match.to_dict()
 
+        monthly_column_count_match: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_column_count_match, Unset):
+            monthly_column_count_match = self.monthly_column_count_match.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -50,11 +61,16 @@ class TableComparisonMonthlyMonitoringChecksSpec:
             field_dict["custom_checks"] = custom_checks
         if monthly_row_count_match is not UNSET:
             field_dict["monthly_row_count_match"] = monthly_row_count_match
+        if monthly_column_count_match is not UNSET:
+            field_dict["monthly_column_count_match"] = monthly_column_count_match
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.table_comparison_column_count_match_check_spec import (
+            TableComparisonColumnCountMatchCheckSpec,
+        )
         from ..models.table_comparison_monthly_monitoring_checks_spec_custom_checks import (
             TableComparisonMonthlyMonitoringChecksSpecCustomChecks,
         )
@@ -85,9 +101,23 @@ class TableComparisonMonthlyMonitoringChecksSpec:
                 _monthly_row_count_match
             )
 
+        _monthly_column_count_match = d.pop("monthly_column_count_match", UNSET)
+        monthly_column_count_match: Union[
+            Unset, TableComparisonColumnCountMatchCheckSpec
+        ]
+        if isinstance(_monthly_column_count_match, Unset):
+            monthly_column_count_match = UNSET
+        else:
+            monthly_column_count_match = (
+                TableComparisonColumnCountMatchCheckSpec.from_dict(
+                    _monthly_column_count_match
+                )
+            )
+
         table_comparison_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_row_count_match=monthly_row_count_match,
+            monthly_column_count_match=monthly_column_count_match,
         )
 
         table_comparison_monthly_monitoring_checks_spec.additional_properties = d
