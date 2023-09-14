@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import tech.tablesaw.api.Row;
 
+/**
+ * Parameter object used for incident notification message.
+ */
 @Data
 @Builder
 public class IncidentNotificationMessageParameters {
