@@ -214,6 +214,12 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 }
             }
 
+            if (this.dqoCloudApiKeyProvider.getApiKey() == null) {
+                log.warn("DQO Cloud pairing API Key missing, cannot use federated authentication");
+                exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
+                return exchange.getResponse().writeAndFlushWith(Mono.empty());
+            }
+
             try {
                 String requestUrl = exchange.getRequest().getURI().toString();
                 String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLoginUrl(requestUrl);

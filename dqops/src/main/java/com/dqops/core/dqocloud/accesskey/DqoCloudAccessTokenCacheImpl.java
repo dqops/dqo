@@ -60,8 +60,12 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
             if (credentialsSupplier == null) {
                 credentialsSupplier = Suppliers.memoize(() -> {
                     TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
-                    AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
-                    return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    if (tenantAccessTokenModel != null) {
+                        AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                        return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    }
+
+                    return null;
                 });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
