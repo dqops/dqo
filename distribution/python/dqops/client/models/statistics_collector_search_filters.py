@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..models.statistics_collector_search_filters_target import (
-    StatisticsCollectorSearchFiltersTarget,
-)
+from ..models.statistics_collector_target import StatisticsCollectorTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -27,7 +25,7 @@ class StatisticsCollectorSearchFilters:
         collector_name (Union[Unset, str]):
         sensor_name (Union[Unset, str]):
         collector_category (Union[Unset, str]):
-        target (Union[Unset, StatisticsCollectorSearchFiltersTarget]):
+        target (Union[Unset, StatisticsCollectorTarget]):
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
@@ -40,7 +38,7 @@ class StatisticsCollectorSearchFilters:
     collector_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
-    target: Union[Unset, StatisticsCollectorSearchFiltersTarget] = UNSET
+    target: Union[Unset, StatisticsCollectorTarget] = UNSET
     collectors_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -133,11 +131,11 @@ class StatisticsCollectorSearchFilters:
         collector_category = d.pop("collectorCategory", UNSET)
 
         _target = d.pop("target", UNSET)
-        target: Union[Unset, StatisticsCollectorSearchFiltersTarget]
+        target: Union[Unset, StatisticsCollectorTarget]
         if isinstance(_target, Unset):
             target = UNSET
         else:
-            target = StatisticsCollectorSearchFiltersTarget(_target)
+            target = StatisticsCollectorTarget(_target)
 
         collectors_hierarchy_ids_models = []
         _collectors_hierarchy_ids_models = d.pop("collectorsHierarchyIdsModels", UNSET)

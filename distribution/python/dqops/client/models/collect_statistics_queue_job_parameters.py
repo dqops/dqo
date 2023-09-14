@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.collect_statistics_queue_job_parameters_data_scope import (
-    CollectStatisticsQueueJobParametersDataScope,
-)
+from ..models.statistics_data_scope import StatisticsDataScope
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -24,8 +22,7 @@ class CollectStatisticsQueueJobParameters:
     """
     Attributes:
         statistics_collector_search_filters (Union[Unset, StatisticsCollectorSearchFilters]):
-        data_scope (Union[Unset, CollectStatisticsQueueJobParametersDataScope]): The target scope of collecting
-            statistics. Statistics could be collected on a whole table or for each data grouping separately.
+        data_scope (Union[Unset, StatisticsDataScope]):
         dummy_sensor_execution (Union[Unset, bool]): Boolean flag that enables a dummy statistics collection (sensors
             are executed, but the statistics results are not written to the parquet files).
         collect_statistics_result (Union[Unset, CollectStatisticsQueueJobResult]): Returns the result with the summary
@@ -35,7 +32,7 @@ class CollectStatisticsQueueJobParameters:
     statistics_collector_search_filters: Union[
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
-    data_scope: Union[Unset, CollectStatisticsQueueJobParametersDataScope] = UNSET
+    data_scope: Union[Unset, StatisticsDataScope] = UNSET
     dummy_sensor_execution: Union[Unset, bool] = UNSET
     collect_statistics_result: Union[Unset, "CollectStatisticsQueueJobResult"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
@@ -98,11 +95,11 @@ class CollectStatisticsQueueJobParameters:
             )
 
         _data_scope = d.pop("dataScope", UNSET)
-        data_scope: Union[Unset, CollectStatisticsQueueJobParametersDataScope]
+        data_scope: Union[Unset, StatisticsDataScope]
         if isinstance(_data_scope, Unset):
             data_scope = UNSET
         else:
-            data_scope = CollectStatisticsQueueJobParametersDataScope(_data_scope)
+            data_scope = StatisticsDataScope(_data_scope)
 
         dummy_sensor_execution = d.pop("dummySensorExecution", UNSET)
 

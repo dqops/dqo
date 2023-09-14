@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.connection_basic_model_provider_type import (
-    ConnectionBasicModelProviderType,
-)
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -36,8 +34,7 @@ class ConnectionBasicModel:
         connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
         parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
-        provider_type (Union[Unset, ConnectionBasicModelProviderType]): Database provider type (required). Accepts:
-            bigquery, snowflake.
+        provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
         postgresql (Union[Unset, PostgresqlParametersSpec]):
@@ -66,7 +63,7 @@ class ConnectionBasicModel:
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
     parallel_runs_limit: Union[Unset, int] = UNSET
-    provider_type: Union[Unset, ConnectionBasicModelProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
@@ -242,11 +239,11 @@ class ConnectionBasicModel:
         parallel_runs_limit = d.pop("parallel_runs_limit", UNSET)
 
         _provider_type = d.pop("provider_type", UNSET)
-        provider_type: Union[Unset, ConnectionBasicModelProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ConnectionBasicModelProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         _bigquery = d.pop("bigquery", UNSET)
         bigquery: Union[Unset, BigQueryParametersSpec]

@@ -2,12 +2,8 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.big_query_parameters_spec_authentication_mode import (
-    BigQueryParametersSpecAuthenticationMode,
-)
-from ..models.big_query_parameters_spec_jobs_create_project import (
-    BigQueryParametersSpecJobsCreateProject,
-)
+from ..models.big_query_authentication_mode import BigQueryAuthenticationMode
+from ..models.big_query_jobs_create_project import BigQueryJobsCreateProject
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="BigQueryParametersSpec")
@@ -19,13 +15,10 @@ class BigQueryParametersSpec:
     Attributes:
         source_project_id (Union[Unset, str]): Source GCP project ID. This is the project that has datasets that will be
             imported.
-        jobs_create_project (Union[Unset, BigQueryParametersSpecJobsCreateProject]): Configures the way how to select
-            the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified
-            by the credentials must have bigquery.jobs.create permission in that project.
+        jobs_create_project (Union[Unset, BigQueryJobsCreateProject]):
         billing_project_id (Union[Unset, str]): Billing GCP project ID. This is the project used as the default GCP
             project. The calling user must have a bigquery.jobs.create permission in this project.
-        authentication_mode (Union[Unset, BigQueryParametersSpecAuthenticationMode]): Authentication mode to the Google
-            Cloud.
+        authentication_mode (Union[Unset, BigQueryAuthenticationMode]):
         json_key_content (Union[Unset, str]): JSON key content. Use an environment variable that contains the content of
             the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the
             authentication-mode: json_key_content.
@@ -34,9 +27,9 @@ class BigQueryParametersSpec:
     """
 
     source_project_id: Union[Unset, str] = UNSET
-    jobs_create_project: Union[Unset, BigQueryParametersSpecJobsCreateProject] = UNSET
+    jobs_create_project: Union[Unset, BigQueryJobsCreateProject] = UNSET
     billing_project_id: Union[Unset, str] = UNSET
-    authentication_mode: Union[Unset, BigQueryParametersSpecAuthenticationMode] = UNSET
+    authentication_mode: Union[Unset, BigQueryAuthenticationMode] = UNSET
     json_key_content: Union[Unset, str] = UNSET
     json_key_path: Union[Unset, str] = UNSET
     quota_project_id: Union[Unset, str] = UNSET
@@ -83,24 +76,20 @@ class BigQueryParametersSpec:
         source_project_id = d.pop("source_project_id", UNSET)
 
         _jobs_create_project = d.pop("jobs_create_project", UNSET)
-        jobs_create_project: Union[Unset, BigQueryParametersSpecJobsCreateProject]
+        jobs_create_project: Union[Unset, BigQueryJobsCreateProject]
         if isinstance(_jobs_create_project, Unset):
             jobs_create_project = UNSET
         else:
-            jobs_create_project = BigQueryParametersSpecJobsCreateProject(
-                _jobs_create_project
-            )
+            jobs_create_project = BigQueryJobsCreateProject(_jobs_create_project)
 
         billing_project_id = d.pop("billing_project_id", UNSET)
 
         _authentication_mode = d.pop("authentication_mode", UNSET)
-        authentication_mode: Union[Unset, BigQueryParametersSpecAuthenticationMode]
+        authentication_mode: Union[Unset, BigQueryAuthenticationMode]
         if isinstance(_authentication_mode, Unset):
             authentication_mode = UNSET
         else:
-            authentication_mode = BigQueryParametersSpecAuthenticationMode(
-                _authentication_mode
-            )
+            authentication_mode = BigQueryAuthenticationMode(_authentication_mode)
 
         json_key_content = d.pop("json_key_content", UNSET)
 

@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.connection_test_model_connection_test_result import (
-    ConnectionTestModelConnectionTestResult,
-)
+from ..models.connection_test_status import ConnectionTestStatus
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ConnectionTestModel")
@@ -15,13 +13,11 @@ class ConnectionTestModel:
     """Connection test status result
 
     Attributes:
-        connection_test_result (Union[Unset, ConnectionTestModelConnectionTestResult]): Connection test result
+        connection_test_result (Union[Unset, ConnectionTestStatus]):
         error_message (Union[Unset, str]): Optional error message when the status is not "SUCCESS"
     """
 
-    connection_test_result: Union[
-        Unset, ConnectionTestModelConnectionTestResult
-    ] = UNSET
+    connection_test_result: Union[Unset, ConnectionTestStatus] = UNSET
     error_message: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -46,13 +42,11 @@ class ConnectionTestModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _connection_test_result = d.pop("connectionTestResult", UNSET)
-        connection_test_result: Union[Unset, ConnectionTestModelConnectionTestResult]
+        connection_test_result: Union[Unset, ConnectionTestStatus]
         if isinstance(_connection_test_result, Unset):
             connection_test_result = UNSET
         else:
-            connection_test_result = ConnectionTestModelConnectionTestResult(
-                _connection_test_result
-            )
+            connection_test_result = ConnectionTestStatus(_connection_test_result)
 
         error_message = d.pop("errorMessage", UNSET)
 

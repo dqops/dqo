@@ -5,9 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_table_scheduling_group_override_scheduling_group import (
-    GetTableSchedulingGroupOverrideSchedulingGroup,
-)
+from ...models.check_run_schedule_group import CheckRunScheduleGroup
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...types import Response
 
@@ -16,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Dict[str, Any]:
@@ -69,7 +67,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
@@ -81,7 +79,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (GetTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,7 +109,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
@@ -123,7 +121,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (GetTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,7 +144,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
@@ -158,7 +156,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (GetTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -186,7 +184,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: GetTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
@@ -198,7 +196,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (GetTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

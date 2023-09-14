@@ -5,16 +5,14 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_connection_scheduling_group_scheduling_group import (
-    GetConnectionSchedulingGroupSchedulingGroup,
-)
+from ...models.check_run_schedule_group import CheckRunScheduleGroup
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...types import Response
 
 
 def _get_kwargs(
     connection_name: str,
-    scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Dict[str, Any]:
@@ -63,7 +61,7 @@ def _build_response(
 
 def sync_detailed(
     connection_name: str,
-    scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
@@ -73,7 +71,7 @@ def sync_detailed(
 
     Args:
         connection_name (str):
-        scheduling_group (GetConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -99,7 +97,7 @@ def sync_detailed(
 
 def sync(
     connection_name: str,
-    scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
@@ -109,7 +107,7 @@ def sync(
 
     Args:
         connection_name (str):
-        scheduling_group (GetConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,7 +126,7 @@ def sync(
 
 async def asyncio_detailed(
     connection_name: str,
-    scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonitoringScheduleSpec]:
@@ -138,7 +136,7 @@ async def asyncio_detailed(
 
     Args:
         connection_name (str):
-        scheduling_group (GetConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -162,7 +160,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     connection_name: str,
-    scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonitoringScheduleSpec]:
@@ -172,7 +170,7 @@ async def asyncio(
 
     Args:
         connection_name (str):
-        scheduling_group (GetConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

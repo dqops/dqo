@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.run_checks_job_result_highest_severity import (
-    RunChecksJobResultHighestSeverity,
-)
+from ..models.rule_severity_level import RuleSeverityLevel
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="RunChecksJobResult")
@@ -16,8 +14,7 @@ class RunChecksJobResult:
     recently executed.
 
         Attributes:
-            highest_severity (Union[Unset, RunChecksJobResultHighestSeverity]): The highest check severity for the data
-                quality checks executed in this batch.
+            highest_severity (Union[Unset, RuleSeverityLevel]):
             executed_checks (Union[Unset, int]): The total count of all executed checks.
             valid_results (Union[Unset, int]): The total count of all checks that finished successfully (with no data
                 quality issues).
@@ -30,7 +27,7 @@ class RunChecksJobResult:
                 errors.
     """
 
-    highest_severity: Union[Unset, RunChecksJobResultHighestSeverity] = UNSET
+    highest_severity: Union[Unset, RuleSeverityLevel] = UNSET
     executed_checks: Union[Unset, int] = UNSET
     valid_results: Union[Unset, int] = UNSET
     warnings: Union[Unset, int] = UNSET
@@ -75,11 +72,11 @@ class RunChecksJobResult:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _highest_severity = d.pop("highestSeverity", UNSET)
-        highest_severity: Union[Unset, RunChecksJobResultHighestSeverity]
+        highest_severity: Union[Unset, RuleSeverityLevel]
         if isinstance(_highest_severity, Unset):
             highest_severity = UNSET
         else:
-            highest_severity = RunChecksJobResultHighestSeverity(_highest_severity)
+            highest_severity = RuleSeverityLevel(_highest_severity)
 
         executed_checks = d.pop("executedChecks", UNSET)
 

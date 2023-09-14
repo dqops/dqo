@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.table_basic_model_profiling_checks_result_truncation import (
-    TableBasicModelProfilingChecksResultTruncation,
-)
+from ..models.profiling_time_period import ProfilingTimePeriod
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -39,10 +37,7 @@ class TableBasicModel:
             grouping of more and less important tables during a data quality improvement project, when the data quality
             issues on higher priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
-        profiling_checks_result_truncation (Union[Unset, TableBasicModelProfilingChecksResultTruncation]): Defines how
-            many profiling checks results are stored for the table monthly. By default, DQO will use the 'one_per_month'
-            configuration and store only the most recent profiling checks result executed during the month. By changing this
-            value, it is possible to store one value per day or even store all profiling checks results.
+        profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriod]):
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
             configured.
@@ -77,9 +72,7 @@ class TableBasicModel:
     filter_: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
-    profiling_checks_result_truncation: Union[
-        Unset, TableBasicModelProfilingChecksResultTruncation
-    ] = UNSET
+    profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriod] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
@@ -276,16 +269,12 @@ class TableBasicModel:
         _profiling_checks_result_truncation = d.pop(
             "profiling_checks_result_truncation", UNSET
         )
-        profiling_checks_result_truncation: Union[
-            Unset, TableBasicModelProfilingChecksResultTruncation
-        ]
+        profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriod]
         if isinstance(_profiling_checks_result_truncation, Unset):
             profiling_checks_result_truncation = UNSET
         else:
-            profiling_checks_result_truncation = (
-                TableBasicModelProfilingChecksResultTruncation(
-                    _profiling_checks_result_truncation
-                )
+            profiling_checks_result_truncation = ProfilingTimePeriod(
+                _profiling_checks_result_truncation
             )
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)

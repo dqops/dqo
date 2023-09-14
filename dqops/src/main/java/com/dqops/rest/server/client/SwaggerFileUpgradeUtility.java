@@ -27,16 +27,18 @@ import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.tags.Tag;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
+import org.apache.commons.text.CaseUtils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Helper class that upgrades the Swagger 2.x file generated from DQO REST Api model to Swagger 3.
@@ -129,26 +131,9 @@ public class SwaggerFileUpgradeUtility {
         }
 
         public OpenAPIBuilder mutateUseReferentiableEnums() {
-//            List<Class<? extends Enum>> projectEnums = TargetClassSearchUtility.findClasses(
-//                    "com.dqops", Path.of("dqops"), Enum.class);
-//            Map<String, Set<String>> projectEnumInfosStream = projectEnums.stream()
-//                    .distinct()
-//                    .map(e -> reflectionService.getEnumValuesMap(e).keySet());
-
-            // Potrzebujemy wyciągnąć nazwę, dlatego wcześniej musimy zebrać wszystkie enumy obecne w programie i stworzyc mape:
-            //  id -> nazwa. W przypadku klas javowych, id wyliczane powinno być z nazw wartości enuma pochodzących z anotacji do swaggera.
-            //
-            // Budujemy mapę id -> referencja, włącznie z setem obiektów do których dajemy referencję.
-            // Id to hashCode HashSetu zawierającego akceptowane wartości enuma.
-            //
-            // Następnie wystarczy przelecieć przez metody, policzyć id'ki i podmienić schemy.
-
-            /////////////////////////////////////////////////////////////////////////////
-
-            // Mapa id -> referencja ma sens nadal, ale musimy od razu chodzić po OpenAPI. Jak znajdziemy enuma to od razu podmieniamy.
-
             Map<Class<? extends Enum<?>>, String> enumComponentRefMapping = new HashMap<>();
             useReferentiableEnumsForControllers(enumComponentRefMapping);
+            useReferentiableEnumsForModels(enumComponentRefMapping);
             return this;
         }
 
@@ -186,7 +171,10 @@ public class SwaggerFileUpgradeUtility {
                                     .filter(p -> apiEnumParameterName.equals(p.getName()))
                                     .findFirst().get();
 
-                            useReferentiableEnumSingle(enumRefMapping, apiEnumParameter, parameter);
+                            String enumRef = useReferentiableEnumSingle(enumRefMapping, parameter.getParameterizedType());
+                            apiEnumParameter.schema(new Schema() {{
+                                set$ref(enumRef);
+                            }});
                         }
                     }
                 }
@@ -195,26 +183,77 @@ public class SwaggerFileUpgradeUtility {
             }
         }
 
-        private void useReferentiableEnumSingle(Map<Class<? extends Enum<?>>, String> enumRefMapping,
-                                                Parameter apiEnumParameter,
-                                                java.lang.reflect.Parameter reflectEnumParameter) {
-            Class<? extends Enum<?>> reflectClass = (Class<? extends Enum<?>>) reflectEnumParameter.getType();
-            if (!enumRefMapping.containsKey(reflectClass)) {
-                Schema<?> enumClassAsSchema = getEnumSchema(reflectClass);
-                String enumSchemaKey = reflectClass.getSimpleName();
-                openApi.getComponents().addSchemas(enumSchemaKey, enumClassAsSchema);
-                enumRefMapping.put(reflectClass, "#/components/schemas/" + enumSchemaKey);
+        private void useReferentiableEnumsForModels(Map<Class<? extends Enum<?>>, String> enumRefMapping) {
+            Map<String, Class<?>> projectModels = new HashMap<>();
+            for (Class<?> clazz : TargetClassSearchUtility.findClasses("com.dqops", Path.of("dqops"), Object.class)) {
+                projectModels.put(clazz.getSimpleName(), clazz);
             }
 
-            String enumRef = enumRefMapping.get(reflectEnumParameter.getType());
-            apiEnumParameter.schema(new Schema<>(){{
-                $ref(enumRef);
-            }});
+            List<Map.Entry<String, Schema>> apiModels = openApi.getComponents().getSchemas().entrySet().stream()
+                    .filter(modelEntry -> "object".equals(modelEntry.getValue().getType()))
+                    .collect(Collectors.toList());
+
+            for (Map.Entry<String, Schema> apiModel : apiModels) {
+                Map<String, Schema> apiProperties = apiModel.getValue().getProperties();
+                if (apiProperties != null) {
+                    List<Map.Entry<String, Schema>> apiEnumParameters = apiProperties.entrySet().stream()
+                            .filter(propEntry -> propEntry.getValue().getEnum() != null)
+                            .collect(Collectors.toList());
+
+                    if (!apiEnumParameters.isEmpty()) {
+                        String modelName = apiModel.getKey();
+
+                        Class<?> model = projectModels.get(modelName);
+
+                        for (Map.Entry<String, Schema> apiEnumParameter : apiEnumParameters) {
+                            String apiEnumParameterName = apiEnumParameter.getKey();
+                            String parameterName = apiEnumParameterName;
+                            if (parameterName.contains("_")) {
+                                parameterName = CaseUtils.toCamelCase(parameterName, false, '_');
+                            }
+
+                            Field parameter;
+                            try {
+                                parameter = model.getDeclaredField(parameterName);
+                            } catch (NoSuchFieldException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            String enumRef = useReferentiableEnumSingle(enumRefMapping, parameter.getGenericType());
+                            apiProperties.put(apiEnumParameterName, new Schema<>() {{
+                                set$ref(enumRef);
+                            }});
+                        }
+                    }
+                }
+            }
+        }
+
+        private String useReferentiableEnumSingle(Map<Class<? extends Enum<?>>, String> enumRefMapping,
+                                                  Type reflectEnumType) {
+            Class<?> reflectClass;
+            if (reflectEnumType instanceof ParameterizedType) {
+                reflectClass = (Class<?>) ((ParameterizedType) reflectEnumType).getActualTypeArguments()[0];
+            } else {
+                reflectClass = (Class<?>) reflectEnumType;
+            }
+
+            Class<? extends Enum<?>> reflectEnumClass = (Class<? extends Enum<?>>) reflectClass;
+
+            if (!enumRefMapping.containsKey(reflectEnumClass)) {
+                Schema<?> enumClassAsSchema = getEnumSchema(reflectEnumClass);
+                String enumSchemaKey = reflectClass.getSimpleName();
+                openApi.getComponents().addSchemas(enumSchemaKey, enumClassAsSchema);
+                enumRefMapping.put(reflectEnumClass, "#/components/schemas/" + enumSchemaKey);
+            }
+
+            return enumRefMapping.get(reflectEnumClass);
         }
 
         private Schema<?> getEnumSchema(Class<? extends Enum<?>> reflectEnumClass) {
             Schema<String> enumSchema = new Schema<>();
-            enumSchema._enum(new ArrayList<>(reflectionService.getEnumValuesMap(reflectEnumClass).keySet()));
+            Set<String> enumkeyset = reflectionService.getEnumValuesMap(reflectEnumClass).keySet();
+            enumSchema._enum(new ArrayList<>(enumkeyset));
             enumSchema.type("string");
             return enumSchema;
         }

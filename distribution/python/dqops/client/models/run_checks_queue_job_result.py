@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.run_checks_queue_job_result_status import RunChecksQueueJobResultStatus
+from ..models.dqo_job_status import DqoJobStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -23,12 +23,12 @@ class RunChecksQueueJobResult:
             job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
             result (Union[Unset, RunChecksJobResult]): Returns the result (highest data quality check severity and the
                 finished checks count) for the checks that were recently executed.
-            status (Union[Unset, RunChecksQueueJobResultStatus]): Job status
+            status (Union[Unset, DqoJobStatus]):
     """
 
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
     result: Union[Unset, "RunChecksJobResult"] = UNSET
-    status: Union[Unset, RunChecksQueueJobResultStatus] = UNSET
+    status: Union[Unset, DqoJobStatus] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,11 +77,11 @@ class RunChecksQueueJobResult:
             result = RunChecksJobResult.from_dict(_result)
 
         _status = d.pop("status", UNSET)
-        status: Union[Unset, RunChecksQueueJobResultStatus]
+        status: Union[Unset, DqoJobStatus]
         if isinstance(_status, Unset):
             status = UNSET
         else:
-            status = RunChecksQueueJobResultStatus(_status)
+            status = DqoJobStatus(_status)
 
         run_checks_queue_job_result = cls(
             job_id=job_id,

@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.check_model_check_target import CheckModelCheckTarget
 from ..models.check_model_configuration_requirements_errors_item import (
     CheckModelConfigurationRequirementsErrorsItem,
 )
-from ..models.check_model_schedule_enabled_status import CheckModelScheduleEnabledStatus
+from ..models.check_target_model import CheckTargetModel
+from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -46,8 +46,7 @@ class CheckModel:
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
-        schedule_enabled_status (Union[Unset, CheckModelScheduleEnabledStatus]): State of the scheduling override for
-            this check.
+        schedule_enabled_status (Union[Unset, ScheduleEnabledStatusModel]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -69,7 +68,7 @@ class CheckModel:
         data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
         data_grouping_configuration (Union[Unset, str]): The name of a data grouping configuration defined at a table
             that should be used for this check.
-        check_target (Union[Unset, CheckModelCheckTarget]): Type of the check's target (column, table).
+        check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[CheckModelConfigurationRequirementsErrorsItem]]): List of
             configuration errors that must be fixed before the data quality check could be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
@@ -89,7 +88,7 @@ class CheckModel:
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
-    schedule_enabled_status: Union[Unset, CheckModelScheduleEnabledStatus] = UNSET
+    schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -99,7 +98,7 @@ class CheckModel:
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
-    check_target: Union[Unset, CheckModelCheckTarget] = UNSET
+    check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[
         Unset, List[CheckModelConfigurationRequirementsErrorsItem]
     ] = UNSET
@@ -320,11 +319,11 @@ class CheckModel:
             effective_schedule = EffectiveScheduleModel.from_dict(_effective_schedule)
 
         _schedule_enabled_status = d.pop("schedule_enabled_status", UNSET)
-        schedule_enabled_status: Union[Unset, CheckModelScheduleEnabledStatus]
+        schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel]
         if isinstance(_schedule_enabled_status, Unset):
             schedule_enabled_status = UNSET
         else:
-            schedule_enabled_status = CheckModelScheduleEnabledStatus(
+            schedule_enabled_status = ScheduleEnabledStatusModel(
                 _schedule_enabled_status
             )
 
@@ -366,11 +365,11 @@ class CheckModel:
         data_grouping_configuration = d.pop("data_grouping_configuration", UNSET)
 
         _check_target = d.pop("check_target", UNSET)
-        check_target: Union[Unset, CheckModelCheckTarget]
+        check_target: Union[Unset, CheckTargetModel]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = CheckModelCheckTarget(_check_target)
+            check_target = CheckTargetModel(_check_target)
 
         configuration_requirements_errors = []
         _configuration_requirements_errors = d.pop(

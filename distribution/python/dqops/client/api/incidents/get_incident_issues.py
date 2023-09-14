@@ -7,8 +7,8 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_result_entry_model import CheckResultEntryModel
-from ...models.get_incident_issues_direction import GetIncidentIssuesDirection
-from ...models.get_incident_issues_order import GetIncidentIssuesOrder
+from ...models.check_result_sort_order import CheckResultSortOrder
+from ...models.sort_direction import SortDirection
 from ...types import UNSET, Response, Unset
 
 
@@ -26,8 +26,8 @@ def _get_kwargs(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues".format(
         client.base_url,
@@ -127,8 +127,8 @@ def sync_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
@@ -146,8 +146,8 @@ def sync_detailed(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -196,8 +196,8 @@ def sync(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
@@ -215,8 +215,8 @@ def sync(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -258,8 +258,8 @@ async def asyncio_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
@@ -277,8 +277,8 @@ async def asyncio_detailed(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -325,8 +325,8 @@ async def asyncio(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
@@ -344,8 +344,8 @@ async def asyncio(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

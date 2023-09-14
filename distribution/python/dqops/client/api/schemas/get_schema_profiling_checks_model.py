@@ -6,9 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_configuration_model import CheckConfigurationModel
-from ...models.get_schema_profiling_checks_model_check_target import (
-    GetSchemaProfilingChecksModelCheckTarget,
-)
+from ...models.check_target import CheckTarget
 from ...types import UNSET, Response, Unset
 
 
@@ -20,7 +18,7 @@ def _get_kwargs(
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
-    check_target: Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
@@ -106,7 +104,7 @@ def sync_detailed(
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
-    check_target: Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
@@ -122,7 +120,7 @@ def sync_detailed(
         table_name_pattern (Union[Unset, None, str]):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
@@ -166,7 +164,7 @@ def sync(
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
-    check_target: Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
@@ -182,7 +180,7 @@ def sync(
         table_name_pattern (Union[Unset, None, str]):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
@@ -219,7 +217,7 @@ async def asyncio_detailed(
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
-    check_target: Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
@@ -235,7 +233,7 @@ async def asyncio_detailed(
         table_name_pattern (Union[Unset, None, str]):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
@@ -277,7 +275,7 @@ async def asyncio(
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
-    check_target: Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
@@ -293,7 +291,7 @@ async def asyncio(
         table_name_pattern (Union[Unset, None, str]):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksModelCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):

@@ -6,9 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_template import CheckTemplate
-from ...models.get_table_monitoring_checks_templates_time_scale import (
-    GetTableMonitoringChecksTemplatesTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import UNSET, Response, Unset
 
 
@@ -16,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
@@ -84,7 +82,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
@@ -98,7 +96,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -132,7 +130,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
@@ -146,7 +144,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -173,7 +171,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
@@ -187,7 +185,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -219,7 +217,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableMonitoringChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     check_category: Union[Unset, None, str] = UNSET,
@@ -233,7 +231,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableMonitoringChecksTemplatesTimeScale):
+        time_scale (CheckTimeScale):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 

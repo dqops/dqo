@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.rule_model_mode import RuleModelMode
-from ..models.rule_model_type import RuleModelType
+from ..models.rule_runner_type import RuleRunnerType
+from ..models.rule_time_window_mode import RuleTimeWindowMode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -22,12 +22,10 @@ class RuleModel:
     Attributes:
         rule_name (Union[Unset, str]): Rule name
         rule_python_module_content (Union[Unset, str]): Rule Python module content
-        type (Union[Unset, RuleModelType]): Rule runner type
+        type (Union[Unset, RuleRunnerType]):
         java_class_name (Union[Unset, str]): Java class name for a rule runner that will execute the sensor. The "type"
             must be "java_class".
-        mode (Union[Unset, RuleModelMode]): Rule historic (past) values mode. A rule may require just the current sensor
-            readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured
-            in the time_window setting.
+        mode (Union[Unset, RuleTimeWindowMode]):
         time_window (Union[Unset, RuleTimeWindowSettingsSpec]):
         fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom rule.
             Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
@@ -40,9 +38,9 @@ class RuleModel:
 
     rule_name: Union[Unset, str] = UNSET
     rule_python_module_content: Union[Unset, str] = UNSET
-    type: Union[Unset, RuleModelType] = UNSET
+    type: Union[Unset, RuleRunnerType] = UNSET
     java_class_name: Union[Unset, str] = UNSET
-    mode: Union[Unset, RuleModelMode] = UNSET
+    mode: Union[Unset, RuleTimeWindowMode] = UNSET
     time_window: Union[Unset, "RuleTimeWindowSettingsSpec"] = UNSET
     fields: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     parameters: Union[Unset, "RuleModelParameters"] = UNSET
@@ -123,20 +121,20 @@ class RuleModel:
         rule_python_module_content = d.pop("rule_python_module_content", UNSET)
 
         _type = d.pop("type", UNSET)
-        type: Union[Unset, RuleModelType]
+        type: Union[Unset, RuleRunnerType]
         if isinstance(_type, Unset):
             type = UNSET
         else:
-            type = RuleModelType(_type)
+            type = RuleRunnerType(_type)
 
         java_class_name = d.pop("java_class_name", UNSET)
 
         _mode = d.pop("mode", UNSET)
-        mode: Union[Unset, RuleModelMode]
+        mode: Union[Unset, RuleTimeWindowMode]
         if isinstance(_mode, Unset):
             mode = UNSET
         else:
-            mode = RuleModelMode(_mode)
+            mode = RuleTimeWindowMode(_mode)
 
         _time_window = d.pop("time_window", UNSET)
         time_window: Union[Unset, RuleTimeWindowSettingsSpec]

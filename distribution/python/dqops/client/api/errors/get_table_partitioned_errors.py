@@ -6,10 +6,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_time_scale import CheckTimeScale
 from ...models.errors_list_model import ErrorsListModel
-from ...models.get_table_partitioned_errors_time_scale import (
-    GetTablePartitionedErrorsTimeScale,
-)
 from ...types import UNSET, Response, Unset
 
 
@@ -17,7 +15,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedErrorsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -108,7 +106,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedErrorsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -128,7 +126,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedErrorsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -172,7 +170,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedErrorsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -192,7 +190,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedErrorsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -229,7 +227,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedErrorsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -249,7 +247,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedErrorsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -291,7 +289,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedErrorsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -311,7 +309,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedErrorsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):

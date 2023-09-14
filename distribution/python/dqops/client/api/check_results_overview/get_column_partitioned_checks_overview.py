@@ -6,9 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_results_overview_data_model import CheckResultsOverviewDataModel
-from ...models.get_column_partitioned_checks_overview_time_scale import (
-    GetColumnPartitionedChecksOverviewTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
 
@@ -17,7 +15,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedChecksOverviewTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
 ) -> Dict[str, Any]:
@@ -79,7 +77,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedChecksOverviewTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
@@ -93,7 +91,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedChecksOverviewTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -125,7 +123,7 @@ def sync(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedChecksOverviewTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
@@ -139,7 +137,7 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedChecksOverviewTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,7 +162,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedChecksOverviewTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
@@ -178,7 +176,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedChecksOverviewTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -208,7 +206,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedChecksOverviewTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
@@ -222,7 +220,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedChecksOverviewTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

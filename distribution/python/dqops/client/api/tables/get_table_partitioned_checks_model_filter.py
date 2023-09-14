@@ -6,9 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
-from ...models.get_table_partitioned_checks_model_filter_time_scale import (
-    GetTablePartitionedChecksModelFilterTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
 
@@ -16,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
@@ -73,7 +71,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
@@ -88,7 +86,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -122,7 +120,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
@@ -137,7 +135,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -164,7 +162,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
@@ -179,7 +177,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 
@@ -211,7 +209,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksModelFilterTimeScale,
+    time_scale: CheckTimeScale,
     check_category: str,
     check_name: str,
     *,
@@ -226,7 +224,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksModelFilterTimeScale):
+        time_scale (CheckTimeScale):
         check_category (str):
         check_name (str):
 

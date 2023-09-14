@@ -6,9 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_configuration_model import CheckConfigurationModel
-from ...models.get_table_columns_partitioned_checks_model_time_scale import (
-    GetTableColumnsPartitionedChecksModelTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import UNSET, Response, Unset
 
 
@@ -16,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
@@ -98,7 +96,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
@@ -117,7 +115,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableColumnsPartitionedChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
         check_category (Union[Unset, None, str]):
@@ -159,7 +157,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
@@ -178,7 +176,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableColumnsPartitionedChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
         check_category (Union[Unset, None, str]):
@@ -213,7 +211,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
@@ -232,7 +230,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableColumnsPartitionedChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
         check_category (Union[Unset, None, str]):
@@ -272,7 +270,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableColumnsPartitionedChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
@@ -291,7 +289,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableColumnsPartitionedChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         column_name_pattern (Union[Unset, None, str]):
         column_data_type (Union[Unset, None, str]):
         check_category (Union[Unset, None, str]):

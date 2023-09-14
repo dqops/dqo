@@ -5,13 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.find_recent_incidents_on_connection_direction import (
-    FindRecentIncidentsOnConnectionDirection,
-)
-from ...models.find_recent_incidents_on_connection_order import (
-    FindRecentIncidentsOnConnectionOrder,
-)
 from ...models.incident_model import IncidentModel
+from ...models.incident_sort_order import IncidentSortOrder
+from ...models.sort_direction import SortDirection
 from ...types import UNSET, Response, Unset
 
 
@@ -27,8 +23,8 @@ def _get_kwargs(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/incidents/{connectionName}".format(
         client.base_url, connectionName=connection_name
@@ -120,8 +116,8 @@ def sync_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -137,8 +133,8 @@ def sync_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,8 +179,8 @@ def sync(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -200,8 +196,8 @@ def sync(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -239,8 +235,8 @@ async def asyncio_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -256,8 +252,8 @@ async def asyncio_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -300,8 +296,8 @@ async def asyncio(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -317,8 +313,8 @@ async def asyncio(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

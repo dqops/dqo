@@ -2,12 +2,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.table_comparison_configuration_spec_check_type import (
-    TableComparisonConfigurationSpecCheckType,
-)
-from ..models.table_comparison_configuration_spec_time_scale import (
-    TableComparisonConfigurationSpecTimeScale,
-)
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -36,11 +32,8 @@ class TableComparisonConfigurationSpec:
         reference_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
             that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression
             that will be added to the WHERE clause when querying the reference table.
-        check_type (Union[Unset, TableComparisonConfigurationSpecCheckType]): The type of checks (profiling, monitoring,
-            partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
-        time_scale (Union[Unset, TableComparisonConfigurationSpecTimeScale]): The time scale that this check comparison
-            configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or
-            an empty value for profiling checks.
+        check_type (Union[Unset, CheckType]):
+        time_scale (Union[Unset, CheckTimeScale]):
         grouping_columns (Union[Unset, List['TableComparisonGroupingColumnsPairSpec']]): List of column pairs from both
             the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
             table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -53,8 +46,8 @@ class TableComparisonConfigurationSpec:
     reference_table_name: Union[Unset, str] = UNSET
     compared_table_filter: Union[Unset, str] = UNSET
     reference_table_filter: Union[Unset, str] = UNSET
-    check_type: Union[Unset, TableComparisonConfigurationSpecCheckType] = UNSET
-    time_scale: Union[Unset, TableComparisonConfigurationSpecTimeScale] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    time_scale: Union[Unset, CheckTimeScale] = UNSET
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnsPairSpec"]
     ] = UNSET
@@ -126,18 +119,18 @@ class TableComparisonConfigurationSpec:
         reference_table_filter = d.pop("reference_table_filter", UNSET)
 
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, TableComparisonConfigurationSpecCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = TableComparisonConfigurationSpecCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _time_scale = d.pop("time_scale", UNSET)
-        time_scale: Union[Unset, TableComparisonConfigurationSpecTimeScale]
+        time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_time_scale, Unset):
             time_scale = UNSET
         else:
-            time_scale = TableComparisonConfigurationSpecTimeScale(_time_scale)
+            time_scale = CheckTimeScale(_time_scale)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)

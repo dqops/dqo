@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.provider_sensor_model_provider_type import ProviderSensorModelProviderType
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ class ProviderSensorModel:
     """Provider sensor model
 
     Attributes:
-        provider_type (Union[Unset, ProviderSensorModelProviderType]): Provider type.
+        provider_type (Union[Unset, ProviderType]):
         provider_sensor_definition_spec (Union[Unset, ProviderSensorDefinitionSpec]):
         sql_template (Union[Unset, str]): Provider Sql template
         custom (Union[Unset, bool]): Whether the provider sensor is a User Home provider sensor
@@ -25,7 +25,7 @@ class ProviderSensorModel:
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
-    provider_type: Union[Unset, ProviderSensorModelProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     provider_sensor_definition_spec: Union[
         Unset, "ProviderSensorDefinitionSpec"
     ] = UNSET
@@ -77,11 +77,11 @@ class ProviderSensorModel:
 
         d = src_dict.copy()
         _provider_type = d.pop("providerType", UNSET)
-        provider_type: Union[Unset, ProviderSensorModelProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ProviderSensorModelProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         _provider_sensor_definition_spec = d.pop("providerSensorDefinitionSpec", UNSET)
         provider_sensor_definition_spec: Union[Unset, ProviderSensorDefinitionSpec]

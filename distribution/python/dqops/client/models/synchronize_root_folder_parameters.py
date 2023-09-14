@@ -2,12 +2,8 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.synchronize_root_folder_parameters_direction import (
-    SynchronizeRootFolderParametersDirection,
-)
-from ..models.synchronize_root_folder_parameters_folder import (
-    SynchronizeRootFolderParametersFolder,
-)
+from ..models.dqo_root import DqoRoot
+from ..models.file_synchronization_direction import FileSynchronizationDirection
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="SynchronizeRootFolderParameters")
@@ -17,13 +13,13 @@ T = TypeVar("T", bound="SynchronizeRootFolderParameters")
 class SynchronizeRootFolderParameters:
     """
     Attributes:
-        folder (Union[Unset, SynchronizeRootFolderParametersFolder]):
-        direction (Union[Unset, SynchronizeRootFolderParametersDirection]):
+        folder (Union[Unset, DqoRoot]):
+        direction (Union[Unset, FileSynchronizationDirection]):
         force_refresh_native_table (Union[Unset, bool]):
     """
 
-    folder: Union[Unset, SynchronizeRootFolderParametersFolder] = UNSET
-    direction: Union[Unset, SynchronizeRootFolderParametersDirection] = UNSET
+    folder: Union[Unset, DqoRoot] = UNSET
+    direction: Union[Unset, FileSynchronizationDirection] = UNSET
     force_refresh_native_table: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -54,18 +50,18 @@ class SynchronizeRootFolderParameters:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _folder = d.pop("folder", UNSET)
-        folder: Union[Unset, SynchronizeRootFolderParametersFolder]
+        folder: Union[Unset, DqoRoot]
         if isinstance(_folder, Unset):
             folder = UNSET
         else:
-            folder = SynchronizeRootFolderParametersFolder(_folder)
+            folder = DqoRoot(_folder)
 
         _direction = d.pop("direction", UNSET)
-        direction: Union[Unset, SynchronizeRootFolderParametersDirection]
+        direction: Union[Unset, FileSynchronizationDirection]
         if isinstance(_direction, Unset):
             direction = UNSET
         else:
-            direction = SynchronizeRootFolderParametersDirection(_direction)
+            direction = FileSynchronizationDirection(_direction)
 
         force_refresh_native_table = d.pop("forceRefreshNativeTable", UNSET)
 

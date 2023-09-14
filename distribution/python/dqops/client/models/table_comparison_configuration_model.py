@@ -2,12 +2,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.table_comparison_configuration_model_check_type import (
-    TableComparisonConfigurationModelCheckType,
-)
-from ..models.table_comparison_configuration_model_time_scale import (
-    TableComparisonConfigurationModelTimeScale,
-)
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -34,12 +30,8 @@ class TableComparisonConfigurationModel:
             reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
                 that has the reference data to compare to.
             reference_table (Union[Unset, PhysicalTableName]):
-            check_type (Union[Unset, TableComparisonConfigurationModelCheckType]): The type of checks (profiling,
-                monitoring, partitioned) that this check comparison configuration is applicable. The default value is
-                'profiling'.
-            time_scale (Union[Unset, TableComparisonConfigurationModelTimeScale]): The time scale that this check comparison
-                configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or
-                an empty value for profiling checks.
+            check_type (Union[Unset, CheckType]):
+            time_scale (Union[Unset, CheckTimeScale]):
             grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
                 the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
                 table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -57,8 +49,8 @@ class TableComparisonConfigurationModel:
     compared_table: Union[Unset, "PhysicalTableName"] = UNSET
     reference_connection: Union[Unset, str] = UNSET
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
-    check_type: Union[Unset, TableComparisonConfigurationModelCheckType] = UNSET
-    time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    time_scale: Union[Unset, CheckTimeScale] = UNSET
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnPairModel"]
     ] = UNSET
@@ -160,18 +152,18 @@ class TableComparisonConfigurationModel:
             reference_table = PhysicalTableName.from_dict(_reference_table)
 
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, TableComparisonConfigurationModelCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = TableComparisonConfigurationModelCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _time_scale = d.pop("time_scale", UNSET)
-        time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale]
+        time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_time_scale, Unset):
             time_scale = UNSET
         else:
-            time_scale = TableComparisonConfigurationModelTimeScale(_time_scale)
+            time_scale = CheckTimeScale(_time_scale)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)

@@ -7,9 +7,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_results_list_model import CheckResultsListModel
-from ...models.get_column_monitoring_checks_results_time_scale import (
-    GetColumnMonitoringChecksResultsTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import UNSET, Response, Unset
 
 
@@ -18,7 +16,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksResultsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -111,7 +109,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksResultsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -132,7 +130,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksResultsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -178,7 +176,7 @@ def sync(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksResultsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -199,7 +197,7 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksResultsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -238,7 +236,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksResultsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -259,7 +257,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksResultsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -303,7 +301,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnMonitoringChecksResultsTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
@@ -324,7 +322,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnMonitoringChecksResultsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):

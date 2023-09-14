@@ -5,10 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_target import CheckTarget
 from ...models.check_template import CheckTemplate
-from ...models.get_schema_profiling_checks_templates_check_target import (
-    GetSchemaProfilingChecksTemplatesCheckTarget,
-)
 from ...types import UNSET, Response, Unset
 
 
@@ -17,9 +15,7 @@ def _get_kwargs(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
@@ -88,9 +84,7 @@ def sync_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -101,7 +95,7 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -135,9 +129,7 @@ def sync(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -148,7 +140,7 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -175,9 +167,7 @@ async def asyncio_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -188,7 +178,7 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -220,9 +210,7 @@ async def asyncio(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -233,7 +221,7 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 

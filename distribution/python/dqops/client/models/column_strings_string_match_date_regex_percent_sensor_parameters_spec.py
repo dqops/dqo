@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.column_strings_string_match_date_regex_percent_sensor_parameters_spec_date_formats import (
-    ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats,
-)
+from ..models.strings_built_in_date_formats import StringsBuiltInDateFormats
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ColumnStringsStringMatchDateRegexPercentSensorParametersSpec")
@@ -16,14 +14,11 @@ class ColumnStringsStringMatchDateRegexPercentSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        date_formats (Union[Unset, ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats]): Desired
-            date format. Sensor will try to parse the column records and cast the data using this format.
+        date_formats (Union[Unset, StringsBuiltInDateFormats]):
     """
 
     filter_: Union[Unset, str] = UNSET
-    date_formats: Union[
-        Unset, ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats
-    ] = UNSET
+    date_formats: Union[Unset, StringsBuiltInDateFormats] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,18 +43,11 @@ class ColumnStringsStringMatchDateRegexPercentSensorParametersSpec:
         filter_ = d.pop("filter", UNSET)
 
         _date_formats = d.pop("date_formats", UNSET)
-        date_formats: Union[
-            Unset,
-            ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats,
-        ]
+        date_formats: Union[Unset, StringsBuiltInDateFormats]
         if isinstance(_date_formats, Unset):
             date_formats = UNSET
         else:
-            date_formats = (
-                ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats(
-                    _date_formats
-                )
-            )
+            date_formats = StringsBuiltInDateFormats(_date_formats)
 
         column_strings_string_match_date_regex_percent_sensor_parameters_spec = cls(
             filter_=filter_,

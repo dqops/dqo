@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.incident_status import IncidentStatus
 from ...models.mono_object import MonoObject
-from ...models.set_incident_status_status import SetIncidentStatusStatus
 from ...types import UNSET, Response
 
 
@@ -17,7 +17,7 @@ def _get_kwargs(
     incident_id: str,
     *,
     client: AuthenticatedClient,
-    status: SetIncidentStatusStatus,
+    status: IncidentStatus,
 ) -> Dict[str, Any]:
     url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/status".format(
         client.base_url,
@@ -79,7 +79,7 @@ def sync_detailed(
     incident_id: str,
     *,
     client: AuthenticatedClient,
-    status: SetIncidentStatusStatus,
+    status: IncidentStatus,
 ) -> Response[MonoObject]:
     """setIncidentStatus
 
@@ -90,7 +90,7 @@ def sync_detailed(
         year (int):
         month (int):
         incident_id (str):
-        status (SetIncidentStatusStatus):
+        status (IncidentStatus):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -124,7 +124,7 @@ def sync(
     incident_id: str,
     *,
     client: AuthenticatedClient,
-    status: SetIncidentStatusStatus,
+    status: IncidentStatus,
 ) -> Optional[MonoObject]:
     """setIncidentStatus
 
@@ -135,7 +135,7 @@ def sync(
         year (int):
         month (int):
         incident_id (str):
-        status (SetIncidentStatusStatus):
+        status (IncidentStatus):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -162,7 +162,7 @@ async def asyncio_detailed(
     incident_id: str,
     *,
     client: AuthenticatedClient,
-    status: SetIncidentStatusStatus,
+    status: IncidentStatus,
 ) -> Response[MonoObject]:
     """setIncidentStatus
 
@@ -173,7 +173,7 @@ async def asyncio_detailed(
         year (int):
         month (int):
         incident_id (str):
-        status (SetIncidentStatusStatus):
+        status (IncidentStatus):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -205,7 +205,7 @@ async def asyncio(
     incident_id: str,
     *,
     client: AuthenticatedClient,
-    status: SetIncidentStatusStatus,
+    status: IncidentStatus,
 ) -> Optional[MonoObject]:
     """setIncidentStatus
 
@@ -216,7 +216,7 @@ async def asyncio(
         year (int):
         month (int):
         incident_id (str):
-        status (SetIncidentStatusStatus):
+        status (IncidentStatus):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

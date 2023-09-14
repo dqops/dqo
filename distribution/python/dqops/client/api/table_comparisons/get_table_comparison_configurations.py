@@ -5,12 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_table_comparison_configurations_check_time_scale import (
-    GetTableComparisonConfigurationsCheckTimeScale,
-)
-from ...models.get_table_comparison_configurations_check_type import (
-    GetTableComparisonConfigurationsCheckType,
-)
+from ...models.check_time_scale import CheckTimeScale
+from ...models.check_type import CheckType
 from ...models.table_comparison_configuration_model import (
     TableComparisonConfigurationModel,
 )
@@ -23,10 +19,8 @@ def _get_kwargs(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableComparisonConfigurationsCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations".format(
         client.base_url,
@@ -101,10 +95,8 @@ def sync_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableComparisonConfigurationsCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[List["TableComparisonConfigurationModel"]]:
     """getTableComparisonConfigurations
 
@@ -114,8 +106,8 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        check_type (Union[Unset, None, GetTableComparisonConfigurationsCheckType]):
-        check_time_scale (Union[Unset, None, GetTableComparisonConfigurationsCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -148,10 +140,8 @@ def sync(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableComparisonConfigurationsCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[List["TableComparisonConfigurationModel"]]:
     """getTableComparisonConfigurations
 
@@ -161,8 +151,8 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        check_type (Union[Unset, None, GetTableComparisonConfigurationsCheckType]):
-        check_time_scale (Union[Unset, None, GetTableComparisonConfigurationsCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -188,10 +178,8 @@ async def asyncio_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableComparisonConfigurationsCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[List["TableComparisonConfigurationModel"]]:
     """getTableComparisonConfigurations
 
@@ -201,8 +189,8 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        check_type (Union[Unset, None, GetTableComparisonConfigurationsCheckType]):
-        check_time_scale (Union[Unset, None, GetTableComparisonConfigurationsCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -233,10 +221,8 @@ async def asyncio(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    check_type: Union[Unset, None, GetTableComparisonConfigurationsCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableComparisonConfigurationsCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[List["TableComparisonConfigurationModel"]]:
     """getTableComparisonConfigurations
 
@@ -246,8 +232,8 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        check_type (Union[Unset, None, GetTableComparisonConfigurationsCheckType]):
-        check_time_scale (Union[Unset, None, GetTableComparisonConfigurationsCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

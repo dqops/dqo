@@ -6,10 +6,8 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
+from ...models.check_time_scale import CheckTimeScale
 from ...models.mono_object import MonoObject
-from ...models.update_table_monitoring_checks_model_time_scale import (
-    UpdateTableMonitoringChecksModelTimeScale,
-)
 from ...types import Response
 
 
@@ -17,7 +15,7 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: UpdateTableMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
@@ -74,7 +72,7 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: UpdateTableMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
@@ -87,7 +85,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (UpdateTableMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -120,7 +118,7 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: UpdateTableMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
@@ -133,7 +131,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (UpdateTableMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -159,7 +157,7 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: UpdateTableMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
@@ -172,7 +170,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (UpdateTableMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 
@@ -203,7 +201,7 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: UpdateTableMonitoringChecksModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
@@ -216,7 +214,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (UpdateTableMonitoringChecksModelTimeScale):
+        time_scale (CheckTimeScale):
         json_body (CheckContainerModel): Model that returns the form definition and the form data
             to edit all data quality checks divided by categories.
 

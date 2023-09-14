@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.dqo_user_profile_model_account_role import DqoUserProfileModelAccountRole
+from ..models.dqo_user_role import DqoUserRole
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DqoUserProfileModel")
@@ -29,8 +29,7 @@ class DqoUserProfileModel:
             Cloud data quality warehouse.
         jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQO can run in parallel on
             this instance.
-        account_role (Union[Unset, DqoUserProfileModelAccountRole]): User role that limits possible operations that the
-            current user can perform.
+        account_role (Union[Unset, DqoUserRole]):
         can_manage_account (Union[Unset, bool]): User is the administrator of the account and can perform security
             related actions, such as managing users.
         can_view_any_object (Union[Unset, bool]): User can view any object and view all results.
@@ -59,7 +58,7 @@ class DqoUserProfileModel:
     connection_tables_limit: Union[Unset, int] = UNSET
     tables_limit: Union[Unset, int] = UNSET
     jobs_limit: Union[Unset, int] = UNSET
-    account_role: Union[Unset, DqoUserProfileModelAccountRole] = UNSET
+    account_role: Union[Unset, DqoUserRole] = UNSET
     can_manage_account: Union[Unset, bool] = UNSET
     can_view_any_object: Union[Unset, bool] = UNSET
     can_manage_scheduler: Union[Unset, bool] = UNSET
@@ -182,11 +181,11 @@ class DqoUserProfileModel:
         jobs_limit = d.pop("jobs_limit", UNSET)
 
         _account_role = d.pop("account_role", UNSET)
-        account_role: Union[Unset, DqoUserProfileModelAccountRole]
+        account_role: Union[Unset, DqoUserRole]
         if isinstance(_account_role, Unset):
             account_role = UNSET
         else:
-            account_role = DqoUserProfileModelAccountRole(_account_role)
+            account_role = DqoUserRole(_account_role)
 
         can_manage_account = d.pop("can_manage_account", UNSET)
 

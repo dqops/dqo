@@ -4,9 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 import attr
 from dateutil.parser import isoparse
 
-from ..models.statistics_metric_model_result_data_type import (
-    StatisticsMetricModelResultDataType,
-)
+from ..models.statistics_result_data_type import StatisticsResultDataType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -22,7 +20,7 @@ class StatisticsMetricModel:
     Attributes:
         category (Union[Unset, str]): Statistics category
         collector (Union[Unset, str]): Statistics (metric) name
-        result_data_type (Union[Unset, StatisticsMetricModelResultDataType]): Statistics result data type
+        result_data_type (Union[Unset, StatisticsResultDataType]):
         result (Union[Unset, StatisticsMetricModelResult]): Statistics result for the metric
         collected_at (Union[Unset, datetime.datetime]): The local timestamp when the metric was collected
         sample_count (Union[Unset, int]): The number of the value samples for this result value. Filled only by the
@@ -33,7 +31,7 @@ class StatisticsMetricModel:
 
     category: Union[Unset, str] = UNSET
     collector: Union[Unset, str] = UNSET
-    result_data_type: Union[Unset, StatisticsMetricModelResultDataType] = UNSET
+    result_data_type: Union[Unset, StatisticsResultDataType] = UNSET
     result: Union[Unset, "StatisticsMetricModelResult"] = UNSET
     collected_at: Union[Unset, datetime.datetime] = UNSET
     sample_count: Union[Unset, int] = UNSET
@@ -88,11 +86,11 @@ class StatisticsMetricModel:
         collector = d.pop("collector", UNSET)
 
         _result_data_type = d.pop("resultDataType", UNSET)
-        result_data_type: Union[Unset, StatisticsMetricModelResultDataType]
+        result_data_type: Union[Unset, StatisticsResultDataType]
         if isinstance(_result_data_type, Unset):
             result_data_type = UNSET
         else:
-            result_data_type = StatisticsMetricModelResultDataType(_result_data_type)
+            result_data_type = StatisticsResultDataType(_result_data_type)
 
         _result = d.pop("result", UNSET)
         result: Union[Unset, StatisticsMetricModelResult]

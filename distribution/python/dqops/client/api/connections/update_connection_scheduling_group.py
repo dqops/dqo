@@ -5,17 +5,15 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_run_schedule_group import CheckRunScheduleGroup
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
-from ...models.update_connection_scheduling_group_scheduling_group import (
-    UpdateConnectionSchedulingGroupSchedulingGroup,
-)
 from ...types import Response
 
 
 def _get_kwargs(
     connection_name: str,
-    scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
@@ -68,7 +66,7 @@ def _build_response(
 
 def sync_detailed(
     connection_name: str,
-    scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
@@ -80,7 +78,7 @@ def sync_detailed(
 
     Args:
         connection_name (str):
-        scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -108,7 +106,7 @@ def sync_detailed(
 
 def sync(
     connection_name: str,
-    scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
@@ -120,7 +118,7 @@ def sync(
 
     Args:
         connection_name (str):
-        scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -141,7 +139,7 @@ def sync(
 
 async def asyncio_detailed(
     connection_name: str,
-    scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
@@ -153,7 +151,7 @@ async def asyncio_detailed(
 
     Args:
         connection_name (str):
-        scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -179,7 +177,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     connection_name: str,
-    scheduling_group: UpdateConnectionSchedulingGroupSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
@@ -191,7 +189,7 @@ async def asyncio(
 
     Args:
         connection_name (str):
-        scheduling_group (UpdateConnectionSchedulingGroupSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:

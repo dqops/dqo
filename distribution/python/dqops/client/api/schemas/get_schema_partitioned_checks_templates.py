@@ -5,25 +5,19 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_target import CheckTarget
 from ...models.check_template import CheckTemplate
-from ...models.get_schema_partitioned_checks_templates_check_target import (
-    GetSchemaPartitionedChecksTemplatesCheckTarget,
-)
-from ...models.get_schema_partitioned_checks_templates_time_scale import (
-    GetSchemaPartitionedChecksTemplatesTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     connection_name: str,
     schema_name: str,
-    time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
@@ -93,12 +87,10 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     schema_name: str,
-    time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -109,8 +101,8 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        time_scale (GetSchemaPartitionedChecksTemplatesTimeScale):
-        check_target (Union[Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget]):
+        time_scale (CheckTimeScale):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -143,12 +135,10 @@ def sync_detailed(
 def sync(
     connection_name: str,
     schema_name: str,
-    time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -159,8 +149,8 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
-        time_scale (GetSchemaPartitionedChecksTemplatesTimeScale):
-        check_target (Union[Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget]):
+        time_scale (CheckTimeScale):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -186,12 +176,10 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
-    time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -202,8 +190,8 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        time_scale (GetSchemaPartitionedChecksTemplatesTimeScale):
-        check_target (Union[Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget]):
+        time_scale (CheckTimeScale):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -234,12 +222,10 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     schema_name: str,
-    time_scale: GetSchemaPartitionedChecksTemplatesTimeScale,
+    time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-    check_target: Union[
-        Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -250,8 +236,8 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
-        time_scale (GetSchemaPartitionedChecksTemplatesTimeScale):
-        check_target (Union[Unset, None, GetSchemaPartitionedChecksTemplatesCheckTarget]):
+        time_scale (CheckTimeScale):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
