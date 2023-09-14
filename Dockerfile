@@ -51,8 +51,9 @@ WORKDIR /dqo
 
 # install java
 RUN apt-get update && apt-get install -y ca-certificates-java openjdk-17-jre && apt-get clean
+ARG TARGETARCH=amd64
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-$TARGETARCH
-ENV PATH=$PATH:$JAVA_HOME/bin
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 # dqo launch setup
 ENV DQO_HOME=/dqo/home
@@ -65,9 +66,9 @@ COPY --from=dqo-home /dqo/home home
 
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/dqops/target/dependency
-COPY --from=dqo-libs /workspace/app/lib/target/output/dqo-lib/jars /dqo/lib
-COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/lib
-COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/META-INF
-COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo
+COPY --from=dqo-libs /workspace/app/lib/target/output/dqo-lib/jars /dqo/app/lib
+COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/app/lib
+COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/app/META-INF
+COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo/app
 ENV JAVA_TOOL_OPTIONS="-Xmx1024m"
-ENTRYPOINT ["java", "-cp", "/dqo:/dqo/lib/*", "com.dqops.cli.CliApplication"]
+ENTRYPOINT ["java", "-cp", "/dqo/app:/dqo/app/lib/*", "com.dqops.cli.CliApplication"]
