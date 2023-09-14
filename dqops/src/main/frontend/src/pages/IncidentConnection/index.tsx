@@ -175,13 +175,13 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="text-sm"
-          label="Checks"
-          order="checkName"
-          direction={filters.sortBy === 'checkName' ? filters.sortDirection : undefined}
+          label="Data quality issue grouping"
+          order="qualityDimension"
+          direction={filters.sortBy === 'qualityDimension' ? filters.sortDirection : undefined}
           onChange={handleSortChange}
         />
       ),
-      label: 'Checks',
+      label: 'Data quality issue grouping',
       className: 'text-left py-2 px-4',
       value: 'checkName',
       render: (value: string, row: IncidentModel) => {

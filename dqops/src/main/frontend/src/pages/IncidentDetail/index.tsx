@@ -322,7 +322,7 @@ export const IncidentDetail = () => {
               <div className="flex-1 font-bold">{incidentDetail?.qualityDimension}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-1">Category:</div>
+              <div className="flex-1">Check category:</div>
               <div className="flex-1 font-bold">{incidentDetail?.checkCategory}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
