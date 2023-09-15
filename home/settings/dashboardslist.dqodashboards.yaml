@@ -155,7 +155,7 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Change of KPIs per day
+        - dashboard_name: KPI history
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
           height: 1700
@@ -355,7 +355,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Change of KPIs per day
+        - dashboard_name: KPI history
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
           height: 1700
@@ -423,7 +423,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Count per table, data grouping and day
+        - dashboard_name: Count per table, data grouping and daily partition
           url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
           width: 1400
           height: 1800
@@ -555,7 +555,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Change of KPIs per day
+        - dashboard_name: KPI history for daily partitions
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
           height: 1700
@@ -564,7 +564,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per table and day
+        - dashboard_name: KPIs per table and daily partition
           url: https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/c5B8C
           width: 1400
           height: 1600
@@ -573,7 +573,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per column and day
+        - dashboard_name: KPIs per column and daily partition
           url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
           width: 1400
           height: 1600
@@ -582,7 +582,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per data grouping and day
+        - dashboard_name: KPIs per data grouping and daily partition
           url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
           width: 1400
           height: 1600
@@ -591,7 +591,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per check and day
+        - dashboard_name: KPIs per check and daily partition
           url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
           width: 1400
           height: 1600
@@ -746,7 +746,7 @@ spec:
         ds0.p_check_type: "*$check type:all,profiling,monitoring,partitioned$"
         ds0.p_quality_dimension: "$dimension:all,accuracy,availability,completeness,consistency,integrity,reasonableness,timeliness,uniqueness,validity$"
         ds0.p_check_category: "$category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
-    - dashboard_name: Change of KPIs per day
+    - dashboard_name: KPI history
       url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
       width: 1400
       height: 1700
