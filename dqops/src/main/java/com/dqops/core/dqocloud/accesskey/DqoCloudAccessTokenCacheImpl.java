@@ -73,6 +73,9 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         }
 
         DqoCloudCredentials dqoCloudCredentials = credentialsSupplier.get();
+        if (dqoCloudCredentials == null) {
+            return null;
+        }
 
         Date testedExpirationDate = new Date(System.currentTimeMillis() + REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS * 1000L);
         boolean accessTokenNotExpired = dqoCloudCredentials.getAccessToken().getExpirationTime().after(testedExpirationDate);

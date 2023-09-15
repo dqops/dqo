@@ -48,8 +48,7 @@ logging:
           util: ERROR
     com:
       google: OFF
-    ai:
-      dqo: WARN
+      dqops: WARN
 
 picocli:
   ansi: true
