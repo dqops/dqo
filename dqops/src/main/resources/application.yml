@@ -48,7 +48,6 @@ logging:
           util: ERROR
     com:
       google: OFF
-      dqops: WARN
 
 picocli:
   ansi: true
@@ -88,9 +87,9 @@ dqo:
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai
-    rest-api-base-url: https://api.dqo.ai
+#    rest-api-base-url: https://api.dqo.ai
     #ui-base-url: http://localhost:8080
-    #rest-api-base-url: http://localhost:8080
+    rest-api-base-url: http://localhost:8080
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
     api-key-pickup-timeout-seconds: 600
     api-key-pickup-retry-delay-millis: 1000
