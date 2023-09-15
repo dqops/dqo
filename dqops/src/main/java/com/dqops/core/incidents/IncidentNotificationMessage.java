@@ -144,9 +144,9 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
-     * Notification text with Markdown format that contains the most important fields from the class.
+     * Notification text in Markdown format that contains the most important fields from the class.
      */
-    @JsonPropertyDescription("Notification text.")
+    @JsonPropertyDescription("Notification text in Markdown format that contains the most important fields from the class.")
     private String text;
 
     /**

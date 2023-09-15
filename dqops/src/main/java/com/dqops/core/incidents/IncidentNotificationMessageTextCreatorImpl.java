@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -20,7 +22,8 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotificationMessageTextCreator {
 
-    private static final String KEY_VALUE_FORMAT = "*%s*: %s";
+    private static final String BOLD = "**";
+    private static final String KEY_VALUE_FORMAT = BOLD + "%s" + BOLD + ": %s";
     private static final String NEW_LINE = " \n";
 
     private final InstanceCloudLoginService instanceCloudLoginService;
@@ -46,10 +49,12 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
 
         Row incidentRow = messageParameters.getIncidentRow();
 
-        String fullTableNameWithLink = "<" + prepareUrlToTable(messageParameters)
-                + "|" + incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
-                + "."
-                + incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME) + ">";
+        String fullTableNameWithLink = formatToLink(
+                prepareUrlToTable(messageParameters),
+                incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
+                        + "."
+                        + incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME)
+        );
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getBlockQuotedLine(prepareHeader(
@@ -77,7 +82,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         if (!incidentRow.isMissing(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME)) {
             stringBuilder.append( String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                     readableColumnName(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
-                    "<" + incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME) + "| LINK >"));
+                    formatToLink(incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME), "LINK")));
         }
 
         stringBuilder.append(extractStringWithFormatting(incidentRow, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
@@ -86,10 +91,10 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
 
         stringBuilder.append(getBlockQuotedLine(""));
 
-        stringBuilder.append("> "
-                + "<" + prepareUrlToIncident(messageParameters)
-                + "| *View in DQOps*>");
-        stringBuilder.append(NEW_LINE);
+        stringBuilder.append(getBlockQuotedLine(formatToLink(
+                prepareUrlToIncident(messageParameters),
+                BOLD + "View in DQOps" + BOLD
+        )));
 
         return stringBuilder.toString();
     }
@@ -103,7 +108,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         Row incidentRow = messageParameters.getIncidentRow();
         return instanceCloudLoginService.getReturnBaseUrl()
                 + "incidents/"
-                + messageParameters.getConnectionName() + "/"
+                + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8) + "/"
                 + incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME)
                         .atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
                 + incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME)
@@ -118,9 +123,9 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
      */
     private String prepareUrlToTable(IncidentNotificationMessageParameters messageParameters){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "sources/connection/" + messageParameters.getConnectionName()
-                + "/schema/" + messageParameters.getIncidentRow().getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME)
-                + "/table/" + messageParameters.getIncidentRow().getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME)
+                + "sources/connection/" + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8)
+                + "/schema/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
+                + "/table/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
                 + "/detail";
     }
 
@@ -134,9 +139,9 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
                                  String fullTableName){
         String commonPart = String.format("in %s table", fullTableName);
         if(incidentStatus.equals(IncidentStatus.open)){
-            return "*New incident detected " + commonPart + ".*";
+            return BOLD + "New incident detected " + commonPart + "." + BOLD;
         }
-        return "*The incident " + commonPart + " has been " + incidentStatus.name() + ".*";
+        return BOLD + "The incident " + commonPart + " has been " + incidentStatus.name() + "." + BOLD;
     }
 
     /**
@@ -169,7 +174,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
         return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                 readableColumnName(incidentsColumnName),
                 zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                        + " (GTM" + (hours > 0 ? "+":"") + hours + ")");
+                        + " (GMT" + (hours > 0 ? "+":"") + hours + ")");
     }
 
     /**
@@ -214,4 +219,13 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
     private String getBlockQuotedLine(String text){
         return "> " + text + NEW_LINE;
     }
+
+    /**
+     * Formats the string to a link. Adds special characters: "<" at the beginning, "|" between link and text and ">" at the end.
+     * @return Link formatted text
+     */
+    private String formatToLink(String link, String text){
+        return "<" + link + " | " + text + ">";
+    }
+
 }

@@ -66,16 +66,16 @@ class IncidentNotificationMessageTextCreatorImplTest extends BaseTest {
         assertNotNull(message);
 
         assertEquals("""
-                               > *New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail|schema_here.table_name_here> table.*
+                               > **New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.**
                                > \s
-                               > *First seen*: 2023-09-01 14:30:20 (GTM+2)\s
-                               > *Quality dimension*: Reasonableness\s
-                               > *Check category*: volume\s
-                               > *Highest severity*:fatal\s
-                               > *Total data quality issues*: 10\s
-                               > *Table priority*: 2\s
+                               > **First seen**: 2023-09-01 14:30:20 (GMT+2)\s
+                               > **Quality dimension**: Reasonableness\s
+                               > **Check category**: volume\s
+                               > **Highest severity**: fatal\s
+                               > **Total data quality issues**: 10\s
+                               > **Table priority**: 2\s
                                > \s
-                               > <http://localhost:8888/incidents/connection_name/2023/9/1| *View in DQOps*>\s
+                               > <http://localhost:8888/incidents/connection_name/2023/9/1 | **View in DQOps**>\s
                         """.replaceAll("\\s+", ""),
                 message.replaceAll("\\s+", "")
         );
@@ -118,17 +118,17 @@ class IncidentNotificationMessageTextCreatorImplTest extends BaseTest {
         assertNotNull(message);
 
         assertEquals("""
-                               > *The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail|schema_here.table_name_here> table has been acknowledged.*\s
+                               > **The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table has been acknowledged.**\s
                                > \s
-                               > *First seen*: 2023-09-01 14:30:20 (GTM+2)\s
-                               > *Last seen*: 2023-09-01 14:30:20 (GTM+2)\s
-                               > *Quality dimension*: Reasonableness\s
-                               > *Check category*: volume\s
-                               > *Highest severity*:fatal\s
-                               > *Total data quality issues*: 10\s
-                               > *Table priority*: 2\s
+                               > **First seen**: 2023-09-01 14:30:20 (GMT+2)\s
+                               > **Last seen**: 2023-09-01 14:30:20 (GMT+2)\s
+                               > **Quality dimension**: Reasonableness\s
+                               > **Check category**: volume\s
+                               > **Highest severity**: fatal\s
+                               > **Total data quality issues**: 10\s
+                               > **Table priority**: 2\s
                                > \s
-                               > <http://localhost:8888/incidents/connection_name/2023/9/1| *View in DQOps*>\s
+                               > <http://localhost:8888/incidents/connection_name/2023/9/1 | **View in DQOps**>\s
                         """.replaceAll("\\s+", ""),
                 message.replaceAll("\\s+", "")
         );
@@ -171,18 +171,18 @@ class IncidentNotificationMessageTextCreatorImplTest extends BaseTest {
         assertNotNull(message);
 
         assertEquals("""
-                               > *The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail|schema_here.table_name_here> table has been acknowledged.*\s
+                               > **The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table has been acknowledged.**\s
                                > \s
-                               > *First seen*: 2023-09-01 14:30:20 (GTM+2)\s
-                               > *Last seen*: 2023-09-01 14:30:20 (GTM+2)\s
-                               > *Quality dimension*: Reasonableness\s
-                               > *Check category*: volume\s
-                               > *Highest severity*:fatal\s
-                               > *Total data quality issues*: 10\s
-                               > *Table priority*: 2\s
-                               > *Issue url*: <https://www.google.com|LINK>\s
+                               > **First seen**: 2023-09-01 14:30:20 (GMT+2)\s
+                               > **Last seen**: 2023-09-01 14:30:20 (GMT+2)\s
+                               > **Quality dimension**: Reasonableness\s
+                               > **Check category**: volume\s
+                               > **Highest severity**: fatal\s
+                               > **Total data quality issues**: 10\s
+                               > **Table priority**: 2\s
+                               > **Issue url**: <https://www.google.com | LINK>\s
                                > \s
-                               > <http://localhost:8888/incidents/connection_name/2023/9/1| *View in DQOps*>\s
+                               > <http://localhost:8888/incidents/connection_name/2023/9/1 | **View in DQOps**>\s
                         """.replaceAll("\\s+", ""),
                 message.replaceAll("\\s+", "")
         );
