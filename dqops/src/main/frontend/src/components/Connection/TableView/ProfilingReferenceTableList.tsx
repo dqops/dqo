@@ -3,8 +3,6 @@ import Button from '../../Button';
 import { TableComparisonModel } from '../../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
-import { TableComparisonsApi } from '../../../services/apiClient';
-import { useParams } from 'react-router-dom';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 
 type ProfilingReferenceTableListProps = {
@@ -13,30 +11,18 @@ type ProfilingReferenceTableListProps = {
   selectReference: (reference: TableComparisonModel) => void;
   onEdit: (reference: TableComparisonModel) => void;
   canUserCreateTableComparison?: boolean;
+  deleteComparison: (tableComparisonConfigurationName: string) => Promise<void>
 };
 
 export const ProfilingReferenceTableList = ({
   references,
   onCreate,
   selectReference,
-  canUserCreateTableComparison
+  canUserCreateTableComparison,
+  deleteComparison
 }: ProfilingReferenceTableListProps) => {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedComparison, setSelectedComparison] = useState('');
-  const deleteComparison = async () => {
-    await TableComparisonsApi.deleteTableComparisonConfiguration(
-      connection,
-      schema,
-      table,
-      selectedComparison
-    );
-  };
-
   return (
     <div className="px-8 py-4 text-sm">
       <table className="mb-4 w-full">
@@ -104,7 +90,7 @@ export const ProfilingReferenceTableList = ({
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        onConfirm={deleteComparison}
+        onConfirm={() => deleteComparison(selectedComparison)}
         message={
           '  Are you sure you want to delete the table comparison ' +
           selectedComparison +
