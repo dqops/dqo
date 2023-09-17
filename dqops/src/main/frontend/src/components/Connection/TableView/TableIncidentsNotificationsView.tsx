@@ -19,6 +19,7 @@ import Checkbox from "../../Checkbox";
 import NumberInput from "../../NumberInput";
 import TableActionGroup from "./TableActionGroup";
 import clsx from "clsx";
+import { IRootState } from "../../../redux/reducers";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
@@ -30,10 +31,14 @@ const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinim
   value: item
 }));
 
-export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
+export const TableIncidentsNotificationsView = () => {
+
   const { connection, schema, table, checkTypes }: { connection: string, schema: string, table: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
@@ -58,7 +63,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
         isUpdated={isUpdatedIncidentGroup}
         isUpdating={isUpdating}
       />
-      <div className={clsx("flex flex-col", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
+      <div className={clsx("flex flex-col", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <div className="flex mb-4">
           <Select
             label="Data quality incident grouping level:"
@@ -66,7 +71,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             value={incidentGrouping?.grouping_level}
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
-            disabled={canUserEdit !== true}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </div>
         <div className="flex mb-4">
@@ -75,7 +80,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
-            disabled={canUserEdit !== true}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
@@ -93,7 +98,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             <NumberInput
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
             <span>days. After this time, the DQO creates a new incident.</span>
           </div>
@@ -104,7 +109,7 @@ export const TableIncidentsNotificationsView = ({canUserEdit} :  {canUserEdit ?:
             <NumberInput
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
             <span> days. If the incident is muted, DQO will not create a new one.</span>
           </div>
