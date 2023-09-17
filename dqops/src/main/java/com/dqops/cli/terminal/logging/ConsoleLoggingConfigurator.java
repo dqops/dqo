@@ -24,6 +24,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.Encoder;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
+import net.logstash.logback.encoder.LogstashEncoder;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class ConsoleLoggingConfigurator implements InitializingBean {
                 break;
 
             case JSON:
-                JsonEncoder jsonEncoder = new JsonEncoder();
+                LogstashEncoder jsonEncoder = new LogstashEncoder();
                 jsonEncoder.setContext(loggerContext);
                 jsonEncoder.start();
                 encoder = jsonEncoder;
