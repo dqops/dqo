@@ -67,7 +67,7 @@ export const HistogramChart = ({ onChangeFilter: changeIssueFilter }: HistogramC
               column: histogramFilter.column === column ? '' : column
             })}
           >
-            <span>{column}</span>({histograms?.columns?.[column]})
+            <span>{column.length === 0 ? "(no column name)" : ""}{column}</span>({histograms?.columns?.[column]})
           </div>
         ))}
       </SectionWrapper>
