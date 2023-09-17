@@ -556,6 +556,15 @@ export const EditProfilingReferenceTable = ({
 
   console.log(reference)
   console.log(tableComparisonResults)
+  
+  const columnKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
+  .find((key) => key.includes("column_count_match"));
+
+  const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
+  .find((key) => key.includes("row_count_match"));
+
+  console.log(columnKey, rowKey)
+  
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -665,11 +674,8 @@ export const EditProfilingReferenceTable = ({
                                 Results:
                                 <td className="flex justify-between w-2/3 ">
                                   <th className="text-xs font-light">Valid:</th>
-                                  {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.valid_results
+                                  {                               
+                                  tableComparisonResults?.table_comparison_results?.[rowKey ?? '']?.valid_results
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
@@ -677,19 +683,13 @@ export const EditProfilingReferenceTable = ({
                                     Errors:
                                   </th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.errors
+                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.errors
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
                                   <th className="text-xs font-light">Fatal:</th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.fatals
+                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.fatals
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
@@ -697,10 +697,7 @@ export const EditProfilingReferenceTable = ({
                                     Warning:
                                   </th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.warnings
+                                    tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.warnings
                                   }
                                 </td>
                               </div>
@@ -778,10 +775,7 @@ export const EditProfilingReferenceTable = ({
                                 <td className="flex justify-between w-2/3 ">
                                   <th className="text-xs font-light">Valid:</th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.valid_results
+                                   tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.valid_results
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
@@ -789,19 +783,13 @@ export const EditProfilingReferenceTable = ({
                                     Errors:
                                   </th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.errors
+                                    tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.errors
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
                                   <th className="text-xs font-light">Fatal:</th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.fatals
+                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.fatals
                                   }
                                 </td>
                                 <td className="flex justify-between w-2/3 ">
@@ -809,10 +797,7 @@ export const EditProfilingReferenceTable = ({
                                     Warning:
                                   </th>
                                   {
-                                    Object.values(
-                                      tableComparisonResults?.table_comparison_results ??
-                                        []
-                                    ).at(0)?.warnings
+                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.warnings
                                   }
                                 </td>
                               </div>
