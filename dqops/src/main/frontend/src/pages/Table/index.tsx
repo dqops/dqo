@@ -22,7 +22,6 @@ import TableNavigation from '../../components/TableNavigation';
 import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { IRootState } from '../../redux/reducers';
 
 const initTabs = [
   {
@@ -85,9 +84,6 @@ const TablePage = () => {
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
 
   const isMonitoringOnly = useMemo(
     () => checkTypes === CheckTypes.MONITORING,
@@ -254,8 +250,8 @@ const TablePage = () => {
             <div className="border-b border-gray-300">
               <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
             </div>
-            <div>{activeTab === 'detail' && <TableDetails canUserEdit={userProfile.can_manage_data_sources}/>}</div>
-            <div>{activeTab === 'schedule' && <ScheduleDetail canUserEdit={userProfile.can_manage_data_sources}/>}</div>
+            <div>{activeTab === 'detail' && <TableDetails />}</div>
+            <div>{activeTab === 'schedule' && <ScheduleDetail />}</div>
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>
@@ -264,10 +260,10 @@ const TablePage = () => {
               )}
             </div>
 
-            <div>{activeTab === 'timestamps' && <TimestampsView canUserEdit={userProfile.can_manage_data_sources}/>}</div>
+            <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
             <div>
               {activeTab === 'incident_configuration' && (
-                <TableIncidentsNotificationsView canUserEdit={userProfile.can_manage_data_sources}/>
+                <TableIncidentsNotificationsView />
               )}
             </div>
           </>
