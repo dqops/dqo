@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for Dqo.ai. Properties are mapped to the "dqo.python." prefix.
+ * Configuration POJO with the configuration for DQO Python. Properties are mapped to the "dqo.python." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.python")

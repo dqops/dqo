@@ -89,8 +89,10 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      */
     @Override
     public void waitForExit(String startMessage) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
+        if (startMessage != null) {
+            this.getWriter().writeLine(startMessage);
+            this.getWriter().writeLine("Press any key to stop the application.");
+        }
 
         while (true) {
             Character character = this.tryReadChar(1000, true);
@@ -112,8 +114,10 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      */
     @Override
     public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
+        if (startMessage != null) {
+            this.getWriter().writeLine(startMessage);
+            this.getWriter().writeLine("Press any key to stop the application.");
+        }
 
         CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
         try {

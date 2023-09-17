@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.TimeZone;
 
 /**
- * Configuration POJO with the configuration for Dqo.ai. Properties are mapped to the root "dqo." prefix.
+ * Configuration POJO with the configuration for DQO. Properties are mapped to the root "dqo." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo")

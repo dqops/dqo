@@ -53,7 +53,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
     /**
      * Dependency injection constructor that receives all required dependencies.
-     * @param dqoCloudApiClientFactory Creates a rest api client for contacting the cloud.dqo.ai using the API key.
+     * @param dqoCloudApiClientFactory Creates a rest api client for contacting the cloud.dqops.com using the API key.
      * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
      * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
      */
