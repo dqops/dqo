@@ -147,11 +147,13 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         }
 
         if (runDuration == null) {
-            this.terminalReader.waitForExit(this.rootConfigurationProperties.getSilent() ? null : POST_STARTUP_MESSAGE);
+            this.terminalReader.waitForExit(
+                    this.rootConfigurationProperties.getSilent() != null && this.rootConfigurationProperties.getSilent() ? null : POST_STARTUP_MESSAGE);
         }
         else {
             String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
-            this.terminalReader.waitForExitWithTimeLimit(this.rootConfigurationProperties.getSilent() ? null : startupMessage, runDuration);
+            this.terminalReader.waitForExitWithTimeLimit(
+                    this.rootConfigurationProperties.getSilent() != null && this.rootConfigurationProperties.getSilent() ? null : startupMessage, runDuration);
         }
 
         this.jobSchedulerService.shutdown();
