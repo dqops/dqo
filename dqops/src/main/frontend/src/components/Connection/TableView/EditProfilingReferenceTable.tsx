@@ -112,6 +112,7 @@ export const EditProfilingReferenceTable = ({
   } = useSelector(getFirstLevelState(checkTypes));
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
+  const [showColumnCount, setShowColumnCount] = useState(false)
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [jobId, setJobId] = useState<number>();
   const [loading, setLoading] = useState(false);
@@ -119,7 +120,7 @@ export const EditProfilingReferenceTable = ({
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
-  const [rowCountExtended, setRowCountExtended] = useState(false);
+  const [tableLevelComparisonExtended, settableLevelComparisonExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -371,6 +372,15 @@ export const EditProfilingReferenceTable = ({
     });
   };
 
+  const onChangeCompareColumnCount = (obj: Partial<CompareThresholdsModel>) => {
+    onChange({
+      compare_column_count: {
+        ...(reference?.compare_column_count || {}),
+        ...obj
+      }
+    });
+  };
+
   const onChangeColumn = (
     obj: Partial<ColumnComparisonModel>,
     columnIndex: number
@@ -544,6 +554,8 @@ export const EditProfilingReferenceTable = ({
     getResultsData();
   }, [isDataDeleted]);
 
+  console.log(reference)
+  console.log(tableComparisonResults)
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -595,9 +607,9 @@ export const EditProfilingReferenceTable = ({
                     <tr>
                       <th
                         className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"
-                        onClick={() => setRowCountExtended(!rowCountExtended)}
+                        onClick={() => settableLevelComparisonExtended(!tableLevelComparisonExtended)}
                       >
-                        {rowCountExtended ? (
+                        {tableLevelComparisonExtended ? (
                           <SvgIcon name="chevron-down" className="w-5 h-5" />
                         ) : (
                           <SvgIcon name="chevron-right" className="w-5 h-5" />
@@ -618,7 +630,20 @@ export const EditProfilingReferenceTable = ({
                           }}
                         />{' '}
                       </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                      <th
+                        className={clsx(
+                          'text-center px-0 py-4 pr-2 w-1/12 ',
+                          showColumnCount && reference.supports_compare_column_count=== true ? calculateColor('', '', true) : ''
+                        )}
+                      >
+                        {reference.supports_compare_column_count===true ? 
+                        <Checkbox
+                          checked={showColumnCount}
+                          onChange={(checked) => {
+                            setShowColumnCount(checked);
+                          }}
+                        /> : null }
+                      </th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
@@ -630,7 +655,7 @@ export const EditProfilingReferenceTable = ({
                       <th className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"></th>
                       <th className="text-left px-4 py-1.5"></th>
                       <th>
-                        {rowCountExtended && (
+                        {tableLevelComparisonExtended && (
                           <div className="flex flex-col w-full font-normal">
                             {Object.values(
                               tableComparisonResults?.table_comparison_results ??
@@ -728,6 +753,118 @@ export const EditProfilingReferenceTable = ({
                                     }
                                     onChange={(e) =>
                                       onChangeCompareRowCount({
+                                        fatal_difference_percent: Number(
+                                          e.target.value
+                                        )
+                                      })
+                                    }
+                                  />
+                                  %
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </th>
+                      <th>
+                        {tableLevelComparisonExtended  && reference?.supports_compare_column_count===true && (
+                          <div className="flex flex-col w-full font-normal">
+                            {Object.values(
+                              tableComparisonResults?.table_comparison_results ??
+                                []
+                            ).at(0) && (
+                              <div className="gap-y-3">
+                                Results:
+                                <td className="flex justify-between w-2/3 ">
+                                  <th className="text-xs font-light">Valid:</th>
+                                  {
+                                    Object.values(
+                                      tableComparisonResults?.table_comparison_results ??
+                                        []
+                                    ).at(0)?.valid_results
+                                  }
+                                </td>
+                                <td className="flex justify-between w-2/3 ">
+                                  <th className="text-xs font-light">
+                                    Errors:
+                                  </th>
+                                  {
+                                    Object.values(
+                                      tableComparisonResults?.table_comparison_results ??
+                                        []
+                                    ).at(0)?.errors
+                                  }
+                                </td>
+                                <td className="flex justify-between w-2/3 ">
+                                  <th className="text-xs font-light">Fatal:</th>
+                                  {
+                                    Object.values(
+                                      tableComparisonResults?.table_comparison_results ??
+                                        []
+                                    ).at(0)?.fatals
+                                  }
+                                </td>
+                                <td className="flex justify-between w-2/3 ">
+                                  <th className="text-xs font-light">
+                                    Warning:
+                                  </th>
+                                  {
+                                    Object.values(
+                                      tableComparisonResults?.table_comparison_results ??
+                                        []
+                                    ).at(0)?.warnings
+                                  }
+                                </td>
+                              </div>
+                            )}
+                            {showColumnCount && (
+                              <div className="flex flex-col pt-0 mt-0 w-full">
+                                <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
+                                  <Input
+                                    className="max-w-30 !min-w-initial"
+                                    type="number"
+                                    value={
+                                      reference?.compare_column_count
+                                        ?.warning_difference_percent
+                                    }
+                                    onChange={(e) =>
+                                      onChangeCompareColumnCount({
+                                        warning_difference_percent: Number(
+                                          e.target.value
+                                        )
+                                      })
+                                    }
+                                  />
+                                  %
+                                </div>
+                                <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
+                                  <Input
+                                    className="max-w-30 !min-w-initial"
+                                    type="number"
+                                    value={
+                                      reference?.compare_column_count
+                                        ?.error_difference_percent
+                                    }
+                                    onChange={(e) =>
+                                      onChangeCompareColumnCount({
+                                        error_difference_percent: Number(
+                                          e.target.value
+                                        )
+                                      })
+                                    }
+                                  />
+                                  %
+                                </div>
+                                <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
+                                  <Input
+                                    className="max-w-30 !min-w-initial"
+                                    type="number"
+                                    value={
+                                      reference?.compare_column_count
+                                        ?.fatal_difference_percent
+                                    }
+                                    onChange={(e) =>
+                                      onChangeCompareColumnCount({
                                         fatal_difference_percent: Number(
                                           e.target.value
                                         )
