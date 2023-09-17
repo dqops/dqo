@@ -29,6 +29,7 @@ import com.dqops.cli.commands.settings.SettingsCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.synchronize.ScheduledSynchronizationFolderSelectionMode;
@@ -99,8 +100,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
      * picocli to fail because a parameter is unknown, so we make all these overridable parameters known to picocli.
      */
 
+    @CommandLine.Option(names = {"--silent"},
+            description = "Starts DQO in a silent mode, without showing the banner and any other information.", defaultValue = "false")
+    private boolean silent;
+
     @CommandLine.Option(names = {"--dqo.cloud.api-key"},
-            description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key.")
+            description = "DQO cloud api key. Log in to https://cloud.dqops.com/ to get the key.")
     private String dqoCloudApiKey;
 
     @CommandLine.Option(names = {"--server.port"},
@@ -117,7 +122,19 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--logging.level.com.dqops"},
             description = "Default logging level for the DQO runtime.", defaultValue = "WARN")
-    private org.slf4j.event.Level loggingLevelAiDqo;
+    private org.slf4j.event.Level loggingLevelComDqops;
+
+    @CommandLine.Option(names = {"--dqo.logging.console"},
+            description = "Enables logging to console, selecting the correct format. " +
+                    "The default configuration 'OFF' disables console logging, allowing to use the DQO shell without being distracted by log entries. " +
+                    "Set the 'PATTERN' mode to send formatted entries to the console in a format similar to Apache logs. " +
+                    "When running DQO in as a docker container on a Kubernetes engine that is configured to capture DQO container logs, use 'JSON' mode to publish " +
+                    "structured Json log entries that could be parsed by fluentd or other similar log engines.", defaultValue = "OFF")
+    private DqoConsoleLoggingMode dqoLoggingConsole;
+
+    @CommandLine.Option(names = {"--dqo.logging.pattern"},
+            description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)
+    private String dqoLoggingPattern;
 
     @CommandLine.Option(names = {"--dqo.logging.enable-user-home-logging"},
             description = "Enables file logging inside the DQO User Home's .logs folder.", defaultValue = "true")
@@ -127,12 +144,9 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the maximum number of log files that could be stored (archived) in the .logs folder.", defaultValue = "7")
     private Integer maxHistory;
 
-    @CommandLine.Option(names = {"--dqo.logging.pattern"},
-            description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)
-    private String dqoLoggingPattern;
-
     @CommandLine.Option(names = {"--dqo.logging.total-size-cap"},
-            description = "Total log file size cap.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
+            description = "Total log file size cap of log files generated in the DQO User Home's .logs folder. Supported suffixes are: kb, mb, gb. For example: 10mb, 2gb.",
+            defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
     private String dqoLoggingTotalSizeCap;
 
     @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},

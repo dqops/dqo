@@ -29,7 +29,7 @@ import java.util.TimeZone;
 @EqualsAndHashCode(callSuper = false)
 public class DqoConfigurationProperties implements Cloneable {
     private String home;
-    private String yamlSchemaServer = "https://cloud.dqo.ai/dqo-yaml-schema/";
+    private String yamlSchemaServer = "https://cloud.dqops.com/dqo-yaml-schema/";
     private String defaultTimeZone = TimeZone.getDefault().getID();
 
     /**

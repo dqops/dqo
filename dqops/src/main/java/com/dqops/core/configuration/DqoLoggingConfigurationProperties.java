@@ -15,6 +15,7 @@
  */
 package com.dqops.core.configuration;
 
+import com.dqops.cli.terminal.logging.DqoConsoleLoggingMode;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,8 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private Integer maxHistory = DEFAULT_MAX_HISTORY;
     private String pattern = DEFAULT_PATTERN;
     private String totalSizeCap = DEFAULT_TOTAL_SIZE_CAP;
+    private DqoConsoleLoggingMode console = DqoConsoleLoggingMode.OFF;
+    private boolean consoleWithJansi = true;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -108,6 +111,38 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setTotalSizeCap(String totalSizeCap) {
         this.totalSizeCap = totalSizeCap;
+    }
+
+    /**
+     * Returns the configured console logging mode.
+     * @return Console logging mode.
+     */
+    public DqoConsoleLoggingMode getConsole() {
+        return console;
+    }
+
+    /**
+     * Sets the configured console logging mode.
+     * @param console Console logging mode.
+     */
+    public void setConsole(DqoConsoleLoggingMode console) {
+        this.console = console;
+    }
+
+    /**
+     * When using a standard FORMATTED_LINE console logger, enable JAnsi to show formatted messages.
+     * @return True to enable JAnsi in logging.
+     */
+    public boolean isConsoleWithJansi() {
+        return consoleWithJansi;
+    }
+
+    /**
+     * Sets true to enable logging to console with JAnsi.
+     * @param consoleWithJansi True - use jansi.
+     */
+    public void setConsoleWithJansi(boolean consoleWithJansi) {
+        this.consoleWithJansi = consoleWithJansi;
     }
 
     /**

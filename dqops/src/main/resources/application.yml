@@ -52,6 +52,8 @@ logging:
 picocli:
   ansi: true
 
+silent: false
+
 https:
   # SSLv3,TLSv1.1,TLSv1.2
   protocols: TLSv1.2
@@ -84,10 +86,10 @@ dqo:
       http2: true
       http2-max-concurrent-streams: 2000
       parallel-delete-operations: 2000
-  yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
+  yaml-schema-server: https://cloud.dqops.com/dqo-yaml-schema/
   cloud:
-    ui-base-url: https://cloud.dqo.ai
-    rest-api-base-url: https://api.dqo.ai
+    ui-base-url: https://cloud.dqops.com
+    rest-api-base-url: https://api.dqops.com
     #ui-base-url: http://localhost:8080
     #rest-api-base-url: http://localhost:8080
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/

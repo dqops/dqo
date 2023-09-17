@@ -17,6 +17,7 @@ package com.dqops.cli;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -105,9 +106,15 @@ public class CliApplication {
 		try {
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
+			boolean runInSilentMode = Arrays.stream(args)
+					.takeWhile(a -> a.startsWith("-"))
+					.anyMatch(a -> a.equals("--silent")) ||
+					Objects.equals(System.getProperty("silent"), "true") ||
+					Objects.equals(System.getenv("SILENT"), "true");
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setBannerMode(runInSilentMode ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 
