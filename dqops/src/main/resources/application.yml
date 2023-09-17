@@ -80,6 +80,8 @@ dqo:
     max-history: 7
     pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%rootException%n"
     total-size-cap: 10mb
+    console-immediate-flush: false
+    console: OFF
   storage:
     gcp:
       upload-buffer-size: 5000000

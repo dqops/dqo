@@ -48,6 +48,7 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private String totalSizeCap = DEFAULT_TOTAL_SIZE_CAP;
     private DqoConsoleLoggingMode console = DqoConsoleLoggingMode.OFF;
     private boolean consoleWithJansi = true;
+    private boolean consoleImmediateFlush;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -143,6 +144,22 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setConsoleWithJansi(boolean consoleWithJansi) {
         this.consoleWithJansi = consoleWithJansi;
+    }
+
+    /**
+     * Turns on immediate flush to the console for all log entries. Usable for logging from a docker container.
+     * @return True when immediate flush is enabled.
+     */
+    public boolean isConsoleImmediateFlush() {
+        return consoleImmediateFlush;
+    }
+
+    /**
+     * Enables or disables a mode to perform an immediate flush when console logging is enabled.
+     * @param consoleImmediateFlush Perform an immediate flush to console.
+     */
+    public void setConsoleImmediateFlush(boolean consoleImmediateFlush) {
+        this.consoleImmediateFlush = consoleImmediateFlush;
     }
 
     /**

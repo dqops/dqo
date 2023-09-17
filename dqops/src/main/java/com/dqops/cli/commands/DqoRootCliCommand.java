@@ -129,8 +129,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "The default configuration 'OFF' disables console logging, allowing to use the DQO shell without being distracted by log entries. " +
                     "Set the 'PATTERN' mode to send formatted entries to the console in a format similar to Apache logs. " +
                     "When running DQO in as a docker container on a Kubernetes engine that is configured to capture DQO container logs, use 'JSON' mode to publish " +
-                    "structured Json log entries that could be parsed by fluentd or other similar log engines.", defaultValue = "OFF")
+                    "structured Json log entries that could be parsed by fluentd or other similar log engines. JSON formatted messages use a Logstash compatible format.", defaultValue = "OFF")
     private DqoConsoleLoggingMode dqoLoggingConsole;
+
+    @CommandLine.Option(names = {"--dqo.logging.console-immediate-flush"},
+            description = "When the console logging is enabled with --dqo.logging.console=PATTERN or --dqo.logging.console=JSON, turns on (for 'true') or turns of (for 'false') " +
+                          "immediate console flushing after each log entry was written. Immediate console flushing is desirable when DQO is started as a docker container " +
+                          "and docker logs from DQO should be forwarded to Kubernetes for centralized logging.", defaultValue = "false")
+    private Boolean dqoLoggingConsoleImmediateFlush;
 
     @CommandLine.Option(names = {"--dqo.logging.pattern"},
             description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)

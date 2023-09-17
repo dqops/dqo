@@ -140,4 +140,13 @@ public class DqoUserPrincipal {
             throw new DqoAccessDeniedException(requiredPrivilege);
         }
     }
+
+    /**
+     * Returns a string representation of the user and his role.
+     * @return User and role.
+     */
+    @Override
+    public String toString() {
+        return this.name + "(" + accountRole + ")";
+    }
 }

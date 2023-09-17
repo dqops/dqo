@@ -18,7 +18,6 @@ package com.dqops.cli.terminal.logging;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
@@ -36,7 +35,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Lazy(false)
-public class ConsoleLoggingConfigurator implements InitializingBean {
+public class ConsoleLoggingConfiguratorInitializingBean implements InitializingBean {
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
 
     /**
@@ -44,7 +43,7 @@ public class ConsoleLoggingConfigurator implements InitializingBean {
      * @param loggingConfigurationProperties Configuration parameters with the logging settings.
      */
     @Autowired
-    public ConsoleLoggingConfigurator(DqoLoggingConfigurationProperties loggingConfigurationProperties) {
+    public ConsoleLoggingConfiguratorInitializingBean(DqoLoggingConfigurationProperties loggingConfigurationProperties) {
         this.loggingConfigurationProperties = loggingConfigurationProperties;
     }
 
@@ -87,6 +86,7 @@ public class ConsoleLoggingConfigurator implements InitializingBean {
         }
 
         consoleAppender.setEncoder(encoder);
+        consoleAppender.setImmediateFlush(this.loggingConfigurationProperties.isConsoleImmediateFlush());
         consoleAppender.start();
         rootLogger.addAppender(consoleAppender);
     }
