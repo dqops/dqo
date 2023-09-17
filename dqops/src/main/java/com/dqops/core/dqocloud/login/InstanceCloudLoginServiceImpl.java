@@ -157,8 +157,10 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     @Override
     public String makeDqoLoginUrl(String returnUrl) {
         String returnBaseUrl = this.getReturnBaseUrl();
-        if (!returnUrl.startsWith(returnBaseUrl)) {
-            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQO instance must begin with " + returnBaseUrl);
+        if (this.dqoInstanceConfigurationProperties.isValidateReturnBaseUrl() && !returnUrl.startsWith(returnBaseUrl)) {
+            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQO instance must begin with " + returnBaseUrl +
+                    ". You can change the configuration by setting the --dqo.instance.return-base-url or setting the environment variable " +
+                    "DQO_INSTANCE_RETURN_BASE_URL to the base url of your DQO instance, for example --dqo.instance.return-base-url=https://dqoinstance.yourcompany.com");
         }
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();

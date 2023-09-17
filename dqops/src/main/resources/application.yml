@@ -121,6 +121,8 @@ dqo:
     process-file-changes-delay-millis: 100
   instance:
     authentication-token-expiration-minutes: 10080
+    return-base-url: http://localhost:8888
+    validate-return-base-url: false
   sensor:
     limits:
       sensor-readout-limit: 1000
