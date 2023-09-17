@@ -584,7 +584,7 @@ export const EditProfilingReferenceTable = ({
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12">
                         Row Count
                       </th>
-                      <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                      <th className="text-center px-4 py-1.5 pr-1 w-1/12">{reference.supports_compare_column_count === true ? "Column Count" : ""}</th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
