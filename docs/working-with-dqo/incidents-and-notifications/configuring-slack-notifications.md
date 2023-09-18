@@ -49,38 +49,19 @@ A simple Slack integration allows you to receive notifications as fast as possib
 
 6. In the **Webhooks for notifications of an incident state change** section paste the slack webhook url and save the changes by **Save** button.
 
+    Let's fill the first field in **Webhooks for notificaiton** section. It will lead to a new notification each time a new incident is observed.
+    If you would like to receive notification on another states, fill proper fields.
+
     ![dqo-incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/dqo-incidents.png)
 
-    Each time an incident changes its state in DQO application you get a notification to keep track your data quality.
+7. Receive the notification
 
-## Message content
+    Each time a new incident is observed in DQO application you get a notification to keep track your data quality.
+    If you set another fields of webhook notifications, you will receive a notification each time resolution state changes on an incident to that state set in webhook. 
 
-Notification message begins with a full table name the incident occurred and contains data such as:
+## Notification example
 
-- incident state 
-- date time of incident (first and last seen),
-- quality dimension
-- highest severity level
-- total data quality issues
-- links [Links](#links)
-
-
-In the notificaiton you will receive information about the data source, times
-
-More details are avaialble when opening the message. You can check it in the [Message content](#message-content) section.
-
-
-Notification message differentiates the following resolution status values:
-
-- **Open**: The default initial state of all incidents. The other states are set manually. You can revert an incident's status back to Open at any time.
-- **Acknowledged**: A state indicating that the incident was acknowledged.
-- **Resolved**: A state indicating that an incident is fixed.
-- **Muted**: A state for hiding the incident from your list. By default, any data quality issues associated with that
-  incident will be muted for 60 days. If an incident is muted, DQO will not create a new one. To change the time duration for muted incidents
-  click the **Configure** button.
-
-
-Each of them differ in the message of the notification.
+Each notification differ in the message. 
 
 #### New incident message example
 
@@ -90,22 +71,5 @@ Each of them differ in the message of the notification.
 #### Acknowledged incident message example
 ![slack-message-acknowledged](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-acknowledged.png)
 
-**Acknowledged**, **Resolved** and **Muted** resolution status messages differs in the header of a notification. 
+**Acknowledged**, **Resolved** and **Muted** resolution status messages differs in the header of a notification.
 You can also see it when indicent change the status.
-
-
-### Links
-
-Notification message contains fast access links to:
-- **an incident** - View in DQOps link on the bottom of a message, 
-- **a data source** - Full table name present in the header of a message, 
-- **an issue url**. 
-
-The last one will be present when set manually on an incident. Check the [External system linking](#external-system-linking) section.
-
-
-### External system linking
-
-If you use an external ticketing system you can link the external ticketing system with the incident.
-
-While an incident occurs for the first time, it will allow to track the issue simple way.

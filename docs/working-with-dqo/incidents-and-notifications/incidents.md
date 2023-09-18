@@ -1,4 +1,4 @@
-# Incidents and notifications overview
+# Incidents overview
 
 With the help of DQO, you can conveniently keep track of the issues that arise during data quality monitoring. The Incidents section aggregates
 these issues into incident and allows you to view and filter them, as well as manage their status.
@@ -32,19 +32,6 @@ On the Incidents and Notifications tab, you can customize:
 - Whether incidents should be created for the entire data source or for each data stream separately.
 - The maximum duration of an incident in days. After this time, DQO creates a new incident.
 - The time duration for muted incidents. If the incident is muted, DQO will not create a new one.
-
-## Configure notifications
-
-You can send a notification about new data quality incident or when the incident state changes using Webhooks.
-
-To configure Webhooks, follow these steps:
-
-1. Go to the **Data Sources** section.
-2. Select the relevant data source.
-3. Select the **Incidents And Notifications** tab.
-4. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
-
-![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-webhooks.png)
 
 ## View and manage Incidents
 
