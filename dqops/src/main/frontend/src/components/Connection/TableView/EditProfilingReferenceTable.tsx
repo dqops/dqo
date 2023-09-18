@@ -413,7 +413,12 @@ export const EditProfilingReferenceTable = ({
         compare_row_count: reference?.default_compare_thresholds
       });
     }
-  }, [showRowCount]);
+    if (showColumnCount) {
+      onChange({
+        compare_column_count: reference?.default_compare_thresholds
+      });
+    }
+  }, [showRowCount, showColumnCount]);
 
   const handleExtend = (index: number) => {
     const newArr = [...isElemExtended];
