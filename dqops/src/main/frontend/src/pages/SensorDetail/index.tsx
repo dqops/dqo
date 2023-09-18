@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
+  addFirstLevelTab,
   createSensor,
   getSensor,
   setUpdatedSensor
@@ -18,6 +19,7 @@ import {
 import ProvideSensor from './ProvideSensor';
 import Input from '../../components/Input';
 import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
+import { ROUTES } from '../../shared/routes';
 
 const tabs = [
   {
@@ -55,7 +57,7 @@ const tabs = [
 ];
 
 export const SensorDetail = () => {
-  const { full_sensor_name, sensorDetail, path, type } = useSelector(
+  const { full_sensor_name, sensorDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
   const dispatch = useActionDispatch();
@@ -63,7 +65,7 @@ export const SensorDetail = () => {
   const [sensorName, setSensorName] = useState('');
 
   useEffect(() => {
-    if (!sensorDetail && type !== 'create') {
+    if (!sensorDetail && type !== 'create' && copied!==true) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);
@@ -118,11 +120,26 @@ export const SensorDetail = () => {
     );
   };
 
+  const onCopy = () : void => { 
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.SENSOR_DETAIL(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
+          value: ROUTES.SENSOR_DETAIL_VALUE(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
+          state: {
+            full_sensor_name: full_sensor_name + "_copy",
+            copied: true,
+            path: path
+          },
+          label: `${String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]}_copy`
+        })
+      );
+  }
+  console.log(copied)
   return (
     <DefinitionLayout>
       <div className="relative">
-        <SensorActionGroup onSave={onCreateSensor} />
-        {type !== 'create' ? (
+        <SensorActionGroup onSave={onCreateSensor} onCopy={onCopy}/>
+        {type !== 'create' && copied !== true ? (
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
@@ -138,12 +155,12 @@ export const SensorDetail = () => {
               <div className="text-xl font-semibold truncate">
                 Sensor: {[...(path || []), ''].join('/')}
               </div>
-
               <Input
                 value={sensorName}
                 onChange={onChangeSensorName}
                 error={!sensorName}
-                
+                defaultValue={copied === true ? full_sensor_name : ""}
+                placeholder={copied === true ? full_sensor_name : ""}
               />
             </div>
           </div>

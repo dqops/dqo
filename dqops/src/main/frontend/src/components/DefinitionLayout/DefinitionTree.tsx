@@ -194,8 +194,6 @@ export const DefinitionTree = () => {
     }
   }, []);
 
-console.log(activeTab)
-
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],

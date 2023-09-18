@@ -8,9 +8,10 @@ import { IRootState } from '../../redux/reducers';
 
 type SensorActionGroupProps = {
   onSave: () => void;
+  onCopy?: () => void;
 };
 
-export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
+export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) => {
   const {
     full_sensor_name,
     sensorDetail,
@@ -44,6 +45,14 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
           disabled={userProfile.can_manage_definitions !== true}
         />
       )}
+        <Button
+        color="primary"
+        variant="outlined"
+        label="Copy"
+        className="w-40 !h-10"
+        disabled={userProfile.can_manage_definitions !== true}
+        onClick={onCopy}
+        />
       <Button
         color="primary"
         variant="contained"
