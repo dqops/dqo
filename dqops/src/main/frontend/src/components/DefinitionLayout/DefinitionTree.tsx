@@ -194,8 +194,6 @@ export const DefinitionTree = () => {
     }
   }, []);
 
-console.log(activeTab)
-
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
@@ -258,6 +256,7 @@ console.log(activeTab)
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {sensor.sensor_name}
               </div>
+              <SensorContextMenu singleSensor={true} sensor={sensor}/>
             </div>
           ))}
         </div>
