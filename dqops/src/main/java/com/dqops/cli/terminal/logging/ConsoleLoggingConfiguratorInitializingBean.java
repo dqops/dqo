@@ -18,12 +18,14 @@ package com.dqops.cli.terminal.logging;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.JsonEncoder;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.Encoder;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import net.logstash.logback.encoder.LogstashEncoder;
+import net.logstash.logback.fieldnames.LogstashFieldNames;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +81,11 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
             case JSON:
                 LogstashEncoder jsonEncoder = new LogstashEncoder();
                 jsonEncoder.setContext(loggerContext);
+                jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                LogstashFieldNames fieldNames = new LogstashFieldNames();
+                fieldNames.setTimestamp("time");
+                fieldNames.setMessage("log");
+                jsonEncoder.setFieldNames(fieldNames);
                 jsonEncoder.start();
                 encoder = jsonEncoder;
                 consoleAppender.setWithJansi(false);
