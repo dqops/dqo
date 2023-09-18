@@ -63,7 +63,7 @@ export const SensorDetail = () => {
   );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
-  const [sensorName, setSensorName] = useState(type === 'create' && copied !== true ? "" : String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]  );
+  const [sensorName, setSensorName] = useState(type === 'create' && copied !== true ? "" : String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1] + "_copy"  );
 
   useEffect(() => {
     if (!sensorDetail && (type !== 'create' || copied === true)) {
@@ -74,7 +74,7 @@ export const SensorDetail = () => {
       if(type === 'create' && copied !== true){
         setSensorName('')
       }else{
-        setSensorName(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1])
+        setSensorName(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy")
       }
     },[type, copied])
 
@@ -154,7 +154,7 @@ export const SensorDetail = () => {
           url: ROUTES.SENSOR_DETAIL(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
           value: ROUTES.SENSOR_DETAIL_VALUE(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
           state: {
-            full_sensor_name: full_sensor_name + "_copy",
+            full_sensor_name: full_sensor_name,
             copied: true,
             path: path,
             sensorDetail: {...sensorDetail, full_sensor_name: full_sensor_name + "_copy", custom: true, built_in: false, can_edit: true},
