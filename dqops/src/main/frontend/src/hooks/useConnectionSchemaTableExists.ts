@@ -41,6 +41,8 @@ function useConnectionSchemaTableExists(
           if (schemaResponse.status === 200) {
             if (schemaResponse.data.find((x) => x.schema_name === schema)) {
               setSchemaExist(true);
+            }else{
+              setSchemaExist(false)
             }
           }
         }
