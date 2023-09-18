@@ -112,7 +112,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             Duration waitDuration = Duration.of(this.dqoCloudConfigurationProperties.getApiKeyPickupTimeoutSeconds(), ChronoUnit.SECONDS);
             Instant startTime = Instant.now();
             Instant timeoutTime = startTime.plus(waitDuration);
-            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalFactory.getReader().waitForConsoleInput(waitDuration);
+            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalFactory.getReader().waitForConsoleInput(waitDuration, false);
 
             // now waiting for the api key...
             while (Instant.now().isBefore(timeoutTime) && !waitForConsoleInputMono.isDone()) {
@@ -135,7 +135,6 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             }
 
             if (waitForConsoleInputMono.isDone() && Objects.equals(true, waitForConsoleInputMono.get())) {
-                this.terminalFactory.getReader().tryReadChar(0, true); // read that character that was typed
                 terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
             }
         }
