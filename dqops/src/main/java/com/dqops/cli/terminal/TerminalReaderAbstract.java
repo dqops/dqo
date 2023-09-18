@@ -15,6 +15,7 @@
  */
 package com.dqops.cli.terminal;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.google.common.base.Strings;
 import tech.tablesaw.api.Table;
 
@@ -90,16 +91,14 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
     @Override
     public void waitForExit(String startMessage) {
         if (startMessage != null) {
+            this.getWriter().writeLine("");
             this.getWriter().writeLine(startMessage);
-            this.getWriter().writeLine("Press any key to stop the application.");
         }
 
         while (true) {
-            Character character = this.tryReadChar(1000, true);
-            if (character != null) {
-                if (this.promptBoolean("Exit the application", false)) {
-                    return;
-                }
+            String line = this.readLine("Press ENTER to stop the application.");
+            if (this.promptBoolean("Exit the application", false)) {
+                return;
             }
         }
     }
