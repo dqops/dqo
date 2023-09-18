@@ -237,6 +237,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Turns on user authentication by using DQO Cloud credentials. Users will be redirected to the DQO Cloud login screen to login and will be returned back to the local DQO instance.", defaultValue = "false")
     private Boolean dqoCloudAuthenticateWithDqoCloud;
 
+    @CommandLine.Option(names = {"--dqo.instance.return-base-url"},
+            description = "Base url of this instance that is used as a return url when authentication with DQO Cloud credentials is forwarded and " +
+                    "the user must be forwarded back to the current instance from the https://cloud.dqops.com login screen. " +
+                    "When this parameter is not provided, DQO will use the url from the \"Host\" HTTP header.")
+    private String dqoInstanceReturnBaseUrl;
+
     @CommandLine.Option(names = {"--dqo.instance.signature-key"},
             description = "DQO local instance signature key that is used to issue and verify digital signatures on API keys. It is a base64 encoded byte array (32 bytes). " +
                     "When not configured, DQO will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
