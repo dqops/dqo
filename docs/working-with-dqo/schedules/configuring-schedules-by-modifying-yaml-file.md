@@ -22,7 +22,7 @@ Next, define the frequency at which the check should be run using the `cron_expr
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
 
 ``` yaml hl_lines="9-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
 spec:
@@ -68,7 +68,7 @@ Next, define the frequency at which the check should be run using the `cron_expr
 For example, to schedule checks to run every day at 10:00 for all profiling checks, the YAML file will look like the one provided below:
 
 ``` yaml hl_lines="8-10"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -105,7 +105,7 @@ the YAML files will look like the ones provided below:
 
 === "Schedule on table level row_count check"
     ``` yaml hl_lines="11-12"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -135,7 +135,7 @@ the YAML files will look like the ones provided below:
     ```
 === "Schedule on column level nulls_count check"
     ```yaml hl_lines="16-17"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:

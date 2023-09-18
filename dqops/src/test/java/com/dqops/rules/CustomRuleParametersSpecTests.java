@@ -77,6 +77,6 @@ public class CustomRuleParametersSpecTests extends BaseTest {
         this.sut.setParameter("field_2", 30);
 
         String serialized = this.yamlSerializer.serialize(this.sut).replace("\r\n", "\n");
-        Assertions.assertEquals("# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CustomRuleParametersSpec-schema.json\nfield_1: abc\nfield_2: 30\n", serialized);
+        Assertions.assertEquals("# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CustomRuleParametersSpec-schema.json\nfield_1: abc\nfield_2: 30\n", serialized);
     }
 }

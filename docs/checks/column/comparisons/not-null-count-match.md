@@ -53,7 +53,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_not
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="24-34"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
