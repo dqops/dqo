@@ -752,7 +752,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -849,7 +849,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -946,7 +946,7 @@ Data quality rule that verifies if the number of executive failures (the sensor 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1069,7 +1069,7 @@ Data quality rule that verifies the results of the data quality checks that coun
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1172,7 +1172,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1269,7 +1269,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1368,7 +1368,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1467,7 +1467,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1566,7 +1566,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1663,7 +1663,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:

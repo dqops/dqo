@@ -40,12 +40,12 @@ Having done the above steps now an example can be run.
 After starting the example, run the following commands in the DQO shell:
 
 dqo> cloud login
-This command will let up login or sign up for the cloud.dqo.ai account.
+This command will let up login or sign up for the cloud.dqops.com account.
 
 dqo> check run
 The data quality checks will be executed.
 
 dqo> cloud sync
-The result files will be pushed to cloud.dqo.ai
+The result files will be pushed to cloud.dqops.com
 
-Now, you can open the browser and navigate to https://cloud.dqo.ai/ and review the sensor results on the dashboards.
+Now, you can open the browser and navigate to https://cloud.dqops.com/ and review the sensor results on the dashboards.
