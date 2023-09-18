@@ -140,7 +140,7 @@ export const EditProfilingReferenceTable = ({
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
   };
-  const checkIfRowCountClicked = () => {
+  const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
     if (checkTypes === CheckTypes.PROFILING) {
       values = Object.values(checksUI);
@@ -161,7 +161,6 @@ export const EditProfilingReferenceTable = ({
     if (values.length === 0 || !Array.isArray(values[0])) {
       return;
     }
-
     const comparisonCategory = values[0].find(
       (x) => x && x.category === `comparisons/${selectedReference}`
     );
@@ -176,8 +175,18 @@ export const EditProfilingReferenceTable = ({
         c.check_name === 'monthly_row_count_match'
     );
 
+    const columnCountElem = comparisonCategory.checks.find(
+      (c: any) =>
+        c.check_name === 'profile_column_count_match' ||
+        c.check_name === 'daily_column_count_match' ||
+        c.check_name === 'monthly_column_count_match'
+    );
+
     if (rowCountElem) {
       setShowRowCount(!!rowCountElem.configured);
+    }
+    if(columnCountElem){
+      setShowColumnCount(!!columnCountElem.configured)
     }
   };
 
@@ -228,7 +237,7 @@ export const EditProfilingReferenceTable = ({
           ).then(callback);
         }
       }
-      checkIfRowCountClicked();
+      checkIfRowAndColumnCountClicked();
     }
   }, [selectedReference]);
 
@@ -553,9 +562,6 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     getResultsData();
   }, [isDataDeleted]);
-
-  console.log(reference)
-  console.log(tableComparisonResults)
   
   const columnKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("column_count_match"));
@@ -563,7 +569,7 @@ export const EditProfilingReferenceTable = ({
   const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("row_count_match"));
 
-  console.log(columnKey, rowKey)
+  console.log(reference)
   
   return (
     <div className="text-sm">
@@ -666,10 +672,7 @@ export const EditProfilingReferenceTable = ({
                       <th>
                         {tableLevelComparisonExtended && (
                           <div className="flex flex-col w-full font-normal">
-                            {Object.values(
-                              tableComparisonResults?.table_comparison_results ??
-                                []
-                            ).at(0) && (
+                            {rowKey ? (
                               <div className="gap-y-3">
                                 Results:
                                 <td className="flex justify-between w-2/3 ">
@@ -701,7 +704,7 @@ export const EditProfilingReferenceTable = ({
                                   }
                                 </td>
                               </div>
-                            )}
+                            ) : null}
                             {showRowCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -764,12 +767,9 @@ export const EditProfilingReferenceTable = ({
                         )}
                       </th>
                       <th>
-                        {tableLevelComparisonExtended  && reference?.supports_compare_column_count===true && (
+                        {(tableLevelComparisonExtended  && reference?.supports_compare_column_count===true) ? (
                           <div className="flex flex-col w-full font-normal">
-                            {Object.values(
-                              tableComparisonResults?.table_comparison_results ??
-                                []
-                            ).at(0) && (
+                            {columnKey ? 
                               <div className="gap-y-3">
                                 Results:
                                 <td className="flex justify-between w-2/3 ">
@@ -801,7 +801,8 @@ export const EditProfilingReferenceTable = ({
                                   }
                                 </td>
                               </div>
-                            )}
+                              : null
+                              }           
                             {showColumnCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -861,7 +862,7 @@ export const EditProfilingReferenceTable = ({
                               </div>
                             )}
                           </div>
-                        )}
+                        ) : null}
                       </th>
                     </tr>
                   </thead>
