@@ -21,7 +21,7 @@ import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
-import com.dqops.cli.terminal.logging.RootConfigurationProperties;
+import com.dqops.core.configuration.RootConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
@@ -201,8 +201,7 @@ public class CliInitializerImpl implements CliInitializer {
                 this.jobSchedulerService.triggerMetadataSynchronization();
             }
 
-            if (CliApplication.isRequiredWebServer() &&
-                    this.rootConfigurationProperties.getSilent() != null && !this.rootConfigurationProperties.getSilent()) {
+            if (CliApplication.isRequiredWebServer() && !this.rootConfigurationProperties.isSilent()) {
                 this.displayUiLinks();
             }
         }

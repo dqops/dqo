@@ -13,26 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.cli.terminal.logging;
+package com.dqops.core.configuration;
 
+import com.dqops.cli.CliApplication;
 import lombok.EqualsAndHashCode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration POJO with the mapping for configuration parameters at the root level.
  */
 @Configuration
-@ConfigurationProperties
 @EqualsAndHashCode(callSuper = false)
 public class RootConfigurationProperties implements Cloneable {
-    private Boolean silent;
+    private boolean silent;
+
+    @Autowired
+    public RootConfigurationProperties() {
+        // this constructor picks the value from the main method, because we want to accept a parameter "--silent" without a value, but for spring configuration, such parameter means to set null to the value
+        if (CliApplication.isSilentEnabledByArgument()) {
+            this.silent = true;
+        }
+    }
 
     /**
      * Returns true if application should run in a silent mode (not showing the banner and the help text).
      * @return Run application in a silent mode.
      */
-    public Boolean getSilent() {
+    public boolean isSilent() {
         return silent;
     }
 
@@ -40,7 +48,7 @@ public class RootConfigurationProperties implements Cloneable {
      * Sets a flag to run the application in a silent mode.
      * @param silent True - do not show any banners, startup message, etc.
      */
-    public void setSilent(Boolean silent) {
+    public void setSilent(boolean silent) {
         this.silent = silent;
     }
 

@@ -19,7 +19,7 @@ import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
-import com.dqops.cli.terminal.logging.RootConfigurationProperties;
+import com.dqops.core.configuration.RootConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -147,13 +147,11 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         }
 
         if (runDuration == null) {
-            this.terminalReader.waitForExit(
-                    this.rootConfigurationProperties.getSilent() != null && this.rootConfigurationProperties.getSilent() ? null : POST_STARTUP_MESSAGE);
+            this.terminalReader.waitForExit(this.rootConfigurationProperties.isSilent() ? null : POST_STARTUP_MESSAGE);
         }
         else {
             String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
-            this.terminalReader.waitForExitWithTimeLimit(
-                    this.rootConfigurationProperties.getSilent() != null && this.rootConfigurationProperties.getSilent() ? null : startupMessage, runDuration);
+            this.terminalReader.waitForExitWithTimeLimit(this.rootConfigurationProperties.isSilent() ? null : startupMessage, runDuration);
         }
 
         this.jobSchedulerService.shutdown();

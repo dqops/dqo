@@ -52,8 +52,6 @@ logging:
 picocli:
   ansi: true
 
-silent: false
-
 https:
   # SSLv3,TLSv1.1,TLSv1.2
   protocols: TLSv1.2

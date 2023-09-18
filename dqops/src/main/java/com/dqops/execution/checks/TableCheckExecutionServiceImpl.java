@@ -328,7 +328,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
-                        log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
+                        log.warn("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
                         executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                                 sensorExecutionResult, sensorRunParameters, ex);
@@ -476,7 +476,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
-                        log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
+                        log.warn("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
                         executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                                 sensorExecutionResultComparedTable, sensorRunParametersComparedTable, ex);
