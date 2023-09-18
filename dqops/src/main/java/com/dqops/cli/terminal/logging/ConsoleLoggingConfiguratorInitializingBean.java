@@ -16,16 +16,21 @@
 
 package com.dqops.cli.terminal.logging;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.JsonEncoder;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.filter.LevelFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.Encoder;
+import ch.qos.logback.core.filter.Filter;
+import ch.qos.logback.core.spi.FilterReply;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.fieldnames.LogstashFieldNames;
+import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,39 +67,83 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
-        ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<>();
-        Encoder<ILoggingEvent> encoder = null;
+        ConsoleAppender<ILoggingEvent> consoleAppenderError = new ConsoleAppender<>();
+        ConsoleAppender<ILoggingEvent> consoleAppenderNonError = new ConsoleAppender<>();
+        Encoder<ILoggingEvent> encoderError = null;
+        Encoder<ILoggingEvent> encoderNonError = null;
 
         switch (loggingConfigurationProperties.getConsole()) {
             case OFF:
                 return;
 
             case PATTERN:
-                PatternLayoutEncoder lineEncoder = new PatternLayoutEncoder();
-                lineEncoder.setContext(loggerContext);
-                lineEncoder.setPattern(this.loggingConfigurationProperties.getPattern());
-                lineEncoder.start();
-                encoder = lineEncoder;
-                consoleAppender.setWithJansi(this.loggingConfigurationProperties.isConsoleWithJansi());
+                PatternLayoutEncoder lineEncoderError = new PatternLayoutEncoder();
+                lineEncoderError.setContext(loggerContext);
+                lineEncoderError.setPattern(this.loggingConfigurationProperties.getPattern());
+                lineEncoderError.start();
+                encoderError = lineEncoderError;
+
+                PatternLayoutEncoder lineEncoderNonError = new PatternLayoutEncoder();
+                lineEncoderNonError.setContext(loggerContext);
+                lineEncoderNonError.setPattern(this.loggingConfigurationProperties.getPattern());
+                lineEncoderNonError.start();
+                encoderNonError = lineEncoderNonError;
+
+
+                consoleAppenderError.setWithJansi(this.loggingConfigurationProperties.isConsoleWithJansi());
+                consoleAppenderNonError.setWithJansi(this.loggingConfigurationProperties.isConsoleWithJansi());
                 break;
 
             case JSON:
-                LogstashEncoder jsonEncoder = new LogstashEncoder();
-                jsonEncoder.setContext(loggerContext);
-                jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                LogstashFieldNames fieldNames = new LogstashFieldNames();
-                fieldNames.setTimestamp("time");
-                fieldNames.setMessage("log");
-                jsonEncoder.setFieldNames(fieldNames);
-                jsonEncoder.start();
-                encoder = jsonEncoder;
-                consoleAppender.setWithJansi(false);
+                LogstashEncoder jsonEncoderError = new LogstashEncoder();
+                jsonEncoderError.setContext(loggerContext);
+                jsonEncoderError.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
+                throwableConverter.setRootCauseFirst(true);
+                jsonEncoderError.setThrowableConverter(throwableConverter);
+                LogstashFieldNames fieldNamesError = new LogstashFieldNames();
+                fieldNamesError.setTimestamp("time");
+                fieldNamesError.setMessage("log");
+                jsonEncoderError.setFieldNames(fieldNamesError);
+                jsonEncoderError.start();
+                encoderError = jsonEncoderError;
+
+                LogstashEncoder jsonEncoderNonError = new LogstashEncoder();
+                jsonEncoderNonError.setContext(loggerContext);
+                jsonEncoderNonError.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                LogstashFieldNames fieldNamesNonError = new LogstashFieldNames();
+                fieldNamesNonError.setTimestamp("time");
+                fieldNamesNonError.setMessage("log");
+                jsonEncoderNonError.setFieldNames(fieldNamesNonError);
+                jsonEncoderNonError.start();
+                encoderNonError = jsonEncoderNonError;
+
+                consoleAppenderError.setWithJansi(false);
+                consoleAppenderNonError.setWithJansi(false);
                 break;
         }
 
-        consoleAppender.setEncoder(encoder);
-        consoleAppender.setImmediateFlush(this.loggingConfigurationProperties.isConsoleImmediateFlush());
-        consoleAppender.start();
-        rootLogger.addAppender(consoleAppender);
+        consoleAppenderError.setEncoder(encoderError);
+        consoleAppenderError.setImmediateFlush(this.loggingConfigurationProperties.isConsoleImmediateFlush());
+        LevelFilter errorLevelFilter = new LevelFilter();
+        errorLevelFilter.setLevel(Level.ERROR);
+        errorLevelFilter.setOnMatch(FilterReply.NEUTRAL);
+        errorLevelFilter.setOnMismatch(FilterReply.DENY);
+        errorLevelFilter.start();
+        consoleAppenderError.addFilter(errorLevelFilter);
+        consoleAppenderError.setOutputStream(System.err);
+        consoleAppenderError.start();
+        rootLogger.addAppender(consoleAppenderError);
+
+        consoleAppenderNonError.setEncoder(encoderNonError);
+        consoleAppenderNonError.setImmediateFlush(this.loggingConfigurationProperties.isConsoleImmediateFlush());
+        LevelFilter notErrorLevelFilter = new LevelFilter();
+        notErrorLevelFilter.setLevel(Level.ERROR);
+        notErrorLevelFilter.setOnMatch(FilterReply.DENY);
+        notErrorLevelFilter.setOnMismatch(FilterReply.NEUTRAL);
+        notErrorLevelFilter.start();
+        consoleAppenderNonError.addFilter(notErrorLevelFilter);
+        consoleAppenderNonError.start();
+        rootLogger.addAppender(consoleAppenderNonError);
     }
 }
