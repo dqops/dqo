@@ -16,6 +16,7 @@
 package com.dqops.cli.commands.run;
 
 import com.dqops.cli.commands.BaseCommand;
+import com.dqops.cli.commands.CliMainCommandRunner;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -147,11 +148,19 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         }
 
         if (runDuration == null) {
-            this.terminalReader.waitForExit(this.rootConfigurationProperties.isSilent() ? null : POST_STARTUP_MESSAGE);
+            if (this.rootConfigurationProperties.isSilent()) {
+                return CliMainCommandRunner.DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE;
+            } else {
+                this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
+            }
         }
         else {
-            String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
-            this.terminalReader.waitForExitWithTimeLimit(this.rootConfigurationProperties.isSilent() ? null : startupMessage, runDuration);
+            if (this.rootConfigurationProperties.isSilent()) {
+                Thread.sleep(runDuration.toMillis());
+            } else {
+                String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
+                this.terminalReader.waitForExitWithTimeLimit(startupMessage, runDuration);
+            }
         }
 
         this.jobSchedulerService.shutdown();

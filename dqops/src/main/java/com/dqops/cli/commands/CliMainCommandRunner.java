@@ -30,6 +30,12 @@ import picocli.CommandLine;
 @Profile("!test & cli")
 @Component
 public class CliMainCommandRunner implements CommandLineRunner {
+    /**
+     * Special exit code returned only by the {@link com.dqops.cli.commands.run.RunCliCommand} command
+     * to indicate that the application should continue working, even after the command finished because we are simply not able to wait for the exit.
+     */
+    public static final int DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE = Integer.MIN_VALUE + 99;
+
     private final CliExitCodeGenerator cliExitCodeGenerator;
     private CliInitializer cliInitializer;
     private ApplicationShutdownManager applicationShutdownManager;
@@ -57,8 +63,10 @@ public class CliMainCommandRunner implements CommandLineRunner {
 
         try {
             int errorCode = commandLine.execute(args);
-			this.cliExitCodeGenerator.setExitCode(errorCode);
-            this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
+            if (errorCode != DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE) {
+                this.cliExitCodeGenerator.setExitCode(errorCode);
+                this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
+            }
         }
         catch (Exception ex) {
 			this.cliExitCodeGenerator.setExitCode(1);
