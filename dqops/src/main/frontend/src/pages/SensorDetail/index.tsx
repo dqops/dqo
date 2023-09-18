@@ -113,6 +113,8 @@ export const SensorDetail = () => {
     if(type === 'create' && copied !== true){
       await dispatch(createSensor(fullName, sensorDetail));
     }else if(copied === true){
+      console.log(full_sensor_name, sensorName)
+
       await dispatch(createSensor(String(full_sensor_name).replace(/\/[^/]*$/, "/")+ sensorName , {...sensorDetail, full_sensor_name: full_sensor_name, custom: true, built_in: false}))
       await dispatch(closeFirstLevelTab("definitions/sensors/" + String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]))
       await  dispatch(
@@ -164,7 +166,8 @@ export const SensorDetail = () => {
         })
       );
   }
-
+console.log(full_sensor_name)
+console.log(sensorName)
   return (
     <DefinitionLayout>
       <div className="relative">

@@ -189,6 +189,7 @@ export const createSensorFailed = (error: unknown) => ({
 
 export const createSensor =
   (sensorName: string, body: SensorModel) => async (dispatch: any) => {
+    console.log(sensorName, body)
     dispatch(createSensorRequest());
     try {
       const res: AxiosResponse<SensorModel> = await SensorsApi.createSensor(
@@ -245,7 +246,8 @@ export const createRuleFailed = (error: unknown) => ({
 });
 
 export const createRule =
-  (ruleName: string, body: RuleModel) => async (dispatch: Dispatch) => {
+  (ruleName: string, body: RuleModel) => async (dispatch: any) => {
+    console.log(ruleName, body)
     dispatch(createRuleRequest());
     try {
       const res: AxiosResponse<SensorModel> = await RulesApi.createRule(
@@ -253,6 +255,7 @@ export const createRule =
         body
       );
       dispatch(createRuleSuccess(res.data));
+      dispatch(getRuleFolderTree());
     } catch (err) {
       dispatch(createRuleFailed(err));
     }
