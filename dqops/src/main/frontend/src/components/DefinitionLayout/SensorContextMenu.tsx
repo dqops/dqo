@@ -6,7 +6,7 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { SensorBasicFolderModel } from '../../api';
+import { SensorBasicFolderModel, SensorBasicModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
@@ -15,9 +15,11 @@ import AddFolderDialog from './AddFolderDialog';
 interface SensorContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
+  singleSensor?: boolean;
+  sensor?: SensorBasicModel
 }
 
-const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
+const SensorContextMenu = ({ folder, path, singleSensor, sensor }: SensorContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +54,22 @@ const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
     setOpen(false);
   };
 
+  const onCopy = () : void => { 
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SENSOR_DETAIL(sensor?.sensor_name+ "_copy" ?? ''),
+        value: ROUTES.SENSOR_DETAIL_VALUE(sensor?.sensor_name+ "_copy" ?? ''),
+        state: {
+          full_sensor_name: sensor?.full_sensor_name,
+          copied: true,
+          path: path,
+          type: "create"
+        },
+        label: `${String(sensor?.full_sensor_name).split("/")[String(sensor?.full_sensor_name).split("/").length - 1]}_copy`
+      })
+    );
+}
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -60,7 +78,18 @@ const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
-        <div onClick={(e) => e.stopPropagation()}>
+          {singleSensor === true ? 
+          <div onClick={(e) => e.stopPropagation()}>
+            <div
+            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+            onClick={onCopy}
+          >
+          Copy sensor
+          </div>
+        </div> : 
+          <div>
+
+          <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
             onClick={openAddNewSensor}
@@ -80,8 +109,9 @@ const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
             onClose={closeModal}
             path={path}
             folder={folder}
-          />
-        </div>
+            />
+          </div>
+        </div>}
       </PopoverContent>
     </Popover>
   );

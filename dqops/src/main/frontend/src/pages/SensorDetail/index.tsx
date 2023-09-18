@@ -66,7 +66,7 @@ export const SensorDetail = () => {
   const [sensorName, setSensorName] = useState(type === 'create' && copied !== true ? "" : String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]  );
 
   useEffect(() => {
-    if (!sensorDetail && type !== 'create' && copied!==true) {
+    if (!sensorDetail && (type !== 'create' || copied === true)) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);

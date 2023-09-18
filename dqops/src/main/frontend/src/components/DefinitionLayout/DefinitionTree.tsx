@@ -256,6 +256,7 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {sensor.sensor_name}
               </div>
+              <SensorContextMenu singleSensor={true} sensor={sensor}/>
             </div>
           ))}
         </div>

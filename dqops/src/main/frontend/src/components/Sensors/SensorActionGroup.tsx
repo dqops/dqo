@@ -24,8 +24,6 @@ export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) =>
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-console.log(full_sensor_name)
-console.log(sensorDetail)
   const handleSave = () => {
     if (type === 'create' || copied === true) {
       onSave();
