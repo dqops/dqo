@@ -17,15 +17,17 @@ export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) =>
     sensorDetail,
     isUpdatedSensorDetail,
     isUpdating,
-    type
+    type,
+    copied
   } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
+console.log(full_sensor_name)
+console.log(sensorDetail)
   const handleSave = () => {
-    if (type === 'create') {
+    if (type === 'create' || copied === true) {
       onSave();
       return;
     }
@@ -33,7 +35,6 @@ export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) =>
       dispatch(updateSensor(full_sensor_name, sensorDetail));
     }
   };
-
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {sensorDetail?.custom && (
@@ -58,7 +59,7 @@ export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) =>
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedSensorDetail || userProfile.can_manage_definitions !== true}
+        disabled={!(isUpdatedSensorDetail || userProfile.can_manage_definitions !== true)}
         onClick={handleSave}
         loading={isUpdating}
       />
