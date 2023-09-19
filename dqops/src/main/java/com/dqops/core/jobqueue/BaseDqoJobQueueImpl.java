@@ -238,42 +238,45 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
 
         this.stopInProgress = true;
 
-        int startedThreadsCount = this.startedThreadsCount.get();
-        for (int i = 0; i < startedThreadsCount; i++) {
-            try {
-                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
-            } catch (InterruptedException ex) {
-                log.error("Job queue stop() operation failed to publish a poison message", ex);
+        try {
+            int startedThreadsCount = this.startedThreadsCount.get();
+            for (int i = 0; i < startedThreadsCount; i++) {
+                try {
+                    DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
+                } catch (InterruptedException ex) {
+                    log.error("Job queue stop() operation failed to publish a poison message", ex);
+                }
             }
-        }
 
-        List<Future<?>> threadFinishFutures = null;
-        synchronized (this.runnerThreadsFuturesLock) {
-            threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
-        }
-
-        for (int i = 0; i < threadFinishFutures.size(); i++) {
-            Future<?> threadFinishFuture = threadFinishFutures.get(i);
-            try {
-                threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
+            List<Future<?>> threadFinishFutures = null;
+            synchronized (this.runnerThreadsFuturesLock) {
+                threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
             }
-            catch (Exception ex) {
-                log.error("Waiting for a job queue thread future failed: " + ex.getMessage(), ex);
+
+            for (int i = 0; i < threadFinishFutures.size(); i++) {
+                Future<?> threadFinishFuture = threadFinishFutures.get(i);
+                try {
+                    threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
+                }
+                catch (Exception ex) {
+                    log.error("Waiting for a job queue thread future failed: " + ex.getMessage(), ex);
+                }
             }
+
+            this.executorService.shutdown();
+
+            cancelRemainingJobs();
         }
-
-        this.executorService.shutdown();
-
-        cancelRemainingJobs();
-
-        this.started = false;
-        this.executorService = null;
-        this.runnerThreadsFutures = null;
-        this.jobsBlockingQueue = null;
-        this.runningJobs = null;
-        this.jobEntriesByJobId = null;
-        this.stopInProgress = false;
+        finally {
+            this.executorService = null;
+            this.runnerThreadsFutures = null;
+            this.jobsBlockingQueue = null;
+            this.runningJobs = null;
+            this.jobEntriesByJobId = null;
+            this.started = false;
+            this.stopInProgress = false;
+        }
     }
 
     /**
@@ -311,7 +314,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * @return Started job summary and a future to await for finish.
      */
     protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
-        if (!this.started) {
+        if (!this.started || this.stopInProgress) {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 newJobId.setParentJobId(parentJobId);
@@ -354,6 +357,20 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * @param jobId Job id.
      */
     public void cancelJob(DqoQueueJobId jobId) {
+        synchronized (this) {
+            if (!this.jobsQueuedBeforeStart.isEmpty()) {
+                Optional<DqoJobQueueEntry> scheduledJobToStart = this.jobsQueuedBeforeStart.stream()
+                        .filter(j -> Objects.equals(j.getJobId(), jobId)).findFirst();
+                if (scheduledJobToStart.isPresent()) {
+                    this.jobsQueuedBeforeStart.remove(scheduledJobToStart);
+                }
+            }
+        }
+
+        if (!this.started || this.stopInProgress) {
+            return; // the job will be cancelled anyway or cannot be started
+        }
+
         DqoJobQueueEntry dqoJobQueueEntry = this.jobEntriesByJobId.get(jobId);
         if (dqoJobQueueEntry != null) {
             this.queueMonitoringService.publishJobCancellationRequestedEvent(dqoJobQueueEntry);
@@ -367,11 +384,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                     }
                 }
             }
-            return;
         }
-
-
-        // TODO: cancel also a job before it even started execution (remove from the queue, notify the job queue monitoring service)
     }
 
     /**
