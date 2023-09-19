@@ -75,7 +75,7 @@ Notification message distinguishes the following resolution status values:
 - **Open**: This is a status a new incident starts its existence with. The system automatically marks incidents with this status. DQO is waiting until an action is manually taken by a data asset manager or someone responsible for recognition of issues. You can revert an incident's status back to Open at any time.
 
 
-- **Acknowledged**: A state indicating that the incident was acknowledged. Incidents observed by DQO are not always real incidents. It is for a DQO user to decide if it should be treated as indecent or not. As an example imagine verification the data delivered by a vendor that made a change in its data or a data engineers are executing some pipelines for testing purposes.
+- **Acknowledged**: A state indicating that the incident was acknowledged. It has to be verified by a data engineers teem to decide about further steps. It is for a DQO user to decide if it should be treated as indecent or not. As an example imagine verification the data delivered by a vendor that made a change in its data which influenced sensor readouts in order to fail rule outputs or a data engineers are executing some pipelines for testing purposes.
 
 
 - **Resolved**: A state indicating that an incident is fixed. Data has been fixed and data quality improved.
@@ -96,7 +96,12 @@ Payload's text field is built with use of data such as:
 - **Data quality dimension**: Name of dimension. [Read more](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md)
 - **Highest severity level**: A severity level from data quality rule. [Read more](../../dqo-concepts/checks/index.md)
 - **Total data quality issues**: A value from failedChecksCount json field.
-- **Links**: Quick access links to:
+- **Links**: Quick access links.
+ 
+**Links**
+
+In the text field you can find links to:
+
   - **an incident**: a "View in DQOps" link on the bottom of a message that forwards straight to the incident in DQO application.
   - **a full table name**: Full table name present in the header of a message that forwards to table details in DQO application.
   - **an issue url**: Link to an external ticketing system. It will be present when set manually on an incident. Check the [External system linking](#external-system-linking) section.
@@ -134,3 +139,7 @@ A notification has an especial field called **issue url**, so user can store an 
 
 A new incident comes with an empty issue url field. Issue url field can be filled on an existing incident any time.
 
+
+## What's next
+
+- [Check the notification configuration with Slack](configuring-slack-notifications.md)

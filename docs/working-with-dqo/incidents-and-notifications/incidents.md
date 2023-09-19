@@ -136,3 +136,8 @@ You can filter the list of issues **by column** or **check name** by clicking on
 To sort the issue table, simply click on the sorting icon next to any column header.
 
 ![Sorting issues](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/sort-issues.png)
+
+
+## What's next
+
+- [Learn more about incident notifications](notifications.md)
