@@ -326,6 +326,7 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {rule.rule_name}
               </div>
+              <RuleContextMenu singleRule={true} rule={rule}/>
             </div>
           ))}
         </div>

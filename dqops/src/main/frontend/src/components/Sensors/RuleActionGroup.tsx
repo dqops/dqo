@@ -8,10 +8,11 @@ import { IRootState } from '../../redux/reducers';
 
 type RuleActionGroupProps = {
   onSave: () => void;
+  onCopy?: () => void;
 };
 
-export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
-  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail } =
+export const RuleActionGroup = ({ onSave, onCopy }: RuleActionGroupProps) => {
+  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail, copied, type } =
     useSelector(getFirstLevelSensorState);
     const { userProfile } = useSelector(
       (state: IRootState) => state.job || {}
@@ -19,7 +20,7 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
-    if (onSave) {
+    if (onSave && (type === 'create' || copied === true)) {
       onSave();
       return;
     }
@@ -39,6 +40,14 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
           disabled={userProfile.can_manage_definitions !== true}
         />
       )}
+       <Button
+        color="primary"
+        variant="outlined"
+        label="Copy"
+        className="w-40 !h-10"
+        disabled={userProfile.can_manage_definitions !== true}
+        onClick={onCopy}
+        />
       <Button
         color="primary"
         variant="contained"
