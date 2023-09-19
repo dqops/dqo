@@ -9,6 +9,7 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
+  TableComparisonConfigurationModelCheckTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TableComparisonModel
 } from '../../../api';
@@ -94,7 +95,6 @@ const EditReferenceTable = ({
   const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [normalList, setNormalList] = useState<Array<string>>();
   const [refList, setRefList] = useState<Array<string>>();
-  const [bool, setBool] = useState(false);
   const [doubleArray, setDoubleArray] =
     useState<Array<TableComparisonGroupingColumnPairModel>>();
   const [trueArray, setTrueArray] =
@@ -255,7 +255,9 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          grouping_columns: doubleArray ?? []
+          grouping_columns: doubleArray ?? [],
+          check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
+          time_scale: timePartitioned
         }
       )
         .then(() => {
@@ -526,19 +528,6 @@ const EditReferenceTable = ({
       );
 
       setDoubleArray(trim);
-      if (
-        trim.find(
-          (x) =>
-            (x.compared_table_column_name?.length === 0 &&
-              x.reference_table_column_name?.length !== 0) ||
-            (x.compared_table_column_name?.length !== 0 &&
-              x.reference_table_column_name?.length === 0)
-        )
-      ) {
-        setBool(false);
-      } else {
-        setBool(true);
-      }
       return trim;
     }
     return [];
@@ -589,12 +578,11 @@ const EditReferenceTable = ({
         refConnection.length !== 0 &&
         refSchema.length !== 0 &&
         refTable.length !== 0 &&
-        bool &&
-        (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-          isUpdated)) ||
-        isUpdatedParent
-    );
-  }, [normalList, refList, isUpdatedParent, bool]);
+        refList?.filter((c) =>c.length!==0 ).length === normalList?.filter((c) =>c.length!==0 ).length &&
+          (isUpdated ||
+        isUpdatedParent)
+    ));
+  }, [normalList, refList, isUpdated, isUpdatedParent]);
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;

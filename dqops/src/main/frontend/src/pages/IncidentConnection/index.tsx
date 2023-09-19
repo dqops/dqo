@@ -293,7 +293,9 @@ export const IncidentConnection = () => {
   useEffect(() => {
     onChangeFilter({
       optionalFilter: debouncedSearchTerm,
-      page: 1
+      page: 1,
+      openIncidents: true,
+      acknowledgedIncidents: true
     })
   }, [debouncedSearchTerm]);
 
