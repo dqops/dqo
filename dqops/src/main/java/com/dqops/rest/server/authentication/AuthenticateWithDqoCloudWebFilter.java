@@ -158,7 +158,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
             if (log.isInfoEnabled()) {
-                log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQO Cloud Pairing Key for the user " + singleUserAuthenticationToken.getName());
+                log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQO Cloud Pairing Key for the user " +
+                        singleUserAuthenticationToken.getName());
             }
 
             ServerWebExchange mutatedExchange = exchange.mutate()
@@ -196,7 +197,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 log.info("Returning a DQOAccessToken cookie for the user " + signedAuthenticationToken.getTarget().getUser() + " in the tenant " +
                         signedAuthenticationToken.getTarget().getTenantId() + ", the cookie is valid for " + hostHeader + " host");
             }
-            
+
             ResponseCookie dqoAccessTokenCookie = ResponseCookie.from("DQOAccessToken", signedAuthenticationToken.getSignedHex())
                     .maxAge(Duration.ofHours(24))
                     .domain(hostHeader)

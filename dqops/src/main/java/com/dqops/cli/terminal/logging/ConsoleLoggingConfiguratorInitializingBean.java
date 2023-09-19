@@ -104,8 +104,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
                 LogstashFieldNames fieldNamesError = new LogstashFieldNames();
                 fieldNamesError.setTimestamp("time");
                 fieldNamesError.setMessage("log");
-                fieldNamesError.setLevel("severity_key");
-                fieldNamesError.setLogger("labels_key");
+//                fieldNamesError.setLevel("severity_key");
+//                fieldNamesError.setLogger("labels_key");
                 jsonEncoderError.setFieldNames(fieldNamesError);
                 jsonEncoderError.start();
                 encoderError = jsonEncoderError;
@@ -116,8 +116,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
                 LogstashFieldNames fieldNamesNonError = new LogstashFieldNames();
                 fieldNamesNonError.setTimestamp("time");
                 fieldNamesNonError.setMessage("log");
-                fieldNamesNonError.setLevel("severity_key");
-                fieldNamesNonError.setLogger("labels_key");
+//                fieldNamesNonError.setLevel("severity_key");
+//                fieldNamesNonError.setLogger("labels_key");
                 jsonEncoderNonError.setFieldNames(fieldNamesNonError);
                 jsonEncoderNonError.start();
                 encoderNonError = jsonEncoderNonError;

@@ -147,6 +147,6 @@ public class DqoUserPrincipal {
      */
     @Override
     public String toString() {
-        return this.name + "(" + accountRole + ")";
+        return this.name + " (" + accountRole + ")";
     }
 }
