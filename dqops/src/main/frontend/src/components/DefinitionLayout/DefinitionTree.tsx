@@ -105,7 +105,7 @@ export const DefinitionTree = () => {
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
         value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
         state: {
-          fullCheckName: check.full_check_name,
+          full_check_name: check.full_check_name,
           custom: check.custom
         },
         label: check.check_name

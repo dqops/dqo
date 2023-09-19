@@ -64,12 +64,13 @@ const DataQualityContextMenu = ({ folder, path, singleCheck, check }: RuleContex
     setOpen(false)
   };
   const onCopy = () : void => { 
+    console.log(check)
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(check?.check_name+ "_copy" ?? ''),
         value: ROUTES.CHECK_DETAIL_VALUE(check?.check_name+ "_copy" ?? ''),
         state: {
-          full_sensor_name: check?.full_check_name,
+          full_check_name: check?.full_check_name,
           copied: true,
           path: path,
           type: "create"
