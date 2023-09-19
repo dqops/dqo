@@ -14,7 +14,7 @@ const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth } = useTree();
+  const { sidebarWidth, setSidebarWidth, treeData } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
@@ -49,7 +49,6 @@ const Sidebar = () => {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
-
   return (
     <div
       className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
@@ -58,7 +57,7 @@ const Sidebar = () => {
       style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
-        {checkTypes === 'sources' ? (
+        {(checkTypes === 'sources' || Object.keys(treeData).length === 0) ? (
           <Button
             label="Add connection"
             color="primary"
