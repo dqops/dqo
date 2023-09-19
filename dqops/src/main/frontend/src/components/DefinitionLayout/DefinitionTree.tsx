@@ -105,7 +105,7 @@ export const DefinitionTree = () => {
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
         value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
         state: {
-          fullCheckName: check.full_check_name,
+          full_check_name: check.full_check_name,
           custom: check.custom
         },
         label: check.check_name
@@ -326,6 +326,7 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {rule.rule_name}
               </div>
+              <RuleContextMenu singleRule={true} rule={rule}/>
             </div>
           ))}
         </div>
@@ -399,6 +400,7 @@ export const DefinitionTree = () => {
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
                   </div>
+                  <DataQualityContextMenu singleCheck={true} check={check} />
                 </div>
               </div>
             ))}

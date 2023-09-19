@@ -152,7 +152,7 @@ public class RulesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(ruleModel.getRuleName());
+        RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
         ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
         ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
         userHomeContext.flush();
