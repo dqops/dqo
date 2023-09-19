@@ -9,6 +9,7 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
+  TableComparisonConfigurationModelCheckTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TableComparisonModel
 } from '../../../api';
@@ -255,7 +256,9 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          grouping_columns: doubleArray ?? []
+          grouping_columns: doubleArray ?? [],
+          check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
+          time_scale: timePartitioned
         }
       )
         .then(() => {
@@ -589,12 +592,11 @@ const EditReferenceTable = ({
         refConnection.length !== 0 &&
         refSchema.length !== 0 &&
         refTable.length !== 0 &&
-        bool &&
-        (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-          isUpdated)) ||
+        refList?.filter((c) =>c.length!==0 ).length === normalList?.filter((c) =>c.length!==0 ).length &&
+          isUpdated ||
         isUpdatedParent
-    );
-  }, [normalList, refList, isUpdatedParent, bool]);
+    ));
+  }, [normalList, refList, bool]);
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;
