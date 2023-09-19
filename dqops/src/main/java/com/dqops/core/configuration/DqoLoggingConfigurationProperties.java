@@ -49,6 +49,8 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private DqoConsoleLoggingMode console = DqoConsoleLoggingMode.OFF;
     private boolean consoleWithJansi = true;
     private boolean consoleImmediateFlush;
+    private boolean logErrorsToStderr;
+    private String jsonLogFieldLevel;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -160,6 +162,38 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setConsoleImmediateFlush(boolean consoleImmediateFlush) {
         this.consoleImmediateFlush = consoleImmediateFlush;
+    }
+
+    /**
+     * Logs errors to stderr stream (Stream.err).
+     * @return Logs errors to the standard error output stream.
+     */
+    public boolean isLogErrorsToStderr() {
+        return logErrorsToStderr;
+    }
+
+    /**
+     * Logs errors to the standard error stream.
+     * @param logErrorsToStderr Log errors to standard error stream.
+     */
+    public void setLogErrorsToStderr(boolean logErrorsToStderr) {
+        this.logErrorsToStderr = logErrorsToStderr;
+    }
+
+    /**
+     * Returns a custom json key name for the key where the log severity (info, warn, etc) is stored in JSON formatted logs.
+     * @return Returns the log level.
+     */
+    public String getJsonLogFieldLevel() {
+        return jsonLogFieldLevel;
+    }
+
+    /**
+     * Sets the field name used to store the severity.
+     * @param jsonLogFieldLevel Json log severity field.
+     */
+    public void setJsonLogFieldLevel(String jsonLogFieldLevel) {
+        this.jsonLogFieldLevel = jsonLogFieldLevel;
     }
 
     /**

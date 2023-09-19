@@ -19,18 +19,17 @@ package com.dqops.cli.terminal.logging;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.filter.LevelFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.Encoder;
-import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.fieldnames.LogstashFieldNames;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
+import org.apache.parquet.Strings;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,51 +76,15 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
                 return;
 
             case PATTERN:
-                PatternLayoutEncoder lineEncoderError = new PatternLayoutEncoder();
-                lineEncoderError.setContext(loggerContext);
-                lineEncoderError.setPattern(this.loggingConfigurationProperties.getPattern());
-                lineEncoderError.start();
-                encoderError = lineEncoderError;
-
-                PatternLayoutEncoder lineEncoderNonError = new PatternLayoutEncoder();
-                lineEncoderNonError.setContext(loggerContext);
-                lineEncoderNonError.setPattern(this.loggingConfigurationProperties.getPattern());
-                lineEncoderNonError.start();
-                encoderNonError = lineEncoderNonError;
-
-
+                encoderError = createPatternLayoutEncoder(loggerContext);
+                encoderNonError = createPatternLayoutEncoder(loggerContext);
                 consoleAppenderError.setWithJansi(this.loggingConfigurationProperties.isConsoleWithJansi());
                 consoleAppenderNonError.setWithJansi(this.loggingConfigurationProperties.isConsoleWithJansi());
                 break;
 
             case JSON:
-                LogstashEncoder jsonEncoderError = new LogstashEncoder();
-                jsonEncoderError.setContext(loggerContext);
-                jsonEncoderError.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
-                throwableConverter.setRootCauseFirst(true);
-                jsonEncoderError.setThrowableConverter(throwableConverter);
-                LogstashFieldNames fieldNamesError = new LogstashFieldNames();
-                fieldNamesError.setTimestamp("time");
-                fieldNamesError.setMessage("log");
-//                fieldNamesError.setLevel("severity_key");
-//                fieldNamesError.setLogger("labels_key");
-                jsonEncoderError.setFieldNames(fieldNamesError);
-                jsonEncoderError.start();
-                encoderError = jsonEncoderError;
-
-                LogstashEncoder jsonEncoderNonError = new LogstashEncoder();
-                jsonEncoderNonError.setContext(loggerContext);
-                jsonEncoderNonError.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                LogstashFieldNames fieldNamesNonError = new LogstashFieldNames();
-                fieldNamesNonError.setTimestamp("time");
-                fieldNamesNonError.setMessage("log");
-//                fieldNamesNonError.setLevel("severity_key");
-//                fieldNamesNonError.setLogger("labels_key");
-                jsonEncoderNonError.setFieldNames(fieldNamesNonError);
-                jsonEncoderNonError.start();
-                encoderNonError = jsonEncoderNonError;
-
+                encoderError = createJsonEncoder(loggerContext);
+                encoderNonError = createJsonEncoder(loggerContext);
                 consoleAppenderError.setWithJansi(false);
                 consoleAppenderNonError.setWithJansi(false);
                 break;
@@ -135,7 +98,9 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         errorLevelFilter.setOnMismatch(FilterReply.DENY);
         errorLevelFilter.start();
         consoleAppenderError.addFilter(errorLevelFilter);
-        consoleAppenderError.setOutputStream(System.err);
+        if (this.loggingConfigurationProperties.isLogErrorsToStderr()) {
+            consoleAppenderError.setOutputStream(System.err);
+        }
         consoleAppenderError.start();
         rootLogger.addAppender(consoleAppenderError);
 
@@ -149,5 +114,39 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         consoleAppenderNonError.addFilter(notErrorLevelFilter);
         consoleAppenderNonError.start();
         rootLogger.addAppender(consoleAppenderNonError);
+    }
+
+    /**
+     * Creates a pattern layout formatter.
+     * @param loggerContext Logger context.
+     * @return Patter layout formatter encoder.
+     */
+    private PatternLayoutEncoder createPatternLayoutEncoder(LoggerContext loggerContext) {
+        PatternLayoutEncoder lineEncoder = new PatternLayoutEncoder();
+        lineEncoder.setContext(loggerContext);
+        lineEncoder.setPattern(this.loggingConfigurationProperties.getPattern());
+        lineEncoder.start();
+        return lineEncoder;
+    }
+
+    /**
+     * Creates a json encoder that returns messages as json objects.
+     * @param loggerContext Logger context.
+     * @return Json encoder.
+     */
+    private LogstashEncoder createJsonEncoder(LoggerContext loggerContext) {
+        LogstashEncoder jsonEncoder = new LogstashEncoder();
+        jsonEncoder.setContext(loggerContext);
+        jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
+        throwableConverter.setRootCauseFirst(true);
+        jsonEncoder.setThrowableConverter(throwableConverter);
+        LogstashFieldNames fieldNames = new LogstashFieldNames();
+        if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldLevel())) {
+            fieldNames.setLevel(this.loggingConfigurationProperties.getJsonLogFieldLevel());
+        }
+        jsonEncoder.setFieldNames(fieldNames);
+        jsonEncoder.start();
+        return jsonEncoder;
     }
 }

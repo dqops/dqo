@@ -80,6 +80,7 @@ dqo:
     total-size-cap: 10mb
     console-immediate-flush: false
     console: OFF
+    log-errors-to-stderr: false
   storage:
     gcp:
       upload-buffer-size: 5000000
