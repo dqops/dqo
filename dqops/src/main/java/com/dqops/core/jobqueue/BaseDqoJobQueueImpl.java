@@ -267,12 +267,12 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
 
         cancelRemainingJobs();
 
+        this.started = false;
         this.executorService = null;
         this.runnerThreadsFutures = null;
         this.jobsBlockingQueue = null;
         this.runningJobs = null;
         this.jobEntriesByJobId = null;
-        this.started = false;
         this.stopInProgress = false;
     }
 
