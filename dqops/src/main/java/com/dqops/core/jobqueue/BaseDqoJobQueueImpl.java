@@ -56,6 +56,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private List<DqoJobQueueEntry> jobsQueuedBeforeStart = new ArrayList<>();
     private volatile boolean started;
     private volatile boolean stopInProgress;
+    private volatile boolean stopped;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
     private final Object runnerThreadsFuturesLock = new Object();
@@ -86,10 +87,11 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Starts the job queue, creates a thread pool.
      */
     public void start() {
-        if (started) {
+        if (started || this.stopInProgress) {
             return;
         }
 
+        this.stopped = false;
         this.jobsBlockingQueue = new LinkedBlockingQueue<>(queueConfigurationProperties.getMaxNonBlockingCapacity() != null ?
                 queueConfigurationProperties.getMaxNonBlockingCapacity() : Integer.MAX_VALUE);
 
@@ -264,6 +266,16 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 }
             }
 
+            for (DqoJobQueueEntry jobBeforeStart : this.jobsQueuedBeforeStart) {
+                try {
+                    jobBeforeStart.getJob().getCancellationToken().cancel();
+                }
+                catch (Exception ex) {
+                    log.error("Failed to cancel a queued job: " + ex.getMessage(), ex);
+                }
+            }
+
+            this.jobsQueuedBeforeStart.clear();
             this.executorService.shutdown();
 
             cancelRemainingJobs();
@@ -276,6 +288,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             this.jobEntriesByJobId = null;
             this.started = false;
             this.stopInProgress = false;
+            this.stopped = true;
         }
     }
 
@@ -314,7 +327,12 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * @return Started job summary and a future to await for finish.
      */
     protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
-        if (!this.started || this.stopInProgress) {
+        if (this.stopped || this.stopInProgress) {
+            job.getCancellationToken().cancel();
+            return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
+        }
+
+        if (!this.started) {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 newJobId.setParentJobId(parentJobId);

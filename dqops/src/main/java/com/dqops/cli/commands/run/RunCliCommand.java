@@ -28,6 +28,7 @@ import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.utils.datetime.DurationParseUtility;
 import com.dqops.utils.datetime.InvalidDurationFormatException;
 import io.swagger.models.auth.In;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -42,6 +43,7 @@ import java.time.Duration;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", header = "Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks", description = "This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQO is running.")
+@Slf4j
 public class RunCliCommand extends BaseCommand implements ICommand {
     public static final String POST_STARTUP_MESSAGE = "DQO was started in a server mode.";
 
@@ -156,7 +158,8 @@ public class RunCliCommand extends BaseCommand implements ICommand {
                     this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
                 }
                 catch (Exception ex) {
-                    if (!Thread.interrupted()) {
+                    if (!Thread.currentThread().isInterrupted() && !(ex.getCause() instanceof InterruptedException)) {
+                        this.terminalWriter.writeLine("Standard input stream not available (running in docker?), DQO will terminate when the process is killed.");
                         return CliMainCommandRunner.DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE; // fallback
                     }
                 }
@@ -176,8 +179,9 @@ public class RunCliCommand extends BaseCommand implements ICommand {
                     this.terminalReader.waitForExitWithTimeLimit(startupMessage, runDuration);
                 }
                 catch (Exception ex) {
-                    if (!Thread.interrupted()) {
+                    if (!Thread.currentThread().isInterrupted() && !(ex.getCause() instanceof InterruptedException)) {
                         try {
+                            this.terminalWriter.writeLine("Standard input stream not available (running in docker?), DQO will terminate when the process is killed or after the time limit.");
                             Thread.sleep(runDuration.toMillis()); // fallback
                         }
                         catch (InterruptedException ex2) {

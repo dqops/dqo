@@ -30,6 +30,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.scheduler.Schedulers;
@@ -111,6 +112,9 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             if (hasLocalChanges) {
                 this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.changed);
             }
+        }
+        catch (BeanCreationNotAllowedException ex) {
+            return; // shutdown was started before synchronization finished
         }
         catch (Exception ex) {
             log.error("Failed to detect changes in a folder " + dqoRoot + ", error: " + ex.getMessage(), ex);

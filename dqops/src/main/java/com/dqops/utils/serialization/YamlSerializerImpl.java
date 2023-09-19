@@ -111,7 +111,10 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += " at line " + location.getLineNr() + ", column " + location.getColumnNr();
             }
 
-            throw new YamlSerializationException(message, e);
+            throw new YamlDeserializationException(message, null, e);
+        }
+        catch (Exception ex) {
+            throw new YamlDeserializationException("Failed to deserialize a YAML file, error: " + ex.getMessage(), null, ex);
         }
     }
 
@@ -140,14 +143,18 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            log.error("Failed to deserialize YAML, " + message, e);
+            log.error("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, e);
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
                 return emptyInstance;
             }
             catch (Exception ex) {
-                throw new YamlSerializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, e);
+                throw new YamlDeserializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, filePathForMessage, e);
             }
+        }
+        catch (Exception ex) {
+            log.error("Failed to deserialize YAML, file: " + filePathForMessage + ", error: " + ex.getMessage(), ex);
+            throw new YamlDeserializationException("Failed to deserialize a YAML file " + filePathForMessage + ", error: " + ex.getMessage(), filePathForMessage, ex);
         }
     }
 }

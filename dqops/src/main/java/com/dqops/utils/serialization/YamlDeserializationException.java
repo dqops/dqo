@@ -17,16 +17,20 @@ package com.dqops.utils.serialization;
 
 import com.dqops.utils.exceptions.DqoRuntimeException;
 
+import java.nio.file.Path;
+
 /**
- * YAML serialization exception thrown when the YAML file is invalid.
+ * YAML deserialization exception thrown when the YAML file is invalid.
  */
-public class YamlSerializationException extends DqoRuntimeException {
+public class YamlDeserializationException extends DqoRuntimeException {
+    private Path yamlFilePath;
+
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public YamlSerializationException() {
+    public YamlDeserializationException() {
     }
 
     /**
@@ -37,8 +41,9 @@ public class YamlSerializationException extends DqoRuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public YamlSerializationException(String message) {
+    public YamlDeserializationException(String message, Path yamlFilePath) {
         super(message);
+        this.yamlFilePath = yamlFilePath;
     }
 
     /**
@@ -55,7 +60,16 @@ public class YamlSerializationException extends DqoRuntimeException {
      *                unknown.)
      * @since 1.4
      */
-    public YamlSerializationException(String message, Throwable cause) {
+    public YamlDeserializationException(String message, Path yamlFilePath, Throwable cause) {
         super(message, cause);
+        this.yamlFilePath = yamlFilePath;
+    }
+
+    /**
+     * Returns the path to the YAML file that failed to deserialize.
+     * @return Path to the file that failed to deserialize.
+     */
+    public Path getYamlFilePath() {
+        return yamlFilePath;
     }
 }

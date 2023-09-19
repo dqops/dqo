@@ -45,6 +45,7 @@ import static org.quartz.JobBuilder.newJob;
 @Slf4j
 public class JobSchedulerServiceImpl implements JobSchedulerService {
     private boolean started;
+    private boolean shutdownInitiated;
     private Scheduler scheduler;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
     private SchedulerFactoryBean schedulerFactory;
@@ -202,6 +203,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             return;
         }
 
+        this.shutdownInitiated = true;
+
         log.debug("Shutting down the job scheduler");
 
         try {
@@ -220,6 +223,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     }
                 }
 
+                this.scheduler.shutdown();
                 this.schedulerFactory.stop();
             }
             this.scheduler = null;
@@ -230,6 +234,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
         finally {
             this.started = false;
+            this.shutdownInitiated = false;
         }
     }
 
@@ -238,6 +243,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     @Override
     public void triggerMetadataSynchronization() {
+        if (!this.started || this.shutdownInitiated) {
+            return;
+        }
+
         log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
 
         try {
