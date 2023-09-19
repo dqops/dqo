@@ -282,6 +282,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         synchronized (this.lock) {
             this.currentSynchronizationStatus = synchronizationStatus;
             this.currentSynchronizationStatusChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
+            if (this.jobUpdateSink == null) {
+                return; // shutdown was initiated
+            }
         }
 
         try {

@@ -27,6 +27,7 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReporti
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.utils.datetime.DurationParseUtility;
 import com.dqops.utils.datetime.InvalidDurationFormatException;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -151,15 +152,39 @@ public class RunCliCommand extends BaseCommand implements ICommand {
             if (this.rootConfigurationProperties.isSilent()) {
                 return CliMainCommandRunner.DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE;
             } else {
-                this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
+                try {
+                    this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
+                }
+                catch (Exception ex) {
+                    if (!Thread.interrupted()) {
+                        return CliMainCommandRunner.DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE; // fallback
+                    }
+                }
             }
         }
         else {
             if (this.rootConfigurationProperties.isSilent()) {
-                Thread.sleep(runDuration.toMillis());
+                try {
+                    Thread.sleep(runDuration.toMillis());
+                }
+                catch (InterruptedException ex) {
+                    // process was stopped
+                }
             } else {
-                String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
-                this.terminalReader.waitForExitWithTimeLimit(startupMessage, runDuration);
+                try {
+                    String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
+                    this.terminalReader.waitForExitWithTimeLimit(startupMessage, runDuration);
+                }
+                catch (Exception ex) {
+                    if (!Thread.interrupted()) {
+                        try {
+                            Thread.sleep(runDuration.toMillis()); // fallback
+                        }
+                        catch (InterruptedException ex2) {
+                            // process was stopped
+                        }
+                    }
+                }
             }
         }
 
