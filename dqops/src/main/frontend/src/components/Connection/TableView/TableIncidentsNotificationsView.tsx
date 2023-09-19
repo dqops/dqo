@@ -22,7 +22,7 @@ import clsx from "clsx";
 import { IRootState } from "../../../redux/reducers";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
-  label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+  label: item.replace(/_/g, "/").replace(/\b\w/g, c => c.toUpperCase()),
   value: item
 }));
 
@@ -81,6 +81,7 @@ export const TableIncidentsNotificationsView = () => {
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
             disabled={userProfile.can_manage_data_sources !== true}
+            className="min-w-55"
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
