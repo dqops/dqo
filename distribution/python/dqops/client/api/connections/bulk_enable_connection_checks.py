@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.all_checks_patch_parameters import AllChecksPatchParameters
 from ...models.mono_object import MonoObject
 from ...types import Response
@@ -14,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: AllChecksPatchParameters,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/checks/{checkName}/bulkenable".format(
@@ -65,7 +65,7 @@ def sync_detailed(
     connection_name: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: AllChecksPatchParameters,
 ) -> Response[MonoObject]:
     """bulkEnableConnectionChecks
@@ -105,7 +105,7 @@ def sync(
     connection_name: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: AllChecksPatchParameters,
 ) -> Optional[MonoObject]:
     """bulkEnableConnectionChecks
@@ -138,7 +138,7 @@ async def asyncio_detailed(
     connection_name: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: AllChecksPatchParameters,
 ) -> Response[MonoObject]:
     """bulkEnableConnectionChecks
@@ -176,7 +176,7 @@ async def asyncio(
     connection_name: str,
     check_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: AllChecksPatchParameters,
 ) -> Optional[MonoObject]:
     """bulkEnableConnectionChecks

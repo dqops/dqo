@@ -53,7 +53,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_row
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -271,7 +271,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-19 39-44"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -574,7 +574,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-23"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -793,7 +793,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-19 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -1097,7 +1097,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="12-24"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -1326,7 +1326,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-20 46-51"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:

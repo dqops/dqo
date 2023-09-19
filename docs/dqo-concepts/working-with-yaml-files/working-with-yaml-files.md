@@ -9,7 +9,7 @@ versioned along with any other pipeline code or machine learning code.
 Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -46,7 +46,7 @@ be raised.
 ## Editing the YAML files
 
 YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
-[here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
+[here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json). 
 
 The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
 extension by RedHat and Better Jinja by Samuel Colvin.

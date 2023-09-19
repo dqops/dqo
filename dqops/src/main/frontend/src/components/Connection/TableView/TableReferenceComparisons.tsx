@@ -37,6 +37,7 @@ export const TableReferenceComparisons = ({
   const [isEditing, setIsEditing] = useState(false);
   const [selectedReference, setSelectedReference] = useState<string>();
   const [isCreating, setIsCreting] = useState(false);
+  const [isComparisonDeleted, setIsComparisonDeleted] = useState(false)
   const location = useLocation();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
@@ -56,7 +57,7 @@ export const TableReferenceComparisons = ({
     getNewTableComparison();
     setIsCreting(false);
     fetchChecks();
-  }, []);
+  }, [isComparisonDeleted]);
 
   const getNewTableComparison = () => {
     if (checkTypes === CheckTypes.PROFILING) {
@@ -232,6 +233,15 @@ export const TableReferenceComparisons = ({
     setIsEditing(true);
   };
 
+  const deleteComparison = async (tableComparisonConfigurationName: string) => {
+    await TableComparisonsApi.deleteTableComparisonConfiguration(
+      connection,
+      schema,
+      table,
+      tableComparisonConfigurationName
+    ).then(() =>  setIsComparisonDeleted(!isComparisonDeleted))
+  };
+
   return (
     <>
       {isEditing ? (
@@ -261,6 +271,7 @@ export const TableReferenceComparisons = ({
           selectReference={onEditProfilingReference}
           onEdit={onEditReference}
           canUserCreateTableComparison={userProfile.can_manage_data_sources}
+          deleteComparison = {deleteComparison}
         />
       )}
     </>

@@ -15,6 +15,8 @@
  */
 package com.dqops.utils.reflection;
 
+import java.util.Map;
+
 /**
  * Field reflection service that returns cached objects used to access fields on a class.
  */
@@ -26,4 +28,12 @@ public interface ReflectionService {
      * @return Class info with a list of fields that will be serialized to YAML.
      */
     ClassInfo getClassInfoForClass(Class<?> targetClass);
+
+    /**
+     * Returns a cached reflection info for a given enum containing its values.
+     *
+     * @param targetEnum Target enum type to introspect.
+     * @return Map containing info regarding values of the enum.
+     */
+    Map<String, EnumValueInfo> getEnumValuesMap(Class<? extends Enum> targetEnum);
 }

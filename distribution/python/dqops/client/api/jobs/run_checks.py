@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.run_checks_parameters import RunChecksParameters
 from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
 from ...types import UNSET, Response, Unset
@@ -12,7 +12,7 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -69,7 +69,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -109,7 +109,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -142,7 +142,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -180,7 +180,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,

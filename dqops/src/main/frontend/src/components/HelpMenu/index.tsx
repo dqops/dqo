@@ -47,7 +47,7 @@ const HelpMenu = () => {
             Browse documentation
           </a>
           <a
-            href="https://cloud.dqo.ai/account"
+            href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
             className="block text-gray-700 mb-3"

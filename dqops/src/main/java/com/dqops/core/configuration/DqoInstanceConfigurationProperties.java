@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoInstanceConfigurationProperties implements Cloneable {
     private String signatureKey;
     private String returnBaseUrl;
+    private boolean validateReturnBaseUrl = false;
     private int authenticationTokenExpirationMinutes = 24 * 60 * 7; // 7 days
 
     /**
@@ -77,6 +78,22 @@ public class DqoInstanceConfigurationProperties implements Cloneable {
      */
     public void setAuthenticationTokenExpirationMinutes(int authenticationTokenExpirationMinutes) {
         this.authenticationTokenExpirationMinutes = authenticationTokenExpirationMinutes;
+    }
+
+    /**
+     * True when the server checks the return base url and will return an error if the base url is invalid.
+     * @return True when validating the base return url.
+     */
+    public boolean isValidateReturnBaseUrl() {
+        return validateReturnBaseUrl;
+    }
+
+    /**
+     * Sets the configuration to validate the return base url.
+     * @param validateReturnBaseUrl True when the return base url is validated.
+     */
+    public void setValidateReturnBaseUrl(boolean validateReturnBaseUrl) {
+        this.validateReturnBaseUrl = validateReturnBaseUrl;
     }
 
     /**

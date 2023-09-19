@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     full_rule_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/rules/{fullRuleName}".format(
         client.base_url, fullRuleName=full_rule_name
@@ -58,7 +58,7 @@ def _build_response(
 def sync_detailed(
     full_rule_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """deleteRule
 
@@ -91,7 +91,7 @@ def sync_detailed(
 def sync(
     full_rule_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """deleteRule
 
@@ -117,7 +117,7 @@ def sync(
 async def asyncio_detailed(
     full_rule_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """deleteRule
 
@@ -148,7 +148,7 @@ async def asyncio_detailed(
 async def asyncio(
     full_rule_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """deleteRule
 

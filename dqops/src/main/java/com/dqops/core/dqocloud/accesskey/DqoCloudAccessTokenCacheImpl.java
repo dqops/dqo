@@ -60,8 +60,12 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
             if (credentialsSupplier == null) {
                 credentialsSupplier = Suppliers.memoize(() -> {
                     TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
-                    AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
-                    return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    if (tenantAccessTokenModel != null) {
+                        AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                        return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    }
+
+                    return null;
                 });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
@@ -69,6 +73,9 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         }
 
         DqoCloudCredentials dqoCloudCredentials = credentialsSupplier.get();
+        if (dqoCloudCredentials == null) {
+            return null;
+        }
 
         Date testedExpirationDate = new Date(System.currentTimeMillis() + REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS * 1000L);
         boolean accessTokenNotExpired = dqoCloudCredentials.getAccessToken().getExpirationTime().after(testedExpirationDate);

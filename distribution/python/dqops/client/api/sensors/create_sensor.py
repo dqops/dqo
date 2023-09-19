@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.sensor_model import SensorModel
 from ...types import Response
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     full_sensor_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SensorModel,
 ) -> Dict[str, Any]:
     url = "{}api/sensors/{fullSensorName}".format(
@@ -63,7 +63,7 @@ def _build_response(
 def sync_detailed(
     full_sensor_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SensorModel,
 ) -> Response[MonoObject]:
     """createSensor
@@ -99,7 +99,7 @@ def sync_detailed(
 def sync(
     full_sensor_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SensorModel,
 ) -> Optional[MonoObject]:
     """createSensor
@@ -128,7 +128,7 @@ def sync(
 async def asyncio_detailed(
     full_sensor_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SensorModel,
 ) -> Response[MonoObject]:
     """createSensor
@@ -162,7 +162,7 @@ async def asyncio_detailed(
 async def asyncio(
     full_sensor_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SensorModel,
 ) -> Optional[MonoObject]:
     """createSensor

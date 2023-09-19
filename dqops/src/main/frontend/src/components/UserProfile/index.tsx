@@ -166,7 +166,7 @@ export default function UserProfile({ name, email }: UserProfile) {
         </div>
         <div className="w-full text-center flex justify-center items-center h-20 text-black">
           <a
-            href="https://cloud.dqo.ai/account"
+            href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
             className="block text-gray-700 mb-3"

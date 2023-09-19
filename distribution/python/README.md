@@ -53,7 +53,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
    must create a DQO cloud account.
 
    After creating a user's home folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
-   redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+   redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
 
    During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
    The API Key is now stored in the configuration file.
@@ -83,7 +83,7 @@ If the endpoints you're going to hit require authentication, use `AuthenticatedC
 ```python
 from dqops.client import AuthenticatedClient
 
-client = AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO Cloud API Key")
+client = AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
 ```
 
 Now call your endpoint and use your models:
@@ -113,7 +113,7 @@ By default, when you're calling an HTTPS API it will attempt to verify that SSL 
 
 ```python
 client = AuthenticatedClient(
-    base_url="https://tenantinstance.dqops.com/", 
+    base_url="https://tenantinstance.us.dqops.com/", 
     token="SuperSecretToken",
     verify_ssl="/path/to/certificate_bundle.pem",
 )
@@ -123,7 +123,7 @@ You can also disable certificate validation altogether, but beware that **this i
 
 ```python
 client = AuthenticatedClient(
-    base_url="https://tenantinstance.dqops.com/", 
+    base_url="https://tenantinstance.us.dqops.com/", 
     token="SuperSecretToken", 
     verify_ssl=False
 )

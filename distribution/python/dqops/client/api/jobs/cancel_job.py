@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/jobs/{jobId}".format(client.base_url, jobId=job_id)
 
@@ -56,7 +56,7 @@ def _build_response(
 def sync_detailed(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """cancelJob
 
@@ -89,7 +89,7 @@ def sync_detailed(
 def sync(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """cancelJob
 
@@ -115,7 +115,7 @@ def sync(
 async def asyncio_detailed(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[MonoObject]:
     """cancelJob
 
@@ -146,7 +146,7 @@ async def asyncio_detailed(
 async def asyncio(
     job_id: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[MonoObject]:
     """cancelJob
 

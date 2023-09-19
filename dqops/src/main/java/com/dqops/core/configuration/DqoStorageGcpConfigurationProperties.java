@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for dqo.ai. Properties are mapped to the "dqo.storage.gcp." prefix
+ * Configuration POJO with the configuration for DQO storage on DQO Cloud (SaaS) provided GCP storage buckets. Properties are mapped to the "dqo.storage.gcp." prefix
  * that are responsible the configuration of a Google Storage file system.
  */
 @Configuration

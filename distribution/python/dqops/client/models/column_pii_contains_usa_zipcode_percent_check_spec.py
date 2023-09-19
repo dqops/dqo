@@ -9,11 +9,11 @@ if TYPE_CHECKING:
         ColumnPiiContainsUsaZipcodePercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
+    from ..models.max_percent_rule_0_parameters_spec import (
+        MaxPercentRule0ParametersSpec,
+    )
     from ..models.max_percent_rule_1_parameters_spec import (
         MaxPercentRule1ParametersSpec,
-    )
-    from ..models.max_percent_rule_2_parameters_spec import (
-        MaxPercentRule2ParametersSpec,
     )
     from ..models.max_percent_rule_5_parameters_spec import (
         MaxPercentRule5ParametersSpec,
@@ -50,8 +50,8 @@ class ColumnPiiContainsUsaZipcodePercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnPiiContainsUsaZipcodePercentSensorParametersSpec]):
-        warning (Union[Unset, MaxPercentRule1ParametersSpec]):
-        error (Union[Unset, MaxPercentRule2ParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0ParametersSpec]):
+        error (Union[Unset, MaxPercentRule1ParametersSpec]):
         fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
@@ -66,8 +66,8 @@ class ColumnPiiContainsUsaZipcodePercentCheckSpec:
     parameters: Union[
         Unset, "ColumnPiiContainsUsaZipcodePercentSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxPercentRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxPercentRule2ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0ParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule1ParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -142,11 +142,11 @@ class ColumnPiiContainsUsaZipcodePercentCheckSpec:
             ColumnPiiContainsUsaZipcodePercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
+        from ..models.max_percent_rule_0_parameters_spec import (
+            MaxPercentRule0ParametersSpec,
+        )
         from ..models.max_percent_rule_1_parameters_spec import (
             MaxPercentRule1ParametersSpec,
-        )
-        from ..models.max_percent_rule_2_parameters_spec import (
-            MaxPercentRule2ParametersSpec,
         )
         from ..models.max_percent_rule_5_parameters_spec import (
             MaxPercentRule5ParametersSpec,
@@ -192,18 +192,18 @@ class ColumnPiiContainsUsaZipcodePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxPercentRule1ParametersSpec]
+        warning: Union[Unset, MaxPercentRule0ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxPercentRule1ParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxPercentRule2ParametersSpec]
+        error: Union[Unset, MaxPercentRule1ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxPercentRule2ParametersSpec.from_dict(_error)
+            error = MaxPercentRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MaxPercentRule5ParametersSpec]

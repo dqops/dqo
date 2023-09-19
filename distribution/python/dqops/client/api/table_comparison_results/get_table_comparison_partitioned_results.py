@@ -4,10 +4,8 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.get_table_comparison_partitioned_results_time_scale import (
-    GetTableComparisonPartitionedResultsTimeScale,
-)
+from ...client import AuthenticatedClient, Client
+from ...models.check_time_scale import CheckTimeScale
 from ...models.table_comparison_results_model import TableComparisonResultsModel
 from ...types import Response
 
@@ -16,10 +14,10 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableComparisonPartitionedResultsTimeScale,
+    time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results".format(
         client.base_url,
@@ -71,10 +69,10 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableComparisonPartitionedResultsTimeScale,
+    time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -85,7 +83,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableComparisonPartitionedResultsTimeScale):
+        time_scale (CheckTimeScale):
         table_comparison_configuration_name (str):
 
     Raises:
@@ -117,10 +115,10 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableComparisonPartitionedResultsTimeScale,
+    time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -131,7 +129,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableComparisonPartitionedResultsTimeScale):
+        time_scale (CheckTimeScale):
         table_comparison_configuration_name (str):
 
     Raises:
@@ -156,10 +154,10 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableComparisonPartitionedResultsTimeScale,
+    time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -170,7 +168,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableComparisonPartitionedResultsTimeScale):
+        time_scale (CheckTimeScale):
         table_comparison_configuration_name (str):
 
     Raises:
@@ -200,10 +198,10 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTableComparisonPartitionedResultsTimeScale,
+    time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableComparisonResultsModel]:
     """getTableComparisonPartitionedResults
 
@@ -214,7 +212,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTableComparisonPartitionedResultsTimeScale):
+        time_scale (CheckTimeScale):
         table_comparison_configuration_name (str):
 
     Raises:

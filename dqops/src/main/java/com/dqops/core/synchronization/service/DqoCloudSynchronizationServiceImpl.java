@@ -30,6 +30,7 @@ import com.dqops.metadata.fileindices.FileLocation;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ import java.util.Optional;
  * File synchronization service. Performs a full synchronization of a given category of files to the DQO Cloud.
  */
 @Component
+@Slf4j
 public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizationService {
     private UserHomeContextFactory userHomeContextFactory;
     private FileSystemSynchronizationService fileSystemSynchronizationService;
@@ -126,6 +128,12 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
 
         SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot);
         SynchronizationRoot remoteDqoCloudFileSystem = this.dqoCloudRemoteFileSystemServiceFactory.createRemoteDqoCloudFSRW(dqoRoot);
+
+        if (remoteDqoCloudFileSystem == null) {
+            // no access to the remote file system
+            log.warn("Cannot access the remote file system for the folder root: " + dqoRoot);
+            return;
+        }
 
         FileSystemChangeSet sourceChangeSet = new FileSystemChangeSet(
                 userHomeFolderFileSystem,

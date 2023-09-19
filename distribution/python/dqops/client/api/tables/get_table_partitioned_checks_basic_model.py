@@ -4,11 +4,9 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.check_container_basic_model import CheckContainerBasicModel
-from ...models.get_table_partitioned_checks_basic_model_time_scale import (
-    GetTablePartitionedChecksBasicModelTimeScale,
-)
+from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
 
@@ -16,9 +14,9 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/basic".format(
         client.base_url,
@@ -69,9 +67,9 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerBasicModel]:
     """getTablePartitionedChecksBasicModel
 
@@ -82,7 +80,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -112,9 +110,9 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerBasicModel]:
     """getTablePartitionedChecksBasicModel
 
@@ -125,7 +123,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -148,9 +146,9 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[CheckContainerBasicModel]:
     """getTablePartitionedChecksBasicModel
 
@@ -161,7 +159,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -189,9 +187,9 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    time_scale: GetTablePartitionedChecksBasicModelTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[CheckContainerBasicModel]:
     """getTablePartitionedChecksBasicModel
 
@@ -202,7 +200,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        time_scale (GetTablePartitionedChecksBasicModelTimeScale):
+        time_scale (CheckTimeScale):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

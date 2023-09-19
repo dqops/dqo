@@ -54,6 +54,9 @@ public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessPro
         try {
             DqoCloudOAuth2BucketRWRefreshHandler refreshHandler = new DqoCloudOAuth2BucketRWRefreshHandler(rootType, this.accessTokenCache);
             DqoCloudCredentials dqoCloudCredentials = this.accessTokenCache.getCredentials(rootType);
+            if (dqoCloudCredentials == null) {
+                return null;
+            }
 
             OAuth2CredentialsWithRefresh credentials =
                     OAuth2CredentialsWithRefresh.newBuilder()

@@ -4,14 +4,14 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.connection_basic_model import ConnectionBasicModel
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections".format(client.base_url)
 
@@ -59,7 +59,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["ConnectionBasicModel"]]:
     """getAllConnections
 
@@ -87,7 +87,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["ConnectionBasicModel"]]:
     """getAllConnections
 
@@ -108,7 +108,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List["ConnectionBasicModel"]]:
     """getAllConnections
 
@@ -134,7 +134,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List["ConnectionBasicModel"]]:
     """getAllConnections
 

@@ -16,9 +16,11 @@
 package com.dqops.cli.commands.run;
 
 import com.dqops.cli.commands.BaseCommand;
+import com.dqops.cli.commands.CliMainCommandRunner;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.configuration.RootConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -57,18 +59,21 @@ public class RunCliCommand extends BaseCommand implements ICommand {
      * @param terminalReader                      Terminal reader - used to wait for an exit signal.
      * @param terminalWriter                      Terminal writer.
      * @param dqoSchedulerConfigurationProperties DQO job scheduler configuration - used to check if the scheduler is not disabled.
+     * @param rootConfigurationProperties         Root configuration properties - to detect the "--silent" parameter.
      */
     @Autowired
     public RunCliCommand(JobSchedulerService jobSchedulerService,
                          TerminalReader terminalReader,
                          TerminalWriter terminalWriter,
-                         DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties) {
+                         DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                         RootConfigurationProperties rootConfigurationProperties) {
         this.jobSchedulerService = jobSchedulerService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.synchronizationMode = dqoSchedulerConfigurationProperties.getSynchronizationMode();
         this.checkRunMode = dqoSchedulerConfigurationProperties.getCheckRunMode();
+        this.rootConfigurationProperties = rootConfigurationProperties;
     }
 
     @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "silent")
@@ -76,6 +81,7 @@ public class RunCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "silent")
     private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
+    private RootConfigurationProperties rootConfigurationProperties;
 
     @CommandLine.Option(names = {"-t", "--time-limit"}, description = "Optional execution time limit. DQO will run for the given duration and gracefully shut down. " +
             "Supported values are in the following format: 300s (300 seconds), 10m (10 minutes), 2h (run for up to 2 hours) or just a number that is the time limit in seconds.")
@@ -142,11 +148,19 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         }
 
         if (runDuration == null) {
-            this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
+            if (this.rootConfigurationProperties.isSilent()) {
+                return CliMainCommandRunner.DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE;
+            } else {
+                this.terminalReader.waitForExit(POST_STARTUP_MESSAGE);
+            }
         }
         else {
-            this.terminalReader.waitForExitWithTimeLimit(POST_STARTUP_MESSAGE +
-                    " DQO will shutdown automatically after " + this.timeLimit + ".", runDuration);
+            if (this.rootConfigurationProperties.isSilent()) {
+                Thread.sleep(runDuration.toMillis());
+            } else {
+                String startupMessage = POST_STARTUP_MESSAGE + " DQO will shutdown automatically after " + this.timeLimit + ".";
+                this.terminalReader.waitForExitWithTimeLimit(startupMessage, runDuration);
+            }
         }
 
         this.jobSchedulerService.shutdown();

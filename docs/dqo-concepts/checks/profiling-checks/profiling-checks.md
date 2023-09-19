@@ -28,7 +28,7 @@ Profiling data quality checks, like other data quality checks in DQO are defined
 Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:

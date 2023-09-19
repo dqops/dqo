@@ -19,8 +19,9 @@ import Select from '../../Select';
 import { TableBasicModelProfilingChecksResultTruncationEnum } from '../../../api';
 import NumberInput from '../../NumberInput';
 import clsx from 'clsx';
+import { IRootState } from '../../../redux/reducers';
 
-const TableDetails = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
+const TableDetails = () => {
   const {
     checkTypes,
     connection,
@@ -37,7 +38,9 @@ const TableDetails = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   useEffect(() => {
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
@@ -80,7 +83,7 @@ const TableDetails = ({canUserEdit} :  {canUserEdit ?: boolean}) => {
         isUpdating={isUpdating}
       />
 
-      <table  className={clsx("mb-6 w-160 text-sm", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
+      <table  className={clsx("mb-6 w-160 text-sm", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>

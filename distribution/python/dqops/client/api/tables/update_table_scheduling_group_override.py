@@ -4,12 +4,10 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
+from ...models.check_run_schedule_group import CheckRunScheduleGroup
 from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
 from ...models.mono_object import MonoObject
-from ...models.update_table_scheduling_group_override_scheduling_group import (
-    UpdateTableSchedulingGroupOverrideSchedulingGroup,
-)
 from ...types import Response
 
 
@@ -17,9 +15,9 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}".format(
@@ -74,9 +72,9 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -88,7 +86,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -120,9 +118,9 @@ def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -134,7 +132,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -159,9 +157,9 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Response[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -173,7 +171,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:
@@ -203,9 +201,9 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    scheduling_group: UpdateTableSchedulingGroupOverrideSchedulingGroup,
+    scheduling_group: CheckRunScheduleGroup,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: MonitoringScheduleSpec,
 ) -> Optional[MonoObject]:
     """updateTableSchedulingGroupOverride
@@ -217,7 +215,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        scheduling_group (UpdateTableSchedulingGroupOverrideSchedulingGroup):
+        scheduling_group (CheckRunScheduleGroup):
         json_body (MonitoringScheduleSpec):
 
     Raises:

@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.column_datetime_date_match_format_percent_sensor_parameters_spec_date_formats import (
-    ColumnDatetimeDateMatchFormatPercentSensorParametersSpecDateFormats,
-)
+from ..models.datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ColumnDatetimeDateMatchFormatPercentSensorParametersSpec")
@@ -16,14 +14,11 @@ class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        date_formats (Union[Unset, ColumnDatetimeDateMatchFormatPercentSensorParametersSpecDateFormats]): Desired date
-            format. Sensor will try to parse the column records and cast the data using this format.
+        date_formats (Union[Unset, DatetimeBuiltInDateFormats]):
     """
 
     filter_: Union[Unset, str] = UNSET
-    date_formats: Union[
-        Unset, ColumnDatetimeDateMatchFormatPercentSensorParametersSpecDateFormats
-    ] = UNSET
+    date_formats: Union[Unset, DatetimeBuiltInDateFormats] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,17 +43,11 @@ class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec:
         filter_ = d.pop("filter", UNSET)
 
         _date_formats = d.pop("date_formats", UNSET)
-        date_formats: Union[
-            Unset, ColumnDatetimeDateMatchFormatPercentSensorParametersSpecDateFormats
-        ]
+        date_formats: Union[Unset, DatetimeBuiltInDateFormats]
         if isinstance(_date_formats, Unset):
             date_formats = UNSET
         else:
-            date_formats = (
-                ColumnDatetimeDateMatchFormatPercentSensorParametersSpecDateFormats(
-                    _date_formats
-                )
-            )
+            date_formats = DatetimeBuiltInDateFormats(_date_formats)
 
         column_datetime_date_match_format_percent_sensor_parameters_spec = cls(
             filter_=filter_,

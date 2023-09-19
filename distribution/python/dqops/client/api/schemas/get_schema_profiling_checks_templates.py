@@ -4,11 +4,9 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
+from ...models.check_target import CheckTarget
 from ...models.check_template import CheckTemplate
-from ...models.get_schema_profiling_checks_templates_check_target import (
-    GetSchemaProfilingChecksTemplatesCheckTarget,
-)
 from ...types import UNSET, Response, Unset
 
 
@@ -16,10 +14,8 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
@@ -87,10 +83,8 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -101,7 +95,7 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -134,10 +128,8 @@ def sync(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -148,7 +140,7 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -174,10 +166,8 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -188,7 +178,7 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -219,10 +209,8 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -233,7 +221,7 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 

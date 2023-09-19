@@ -21,6 +21,7 @@ import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.configuration.RootConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
@@ -62,6 +63,7 @@ public class CliInitializerImpl implements CliInitializer {
     private TerminalWriter terminalWriter;
     private LocalUrlAddresses localUrlAddresses;
     private PythonVirtualEnvService pythonVirtualEnvService;
+    private RootConfigurationProperties rootConfigurationProperties;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -80,6 +82,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
+     * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -96,7 +99,8 @@ public class CliInitializerImpl implements CliInitializer {
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
                               LocalUrlAddresses localUrlAddresses,
-                              PythonVirtualEnvService pythonVirtualEnvService) {
+                              PythonVirtualEnvService pythonVirtualEnvService,
+                              RootConfigurationProperties rootConfigurationProperties) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -112,6 +116,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.terminalWriter = terminalWriter;
         this.localUrlAddresses = localUrlAddresses;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
+        this.rootConfigurationProperties = rootConfigurationProperties;
     }
 
     /**
@@ -144,6 +149,9 @@ public class CliInitializerImpl implements CliInitializer {
         this.cloudLoginService.logInToDqoCloud();
     }
 
+    /**
+     * Shows the initial information with the links to the UI.
+     */
     protected void displayUiLinks() {
         String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
         String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
@@ -193,7 +201,7 @@ public class CliInitializerImpl implements CliInitializer {
                 this.jobSchedulerService.triggerMetadataSynchronization();
             }
 
-            if (CliApplication.isRequiredWebServer()) {
+            if (CliApplication.isRequiredWebServer() && !this.rootConfigurationProperties.isSilent()) {
                 this.displayUiLinks();
             }
         }

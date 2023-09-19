@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
 from ...models.synchronize_multiple_folders_dqo_queue_job_parameters import (
     SynchronizeMultipleFoldersDqoQueueJobParameters,
@@ -14,7 +14,7 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/synchronize".format(client.base_url)
@@ -61,7 +61,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
 ) -> Response[DqoQueueJobId]:
     """synchronizeFolders
@@ -96,7 +96,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
 ) -> Optional[DqoQueueJobId]:
     """synchronizeFolders
@@ -124,7 +124,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
 ) -> Response[DqoQueueJobId]:
     """synchronizeFolders
@@ -157,7 +157,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
 ) -> Optional[DqoQueueJobId]:
     """synchronizeFolders

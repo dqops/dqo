@@ -52,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-21"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -343,7 +343,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -635,7 +635,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:

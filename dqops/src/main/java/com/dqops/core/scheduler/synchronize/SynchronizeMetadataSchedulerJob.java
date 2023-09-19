@@ -72,6 +72,11 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            if (principal.getApiKeyPayload() == null) {
+                return;
+            }
+
             SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
             SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
 
@@ -93,7 +98,6 @@ public class SynchronizeMetadataSchedulerJob implements Job {
             jobParameters.setDetectCronSchedules(true);
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
             PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
             pushJobResult.getFinishedFuture().get();
         }

@@ -54,6 +54,10 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
      */
     public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType) {
         DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType);
+        if (remoteBucketClient == null) {
+            return null;
+        }
+
         GSFileSystemSynchronizationRoot gsFileSystemRoot = new GSFileSystemSynchronizationRoot(
                 Path.of(remoteBucketClient.getObjectPrefix()),
                 remoteBucketClient.getStorage(),

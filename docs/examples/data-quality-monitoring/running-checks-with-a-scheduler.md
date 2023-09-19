@@ -91,7 +91,7 @@ for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
 
 ```yaml hl_lines="10-12"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
 spec:
@@ -119,7 +119,7 @@ It is important to keep in mind that the daily_values_in_range_numeric_percent c
 parameter has been set to "true" in the "schedule_override" section.
 
 ```yaml hl_lines="8-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:

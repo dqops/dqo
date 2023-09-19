@@ -15,6 +15,7 @@
  */
 package com.dqops.cli.terminal;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.google.common.base.Strings;
 import tech.tablesaw.api.Table;
 
@@ -72,12 +73,13 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
     /**
      * Starts a background job that will wait for any input on the console.
      * @param waitDuration Wait duration.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Mono that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
      */
     @Override
-    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
+    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration, boolean peekOnly) {
         return CompletableFuture.supplyAsync(() -> {
-            Character c = this.tryReadChar(waitDuration.toMillis(), true);
+            Character c = this.tryReadChar(waitDuration.toMillis(), peekOnly);
             return c != null;
         });
     }
@@ -89,15 +91,15 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      */
     @Override
     public void waitForExit(String startMessage) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
+        if (startMessage != null) {
+            this.getWriter().writeLine("");
+            this.getWriter().writeLine(startMessage);
+        }
 
         while (true) {
-            Character character = this.tryReadChar(1000, true);
-            if (character != null) {
-                if (this.promptBoolean("Exit the application", false)) {
-                    return;
-                }
+            String line = this.readLine("Press ENTER to stop the application.");
+            if (this.promptBoolean("Exit the application", false)) {
+                return;
             }
         }
     }
@@ -112,10 +114,12 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      */
     @Override
     public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
+        if (startMessage != null) {
+            this.getWriter().writeLine(startMessage);
+            this.getWriter().writeLine("Press any key to stop the application.");
+        }
 
-        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
+        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L), true);
         try {
             Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
             return wasExitedByUser;

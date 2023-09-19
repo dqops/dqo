@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.column_daily_monitoring_check_categories_spec import (
     ColumnDailyMonitoringCheckCategoriesSpec,
 )
@@ -18,7 +18,7 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnDailyMonitoringCheckCategoriesSpec,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily".format(
@@ -75,7 +75,7 @@ def sync_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnDailyMonitoringCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateColumnMonitoringChecksDaily
@@ -120,7 +120,7 @@ def sync(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnDailyMonitoringCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateColumnMonitoringChecksDaily
@@ -158,7 +158,7 @@ async def asyncio_detailed(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnDailyMonitoringCheckCategoriesSpec,
 ) -> Response[MonoObject]:
     """updateColumnMonitoringChecksDaily
@@ -201,7 +201,7 @@ async def asyncio(
     table_name: str,
     column_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: ColumnDailyMonitoringCheckCategoriesSpec,
 ) -> Optional[MonoObject]:
     """updateColumnMonitoringChecksDaily

@@ -8,23 +8,24 @@ import { IRootState } from '../../redux/reducers';
 
 type SensorActionGroupProps = {
   onSave: () => void;
+  onCopy?: () => void;
 };
 
-export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
+export const SensorActionGroup = ({ onSave, onCopy }: SensorActionGroupProps) => {
   const {
     full_sensor_name,
     sensorDetail,
     isUpdatedSensorDetail,
     isUpdating,
-    type
+    type,
+    copied
   } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
   const handleSave = () => {
-    if (type === 'create') {
+    if (type === 'create' || copied === true) {
       onSave();
       return;
     }
@@ -32,7 +33,6 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
       dispatch(updateSensor(full_sensor_name, sensorDetail));
     }
   };
-
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {sensorDetail?.custom && (
@@ -44,12 +44,20 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
           disabled={userProfile.can_manage_definitions !== true}
         />
       )}
+        <Button
+        color="primary"
+        variant="outlined"
+        label="Copy"
+        className="w-40 !h-10"
+        disabled={userProfile.can_manage_definitions !== true}
+        onClick={onCopy}
+        />
       <Button
         color="primary"
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedSensorDetail || userProfile.can_manage_definitions !== true}
+        disabled={!(isUpdatedSensorDetail || userProfile.can_manage_definitions !== true)}
         onClick={handleSave}
         loading={isUpdating}
       />

@@ -2,10 +2,8 @@ from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..models.parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
-from ..models.parameter_definition_spec_display_hint import (
-    ParameterDefinitionSpecDisplayHint,
-)
+from ..models.display_hint import DisplayHint
+from ..models.parameter_data_type import ParameterDataType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ParameterDefinitionSpec")
@@ -21,8 +19,8 @@ class ParameterDefinitionSpec:
         display_name (Union[Unset, str]): Field display name that should be shown as a label for the control.
         help_text (Union[Unset, str]): Help text (full description) that will be shown to the user as a hint when the
             cursor is moved over the control.
-        data_type (Union[Unset, ParameterDefinitionSpecDataType]): Parameter data type.
-        display_hint (Union[Unset, ParameterDefinitionSpecDisplayHint]): UI control display hint.
+        data_type (Union[Unset, ParameterDataType]):
+        display_hint (Union[Unset, DisplayHint]):
         required (Union[Unset, bool]): True when the value for the parameter must be provided.
         allowed_values (Union[Unset, List[str]]): List of allowed values for a field that is of an enum type.
         sample_values (Union[Unset, List[str]]): List of sample values. The sample values are used in the documentation
@@ -32,8 +30,8 @@ class ParameterDefinitionSpec:
     field_name: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
-    data_type: Union[Unset, ParameterDefinitionSpecDataType] = UNSET
-    display_hint: Union[Unset, ParameterDefinitionSpecDisplayHint] = UNSET
+    data_type: Union[Unset, ParameterDataType] = UNSET
+    display_hint: Union[Unset, DisplayHint] = UNSET
     required: Union[Unset, bool] = UNSET
     allowed_values: Union[Unset, List[str]] = UNSET
     sample_values: Union[Unset, List[str]] = UNSET
@@ -92,18 +90,18 @@ class ParameterDefinitionSpec:
         help_text = d.pop("help_text", UNSET)
 
         _data_type = d.pop("data_type", UNSET)
-        data_type: Union[Unset, ParameterDefinitionSpecDataType]
+        data_type: Union[Unset, ParameterDataType]
         if isinstance(_data_type, Unset):
             data_type = UNSET
         else:
-            data_type = ParameterDefinitionSpecDataType(_data_type)
+            data_type = ParameterDataType(_data_type)
 
         _display_hint = d.pop("display_hint", UNSET)
-        display_hint: Union[Unset, ParameterDefinitionSpecDisplayHint]
+        display_hint: Union[Unset, DisplayHint]
         if isinstance(_display_hint, Unset):
             display_hint = UNSET
         else:
-            display_hint = ParameterDefinitionSpecDisplayHint(_display_hint)
+            display_hint = DisplayHint(_display_hint)
 
         required = d.pop("required", UNSET)
 

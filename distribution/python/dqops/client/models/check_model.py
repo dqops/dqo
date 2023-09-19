@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.check_model_check_target import CheckModelCheckTarget
 from ..models.check_model_configuration_requirements_errors_item import (
     CheckModelConfigurationRequirementsErrorsItem,
 )
-from ..models.check_model_schedule_enabled_status import CheckModelScheduleEnabledStatus
+from ..models.check_target_model import CheckTargetModel
+from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -46,8 +46,7 @@ class CheckModel:
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
-        schedule_enabled_status (Union[Unset, CheckModelScheduleEnabledStatus]): State of the scheduling override for
-            this check.
+        schedule_enabled_status (Union[Unset, ScheduleEnabledStatusModel]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -69,11 +68,14 @@ class CheckModel:
         data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
         data_grouping_configuration (Union[Unset, str]): The name of a data grouping configuration defined at a table
             that should be used for this check.
-        check_target (Union[Unset, CheckModelCheckTarget]): Type of the check's target (column, table).
+        check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[CheckModelConfigurationRequirementsErrorsItem]]): List of
             configuration errors that must be fixed before the data quality check could be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
             other time scales.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
+        can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
+        can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -86,7 +88,7 @@ class CheckModel:
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
-    schedule_enabled_status: Union[Unset, CheckModelScheduleEnabledStatus] = UNSET
+    schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -96,11 +98,14 @@ class CheckModel:
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
-    check_target: Union[Unset, CheckModelCheckTarget] = UNSET
+    check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[
         Unset, List[CheckModelConfigurationRequirementsErrorsItem]
     ] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -185,6 +190,10 @@ class CheckModel:
 
                 similar_checks.append(similar_checks_item)
 
+        can_edit = self.can_edit
+        can_run_checks = self.can_run_checks
+        can_delete_data = self.can_delete_data
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -236,6 +245,12 @@ class CheckModel:
             ] = configuration_requirements_errors
         if similar_checks is not UNSET:
             field_dict["similar_checks"] = similar_checks
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_checks is not UNSET:
+            field_dict["can_run_checks"] = can_run_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -304,11 +319,11 @@ class CheckModel:
             effective_schedule = EffectiveScheduleModel.from_dict(_effective_schedule)
 
         _schedule_enabled_status = d.pop("schedule_enabled_status", UNSET)
-        schedule_enabled_status: Union[Unset, CheckModelScheduleEnabledStatus]
+        schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel]
         if isinstance(_schedule_enabled_status, Unset):
             schedule_enabled_status = UNSET
         else:
-            schedule_enabled_status = CheckModelScheduleEnabledStatus(
+            schedule_enabled_status = ScheduleEnabledStatusModel(
                 _schedule_enabled_status
             )
 
@@ -350,11 +365,11 @@ class CheckModel:
         data_grouping_configuration = d.pop("data_grouping_configuration", UNSET)
 
         _check_target = d.pop("check_target", UNSET)
-        check_target: Union[Unset, CheckModelCheckTarget]
+        check_target: Union[Unset, CheckTargetModel]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = CheckModelCheckTarget(_check_target)
+            check_target = CheckTargetModel(_check_target)
 
         configuration_requirements_errors = []
         _configuration_requirements_errors = d.pop(
@@ -380,6 +395,12 @@ class CheckModel:
 
             similar_checks.append(similar_checks_item)
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_checks = d.pop("can_run_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         check_model = cls(
             check_name=check_name,
             help_text=help_text,
@@ -404,6 +425,9 @@ class CheckModel:
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,
+            can_edit=can_edit,
+            can_run_checks=can_run_checks,
+            can_delete_data=can_delete_data,
         )
 
         check_model.additional_properties = d

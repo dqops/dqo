@@ -17,6 +17,7 @@ package com.dqops.cli;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,13 +36,30 @@ public class CliApplication {
 
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
+	private static boolean silentEnabledByArgument;
 
+	/**
+	 * Returns true if DQO was started in a mode to run one command and exit.
+	 * @return True - command was given in the argument list, it will execute and the application will exit.
+	 */
 	public static boolean isRunningOneShotMode() {
 		return runningOneShotMode;
 	}
 
+	/**
+	 * Returns true if the web server must be started.
+	 * @return True - webserver must be started.
+	 */
 	public static boolean isRequiredWebServer() {
 		return requiredWebServer;
+	}
+
+	/**
+	 * Returns true if "--silent" or --silent=true was given on the command line.
+	 * @return True when a silent mode is enabled.
+	 */
+	public static boolean isSilentEnabledByArgument() {
+		return silentEnabledByArgument;
 	}
 
 	/**
@@ -80,6 +98,11 @@ public class CliApplication {
 		return true; // no parameters, just the shell mode, so we start the web server
 	}
 
+	/**
+	 * Detects a presence of a command in the argument list.
+	 * @param args Argument list.
+	 * @return True - a command to run and exit was found.
+	 */
 	public static boolean hasArgumentsForOneShot(String[] args) {
 		if (args == null || args.length == 0) {
 			// running just "dqo" in shell starts the interactive mode
@@ -105,9 +128,20 @@ public class CliApplication {
 		try {
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
+			boolean silentDisabledAsArgument = Arrays.stream(args)
+					.takeWhile(a -> a.startsWith("-"))
+					.anyMatch(a -> a.equals("--silent=false"));
+
+			silentEnabledByArgument = Arrays.stream(args)
+					.takeWhile(a -> a.startsWith("-"))
+					.anyMatch(a -> a.equals("--silent") || a.equals("--silent=true")) ||
+					(!silentDisabledAsArgument &&
+							(Objects.equals(System.getProperty("silent"), "true") ||
+					         Objects.equals(System.getenv("SILENT"), "true")));
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setBannerMode(silentEnabledByArgument ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 

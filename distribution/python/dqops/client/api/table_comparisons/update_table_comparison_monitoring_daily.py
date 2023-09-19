@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.table_comparison_model import TableComparisonModel
 from ...types import Response
@@ -16,7 +16,7 @@ def _get_kwargs(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily/{tableComparisonConfigurationName}".format(
@@ -73,7 +73,7 @@ def sync_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Response[MonoObject]:
     """updateTableComparisonMonitoringDaily
@@ -119,7 +119,7 @@ def sync(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Optional[MonoObject]:
     """updateTableComparisonMonitoringDaily
@@ -158,7 +158,7 @@ async def asyncio_detailed(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Response[MonoObject]:
     """updateTableComparisonMonitoringDaily
@@ -202,7 +202,7 @@ async def asyncio(
     table_name: str,
     table_comparison_configuration_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Optional[MonoObject]:
     """updateTableComparisonMonitoringDaily

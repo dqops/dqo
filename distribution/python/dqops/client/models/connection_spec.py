@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..models.connection_spec_provider_type import ConnectionSpecProviderType
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -28,7 +28,7 @@ T = TypeVar("T", bound="ConnectionSpec")
 class ConnectionSpec:
     """
     Attributes:
-        provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required).
+        provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
         postgresql (Union[Unset, PostgresqlParametersSpec]):
@@ -48,7 +48,7 @@ class ConnectionSpec:
             searching for tables when filtered data quality checks are executed.
     """
 
-    provider_type: Union[Unset, ConnectionSpecProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
@@ -182,11 +182,11 @@ class ConnectionSpec:
 
         d = src_dict.copy()
         _provider_type = d.pop("provider_type", UNSET)
-        provider_type: Union[Unset, ConnectionSpecProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ConnectionSpecProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         _bigquery = d.pop("bigquery", UNSET)
         bigquery: Union[Unset, BigQueryParametersSpec]

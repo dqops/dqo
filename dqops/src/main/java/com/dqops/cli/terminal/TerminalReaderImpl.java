@@ -15,6 +15,7 @@
  */
 package com.dqops.cli.terminal;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 
@@ -67,22 +68,33 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
      */
     @Override
     public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
-        try {
-            Terminal terminal = this.lineReader.getTerminal();
+        long startMillis = System.currentTimeMillis();
 
-            int readResult = terminal.reader().peek(timeoutMillis);
-            if (readResult <= 0) {
+        while (startMillis + timeoutMillis > System.currentTimeMillis()) {
+            try {
+                Terminal terminal = this.lineReader.getTerminal();
+
+                int readResult = terminal.reader().peek(0);
+                if (readResult <= 0) {
+                    try {
+                        Thread.sleep(Math.min(100, timeoutMillis));
+                    }
+                    catch (InterruptedException ex) {
+                        throw new DqoRuntimeException("Waiting for input interrupted, message: " + ex.getMessage(), ex);
+                    }
+                    continue;
+                }
+
+                if (peekOnly || Thread.currentThread().isInterrupted()) {
+                    return null;
+                }
+
+                return (char) terminal.reader().read();
+            } catch (IOException ioe) {
                 return null;
             }
-
-            if (peekOnly || Thread.currentThread().isInterrupted()) {
-                return null;
-            }
-
-            return (char)terminal.reader().read();
         }
-        catch (IOException ioe) {
-            return null;
-        }
+
+        return null;
     }
 }

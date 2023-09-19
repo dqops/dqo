@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.sensor_readouts_list_model import SensorReadoutsListModel
 from ...types import UNSET, Response, Unset
 
@@ -15,7 +15,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -106,7 +106,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -167,7 +167,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -221,7 +221,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -280,7 +280,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,

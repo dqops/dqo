@@ -4,13 +4,9 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.get_table_data_quality_status_check_time_scale import (
-    GetTableDataQualityStatusCheckTimeScale,
-)
-from ...models.get_table_data_quality_status_check_type import (
-    GetTableDataQualityStatusCheckType,
-)
+from ...client import AuthenticatedClient, Client
+from ...models.check_time_scale import CheckTimeScale
+from ...models.check_type import CheckType
 from ...models.table_data_quality_status_model import TableDataQualityStatusModel
 from ...types import UNSET, Response, Unset
 
@@ -20,12 +16,10 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status".format(
         client.base_url,
@@ -94,12 +88,10 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -114,8 +106,8 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -148,12 +140,10 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -168,8 +158,8 @@ def sync(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -195,12 +185,10 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -215,8 +203,8 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -247,12 +235,10 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -267,8 +253,8 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

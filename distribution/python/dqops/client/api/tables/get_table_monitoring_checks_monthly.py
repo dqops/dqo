@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.table_monthly_monitoring_check_categories_spec import (
     TableMonthlyMonitoringCheckCategoriesSpec,
 )
@@ -16,7 +16,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly".format(
         client.base_url,
@@ -69,7 +69,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableMonthlyMonitoringCheckCategoriesSpec]:
     """getTableMonitoringChecksMonthly
 
@@ -108,7 +108,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableMonthlyMonitoringCheckCategoriesSpec]:
     """getTableMonitoringChecksMonthly
 
@@ -140,7 +140,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[TableMonthlyMonitoringCheckCategoriesSpec]:
     """getTableMonitoringChecksMonthly
 
@@ -177,7 +177,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[TableMonthlyMonitoringCheckCategoriesSpec]:
     """getTableMonitoringChecksMonthly
 

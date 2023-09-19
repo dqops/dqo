@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..models.statistics_collector_search_filters_target import (
-    StatisticsCollectorSearchFiltersTarget,
-)
+from ..models.statistics_collector_target import StatisticsCollectorTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -23,11 +21,11 @@ class StatisticsCollectorSearchFilters:
         enabled (Union[Unset, bool]):
         tags (Union[Unset, List[str]]):
         labels (Union[Unset, List[str]]):
-        column_name (Union[Unset, str]):
+        column_names (Union[Unset, List[str]]):
         collector_name (Union[Unset, str]):
         sensor_name (Union[Unset, str]):
         collector_category (Union[Unset, str]):
-        target (Union[Unset, StatisticsCollectorSearchFiltersTarget]):
+        target (Union[Unset, StatisticsCollectorTarget]):
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
@@ -36,11 +34,11 @@ class StatisticsCollectorSearchFilters:
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    column_name: Union[Unset, str] = UNSET
+    column_names: Union[Unset, List[str]] = UNSET
     collector_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
-    target: Union[Unset, StatisticsCollectorSearchFiltersTarget] = UNSET
+    target: Union[Unset, StatisticsCollectorTarget] = UNSET
     collectors_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -56,7 +54,10 @@ class StatisticsCollectorSearchFilters:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
-        column_name = self.column_name
+        column_names: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.column_names, Unset):
+            column_names = self.column_names
+
         collector_name = self.collector_name
         sensor_name = self.sensor_name
         collector_category = self.collector_category
@@ -91,8 +92,8 @@ class StatisticsCollectorSearchFilters:
             field_dict["tags"] = tags
         if labels is not UNSET:
             field_dict["labels"] = labels
-        if column_name is not UNSET:
-            field_dict["columnName"] = column_name
+        if column_names is not UNSET:
+            field_dict["columnNames"] = column_names
         if collector_name is not UNSET:
             field_dict["collectorName"] = collector_name
         if sensor_name is not UNSET:
@@ -121,7 +122,7 @@ class StatisticsCollectorSearchFilters:
 
         labels = cast(List[str], d.pop("labels", UNSET))
 
-        column_name = d.pop("columnName", UNSET)
+        column_names = cast(List[str], d.pop("columnNames", UNSET))
 
         collector_name = d.pop("collectorName", UNSET)
 
@@ -130,11 +131,11 @@ class StatisticsCollectorSearchFilters:
         collector_category = d.pop("collectorCategory", UNSET)
 
         _target = d.pop("target", UNSET)
-        target: Union[Unset, StatisticsCollectorSearchFiltersTarget]
+        target: Union[Unset, StatisticsCollectorTarget]
         if isinstance(_target, Unset):
             target = UNSET
         else:
-            target = StatisticsCollectorSearchFiltersTarget(_target)
+            target = StatisticsCollectorTarget(_target)
 
         collectors_hierarchy_ids_models = []
         _collectors_hierarchy_ids_models = d.pop("collectorsHierarchyIdsModels", UNSET)
@@ -153,7 +154,7 @@ class StatisticsCollectorSearchFilters:
             enabled=enabled,
             tags=tags,
             labels=labels,
-            column_name=column_name,
+            column_names=column_names,
             collector_name=collector_name,
             sensor_name=sensor_name,
             collector_category=collector_category,

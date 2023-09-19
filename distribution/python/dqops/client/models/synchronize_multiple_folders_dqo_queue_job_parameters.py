@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.synchronize_multiple_folders_dqo_queue_job_parameters_direction import (
-    SynchronizeMultipleFoldersDqoQueueJobParametersDirection,
-)
+from ..models.file_synchronization_direction import FileSynchronizationDirection
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="SynchronizeMultipleFoldersDqoQueueJobParameters")
@@ -14,8 +12,7 @@ T = TypeVar("T", bound="SynchronizeMultipleFoldersDqoQueueJobParameters")
 class SynchronizeMultipleFoldersDqoQueueJobParameters:
     """
     Attributes:
-        direction (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection]): File synchronization
-            direction, the default is full synchronization (push local changes and pull other changes from DQO Cloud).
+        direction (Union[Unset, FileSynchronizationDirection]):
         force_refresh_native_tables (Union[Unset, bool]): Force full refresh of native tables in the data quality data
             warehouse. The default synchronization mode is to refresh only modified data.
         detect_cron_schedules (Union[Unset, bool]): Scans the yaml files (with the configuration for connections and
@@ -35,9 +32,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
             decide which folders need synchronization (to be pushed to the cloud).
     """
 
-    direction: Union[
-        Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection
-    ] = UNSET
+    direction: Union[Unset, FileSynchronizationDirection] = UNSET
     force_refresh_native_tables: Union[Unset, bool] = UNSET
     detect_cron_schedules: Union[Unset, bool] = UNSET
     sources: Union[Unset, bool] = UNSET
@@ -110,15 +105,11 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _direction = d.pop("direction", UNSET)
-        direction: Union[
-            Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection
-        ]
+        direction: Union[Unset, FileSynchronizationDirection]
         if isinstance(_direction, Unset):
             direction = UNSET
         else:
-            direction = SynchronizeMultipleFoldersDqoQueueJobParametersDirection(
-                _direction
-            )
+            direction = FileSynchronizationDirection(_direction)
 
         force_refresh_native_tables = d.pop("forceRefreshNativeTables", UNSET)
 

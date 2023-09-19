@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
 from ...models.table_comparison_model import TableComparisonModel
 from ...types import Response
@@ -15,7 +15,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling".format(
@@ -70,7 +70,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Response[MonoObject]:
     """createTableComparisonProfiling
@@ -113,7 +113,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Optional[MonoObject]:
     """createTableComparisonProfiling
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Response[MonoObject]:
     """createTableComparisonProfiling
@@ -190,7 +190,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: TableComparisonModel,
 ) -> Optional[MonoObject]:
     """createTableComparisonProfiling

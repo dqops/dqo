@@ -102,7 +102,7 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, dummyResultTable);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
+            log.warn("Sensor failed to execute a query :" + renderedSensorSql, exception);
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }

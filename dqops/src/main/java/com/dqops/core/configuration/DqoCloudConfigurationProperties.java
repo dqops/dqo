@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for dqo.ai. Properties are mapped to the "dqo.cloud." prefix that are responsible for the configuration of the DQO Cloud.
+ * Configuration POJO with the configuration for cloud.dqops.com. Properties are mapped to the "dqo.cloud." prefix that are responsible for the configuration of the DQO Cloud.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.cloud")

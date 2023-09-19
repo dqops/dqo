@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

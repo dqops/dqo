@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.dqo_job_queue_incremental_snapshot_model import (
     DqoJobQueueIncrementalSnapshotModel,
 )
@@ -14,7 +14,7 @@ from ...types import Response
 def _get_kwargs(
     sequence_number: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/jobs/jobchangessince/{sequenceNumber}".format(
         client.base_url, sequenceNumber=sequence_number
@@ -60,7 +60,7 @@ def _build_response(
 def sync_detailed(
     sequence_number: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoJobQueueIncrementalSnapshotModel]:
     """getJobChangesSince
 
@@ -93,7 +93,7 @@ def sync_detailed(
 def sync(
     sequence_number: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoJobQueueIncrementalSnapshotModel]:
     """getJobChangesSince
 
@@ -119,7 +119,7 @@ def sync(
 async def asyncio_detailed(
     sequence_number: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[DqoJobQueueIncrementalSnapshotModel]:
     """getJobChangesSince
 
@@ -150,7 +150,7 @@ async def asyncio_detailed(
 async def asyncio(
     sequence_number: int,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[DqoJobQueueIncrementalSnapshotModel]:
     """getJobChangesSince
 

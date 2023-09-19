@@ -5,6 +5,9 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.table_comparison_column_count_match_check_spec import (
+        TableComparisonColumnCountMatchCheckSpec,
+    )
     from ..models.table_comparison_daily_monitoring_checks_spec_custom_checks import (
         TableComparisonDailyMonitoringChecksSpecCustomChecks,
     )
@@ -24,12 +27,16 @@ class TableComparisonDailyMonitoringChecksSpec:
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
+        daily_column_count_match (Union[Unset, TableComparisonColumnCountMatchCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "TableComparisonDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
     daily_row_count_match: Union[Unset, "TableComparisonRowCountMatchCheckSpec"] = UNSET
+    daily_column_count_match: Union[
+        Unset, "TableComparisonColumnCountMatchCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -41,6 +48,10 @@ class TableComparisonDailyMonitoringChecksSpec:
         if not isinstance(self.daily_row_count_match, Unset):
             daily_row_count_match = self.daily_row_count_match.to_dict()
 
+        daily_column_count_match: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_column_count_match, Unset):
+            daily_column_count_match = self.daily_column_count_match.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -48,11 +59,16 @@ class TableComparisonDailyMonitoringChecksSpec:
             field_dict["custom_checks"] = custom_checks
         if daily_row_count_match is not UNSET:
             field_dict["daily_row_count_match"] = daily_row_count_match
+        if daily_column_count_match is not UNSET:
+            field_dict["daily_column_count_match"] = daily_column_count_match
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.table_comparison_column_count_match_check_spec import (
+            TableComparisonColumnCountMatchCheckSpec,
+        )
         from ..models.table_comparison_daily_monitoring_checks_spec_custom_checks import (
             TableComparisonDailyMonitoringChecksSpecCustomChecks,
         )
@@ -83,9 +99,21 @@ class TableComparisonDailyMonitoringChecksSpec:
                 _daily_row_count_match
             )
 
+        _daily_column_count_match = d.pop("daily_column_count_match", UNSET)
+        daily_column_count_match: Union[Unset, TableComparisonColumnCountMatchCheckSpec]
+        if isinstance(_daily_column_count_match, Unset):
+            daily_column_count_match = UNSET
+        else:
+            daily_column_count_match = (
+                TableComparisonColumnCountMatchCheckSpec.from_dict(
+                    _daily_column_count_match
+                )
+            )
+
         table_comparison_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             daily_row_count_match=daily_row_count_match,
+            daily_column_count_match=daily_column_count_match,
         )
 
         table_comparison_daily_monitoring_checks_spec.additional_properties = d

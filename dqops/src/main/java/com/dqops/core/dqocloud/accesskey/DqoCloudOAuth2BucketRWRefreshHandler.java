@@ -55,6 +55,9 @@ public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWi
     public AccessToken refreshAccessToken() throws IOException {
         try {
             DqoCloudCredentials credentials = this.accessTokenCache.getCredentials(this.rootType);
+            if (credentials == null) {
+                return null;
+            }
             AccessToken accessToken = credentials.getAccessToken();
             return accessToken;
         }

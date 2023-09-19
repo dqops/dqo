@@ -38,7 +38,7 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
                 .addResourceLocations("classpath:/static/")
                 .setUseLastModified(true)
                 .setOptimizeLocations(true)
-                .setCacheControl(CacheControl.maxAge(Duration.ofMinutes(60)).cachePublic().mustRevalidate())
+                .setCacheControl(CacheControl.maxAge(Duration.ofMinutes(60)).cachePublic())
                 .resourceChain(true);
     }
 }

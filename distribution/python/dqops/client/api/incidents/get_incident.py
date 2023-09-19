@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.incident_model import IncidentModel
 from ...types import Response
 
@@ -15,7 +15,7 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}".format(
         client.base_url,
@@ -68,7 +68,7 @@ def sync_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[IncidentModel]:
     """getIncident
 
@@ -110,7 +110,7 @@ def sync(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[IncidentModel]:
     """getIncident
 
@@ -145,7 +145,7 @@ async def asyncio_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[IncidentModel]:
     """getIncident
 
@@ -185,7 +185,7 @@ async def asyncio(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[IncidentModel]:
     """getIncident
 

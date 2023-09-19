@@ -61,7 +61,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         apiClient.setApiKey(apiKey.getApiKeyToken());
-        apiClient.getAuthentication("api_key");
+//        apiClient.setDebugging(true);
 
         return apiClient;
     }
