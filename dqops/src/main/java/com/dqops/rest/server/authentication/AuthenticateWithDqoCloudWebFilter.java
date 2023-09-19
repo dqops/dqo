@@ -191,6 +191,12 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             if (portPrefixIndex > 0) {
                 hostHeader = hostHeader.substring(0, portPrefixIndex);
             }
+
+            if (log.isInfoEnabled()) {
+                log.info("Returning a DQOAccessToken cookie for the user " + signedAuthenticationToken.getTarget().getUser() + " in the tenant " +
+                        signedAuthenticationToken.getTarget().getTenantId() + ", the cookie is valid for " + hostHeader + " host");
+            }
+            
             ResponseCookie dqoAccessTokenCookie = ResponseCookie.from("DQOAccessToken", signedAuthenticationToken.getSignedHex())
                     .maxAge(Duration.ofHours(24))
                     .domain(hostHeader)
