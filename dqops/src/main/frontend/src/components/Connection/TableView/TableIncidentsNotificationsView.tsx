@@ -72,6 +72,7 @@ export const TableIncidentsNotificationsView = () => {
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
             disabled={userProfile.can_manage_data_sources !== true}
+            className="min-w-60"
           />
         </div>
         <div className="flex mb-4">
@@ -81,7 +82,7 @@ export const TableIncidentsNotificationsView = () => {
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
             disabled={userProfile.can_manage_data_sources !== true}
-            className="min-w-55"
+            className="min-w-60"
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
