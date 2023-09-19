@@ -23,6 +23,7 @@ import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +37,7 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
@@ -173,7 +175,18 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             String returnUrl = exchange.getRequest().getQueryParams().getFirst("returnUrl");
             String refreshToken = exchange.getRequest().getQueryParams().getFirst("refreshToken");
             SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.instanceCloudLoginService.issueDqoUserAuthenticationToken(refreshToken);
-            String hostHeader = exchange.getRequest().getHeaders().getFirst("Host");
+
+            String hostHeader;
+            try {
+                URI originalReturnUri = new URI(returnUrl);
+                hostHeader = originalReturnUri.getHost();
+            }
+            catch (Exception ex) {
+                log.error("Return url is invalid: " + returnUrl + ", exception: " + ex.getMessage(), ex);
+                exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
+                return exchange.getResponse().writeAndFlushWith(Mono.empty());
+            }
+
             int portPrefixIndex = hostHeader.indexOf(':');
             if (portPrefixIndex > 0) {
                 hostHeader = hostHeader.substring(0, portPrefixIndex);
