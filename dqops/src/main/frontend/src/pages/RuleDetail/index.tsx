@@ -56,11 +56,9 @@ export const RuleDetail = () => {
     const fullName = [...(path || []), ruleName].join('/');
     if(type === 'create' && copied !== true){
       await dispatch(createRule(fullName, 
-        {...ruleDetail, rule_name: ruleName, custom: true, can_edit: true, built_in: false}));
+        {...ruleDetail, full_rule_name: fullName, rule_name: ruleName, custom: true, can_edit: true, built_in: false}));
     }else if(copied === true){
-      console.log(full_rule_name, ruleName)
-
-      await dispatch(createRule(String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , {...ruleDetail, full_rule_name: full_rule_name, custom: true, built_in: false}))
+      await dispatch(createRule(String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , {...ruleDetail, rule_name: ruleName, full_rule_name: String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , custom: true, built_in: false}))
       await dispatch(closeFirstLevelTab("definitions/rules/" + String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]))
       await  dispatch(
         addFirstLevelTab({
@@ -111,7 +109,6 @@ export const RuleDetail = () => {
       })
     );
 }
-console.log(path, ruleName, full_rule_name, ruleDetail)
   return (
     <DefinitionLayout>
       <div className="relative">
