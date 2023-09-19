@@ -272,7 +272,7 @@ export const SensorDetail = () => {
                 : 'secondary'
             }
             variant="contained"
-            label={isCreating === true ? 'Create' : 'Update'}
+            label={'Save'}
             className="w-40 !h-10"
             disabled={!isUpdated || userProfile.can_manage_definitions !== true}
             onClick={onCreateUpdateCheck}
