@@ -399,6 +399,7 @@ export const DefinitionTree = () => {
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
                   </div>
+                  <DataQualityContextMenu singleCheck={true} check={check} />
                 </div>
               </div>
             ))}

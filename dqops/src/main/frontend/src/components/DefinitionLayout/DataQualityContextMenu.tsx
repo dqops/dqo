@@ -6,7 +6,7 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { CheckSpecModel, SensorBasicFolderModel } from '../../api';
+import { CheckSpecBasicModel, CheckSpecModel, SensorBasicFolderModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
@@ -20,9 +20,11 @@ import { IRootState } from '../../redux/reducers';
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
+  singleCheck?: boolean;
+  check?: CheckSpecBasicModel;
 }
 
-const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
+const DataQualityContextMenu = ({ folder, path, singleCheck, check }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false);
@@ -61,6 +63,21 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     );
     setOpen(false)
   };
+  const onCopy = () : void => { 
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.CHECK_DETAIL(check?.check_name+ "_copy" ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(check?.check_name+ "_copy" ?? ''),
+        state: {
+          full_sensor_name: check?.full_check_name,
+          copied: true,
+          path: path,
+          type: "create"
+        },
+        label: `${String(check?.full_check_name).split("/")[String(check?.full_check_name).split("/").length - 1]}_copy`
+      })
+    );
+}
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -70,6 +87,18 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
+        {singleCheck ? 
+        <div onClick={(e) => e.stopPropagation()}>
+          <div
+            className={clsx(
+              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
+            )}
+            onClick={onCopy}
+          >
+            Copy check
+          </div>
+        </div>
+        :
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className={clsx(
@@ -80,6 +109,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
             Add new check
           </div>
         </div>
+        }
         <div onClick={(e) => e.stopPropagation()}>
           <AddFolderDialog
             open={isOpen}
