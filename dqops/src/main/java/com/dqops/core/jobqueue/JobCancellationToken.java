@@ -17,9 +17,11 @@
 package com.dqops.core.jobqueue;
 
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashSet;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -55,7 +57,16 @@ public class JobCancellationToken {
         if (this.job.getCompletionStatus() != null) {
             return; // the job has completed, too late to cancel it
         }
-        this.job.getFinishedFuture().cancel(true);
+
+        try {
+            CompletableFuture<?> finishedFuture = this.job.getFinishedFuture();
+            if (finishedFuture != null) {
+                finishedFuture.cancel(true);
+            }
+        }
+        catch (Throwable ex) {
+            throw new DqoRuntimeException("Failed to cancel a job " + this.job.getClass().getSimpleName() + ", error: " + ex.getMessage(), ex);
+        }
         this.notifyCancellationListeners();
     }
 

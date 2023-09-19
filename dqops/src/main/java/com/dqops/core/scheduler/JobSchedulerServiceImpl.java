@@ -16,6 +16,8 @@
 package com.dqops.core.scheduler;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.jobqueue.DqoJobQueue;
+import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -50,6 +52,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private TriggerFactory triggerFactory;
     private JobDataMapAdapter jobDataMapAdapter;
     private ScheduledJobListener scheduledJobListener;
+    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -63,6 +67,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param triggerFactory Trigger factory that creates quartz triggers for the schedules defined in the metadata.
      * @param jobDataMapAdapter Job data adapter that can retrieve the original schedule from the trigger arguments.
      * @param scheduledJobListener  Job listener that is notified when a job starts or finishes.
+     * @param dqoJobQueue Standard job queue, used to ensure that the job queue starts before the job scheduler.
+     * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -70,13 +76,17 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    SpringIoCJobFactory jobFactory,
                                    TriggerFactory triggerFactory,
                                    JobDataMapAdapter jobDataMapAdapter,
-                                   ScheduledJobListener scheduledJobListener) {
+                                   ScheduledJobListener scheduledJobListener,
+                                   DqoJobQueue dqoJobQueue,
+                                   ParentDqoJobQueue parentDqoJobQueue) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
         this.triggerFactory = triggerFactory;
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.scheduledJobListener = scheduledJobListener;
+        this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
     }
 
     /**
@@ -131,6 +141,9 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * Creates and starts a scheduler, but without any jobs.
      */
     public void createAndStartScheduler() {
+        this.dqoJobQueue.start(); // ensure that the job queues are working
+        this.parentDqoJobQueue.start();
+
         assert scheduler == null;
         try {
             this.scheduler = schedulerFactory.getScheduler();
