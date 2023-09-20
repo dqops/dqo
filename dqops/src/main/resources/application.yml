@@ -159,6 +159,8 @@ dqo:
       monitoring-monthly: "0 12 * * *"  # 12PM every day (noon)
       partitioned-daily: "0 12 * * *"  # 12PM every day (noon)
       partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
+  webserver:
+    static-files-cache-control-max-age: 86400
   cli:
     oneshot:
       terminal-width: 150

@@ -15,8 +15,10 @@
  */
 package com.dqops.rest.server;
 
+import com.dqops.core.configuration.DqoWebServerConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
+import org.springframework.web.reactive.config.ResourceHandlerRegistration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
@@ -27,6 +29,16 @@ import java.time.Duration;
  */
 @Configuration
 public class StaticResourcesConfiguration implements WebFluxConfigurer {
+    private final DqoWebServerConfigurationProperties webServerConfigurationProperties;
+
+    /**
+     * Dependency injection constructor.
+     * @param webServerConfigurationProperties Web sever specific configuration.
+     */
+    public StaticResourcesConfiguration(DqoWebServerConfigurationProperties webServerConfigurationProperties) {
+        this.webServerConfigurationProperties = webServerConfigurationProperties;
+    }
+
     /**
      * Registers static resources with the production build of the DQO UI.
      * @param registry Resource handler registry.
@@ -34,11 +46,16 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String baseUrl = "";
-        registry.addResourceHandler(baseUrl + "/**")
+        ResourceHandlerRegistration resourceHandlerRegistration = registry.addResourceHandler(baseUrl + "/**")
                 .addResourceLocations("classpath:/static/")
                 .setUseLastModified(true)
-                .setOptimizeLocations(true)
-                .setCacheControl(CacheControl.maxAge(Duration.ofMinutes(60)).cachePublic())
-                .resourceChain(true);
+                .setOptimizeLocations(true);
+
+        if (this.webServerConfigurationProperties.getStaticFilesCacheControlMaxAge() != null) {
+            Duration maxAge = Duration.ofSeconds(this.webServerConfigurationProperties.getStaticFilesCacheControlMaxAge());
+            resourceHandlerRegistration
+                    .setCacheControl(CacheControl.maxAge(maxAge).cachePublic())
+                    .resourceChain(true);
+        }
     }
 }
