@@ -98,7 +98,15 @@ const TableActionGroup = ({
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  );
+  ).find(
+    (x) =>
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+      schema + '.' + table
+      && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+      connection
+  )
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -145,14 +153,7 @@ const TableActionGroup = ({
         <Button
           className="flex items-center gap-x-2 justify-center "
           label={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schema + '.' + table
-                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
-                connection
-            )
+            filteredJobs
               ? 'Collecting...'
               : 
               selectedColumns?.length!== 0 ? 
@@ -160,27 +161,13 @@ const TableActionGroup = ({
               'Collect Statistics'
           }
           color={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schema + '.' + table
-                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
-                connection
-            )
+            filteredJobs
               ? 'secondary'
               : 'primary'
           }
           leftIcon={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schema + '.' + table
-                && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
-                connection
-            ) ? (
-              <SvgIcon name="sync" className="w-4 h-4" />
+            filteredJobs? (
+              <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
             ) : (
               ''
             )
