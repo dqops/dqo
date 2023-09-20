@@ -61,7 +61,7 @@ const LeftView = () => {
   }, [resize, stopResizing]);
 
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
-    const { changeActiveTab, dashboardStatus, toggleDashboardFolder } =
+    const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
       useDashboard();
 
     const key = useMemo(
@@ -85,6 +85,12 @@ const LeftView = () => {
       }
       setActiveTooltip(null);
     };
+
+    useEffect(() => {
+      if(selected !== activeTab){
+        setSelected(activeTab)
+      }
+    },[activeTab])
 
     return (
       <div>
