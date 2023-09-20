@@ -71,6 +71,22 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/credentials:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketCredentialsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with credentials (.credentials folder)"
+      operationId: "issueBucketCredentialsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/error_samples:
     get:
       tags:
@@ -167,6 +183,22 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/settings:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSettingsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with settings"
+      operationId: "issueBucketSettingsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/sources:
     get:
       tags:
@@ -199,21 +231,24 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/apikey/issued/{apiKeyRequest}:
-    put:
+  /api/v1/apikey/issueapikey:
+    post:
       tags:
       - "ApiKeyRequest"
       summary: "issueApiKey"
       description: "Issues an API Key by the DQO Cloud UI, this operation can also\
         \ generate a new fresh API key."
       operationId: "issueApiKey"
+      consumes:
+      - "text/plain"
       produces:
       - "text/plain"
       parameters:
-      - name: "apiKeyRequest"
-        in: "path"
-        required: true
-        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "string"
       responses:
         200:
           description: "successful operation"
@@ -379,6 +414,8 @@ definitions:
         - "sensors"
         - "rules"
         - "checks"
+        - "settings"
+        - "credentials"
       connections:
         type: "array"
         description: "Optional list of connection names that were modified and the\
