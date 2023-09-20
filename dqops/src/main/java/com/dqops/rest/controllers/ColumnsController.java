@@ -1920,8 +1920,13 @@ public class ColumnsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
+        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -1929,7 +1934,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1982,8 +1987,13 @@ public class ColumnsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
+        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -1991,7 +2001,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -2044,8 +2054,13 @@ public class ColumnsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
+        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -2053,7 +2068,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
 
         if (allChecksModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel.get(), checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }

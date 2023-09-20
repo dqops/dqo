@@ -102,7 +102,7 @@ public class SensorModel {
             return false;
         }
 
-        if(!equalsProviderSensorsList(sensorDefinitionWrapper.getProviderSensors())){
+        if (!equalsProviderSensorsList(sensorDefinitionWrapper.getProviderSensors())){
             return false;
         }
 

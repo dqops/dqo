@@ -85,7 +85,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         CheckContainerModel uiModel = this.specToUiMapper.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
-        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec, this.tableSpec);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         CheckContainerModel uiModel = this.specToUiMapper.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
-        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec, this.tableSpec);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         profileRowCountModel.getRule().getWarning().setConfigured(true);
 
 
-        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable());
+        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable(), this.tableSpec);
 
         Assertions.assertNotNull(profilingObservabilityChecksSpec.getTable().getVolume());
         TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTable().getVolume().getProfileRowCount();

@@ -2743,7 +2743,7 @@ public class TablesController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
             tableSpec.setTableCheckRootContainer(checksToUpdate);
         } else {
             // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object

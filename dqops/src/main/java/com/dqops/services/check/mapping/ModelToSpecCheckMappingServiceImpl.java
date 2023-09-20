@@ -26,6 +26,7 @@ import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.checks.custom.CustomParametersSpecObject;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -63,9 +64,12 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
      *
      * @param model              Data quality check model with the updates.
      * @param checkContainerSpec The target check container spec object that will be updated.
+     * @param parentTableSpec    Parent table specification.
      */
     @Override
-    public void updateCheckContainerSpec(CheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec) {
+    public void updateCheckContainerSpec(CheckContainerModel model,
+                                         AbstractRootChecksContainerSpec checkContainerSpec,
+                                         TableSpec parentTableSpec) {
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkContainerSpec.getClass());
         List<QualityCategoryModel> categoryModelList = model.getCategories();
         if (categoryModelList == null) {
@@ -77,6 +81,11 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
             if (categoryDisplayName.startsWith("comparisons/")) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisons = checkContainerSpec.getComparisons();
                 String comparisonName = categoryModel.getComparisonName();
+
+                if (parentTableSpec.getTableComparisons() == null || !parentTableSpec.getTableComparisons().containsKey(comparisonName)) {
+                    continue; // skipping the comparisons, because we cannot save checks for a comparison that is not defined
+                }
+
                 AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = comparisons.get(comparisonName);
                 if (comparisonCheckCategorySpec == null) {
                     Type actualTypeArgument = ((ParameterizedType) comparisons.getClass().getGenericSuperclass()).getActualTypeArguments()[0];

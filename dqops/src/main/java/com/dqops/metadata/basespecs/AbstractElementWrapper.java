@@ -19,6 +19,8 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Objects;
+
 /**
  * Wrapper class that holds a model instance. Delays the loading until the actual model is retrieved. Also tracks
  * the change status (added, removed, modified).
@@ -156,10 +158,85 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
      */
     @Override
     public AbstractSpec deepClone() {
-        AbstractElementWrapper<K,V> cloned = (AbstractElementWrapper<K,V>)super.deepClone();
-        if (cloned.status == InstanceStatus.MODIFIED) {
-            cloned.status = InstanceStatus.UNCHANGED;
+        try {
+            AbstractElementWrapper<K,V> cloned = (AbstractElementWrapper<K,V>)super.clone();
+            if (cloned.status == InstanceStatus.MODIFIED) {
+                cloned.status = InstanceStatus.UNCHANGED;
+            }
+
+            if (this.spec != null) {
+                V specDeepClone = (V)this.spec.deepClone();
+                cloned.setSpec(specDeepClone);
+            }
+
+            cloned.clearDirty(false);
+            return cloned;
         }
-        return cloned;
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone the object ", ex);
+        }
+    }
+
+    /**
+     * Compares this object to another object. Avoids triggering the load of specification.
+     * @param o Object to compare to.
+     * @return True - objects are equal.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        AbstractElementWrapper<K, V>  other = (AbstractElementWrapper<K, V>)o;
+        return Objects.equals(this.spec, other.spec);
+    }
+
+    /**
+     * Check if the object is dirty (has changes).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @Override
+    public boolean isDirty() {
+        if (this.spec == null && this.status == InstanceStatus.UNCHANGED) {
+            return this.isDirty(false);
+        }
+
+        return super.isDirty();
+    }
+
+    /**
+     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
+     *
+     * @param propagateToChildren When true, clears also the dirty status of child objects.
+     */
+    @Override
+    public void clearDirty(boolean propagateToChildren) {
+        if (this.spec == null) {
+            super.clearDirty(false);
+            return;
+        }
+
+        super.clearDirty(propagateToChildren);
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    public boolean isDefault() {
+        if (this.spec == null && this.status == InstanceStatus.UNCHANGED) {
+            return true; // but it does not matter, we would never call isDefault to test if a wrapper is default, because wrappers are wrappers... not specification roots that are saved
+        }
+
+        return super.isDefault();
     }
 }

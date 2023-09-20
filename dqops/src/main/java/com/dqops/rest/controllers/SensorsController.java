@@ -252,10 +252,11 @@ public class SensorsController {
         }
         List<ProviderSensorModel> providerSensorModels = sensorModel.getProviderSensorList();
 
-        ProviderSensorDefinitionList dqoHomeSensorDefinitionWrapperProviderSensors = dqoHomeSensorDefinitionWrapper.getProviderSensors();
+        ProviderSensorDefinitionList dqoHomeSensorDefinitionWrapperProviderSensors =
+                dqoHomeSensorDefinitionWrapper != null ? dqoHomeSensorDefinitionWrapper.getProviderSensors() : null;
 
-        if(userHomeSensorDefinitionWrapper == null){
-            if(!sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
+        if (userHomeSensorDefinitionWrapper == null) {
+            if (!sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)) {
                 SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(fullSensorName);
                 sensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
 
@@ -277,28 +278,31 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
-        ProviderSensorDefinitionList providerSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
+        ProviderSensorDefinitionList userProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
 
-        if (sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
+        if (sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)) {
             for (ProviderSensorModel providerSensorModel: providerSensorModels){
                 ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
-                        providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
-                if(userHomeProviderSensorDefinitionWrapper != null){
+                        userProviderSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
+                if (userHomeProviderSensorDefinitionWrapper != null){
                     userHomeProviderSensorDefinitionWrapper.markForDeletion();
                     userHomeContext.flush();
                 }
             }
             userHomeSensorDefinitionWrapper.markForDeletion();
-            userHomeContext.flush();
         } else {
+            userHomeSensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
+
             for (ProviderSensorModel providerSensorModel: providerSensorModels) {
                 ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
-                        providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
-                ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper =
-                        dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
+                        userProviderSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
 
-                if(!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper == null) {
-                    userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
+                ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper =
+                        dqoHomeSensorDefinitionWrapperProviderSensors != null ?
+                        dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true) : null;
+
+                if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper == null) {
+                    userHomeProviderSensorDefinitionWrapper = userProviderSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
                 } else if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper != null) {
@@ -307,10 +311,11 @@ public class SensorsController {
                 } else if (userHomeProviderSensorDefinitionWrapper != null){
                     userHomeProviderSensorDefinitionWrapper.markForDeletion();
                 }
-
-                userHomeContext.flush();
             }
         }
+
+        userHomeContext.flush();
+
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
     }

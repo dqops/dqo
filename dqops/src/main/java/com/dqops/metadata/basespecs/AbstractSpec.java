@@ -186,6 +186,28 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Check if the object is dirty (has changes), but the <code>checkAlsoChildren</code> parameter wil decide if we want to iterate also over child items (which could trigger loading them).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @JsonIgnore
+    public boolean isDirty(boolean checkAlsoChildren) {
+        if (super.isDirty()) {
+            return true;
+        }
+
+        if (checkAlsoChildren) {
+            for(HierarchyNode child : this.children()) {
+                if (child.isDirty()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
      * @param propagateToChildren When true, clears also the dirty status of child objects.
      */

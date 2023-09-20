@@ -338,7 +338,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -392,7 +392,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -447,7 +447,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
@@ -502,7 +502,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
@@ -557,7 +557,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
@@ -612,7 +612,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
