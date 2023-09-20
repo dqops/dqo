@@ -72,14 +72,24 @@ public enum DqoRoot {
     checks,
 
     /**
+     * Settings in the settings/ folder that are synchronized to DQO Cloud.
+     */
+    settings,
+
+    /**
+     * Shared credentials in the .credentials/ folder that are synchronized to DQO Cloud.
+     */
+    credentials,
+
+    /**
      * Local file indexes.
      */
     _indexes,
 
     /**
-     * Local settings file.
+     * Local settings file that is not synchronized.
      */
-    _settings;
+    _local_settings;
 
     /**
      * Creates a dqo user home root from the folder path.
@@ -108,12 +118,20 @@ public enum DqoRoot {
             return checks;
         }
 
+        if (Objects.equals(folder1, BuiltInFolderNames.SETTINGS)) {
+            return settings;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.CREDENTIALS)) {
+            return credentials;
+        }
+
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {
             return _indexes;
         }
 
-        if (Objects.equals(folder1, SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML)) {
-            return _settings;
+        if (Objects.equals(folder1, SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML)) {
+            return _local_settings;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.DATA) && folderPath.size() > 1) {

@@ -131,6 +131,8 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.rules);
             detectAndPublishLocalFolderStatus(DqoRoot.checks);
+            detectAndPublishLocalFolderStatus(DqoRoot.settings);
+            detectAndPublishLocalFolderStatus(DqoRoot.credentials);
             detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts);
             detectAndPublishLocalFolderStatus(DqoRoot.data_check_results);
             detectAndPublishLocalFolderStatus(DqoRoot.data_errors);

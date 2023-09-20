@@ -91,6 +91,12 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case checks:
                 return localUserHomePath.resolve(BuiltInFolderNames.CHECKS);
 
+            case settings:
+                return localUserHomePath.resolve(BuiltInFolderNames.SETTINGS);
+
+            case credentials:
+                return localUserHomePath.resolve(BuiltInFolderNames.CREDENTIALS);
+
             default:
                 throw new IllegalArgumentException("Unsupported root: " +  rootType.toString());
         }

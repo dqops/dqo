@@ -201,17 +201,17 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
-//        initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
             if (!Files.exists(gitIgnorePath)) {
                 String gitIgnoreContent =
                         BuiltInFolderNames.CREDENTIALS + "/\n" +
-                                BuiltInFolderNames.DATA + "/\n" +
-                                BuiltInFolderNames.INDEX + "/\n" +
-                                BuiltInFolderNames.LOGS + "/\n" +
-                                ".venv/\n" +
-                                SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML + "\n";
+                        BuiltInFolderNames.DATA + "/\n" +
+                        BuiltInFolderNames.INDEX + "/\n" +
+                        BuiltInFolderNames.LOGS + "/\n" +
+                        ".venv/\n" +
+                        SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 
                 Files.writeString(gitIgnorePath, gitIgnoreContent);
             }
@@ -223,7 +223,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(userHomeMarkerPath, userHomeMarkerContent);
             }
 
-            Path localSettingsPath = userHomePath.resolve(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+            Path localSettingsPath = userHomePath.resolve(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(localSettingsPath)) {
                 SettingsYaml settingsYaml = new SettingsYaml();
                 SettingsSpec settingsSpec = settingsYaml.getSpec();

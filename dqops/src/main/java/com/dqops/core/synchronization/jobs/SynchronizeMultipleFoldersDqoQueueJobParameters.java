@@ -77,6 +77,18 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     private boolean checks;
 
     /**
+     * Synchronize the "settings" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"settings\" folder.")
+    private boolean settings;
+
+    /**
+     * Synchronize the ".credentials" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \".credentials\" folder.")
+    private boolean credentials;
+
+    /**
      * Synchronize the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("Synchronize the \".data/sensor_readouts\" folder.")

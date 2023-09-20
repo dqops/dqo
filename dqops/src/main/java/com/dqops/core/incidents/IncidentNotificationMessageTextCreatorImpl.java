@@ -107,7 +107,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
     private String prepareUrlToIncident(IncidentNotificationMessageParameters messageParameters){
         Row incidentRow = messageParameters.getIncidentRow();
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "incidents/"
+                + "/incidents/"
                 + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8) + "/"
                 + incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME)
                         .atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
@@ -123,7 +123,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
      */
     private String prepareUrlToTable(IncidentNotificationMessageParameters messageParameters){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "sources/connection/" + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8)
+                + "/sources/connection/" + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8)
                 + "/schema/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
                 + "/table/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
                 + "/detail";

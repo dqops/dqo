@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "cloud sync" 2t level cli command to connect and synchronize with DQO Cloud
+ * "cloud sync" 2nd level cli command to connect and synchronize with DQO Cloud
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -32,6 +32,8 @@ import picocli.CommandLine;
         CloudSyncSensorsCliCommand.class,
         CloudSyncRulesCliCommand.class,
         CloudSyncChecksCliCommand.class,
+        CloudSyncSettingsCliCommand.class,
+        CloudSyncCredentialsCliCommand.class,
         CloudSyncAllCliCommand.class
 })
 public class CloudSyncCliCommand extends BaseCommand {

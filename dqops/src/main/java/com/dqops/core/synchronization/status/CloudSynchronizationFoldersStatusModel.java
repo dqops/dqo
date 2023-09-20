@@ -60,6 +60,20 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus checks = FolderSynchronizationStatus.unchanged;
 
     /**
+     * The synchronization status of the "settings" folder.
+     */
+    @JsonPropertyDescription("The synchronization status of the \"settings\" folder.")
+    @Setter(AccessLevel.NONE)
+    private FolderSynchronizationStatus settings = FolderSynchronizationStatus.unchanged;
+
+    /**
+     * The synchronization status of the ".credentials" folder.
+     */
+    @JsonPropertyDescription("The synchronization status of the \".credentials\" folder.")
+    @Setter(AccessLevel.NONE)
+    private FolderSynchronizationStatus credentials = FolderSynchronizationStatus.unchanged;
+
+    /**
      * The synchronization status of the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("The synchronization status of the \".data/sensor_readouts\" folder.")
@@ -109,6 +123,10 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return checks;
             case sources:
                 return sources;
+            case settings:
+                return settings;
+            case credentials:
+                return credentials;
             case data_sensor_readouts:
                 return dataSensorReadouts;
             case data_check_results:
@@ -120,7 +138,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case data_incidents:
                 return dataIncidents;
             case _indexes:
-            case _settings:
+            case _local_settings:
                 return null;
             default:
                 throw new RuntimeException("Unsupported enum: " + folderRoot);
@@ -146,6 +164,12 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case sources:
                 this.sources = newStatus;
                 return;
+            case settings:
+                this.settings = newStatus;
+                return;
+            case credentials:
+                this.credentials = newStatus;
+                return;
             case data_sensor_readouts:
                 this.dataSensorReadouts = newStatus;
                 return;
@@ -162,7 +186,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 this.dataIncidents = newStatus;
                 return;
             case _indexes:
-            case _settings:
+            case _local_settings:
                 return;
             default:
                 throw new RuntimeException("Unsupported enum: " + folderRoot);

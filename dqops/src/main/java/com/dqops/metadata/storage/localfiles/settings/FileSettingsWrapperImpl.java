@@ -54,7 +54,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	public SettingsSpec getSpec() {
 		SettingsSpec spec = super.getSpec();
 		if (spec == null) {
-			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
 				String textContent = fileContent.getTextContent();
@@ -99,7 +99,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 		SettingsYaml settingsYaml = new SettingsYaml(this.getSpec());
 		String specAsYaml = this.yamlSerializer.serialize(settingsYaml);
 		FileContent newFileContent = new FileContent(specAsYaml);
-		String fileNameWithExt = SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML;
+		String fileNameWithExt = SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML;
 
 		switch (this.getStatus()) {
 			case ADDED:
