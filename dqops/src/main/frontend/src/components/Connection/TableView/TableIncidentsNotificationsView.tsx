@@ -21,10 +21,6 @@ import TableActionGroup from "./TableActionGroup";
 import clsx from "clsx";
 import { IRootState } from "../../../redux/reducers";
 
-const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
-  label: item.replace(/_/g, "/").replace(/\b\w/g, c => c.toUpperCase()),
-  value: item
-}));
 
 const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
   label: item.charAt(0).toUpperCase() + item.slice(1),
@@ -51,6 +47,15 @@ export const TableIncidentsNotificationsView = () => {
       ...obj,
     }));
   };
+  const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
+    label: item
+    .replace(/_(?=dimension)/, " / Quality ")
+    .replace(/_(?=(name))/, " / Check ")
+    .replace(/_(?=type)/, " / Check ")
+    .replace(/(_(?=category))/, " / Check ")
+    .replace(/^\w/g, c => c.toUpperCase()),
+    value: item
+  }));  
 
   const onUpdate = () => {
     dispatch(updateTableIncidentGrouping(checkTypes, firstLevelActiveTab, connection, schema, table, incidentGrouping));
@@ -72,7 +77,7 @@ export const TableIncidentsNotificationsView = () => {
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
             disabled={userProfile.can_manage_data_sources !== true}
-            className="min-w-60"
+            className="min-w-110"
           />
         </div>
         <div className="flex mb-4">
@@ -82,7 +87,7 @@ export const TableIncidentsNotificationsView = () => {
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
             disabled={userProfile.can_manage_data_sources !== true}
-            className="min-w-60"
+            className="min-w-110"
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
