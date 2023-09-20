@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python.apimodel;
+package com.dqops.utils.docs.client;
 
-import io.swagger.v3.oas.models.PathItem.HttpMethod;
-import io.swagger.v3.oas.models.Operation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.nio.file.Path;
 
-@Data
-@AllArgsConstructor
-public class OperationModel {
-    private final Operation operation;
-    private final HttpMethod httpMethod;
-    private final String path;
+public interface DocsModelLinkageService {
+    /**
+     * Gets docs linkage for a certain class, if this class can be linked to external pages in the documentation.
+     * @param modelClassName Searched class name.
+     * @return Path to the class's documentation if it can be found. Null otherwise.
+     */
+    Path findDocsLinkage(String modelClassName);
 }

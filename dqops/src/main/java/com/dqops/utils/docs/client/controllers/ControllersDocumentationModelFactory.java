@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.controllers;
 
-import io.swagger.v3.oas.models.OpenAPI;
+import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 
 import java.util.List;
 
 public interface ControllersDocumentationModelFactory {
-    List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPI openAPI);
+    List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPIModel openAPIModel);
 }

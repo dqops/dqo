@@ -16,8 +16,12 @@
 
 package com.dqops.checks.comparison;
 
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.comparison.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -72,4 +76,15 @@ public abstract class AbstractColumnComparisonCheckCategorySpec extends Abstract
      * @param columnCompareCheckType Check type.
      */
     public abstract void removeCheckSpec(ColumnCompareCheckType columnCompareCheckType);
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
 }

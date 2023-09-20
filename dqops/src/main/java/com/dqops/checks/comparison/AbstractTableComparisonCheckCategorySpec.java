@@ -16,7 +16,11 @@
 
 package com.dqops.checks.comparison;
 
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -55,4 +59,15 @@ public abstract class AbstractTableComparisonCheckCategorySpec extends AbstractC
      * @return True - the column count match check is supported for this type of checks, false when it is not supported.
      */
     public abstract boolean supportsColumnComparisonCheck();
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.table;
+    }
 }

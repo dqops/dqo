@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.controllers;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
+import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.github.jknack.handlebars.Template;
-import io.swagger.v3.oas.models.OpenAPI;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -39,21 +38,20 @@ public class ControllersDocumentationGeneratorImpl implements ControllersDocumen
      * Renders documentation for all yaml classes as markdown files.
      *
      * @param projectRootPath         Path to the project root folder, used to find the target/classes folder and scan for classes.
-     * @param linkageStore
-     * @param openAPI
+     * @param openAPIModel
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderControllersDocumentation(Path projectRootPath, LinkageStore<String> linkageStore, OpenAPI openAPI) {
+    public DocumentationFolder renderControllersDocumentation(Path projectRootPath, OpenAPIModel openAPIModel) {
         DocumentationFolder controllersFolder = new DocumentationFolder();
-        controllersFolder.setFolderName("python/controllers");
+        controllersFolder.setFolderName("client/controllers");
         controllersFolder.setLinkName("Controllers");
-        controllersFolder.setDirectPath(projectRootPath.resolve("../docs/python/controllers").toAbsolutePath().normalize());
+        controllersFolder.setDirectPath(projectRootPath.resolve("../docs/client/controllers").toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("python/controllers/controllers_documentation");
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("client/controllers/controllers_documentation");
 
         List<ControllersSuperiorObjectDocumentationModel> controllersSuperiorObjectDocumentationModels =
-                controllersDocumentationModelFactory.createDocumentationForControllers(openAPI);
+                controllersDocumentationModelFactory.createDocumentationForControllers(openAPIModel);
 
         for (ControllersSuperiorObjectDocumentationModel controllersSuperiorObjectDocumentationModel : controllersSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = controllersFolder.addNestedFile(controllersSuperiorObjectDocumentationModel.getLocationFilePath());

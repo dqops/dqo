@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python.apimodel;
+package com.dqops.utils.docs.client.apimodel;
 
+import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.DocsModelLinkageService;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.tags.Tag;
 import lombok.Data;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +34,9 @@ public class OpenAPIModel {
     private final Map<String, Set<OperationModel>> controllersMethods = new HashMap<>();
     private final Set<ComponentModel> models = new HashSet<>();
 
-    public static OpenAPIModel fromOpenAPI(OpenAPI openAPI) {
+    public static OpenAPIModel fromOpenAPI(OpenAPI openAPI,
+                                           LinkageStore<String> linkageStore,
+                                           DocsModelLinkageService docsModelLinkageService) {
         OpenAPIModel model = new OpenAPIModel();
         model.sourceModel = openAPI;
 
@@ -58,6 +63,19 @@ public class OpenAPIModel {
         Collection<ComponentModel> componentModels = openAPI.getComponents().getSchemas().entrySet().stream()
                 .map(entry -> new ComponentModel(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
+
+        for (ComponentModel component : componentModels) {
+            String componentClassName = component.getClassName();
+            if (!linkageStore.containsKey(componentClassName)) {
+                Path linkage = docsModelLinkageService.findDocsLinkage(componentClassName);
+                if (linkage != null) {
+                    linkageStore.put(componentClassName, linkage);
+                }
+            }
+
+            component.setDocsLink(linkageStore.get(componentClassName));
+        }
+
         model.models.addAll(componentModels);
         return model;
     }

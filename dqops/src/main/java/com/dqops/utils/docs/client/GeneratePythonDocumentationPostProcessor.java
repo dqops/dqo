@@ -13,47 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python;
+package com.dqops.utils.docs.client;
 
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
+import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckMatchingService;
+import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
-import com.dqops.utils.docs.python.apimodel.OpenAPIModel;
-import com.dqops.utils.docs.python.controllers.ControllersDocumentationGenerator;
-import com.dqops.utils.docs.python.controllers.ControllersDocumentationGeneratorImpl;
-import com.dqops.utils.docs.python.controllers.ControllersDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
+import com.dqops.utils.docs.client.controllers.ControllersDocumentationGenerator;
+import com.dqops.utils.docs.client.controllers.ControllersDocumentationGeneratorImpl;
+import com.dqops.utils.docs.client.controllers.ControllersDocumentationModelFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.google.api.client.http.HttpMediaType;
 import com.google.common.base.CaseFormat;
-import com.google.rpc.Help;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.tags.Tag;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
-import org.apache.commons.text.CaseUtils;
-import org.json.HTTP;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Class called from the maven build. Generates documentation for the Python client.
  */
 public class GeneratePythonDocumentationPostProcessor {
-    public static final Path basePythonDocsPath = Path.of("/docs", "python");
+    public static final Path baseClientDocsPath = Path.of("/docs", "client");
 
     /**
      * Main method of the documentation generator that generates markdown documentation files for mkdocs.
@@ -74,20 +74,29 @@ public class GeneratePythonDocumentationPostProcessor {
 
             System.out.println("Generating documentation for the python client: " + pythonClientDir);
 
-            OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
-            OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI);
-
-//            ComponentReflectionService componentReflectionService = new ComponentReflectionServiceImpl(new ReflectionServiceImpl());
-//            componentReflectionService.fillComponentsDocsRefs(openAPIModel.getModels());
-
             HandlebarsDocumentationUtilities.configure(projectDir);
-
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+
+            OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
             LinkageStore<String> linkageStore = getPopulatedLinkageStore(openAPI);
 
+            SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                    new ReflectionServiceImpl(),
+                    new SensorDefinitionFindServiceImpl(),
+                    new RuleDefinitionFindServiceImpl()
+            );
+            SimilarCheckMatchingService similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(
+                    specToModelCheckMappingService,
+                    () -> dqoHomeContext
+            );
+            DocsModelLinkageService docsModelLinkageService = new DocsModelLinkageServiceImpl(
+                    projectDir,
+                    similarCheckMatchingService
+            );
 
-            generateDocumentationForControllers(projectDir, linkageStore, dqoHomeContext, openAPI);
+            OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, linkageStore, docsModelLinkageService);
+            generateDocumentationForControllers(projectDir, dqoHomeContext, openAPIModel);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,12 +118,12 @@ public class GeneratePythonDocumentationPostProcessor {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
 
-                linkageStore.put(modelName, basePythonDocsPath.resolve(
+                linkageStore.put(modelName, baseClientDocsPath.resolve(
                         Path.of("controllers", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence))
                 ));
             } else {
                 // Model is used in several places.
-                linkageStore.put(modelName, basePythonDocsPath.resolve(
+                linkageStore.put(modelName, baseClientDocsPath.resolve(
                         // TODO: Verify whether the file isn't too large, split it if needed.
                         Path.of("models")
                 ));
@@ -135,14 +144,25 @@ public class GeneratePythonDocumentationPostProcessor {
             return;
         }
 
+        // Parameters (path and query)
         Set<String> variables$refs = operationParameters.stream()
-                .map(Parameter::get$ref)
+                .map(Parameter::getSchema)
+                .map(GeneratePythonDocumentationPostProcessor::getEffective$refFromSchema)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
+        // Request body
+        RequestBody requestBody = operation.getRequestBody();
+        if (requestBody != null) {
+            String requestBody$ref = getEffective$refFromSchema(requestBody.getContent().get("application/json").getSchema());
+            if (requestBody$ref != null) {
+                variables$refs.add(requestBody$ref);
+            }
+        }
+
+        // Return
         ApiResponse returnResponse = operation.getResponses().values().stream().findFirst().get();
-        Schema<?> returnMediaSchema = returnResponse.getContent().get("application/json").getSchema();
-        String return$ref = returnMediaSchema.get$ref();
+        String return$ref = getEffective$refFromSchema(returnResponse.getContent().get("application/json").getSchema());
 
         if (return$ref != null) {
             variables$refs.add(return$ref);
@@ -163,16 +183,31 @@ public class GeneratePythonDocumentationPostProcessor {
         }
     }
 
+    protected static String getEffective$refFromSchema(Schema<?> schema) {
+        String $ref = schema.get$ref();
+        if ($ref == null && schema.getItems() != null){
+            return getEffective$refFromSchema(schema.getItems());
+        }
+        return $ref;
+    }
+
     protected static void generateDocumentationForControllers(Path projectRoot,
-                                                              LinkageStore<String> linkageStore,
                                                               DqoHomeContext dqoHomeContext,
-                                                              OpenAPI openAPI) {
-        Path controllersDocPath = projectRoot.resolve("../docs/client/controllers").toAbsolutePath().normalize();
+                                                              OpenAPIModel openAPIModel) {
+        Path controllersDocPath = projectRoot
+                .resolve("..")
+                .resolve(baseClientDocsPath)
+                .resolve("controllers")
+                .toAbsolutePath().normalize();
         DocumentationFolder currentControllersDocFiles = DocumentationFolderFactory.loadCurrentFiles(controllersDocPath);
-        ControllersDocumentationGenerator controllersDocumentationGenerator = new ControllersDocumentationGeneratorImpl(new ControllersDocumentationModelFactoryImpl(linkageStore));
+        ControllersDocumentationGenerator controllersDocumentationGenerator = new ControllersDocumentationGeneratorImpl(new ControllersDocumentationModelFactoryImpl());
+
+
+//        DocumentationFolder renderedDocumentation = parquetFilesDocumentationGenerator.renderParquetDocumentation(projectRoot);
+//        renderedDocumentation.writeModifiedFiles(currentParquetsDocFiles);
 
 //        List<ControllersDocumentationSchemaNode> controllersDocumentationSchema = getYamlDocumentationSchema();
-        DocumentationFolder renderedDocumentation = controllersDocumentationGenerator.renderControllersDocumentation(projectRoot, linkageStore, openAPI);
+        DocumentationFolder renderedDocumentation = controllersDocumentationGenerator.renderControllersDocumentation(projectRoot, openAPIModel);
 //        renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
 //        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);

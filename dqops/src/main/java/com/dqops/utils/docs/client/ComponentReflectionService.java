@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python.apimodel;
+package com.dqops.utils.docs.client;
 
-import io.swagger.v3.oas.models.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.dqops.utils.docs.client.apimodel.ComponentModel;
 
-import java.nio.file.Path;
-
-@Data
-public class ComponentModel {
-    private final String className;
-    private final Schema<?> objectSchema;
-    private Path docsLink;
-
-    public ComponentModel(String className, Schema<?> objectSchema) {
-        this.className = className;
-        this.objectSchema = objectSchema;
-    }
+public interface ComponentReflectionService {
+    void fillComponentsDocsRefs(Iterable<ComponentModel> componentModels);
 }

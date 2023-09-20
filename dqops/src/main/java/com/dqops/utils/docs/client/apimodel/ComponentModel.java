@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.apimodel;
 
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.models.media.Schema;
 import lombok.Data;
 
 import java.nio.file.Path;
 
-/**
- * Object describing a single autonomous node of the YAML documentation.
- */
 @Data
-@AllArgsConstructor
-public class ControllersDocumentationSchemaNode {
-    private Class<?> clazz;
-    private Path pathToFile;
+public class ComponentModel {
+    private final String className;
+    private final Schema<?> objectSchema;
+    private Path docsLink;
 
-    public static ControllersDocumentationSchemaNode fromClass(Class<?> clazz) {
-        return new ControllersDocumentationSchemaNode(
-                clazz,
-                Path.of(clazz.getSimpleName())
-        );
+    public ComponentModel(String className, Schema<?> objectSchema) {
+        this.className = className;
+        this.objectSchema = objectSchema;
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.controllers;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.reflection.EnumValueInfo;

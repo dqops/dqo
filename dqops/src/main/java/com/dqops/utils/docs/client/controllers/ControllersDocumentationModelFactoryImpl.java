@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.controllers;
 
 import com.dqops.metadata.fields.ParameterDataType;
-import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
+import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -24,36 +25,27 @@ import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import com.google.common.base.CaseFormat;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.tags.Tag;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ControllersDocumentationModelFactoryImpl implements ControllersDocumentationModelFactory {
 
     private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
-    private final LinkageStore<String> linkageStore;
-
-    public ControllersDocumentationModelFactoryImpl(LinkageStore<String> linkageStore) {
-        this.linkageStore = linkageStore;
-    }
-
     @Override
-    public List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPI openAPI) {
+    public List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPIModel openAPIModel) {
         List<ControllersSuperiorObjectDocumentationModel> controllersDocumentation = new ArrayList<>();
 
-        for (Tag tag : openAPI.getTags()) {
+        for (Map.Entry<String, Set<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
+            String controllerName = controller.getKey();
+            Set<OperationModel> controllerMethods = controller.getValue();
             ControllersSuperiorObjectDocumentationModel controllersSuperiorObjectDocumentationModel = new ControllersSuperiorObjectDocumentationModel();
-            controllersSuperiorObjectDocumentationModel.setSuperiorClassFullName(tag.getName());
-            controllersSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getTagSimpleName(tag));
+            controllersSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
+            controllersSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(controllerName));
 
             Map<Class<?>, ControllersObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
 
@@ -73,8 +65,8 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
         return controllersDocumentation;
     }
 
-    private String getTagSimpleName(Tag tag) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, tag.getName());
+    private String getObjectSimpleName(String name) {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
     }
 
     /**
@@ -86,7 +78,7 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
     private void generateYamlObjectDocumentationModelRecursive(Path superiorObjectFileName,
                                                                Class<?> targetClass,
                                                                Map<Class<?>, ControllersObjectDocumentationModel> visitedObjects) {
-        if (!visitedObjects.containsKey(targetClass) && !linkageStore.containsKey(targetClass)) {
+        if (!visitedObjects.containsKey(targetClass)) {
             visitedObjects.put(targetClass, null);
 
             ControllersObjectDocumentationModel controllersObjectDocumentationModel = new ControllersObjectDocumentationModel();
@@ -129,13 +121,13 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
                 ControllersDocumentationModel controllersDocumentationModel = new ControllersDocumentationModel();
                 controllersDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
-                if (linkageStore.containsKey(info.getClazz())) {
-                    Path infoClassPath = linkageStore.get(info.getClazz());
-                    controllersDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
-                } else {
-                    controllersDocumentationModel.setClassUsedOnTheFieldPath(
-                            "#" + controllersDocumentationModel.getClassNameUsedOnTheField());
-                }
+//                if (linkageStore.containsKey(info.getClazz())) {
+//                    Path infoClassPath = linkageStore.get(info.getClazz());
+//                    controllersDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
+//                } else {
+//                    controllersDocumentationModel.setClassUsedOnTheFieldPath(
+//                            "#" + controllersDocumentationModel.getClassNameUsedOnTheField());
+//                }
 
                 controllersDocumentationModel.setClassFieldName(info.getClassFieldName());
                 controllersDocumentationModel.setYamlFieldName(info.getYamlFieldName());

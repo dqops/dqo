@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python;
+package com.dqops.utils.docs.client;
 
-import com.dqops.utils.docs.python.apimodel.ComponentModel;
+import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.ReflectionService;
 import com.google.common.reflect.ClassPath;

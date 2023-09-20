@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs.python;
+package com.dqops.utils.docs.client.apimodel;
 
-import com.dqops.utils.docs.python.apimodel.ComponentModel;
+import io.swagger.v3.oas.models.PathItem.HttpMethod;
+import io.swagger.v3.oas.models.Operation;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-public interface ComponentReflectionService {
-    void fillComponentsDocsRefs(Iterable<ComponentModel> componentModels);
+@Data
+@AllArgsConstructor
+public class OperationModel {
+    private final Operation operation;
+    private final HttpMethod httpMethod;
+    private final String path;
 }

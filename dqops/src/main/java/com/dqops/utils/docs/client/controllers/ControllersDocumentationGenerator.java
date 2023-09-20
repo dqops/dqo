@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.python.controllers;
+package com.dqops.utils.docs.client.controllers;
 
-import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
-import io.swagger.v3.oas.models.OpenAPI;
+import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 
 import java.nio.file.Path;
 
@@ -29,9 +28,8 @@ public interface ControllersDocumentationGenerator {
      * Renders documentation for all yaml classes as markdown files.
      *
      * @param projectRootPath         Path to the project root folder, used to find the target/classes folder and scan for classes.
-     * @param linkageStore
-     * @param openAPI
+     * @param openAPIModel
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderControllersDocumentation(Path projectRootPath, LinkageStore<String> linkageStore, OpenAPI openAPI);
+    DocumentationFolder renderControllersDocumentation(Path projectRootPath, OpenAPIModel openAPIModel);
 }
