@@ -175,10 +175,10 @@ const ColumnProfilingChecksView = ({
     );
     setActiveTab(tab);
   };
-
+    console.log(tabs)
   return (
     <div className="flex flex-col overflow-x-auto overflow-y-hidden"
-    style={{ height: `calc(100vh - 300px)` }}>
+    >
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -188,7 +188,7 @@ const ColumnProfilingChecksView = ({
         onCollectStatistics={onCollectStatistics}
         runningStatistics={loadingJob}
       />
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='overflow-y-hidden h-16'/>
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
       {activeTab === 'statistics' && <ColumnStatisticsView />}
       {activeTab === 'advanced' && (
         <DataQualityChecks
