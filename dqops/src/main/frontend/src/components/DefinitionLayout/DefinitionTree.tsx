@@ -180,49 +180,44 @@ export const DefinitionTree = () => {
   };
 
   useEffect(() => {
-    if (
-      definitionFirstLevelFolder === undefined ||
-      definitionFirstLevelFolder.length === 0
-    ) {
-      const configuration = [
-        { category: 'Sensors', isOpen: false },
-        { category: 'Rules', isOpen: false },
-        { category: 'Data quality checks', isOpen: false },
-        { category: 'Default checks configuration', isOpen: false }
-      ];
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url.includes('default_checks')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i].url.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-        } else if (tabs[i].url.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.fullCheckName as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i].url.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
+    console.log(activeTab);
+    const configuration = [
+      { category: 'Sensors', isOpen: false },
+      { category: 'Rules', isOpen: false },
+      { category: 'Data quality checks', isOpen: false },
+      { category: 'Default checks configuration', isOpen: false }
+    ];
+    for (let i = 0; i < tabs.length; i++) {
+      if (tabs[i].url.includes('default_checks')) {
+        configuration[3].isOpen = true;
+      } else if (tabs[i].url.includes('sensors')) {
+        configuration[0].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.full_sensor_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
+        }
+      } else if (tabs[i].url.includes('checks')) {
+        configuration[2].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.fullCheckName as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+        }
+      } else if (tabs[i].url.includes('rules')) {
+        configuration[1].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.full_rule_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
         }
       }
       dispatch(toggleFirstLevelFolder(configuration));
     }
-  }, []);
-
+  }, [activeTab]);
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
