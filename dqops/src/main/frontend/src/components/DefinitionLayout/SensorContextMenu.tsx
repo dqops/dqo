@@ -106,17 +106,19 @@ const SensorContextMenu = ({
             >
               Copy sensor
             </div>
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setDeleteDialogOpen(true)}
-            >
-              Delete sensor
-            </div>
+            {sensor?.built_in === false ? (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                Delete sensor
+              </div>
+            ) : null}
             <ConfirmDialog
               open={deleteDialogOpen}
               onClose={() => setDeleteDialogOpen(false)}
               onConfirm={deleteSensorFromTree}
-              message={`Are you sure you want to delete the check ${sensor?.full_sensor_name}`}
+              message={`Are you sure you want to delete the sensor ${sensor?.full_sensor_name}`}
             />
           </div>
         ) : (

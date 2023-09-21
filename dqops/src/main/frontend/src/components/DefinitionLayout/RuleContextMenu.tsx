@@ -105,17 +105,19 @@ const RuleContextMenu = ({
             >
               Copy rule
             </div>
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setDeleteDialogOpen(true)}
-            >
-              Delete rule
-            </div>
+            {rule?.built_in === false ? (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                Delete rule
+              </div>
+            ) : null}
             <ConfirmDialog
               open={deleteDialogOpen}
               onClose={() => setDeleteDialogOpen(false)}
               onConfirm={deleteRuleFromTree}
-              message={`Are you sure you want to delete the check ${rule?.full_rule_name}`}
+              message={`Are you sure you want to delete the rule ${rule?.full_rule_name}`}
             />
           </div>
         ) : (
