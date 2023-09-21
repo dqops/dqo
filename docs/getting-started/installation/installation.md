@@ -4,7 +4,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 If you want to [install DQO directly from Git go to this section](../../working-with-dqo/installation/install-dqo-from-git.md).
 
-You can also [run DQO as Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+You can also [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 
 ## Prerequisites
 
