@@ -61,7 +61,7 @@ public class LocalFileTreeNode extends FileTreeNode {
     public FileContent getContent() {
         if (super.getContent() == null) {
             LocalFileStorageService storageService = this.context.getStorageService();
-            FileContent fileContent = storageService.readTextFile(this.getFilePath()); // TODO: look at the file extension, we may support binary files in the future
+            FileContent fileContent = storageService.readFile(this.getFilePath()); // TODO: look at the file extension, we may support binary files in the future
 			this.setContent(fileContent);
 			this.setStatus(FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         }

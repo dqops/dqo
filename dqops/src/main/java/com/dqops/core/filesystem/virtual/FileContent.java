@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -28,6 +29,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class FileContent implements Cloneable {
     private String textContent;
+    private byte[] byteContent;
 
     @JsonIgnore
     private Instant lastModified;
@@ -73,6 +75,48 @@ public class FileContent implements Cloneable {
     }
 
     /**
+     * Creates a file content with a byte array content.
+     * @param byteContent Byte array content.
+     */
+    public FileContent(byte[] byteContent) {
+        this.byteContent = byteContent;
+        this.lastModified = Instant.now();
+    }
+
+    /**
+     * Creates a file content with a byte array content.
+     * @param byteContent Byte array content.
+     * @param cachedObjectInstance Cached object instance.
+     */
+    public FileContent(byte[] byteContent, Object cachedObjectInstance) {
+        this.byteContent = byteContent;
+        this.cachedObjectInstance = cachedObjectInstance;
+        this.lastModified = Instant.now();
+    }
+
+    /**
+     * Creates a file content with a byte array content, storing also the file modified timestamp.
+     * @param byteContent Byte array content of the file.
+     * @param lastModified Last modified timestamp from the file.
+     */
+    public FileContent(byte[] byteContent, Instant lastModified) {
+        this.byteContent = byteContent;
+        this.lastModified = lastModified;
+    }
+
+    /**
+     * Creates a file content with a text, storing also the file modified timestamp.
+     * @param textContent Text content of the file.
+     * @param byteContent Alternative byte array content.
+     * @param lastModified Last modified timestamp from the file.
+     */
+    public FileContent(String textContent, byte[] byteContent, Instant lastModified) {
+        this.textContent = textContent;
+        this.byteContent = byteContent;
+        this.lastModified = lastModified;
+    }
+
+    /**
      * Returns the text content of a file.
      * @return Text content.
      */
@@ -85,7 +129,29 @@ public class FileContent implements Cloneable {
      * @param textContent New text content.
      */
     public void setTextContent(String textContent) {
+        if (this.byteContent != null) {
+            throw new IllegalStateException("The object already contains a byte array");
+        }
         this.textContent = textContent;
+    }
+
+    /**
+     * Returns the content of the file as a byte array.
+     * @return Content of the file as a byte array.
+     */
+    public byte[] getByteContent() {
+        return byteContent;
+    }
+
+    /**
+     * Stores the content of the file as a byte array.
+     * @param byteContent Byte array with the content of the file.
+     */
+    public void setByteContent(byte[] byteContent) {
+        if (this.textContent != null) {
+            throw new IllegalStateException("The object already contains a text object");
+        }
+        this.byteContent = byteContent;
     }
 
     /**
@@ -124,13 +190,18 @@ public class FileContent implements Cloneable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FileContent that = (FileContent) o;
-        return Objects.equals(textContent, that.textContent);
+
+        if (!Objects.equals(textContent, that.textContent)) return false;
+        return Arrays.equals(byteContent, that.byteContent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(textContent);
+        int result = textContent != null ? textContent.hashCode() : 0;
+        result = 31 * result + Arrays.hashCode(byteContent);
+        return result;
     }
 
     /**
