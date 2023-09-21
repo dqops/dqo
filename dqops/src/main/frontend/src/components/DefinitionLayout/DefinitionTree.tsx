@@ -180,7 +180,6 @@ export const DefinitionTree = () => {
   };
 
   useEffect(() => {
-    console.log(activeTab);
     const configuration = [
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
