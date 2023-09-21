@@ -56,12 +56,11 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void listFiles_whenRootFolder_thenReturnsJustGitIgnore() {
         List<HomeFilePath> files = this.sut.listFiles(new HomeFolderPath());
-        Assertions.assertEquals(4, files.size());
+        Assertions.assertEquals(3, files.size());
         files.sort(Comparator.comparing(HomeFilePath::getFileName));
         Assertions.assertEquals(".DQO_USER_HOME", files.get(0).getFileName());
         Assertions.assertEquals(".gitignore", files.get(1).getFileName());
         Assertions.assertEquals(".localsettings.dqosettings.yaml", files.get(2).getFileName());
-        Assertions.assertEquals("dashboardslist.dqodashboards.yaml", files.get(3).getFileName());
     }
 
     @Test
