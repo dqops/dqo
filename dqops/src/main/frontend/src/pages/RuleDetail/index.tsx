@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import DefinitionLayout from '../../components/DefinitionLayout';
 import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
-import {  getFirstLevelSensorState } from '../../redux/selectors';
+import { getFirstLevelSensorState } from '../../redux/selectors';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
@@ -17,6 +17,8 @@ import PythonCode from './PythonCode';
 import { RuleActionGroup } from '../../components/Sensors/RuleActionGroup';
 import Input from '../../components/Input';
 import { ROUTES } from '../../shared/routes';
+import { RulesApi } from '../../services/apiClient';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const tabs = [
   {
@@ -35,8 +37,14 @@ export const RuleDetail = () => {
   );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
-  const [ruleName, setRuleName] = useState(type === 'create' && copied !== true ? "" 
-  : String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1] + "_copy"  );
+  const [ruleName, setRuleName] = useState(
+    type === 'create' && copied !== true
+      ? ''
+      : String(full_rule_name).split('/')[
+          String(full_rule_name).split('/').length - 1
+        ] + '_copy'
+  );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!ruleDetail && (type !== 'create' || copied === true)) {
@@ -45,29 +53,66 @@ export const RuleDetail = () => {
   }, [full_rule_name, ruleDetail, type]);
 
   useEffect(() => {
-    if(type === 'create' && copied !== true){
-      setRuleName('')
-    }else{
-      setRuleName(String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]+ "_copy")
+    if (type === 'create' && copied !== true) {
+      setRuleName('');
+    } else {
+      setRuleName(
+        String(full_rule_name).split('/')[
+          String(full_rule_name).split('/').length - 1
+        ] + '_copy'
+      );
     }
-  },[type, copied])
+  }, [type, copied]);
 
   const onCreateRule = async () => {
     const fullName = [...(path || []), ruleName].join('/');
-    if(type === 'create' && copied !== true){
-      await dispatch(createRule(fullName, 
-        {...ruleDetail, full_rule_name: fullName, rule_name: ruleName, custom: true, can_edit: true, built_in: false}));
-    }else if(copied === true){
-      await dispatch(createRule(String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , {...ruleDetail, rule_name: ruleName, full_rule_name: String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , custom: true, built_in: false}))
-      await dispatch(closeFirstLevelTab("definitions/rules/" + String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]))
-      await  dispatch(
+    if (type === 'create' && copied !== true) {
+      await dispatch(
+        createRule(fullName, {
+          ...ruleDetail,
+          full_rule_name: fullName,
+          rule_name: ruleName,
+          custom: true,
+          can_edit: true,
+          built_in: false
+        })
+      );
+    } else if (copied === true) {
+      await dispatch(
+        createRule(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName, {
+          ...ruleDetail,
+          rule_name: ruleName,
+          full_rule_name:
+            String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+          custom: true,
+          built_in: false
+        })
+      );
+      closeRuleFirstLevelTab();
+      await dispatch(
         addFirstLevelTab({
-          url: ROUTES.RULE_DETAIL(String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]?? ''),
-          value: ROUTES.RULE_DETAIL_VALUE(String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1] ?? ''),
+          url: ROUTES.RULE_DETAIL(
+            String(full_rule_name).split('/')[
+              String(full_rule_name).split('/').length - 1
+            ] ?? ''
+          ),
+          value: ROUTES.RULE_DETAIL_VALUE(
+            String(full_rule_name).split('/')[
+              String(full_rule_name).split('/').length - 1
+            ] ?? ''
+          ),
           state: {
-            full_rule_name: String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName,
+            full_rule_name:
+              String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
             path: path,
-            ruleDetail: {...ruleDetail, rule_name: ruleName, full_rule_name: String(full_rule_name).replace(/\/[^/]*$/, "/")+ ruleName , custom: true, built_in: false},
+            ruleDetail: {
+              ...ruleDetail,
+              rule_name: ruleName,
+              full_rule_name:
+                String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+              custom: true,
+              built_in: false
+            }
           },
           label: ruleName
         })
@@ -75,44 +120,86 @@ export const RuleDetail = () => {
     }
   };
 
+  const closeRuleFirstLevelTab = () => {
+    dispatch(
+      closeFirstLevelTab(
+        '/definitions/rules/' +
+          String(full_rule_name).split('/')[
+            String(full_rule_name).split('/').length - 1
+          ]
+      )
+    );
+  };
+
   const onChangeRuleName = (e: ChangeEvent<HTMLInputElement>) => {
     setRuleName(e.target.value);
-    if(path){
+    if (path) {
       const fullName = [...(path || []), e.target.value].join('/');
       dispatch(
         setUpdatedRule({
           ...ruleDetail,
           full_rule_name: fullName
         })
-        );
-      }else{
-        dispatch(
-          setUpdatedRule({
-            ...ruleDetail,
-            full_rule_name: String(full_rule_name).replace(/\/[^/]*$/, "/") + e.target.value
-          })
-      )}
+      );
+    } else {
+      dispatch(
+        setUpdatedRule({
+          ...ruleDetail,
+          full_rule_name:
+            String(full_rule_name).replace(/\/[^/]*$/, '/') + e.target.value
+        })
+      );
+    }
   };
-  const onCopy = () : void => { 
+  const onCopy = (): void => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]+ "_copy" ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]+ "_copy" ?? ''),
-        state: {  
+        url: ROUTES.RULE_DETAIL(
+          String(full_rule_name).split('/')[
+            String(full_rule_name).split('/').length - 1
+          ] + '_copy' ?? ''
+        ),
+        value: ROUTES.RULE_DETAIL_VALUE(
+          String(full_rule_name).split('/')[
+            String(full_rule_name).split('/').length - 1
+          ] + '_copy' ?? ''
+        ),
+        state: {
           full_rule_name: full_rule_name,
           copied: true,
           path: path,
-          ruleDetail: {...ruleDetail, full_rule_name: full_rule_name + "_copy", custom: true, built_in: false, can_edit: true},
-          type: "create"
+          ruleDetail: {
+            ...ruleDetail,
+            full_rule_name: full_rule_name + '_copy',
+            custom: true,
+            built_in: false,
+            can_edit: true
+          },
+          type: 'create'
         },
-        label: `${String(full_rule_name).split("/")[String(full_rule_name).split("/").length - 1]}_copy`
+        label: `${
+          String(full_rule_name).split('/')[
+            String(full_rule_name).split('/').length - 1
+          ]
+        }_copy`
       })
     );
-}
+  };
+
+  const onDelete = async () => {
+    RulesApi.deleteRule(full_rule_name).then(async () =>
+      closeRuleFirstLevelTab()
+    );
+  };
+
   return (
     <DefinitionLayout>
       <div className="relative">
-        <RuleActionGroup onSave={onCreateRule} onCopy = {onCopy}/>
+        <RuleActionGroup
+          onSave={onCreateRule}
+          onCopy={onCopy}
+          onDelete={() => setDeleteDialogOpen(true)}
+        />
 
         {type !== 'create' ? (
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
@@ -128,7 +215,10 @@ export const RuleDetail = () => {
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">
-                Rule: {path?  [...(path || []), ''].join('/') : String(full_rule_name).replace(/\/[^/]*$/, "/")}
+                Rule:{' '}
+                {path
+                  ? [...(path || []), ''].join('/')
+                  : String(full_rule_name).replace(/\/[^/]*$/, '/')}
               </div>
               <Input
                 value={ruleName}
@@ -145,6 +235,12 @@ export const RuleDetail = () => {
         {activeTab === 'definition' && <RuleDefinition rule={ruleDetail} />}
         {activeTab === 'python_code' && <PythonCode rule={ruleDetail} />}
       </div>
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={onDelete}
+        message={`Are you sure you want to delete the sensor ${full_rule_name}`}
+      />
     </DefinitionLayout>
   );
 };

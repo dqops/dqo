@@ -21,6 +21,8 @@ import ProvideSensor from './ProvideSensor';
 import Input from '../../components/Input';
 import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
 import { ROUTES } from '../../shared/routes';
+import { SensorsApi } from '../../services/apiClient';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const tabs = [
   {
@@ -52,7 +54,7 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.mysql
   },
   {
-    label: "Oracle",
+    label: 'Oracle',
     value: ProviderSensorModelProviderTypeEnum.oracle
   }
 ];
@@ -63,20 +65,42 @@ export const SensorDetail = () => {
   );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
-  const [sensorName, setSensorName] = useState(type === 'create' && copied !== true ? "" : String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1] + "_copy"  );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [sensorName, setSensorName] = useState(
+    type === 'create' && copied !== true
+      ? ''
+      : String(full_sensor_name).split('/')[
+          String(full_sensor_name).split('/').length - 1
+        ] + '_copy'
+  );
 
   useEffect(() => {
     if (!sensorDetail && (type !== 'create' || copied === true)) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);
-    useEffect(() => {
-      if(type === 'create' && copied !== true){
-        setSensorName('')
-      }else{
-        setSensorName(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy")
-      }
-    },[type, copied])
+  useEffect(() => {
+    if (type === 'create' && copied !== true) {
+      setSensorName('');
+    } else {
+      setSensorName(
+        String(full_sensor_name).split('/')[
+          String(full_sensor_name).split('/').length - 1
+        ] + '_copy'
+      );
+    }
+  }, [type, copied]);
+
+  const closeSensorFirstLevelTab = () => {
+    dispatch(
+      closeFirstLevelTab(
+        '/definitions/sensors/' +
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ]
+      )
+    );
+  };
 
   const handleChangeProvideSensor = (
     tab: string,
@@ -110,66 +134,121 @@ export const SensorDetail = () => {
   };
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
-    if(type === 'create' && copied !== true){
+    if (type === 'create' && copied !== true) {
       await dispatch(createSensor(fullName, sensorDetail));
-    }else if(copied === true){
-      await dispatch(createSensor(String(full_sensor_name).replace(/\/[^/]*$/, "/")+ sensorName , {...sensorDetail, full_sensor_name: full_sensor_name, custom: true, built_in: false}))
-      await dispatch(closeFirstLevelTab("definitions/sensors/" + String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]))
-      await  dispatch(
+    } else if (copied === true) {
+      await dispatch(
+        createSensor(
+          String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+          {
+            ...sensorDetail,
+            full_sensor_name: full_sensor_name,
+            custom: true,
+            built_in: false
+          }
+        )
+      );
+      closeSensorFirstLevelTab();
+      await dispatch(
         addFirstLevelTab({
-          url: ROUTES.SENSOR_DETAIL(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]?? ''),
-          value: ROUTES.SENSOR_DETAIL_VALUE(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1] ?? ''),
+          url: ROUTES.SENSOR_DETAIL(
+            String(full_sensor_name).split('/')[
+              String(full_sensor_name).split('/').length - 1
+            ] ?? ''
+          ),
+          value: ROUTES.SENSOR_DETAIL_VALUE(
+            String(full_sensor_name).split('/')[
+              String(full_sensor_name).split('/').length - 1
+            ] ?? ''
+          ),
           state: {
-            full_sensor_name: String(full_sensor_name).replace(/\/[^/]*$/, "/")+ sensorName,
+            full_sensor_name:
+              String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
             path: path,
-            sensorDetail: {...sensorDetail, full_sensor_name: String(full_sensor_name).replace(/\/[^/]*$/, "/")+ sensorName , custom: true, built_in: false},
+            sensorDetail: {
+              ...sensorDetail,
+              full_sensor_name:
+                String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+              custom: true,
+              built_in: false
+            }
           },
           label: sensorName
         })
       );
     }
-    };
+  };
 
   const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {
     setSensorName(e.target.value);
-    if(path){
+    if (path) {
       const fullName = [...(path || []), e.target.value].join('/');
       dispatch(
         setUpdatedSensor({
           ...sensorDetail,
           full_sensor_name: fullName
         })
-        );
-      }else{
-        dispatch(
-          setUpdatedSensor({
-            ...sensorDetail,
-            full_sensor_name: String(full_sensor_name).replace(/\/[^/]*$/, "/") + e.target.value
-          })
-      )}
-  };
-  const onCopy = () : void => { 
+      );
+    } else {
       dispatch(
-        addFirstLevelTab({
-          url: ROUTES.SENSOR_DETAIL(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
-          value: ROUTES.SENSOR_DETAIL_VALUE(String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]+ "_copy" ?? ''),
-          state: {
-            full_sensor_name: full_sensor_name,
-            copied: true,
-            path: path,
-            sensorDetail: {...sensorDetail, full_sensor_name: full_sensor_name + "_copy", custom: true, built_in: false, can_edit: true},
-            type: "create"
-          },
-          label: `${String(full_sensor_name).split("/")[String(full_sensor_name).split("/").length - 1]}_copy`
+        setUpdatedSensor({
+          ...sensorDetail,
+          full_sensor_name:
+            String(full_sensor_name).replace(/\/[^/]*$/, '/') + e.target.value
         })
       );
-  }
+    }
+  };
+  const onCopy = (): void => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SENSOR_DETAIL(
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ] + '_copy' ?? ''
+        ),
+        value: ROUTES.SENSOR_DETAIL_VALUE(
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ] + '_copy' ?? ''
+        ),
+        state: {
+          full_sensor_name: full_sensor_name,
+          copied: true,
+          path: path,
+          sensorDetail: {
+            ...sensorDetail,
+            full_sensor_name: full_sensor_name + '_copy',
+            custom: true,
+            built_in: false,
+            can_edit: true
+          },
+          type: 'create'
+        },
+        label: `${
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ]
+        }_copy`
+      })
+    );
+  };
+
+  const onDelete = async () => {
+    SensorsApi.deleteSensor(full_sensor_name).then(async () =>
+      closeSensorFirstLevelTab()
+    );
+  };
 
   return (
     <DefinitionLayout>
       <div className="relative">
-        <SensorActionGroup onSave={onCreateSensor} onCopy={onCopy}/>
-        {type !== 'create'  ? (
+        <SensorActionGroup
+          onSave={onCreateSensor}
+          onCopy={onCopy}
+          onDelete={() => setDeleteDialogOpen(true)}
+        />
+        {type !== 'create' ? (
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
@@ -183,7 +262,10 @@ export const SensorDetail = () => {
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">
-                Sensor: {path?  [...(path || []), ''].join('/') : String(full_sensor_name).replace(/\/[^/]*$/, "/")}
+                Sensor:{' '}
+                {path
+                  ? [...(path || []), ''].join('/')
+                  : String(full_sensor_name).replace(/\/[^/]*$/, '/')}
               </div>
               <Input
                 value={sensorName}
@@ -223,6 +305,12 @@ export const SensorDetail = () => {
               )
           )}
       </div>
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={onDelete}
+        message={`Are you sure you want to delete the sensor ${full_sensor_name}`}
+      />
     </DefinitionLayout>
   );
 };

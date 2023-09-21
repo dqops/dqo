@@ -9,14 +9,23 @@ import { IRootState } from '../../redux/reducers';
 type RuleActionGroupProps = {
   onSave: () => void;
   onCopy?: () => void;
+  onDelete?: () => void;
 };
 
-export const RuleActionGroup = ({ onSave, onCopy }: RuleActionGroupProps) => {
-  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail, copied, type } =
-    useSelector(getFirstLevelSensorState);
-    const { userProfile } = useSelector(
-      (state: IRootState) => state.job || {}
-    );
+export const RuleActionGroup = ({
+  onSave,
+  onCopy,
+  onDelete
+}: RuleActionGroupProps) => {
+  const {
+    full_rule_name,
+    ruleDetail,
+    isUpdating,
+    isUpdatedRuleDetail,
+    copied,
+    type
+  } = useSelector(getFirstLevelSensorState);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
@@ -38,22 +47,25 @@ export const RuleActionGroup = ({ onSave, onCopy }: RuleActionGroupProps) => {
           label="Delete rule"
           className="w-40 !h-10"
           disabled={userProfile.can_manage_definitions !== true}
+          onClick={onDelete}
         />
       )}
-       <Button
+      <Button
         color="primary"
         variant="outlined"
         label="Copy"
         className="w-40 !h-10"
         disabled={userProfile.can_manage_definitions !== true}
         onClick={onCopy}
-        />
+      />
       <Button
         color="primary"
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedRuleDetail || userProfile.can_manage_definitions !== true}
+        disabled={
+          !isUpdatedRuleDetail || userProfile.can_manage_definitions !== true
+        }
         onClick={handleSave}
         loading={isUpdating}
       />
