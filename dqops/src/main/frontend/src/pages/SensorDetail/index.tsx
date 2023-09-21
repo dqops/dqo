@@ -22,6 +22,7 @@ import Input from '../../components/Input';
 import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
 import { ROUTES } from '../../shared/routes';
 import { SensorsApi } from '../../services/apiClient';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const tabs = [
   {
@@ -64,6 +65,7 @@ export const SensorDetail = () => {
   );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sensorName, setSensorName] = useState(
     type === 'create' && copied !== true
       ? ''
@@ -228,16 +230,17 @@ export const SensorDetail = () => {
     );
   };
 
-  const onDelete = () => {
-    SensorsApi.deleteSensor(full_sensor_name).then(() =>
-      dispatch(
-        closeFirstLevelTab(
-          '/definitions/sensors/' +
-            String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
-            ]
+  const onDelete = async () => {
+    SensorsApi.deleteSensor(full_sensor_name).then(
+      async () =>
+        await dispatch(
+          closeFirstLevelTab(
+            '/definitions/sensors/' +
+              String(full_sensor_name).split('/')[
+                String(full_sensor_name).split('/').length - 1
+              ]
+          )
         )
-      )
     );
   };
 
@@ -247,7 +250,7 @@ export const SensorDetail = () => {
         <SensorActionGroup
           onSave={onCreateSensor}
           onCopy={onCopy}
-          onDelete={onDelete}
+          onDelete={() => setDeleteDialogOpen(true)}
         />
         {type !== 'create' ? (
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
@@ -306,6 +309,12 @@ export const SensorDetail = () => {
               )
           )}
       </div>
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={onDelete}
+        message={`Are you sure you want to delete the sensor ${full_sensor_name}`}
+      />
     </DefinitionLayout>
   );
 };
