@@ -11,16 +11,24 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
+import { RulesApi } from '../../services/apiClient';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
   singleRule?: boolean;
-  rule?: RuleBasicModel
+  rule?: RuleBasicModel;
 }
 
-const RuleContextMenu = ({ folder, path, singleRule, rule }: RuleContextMenuProps) => {
+const RuleContextMenu = ({
+  folder,
+  path,
+  singleRule,
+  rule
+}: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const dispatch = useActionDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,21 +61,29 @@ const RuleContextMenu = ({ folder, path, singleRule, rule }: RuleContextMenuProp
     setIsOpen(false);
     setOpen(false);
   };
-  const onCopy = () : void => { 
+  const onCopy = (): void => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(rule?.rule_name+ "_copy" ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(rule?.rule_name+ "_copy" ?? ''),
+        url: ROUTES.RULE_DETAIL(rule?.rule_name + '_copy' ?? ''),
+        value: ROUTES.RULE_DETAIL_VALUE(rule?.rule_name + '_copy' ?? ''),
         state: {
           full_rule_name: rule?.full_rule_name,
           copied: true,
           path: path,
-          type: "create"
+          type: 'create'
         },
-        label: `${String(rule?.full_rule_name).split("/")[String(rule?.full_rule_name).split("/").length - 1]}_copy`
+        label: `${
+          String(rule?.full_rule_name).split('/')[
+            String(rule?.full_rule_name).split('/').length - 1
+          ]
+        }_copy`
       })
     );
-}
+  };
+
+  const deleteRuleFromTree = async () => {
+    await RulesApi.deleteRule(rule?.full_rule_name ?? '');
+  };
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -77,42 +93,54 @@ const RuleContextMenu = ({ folder, path, singleRule, rule }: RuleContextMenuProp
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
-        {singleRule === true ? 
-        <div onClick={(e) => e.stopPropagation()}>
-        <div
-        className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-        onClick={onCopy}
-      >
-      Copy rule
-        </div>
-      </div>
-         : 
-        <div>
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewRule}
+        {singleRule === true ? (
+          <div onClick={(e) => e.stopPropagation()}>
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={onCopy}
             >
-            Add new rule
+              Copy rule
+            </div>
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setDeleteDialogOpen(true)}
+            >
+              Delete rule
+            </div>
+            <ConfirmDialog
+              open={deleteDialogOpen}
+              onClose={() => setDeleteDialogOpen(false)}
+              onConfirm={deleteRuleFromTree}
+              message={`Are you sure you want to delete the check ${rule?.full_rule_name}`}
+            />
           </div>
-        </div>
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewFolder}
-          >
-            Add new folder
+        ) : (
+          <div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={openAddNewRule}
+              >
+                Add new rule
+              </div>
+            </div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={openAddNewFolder}
+              >
+                Add new folder
+              </div>
+              <AddFolderDialog
+                open={isOpen}
+                onClose={closeModal}
+                path={path}
+                folder={folder}
+                type="rule"
+              />
+            </div>
           </div>
-          <AddFolderDialog
-            open={isOpen}
-            onClose={closeModal}
-            path={path}
-            folder={folder}
-            type="rule"
-          />
-        </div>
-        </div>
-        }
+        )}
       </PopoverContent>
     </Popover>
   );

@@ -6,9 +6,16 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { CheckSpecBasicModel, CheckSpecModel, SensorBasicFolderModel } from '../../api';
+import {
+  CheckSpecBasicModel,
+  CheckSpecModel,
+  SensorBasicFolderModel
+} from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import {
+  addFirstLevelTab,
+  deleteCheck
+} from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
 import { ChecksApi } from '../../services/apiClient';
@@ -16,6 +23,7 @@ import CreateCheckDialog from './CreateChecksDialog';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
@@ -24,14 +32,18 @@ interface RuleContextMenuProps {
   check?: CheckSpecBasicModel;
 }
 
-const DataQualityContextMenu = ({ folder, path, singleCheck, check }: RuleContextMenuProps) => {
+const DataQualityContextMenu = ({
+  folder,
+  path,
+  singleCheck,
+  check
+}: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const dispatch = useActionDispatch();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -61,24 +73,32 @@ const DataQualityContextMenu = ({ folder, path, singleCheck, check }: RuleContex
         label: 'New check'
       })
     );
-    setOpen(false)
+    setOpen(false);
   };
-  const onCopy = () : void => { 
-    console.log(check)
+  const onCopy = (): void => {
+    console.log(check);
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL(check?.check_name+ "_copy" ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(check?.check_name+ "_copy" ?? ''),
+        url: ROUTES.CHECK_DETAIL(check?.check_name + '_copy' ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(check?.check_name + '_copy' ?? ''),
         state: {
           full_check_name: check?.full_check_name,
           copied: true,
           path: path,
-          type: "create"
+          type: 'create'
         },
-        label: `${String(check?.full_check_name).split("/")[String(check?.full_check_name).split("/").length - 1]}_copy`
+        label: `${
+          String(check?.full_check_name).split('/')[
+            String(check?.full_check_name).split('/').length - 1
+          ]
+        }_copy`
       })
     );
-}
+  };
+
+  const deleteChecksFromTree = async () => {
+    await dispatch(deleteCheck(check?.full_check_name ?? ''));
+  };
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -88,29 +108,45 @@ const DataQualityContextMenu = ({ folder, path, singleCheck, check }: RuleContex
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
-        {singleCheck ? 
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className={clsx(
-              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
-            )}
-            onClick={onCopy}
-          >
-            Copy check
+        {singleCheck ? (
+          <div onClick={(e) => e.stopPropagation()}>
+            <div
+              className={clsx(
+                'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
+              )}
+              onClick={onCopy}
+            >
+              Copy check
+            </div>
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setDeleteDialogOpen(true)}
+            >
+              Delete check
+            </div>
+            <ConfirmDialog
+              open={deleteDialogOpen}
+              onClose={() => setDeleteDialogOpen(false)}
+              onConfirm={deleteChecksFromTree}
+              message={`Are you sure you want to delete the check ${check?.full_check_name}`}
+            />
           </div>
-        </div>
-        :
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className={clsx(
-              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
-            )}
-            onClick={userProfile.can_manage_definitions !== true ? undefined :  openAddNewCheck}
-          >
-            Add new check
+        ) : (
+          <div onClick={(e) => e.stopPropagation()}>
+            <div
+              className={clsx(
+                'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
+              )}
+              onClick={
+                userProfile.can_manage_definitions !== true
+                  ? undefined
+                  : openAddNewCheck
+              }
+            >
+              Add new check
+            </div>
           </div>
-        </div>
-        }
+        )}
         <div onClick={(e) => e.stopPropagation()}>
           <AddFolderDialog
             open={isOpen}

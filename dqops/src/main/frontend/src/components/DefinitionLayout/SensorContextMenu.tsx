@@ -11,18 +11,26 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { SensorsApi } from '../../services/apiClient';
 
 interface SensorContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
   singleSensor?: boolean;
-  sensor?: SensorBasicModel
+  sensor?: SensorBasicModel;
 }
 
-const SensorContextMenu = ({ folder, path, singleSensor, sensor }: SensorContextMenuProps) => {
+const SensorContextMenu = ({
+  folder,
+  path,
+  singleSensor,
+  sensor
+}: SensorContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -54,21 +62,29 @@ const SensorContextMenu = ({ folder, path, singleSensor, sensor }: SensorContext
     setOpen(false);
   };
 
-  const onCopy = () : void => { 
+  const onCopy = (): void => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SENSOR_DETAIL(sensor?.sensor_name+ "_copy" ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(sensor?.sensor_name+ "_copy" ?? ''),
+        url: ROUTES.SENSOR_DETAIL(sensor?.sensor_name + '_copy' ?? ''),
+        value: ROUTES.SENSOR_DETAIL_VALUE(sensor?.sensor_name + '_copy' ?? ''),
         state: {
           full_sensor_name: sensor?.full_sensor_name,
           copied: true,
           path: path,
-          type: "create"
+          type: 'create'
         },
-        label: `${String(sensor?.full_sensor_name).split("/")[String(sensor?.full_sensor_name).split("/").length - 1]}_copy`
+        label: `${
+          String(sensor?.full_sensor_name).split('/')[
+            String(sensor?.full_sensor_name).split('/').length - 1
+          ]
+        }_copy`
       })
     );
-}
+  };
+
+  const deleteSensorFromTree = async () => {
+    await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '');
+  };
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -78,40 +94,53 @@ const SensorContextMenu = ({ folder, path, singleSensor, sensor }: SensorContext
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
-          {singleSensor === true ? 
+        {singleSensor === true ? (
           <div onClick={(e) => e.stopPropagation()}>
             <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={onCopy}
-          >
-          Copy sensor
-          </div>
-        </div> : 
-          <div>
-
-          <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewSensor}
-          >
-            Add new sensor
-          </div>
-        </div>
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewFolder}
-          >
-            Add new folder
-          </div>
-          <AddFolderDialog
-            open={isOpen}
-            onClose={closeModal}
-            path={path}
-            folder={folder}
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={onCopy}
+            >
+              Copy sensor
+            </div>
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setDeleteDialogOpen(true)}
+            >
+              Delete sensor
+            </div>
+            <ConfirmDialog
+              open={deleteDialogOpen}
+              onClose={() => setDeleteDialogOpen(false)}
+              onConfirm={deleteSensorFromTree}
+              message={`Are you sure you want to delete the check ${sensor?.full_sensor_name}`}
             />
           </div>
-        </div>}
+        ) : (
+          <div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={openAddNewSensor}
+              >
+                Add new sensor
+              </div>
+            </div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={openAddNewFolder}
+              >
+                Add new folder
+              </div>
+              <AddFolderDialog
+                open={isOpen}
+                onClose={closeModal}
+                path={path}
+                folder={folder}
+              />
+            </div>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
