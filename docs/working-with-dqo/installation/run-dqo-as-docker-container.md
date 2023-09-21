@@ -4,7 +4,7 @@ DQO can be run as a Docker container in a server mode or in Shell mode. You can 
 
 ## Prerequisites
 
-To run DQO as Docker container you need
+To run DQO as a Docker container you need
 
 - Docker running locally. Follow the instructions to [download and install Docker](https://docs.docker.com/get-docker/).
 - DQO Cloud account and unique identification code (API Key). If you want to use DQO features, such as storing data quality
