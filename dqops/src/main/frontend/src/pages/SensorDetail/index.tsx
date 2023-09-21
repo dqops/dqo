@@ -94,7 +94,7 @@ export const SensorDetail = () => {
   const closeSensorFirstLevelTab = () => {
     dispatch(
       closeFirstLevelTab(
-        'definitions/sensors/' +
+        '/definitions/sensors/' +
           String(full_sensor_name).split('/')[
             String(full_sensor_name).split('/').length - 1
           ]

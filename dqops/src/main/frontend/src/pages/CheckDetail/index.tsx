@@ -149,12 +149,19 @@ export const SensorDetail = () => {
   };
 
   const onDeleteCheck = async () => {
-    closeFirstLevelTab(path ?? '/definitions/checks/' + full_check_name);
     await dispatch(
       deleteCheck(
         full_check_name
           ? full_check_name
           : Array.from(path).join('/') + '/' + checkName
+      )
+    );
+    dispatch(
+      closeFirstLevelTab(
+        '/definitions/checks/' +
+          String(full_check_name).split('/')[
+            String(full_check_name).split('/').length - 1
+          ]
       )
     );
   };
