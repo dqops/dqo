@@ -46,7 +46,7 @@ public class SettingsSpec extends AbstractSpec {
 		}
 	};
 
-	@JsonPropertyDescription("Editor name spec (VSC, Eclipse, Intellj)")
+	@JsonPropertyDescription("Editor name spec (VSC, Eclipse, Intellij)")
 	private String editorName;
 
 	@JsonPropertyDescription("Editor path on user's computer")
