@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
@@ -39,6 +40,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 			put("rules", o -> o.rules);
             put("checks", o -> o.checks);
             put("settings", o -> o.settings);
+            put("credentials", o -> o.credentials);
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
         }
@@ -51,6 +53,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private RuleDefinitionListImpl rules;
     private CheckDefinitionListImpl checks;
     private SettingsWrapperImpl settings;
+    private SharedCredentialListImpl credentials;
     private FileIndexList fileIndices;
     private DashboardFolderListSpecWrapperImpl dashboards;
     @JsonIgnore
@@ -65,6 +68,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 		this.setRules(new RuleDefinitionListImpl());
         this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
+        this.setCredentials(new SharedCredentialListImpl());
         this.setFileIndices(new FileIndexListImpl());
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
     }
@@ -75,7 +79,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
      * @param checks Collection of custom check definitions.
-     * @param settings user local settings.
+     * @param settings User local settings.
+     * @param credentials Collection of shared credentials.
      * @param fileIndices File synchronization indexes.
      * @param dashboards Custom dashboards wrapper.
      */
@@ -84,6 +89,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         RuleDefinitionListImpl rules,
                         CheckDefinitionListImpl checks,
                         SettingsWrapperImpl settings,
+                        SharedCredentialListImpl credentials,
                         FileIndexListImpl fileIndices,
                         DashboardFolderListSpecWrapperImpl dashboards) {
 		this.setConnections(connections);
@@ -91,6 +97,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 		this.setRules(rules);
         this.setChecks(checks);
         this.setSettings(settings);
+        this.setCredentials(credentials);
         this.setFileIndices(fileIndices);
         this.setDashboards(dashboards);
     }
@@ -204,6 +211,28 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns the collection of local shared credentials.
+     * @return Collection of local shared credentials.
+     */
+    @Override
+    public SharedCredentialListImpl getCredentials() {
+        return credentials;
+    }
+
+    /**
+     * Sets a reference to the collection of local credentials.
+     * @param credentials Collection of local credentials.
+     */
+    public void setCredentials(SharedCredentialListImpl credentials) {
+        this.credentials = credentials;
+        if (credentials != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "credentials");
+            credentials.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("credentials").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns a collection of file indices in the user home folder.
      * @return Collection of file indices.
      */
@@ -258,6 +287,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 		this.getRules().flush();
         this.getChecks().flush();
         this.getSettings().flush();
+        this.getCredentials().flush();
         this.getFileIndices().flush();
         this.getDashboards().flush();
 
@@ -474,6 +504,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
             }
             if (cloned.settings != null) {
                 cloned.settings = (SettingsWrapperImpl) cloned.settings.deepClone();
+            }
+            if (cloned.credentials != null) {
+                cloned.credentials = (SharedCredentialListImpl) cloned.credentials.deepClone();
             }
             if (cloned.dashboards != null) {
                 cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();

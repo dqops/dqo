@@ -32,6 +32,8 @@ import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -958,6 +960,30 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential wrapper instance.
+     *
+     * @param sharedCredentialWrapper Shared credential wrapper.
+     * @param parameter               Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialWrapper sharedCredentialWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential list.
+     *
+     * @param sharedCredentialWrappers Shared credentials list.
+     * @param parameter                Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialList sharedCredentialWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.metadata.basespecs.BaseDirtyTrackingSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -27,7 +28,7 @@ import java.util.Objects;
  * File content holder.
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class FileContent implements Cloneable {
+public class FileContent extends BaseDirtyTrackingSpec implements Cloneable {
     private String textContent;
     private byte[] byteContent;
 
@@ -132,6 +133,7 @@ public class FileContent implements Cloneable {
         if (this.byteContent != null) {
             throw new IllegalStateException("The object already contains a byte array");
         }
+        this.setDirtyIf(!Objects.equals(this.textContent, textContent));
         this.textContent = textContent;
     }
 
@@ -151,6 +153,7 @@ public class FileContent implements Cloneable {
         if (this.textContent != null) {
             throw new IllegalStateException("The object already contains a text object");
         }
+        this.setDirtyIf(!Objects.equals(this.byteContent, byteContent));
         this.byteContent = byteContent;
     }
 
@@ -167,6 +170,7 @@ public class FileContent implements Cloneable {
      * @param lastModified Last modified timestamp.
      */
     public void setLastModified(Instant lastModified) {
+        this.setDirtyIf(!Objects.equals(this.lastModified, lastModified));
         this.lastModified = lastModified;
     }
 
@@ -183,6 +187,7 @@ public class FileContent implements Cloneable {
      * @param cachedObjectInstance Cached object instance.
      */
     public void setCachedObjectInstance(Object cachedObjectInstance) {
+        this.setDirtyIf(this.cachedObjectInstance != cachedObjectInstance); // comparing by reference
         this.cachedObjectInstance = cachedObjectInstance;
     }
 
@@ -210,7 +215,9 @@ public class FileContent implements Cloneable {
     @Override
     public FileContent clone() {
         try {
-            return (FileContent) super.clone();
+            FileContent cloned = (FileContent) super.clone();
+            cloned.clearDirty(false);
+            return cloned;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException("Clone failed");
         }
