@@ -50,7 +50,6 @@ export const DefinitionTree = () => {
     tabs,
     activeTab
   } = useSelector((state: IRootState) => state.definition);
-  const [selected, setSelected] = useState('');
   const [checkIndicator, setCheckIndicator] = useState(false);
   const [sensorIndicator, setSensorIndicator] = useState(false);
   const [ruleIndicator, setRuleIndicator] = useState(false);
@@ -181,49 +180,43 @@ export const DefinitionTree = () => {
   };
 
   useEffect(() => {
-    if (
-      definitionFirstLevelFolder === undefined ||
-      definitionFirstLevelFolder.length === 0
-    ) {
-      const configuration = [
-        { category: 'Sensors', isOpen: false },
-        { category: 'Rules', isOpen: false },
-        { category: 'Data quality checks', isOpen: false },
-        { category: 'Default checks configuration', isOpen: false }
-      ];
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url.includes('default_checks')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i].url.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-        } else if (tabs[i].url.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.fullCheckName as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i].url.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
+    const configuration = [
+      { category: 'Sensors', isOpen: false },
+      { category: 'Rules', isOpen: false },
+      { category: 'Data quality checks', isOpen: false },
+      { category: 'Default checks configuration', isOpen: false }
+    ];
+    for (let i = 0; i < tabs.length; i++) {
+      if (tabs[i].url.includes('default_checks')) {
+        configuration[3].isOpen = true;
+      } else if (tabs[i].url.includes('sensors')) {
+        configuration[0].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.full_sensor_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
+        }
+      } else if (tabs[i].url.includes('checks')) {
+        configuration[2].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.fullCheckName as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+        }
+      } else if (tabs[i].url.includes('rules')) {
+        configuration[1].isOpen = true;
+        const arrayOfElemsToToggle = (
+          tabs[i].state.full_rule_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
         }
       }
       dispatch(toggleFirstLevelFolder(configuration));
     }
-  }, []);
-
+  }, [activeTab]);
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
@@ -281,15 +274,13 @@ export const DefinitionTree = () => {
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                 sensor.custom ? 'font-bold' : '',
-                selected == sensor.sensor_name ? 'bg-gray-300' : '',
                 activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
                   sensor.sensor_name
                   ? 'bg-gray-300'
                   : ''
               )}
               onClick={() => {
-                openSensorFirstLevelTab(sensor),
-                  setSelected(sensor.sensor_name ? sensor.sensor_name : '');
+                openSensorFirstLevelTab(sensor);
               }}
             >
               <SvgIcon
@@ -368,15 +359,13 @@ export const DefinitionTree = () => {
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
                 rule.custom ? 'font-bold ' : '',
-                selected == rule.rule_name ? 'bg-gray-300' : '',
                 activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
                   rule.rule_name
                   ? 'bg-gray-300'
                   : ''
               )}
               onClick={() => {
-                openRuleFirstLevelTab(rule),
-                  setSelected(rule.rule_name ? rule.rule_name : '');
+                openRuleFirstLevelTab(rule);
               }}
             >
               <SvgIcon
@@ -460,7 +449,6 @@ export const DefinitionTree = () => {
                   className={clsx(
                     'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                     check.custom ? 'font-bold' : '',
-                    selected == check.check_name ? 'bg-gray-300' : '',
                     activeTab
                       ?.split('/')
                       .at(activeTab?.split('/').length - 1) === check.check_name
