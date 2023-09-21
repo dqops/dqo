@@ -50,9 +50,7 @@ export const TableIncidentsNotificationsView = () => {
   const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
     label: item
     .replace(/_(?=dimension)/, " / Quality ")
-    .replace(/_(?=(name))/, " / Check ")
-    .replace(/_(?=type)/, " / Check ")
-    .replace(/(_(?=category))/, " / Check ")
+    .replace(/_(?=(name|type|category))/g, " / Check ")
     .replace(/^\w/g, c => c.toUpperCase()),
     value: item
   }));  
