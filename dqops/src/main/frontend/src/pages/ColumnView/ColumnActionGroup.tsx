@@ -9,6 +9,8 @@ import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { DqoJobHistoryEntryModelStatusEnum } from '../../api';
+import SvgIcon from '../../components/SvgIcon';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -36,7 +38,7 @@ const ColumnActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const { userProfile, job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -45,6 +47,19 @@ const ColumnActionGroup = ({
       column ?? ''
     );
   };
+
+  const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schema + '.' + table && 
+         x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.connectionName === 
+        connection &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  ).length !==0 
 
   const columnPath = `${connection}.${schema}.${table}.${column}`
   return (
@@ -76,14 +91,26 @@ const ColumnActionGroup = ({
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           <Button
-             color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
-            label="Collect Statistics"
+          color={
+          filteredCollectStatisticsJobs
+          ? 'secondary'
+          : 'primary'
+            }           
+            label={filteredCollectStatisticsJobs
+              ? 'Collecting...'
+              : "Collect Statistics"}
             className={clsx(
-              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
+              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
             )}
+            leftIcon={
+              filteredCollectStatisticsJobs? (
+                <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
+              ) : (
+                ''
+              )
+            }
             onClick={onCollectStatistics}
-            disabled={runningStatistics || userProfile.can_collect_statistics  !== true}
+            disabled={runningStatistics || userProfile.can_collect_statistics  !== true || filteredCollectStatisticsJobs}
           />
         </div>
       ) : (
