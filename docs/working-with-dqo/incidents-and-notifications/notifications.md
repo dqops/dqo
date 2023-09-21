@@ -1,6 +1,11 @@
 # Notifications overview
 
-DQO can send alert notifications whenever a new incident is created or modified. Thanks to notifications you follow your data quality in real-time, without the need to look through your tables.
+DQO can send alert notifications whenever a new incident is created or modified.
+
+An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category, or check type. Thanks to the issue grouping the number of notifications is reduced. 
+You can read [more about incidents and their configuration here](incidents.md).
+
+Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds..
 
 A notification contains the most important information about an incident you may want to discover in order to resolve an issue.
 
@@ -26,25 +31,25 @@ A payload has a JSON format with multiple fields that together create a message.
 
 The fields of a JSON payload include the following:
 
-| Field name              | Description                                                                                                                                                                                                                                                                                                 | Type     | 
-|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| **incident_id**         | The primary key that identifies each data quality incident.                                                                                                                                                                                                                                                 | String   |
-| **connection**          | Connection name affected by a data quality incident.                                                                                                                                                                                                                                                        | String   |
-| **schema**              | Schema name affected by a data quality incident.                                                                                                                                                                                                                                                            | String   |
-| **table**               | Table name affected by a data quality incident.                                                                                                                                                                                                                                                             | String   |
-| **table_priority**      | Table priority of the table that was affected by a data quality incident.                                                                                                                                                                                                                                   | Integer  |
-| **incident_hash**       | Data quality incident hash that identifies similar incidents on the same incident grouping level.                                                                                                                                                                                                           | Long     |
-| **first_seen**          | The UTC timestamp when the data quality incident was first seen.                                                                                                                                                                                                                                            | Datetime |
-| **last_seen**           | The UTC timestamp when the data quality incident was last seen.                                                                                                                                                                                                                                             | Datetime  |
+| Field name              | Description                                                                                                                                                                                                                                                                                                | Type     | 
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| **incident_id**         | The primary key that identifies each data quality incident.                                                                                                                                                                                                                                                | String   |
+| **connection**          | Connection name affected by a data quality incident.                                                                                                                                                                                                                                                       | String   |
+| **schema**              | Schema name affected by a data quality incident.                                                                                                                                                                                                                                                           | String   |
+| **table**               | Table name affected by a data quality incident.                                                                                                                                                                                                                                                            | String   |
+| **table_priority**      | Table priority of the table that was affected by a data quality incident.                                                                                                                                                                                                                                  | Integer  |
+| **incident_hash**       | Data quality incident hash that identifies similar incidents on the same incident grouping level.                                                                                                                                                                                                          | Long     |
+| **first_seen**          | The UTC timestamp when the data quality incident was first seen.                                                                                                                                                                                                                                           | Datetime |
+| **last_seen**           | The UTC timestamp when the data quality incident was last seen.                                                                                                                                                                                                                                            | Datetime  |
 | **incident_until**      | The UTC timestamp when the data quality incident is valid. Any failed data quality checks that occur before this date will be included in the incident, unless the incident status is changed to resolved. If a status is changed to resolved, a new failed data quality checks will create a new incident. | Datetime  |
-| **data_stream_name**    | The data stream name that was affected by a data quality incident.                                                                                                                                                                                                                                          | String   |
-| **quality_dimension**   | The data quality dimension that was affected by a data quality incident.                                                                                                                                                                                                                                    | String   |
-| **check_category**      | The data quality check category that was affected by a data quality incident.                                                                                                                                                                                                                               | String   |
-| **highest_severity**    | The highest severity of the failed check detected in this data quality incident. Possible values include warning, error and fatal.                                                                                                                                                                          | Integer  |
-| **failed_checks_count** | The total number of failed data quality checks that were seen when the incident was raised for the first time.                                                                                                                                                                                              | String   |
-| **issue_url**           | The link (URL) to a ticket in an external system that is tracking this incident.                                                                                                                                                                                                                            | String   |
-| **status**              | Possible values for incident status include: open, acknowledged, resolved and muted.                                                                                                                                                                                                                        | String   |
-| **text**                | Notification text in Markdown format that contains the most important fields from the payload.                                                                                                                                                                                                              | String   |
+| **data_stream_name**    | The data stream name that was affected by a data quality incident.                                                                                                                                                                                                                                         | String   |
+| **quality_dimension**   | The data quality dimension that was affected by a data quality incident.                                                                                                                                                                                                                                   | String   |
+| **check_category**      | The data quality check category that was affected by a data quality incident.                                                                                                                                                                                                                              | String   |
+| **highest_severity**    | The highest severity of the failed check detected in this data quality incident. Possible values include warning, error and fatal.                                                                                                                                                                         | Integer  |
+| **failed_checks_count** | The total number of failed data quality checks that were seen when the incident was raised for the first time.                                                                                                                                                                                             | String   |
+| **issue_url**           | The link (URL) to a ticket in an external system that is tracking this incident.                                                                                                                                                                                                                           | String   |
+| **status**              | Possible values for incident status include open, acknowledged, resolved and muted.                                                                                                                                                                                                                        | String   |
+| **text**                | Notification text in Markdown format that contains the most important fields from the payload.                                                                                                                                                                                                             | String   |
 
 
 The json object presents as below:
@@ -68,22 +73,14 @@ The json object presents as below:
 }
 ```
 
-## Resolution status
+## Notification message statuses
 
-Notification message distinguishes the following resolution status values:
+Notification message can have the following status:
 
-- **Open**: This is a status a new incident starts its existence with. The system automatically marks incidents with this status. DQO is waiting until an action is manually taken by a data asset manager or someone responsible for recognition of issues. You can revert an incident's status back to Open at any time.
-
-
-- **Acknowledged**: A state indicating that the incident was acknowledged. It has to be verified by a data engineers teem to decide about further steps. It is for a DQO user to decide if it should be treated as indecent or not. As an example imagine verification the data delivered by a vendor that made a change in its data which influenced sensor readouts in order to fail rule outputs or a data engineers are executing some pipelines for testing purposes.
-
-
-- **Resolved**: A state indicating that an incident is fixed. Data has been fixed and data quality improved.
-
-
-- **Muted**: A state for hiding the incident from your list. By default, any data quality issues associated with that
-  incident will be muted for 60 days. If an incident is muted, DQO will not create a new one. To change the time duration for muted incidents
-  click the **Configure** button.
+- **Open**: This is the initial status of a new incident, which is automatically assigned by DQO. The remaining statuses of the incidents (Acknowledged, Resolved, and Muted) have to be set manually. An open incident indicates that a data quality team together with the data owner or someone else responsible for identifying issues should take action to address the data quality issue. You can change an incident's status back to Open at any time.
+- **Acknowledged**: This status indicates that the incident has been acknowledged, and someone has begun to investigate the data quality issue. The Acknowledged status has to be manually marked in the Incident section. Usually, the data quality issues present at the data source level can be fixed by the data producer. Issues caused by a bug in the data pipeline or an ETL process should be fixed by the Data Engineering Team.
+- **Resolved**: This status indicates that the root cause of the issue has been identified and fixed. The resolved status has to be set manually in the Incident section.
+- **Muted**: This status hides the incident from your list. By default, any data quality issues associated with the incident will be muted for 60 days. If an incident is muted, DQO will not create a new one for 60 days. You can change the duration for muted incidents, by simply clicking the **Configure button** and changing the **Incidents and Notifications** settings. Muting the incident might be useful, when, for example, vendor’s data has been intentionally changed in comparison to the previous version.
 
 
 ## Text field content and format
