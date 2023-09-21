@@ -91,6 +91,17 @@ export const SensorDetail = () => {
     }
   }, [type, copied]);
 
+  const closeSensorFirstLevelTab = () => {
+    dispatch(
+      closeFirstLevelTab(
+        'definitions/sensors/' +
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ]
+      )
+    );
+  };
+
   const handleChangeProvideSensor = (
     tab: string,
     providerSensor: ProviderSensorModel
@@ -137,14 +148,7 @@ export const SensorDetail = () => {
           }
         )
       );
-      await dispatch(
-        closeFirstLevelTab(
-          'definitions/sensors/' +
-            String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
-            ]
-        )
-      );
+      closeSensorFirstLevelTab();
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.SENSOR_DETAIL(
@@ -231,16 +235,8 @@ export const SensorDetail = () => {
   };
 
   const onDelete = async () => {
-    SensorsApi.deleteSensor(full_sensor_name).then(
-      async () =>
-        await dispatch(
-          closeFirstLevelTab(
-            '/definitions/sensors/' +
-              String(full_sensor_name).split('/')[
-                String(full_sensor_name).split('/').length - 1
-              ]
-          )
-        )
+    SensorsApi.deleteSensor(full_sensor_name).then(async () =>
+      closeSensorFirstLevelTab()
     );
   };
 
