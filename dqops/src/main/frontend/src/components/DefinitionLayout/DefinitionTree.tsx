@@ -39,23 +39,47 @@ const defaultChecks = [
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
-  const { sensorFolderTree, sensorState, definitionFirstLevelFolder, checksFolderTree, dataQualityChecksState, ruleFolderTree, ruleState, tabs, activeTab } =
-    useSelector((state: IRootState) => state.definition);
+  const {
+    sensorFolderTree,
+    sensorState,
+    definitionFirstLevelFolder,
+    checksFolderTree,
+    dataQualityChecksState,
+    ruleFolderTree,
+    ruleState,
+    tabs,
+    activeTab
+  } = useSelector((state: IRootState) => state.definition);
   const [selected, setSelected] = useState('');
+  const [checkIndicator, setCheckIndicator] = useState(false);
+  const [sensorIndicator, setSensorIndicator] = useState(false);
+  const [ruleIndicator, setRuleIndicator] = useState(false);
+
+  const onChangeCheckIndicator = () => setCheckIndicator(!checkIndicator);
+
+  const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
+
+  const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
+  }, [sensorIndicator]);
+
+  useEffect(() => {
     dispatch(getRuleFolderTree());
+  }, [ruleIndicator]);
+
+  useEffect(() => {
     dispatch(getdataQualityChecksFolderTree());
-  }, []);
+  }, [checkIndicator]);
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
   };
 
-  const openSensorFolder = (key: string )=> {
-    dispatch(openSensorFolderTree(key))
-  }
+  const openSensorFolder = (key: string) => {
+    dispatch(openSensorFolderTree(key));
+  };
 
   const toggleRuleFolder = (key: string) => {
     dispatch(toggleRuleFolderTree(key));
@@ -64,7 +88,6 @@ export const DefinitionTree = () => {
   const openRuleFolder = (key: string) => {
     dispatch(openRuleFolderTree(key));
   };
-
 
   const toggleDataQualityChecksFolder = (fullPath: string) => {
     dispatch(toggledataQualityChecksFolderTree(fullPath));
@@ -116,8 +139,10 @@ export const DefinitionTree = () => {
   const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, "_")),
-        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(defaultCheck.replace(/\s/g, "_")),
+        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, '_')),
+        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(
+          defaultCheck.replace(/\s/g, '_')
+        ),
         state: {
           type: defaultCheck
         },
@@ -126,26 +151,30 @@ export const DefinitionTree = () => {
     );
   };
 
-  const toggleFolderRecursively = (elements: string[], index = 0, type: string) => {
-    if (index >= elements.length -1 ) {
+  const toggleFolderRecursively = (
+    elements: string[],
+    index = 0,
+    type: string
+  ) => {
+    if (index >= elements.length - 1) {
       return;
     }
-    const path = elements.slice(0, index + 1).join('/'); 
-    if(index ===0 ){
-      if(type==="checks"){
-        openDataQualityChecksFolder("undefined/"+path)
-      }else if(type==="rules"){
-        openRuleFolder("undefined/"+path)
-      }else{
-        openSensorFolder("undefined/"+path)
+    const path = elements.slice(0, index + 1).join('/');
+    if (index === 0) {
+      if (type === 'checks') {
+        openDataQualityChecksFolder('undefined/' + path);
+      } else if (type === 'rules') {
+        openRuleFolder('undefined/' + path);
+      } else {
+        openSensorFolder('undefined/' + path);
       }
-    }else{
-      if(type==="checks"){
-        openDataQualityChecksFolder(path)
-      }else if(type==="rules"){
-        openRuleFolder(path)
-      }else{
-        openSensorFolder(path)
+    } else {
+      if (type === 'checks') {
+        openDataQualityChecksFolder(path);
+      } else if (type === 'rules') {
+        openRuleFolder(path);
+      } else {
+        openSensorFolder(path);
       }
     }
     toggleFolderRecursively(elements, index + 1, type);
@@ -161,36 +190,37 @@ export const DefinitionTree = () => {
         { category: 'Rules', isOpen: false },
         { category: 'Data quality checks', isOpen: false },
         { category: 'Default checks configuration', isOpen: false }
-      ]
-      for(let i =0; i<tabs.length; i++){
-        if(tabs[i].url.includes("default_checks")){
-          configuration[3].isOpen = true
+      ];
+      for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].url.includes('default_checks')) {
+          configuration[3].isOpen = true;
+        } else if (tabs[i].url.includes('sensors')) {
+          configuration[0].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_sensor_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
+          }
+        } else if (tabs[i].url.includes('checks')) {
+          configuration[2].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.fullCheckName as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+          }
+        } else if (tabs[i].url.includes('rules')) {
+          configuration[1].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_rule_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
+          }
         }
-       else if(tabs[i].url.includes("sensors")){
-          configuration[0].isOpen = true
-          const arrayOfElemsToToggle = (tabs[i].state.full_sensor_name as string)?.split("/");
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle,0, "sensors");
-          }
-        }  
-        else if(tabs[i].url.includes("checks")){
-          configuration[2].isOpen = true
-          const arrayOfElemsToToggle = (tabs[i].state.fullCheckName as string)?.split("/");
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle,0, "checks");
-          }
-        }
-        else if(tabs[i].url.includes("rules")){
-          configuration[1].isOpen = true
-          const arrayOfElemsToToggle = (tabs[i].state.full_rule_name as string)?.split("/");
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle,0, "rules");
-          }
       }
-    }
-      dispatch(
-        toggleFirstLevelFolder(configuration)
-      );
+      dispatch(toggleFirstLevelFolder(configuration));
     }
   }, []);
 
@@ -209,10 +239,20 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleSensorFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
+                  onClick={() =>
+                    toggleSensorFolder(
+                      previousFolder !== 'undefined'
+                        ? previousFolder + '/' + key
+                        : key
+                    )
+                  }
                 >
                   <SvgIcon
-                    name={sensorState[previousFolder+"/"+key] === true  ? 'folder' : 'closed-folder'}
+                    name={
+                      sensorState[previousFolder + '/' + key] === true
+                        ? 'folder'
+                        : 'closed-folder'
+                    }
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -221,13 +261,14 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {sensorState[previousFolder+"/"+key] === true && (
+                {sensorState[previousFolder + '/' + key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
-                      renderSensorFolderTree(folder?.folders[key], [
-                        ...(path || []),
-                        key
-                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
+                      renderSensorFolderTree(
+                        folder?.folders[key],
+                        [...(path || []), key],
+                        previousFolder ? previousFolder + '/' + key : key
+                      )}
                   </div>
                 )}
               </div>
@@ -241,8 +282,10 @@ export const DefinitionTree = () => {
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                 sensor.custom ? 'font-bold' : '',
                 selected == sensor.sensor_name ? 'bg-gray-300' : '',
-                activeTab?.split("/").at(activeTab?.split("/").length -1 ) === sensor.sensor_name ? 
-                "bg-gray-300" : ""
+                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                  sensor.sensor_name
+                  ? 'bg-gray-300'
+                  : ''
               )}
               onClick={() => {
                 openSensorFirstLevelTab(sensor),
@@ -256,7 +299,11 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {sensor.sensor_name}
               </div>
-              <SensorContextMenu singleSensor={true} sensor={sensor}/>
+              <SensorContextMenu
+                singleSensor={true}
+                sensor={sensor}
+                indicateChanges={onChangeSensorIndicator}
+              />
             </div>
           ))}
         </div>
@@ -279,10 +326,20 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleRuleFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
+                  onClick={() =>
+                    toggleRuleFolder(
+                      previousFolder !== 'undefined'
+                        ? previousFolder + '/' + key
+                        : key
+                    )
+                  }
                 >
                   <SvgIcon
-                    name={ruleState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'}
+                    name={
+                      ruleState[previousFolder + '/' + key] === true
+                        ? 'folder'
+                        : 'closed-folder'
+                    }
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -291,13 +348,14 @@ export const DefinitionTree = () => {
                     path={[...(path || []), key]}
                   />
                 </div>
-                {ruleState[previousFolder+"/"+key] === true && (
+                {ruleState[previousFolder + '/' + key] === true && (
                   <div className="ml-2">
                     {folder?.folders &&
-                      renderRuleFolderTree(folder?.folders[key], [
-                        ...(path || []),
-                        key
-                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
+                      renderRuleFolderTree(
+                        folder?.folders[key],
+                        [...(path || []), key],
+                        previousFolder ? previousFolder + '/' + key : key
+                      )}
                   </div>
                 )}
               </div>
@@ -311,8 +369,10 @@ export const DefinitionTree = () => {
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
                 rule.custom ? 'font-bold ' : '',
                 selected == rule.rule_name ? 'bg-gray-300' : '',
-                activeTab?.split("/").at(activeTab?.split("/").length -1 ) === rule.rule_name ? 
-                "bg-gray-300" : ""
+                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                  rule.rule_name
+                  ? 'bg-gray-300'
+                  : ''
               )}
               onClick={() => {
                 openRuleFirstLevelTab(rule),
@@ -326,7 +386,11 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {rule.rule_name}
               </div>
-              <RuleContextMenu singleRule={true} rule={rule}/>
+              <RuleContextMenu
+                singleRule={true}
+                rule={rule}
+                indicateChanges={onChangeRuleIndicator}
+              />
             </div>
           ))}
         </div>
@@ -349,11 +413,20 @@ export const DefinitionTree = () => {
               <div key={index}>
                 <div
                   className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-                  onClick={() => toggleDataQualityChecksFolder(previousFolder!=="undefined" ? previousFolder+"/"+key : key)}
+                  onClick={() =>
+                    toggleDataQualityChecksFolder(
+                      previousFolder !== 'undefined'
+                        ? previousFolder + '/' + key
+                        : key
+                    )
+                  }
                 >
                   <SvgIcon
                     name={
-                      dataQualityChecksState[previousFolder+"/"+key] === true ? 'folder' : 'closed-folder'
+                      dataQualityChecksState[previousFolder + '/' + key] ===
+                      true
+                        ? 'folder'
+                        : 'closed-folder'
                     }
                     className="w-4 h-4 min-w-4"
                   />
@@ -365,13 +438,15 @@ export const DefinitionTree = () => {
                     />
                   )}
                 </div>
-                {dataQualityChecksState[previousFolder+"/"+key] === true && (
+                {dataQualityChecksState[previousFolder + '/' + key] ===
+                  true && (
                   <div className="ml-2">
                     {folder?.folders &&
-                      renderChecksFolderTree(folder?.folders[key], [
-                        ...(path || []),
-                        key
-                      ],previousFolder ?  (previousFolder + "/" + key) : key)}
+                      renderChecksFolderTree(
+                        folder?.folders[key],
+                        [...(path || []), key],
+                        previousFolder ? previousFolder + '/' + key : key
+                      )}
                   </div>
                 )}
               </div>
@@ -386,8 +461,11 @@ export const DefinitionTree = () => {
                     'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                     check.custom ? 'font-bold' : '',
                     selected == check.check_name ? 'bg-gray-300' : '',
-                    activeTab?.split("/").at(activeTab?.split("/").length -1 ) === check.check_name ? 
-                    "bg-gray-300" : ""
+                    activeTab
+                      ?.split('/')
+                      .at(activeTab?.split('/').length - 1) === check.check_name
+                      ? 'bg-gray-300'
+                      : ''
                   )}
                   onClick={() => {
                     openCheckFirstLevelTab(check);
@@ -400,7 +478,11 @@ export const DefinitionTree = () => {
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
                   </div>
-                  <DataQualityContextMenu singleCheck={true} check={check} />
+                  <DataQualityContextMenu
+                    singleCheck={true}
+                    check={check}
+                    indicateChanges={onChangeCheckIndicator}
+                  />
                 </div>
               </div>
             ))}
@@ -453,7 +535,12 @@ export const DefinitionTree = () => {
                     <div
                       className={clsx(
                         'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
-                        activeTab?.split("/").at(activeTab?.split("/").length -1 )?.replace("_", " ") === x ? "bg-gray-300" : ""
+                        activeTab
+                          ?.split('/')
+                          .at(activeTab?.split('/').length - 1)
+                          ?.replace('_', ' ') === x
+                          ? 'bg-gray-300'
+                          : ''
                         // check.custom ? 'font-bold' : '',
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
