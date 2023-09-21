@@ -89,23 +89,18 @@ const TableActionGroup = ({
       }
   };
 
-  const filteredJobs = Object.values(job_dictionary_state).filter(
+  const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
         ?.statisticsCollectorSearchFilters?.schemaTableName ===
-        schema + '.' + table &&
+        schema + '.' + table && 
+         x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.connectionName === 
+        connection &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  ).find(
-    (x) =>
-      x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
-      schema + '.' + table
-      && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
-      connection
-  )
+  ).length !==0 
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
@@ -153,7 +148,7 @@ const TableActionGroup = ({
         <Button
           className="flex items-center gap-x-2 justify-center "
           label={
-            filteredJobs
+            filteredCollectStatisticsJobs
               ? 'Collecting...'
               : 
               selectedColumns?.length!== 0 ? 
@@ -161,12 +156,12 @@ const TableActionGroup = ({
               'Collect Statistics'
           }
           color={
-            filteredJobs
+            filteredCollectStatisticsJobs
               ? 'secondary'
               : 'primary'
           }
           leftIcon={
-            filteredJobs? (
+            filteredCollectStatisticsJobs? (
               <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
             ) : (
               ''
@@ -174,7 +169,7 @@ const TableActionGroup = ({
           }
           onClick={collectStatistics}
           loading={loadingJob}
-          disabled={userProfile.can_collect_statistics !== true}
+          disabled={userProfile.can_collect_statistics !== true || filteredCollectStatisticsJobs}
         />
       )}
       {addSaveButton && (
