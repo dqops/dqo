@@ -20,6 +20,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -77,21 +78,21 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         RedshiftParametersSpec redshiftSpec = connectionSpec.getRedshift();
 
-        String host = this.getSecretValueProvider().expandValue(redshiftSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(redshiftSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:redshift://");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(redshiftSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(redshiftSpec.getPort(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
@@ -103,7 +104,7 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(redshiftSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(redshiftSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
         }
@@ -116,13 +117,13 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(redshiftSpec.getProperties());
         }
 
-        String userName = this.getSecretValueProvider().expandValue(redshiftSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(redshiftSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(redshiftSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(redshiftSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(redshiftSpec.getOptions());
+        String options =  this.getSecretValueProvider().expandValue(redshiftSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
             dataSourceProperties.put("options", options);
         }

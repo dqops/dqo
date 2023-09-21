@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
@@ -137,7 +138,8 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
 
                 jobCancellationToken.throwIfCancelled();
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(executionContext.getUserHomeContext().getUserHome());
+                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
                     jobCancellationToken.throwIfCancelled();
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken,
                             sensorRunParameters.getRowCountLimit(),

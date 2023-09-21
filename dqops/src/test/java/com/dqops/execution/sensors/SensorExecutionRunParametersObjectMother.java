@@ -73,7 +73,7 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
-                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, null, checkType, null,
+                userHome, connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, null, checkType, null,
                 null, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
@@ -93,7 +93,7 @@ public class SensorExecutionRunParametersObjectMother {
          SensorExecutionRunParametersFactory factory = getFactory();
          TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
-         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, null,
                 checkSpec, null, CheckType.profiling, null, null,
                  timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
@@ -117,7 +117,7 @@ public class SensorExecutionRunParametersObjectMother {
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForMonitoring(timeScale);
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, null,
                 checkSpec, null, CheckType.monitoring, null, null,
                 timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
@@ -151,7 +151,7 @@ public class SensorExecutionRunParametersObjectMother {
             userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
         }
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, null,
                 checkSpec, null, CheckType.partitioned, null, null,
                 timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
@@ -182,7 +182,7 @@ public class SensorExecutionRunParametersObjectMother {
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(userHome, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, checkType, null, null,
                 timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
@@ -206,7 +206,7 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, CheckType.profiling, null, null,
                 timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
@@ -232,7 +232,7 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForMonitoring(checkTimeScale);
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, CheckType.monitoring, null, null,
                 timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
@@ -269,7 +269,7 @@ public class SensorExecutionRunParametersObjectMother {
             userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
         }
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, CheckType.partitioned, null, null,
                 timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;

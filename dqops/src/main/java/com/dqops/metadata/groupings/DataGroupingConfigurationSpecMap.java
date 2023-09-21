@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.groupings;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -58,12 +59,14 @@ public class DataGroupingConfigurationSpecMap extends AbstractDirtyTrackingSpecM
 
     /**
      * Creates a copy of the data group mappings map. Additionally, parameters are expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup.
      * @return Deep cloned map with parameters expanded inside all data group levels.
      */
-    public DataGroupingConfigurationSpecMap expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataGroupingConfigurationSpecMap expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         DataGroupingConfigurationSpecMap trimmed = new DataGroupingConfigurationSpecMap();
         for(Map.Entry<String, DataGroupingConfigurationSpec> keyValuePair : this.entrySet()) {
-            trimmed.put(keyValuePair.getKey(), keyValuePair.getValue().expandAndTrim(secretValueProvider));
+            trimmed.put(keyValuePair.getKey(), keyValuePair.getValue().expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         return trimmed;
     }

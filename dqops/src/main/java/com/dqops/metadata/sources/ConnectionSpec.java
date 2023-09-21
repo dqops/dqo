@@ -24,6 +24,7 @@ import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -445,31 +446,32 @@ public class ConnectionSpec extends AbstractSpec {
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed and expanded version of this object.
      */
-    public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
             if (cloned.defaultGroupingConfiguration != null) {
-                cloned.defaultGroupingConfiguration = cloned.defaultGroupingConfiguration.expandAndTrim(secretValueProvider);
+                cloned.defaultGroupingConfiguration = cloned.defaultGroupingConfiguration.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.bigquery != null) {
-                cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider);
+                cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.snowflake != null) {
-                cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
+                cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.postgresql != null) {
-                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.redshift != null) {
-                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
+                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.sqlserver != null) {
-                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
+                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
-                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             cloned.comments = null;
             cloned.schedules = null;

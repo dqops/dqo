@@ -25,6 +25,7 @@ import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
@@ -125,7 +126,8 @@ public class SampleTableMetadataObjectMother {
     public static SampleTableMetadata createSampleTableMetadataForCsvFile(String csvFileName, ProviderType providerType) {
         String connectionName = getConnectionNameForProvider(providerType);
         ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
-        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance());
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         String targetSchema = getSchemaForProvider(providerType);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());

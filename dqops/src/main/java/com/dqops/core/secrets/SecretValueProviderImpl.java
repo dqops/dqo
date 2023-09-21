@@ -16,6 +16,7 @@
 package com.dqops.core.secrets;
 
 import com.dqops.core.secrets.gcp.GcpSecretManagerPropertySource;
+import com.dqops.metadata.userhome.UserHome;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.parquet.Strings;
@@ -70,10 +71,11 @@ public class SecretValueProviderImpl implements SecretValueProvider {
     /**
      * Expands a value that references possible secret values. For example ${ENVIRONMENT_VARIABLE_NAME}
      * @param value Value to expand.
+     * @param lookupContext Secret lookup context with the user home used to look up credentials.
      * @return Value (when no expansions possible) or an expanded value.
      */
     @Override
-    public String expandValue(String value) {
+    public String expandValue(String value, SecretValueLookupContext lookupContext) {
         if (Strings.isNullOrEmpty(value)) {
             return value;
         }
@@ -82,7 +84,7 @@ public class SecretValueProviderImpl implements SecretValueProvider {
             return value;
         }
 
-        try {
+        try (CurrentSecretValueLookupContext currentSecretValueLookupContext = CurrentSecretValueLookupContext.storeLookupContext(lookupContext)) {
             String resolvedAndCachedValue = this.secretValuesCache.get(value, () -> {
                 try {
                     String expandedValue = this.beanFactory.resolveEmbeddedValue(value);
@@ -103,10 +105,12 @@ public class SecretValueProviderImpl implements SecretValueProvider {
      * Expands properties in a given hash map. Returns a cloned instance with all property values expanded.
      *
      * @param properties Properties to expand.
+     * @param lookupContext Lookup context with the user home used to look up credentials.
      * @return Expanded properties.
      */
     @Override
-    public Map<String, String> expandProperties(Map<String, String> properties) {
+    public Map<String, String> expandProperties(Map<String, String> properties,
+                                                SecretValueLookupContext lookupContext) {
         if (properties == null) {
             return null;
         }
@@ -117,7 +121,7 @@ public class SecretValueProviderImpl implements SecretValueProvider {
 
         LinkedHashMap<String, String> expanded = new LinkedHashMap<>();
         for (Map.Entry<String, String> keyValuePair : properties.entrySet()) {
-            expanded.put(keyValuePair.getKey(), expandValue(keyValuePair.getValue()));
+            expanded.put(keyValuePair.getKey(), expandValue(keyValuePair.getValue(), lookupContext));
         }
 
         return Collections.unmodifiableMap(expanded);

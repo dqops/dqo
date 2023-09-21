@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorPrepareResult;
@@ -83,7 +84,8 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
                         firstSensorPrepareResult.getSensorDefinition(), connectionSpec, null));
 
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(executionContext.getUserHomeContext().getUserHome());
+                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
                     jobCancellationToken.throwIfCancelled();
                     String schemaName = physicalTableName.getSchemaName();
                     String tableName = physicalTableName.getTableName();

@@ -25,6 +25,7 @@ import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -798,9 +799,10 @@ public class TableSpec extends AbstractSpec {
      * Creates an expanded and trimmed (no checks for columns, no comments) deep copy of the table.
      * Configurable properties will be expanded if they contain environment variables or secrets.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Cloned, trimmed and expanded table specification.
      */
-    public TableSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public TableSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.profilingChecks = null;
@@ -812,18 +814,18 @@ public class TableSpec extends AbstractSpec {
             cloned.statistics = null;
             cloned.tableComparisons = null;
             if (cloned.timestampColumns != null) {
-                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
+                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incrementalTimeWindow != null) {
                 cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
             if (cloned.groupings != null) {
-                cloned.groupings = cloned.groupings.expandAndTrim(secretValueProvider);
+                cloned.groupings = cloned.groupings.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }
-            cloned.columns = this.columns.expandAndTrim(secretValueProvider);
+            cloned.columns = this.columns.expandAndTrim(secretValueProvider, secretValueLookupContext);
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ControlType;
@@ -156,13 +157,14 @@ public class TimestampColumnsSpec extends AbstractSpec {
     /**
      * Creates a clone of the object, expanding variables in parameters.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded instance of the object.
      */
-    public TimestampColumnsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public TimestampColumnsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         TimestampColumnsSpec cloned = this.deepClone();
-        cloned.eventTimestampColumn = secretValueProvider.expandValue(cloned.eventTimestampColumn);
-        cloned.ingestionTimestampColumn = secretValueProvider.expandValue(cloned.ingestionTimestampColumn);
-        cloned.partitionByColumn = secretValueProvider.expandValue(cloned.partitionByColumn);
+        cloned.eventTimestampColumn = secretValueProvider.expandValue(cloned.eventTimestampColumn, lookupContext);
+        cloned.ingestionTimestampColumn = secretValueProvider.expandValue(cloned.ingestionTimestampColumn, lookupContext);
+        cloned.partitionByColumn = secretValueProvider.expandValue(cloned.partitionByColumn, lookupContext);
         return cloned;
     }
 

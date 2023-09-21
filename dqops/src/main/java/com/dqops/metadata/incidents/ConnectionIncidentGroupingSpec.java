@@ -16,6 +16,7 @@
 
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -225,12 +226,13 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Cloned and expanded copy of the object.
      */
-    public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         ConnectionIncidentGroupingSpec cloned = this.deepClone();
         if (cloned.webhooks != null) {
-            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider);
+            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         return cloned;
     }

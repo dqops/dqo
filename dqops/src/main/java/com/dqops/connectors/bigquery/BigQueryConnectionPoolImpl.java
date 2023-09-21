@@ -18,6 +18,7 @@ package com.dqops.connectors.bigquery;
 import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.jdbc.JdbConnectionPoolCreateException;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -56,9 +57,10 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
     /**
      * Returns or creates a BigQuery service for the given connection specification.
      * @param connectionSpec Connection specification (should be not mutable).
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return BigQuery service.
      */
-    public BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec) {
+    public BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext) {
         assert connectionSpec != null;
         assert connectionSpec.getProviderType() == ProviderType.bigquery;
         assert connectionSpec.getBigquery() != null;
@@ -66,7 +68,8 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
         try {
             final BigQueryParametersSpec clonedBigQueryConnectionSpec = connectionSpec.getBigquery().deepClone();
             final String connectionName = connectionSpec.getConnectionName();
-            return this.bigQueryServiceCache.get(clonedBigQueryConnectionSpec, () -> createBigQueryService(clonedBigQueryConnectionSpec, connectionName));
+            return this.bigQueryServiceCache.get(clonedBigQueryConnectionSpec, () -> createBigQueryService(
+                    clonedBigQueryConnectionSpec, connectionName, secretValueLookupContext));
         } catch (ExecutionException e) {
             throw new JdbConnectionPoolCreateException("Cannot create a BigQuery connection for " + connectionSpec.getConnectionName(), e);
         }
@@ -76,9 +79,12 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
      * Creates a big query service.
      * @param bigQueryParametersSpec Connection specification for a BigQuery connection.
      * @param connectionName Connection name, used for error reporting.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection specification.
      */
-    public BigQueryInternalConnection createBigQueryService(BigQueryParametersSpec bigQueryParametersSpec, String connectionName) {
+    public BigQueryInternalConnection createBigQueryService(BigQueryParametersSpec bigQueryParametersSpec,
+                                                            String connectionName,
+                                                            SecretValueLookupContext secretValueLookupContext) {
         try {
             GoogleCredentials googleCredentials = null;
             switch (bigQueryParametersSpec.getAuthenticationMode()) {

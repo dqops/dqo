@@ -855,7 +855,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             }
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                    connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
+                    userHome, connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
                     tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
             sensorRunParameters.appendAdditionalFilter(extraComparisonFilter);
             return sensorRunParameters;
@@ -960,7 +960,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     this.sensorExecutionRunParametersFactory.makeEffectiveIncrementalFilter(comparedTableSpec, timeSeriesConfigurationSpec, userTimeWindowFilters);
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                    referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
+                    userHome, referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
                     tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
             sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
             sensorRunParameters.setReferenceColumnName(referencedColumnName);
