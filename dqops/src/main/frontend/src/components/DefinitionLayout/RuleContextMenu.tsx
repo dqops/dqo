@@ -19,13 +19,15 @@ interface RuleContextMenuProps {
   path?: string[];
   singleRule?: boolean;
   rule?: RuleBasicModel;
+  indicateChanges?: () => void;
 }
 
 const RuleContextMenu = ({
   folder,
   path,
   singleRule,
-  rule
+  rule,
+  indicateChanges
 }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -82,7 +84,9 @@ const RuleContextMenu = ({
   };
 
   const deleteRuleFromTree = async () => {
-    await RulesApi.deleteRule(rule?.full_rule_name ?? '');
+    await RulesApi.deleteRule(rule?.full_rule_name ?? '').then(
+      () => indicateChanges && indicateChanges()
+    );
   };
 
   return (

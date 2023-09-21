@@ -30,13 +30,15 @@ interface RuleContextMenuProps {
   path?: string[];
   singleCheck?: boolean;
   check?: CheckSpecBasicModel;
+  indicateChanges?: () => void;
 }
 
 const DataQualityContextMenu = ({
   folder,
   path,
   singleCheck,
-  check
+  check,
+  indicateChanges
 }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -97,7 +99,9 @@ const DataQualityContextMenu = ({
   };
 
   const deleteChecksFromTree = async () => {
-    await dispatch(deleteCheck(check?.full_check_name ?? ''));
+    await dispatch(deleteCheck(check?.full_check_name ?? '')).then(
+      () => indicateChanges && indicateChanges()
+    );
   };
 
   return (
@@ -118,12 +122,14 @@ const DataQualityContextMenu = ({
             >
               Copy check
             </div>
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setDeleteDialogOpen(true)}
-            >
-              Delete check
-            </div>
+            {check?.built_in === false ? (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                Delete check
+              </div>
+            ) : null}
             <ConfirmDialog
               open={deleteDialogOpen}
               onClose={() => setDeleteDialogOpen(false)}

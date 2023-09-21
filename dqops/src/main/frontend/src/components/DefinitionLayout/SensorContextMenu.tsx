@@ -19,13 +19,15 @@ interface SensorContextMenuProps {
   path?: string[];
   singleSensor?: boolean;
   sensor?: SensorBasicModel;
+  indicateChanges?: () => void;
 }
 
 const SensorContextMenu = ({
   folder,
   path,
   singleSensor,
-  sensor
+  sensor,
+  indicateChanges
 }: SensorContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
@@ -83,7 +85,9 @@ const SensorContextMenu = ({
   };
 
   const deleteSensorFromTree = async () => {
-    await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '');
+    await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '').then(
+      () => indicateChanges && indicateChanges()
+    );
   };
 
   return (

@@ -51,12 +51,27 @@ export const DefinitionTree = () => {
     activeTab
   } = useSelector((state: IRootState) => state.definition);
   const [selected, setSelected] = useState('');
+  const [checkIndicator, setCheckIndicator] = useState(false);
+  const [sensorIndicator, setSensorIndicator] = useState(false);
+  const [ruleIndicator, setRuleIndicator] = useState(false);
+
+  const onChangeCheckIndicator = () => setCheckIndicator(!checkIndicator);
+
+  const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
+
+  const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
+  }, [sensorIndicator]);
+
+  useEffect(() => {
     dispatch(getRuleFolderTree());
+  }, [ruleIndicator]);
+
+  useEffect(() => {
     dispatch(getdataQualityChecksFolderTree());
-  }, []);
+  }, [checkIndicator]);
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -284,7 +299,11 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {sensor.sensor_name}
               </div>
-              <SensorContextMenu singleSensor={true} sensor={sensor} />
+              <SensorContextMenu
+                singleSensor={true}
+                sensor={sensor}
+                indicateChanges={onChangeSensorIndicator}
+              />
             </div>
           ))}
         </div>
@@ -367,7 +386,11 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {rule.rule_name}
               </div>
-              <RuleContextMenu singleRule={true} rule={rule} />
+              <RuleContextMenu
+                singleRule={true}
+                rule={rule}
+                indicateChanges={onChangeRuleIndicator}
+              />
             </div>
           ))}
         </div>
@@ -455,7 +478,11 @@ export const DefinitionTree = () => {
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {check.check_name}
                   </div>
-                  <DataQualityContextMenu singleCheck={true} check={check} />
+                  <DataQualityContextMenu
+                    singleCheck={true}
+                    check={check}
+                    indicateChanges={onChangeCheckIndicator}
+                  />
                 </div>
               </div>
             ))}
