@@ -57,6 +57,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -388,15 +389,25 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
             }
 
-            DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
-                    .dqoBuilder(targetParquetFile)
-                    .withOverwrite(true)
-                    .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
-                    .build();
-
             Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
-            new DqoTablesawParquetWriter(hadoopConfiguration).write(dataToSave, writeOptions);
-            this.localFileSystemCache.removeFile(targetParquetFilePath);
+            byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);
+
+            Path parentDirectory = targetParquetFilePath.getParent();
+            if (!Files.exists(parentDirectory)) {
+                Files.createDirectories(parentDirectory);
+            }
+
+            try {
+                Files.write(targetParquetFilePath, parquetFileContent);
+            } catch (Exception ex) {
+                if (targetParquetFile.exists()) {
+                    targetParquetFile.delete();
+                }
+                throw ex;
+            }
+            finally {
+                this.localFileSystemCache.removeFile(targetParquetFilePath);
+            }
 
             return true;
         }

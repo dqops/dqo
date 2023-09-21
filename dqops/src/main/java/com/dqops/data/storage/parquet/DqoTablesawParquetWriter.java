@@ -57,39 +57,78 @@ public class DqoTablesawParquetWriter extends TablesawParquetWriter {
      */
     public void write(final Table table, final DqoTablesawParquetWriteOptions options) {
         try {
-            DqoInMemoryFileSystem inMemoryFileSystem =
-                    new DqoInMemoryFileSystem(new URI("ramfs://inmemory/"), this.configuration);
+            try (DqoInMemoryFileSystem inMemoryFileSystem =
+                    new DqoInMemoryFileSystem(new URI("ramfs://inmemory/"), this.configuration)) {
 
-            String inMemoryFileName = "ramfs://inmemory/output.parquet" + (options.getCompressionCodec() == TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED ? "" :
-                    "." + options.getCompressionCodec().name().toLowerCase(Locale.ROOT));
+                String inMemoryFileName = "ramfs://inmemory/output.parquet" + (options.getCompressionCodec() == TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED ? "" :
+                        "." + options.getCompressionCodec().name().toLowerCase(Locale.ROOT));
 
-            DqoInMemoryPath inMemoryParquetPath = new DqoInMemoryPath(inMemoryFileName, inMemoryFileSystem);
-            Builder builder = new Builder(inMemoryParquetPath, table);
+                DqoInMemoryPath inMemoryParquetPath = new DqoInMemoryPath(inMemoryFileName, inMemoryFileSystem);
+                Builder builder = new Builder(inMemoryParquetPath, table);
 
-            try (final ParquetWriter<Row> writer = builder
-                    .withConf(this.configuration)
-                    .withCompressionCodec(CompressionCodecName.fromConf(options.getCompressionCodec().name()))
-                    .withWriteMode(options.isOverwrite() ? ParquetFileWriter.Mode.OVERWRITE : ParquetFileWriter.Mode.CREATE)
-                    .withPageWriteChecksumEnabled(false)
-                    .build()) {
+                try (final ParquetWriter<Row> writer = builder
+                        .withConf(this.configuration)
+                        .withCompressionCodec(CompressionCodecName.fromConf(options.getCompressionCodec().name()))
+                        .withWriteMode(options.isOverwrite() ? ParquetFileWriter.Mode.OVERWRITE : ParquetFileWriter.Mode.CREATE)
+                        .withPageWriteChecksumEnabled(false)
+                        .build()) {
 
-                for (final Row row : table) {
-                    writer.write(row);
+                    for (final Row row : table) {
+                        writer.write(row);
+                    }
                 }
-            }
 
-            File nioCurrentFile = java.nio.file.Path.of(options.getOutputFile()).toFile();
-            if (nioCurrentFile.exists()) {
-                nioCurrentFile.delete();
-            }
-            try {
-                inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), true);
-            }
-            catch (Exception ex) {
+                File nioCurrentFile = java.nio.file.Path.of(options.getOutputFile()).toFile();
                 if (nioCurrentFile.exists()) {
                     nioCurrentFile.delete();
                 }
-                throw ex;
+                try {
+                    inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), true);
+                } catch (Exception ex) {
+                    if (nioCurrentFile.exists()) {
+                        nioCurrentFile.delete();
+                    }
+                    throw ex;
+                }
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeIOException(e);
+        }
+        catch (Exception e) {
+            throw new DqoRuntimeException(e);
+        }
+    }
+
+    /**
+     * Writes a tablesaw table object to an in-memory object.
+     * @param table Table to write.
+     */
+    public byte[] writeToByteArray(final Table table) {
+        try {
+            try (DqoInMemoryFileSystem inMemoryFileSystem =
+                    new DqoInMemoryFileSystem(new URI("ramfs://inmemory/"), this.configuration)) {
+                String inMemoryFileName = "ramfs://inmemory/output.parquet";
+
+                DqoInMemoryPath inMemoryParquetPath = new DqoInMemoryPath(inMemoryFileName, inMemoryFileSystem);
+                Builder builder = new Builder(inMemoryParquetPath, table);
+
+                try (final ParquetWriter<Row> writer = builder
+                        .withConf(this.configuration)
+                        .withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
+                        .withWriteMode(ParquetFileWriter.Mode.CREATE)
+                        .withPageWriteChecksumEnabled(false)
+                        .build()) {
+
+                    for (final Row row : table) {
+                        writer.write(row);
+                    }
+                }
+
+                byte[] inMemoryFileContent = inMemoryFileSystem.getInMemoryFileContent(inMemoryParquetPath);
+                inMemoryFileSystem.close();
+
+                return inMemoryFileContent;
             }
         }
         catch (IOException e) {
