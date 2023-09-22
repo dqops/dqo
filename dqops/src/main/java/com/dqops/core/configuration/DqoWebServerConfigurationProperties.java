@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoWebServerConfigurationProperties implements Cloneable {
     private Integer staticFilesCacheControlMaxAge;
+    private Integer dynamicFilesCacheControlMaxAge;
 
     /**
      * Returns the maximum age for public caching using a Cache-Control header for static files. The value is in seconds.
@@ -42,6 +43,22 @@ public class DqoWebServerConfigurationProperties implements Cloneable {
      */
     public void setStaticFilesCacheControlMaxAge(Integer staticFilesCacheControlMaxAge) {
         this.staticFilesCacheControlMaxAge = staticFilesCacheControlMaxAge;
+    }
+
+    /**
+     * Cache control for dynamic files that could change. These are the root url of the page and bookmarked direct links to screens. Dynamic files are always cached with a must-revalidate flag.
+     * @return Max age for dynamic files.
+     */
+    public Integer getDynamicFilesCacheControlMaxAge() {
+        return dynamicFilesCacheControlMaxAge;
+    }
+
+    /**
+     * Sets the max cache age for dynamic files.
+     * @param dynamicFilesCacheControlMaxAge Max cache age for dynamic files.
+     */
+    public void setDynamicFilesCacheControlMaxAge(Integer dynamicFilesCacheControlMaxAge) {
+        this.dynamicFilesCacheControlMaxAge = dynamicFilesCacheControlMaxAge;
     }
 
     /**
