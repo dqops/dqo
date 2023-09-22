@@ -51,7 +51,7 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     /**
      * The number of seconds to sleep before starting.
      */
-    public static final int RANDOM_SLEEP_SECONDS = 10 * 60;
+    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 5 * 60;
 
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
@@ -104,12 +104,12 @@ public class SynchronizeMetadataSchedulerJob implements Job {
                 }
 
                 lastExecutedAtHour = executionHour;
-                if (!waitRandomTime(jobExecutionContext, 3600 - RANDOM_SLEEP_SECONDS)) {
+                if (!waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
                     return;
                 }
             }
 
-            if (jobRunCount > 0 && !waitRandomTime(jobExecutionContext, RANDOM_SLEEP_SECONDS)) {
+            if (jobRunCount > 0 && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
                 return;
             }
 
