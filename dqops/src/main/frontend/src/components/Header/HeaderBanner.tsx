@@ -81,7 +81,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
             <div className="flex items-center gap-2">
               <SvgIcon name="info" className="text-white" />
               <h4 className="text-white font-bold">
-                Data source needs configuration
+                New tables have been imported and the automatic monitoring has been scheduled. Complete additional steps…
               </h4>
             </div>
 
