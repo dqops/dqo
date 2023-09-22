@@ -10,9 +10,10 @@ interface FieldTypeInputProps {
   name?: string;
   maskingType?: string;
   onChange?: (value: string) => void;
+  disabled?: boolean
 }
 
-const FieldTypeInput = ({ className, label, value, name, maskingType, onChange}: FieldTypeInputProps) => {
+const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, disabled}: FieldTypeInputProps) => {
   const options = [
     {
       label: 'clear text',
@@ -70,7 +71,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange}:
         <div className="flex-1 flex space-x-1 items-center">
           {type === 'env' && <div>{'${'}</div>}
           <div className="flex-1">
-            <Input name={name} value={text} onChange={handleChange} type={inputType} />
+            <Input name={name} value={text} onChange={handleChange} type={inputType} disabled={disabled}/>
           </div>
           {type === 'env' && <div>{'}'}</div>}
         </div>

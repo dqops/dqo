@@ -74,12 +74,12 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
          onChange={(value) => handleChange({ jobs_create_project: value })}
        />
       <FieldTypeInput
-        className={bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id ?
-           "mb-4" : "mb-4 pointer-events-none"}
+        className="mb-4" 
         label="Billing GCP project ID"
         name="billing_project_id"
         value={bigquery?.billing_project_id}
         onChange={(value) => handleChange({ billing_project_id: value })}
+        disabled={bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id ? false: true}
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
