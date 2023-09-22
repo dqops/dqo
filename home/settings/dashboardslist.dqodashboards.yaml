@@ -444,8 +444,8 @@ spec:
 
     - folder_name: Current status
       dashboards:
-        - dashboard_name: Current table status per check category
-          url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
+        - dashboard_name: Current table partition status per check category
+          url: https://lookerstudio.google.com/reporting/6c58d29c-7de3-4051-8b27-396981f5e8f2
           width: 1400
           height: 1400
           parameters:
@@ -453,8 +453,8 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Current table status per data quality dimension
-          url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
+        - dashboard_name: Current table partition status per data quality dimension
+          url: https://lookerstudio.google.com/reporting/9d9802a4-775b-4e39-8b09-d5b1e9ae6893
           width: 1400
           height: 1400
           parameters:
@@ -462,8 +462,8 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Current column status per check category
-          url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
+        - dashboard_name: Current column partition status per check category
+          url: https://lookerstudio.google.com/reporting/2921e451-adef-4769-a96b-2497daed58db/page/c5B8C
           width: 1400
           height: 1760
           parameters:
@@ -471,8 +471,8 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Current column status per data quality dimension
-          url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
+        - dashboard_name: Current column partition status per data quality dimension
+          url: https://lookerstudio.google.com/reporting/738d9b7e-9240-458c-9bc0-211f8be55798
           width: 1400
           height: 1760
           parameters:
