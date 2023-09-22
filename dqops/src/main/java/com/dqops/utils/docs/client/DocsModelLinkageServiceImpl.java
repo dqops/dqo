@@ -17,13 +17,28 @@
 package com.dqops.utils.docs.client;
 
 import com.dqops.checks.*;
+import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
+import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
+import com.dqops.metadata.fields.ParameterDefinitionSpec;
+import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapperImpl;
+import com.dqops.metadata.sources.TableWrapperImpl;
+import com.dqops.metadata.storage.localfiles.sources.ConnectionYaml;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.CustomRuleParametersSpec;
+import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarChecksContainer;
+import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
+import com.dqops.statistics.AbstractStatisticsCollectorCategorySpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
 
@@ -36,6 +51,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
+    public final TreeSet<String> notMapped = new TreeSet<>();
+
     private final SimilarCheckMatchingService similarCheckMatchingService;
     private SimilarChecksContainer tableSimilarChecks = null;
     private SimilarChecksContainer columnSimilarChecks = null;
@@ -45,6 +62,12 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     private final Map<String, Class<? extends ConnectionProviderSpecificParameters>> connectionProviderParametersClasses;
     private final Map<String, Class<? extends AbstractCheckCategorySpec>> checkCategorySpecsClasses;
     private final Map<String, Class<? extends AbstractCheckSpec>> checkSpecsClasses;
+
+    private final Map<String, Class<?>> tableYamlClasses;
+    private final Map<String, Class<?>> tableProfilingChecksClasses;
+    private final Map<String, Class<?>> connectionYamlClasses;
+
+    private final Map<String, Path> extraLinkageMappings;
 
     public DocsModelLinkageServiceImpl(Path projectDir,
                                        SimilarCheckMatchingService similarCheckMatchingService) {
@@ -89,6 +112,122 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
                 Class::getSimpleName,
                 Function.identity()
         ));
+
+        this.tableYamlClasses = generateTableYamlClasses(projectDir);
+        this.tableProfilingChecksClasses = new HashMap<>() {{
+            put(CustomCheckSpec.class.getSimpleName(), CustomCheckSpec.class);
+            put(CustomRuleParametersSpec.class.getSimpleName(), CustomRuleParametersSpec.class);
+            put(CustomSensorParametersSpec.class.getSimpleName(), CustomSensorParametersSpec.class);
+        }};
+        this.connectionYamlClasses = generateConnectionYamlClasses(projectDir);
+        this.extraLinkageMappings = generateExtraLinkageMappings();
+    }
+
+    protected Map<String, Class<?>> generateTableYamlClasses(Path projectDir) {
+        Map<String, Class<?>> tableYaml = new HashMap<>();
+        tableYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.metadata.sources", projectDir, AbstractSpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+        tableYaml.remove("");
+        tableYaml.remove(ConnectionSpec.class.getSimpleName());
+        tableYaml.remove(TableWrapperImpl.class.getSimpleName());
+        tableYaml.remove(ConnectionWrapperImpl.class.getSimpleName());
+
+        tableYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.metadata.comparisons", projectDir, AbstractSpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+
+        tableYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.statistics", projectDir, AbstractRootStatisticsCollectorsContainerSpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+        tableYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.statistics", projectDir, AbstractStatisticsCollectorCategorySpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+        tableYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.statistics", projectDir, AbstractStatisticsCollectorSpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+        tableYaml.put(TableIncidentGroupingSpec.class.getSimpleName(), TableIncidentGroupingSpec.class);
+
+        return tableYaml;
+    }
+
+    protected Map<String, Class<?>> generateConnectionYamlClasses(Path projectDir) {
+        Map<String, Class<?>> connectionYaml = new HashMap<>();
+        connectionYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                                "com.dqops.metadata.groupings", projectDir, AbstractSpec.class
+                        ).stream()
+                        .collect(Collectors.toMap(
+                                Class::getSimpleName,
+                                Function.identity()
+                        ))
+        );
+
+        connectionYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.metadata.incidents", projectDir, AbstractSpec.class
+                ).stream()
+                        .filter(c -> !c.getSimpleName().toLowerCase().contains("table"))
+                        .collect(Collectors.toMap(
+                                Class::getSimpleName,
+                                Function.identity()
+                        ))
+        );
+
+        connectionYaml.put(ConnectionYaml.class.getSimpleName(), ConnectionYaml.class);
+        connectionYaml.put(ConnectionSpec.class.getSimpleName(), ConnectionSpec.class);
+        connectionYaml.put(MonitoringSchedulesSpec.class.getSimpleName(), MonitoringSchedulesSpec.class);
+
+        connectionYaml.putAll(
+                TargetClassSearchUtility.findClasses(
+                        "com.dqops.connectors", projectDir, BaseProviderParametersSpec.class
+                ).stream().collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity()
+                ))
+        );
+
+        return connectionYaml;
+    }
+
+    protected Map<String, Path> generateExtraLinkageMappings() {
+        Map<String, Path> extraLinkage = new HashMap<>();
+
+        extraLinkage.put(ProviderSensorDefinitionSpec.class.getSimpleName(),
+                Path.of("/docs/reference/yaml/ProviderSensorYaml/#providersensordefinitionspec"));
+        extraLinkage.put(ParameterDefinitionSpec.class.getSimpleName(),
+                Path.of("/docs/reference/yaml/RuleDefinitionYaml/#parameterdefinitionspec"));
+        extraLinkage.put(RuleTimeWindowSettingsSpec.class.getSimpleName(),
+                Path.of("/docs/reference/yaml/RuleDefinitionYaml/#ruletimewindowsettingsspec"));
+        extraLinkage.put(SensorDefinitionSpec.class.getSimpleName(),
+                Path.of("/docs/reference/yaml/SensorDefinitionYaml/#sensordefinitionspec"));
+
+        return extraLinkage;
     }
 
     protected SimilarChecksContainer getTableSimilarChecks() {
@@ -104,8 +243,6 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         }
         return columnSimilarChecks;
     }
-
-    public final Set<String> notMapped = new HashSet<>();
 
     /**
      * Gets docs linkage for a certain class, if this class can be linked to external pages in the documentation.
@@ -185,6 +322,18 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
             //table/accuracy/total-row-count-match-percent/#daily-total-row-count-match-percent
 
             return docsPath.resolve(checkNameFromSpec);
+        }
+        else if (tableYamlClasses.containsKey(modelClassName)) {
+            return docsPath.resolve("reference/yaml/TableYaml").resolve("#" + modelClassName.toLowerCase());
+        }
+        else if (tableProfilingChecksClasses.containsKey(modelClassName)) {
+            return docsPath.resolve("reference/yaml/profiling/table-profiling-checks").resolve("#" + modelClassName.toLowerCase());
+        }
+        else if (connectionYamlClasses.containsKey(modelClassName)) {
+            return docsPath.resolve("reference/yaml/ConnectionYaml").resolve("#" + modelClassName.toLowerCase());
+        }
+        else if (extraLinkageMappings.containsKey(modelClassName)) {
+            return extraLinkageMappings.get(modelClassName);
         }
 
         notMapped.add(modelClassName);

@@ -43,7 +43,7 @@ import java.util.Objects;
 public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_min_row_count", o -> o.monthlyPartitionMinRowCount);
+            put("monthly_partition_row_count", o -> o.monthlyPartitionRowCount);
             put("monthly_partition_row_count_change", o -> o.monthlyPartitionRowCountChange);
         }
     };
@@ -53,7 +53,7 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
             "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableRowCountCheckSpec monthlyPartitionMinRowCount;
+    private TableRowCountCheckSpec monthlyPartitionRowCount;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -64,18 +64,18 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns the minimum row count check configuration.
      * @return Minimum row count check specification.
      */
-    public TableRowCountCheckSpec getMonthlyPartitionMinRowCount() {
-        return monthlyPartitionMinRowCount;
+    public TableRowCountCheckSpec getMonthlyPartitionRowCount() {
+        return monthlyPartitionRowCount;
     }
 
     /**
      * Sets the minimum row count.
-     * @param monthlyPartitionMinRowCount New row count check.
+     * @param monthlyPartitionRowCount New row count check.
      */
-    public void setMonthlyPartitionMinRowCount(TableRowCountCheckSpec monthlyPartitionMinRowCount) {
-		this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinRowCount, monthlyPartitionMinRowCount));
-        this.monthlyPartitionMinRowCount = monthlyPartitionMinRowCount;
-		this.propagateHierarchyIdToField(monthlyPartitionMinRowCount, "monthly_partition_min_row_count");
+    public void setMonthlyPartitionRowCount(TableRowCountCheckSpec monthlyPartitionRowCount) {
+		this.setDirtyIf(!Objects.equals(this.monthlyPartitionRowCount, monthlyPartitionRowCount));
+        this.monthlyPartitionRowCount = monthlyPartitionRowCount;
+		this.propagateHierarchyIdToField(monthlyPartitionRowCount, "monthly_partition_row_count");
     }
 
     /**
