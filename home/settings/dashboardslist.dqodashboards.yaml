@@ -637,9 +637,9 @@ spec:
     - folder_name: Data completeness
       dashboards:
         - dashboard_name: Null checks - summary
-          url: https://lookerstudio.google.com/embed/reporting/9b4ee705-8942-4673-b305-fb95ca4b4837/page/c5B8C
+          url: https://lookerstudio.google.com/reporting/ba36e1a3-11a4-442b-841c-9a5d54b6f211/page/c5B8C
           width: 1400
-          height: 1300
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Maximum accepted nulls failed
