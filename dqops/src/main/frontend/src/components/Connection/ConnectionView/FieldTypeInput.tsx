@@ -63,7 +63,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   const inputType = maskingType === 'password' && type !== 'env'
   ? 'password'
   : 'text';
-  
+
   return (
     <div className={clsx('', className)}>
       <div>{label}</div>
@@ -75,7 +75,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
           </div>
           {type === 'env' && <div>{'}'}</div>}
         </div>
-        <Select options={options} value={type} onChange={onChangeType} />
+        <Select options={options} value={type} onChange={onChangeType} disabled={disabled}/>
       </div>
     </div>
   );
