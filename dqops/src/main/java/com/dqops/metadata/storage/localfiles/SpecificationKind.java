@@ -52,5 +52,9 @@ public enum SpecificationKind {
     MONITORING_SCHEDULES,
 
     @JsonProperty("default_data_observability_checks")
-    OBSERVABILITY_CHECK_SETTINGS
+    OBSERVABILITY_CHECK_SETTINGS,
+
+    @JsonProperty("default_incident_webhooks_notifications")
+    NOTIFICATION_WEBHOOKS
+
 }

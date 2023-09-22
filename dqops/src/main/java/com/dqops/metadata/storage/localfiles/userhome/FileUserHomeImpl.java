@@ -27,6 +27,7 @@ import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionL
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
+import com.dqops.metadata.storage.localfiles.webhooks.FileDefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -63,8 +64,10 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileDashboardFolderListSpecWrapperImpl dashboards,
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
                             FileObservabilityCheckWrapperImpl observabilityCheck,
+                            FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext) {
-        super(sources, sensors, rules, checks, settings, credentials, fileIndices, dashboards, monitoringSchedules, observabilityCheck);
+        super(sources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+                monitoringSchedules, observabilityCheck, notificationWebhooks);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -96,8 +99,10 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer);
         FileObservabilityCheckWrapperImpl observabilityCheckSettings = new FileObservabilityCheckWrapperImpl(settingsFolder, yamlSerializer);
+        FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
 
-        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, credentials, fileIndices, dashboards, monitoringSchedules, observabilityCheckSettings, userHomeContext);
+        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+                monitoringSchedules, observabilityCheckSettings, notificationWebhooks, userHomeContext);
     }
 
     /**

@@ -29,6 +29,7 @@ import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -47,6 +48,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
             put("default_data_observability_checks", o -> o.defaultObservabilityChecks);
+            put("default_incident_webhooks_notifications", o -> o.defaultNotificationWebhooks);
         }
     };
 
@@ -70,6 +72,11 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.
      */
     private DefaultObservabilityCheckWrapperImpl defaultObservabilityChecks;
+
+    /**
+     * The default notification webhooks.
+     */
+    private DefaultIncidentWebhookNotificationsWrapperImpl defaultNotificationWebhooks;
 
     @JsonIgnore
     private boolean dirty;
@@ -112,7 +119,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         FileIndexListImpl fileIndices,
                         DashboardFolderListSpecWrapperImpl dashboards,
                         MonitoringSchedulesWrapperImpl schedules,
-                        DefaultObservabilityCheckWrapperImpl observabilityCheck) {
+                        DefaultObservabilityCheckWrapperImpl observabilityCheck,
+                        DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks) {
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
@@ -123,6 +131,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDashboards(dashboards);
         this.setDefaultSchedules(schedules);
         this.setDefaultObservabilityChecks(observabilityCheck);
+        this.setDefaultNotificationWebhooks(notificationWebhooks);
     }
 
     /**
@@ -342,6 +351,27 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns the default notification webhooks. Configuration is stored in the user home folder.
+     * @return User's default notification webhooks.
+     */
+    public DefaultIncidentWebhookNotificationsWrapperImpl getDefaultNotificationWebhook() {
+        return defaultNotificationWebhooks;
+    }
+
+    /**
+     * Sets the default configuration of notification webhooks.
+     * @param defaultNotificationWebhooks The default notification webhooks.
+     */
+    public void setDefaultNotificationWebhooks(DefaultIncidentWebhookNotificationsWrapperImpl defaultNotificationWebhooks) {
+        this.defaultNotificationWebhooks = defaultNotificationWebhooks;
+        if (this.defaultNotificationWebhooks != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_incident_webhooks_notifications");
+            this.defaultNotificationWebhooks.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("default_incident_webhooks_notifications").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Flushes an object to a persistent store.
      */
     @Override
@@ -357,6 +387,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getDashboards().flush();
         this.getDefaultSchedules().flush();
         this.getDefaultObservabilityChecks().flush();
+        this.getDefaultNotificationWebhook().flush();
 
         this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
         assert !this.isDirty();
@@ -582,8 +613,12 @@ public class UserHomeImpl implements UserHome, Cloneable {
                 cloned.defaultSchedules = (MonitoringSchedulesWrapperImpl) cloned.defaultSchedules.deepClone();
             }
             if (cloned.defaultObservabilityChecks != null) {
-                cloned.defaultObservabilityChecks
-                        = (DefaultObservabilityCheckWrapperImpl) cloned.defaultObservabilityChecks.deepClone();
+                cloned.defaultObservabilityChecks = (DefaultObservabilityCheckWrapperImpl) cloned
+                        .defaultObservabilityChecks.deepClone();
+            }
+            if (cloned.defaultNotificationWebhooks != null) {
+                cloned.defaultNotificationWebhooks = (DefaultIncidentWebhookNotificationsWrapperImpl) cloned
+                        .defaultNotificationWebhooks.deepClone();
             }
             // NOTE: the file index is not cloned... it has a different lifecycle
 

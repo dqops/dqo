@@ -41,6 +41,7 @@ import com.dqops.metadata.storage.localfiles.monitoringschedules.MonitoringSched
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.ObservabilityCheckSettingsYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -256,6 +257,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 observabilityCheckSettingsYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
                 String defaultObservabilityChecks = this.yamlSerializer.serialize(observabilityCheckSettingsYaml);
                 Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
+            }
+
+            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATION_WEBHOOKS_FILE_NAME_YAML);
+            if (!Files.exists(defaultNotificaitonWebhooksPath)) {
+                DefaultIncidentWebhookNotificationsYaml webhooksYaml = new DefaultIncidentWebhookNotificationsYaml();
+                String defaultWebhooks = this.yamlSerializer.serialize(webhooksYaml);
+                Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
             }
 
             Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");

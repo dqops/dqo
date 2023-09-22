@@ -625,4 +625,7 @@ public class DefaultsController {
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
+
+    // todo: api for default schedules - read and update methods
+    // todo: api for default webhooks - read and update methods
 }
