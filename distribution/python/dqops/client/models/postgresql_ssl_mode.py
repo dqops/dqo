@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class PostgreqlSslmode(str, Enum):
+class PostgresqlSslMode(str, Enum):
     ALLOW = "allow"
     DISABLE = "disable"
     PREFER = "prefer"

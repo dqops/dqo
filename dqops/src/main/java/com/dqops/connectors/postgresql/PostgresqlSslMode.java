@@ -18,10 +18,10 @@ package com.dqops.connectors.postgresql;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of sslmode connection parameters for finer control of the SSL connection in PostgreSql.
+ * Enumeration of sslMode connection parameters for finer control of the SSL connection in PostgreSql.
  */
 
-public enum PostgreqlSslmode {
+public enum PostgresqlSslMode {
     @JsonProperty("disable")
     disable("disable"),
 
@@ -42,7 +42,7 @@ public enum PostgreqlSslmode {
 
     private final String value;
 
-    PostgreqlSslmode(String value) {
+    PostgresqlSslMode(String value) {
         this.value = value;
     }
 

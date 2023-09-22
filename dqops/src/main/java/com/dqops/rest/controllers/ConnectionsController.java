@@ -628,7 +628,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
-            @ApiParam("Monitoring schedule definition to store") @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
+            @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -645,26 +645,25 @@ public class ConnectionsController {
             existingConnectionSpec.setSchedules(schedules);
         }
 
-        MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
         switch (schedulingGroup) {
             case profiling:
-                schedules.setProfiling(newScheduleSpec);
+                schedules.setProfiling(monitoringScheduleSpec);
                 break;
 
             case monitoring_daily:
-                schedules.setMonitoringDaily(newScheduleSpec);
+                schedules.setMonitoringDaily(monitoringScheduleSpec);
                 break;
 
             case monitoring_monthly:
-                schedules.setMonitoringMonthly(newScheduleSpec);
+                schedules.setMonitoringMonthly(monitoringScheduleSpec);
                 break;
 
             case partitioned_daily:
-                schedules.setPartitionedDaily(newScheduleSpec);
+                schedules.setPartitionedDaily(monitoringScheduleSpec);
                 break;
 
             case partitioned_monthly:
-                schedules.setPartitionedMonthly(newScheduleSpec);
+                schedules.setPartitionedMonthly(monitoringScheduleSpec);
                 break;
 
             default:
@@ -698,7 +697,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<Void>> updateConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("List of labels") @RequestBody Optional<LabelSetSpec> labelSetSpec) {
+            @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -708,12 +707,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (labelSetSpec.isPresent()) {
-            existingConnectionSpec.setLabels(labelSetSpec.get());
-        } else {
-            existingConnectionSpec.setLabels(null);
-        }
+        connectionWrapper.getSpec().setLabels(labelSetSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -741,7 +735,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<Void>> updateConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -751,12 +745,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (commentsListSpec.isPresent()) {
-            existingConnectionSpec.setComments(commentsListSpec.get());
-        } else {
-            existingConnectionSpec.setComments(null);
-        }
+        connectionWrapper.getSpec().setComments(commentsListSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -785,7 +774,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
-                @RequestBody Optional<DataGroupingConfigurationSpec> dataGroupingConfigurationSpec) {
+                @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -795,13 +784,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (dataGroupingConfigurationSpec.isPresent()) {
-            existingConnectionSpec.setDefaultGroupingConfiguration(dataGroupingConfigurationSpec.get());
-        }
-        else {
-            existingConnectionSpec.setDefaultGroupingConfiguration(null);
-        }
+        connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -830,7 +813,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<Void>> updateConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<ConnectionIncidentGroupingSpec> incidentGroupingSpec) {
+            @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -840,12 +823,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (incidentGroupingSpec.isPresent()) {
-            existingConnectionSpec.setIncidentGrouping(incidentGroupingSpec.get());
-        } else {
-            existingConnectionSpec.setIncidentGrouping(null);
-        }
+        connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

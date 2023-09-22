@@ -1373,60 +1373,15 @@ from .mono_void import MonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
-from .optional import Optional
-from .optional_check_container_model import OptionalCheckContainerModel
-from .optional_column_daily_monitoring_check_categories_spec import (
-    OptionalColumnDailyMonitoringCheckCategoriesSpec,
-)
-from .optional_column_daily_partitioned_check_categories_spec import (
-    OptionalColumnDailyPartitionedCheckCategoriesSpec,
-)
-from .optional_column_monthly_monitoring_check_categories_spec import (
-    OptionalColumnMonthlyMonitoringCheckCategoriesSpec,
-)
-from .optional_column_monthly_partitioned_check_categories_spec import (
-    OptionalColumnMonthlyPartitionedCheckCategoriesSpec,
-)
-from .optional_column_profiling_check_categories_spec import (
-    OptionalColumnProfilingCheckCategoriesSpec,
-)
-from .optional_comments_list_spec import OptionalCommentsListSpec
-from .optional_connection_incident_grouping_spec import (
-    OptionalConnectionIncidentGroupingSpec,
-)
-from .optional_data_grouping_configuration_spec import (
-    OptionalDataGroupingConfigurationSpec,
-)
-from .optional_incident_webhook_notifications_spec import (
-    OptionalIncidentWebhookNotificationsSpec,
-)
-from .optional_label_set_spec import OptionalLabelSetSpec
-from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
-from .optional_table_daily_monitoring_check_categories_spec import (
-    OptionalTableDailyMonitoringCheckCategoriesSpec,
-)
-from .optional_table_daily_partitioned_check_categories_spec import (
-    OptionalTableDailyPartitionedCheckCategoriesSpec,
-)
-from .optional_table_incident_grouping_spec import OptionalTableIncidentGroupingSpec
-from .optional_table_monthly_monitoring_check_categories_spec import (
-    OptionalTableMonthlyMonitoringCheckCategoriesSpec,
-)
-from .optional_table_monthly_partitioned_check_categories_spec import (
-    OptionalTableMonthlyPartitionedCheckCategoriesSpec,
-)
-from .optional_table_profiling_check_categories_spec import (
-    OptionalTableProfilingCheckCategoriesSpec,
-)
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
 from .parameter_definition_spec import ParameterDefinitionSpec
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 from .physical_table_name import PhysicalTableName
-from .postgreql_sslmode import PostgreqlSslmode
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
+from .postgresql_ssl_mode import PostgresqlSslMode
 from .profiling_time_period import ProfilingTimePeriod
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
@@ -2449,34 +2404,15 @@ __all__ = (
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
-    "Optional",
-    "OptionalCheckContainerModel",
-    "OptionalColumnDailyMonitoringCheckCategoriesSpec",
-    "OptionalColumnDailyPartitionedCheckCategoriesSpec",
-    "OptionalColumnMonthlyMonitoringCheckCategoriesSpec",
-    "OptionalColumnMonthlyPartitionedCheckCategoriesSpec",
-    "OptionalColumnProfilingCheckCategoriesSpec",
-    "OptionalCommentsListSpec",
-    "OptionalConnectionIncidentGroupingSpec",
-    "OptionalDataGroupingConfigurationSpec",
-    "OptionalIncidentWebhookNotificationsSpec",
-    "OptionalLabelSetSpec",
-    "OptionalMonitoringScheduleSpec",
-    "OptionalTableDailyMonitoringCheckCategoriesSpec",
-    "OptionalTableDailyPartitionedCheckCategoriesSpec",
-    "OptionalTableIncidentGroupingSpec",
-    "OptionalTableMonthlyMonitoringCheckCategoriesSpec",
-    "OptionalTableMonthlyPartitionedCheckCategoriesSpec",
-    "OptionalTableProfilingCheckCategoriesSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDataType",
     "ParameterDefinitionSpec",
     "PartitionIncrementalTimeWindowSpec",
     "PhysicalTableName",
-    "PostgreqlSslmode",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
+    "PostgresqlSslMode",
     "ProfilingTimePeriod",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
