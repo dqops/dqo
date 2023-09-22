@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.scheduling;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -209,24 +210,25 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed and expanded version of this object.
      */
-    public MonitoringSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public MonitoringSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         MonitoringSchedulesSpec cloned = (MonitoringSchedulesSpec) super.deepClone();
         if (cloned.profiling != null) {
-            cloned.setProfiling(cloned.profiling.expandAndTrim(secretValueProvider));
+            cloned.setProfiling(cloned.profiling.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         if (cloned.monitoringDaily != null) {
-            cloned.setMonitoringDaily(cloned.monitoringDaily.expandAndTrim(secretValueProvider));
+            cloned.setMonitoringDaily(cloned.monitoringDaily.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         if (cloned.monitoringMonthly != null) {
-            cloned.setMonitoringMonthly(cloned.monitoringMonthly.expandAndTrim(secretValueProvider));
+            cloned.setMonitoringMonthly(cloned.monitoringMonthly.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         if (cloned.partitionedDaily != null) {
-            cloned.setPartitionedDaily(cloned.partitionedDaily.expandAndTrim(secretValueProvider));
+            cloned.setPartitionedDaily(cloned.partitionedDaily.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         if (cloned.partitionedMonthly != null) {
-            cloned.setPartitionedMonthly(cloned.partitionedMonthly.expandAndTrim(secretValueProvider));
+            cloned.setPartitionedMonthly(cloned.partitionedMonthly.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         return cloned;
     }

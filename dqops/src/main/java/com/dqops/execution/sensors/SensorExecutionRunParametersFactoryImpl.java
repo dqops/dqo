@@ -20,6 +20,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
@@ -34,6 +35,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.google.common.base.Strings;
@@ -63,6 +65,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
@@ -78,7 +81,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+    public SensorExecutionRunParameters createSensorParameters(UserHome userHome,
+                                                               ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
                                                                AbstractCheckSpec<?,?,?,?> check,
@@ -89,10 +93,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                TimeWindowFilterParameters userTimeWindowFilters,
                                                                ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider, secretValueLookupContext) : null;
+        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
         DataGroupingConfigurationSpec dataGroupingConfiguration =
@@ -139,6 +145,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
@@ -149,17 +156,19 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+    public SensorExecutionRunParameters createStatisticsSensorParameters(UserHome userHome,
+                                                                         ConnectionSpec connection,
                                                                          TableSpec table,
                                                                          ColumnSpec column,
                                                                          AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
                                                                          TimeWindowFilterParameters userTimeWindowFilters,
                                                                          StatisticsDataScope statisticsDataScope,
                                                                          ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider, secretValueLookupContext) : null;
+        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = statisticsDataScope == StatisticsDataScope.table ? null :

@@ -83,7 +83,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
         FileContent fileContent = new FileContent(textContent);
         HomeFilePath filePath = new HomeFilePath(new HomeFolderPath(), "file.txt");
 		this.sut.saveFile(filePath, fileContent);
-        FileContent restoredFile = this.sut.readTextFile(filePath);
+        FileContent restoredFile = this.sut.readFile(filePath);
         Assertions.assertNotNull(restoredFile);
         Assertions.assertEquals(textContent, restoredFile.getTextContent());
     }
@@ -97,7 +97,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
         HomeFilePath filePath = new HomeFilePath(folderPath, "file.txt");
 		this.sut.saveFile(filePath, fileContent);
 
-        FileContent restoredFile = this.sut.readTextFile(filePath);
+        FileContent restoredFile = this.sut.readFile(filePath);
         Assertions.assertNotNull(restoredFile);
         Assertions.assertEquals(textContent, restoredFile.getTextContent());
     }
@@ -118,13 +118,13 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
 
     @Test
     void readTextFile_whenFileMissingInRootFolder_thenReturnsNull() {
-        FileContent restoredFile = this.sut.readTextFile(new HomeFilePath(new HomeFolderPath(), "missing.txt"));
+        FileContent restoredFile = this.sut.readFile(new HomeFilePath(new HomeFolderPath(), "missing.txt"));
         Assertions.assertNull(restoredFile);
     }
 
     @Test
     void readTextFile_whenFileMissingInMissingSubfolder_thenReturnsNull() {
-        FileContent restoredFile = this.sut.readTextFile(new HomeFilePath(new HomeFolderPath(FolderName.fromObjectName("nosuchfolder")), "missing.txt"));
+        FileContent restoredFile = this.sut.readFile(new HomeFilePath(new HomeFolderPath(FolderName.fromObjectName("nosuchfolder")), "missing.txt"));
         Assertions.assertNull(restoredFile);
     }
 
@@ -156,7 +156,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
         Assertions.assertTrue(this.sut.deleteFile(filePath));
 
         Assertions.assertFalse(this.sut.fileExists(filePath));
-        FileContent restoredFile2= this.sut.readTextFile(filePath);
+        FileContent restoredFile2= this.sut.readFile(filePath);
         Assertions.assertNull(restoredFile2);
     }
 

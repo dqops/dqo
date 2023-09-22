@@ -16,6 +16,7 @@
 package com.dqops.services.remote.tables;
 
 import com.dqops.connectors.*;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -73,13 +74,14 @@ public class SourceTablesServiceImpl implements SourceTablesService {
                 .collect(Collectors.toSet());
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         List<RemoteTableBasicModel> remoteTableBasicModels;
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName);
             remoteTableBasicModels = sourceTableModels.stream()
                     .map(sourceTableModel -> new RemoteTableBasicModel(){{

@@ -32,6 +32,7 @@ import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
 import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.StringPatternComparer;
@@ -63,7 +64,7 @@ public class TableCliServiceImpl implements TableCliService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
-    private SecretValueProvider secretValueProvider;
+    private final SecretValueProvider secretValueProvider;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final TerminalTableWritter terminalTableWritter;
     private final OutputFormatService outputFormatService;
@@ -105,13 +106,22 @@ public class TableCliServiceImpl implements TableCliService {
      */
     @Override
     public Table loadSchemaList(String connectionName, String schemaFilter) throws TableImportFailedException {
-        ConnectionWrapper connectionWrapper = getConnection(connectionName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionList connections = userHome.getConnections();
+
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            throw new TableImportFailedException("Connection was not found");
+        }
+
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         ProviderType providerType = connectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceSchemaModel> schemas = sourceConnection.listSchemas().stream()
                     .filter(schema -> (schemaFilter == null || StringPatternComparer.matchSearchPattern(schema.getSchemaName(), schemaFilter)))
                     .collect(Collectors.toList());
@@ -123,26 +133,6 @@ public class TableCliServiceImpl implements TableCliService {
 
             return resultTable;
         }
-    }
-
-    /**
-     * Retrieves a connection by name.
-     *
-     * @param connectionName Connection name to return.
-     * @return Connection specification object.
-     * @throws TableImportFailedException Raised when the connection was not found.
-     */
-    public ConnectionWrapper getConnection(String connectionName) throws TableImportFailedException {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
-
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            throw new TableImportFailedException("Connection was not found");
-        }
-
-        return connectionWrapper;
     }
 
     /**

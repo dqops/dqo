@@ -17,6 +17,7 @@ package com.dqops.services.remote.schemas;
 
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -72,13 +73,14 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                 .collect(Collectors.toSet());
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         List<SchemaRemoteModel> schemaRemoteModels;
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceSchemaModel> sourceSchemaModels = sourceConnection.listSchemas();
             schemaRemoteModels = sourceSchemaModels.stream()
                 .map(sourceSchemaModel -> new SchemaRemoteModel(){{

@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -59,12 +60,14 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
      * Creates a copy of the column map using trimmed column specifications. Additionally, parameters are expanded.
      * Trimmed column specifications are serialized to json and forwarded to a jinja2 template (sensor runner).
      * A trimmed column specification is missing the checks and is smaller.
+     * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed copy of the column map. With parameters expanded.
      */
-    public ColumnSpecMap expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ColumnSpecMap expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         ColumnSpecMap trimmed = new ColumnSpecMap();
         for(Map.Entry<String, ColumnSpec> keyValuePair : this.entrySet()) {
-            trimmed.put(keyValuePair.getKey(), keyValuePair.getValue().expandAndTrim(secretValueProvider));
+            trimmed.put(keyValuePair.getKey(), keyValuePair.getValue().expandAndTrim(secretValueProvider, secretValueLookupContext));
         }
         return trimmed;
     }

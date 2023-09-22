@@ -416,7 +416,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         // TODO: statistics collection could support time windows or a time range, the filter that is passed downstream is now null
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createStatisticsSensorParameters(
-                connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec, null, statisticsDataScope, dialectSettings);
+                userHome, connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec, null, statisticsDataScope, dialectSettings);
         return sensorRunParameters;
     }
 

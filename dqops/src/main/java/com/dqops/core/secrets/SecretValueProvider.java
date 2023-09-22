@@ -24,14 +24,16 @@ public interface SecretValueProvider {
     /**
      * Expands a value that references possible secret values. For example ${ENVIRONMENT_VARIABLE_NAME}
      * @param value Value to expand.
+     * @param lookupContext Context used to look up credentials in the user home.
      * @return Value (when no expansions possible) or an expanded value.
      */
-    String expandValue(String value);
+    String expandValue(String value, SecretValueLookupContext lookupContext);
 
     /**
      * Expands properties in a given hash map. Returns a cloned instance with all property values expanded.
      * @param properties Properties to expand.
+     * @param lookupContext Context to look up credentials.
      * @return Expanded properties.
      */
-    Map<String, String> expandProperties(Map<String, String> properties);
+    Map<String, String> expandProperties(Map<String, String> properties, SecretValueLookupContext lookupContext);
 }

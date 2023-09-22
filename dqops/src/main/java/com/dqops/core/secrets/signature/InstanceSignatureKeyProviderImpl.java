@@ -17,6 +17,7 @@
 package com.dqops.core.secrets.signature;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
@@ -71,7 +72,8 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
             }
 
             if (!Strings.isNullOrEmpty(this.dqoInstanceConfigurationProperties.getSignatureKey())) {
-                byte[] decodedSignatureKeyFromConfiguration = Base64.getDecoder().decode(this.dqoInstanceConfigurationProperties.getSignatureKey());
+                byte[] decodedSignatureKeyFromConfiguration = Base64.getDecoder().decode(
+                        this.dqoInstanceConfigurationProperties.getSignatureKey());
                 this.cachedInstanceKey = decodedSignatureKeyFromConfiguration;
                 return decodedSignatureKeyFromConfiguration;
             }
@@ -82,7 +84,8 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
             String instanceKeyBase64String = null;
 
             if (settingsSpec != null) {
-                SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider);
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
+                SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
                 instanceKeyBase64String = settings.getInstanceSignatureKey();
             }
 

@@ -20,6 +20,7 @@ import com.dqops.connectors.bigquery.BigQueryConnectionPool;
 import com.dqops.connectors.bigquery.BigQueryConnectionPoolImpl;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.bigquery.BigQueryInternalConnection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.google.cloud.bigquery.BigQuery;
@@ -32,17 +33,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryIntegrationTest {
     private BigQueryConnectionPoolImpl sut;
+    private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
 		this.sut = (BigQueryConnectionPoolImpl) beanFactory.getBean(BigQueryConnectionPool.class);
+        this.secretValueLookupContext = new SecretValueLookupContext(null);
     }
 
     @Test
     void getBigQueryService_whenCalledOnce_thenReturnsConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
-        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec, this.secretValueLookupContext);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
         Assertions.assertNotNull(bigQueryService);
     }
@@ -50,17 +53,17 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
     @Test
     void getBigQueryService_whenCalledAgain_thenReturnsTheSameInstance() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
-        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec, this.secretValueLookupContext);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
         Assertions.assertNotNull(bigQueryService);
-        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec).getBigQueryClient());
+        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec, this.secretValueLookupContext).getBigQueryClient());
     }
 
     @Test
     void getBigQueryService_whenCalledWithQuotaProject_thenReturnsConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
         connectionSpec.getBigquery().setQuotaProjectId(connectionSpec.getBigquery().getSourceProjectId());
-        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec, this.secretValueLookupContext);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 //        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
         Assertions.assertNotNull(bigQueryService);
@@ -70,7 +73,7 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
     void getBigQueryService_whenCalledWithBillingProject_thenReturnsConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
         connectionSpec.getBigquery().setBillingProjectId(connectionSpec.getBigquery().getSourceProjectId());
-        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec, this.secretValueLookupContext);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 //        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
         Assertions.assertNotNull(bigQueryService);

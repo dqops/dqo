@@ -32,6 +32,10 @@ import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.credentials.SharedCredentialListImpl;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
+import com.dqops.metadata.credentials.SharedCredentialWrapperImpl;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -734,4 +738,20 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, P parameter);
+
+    /**
+     * Accepts a shared credential wrapper instance.
+     * @param sharedCredentialWrapper Shared credential wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SharedCredentialWrapper sharedCredentialWrapper, P parameter);
+
+    /**
+     * Accepts a shared credential list.
+     * @param sharedCredentialWrappers Shared credentials list.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SharedCredentialList sharedCredentialWrappers, P parameter);
 }
