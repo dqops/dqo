@@ -103,7 +103,7 @@ In the text field you can find links to:
   - **full table name**: the full table name present in the message header that leads to the table details in the DQO application.
   - **issue URL**: a link to an external ticketing system. It is present when set manually on the incident. Check the [External system linking](#external-system-linking) section.
 
-### Markdown format
+**Markdown format**
 
 The text field uses elements of the Markdown language, which include:
 
