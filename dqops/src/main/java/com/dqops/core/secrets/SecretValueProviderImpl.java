@@ -15,6 +15,7 @@
  */
 package com.dqops.core.secrets;
 
+import com.dqops.core.secrets.credentials.SharedCredentialPropertySource;
 import com.dqops.core.secrets.gcp.GcpSecretManagerPropertySource;
 import com.dqops.metadata.userhome.UserHome;
 import com.google.common.cache.Cache;
@@ -45,6 +46,7 @@ public class SecretValueProviderImpl implements SecretValueProvider {
 
     private final ConfigurableBeanFactory beanFactory;
     private final GcpSecretManagerPropertySource gcpSecretManagerPropertySource;
+    private final SharedCredentialPropertySource sharedCredentialPropertySource;
     private final ConfigurableEnvironment environment;
     private final Cache<String, String> secretValuesCache =
             CacheBuilder.newBuilder()
@@ -57,14 +59,18 @@ public class SecretValueProviderImpl implements SecretValueProvider {
      * @param environment Spring environment.
      * @param beanFactory Spring bean factory.
      * @param gcpSecretManagerPropertySource GCP Secret Manager custom property source.
+     * @param sharedCredentialPropertySource DQO shared credential custom property source.
      */
     @Autowired
     public SecretValueProviderImpl(BeanFactory beanFactory,
-								   Environment environment,
-								   GcpSecretManagerPropertySource gcpSecretManagerPropertySource) {
+                                   Environment environment,
+                                   GcpSecretManagerPropertySource gcpSecretManagerPropertySource,
+                                   SharedCredentialPropertySource sharedCredentialPropertySource) {
         this.environment = (ConfigurableEnvironment)environment;
         this.beanFactory = (ConfigurableBeanFactory)beanFactory;
         this.gcpSecretManagerPropertySource = gcpSecretManagerPropertySource;
+        this.sharedCredentialPropertySource = sharedCredentialPropertySource;
+        this.environment.getPropertySources().addFirst(sharedCredentialPropertySource);
         this.environment.getPropertySources().addFirst(gcpSecretManagerPropertySource);
     }
 
