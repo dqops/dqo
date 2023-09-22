@@ -21,7 +21,7 @@ ready to be transcribed.
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.fcc_political_ads.content_info` using profiling 
-[bool_false_percent](../../checks/column/bool/false-percent.md) column check.
+[profile_false_percent](../../checks/column/bool/false-percent.md) column check.
 Our goal is to verify that the percentage of false values on `invalidOcr` column does not fall below 99%. 
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -66,7 +66,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `bool_false_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `profile_false_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
@@ -274,3 +274,10 @@ Results returned by the sensor:
 +----------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_false_percent check used in this example, go to the check details section](../../checks/column/bool/false-percent.md).
+- You might be interested in another reasonability check that [evaluates that percentage of integer values from a range in a column does not exceed the minimum accepted percentage](../data-reasonability/percentage-of-integer-values-in-range.md).
+- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- DQO provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).

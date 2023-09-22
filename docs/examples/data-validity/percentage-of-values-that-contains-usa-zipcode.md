@@ -1,6 +1,6 @@
 # Percentage of rows containing USA zipcodes
 
-Calculates the  percentage of rows that contains USA zipcodes values in a column.
+Column level check that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds.
 
 **PROBLEM**
 
@@ -228,3 +228,10 @@ Results returned by the sensor:
 +-----------------+-----------+--------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [contains_usa_zipcode_percent check used in this example, go to the check details section](../../checks/column/pii/contains-usa-zipcode-percent.md).
+- You might be interested in another validity check that [evaluates that the number of invalid emails in a monitored column does not exceed the maximum accepted count](../data-validity/number-of-invalid-emails.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).

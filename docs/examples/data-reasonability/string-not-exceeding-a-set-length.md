@@ -15,7 +15,7 @@ The `measure_name` contains measure name data. We want to verify that the length
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
-[string_max_length](../../checks/column/strings/string-max-length.md) column check.
+[profile_string_max_length](../../checks/column/strings/string-max-length.md) column check.
 Our goal is to verify if the number of valid length values on `measure_name` column does not exceed the setup thresholds.
 
 In this example, we will set one maximum thresholds level for the check:
@@ -110,7 +110,7 @@ In this example, we have set three maximum number thresholds levels for the chec
 
 - warning: 30.0
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `string_max_length` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `profile_string_max_length` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
@@ -232,3 +232,10 @@ Results returned by the sensor:
 |31          |2023-05-09T09:19:39.470Z|2023-05-09T09:19:39.470Z|
 +------------+------------------------+---------------
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_string_max_length check used in this example, go to the check details section](../../checks/column/strings/string-max-length.md).
+- You might be interested in another reasonability check that [evaluates that the percentage of false values does not fall below the minimum percentage](../data-reasonability/percentage-of-false-values.md).
+- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md). 
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

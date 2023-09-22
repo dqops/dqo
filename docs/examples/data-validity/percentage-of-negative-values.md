@@ -238,3 +238,10 @@ Results returned by the sensor:
 +-----------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [negative_percent check used in this example, go to the check details section](../../checks/column/numeric/negative-percent.md).
+- You might be interested in another validity check that [evaluates that a minimum percentage of rows passed a custom SQL condition (expression)](../data-validity/percentage-of-rows-passing-sql-condition.md).
+- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

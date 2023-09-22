@@ -233,3 +233,10 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [string_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/strings/string-valid-currency-code-percent.md).
+- You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](../data-validity/percentage-of-valid-latitude-and-longitude.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).

@@ -14,7 +14,7 @@ The `unique_key` column contains unique key data. We want to verify the percent 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
-[duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check.
+[profile_duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check.
 Our goal is to verify if the percentage of duplicated values in `unique_key` column does not exceed set thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
@@ -224,3 +224,11 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_duplicate_percent check used in this example, go to the check details section](../../checks/column/uniqueness/duplicate-percent.md).
+- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md). 
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- DQO provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
+

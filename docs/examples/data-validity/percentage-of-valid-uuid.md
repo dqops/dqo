@@ -1,6 +1,6 @@
 # Percentage of valid UUID
 
-We are verifying if the rows in the table contain valid UUID values.
+Verifies that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 
@@ -225,3 +225,10 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [string_valid_uuid_percent check used in this example, go to the check details section](../../checks/column/strings/string-valid-uuid-percent.md).
+- You might be interested in another validity check that [evaluates that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds](../data-validity/percentage-of-values-that-contains-usa-zipcode.md).
+- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
+- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).

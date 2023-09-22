@@ -16,7 +16,7 @@ We want to verify the percent of values between 0 ad 100,000 in `values` column.
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
-[values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) column check.
+[profile_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) column check.
 Our goal is to verify if the percentage of values in a range in the `values` column does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -115,7 +115,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 - error: 95.0%
 - fatal: 90.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `values_in_range_numeric_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `profile_values_in_range_numeric_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
@@ -252,3 +252,10 @@ Results returned by the sensor:
 +-----------------+------------------------+------------------------+
 **************************************************
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_values_in_range_numeric_percent check used in this example, go to the check details section](../../checks/column/numeric/values-in-range-numeric-percent.md).
+- You might be interested in another reasonability check that [evaluates that the length of the string does not exceed the indicated value](../data-reasonability/string-not-exceeding-a-set-length.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
