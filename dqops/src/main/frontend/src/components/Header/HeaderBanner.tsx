@@ -148,14 +148,14 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
           </div>
           <div className="flex mb-2 items-center justify-between">
             <div className="grow">
-              Configure scheduling for profiling and daily monitoring checks
+              Review scheduling for profiling and daily monitoring checks
             </div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
                 variant={scheduleConfigured ? 'contained' : 'outlined'}
                 color={scheduleConfigured ? 'secondary' : 'primary'}
-                label="Configure scheduling"
+                label="Review scheduling"
                 className="text-sm px-2 w-40"
                 onClick={scheduleConfigured ? undefined : configureScheduling}
               />
