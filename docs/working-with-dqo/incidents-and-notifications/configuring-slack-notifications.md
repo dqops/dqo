@@ -13,7 +13,7 @@ Slack integration allows you to receive notifications whenever an issue is detec
     Open the slack API webpage: [https://api.slack.com/apps](https://api.slack.com/apps) and select the app you would like to receive notifications.
     
     In case you have not already created a Slack app or want to configure notifications with a new Slack app, select the **Create New App button**. 
-    It will trigger a popup window with the app creation.
+    It will trigger a pop-up window with the app creation.
 
     ![slack-api](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-1.png)
 
@@ -62,11 +62,13 @@ To add a Webhook URL to DQO:
 
     Remember to replace [connection_name] with your connection name, created in DQO application.
 
-3. In the **Webhooks for notifications of an incident state change** section, paste the Webhook URL that you get in the Slack app into the  “A new incident was opened (detected)” field. Save the changes by clicking the **Save button**. Now each time a new incident is open you will receive a notification in Slack.
+3. In the **Webhooks for notifications of an incident state change** section, paste the Webhook URL that you get in the Slack app into the  “A new incident was opened (detected)” field. 
+
+4. Save the changes by clicking the **Save button**. Now each time a new incident is open you will receive a notification in Slack.
    
     If you would like to receive notification on statuses other than Open, fill in other input fields with Webhook URLs.
 
-   ![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-webhooks.png)
+   ![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/webhook-fields.png)
 
 ## Notification example in Slack
 
