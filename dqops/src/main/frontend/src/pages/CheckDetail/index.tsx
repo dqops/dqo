@@ -14,7 +14,8 @@ import {
   createCheck,
   updateCheck,
   deleteCheck,
-  getCheck
+  getCheck,
+  refreshChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import Input from '../../components/Input';
 import CheckEditor from './CheckEditor';
@@ -28,7 +29,7 @@ export const SensorDetail = () => {
   const { full_check_name, path, type, custom, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { tabs, activeTab } = useSelector(
+  const { tabs, activeTab, refreshChecksTreeIndicator } = useSelector(
     (state: IRootState) => state.definition
   );
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -164,8 +165,9 @@ export const SensorDetail = () => {
           ]
       )
     );
+    dispatch(refreshChecksFolderTree(!refreshChecksTreeIndicator))
   };
-
+console.log(refreshChecksTreeIndicator)
   const onChangecheckName = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdated(true);
     setcheckName(e.target.value);

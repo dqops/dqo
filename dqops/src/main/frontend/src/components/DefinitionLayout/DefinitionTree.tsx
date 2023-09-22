@@ -48,7 +48,10 @@ export const DefinitionTree = () => {
     ruleFolderTree,
     ruleState,
     tabs,
-    activeTab
+    activeTab,
+    refreshChecksTreeIndicator = false,
+    refreshRulesTreeIndicator = false,
+    refreshSensorsTreeIndicator = false
   } = useSelector((state: IRootState) => state.definition);
   const [checkIndicator, setCheckIndicator] = useState(false);
   const [sensorIndicator, setSensorIndicator] = useState(false);
@@ -59,7 +62,9 @@ export const DefinitionTree = () => {
   const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
 
   const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
-
+  console.log(    refreshChecksTreeIndicator,
+    refreshRulesTreeIndicator,
+    refreshSensorsTreeIndicator)
   useEffect(() => {
     dispatch(getSensorFolderTree());
   }, [sensorIndicator]);

@@ -37,6 +37,9 @@ export interface IDefinitionState {
   checkDetail?: CheckSpecModel;
 
   definitionFirstLevelFolder?: Array<{ category: string; isOpen: boolean }>;
+  refreshChecksTreeIndicator?: boolean;
+  refreshSensorsTreeIndicator?: boolean;
+  refreshRulesTreeIndicator?: boolean;
 }
 
 const initialState: IDefinitionState = {
@@ -46,7 +49,10 @@ const initialState: IDefinitionState = {
   tabs: [],
   ruleState: {},
   dataQualityChecksState: {},
-  definitionFirstLevelFolder: []
+  definitionFirstLevelFolder: [],
+  refreshChecksTreeIndicator: false,
+  refreshRulesTreeIndicator: false,
+  refreshSensorsTreeIndicator: false
 };
 
 const setActiveTabState = (
@@ -395,9 +401,20 @@ const definitionReducer = (state = initialState, action: any) => {
     case DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER: {
       return { ...state, definitionFirstLevelFolder: action.data };
     }
+    case DEFINITION_ACTION.REFRESH_CHECKS_TREE_INDICATOR: {
+      return { ...state, refreshChecksTreeIndicator: action.data };
+    }
+    case DEFINITION_ACTION.REFRESH_SENSORS_TREE_INDICATOR: {
+      return { ...state, refreshSensorsTreeIndicator: action.data };
+    }
+    case DEFINITION_ACTION.REFRESH_RULES_TREE_INDICATOR: {
+      return { ...state, refreshRulesTreeIndicator: action.data };
+    }
+
     default:
       return state;
   }
+
 };
 
 export default definitionReducer;
