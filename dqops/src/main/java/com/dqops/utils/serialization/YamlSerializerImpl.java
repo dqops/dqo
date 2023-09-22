@@ -143,7 +143,7 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            log.error("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, e);
+            log.warn("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, e);
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
                 return emptyInstance;
@@ -153,7 +153,7 @@ public class YamlSerializerImpl implements YamlSerializer {
             }
         }
         catch (Exception ex) {
-            log.error("Failed to deserialize YAML, file: " + filePathForMessage + ", error: " + ex.getMessage(), ex);
+            log.warn("Failed to deserialize YAML, file: " + filePathForMessage + ", error: " + ex.getMessage(), ex);
             throw new YamlDeserializationException("Failed to deserialize a YAML file " + filePathForMessage + ", error: " + ex.getMessage(), filePathForMessage, ex);
         }
     }
