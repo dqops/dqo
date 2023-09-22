@@ -24,11 +24,13 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
@@ -112,4 +114,16 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of dashboards definitions.
      */
     DashboardFolderListSpecWrapper getDashboards();
+
+    /**
+     * Returns a list of default schedules definitions.
+     * @return Collection of default schedules definitions.
+     */
+    MonitoringSchedulesWrapper getDefaultSchedules();
+
+    /**
+     * Returns a list of default observability checks definitions.
+     * @return Collection of default observability checks definitions.
+     */
+    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks();
 }

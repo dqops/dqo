@@ -20,6 +20,7 @@ import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSetting
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsProvider;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
@@ -27,6 +28,7 @@ import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
@@ -54,15 +56,18 @@ public class DefaultsController {
     private ExecutionContextFactory executionContextFactory;
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
+    private DefaultObservabilityCheckSettingsProvider defaultObservabilityCheckSettingsProvider;
 
     @Autowired
     public DefaultsController(
             ExecutionContextFactory executionContextFactory,
             SpecToModelCheckMappingService specToModelCheckMappingService,
-            ModelToSpecCheckMappingService modelToSpecCheckMappingService) {
+            ModelToSpecCheckMappingService modelToSpecCheckMappingService,
+            DefaultObservabilityCheckSettingsProvider defaultObservabilityCheckSettingsProvider) {
         this.executionContextFactory = executionContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
+        this.defaultObservabilityCheckSettingsProvider = defaultObservabilityCheckSettingsProvider;
     }
 
     /**
@@ -86,14 +91,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultProfilingObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getProfiling() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getProfiling() == null
+        ) {
             defaultChecksContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getProfiling();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getProfiling();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
@@ -124,14 +132,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultProfilingObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getProfiling() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getProfiling() == null
+        ) {
             defaultChecksContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getProfiling();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getProfiling();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
@@ -162,14 +173,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getMonitoringDaily() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily() == null
+        ) {
             defaultChecksContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getMonitoringDaily();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
@@ -200,14 +214,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getMonitoringDaily() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily() == null
+        ) {
             defaultChecksContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getMonitoringDaily();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
@@ -238,14 +255,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getMonitoringMonthly() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly() == null
+        ) {
             defaultChecksContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getMonitoringMonthly();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
@@ -276,14 +296,17 @@ public class DefaultsController {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getMonitoringMonthly() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly() == null
+        ) {
             defaultChecksContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getMonitoringMonthly();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
@@ -326,11 +349,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -380,11 +400,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -435,11 +452,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -490,11 +504,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -545,11 +556,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
@@ -600,11 +608,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
+                .provideFromUserHomeContext(userHomeContext.getUserHome());
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {

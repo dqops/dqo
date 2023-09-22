@@ -24,9 +24,11 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionListImpl;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.fileindices.FileIndexListImpl;
 import com.dqops.metadata.id.*;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -43,6 +45,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("credentials", o -> o.credentials);
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
+            put("default_schedules", o -> o.defaultSchedules);
+            put("default_data_observability_checks", o -> o.defaultObservabilityChecks);
         }
     };
 
@@ -56,6 +60,17 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private SharedCredentialListImpl credentials;
     private FileIndexList fileIndices;
     private DashboardFolderListSpecWrapperImpl dashboards;
+
+    /**
+     * Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.
+     */
+    private MonitoringSchedulesWrapperImpl defaultSchedules;
+
+    /**
+     * The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.
+     */
+    private DefaultObservabilityCheckWrapperImpl defaultObservabilityChecks;
+
     @JsonIgnore
     private boolean dirty;
 
@@ -71,6 +86,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setCredentials(new SharedCredentialListImpl());
         this.setFileIndices(new FileIndexListImpl());
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
+        this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
+        this.setDefaultObservabilityChecks(new DefaultObservabilityCheckWrapperImpl());
     }
 
     /**
@@ -83,6 +100,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param credentials Collection of shared credentials.
      * @param fileIndices File synchronization indexes.
      * @param dashboards Custom dashboards wrapper.
+     * @param schedules Default monitoring schedules wrapper.
+     * @param observabilityCheck Default observability checks wrapper.
      */
     public UserHomeImpl(ConnectionListImpl connections,
                         SensorDefinitionListImpl sensors,
@@ -91,7 +110,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         SettingsWrapperImpl settings,
                         SharedCredentialListImpl credentials,
                         FileIndexListImpl fileIndices,
-                        DashboardFolderListSpecWrapperImpl dashboards) {
+                        DashboardFolderListSpecWrapperImpl dashboards,
+                        MonitoringSchedulesWrapperImpl schedules,
+                        DefaultObservabilityCheckWrapperImpl observabilityCheck) {
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
@@ -100,6 +121,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setCredentials(credentials);
         this.setFileIndices(fileIndices);
         this.setDashboards(dashboards);
+        this.setDefaultSchedules(schedules);
+        this.setDefaultObservabilityChecks(observabilityCheck);
     }
 
     /**
@@ -277,6 +300,48 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns the default configuration of schedules in the user home folder.
+     * @return Collection of user's the default configuration of schedules.
+     */
+    public MonitoringSchedulesWrapperImpl getDefaultSchedules() {
+        return defaultSchedules;
+    }
+
+    /**
+     * Changes the collection of custom monitoring schedules.
+     * @param defaultSchedules New collection of custom monitoring schedules.
+     */
+    public void setDefaultSchedules(MonitoringSchedulesWrapperImpl defaultSchedules) {
+        this.defaultSchedules = defaultSchedules;
+        if (defaultSchedules != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_schedules");
+            defaultSchedules.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("default_schedules").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
+     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
+     * @return User's default data observability checks configuration.
+     */
+    public DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks() {
+        return defaultObservabilityChecks;
+    }
+
+    /**
+     * Sets the default configuration of data observability checks.
+     * @param defaultObservabilityChecks The default configuration of data observability checks.
+     */
+    public void setDefaultObservabilityChecks(DefaultObservabilityCheckWrapperImpl defaultObservabilityChecks) {
+        this.defaultObservabilityChecks = defaultObservabilityChecks;
+        if (this.defaultObservabilityChecks != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_data_observability_checks");
+            this.defaultObservabilityChecks.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("default_data_observability_checks").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Flushes an object to a persistent store.
      */
     @Override
@@ -290,6 +355,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getCredentials().flush();
         this.getFileIndices().flush();
         this.getDashboards().flush();
+        this.getDefaultSchedules().flush();
+        this.getDefaultObservabilityChecks().flush();
 
         this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
         assert !this.isDirty();
@@ -510,6 +577,13 @@ public class UserHomeImpl implements UserHome, Cloneable {
             }
             if (cloned.dashboards != null) {
                 cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();
+            }
+            if (cloned.defaultSchedules != null) {
+                cloned.defaultSchedules = (MonitoringSchedulesWrapperImpl) cloned.defaultSchedules.deepClone();
+            }
+            if (cloned.defaultObservabilityChecks != null) {
+                cloned.defaultObservabilityChecks
+                        = (DefaultObservabilityCheckWrapperImpl) cloned.defaultObservabilityChecks.deepClone();
             }
             // NOTE: the file index is not cloned... it has a different lifecycle
 
