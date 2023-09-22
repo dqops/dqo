@@ -9,7 +9,7 @@ spec:
         - dashboard_name: Count summary
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 2100
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -208,7 +208,7 @@ spec:
         - dashboard_name: Count summary
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 2100
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -408,7 +408,7 @@ spec:
         - dashboard_name: Count summary
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 2100
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -659,16 +659,34 @@ spec:
       #    ds0.p_check_category: all
     - folder_name: Timeliness
       dashboards:
-        - dashboard_name: Table freshness - tables with the latest data
+        - dashboard_name: Table freshness - tables with most current data
           url: https://lookerstudio.google.com/embed/reporting/19ab1796-a679-42ed-8a83-db6c56bdd0e6/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Table staleness - the most recently loaded tables
+        - dashboard_name: Table freshness-Tables with oldest data
+          url: https://lookerstudio.google.com/reporting/dbb9bfb4-639b-40df-bc9c-08bbcd59312a
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Table staleness - tables most recently loaded
           url: https://lookerstudio.google.com/embed/reporting/d8221aed-ce55-4a5b-8795-e212fe71433e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Table staleness - tables no longer loaded
+          url: https://lookerstudio.google.com/reporting/deeecb83-7552-496a-b507-eeab47272116
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: History of table freshness by day of the month
+          url: https://lookerstudio.google.com/reporting/25946a87-37e9-404f-a9e4-3497bb074590
+          width: 1400
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
       #- dashboard_name: Table ingestion delay
@@ -740,7 +758,7 @@ spec:
       - dashboard_name: Count summary
         url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
         width: 1400
-        height: 2100
+        height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
