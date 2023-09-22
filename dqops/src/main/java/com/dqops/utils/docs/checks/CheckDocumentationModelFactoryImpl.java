@@ -356,9 +356,18 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         CheckContainerModel allChecksModel = new CheckContainerModel();
         QualityCategoryModel uiCategoryModel;
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
         if (Objects.equals(checkCategoryName, AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
             uiCategoryModel = new QualityCategoryModel(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/" + COMPARISON_NAME);
             uiCategoryModel.setComparisonName(COMPARISON_NAME);
+
+            tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+            tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
+            tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
+            tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
+
+            trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
+            trimmedTableSpec.getTableComparisons().put(COMPARISON_NAME, tableComparisonConfigurationSpec);
         } else {
             uiCategoryModel = new QualityCategoryModel(checkCategoryName);
         }
@@ -376,14 +385,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer, tableSpec);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer, trimmedTableSpec);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(checkCategoryName);
         if (checkCategoryContainer == null) {
             System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + checkCategoryName);
         }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
         if (checkCategoryContainer instanceof AbstractComparisonCheckCategorySpecMap) {
             AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec> comparisonCategoryMap =
                     (AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec>)checkCategoryContainer;
@@ -397,11 +405,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 columnComparisonCheckCategorySpec.setReferenceColumn("source_of_truth_column_name");
             }
 
-            tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-            tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
-            tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
-            tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
-
             trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
             trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
             tableComparisonConfigurationSpec.getGroupingColumns().add(new TableComparisonGroupingColumnsPairSpec() {{
@@ -412,9 +415,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 setComparedTableColumnName("state");
                 setReferenceTableColumnName("state_column_name_on_reference_table");
             }});
-
-            trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
-            trimmedTableSpec.getTableComparisons().put(comparisonCheckCategorySpec.getComparisonName(), tableComparisonConfigurationSpec);
         }
 
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());

@@ -16,6 +16,7 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.metadata.basespecs.Flushable;
+import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
@@ -63,6 +64,12 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Settings.
      */
     SettingsWrapper getSettings();
+
+    /**
+     * Returns a collection of shared credentials.
+     * @return Collection of shared credentials.
+     */
+    SharedCredentialList getCredentials();
 
     /**
      * Returns a list of file indexes.

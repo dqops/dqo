@@ -60,7 +60,7 @@ public class LocalFolderTreeNodeTests extends BaseTest {
     @Test
     void getFiles_whenCalledBeforeAddingFiles_thenReturnsJustLoadedList() {
         Assertions.assertNotNull(this.sut.getFiles());
-        Assertions.assertEquals(4, this.sut.getFiles().size());
+        Assertions.assertEquals(3, this.sut.getFiles().size());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class LocalFolderTreeNodeTests extends BaseTest {
     @Test
     void loadChildFilesAndFolders_whenDefaultFilesAndFoldersPresent_thenReturnsThoseFiles() {
 		this.sut.loadChildFilesAndFolders();
-        Assertions.assertEquals(4, this.sut.getFiles().size());
+        Assertions.assertEquals(3, this.sut.getFiles().size());
         Assertions.assertEquals(9, this.sut.getSubFolders().size());
         Assertions.assertNotNull(this.sut.getChildFileByFileName(".gitignore"));
     }

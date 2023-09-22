@@ -16,6 +16,7 @@
 package com.dqops.connectors.bigquery;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -213,15 +214,17 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public BigQueryParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public BigQueryParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         BigQueryParametersSpec cloned = this.deepClone();
-        cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId);
-        cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId);
-        cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent);
-        cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath);
-        cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId);
+        cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId, lookupContext);
+        cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId, lookupContext);
+        cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent, lookupContext);
+        cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath, lookupContext);
+        cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId, lookupContext);
 
         return cloned;
     }

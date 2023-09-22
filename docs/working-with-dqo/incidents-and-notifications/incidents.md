@@ -18,7 +18,9 @@ Incidents are the default function of DQO and automatically groups issues.
 To modify the settings of the Incidents, follow these steps:
 
 1. Go to the **Data Sources** section.
+
 2. Select the relevant data source.
+
 3. Select the **Incidents And Notifications** tab.
 
    ![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings.png)
@@ -58,7 +60,7 @@ By default, incidents are grouped by table name. To change the grouping method c
 will link you to the **Incidents and Notifications** tab in the **Data Source** section.
 Change the level of grouping for data quality incidents and click the **Save** button.
 
-### Filter incidents
+## Filter incidents
 
 Use filtering to restrict the types of issue groups that appear in the list.
 
@@ -75,13 +77,13 @@ months using the time range filter buttons.
 
 ![Time range filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/time-range-filter.png)
 
-### Sort incidents
+## Sort incidents
 
 You can sort the incidents table. Simply click on the sorting icon next to any column header to sort the incidents table by that column.
 
 ![Sorting issues](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/sort-incidents.png)
 
-### Change the resolution status
+## Change the resolution status
 
 To help you manage the incidents, each of them can have the following resolution status values:
 
@@ -96,7 +98,7 @@ To help you manage the incidents, each of them can have the following resolution
 
 To change the resolution status, simply chose the status from the dropdown menu.
 
-### Add Issue link
+## Add Issue link
 
 You can add an **issue tracker link** to an incident by clicking the "+" button in the **Issue Link** column.
 
@@ -115,7 +117,7 @@ filter and sort them.
 ![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen.png)
 
 
-### Filter data quality checks
+## Filter data quality checks
 
 Use filtering to restrict the types of data quality issues that appear in the list and on the bar chart.
 
@@ -131,7 +133,7 @@ You can filter the list of issues **by column** or **check name** by clicking on
 
 ![Detailed input box filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/details-column-or-check-filter.png)
 
-### Sort incidents
+## Sort incidents
 
 To sort the issue table, simply click on the sorting icon next to any column header.
 

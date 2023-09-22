@@ -25,6 +25,7 @@ import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -484,9 +485,10 @@ public class ColumnSpec extends AbstractSpec {
      * Creates a trimmed version of the object without unwanted properties. Additionally, some variables that contain environment variables are expanded.
      * A trimmed version is passed to a Jinja2 sql template as a context parameter.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed version of this object.
      */
-    public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
@@ -496,7 +498,7 @@ public class ColumnSpec extends AbstractSpec {
             cloned.statistics = null;
             cloned.labels = null;
             if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
+                cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             return cloned;
         }

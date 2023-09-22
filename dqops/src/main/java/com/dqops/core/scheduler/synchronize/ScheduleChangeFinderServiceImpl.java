@@ -16,6 +16,7 @@
 package com.dqops.core.scheduler.synchronize;
 
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -57,6 +58,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 
         MonitoringScheduleSearchFilters monitoringScheduleSearchFilters = new MonitoringScheduleSearchFilters();
         monitoringScheduleSearchFilters.setScheduleEnabled(true);
@@ -72,7 +74,8 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
             ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(monitoringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
-            MonitoringScheduleSpec clonedMonitoringSchedule = monitoringSchedule.expandAndTrim(this.secretValueProvider);
+            MonitoringScheduleSpec clonedMonitoringSchedule = monitoringSchedule.expandAndTrim(
+                    this.secretValueProvider, secretValueLookupContext);
             clonedMonitoringSchedule.setHierarchyId(null);
 
             uniqueSchedulesCollection.add(clonedMonitoringSchedule);

@@ -17,6 +17,7 @@ package com.dqops.connectors.snowflake;
 
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -48,16 +49,16 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         SnowflakeParametersSpec snowflakeSpec = connectionSpec.getSnowflake();
 
-        String snowflakeAccount = this.getSecretValueProvider().expandValue(snowflakeSpec.getAccount());
+        String snowflakeAccount = this.getSecretValueProvider().expandValue(snowflakeSpec.getAccount(), secretValueLookupContext);
         hikariConfig.setJdbcUrl("jdbc:snowflake://" + snowflakeAccount + ".snowflakecomputing.com/");
 
         Properties dataSourceProperties = new Properties();
@@ -65,23 +66,23 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(snowflakeSpec.getProperties());
         }
 
-        String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
+        String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse(), secretValueLookupContext);
         dataSourceProperties.put("warehouse", warehouse);
 
-        String databaseName = this.getSecretValueProvider().expandValue(snowflakeSpec.getDatabase());
+        String databaseName = this.getSecretValueProvider().expandValue(snowflakeSpec.getDatabase(), secretValueLookupContext);
         dataSourceProperties.put("db", databaseName);
 
-        String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole());
+        String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(role)) {
             dataSourceProperties.put("role", role);
         }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
-        String userName = this.getSecretValueProvider().expandValue(snowflakeSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(snowflakeSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(snowflakeSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(snowflakeSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
         return hikariConfig;

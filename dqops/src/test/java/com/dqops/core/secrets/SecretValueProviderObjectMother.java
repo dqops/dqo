@@ -40,6 +40,6 @@ public class SecretValueProviderObjectMother {
      */
     public static String resolveProperty(String propertyString) {
         SecretValueProvider instance = getInstance();
-        return instance.expandValue(propertyString);
+        return instance.expandValue(propertyString, new SecretValueLookupContext(null));
     }
 }

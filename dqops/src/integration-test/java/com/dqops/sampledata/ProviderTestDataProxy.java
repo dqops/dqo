@@ -16,6 +16,7 @@
 package com.dqops.sampledata;
 
 import com.dqops.connectors.*;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,7 +68,7 @@ public class ProviderTestDataProxy {
         }
 
         // we need to create the target table
-        try (SourceConnection connectionForLoad = connectionProvider.createConnection(connectionSpec, true)) {
+        try (SourceConnection connectionForLoad = connectionProvider.createConnection(connectionSpec, true, new SecretValueLookupContext(null))) {
             connectionForLoad.createTable(sampleTableMetadata.getTableSpec());
 
             try {
@@ -95,7 +96,8 @@ public class ProviderTestDataProxy {
                 = new ConnectionSchemaPair(connectionSpec, schemaName);
         List<SourceTableModel> tablesInSchema = tablesInSchemas.get(schemaListKey);
         if (tablesInSchema == null) {
-            try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+            SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+            try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
                 tablesInSchema = sourceConnection.listTables(schemaName);
                 tablesInSchemas.put(schemaListKey, tablesInSchema);
             }

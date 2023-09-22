@@ -234,13 +234,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(localSettingsPath, emptyLocalSettings);
             }
 
-            Path customDashboardsPath = userHomePath.resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
+            Path customDashboardsPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(customDashboardsPath)) {
                 DashboardYaml dashboardYaml = new DashboardYaml();
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
             }
-
 
             Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
             if (!Files.exists(rulesRequirementTxtPath)) {

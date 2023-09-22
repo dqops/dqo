@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.RowCountLimitExceededException;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -53,7 +54,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
     }
 
     /**
-     * Returns an open JDBC connection (if the {@link AbstractJdbcSourceConnection#open()} was called.
+     * Returns an open JDBC connection (if the {@link AbstractJdbcSourceConnection#open(SecretValueLookupContext)} ()} was called.
      * @return Jdbc connection object.
      */
     public Connection getJdbcConnection() {
@@ -62,21 +63,23 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
 
     /**
      * Creates a hikari connection pool config for the connection specification.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
-    public abstract HikariConfig createHikariConfig();
+    public abstract HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     @Override
-    public void open() {
+    public void open(SecretValueLookupContext secretValueLookupContext) {
         if (this.jdbcConnection != null) {
             throw new JdbcConnectionFailedException("Cannot open a connection again");
         }
 
         try {
-            HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig());
+            HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig(secretValueLookupContext));
 			this.jdbcConnection = dataSource.getConnection();
             this.jdbcConnection.setAutoCommit(true);
         }

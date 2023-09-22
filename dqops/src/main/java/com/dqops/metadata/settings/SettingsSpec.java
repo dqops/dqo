@@ -16,6 +16,7 @@
 package com.dqops.metadata.settings;
 
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -232,17 +233,19 @@ public class SettingsSpec extends AbstractSpec {
 
 	/**
 	 * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+	 * @param secretValueProvider Secret value provider to use.
+	 * @param lookupContext Secret lookup context.
 	 * @return Trimmed and expanded version of this object.
 	 */
-	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
 		SettingsSpec cloned = (SettingsSpec) super.deepClone();
-		cloned.apiKey = secretValueProvider.expandValue(this.apiKey);
-		cloned.instanceSignatureKey = secretValueProvider.expandValue(this.instanceSignatureKey);
-		cloned.editorPath = secretValueProvider.expandValue(this.editorPath);
-		cloned.editorName = secretValueProvider.expandValue(this.editorName);
-		cloned.timeZone = secretValueProvider.expandValue(this.timeZone);
+		cloned.apiKey = secretValueProvider.expandValue(this.apiKey, lookupContext);
+		cloned.instanceSignatureKey = secretValueProvider.expandValue(this.instanceSignatureKey, lookupContext);
+		cloned.editorPath = secretValueProvider.expandValue(this.editorPath, lookupContext);
+		cloned.editorName = secretValueProvider.expandValue(this.editorName, lookupContext);
+		cloned.timeZone = secretValueProvider.expandValue(this.timeZone, lookupContext);
 		if (cloned.defaultSchedules != null) {
-			cloned.defaultSchedules = cloned.defaultSchedules.expandAndTrim(secretValueProvider);
+			cloned.defaultSchedules = cloned.defaultSchedules.expandAndTrim(secretValueProvider, lookupContext);
 		}
 		cloned.defaultDataObservabilityChecks = null;
         return cloned;

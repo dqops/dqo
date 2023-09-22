@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,7 @@ import java.util.function.Function;
 public class LocalFileSystemCacheImpl implements LocalFileSystemCache, DisposableBean {
     private final Cache<Path, List<HomeFolderPath>> folderListsCache;
     private final Cache<Path, List<HomeFilePath>> fileListsCache;
-    private final Cache<Path, FileContent> textFilesCache;
+    private final Cache<Path, FileContent> fileContentsCache;
     private final Cache<Path, LoadedMonthlyPartition> parquetFilesCache;
     private WatchService watchService;
     private final Map<Path, WatchKey> directoryWatchersByPath = new LinkedHashMap<>();
@@ -59,6 +58,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
 
+    /**
+     * Dependency injection constructor.
+     * @param dqoCacheConfigurationProperties Cache configuration parameters.
+     */
     @Autowired
     public LocalFileSystemCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties) {
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
@@ -81,7 +84,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 .maximumSize(dqoCacheConfigurationProperties.getFileListsLimit())
                 .expireAfterWrite(dqoCacheConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS)
                 .build();
-        this.textFilesCache = Caffeine.newBuilder()
+        this.fileContentsCache = Caffeine.newBuilder()
                 .maximumSize(dqoCacheConfigurationProperties.getFileListsLimit())
                 .expireAfterWrite(dqoCacheConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS)
                 .build();
@@ -256,25 +259,25 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         if (this.dqoCacheConfigurationProperties.isEnable()) {
             this.startFolderWatcher(filePath.getParent());
             this.processFileChanges(false);
-            return this.textFilesCache.get(filePath, readFunction);
+            return this.fileContentsCache.get(filePath, readFunction);
         }
 
         return readFunction.apply(filePath);
     }
 
     /**
-     * Stores a content of a text file in the cache. Also invalidates a cached list of files from the parent folder.
+     * Stores a content of a file in the cache. Also invalidates a cached list of files from the parent folder.
      * @param filePath Cache key (file path).
      * @param fileContent File content.
      */
     @Override
-    public void storeTextFile(Path filePath, FileContent fileContent) {
+    public void storeFile(Path filePath, FileContent fileContent) {
         if (!this.dqoCacheConfigurationProperties.isEnable()) {
             return;
         }
 
         this.startFolderWatcher(filePath.getParent());
-        this.textFilesCache.put(filePath, fileContent);
+        this.fileContentsCache.put(filePath, fileContent);
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -330,7 +333,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
             return;
         }
 
-        this.textFilesCache.invalidate(filePath);
+        this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
 
         Path parentFolderPath = filePath.getParent();
@@ -386,7 +389,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
             return;
         }
 
-        this.textFilesCache.invalidate(filePath);
+        this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
 
         Path folderPath = filePath.getParent();
@@ -403,7 +406,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     public void invalidateAll() {
         this.folderListsCache.invalidateAll();
         this.fileListsCache.invalidateAll();
-        this.textFilesCache.invalidateAll();
+        this.fileContentsCache.invalidateAll();
         this.parquetFilesCache.invalidateAll();
 
         if (this.dqoCacheConfigurationProperties.isWatchFileSystemChanges() && this.watchService != null) {

@@ -16,6 +16,7 @@
 
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -183,14 +184,15 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         IncidentWebhookNotificationsSpec cloned = this.deepClone();
-        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl);
-        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl);
-        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl);
-        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl);
+        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl, lookupContext);
+        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl, lookupContext);
+        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl, lookupContext);
+        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
         return cloned;
     }
 }

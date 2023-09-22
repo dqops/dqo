@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.scheduling;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -146,11 +147,13 @@ public class MonitoringScheduleSpec extends AbstractSpec {
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public MonitoringScheduleSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public MonitoringScheduleSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         MonitoringScheduleSpec cloned = this.deepClone();
-        cloned.cronExpression = secretValueProvider.expandValue(cloned.cronExpression);
+        cloned.cronExpression = secretValueProvider.expandValue(cloned.cronExpression, lookupContext);
         return cloned;
     }
 }

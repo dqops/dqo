@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -306,14 +307,15 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     /**
      * Creates a clone of the object that will be passed to the sensor runner. Configurable variables are expanded.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         ColumnTypeSnapshotSpec cloned = this.deepClone();
         if (cloned.columnType != null) {
             cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
         }
-        cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
+        cloned.columnType = secretValueProvider.expandValue(cloned.columnType, lookupContext);
         return cloned;
     }
 

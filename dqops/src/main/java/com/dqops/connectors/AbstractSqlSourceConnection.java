@@ -16,6 +16,7 @@
 package com.dqops.connectors;
 
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.utils.conversion.NumericTypeConverter;
@@ -89,9 +90,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     @Override
-    public abstract void open();
+    public abstract void open(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Closes a connection.
@@ -154,7 +156,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("WHERE table_schema='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
-        String databaseName = this.secretValueProvider.expandValue(providerSpecificConfiguration.getDatabase());
+        String databaseName = providerSpecificConfiguration.getDatabase();
         if (!Strings.isNullOrEmpty(databaseName)) {
             sqlBuilder.append(" AND table_catalog='");
             sqlBuilder.append(databaseName.replace("'", "''"));
