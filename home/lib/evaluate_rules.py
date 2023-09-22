@@ -108,9 +108,14 @@ class RuleRunner:
 
 def main():
     rule_runner = RuleRunner()
-    for request, duration_millis in streaming.stream_json_objects(sys.stdin):
-        response = rule_runner.process_rule_request(request)
-        sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
+    try:
+        for request, duration_millis in streaming.stream_json_objects(sys.stdin):
+            response = rule_runner.process_rule_request(request)
+            sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+    except Exception as ex:
+        sys.stdout.write(json.dumps(PythonRuleCallOutput(None, None, traceback.format_exc()), cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")
         sys.stdout.flush()
 
