@@ -10,6 +10,8 @@ import {
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../redux/reducers';
 
 const options = [
   {
@@ -35,6 +37,9 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   bigquery,
   onChange
 }) => {
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const handleChange = (obj: Partial<BigQueryParametersSpec>) => {
     if (!onChange) return;
 
@@ -52,6 +57,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         name="source_project_id"
         value={bigquery?.source_project_id}
         onChange={(value) => handleChange({ source_project_id: value })}
+        disabled={userProfile.can_manage_data_sources!== true}
       />
         <Select
           label="Authentication mode to the Google Cloud"
@@ -62,6 +68,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
             BigQueryAuthenticationMode.google_application_credentials
           }
           onChange={(value) => handleChange({ authentication_mode: value })}
+          disabled={userProfile.can_manage_data_sources!== true}
         />
         <Select
          label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
@@ -72,14 +79,15 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
            BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_source_project
          }
          onChange={(value) => handleChange({ jobs_create_project: value })}
+         disabled={userProfile.can_manage_data_sources!== true}
        />
       <FieldTypeInput
-        className={bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id ?
-           "mb-4" : "mb-4 pointer-events-none"}
+        className="mb-4" 
         label="Billing GCP project ID"
         name="billing_project_id"
         value={bigquery?.billing_project_id}
         onChange={(value) => handleChange({ billing_project_id: value })}
+        disabled={(bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id || userProfile.can_manage_data_sources!== true) ? false: true}
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
@@ -99,6 +107,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
           name="json_key_path"
           value={bigquery?.json_key_path}
           onChange={(value) => handleChange({ json_key_path: value })}
+          disabled={userProfile.can_manage_data_sources!== true}
         />
       )}
       <FieldTypeInput
@@ -106,6 +115,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         name="quota_project_id"
         value={bigquery?.quota_project_id}
         onChange={(value) => handleChange({ quota_project_id: value })}
+        disabled={userProfile.can_manage_data_sources!== true}
       />
     </SectionWrapper>
   );
