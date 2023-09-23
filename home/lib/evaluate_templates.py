@@ -93,6 +93,7 @@ def main():
     #        sys.stdout.write(" " * 1024)  # padding
             sys.stdout.flush()
     except Exception as ex:
+        print ('Error rendering a sensor: ' + traceback.format_exc(), file=sys.stderr)
         sys.stdout.write(json.dumps({"error": traceback.format_exc()}))
         sys.stdout.write("\n")
         sys.stdout.flush()

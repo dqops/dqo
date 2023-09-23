@@ -19,6 +19,7 @@ import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Instance of a python process that started a python module that works in a streaming mode.
  */
+@Slf4j
 public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private static final Logger LOG = LoggerFactory.getLogger(StreamingPythonProcess.class);
     private static final int PYTHON_BUFFER_SIZE = 1024; // buffer size used in the python streaming process in a call to TextIO.read(buffer_size)
@@ -158,14 +160,18 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 							this.writeToProcessStreamProcessSide.close();
 							this.readFromProcessStream.close();
 							this.readFromProcessStreamProcessSide.close();
+
+                            String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
+                            log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText);
                         }
                         catch (Exception ioe) {
+                            log.error("Python process failed with an error and we cannot close the stream: " + ioe.getMessage(), ioe);
                         }
                     });
 
             PumpStreamHandler streamHandler = new FlushingPumpStreamHandler(
                     new FlushingOutputStream(this.readFromProcessStreamProcessSide),
-                    errorOutputStream,
+                    errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
 					this.writeToProcessStreamProcessSide);
 			this.executor = new DefaultExecutor();
 			this.executor.setStreamHandler(streamHandler);
@@ -183,6 +189,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         }
         catch (Exception ex) {
             String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
+            log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText +
+                    ", exception message: " + ex.getMessage(), ex);
             throw new PythonExecutionException("Command line " + commandLineText + " failed, stderr:\n" + errStreamText);
         }
     }
