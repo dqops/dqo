@@ -429,18 +429,18 @@ export const openRuleFolderTree = (key: string) => ({
   key
 });
 
-export const refreshRuleFolderTree = (bool: boolean) => ({
+export const refreshRuleFolderTree = (refreshRulesTreeIndicator: boolean) => ({
   type: DEFINITION_ACTION.REFRESH_RULES_TREE_INDICATOR,
-  bool
+  refreshRulesTreeIndicator
 });
 
-export const refreshSensorsFolderTree = (bool: boolean) => ({
+export const refreshSensorsFolderTree = (refreshSensorsTreeIndicator: boolean) => ({
   type: DEFINITION_ACTION.REFRESH_SENSORS_TREE_INDICATOR,
-  bool
+  refreshSensorsTreeIndicator
 });
-export const refreshChecksFolderTree = (bool: boolean) => ({
+export const refreshChecksFolderTree = (refreshChecksTreeIndicator: boolean) => ({
   type: DEFINITION_ACTION.REFRESH_CHECKS_TREE_INDICATOR,
-  bool
+  refreshChecksTreeIndicator
 });
 
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({

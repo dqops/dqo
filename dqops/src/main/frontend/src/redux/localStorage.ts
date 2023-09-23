@@ -52,6 +52,9 @@ const transformSensorState = (state: IDefinitionState): IDefinitionState => {
     sensorState: {},
     ruleState: {},
     dataQualityChecksState: {},
+    refreshChecksTreeIndicator: false,
+    refreshSensorsTreeIndicator: false,
+    refreshRulesTreeIndicator: false,
     tabs: state?.tabs?.map((item: INestTab, index: number) => ({
       url: item.url,
       value: item.value,

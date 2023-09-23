@@ -12,7 +12,10 @@ import {
   openSensorFolderTree,
   getdataQualityChecksFolderTree,
   toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
+  opendataQualityChecksFolderTree,
+  // refreshChecksFolderTree,
+  // refreshRuleFolderTree,
+
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -49,9 +52,9 @@ export const DefinitionTree = () => {
     ruleState,
     tabs,
     activeTab,
-    refreshChecksTreeIndicator = false,
-    refreshRulesTreeIndicator = false,
-    refreshSensorsTreeIndicator = false
+    refreshChecksTreeIndicator,
+    refreshRulesTreeIndicator ,
+    refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
   const [checkIndicator, setCheckIndicator] = useState(false);
   const [sensorIndicator, setSensorIndicator] = useState(false);
@@ -62,9 +65,13 @@ export const DefinitionTree = () => {
   const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
 
   const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
-  console.log(    refreshChecksTreeIndicator,
-    refreshRulesTreeIndicator,
-    refreshSensorsTreeIndicator)
+
+useEffect(() => {
+  // dispatch(refreshChecksFolderTree(false))
+  // dispatch(refreshRuleFolderTree(false))
+  // dispatch(refreshSensorFolderTree(false))
+},[])
+
   useEffect(() => {
     dispatch(getSensorFolderTree());
   }, [sensorIndicator]);
@@ -222,6 +229,10 @@ export const DefinitionTree = () => {
       dispatch(toggleFirstLevelFolder(configuration));
     }
   }, [activeTab]);
+    console.log(    
+    refreshChecksTreeIndicator,
+    refreshRulesTreeIndicator,
+    refreshSensorsTreeIndicator)
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
