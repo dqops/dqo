@@ -211,10 +211,7 @@ export const DefinitionTree = () => {
       dispatch(toggleFirstLevelFolder(configuration));
     }
   }, [activeTab]);
-    console.log(    
-    refreshChecksTreeIndicator,
-    refreshRulesTreeIndicator,
-    refreshSensorsTreeIndicator)
+
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
