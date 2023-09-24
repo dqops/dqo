@@ -429,6 +429,19 @@ export const openRuleFolderTree = (key: string) => ({
   key
 });
 
+export const refreshRuleFolderTree = (refreshRulesTreeIndicator: boolean) => ({
+  type: DEFINITION_ACTION.REFRESH_RULES_TREE_INDICATOR,
+  refreshRulesTreeIndicator
+});
+
+export const refreshSensorsFolderTree = (refreshSensorsTreeIndicator: boolean) => ({
+  type: DEFINITION_ACTION.REFRESH_SENSORS_TREE_INDICATOR,
+  refreshSensorsTreeIndicator
+});
+export const refreshChecksFolderTree = (refreshChecksTreeIndicator: boolean) => ({
+  type: DEFINITION_ACTION.REFRESH_CHECKS_TREE_INDICATOR,
+  refreshChecksTreeIndicator
+});
 
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE,
@@ -451,3 +464,4 @@ export const toggleFirstLevelFolder = (
   type: DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER,
   data
 });
+

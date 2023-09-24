@@ -9,6 +9,7 @@ import {
   closeFirstLevelTab,
   createRule,
   getRule,
+  refreshRuleFolderTree,
   setUpdatedRule
 } from '../../redux/actions/definition.actions';
 import Tabs from '../../components/Tabs';
@@ -19,6 +20,7 @@ import Input from '../../components/Input';
 import { ROUTES } from '../../shared/routes';
 import { RulesApi } from '../../services/apiClient';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
 
 const tabs = [
   {
@@ -35,6 +37,9 @@ export const RuleDetail = () => {
   const { full_rule_name, ruleDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
+  const {
+    refreshRulesTreeIndicator 
+  } = useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [ruleName, setRuleName] = useState(
@@ -188,7 +193,9 @@ export const RuleDetail = () => {
 
   const onDelete = async () => {
     RulesApi.deleteRule(full_rule_name).then(async () =>
-      closeRuleFirstLevelTab()
+      closeRuleFirstLevelTab(),
+      dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
+
     );
   };
 
@@ -239,7 +246,7 @@ export const RuleDetail = () => {
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={onDelete}
-        message={`Are you sure you want to delete the sensor ${full_rule_name}`}
+        message={`Are you sure you want to delete the rule ${full_rule_name}`}
       />
     </DefinitionLayout>
   );

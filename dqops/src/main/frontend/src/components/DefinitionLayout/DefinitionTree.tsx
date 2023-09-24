@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import {
   addFirstLevelTab,
@@ -12,7 +12,7 @@ import {
   openSensorFolderTree,
   getdataQualityChecksFolderTree,
   toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
+  opendataQualityChecksFolderTree,
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -48,29 +48,23 @@ export const DefinitionTree = () => {
     ruleFolderTree,
     ruleState,
     tabs,
-    activeTab
+    activeTab,
+    refreshChecksTreeIndicator,
+    refreshRulesTreeIndicator ,
+    refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
-  const [checkIndicator, setCheckIndicator] = useState(false);
-  const [sensorIndicator, setSensorIndicator] = useState(false);
-  const [ruleIndicator, setRuleIndicator] = useState(false);
-
-  const onChangeCheckIndicator = () => setCheckIndicator(!checkIndicator);
-
-  const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
-
-  const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
-  }, [sensorIndicator]);
+  }, [refreshSensorsTreeIndicator]);
 
   useEffect(() => {
     dispatch(getRuleFolderTree());
-  }, [ruleIndicator]);
+  }, [refreshRulesTreeIndicator]);
 
   useEffect(() => {
     dispatch(getdataQualityChecksFolderTree());
-  }, [checkIndicator]);
+  }, [refreshChecksTreeIndicator]);
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -217,6 +211,7 @@ export const DefinitionTree = () => {
       dispatch(toggleFirstLevelFolder(configuration));
     }
   }, [activeTab]);
+
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
     path?: string[],
@@ -293,7 +288,6 @@ export const DefinitionTree = () => {
               <SensorContextMenu
                 singleSensor={true}
                 sensor={sensor}
-                indicateChanges={onChangeSensorIndicator}
               />
             </div>
           ))}
@@ -378,7 +372,6 @@ export const DefinitionTree = () => {
               <RuleContextMenu
                 singleRule={true}
                 rule={rule}
-                indicateChanges={onChangeRuleIndicator}
               />
             </div>
           ))}
@@ -469,7 +462,6 @@ export const DefinitionTree = () => {
                   <DataQualityContextMenu
                     singleCheck={true}
                     check={check}
-                    indicateChanges={onChangeCheckIndicator}
                   />
                 </div>
               </div>
