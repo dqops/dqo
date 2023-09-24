@@ -72,7 +72,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         />
         <Select
          label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
-         options={Object.values(BigQueryParametersSpecJobsCreateProjectEnum).map((x) => ({label: x, value: x}))}
+         options={Object.values(BigQueryParametersSpecJobsCreateProjectEnum).map((x) => ({label: x.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()), value: x}))}
          className="mb-4"
          value={
            bigquery?.jobs_create_project ||
