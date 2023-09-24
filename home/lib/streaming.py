@@ -81,15 +81,15 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
     ex = None
     started_at = None
     while True:
-        if os.name != 'nt':
-            io_event.wait()
-
         block = file_obj.read(buf_size)
         if os.name != 'nt':
             io_event.clear()
 
-        if not block:
+        if file_obj.closed:
             break
+
+        if not block:
+            continue
 
         if not started_at:
             started_at = datetime.now()
@@ -116,6 +116,9 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
                 yield obj, duration_millis
         buf = buf[pos:]
         started_at = None
+
+        if os.name != 'nt':
+            io_event.wait()
     if ex is not None:
         raise ex
 
@@ -134,15 +137,16 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
     ex = None
     started_at = None
     while True:
-        if os.name != 'nt':
-            io_event.wait()
-
         block = file_obj.read(buf_size)
         if os.name != 'nt':
             io_event.clear()
 
-        if not block:
+        if file_obj.closed:
             break
+
+        if not block:
+            continue
+
         if not started_at:
             started_at = datetime.now()
         buf += block
@@ -168,5 +172,8 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
                 yield obj, duration_millis
         buf = buf[pos:]
         started_at = None
+
+        if os.name != 'nt':
+            io_event.wait()
     if ex is not None:
         raise ex
