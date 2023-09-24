@@ -14,7 +14,8 @@ import {
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
-  deleteCheck
+  deleteCheck,
+  refreshChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
@@ -30,7 +31,6 @@ interface RuleContextMenuProps {
   path?: string[];
   singleCheck?: boolean;
   check?: CheckSpecBasicModel;
-  indicateChanges?: () => void;
 }
 
 const DataQualityContextMenu = ({
@@ -38,7 +38,6 @@ const DataQualityContextMenu = ({
   path,
   singleCheck,
   check,
-  indicateChanges
 }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +45,9 @@ const DataQualityContextMenu = ({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const {
+    refreshChecksTreeIndicator 
+  } = useSelector((state: IRootState) => state.definition);
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -100,7 +102,7 @@ const DataQualityContextMenu = ({
 
   const deleteChecksFromTree = async () => {
     await dispatch(deleteCheck(check?.full_check_name ?? '')).then(
-      () => indicateChanges && indicateChanges()
+      () =>dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
     );
   };
 

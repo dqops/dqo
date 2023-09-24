@@ -167,7 +167,6 @@ export const SensorDetail = () => {
     );
     dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
   };
-console.log(refreshChecksTreeIndicator)
   const onChangecheckName = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdated(true);
     setcheckName(e.target.value);

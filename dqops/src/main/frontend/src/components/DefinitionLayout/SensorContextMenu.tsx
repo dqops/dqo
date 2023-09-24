@@ -8,18 +8,19 @@ import {
 import SvgIcon from '../SvgIcon';
 import { SensorBasicFolderModel, SensorBasicModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { addFirstLevelTab, refreshSensorsFolderTree } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { SensorsApi } from '../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface SensorContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
   singleSensor?: boolean;
   sensor?: SensorBasicModel;
-  indicateChanges?: () => void;
 }
 
 const SensorContextMenu = ({
@@ -27,12 +28,14 @@ const SensorContextMenu = ({
   path,
   singleSensor,
   sensor,
-  indicateChanges
 }: SensorContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const {
+    refreshSensorsTreeIndicator 
+  } = useSelector((state: IRootState) => state.definition);
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -86,7 +89,7 @@ const SensorContextMenu = ({
 
   const deleteSensorFromTree = async () => {
     await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '').then(
-      () => indicateChanges && indicateChanges()
+      () => dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
   };
 

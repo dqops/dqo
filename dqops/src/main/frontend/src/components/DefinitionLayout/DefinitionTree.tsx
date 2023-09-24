@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import {
   addFirstLevelTab,
@@ -13,9 +13,6 @@ import {
   getdataQualityChecksFolderTree,
   toggledataQualityChecksFolderTree,
   opendataQualityChecksFolderTree,
-  // refreshChecksFolderTree,
-  // refreshRuleFolderTree,
-
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -56,33 +53,18 @@ export const DefinitionTree = () => {
     refreshRulesTreeIndicator ,
     refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
-  const [checkIndicator, setCheckIndicator] = useState(false);
-  const [sensorIndicator, setSensorIndicator] = useState(false);
-  const [ruleIndicator, setRuleIndicator] = useState(false);
-
-  const onChangeCheckIndicator = () => setCheckIndicator(!checkIndicator);
-
-  const onChangeSensorIndicator = () => setSensorIndicator(!sensorIndicator);
-
-  const onChangeRuleIndicator = () => setRuleIndicator(!ruleIndicator);
-
-useEffect(() => {
-  // dispatch(refreshChecksFolderTree(false))
-  // dispatch(refreshRuleFolderTree(false))
-  // dispatch(refreshSensorFolderTree(false))
-},[])
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
-  }, [sensorIndicator]);
+  }, [refreshSensorsTreeIndicator]);
 
   useEffect(() => {
     dispatch(getRuleFolderTree());
-  }, [ruleIndicator]);
+  }, [refreshRulesTreeIndicator]);
 
   useEffect(() => {
     dispatch(getdataQualityChecksFolderTree());
-  }, [checkIndicator]);
+  }, [refreshChecksTreeIndicator]);
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -309,7 +291,6 @@ useEffect(() => {
               <SensorContextMenu
                 singleSensor={true}
                 sensor={sensor}
-                indicateChanges={onChangeSensorIndicator}
               />
             </div>
           ))}
@@ -394,7 +375,6 @@ useEffect(() => {
               <RuleContextMenu
                 singleRule={true}
                 rule={rule}
-                indicateChanges={onChangeRuleIndicator}
               />
             </div>
           ))}
@@ -485,7 +465,6 @@ useEffect(() => {
                   <DataQualityContextMenu
                     singleCheck={true}
                     check={check}
-                    indicateChanges={onChangeCheckIndicator}
                   />
                 </div>
               </div>
