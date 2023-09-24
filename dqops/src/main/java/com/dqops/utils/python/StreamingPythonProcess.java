@@ -218,6 +218,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
      */
     @Override
     public void onProcessFailed(ExecuteException e) {
+        log.error("Python process failed, error: " + e.getMessage(), e);
 		this.processFinishedErrorFuture.complete(e);
     }
 

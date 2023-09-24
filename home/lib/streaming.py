@@ -15,6 +15,13 @@
 #
 
 import re
+import sys
+import os
+import signal
+if os.name != 'nt':
+    import fcntl
+
+import threading
 from datetime import datetime
 from json import JSONDecoder, JSONDecodeError, JSONEncoder
 from typing import TextIO
@@ -55,15 +62,35 @@ class ObjectEncoder(JSONEncoder):
         return obj.__dict__
 
 
+if os.name != 'nt':
+    io_event = threading.Event()
+def handle_io(signal, frame):
+    io_event.set()
+
 def stream_json_objects(file_obj: TextIO, buf_size=1024):
+    if os.name != 'nt':
+        # invoke handle_io on a SIGIO event
+        signal.signal(signal.SIGIO, handle_io)
+        # send io events on stdin (fd 0) to our process
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
+        # tell the os to produce SIGIO events when data is written to stdin
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
+
     decoder = JSONDecoder(object_hook=ObjectHook)
     buf = ""
     ex = None
     started_at = None
     while True:
+        if os.name != 'nt':
+            io_event.wait()
+
         block = file_obj.read(buf_size)
+        if os.name != 'nt':
+            io_event.clear()
+
         if not block:
             break
+
         if not started_at:
             started_at = datetime.now()
         buf += block
@@ -94,12 +121,26 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
 
 
 def stream_json_dicts(file_obj: TextIO, buf_size=1024):
+    if os.name != 'nt':
+        # invoke handle_io on a SIGIO event
+        signal.signal(signal.SIGIO, handle_io)
+        # send io events on stdin (fd 0) to our process
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
+        # tell the os to produce SIGIO events when data is written to stdin
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
+
     decoder = JSONDecoder()
     buf = ""
     ex = None
     started_at = None
     while True:
+        if os.name != 'nt':
+            io_event.wait()
+
         block = file_obj.read(buf_size)
+        if os.name != 'nt':
+            io_event.clear()
+
         if not block:
             break
         if not started_at:
