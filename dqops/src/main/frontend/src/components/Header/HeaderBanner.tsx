@@ -100,7 +100,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
           {...triggers}
           className="max-w-250 z-50 !top-12 !left-0 rounded-none text-gray-700"
         >
-          <div className="flex mb-2  items-center justify-between">
+          <div className="flex mb-4  items-center justify-between">
             <div className="grow">Collect basic statistics</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
@@ -124,7 +124,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
               </div>
             </div>
           </div>
-          <div className="flex mb-2 items-center justify-between">
+          <div className="flex mb-4 items-center justify-between">
             <div className="grow">Run profiling checks</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
@@ -147,7 +147,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
               </div>
             </div>
           </div>
-          <div className="flex mb-2 w-150 items-center justify-between">
+          <div className="flex mb-4 w-150 items-center justify-between">
             <div className="grow">
               Review scheduling for profiling and
               <br></br> daily monitoring checks
