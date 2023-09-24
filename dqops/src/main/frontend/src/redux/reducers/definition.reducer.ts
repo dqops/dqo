@@ -37,9 +37,9 @@ export interface IDefinitionState {
   checkDetail?: CheckSpecModel;
 
   definitionFirstLevelFolder?: Array<{ category: string; isOpen: boolean }>;
-  refreshChecksTreeIndicator: boolean;
-  refreshSensorsTreeIndicator: boolean;
-  refreshRulesTreeIndicator: boolean;
+  refreshChecksTreeIndicator?: boolean;
+  refreshSensorsTreeIndicator?: boolean;
+  refreshRulesTreeIndicator?: boolean;
 }
 
 const initialState: IDefinitionState = {
