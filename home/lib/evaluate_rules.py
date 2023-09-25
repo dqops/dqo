@@ -16,6 +16,7 @@
 
 import importlib.util
 import json
+import os
 import sys
 import traceback
 import types
@@ -109,7 +110,8 @@ class RuleRunner:
 def main():
     try:
         rule_runner = RuleRunner()
-        for request, duration_millis in streaming.stream_json_objects(sys.stdin):
+        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 512)
+        for request, duration_millis in streaming.stream_json_objects(stdin_small_buffer):
             response = rule_runner.process_rule_request(request)
             sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
             sys.stdout.write("\n")
