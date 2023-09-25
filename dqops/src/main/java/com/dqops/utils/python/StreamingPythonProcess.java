@@ -99,7 +99,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                     return deserializedResponse;
                 } catch (Exception ex) {
                     if (!this.outputDetectedOnStderrFuture.isDone()) {
-                        throw new PythonExecutionException("Failed to parse a response from a python process", ex);
+                        throw new PythonExecutionException("Failed to parse a response from a python process, message: " + ex.getMessage(), ex);
                     }
                     else {
                         return null;
@@ -147,7 +147,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 			this.readFromProcessStreamProcessSide = new PipedOutputStream();
 			this.readFromProcessStream = new PipedInputStream(this.readFromProcessStreamProcessSide);
 
-			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream, PYTHON_RECEIVE_RESPONSE_BUFFER_SIZE));
+			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream, PYTHON_RECEIVE_RESPONSE_BUFFER_SIZE), StandardCharsets.UTF_8);
 			this.errorStream = new ByteArrayOutputStream();
 			this.jsonFactory = new JsonFactory();
 			this.jsonParser = jsonFactory.createParser(this.readFromProcessStreamReader);
