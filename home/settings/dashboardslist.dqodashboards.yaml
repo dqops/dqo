@@ -465,7 +465,7 @@ spec:
         - dashboard_name: Current column partition status per check category
           url: https://lookerstudio.google.com/reporting/2921e451-adef-4769-a96b-2497daed58db/page/c5B8C
           width: 1400
-          height: 1760
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -474,7 +474,7 @@ spec:
         - dashboard_name: Current column partition status per data quality dimension
           url: https://lookerstudio.google.com/reporting/738d9b7e-9240-458c-9bc0-211f8be55798
           width: 1400
-          height: 1760
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
