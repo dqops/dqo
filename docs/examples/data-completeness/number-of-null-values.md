@@ -58,7 +58,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 1. Go to the **Monitoring** section.
     
-    The Monitoring section enables the configuration of advanced monitoring data quality checks that are designed for the monthly and daily evaluation of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -68,7 +68,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 3. Select the **Monitoring Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Monitoring** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+    In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
@@ -107,20 +107,37 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![Null-count check results on Issue severity status per column and day dashboard](https://dqops.com/docs/images/examples/daily-null-count-check-results-on-issue-severity-status-per-column-and-day-dashboard.png)
 
-## Configure scheduler
+## Configuring a schedule at connection level
 
-To make better use of that data, and accurately predict operational issues so that we can resolve them before they
-negatively impact our business, we want to monitor various data quality aspects.
+With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+table, or individual check.
+
+After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
 
 ![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
-You can read more about scheduling [here](../../working-with-dqo/schedules/index.md).
+1. Navigate to the **Data Source** section.
 
-By setting up a schedule, data can be constantly monitored, and errors can be triggered to alert about potential
-issues with the data quality or operational processes.
+2. Choose the connection from the tree view on the left.
 
-You can learn more about different types of configurations by referring the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md).
+3. Click on the **Schedule** tab.
+
+4. Select the Monitoring Daily tab
+
+5. Select the **Run every day at** option and specify the time as 12:00.
+
+6. Once you have set the schedule, click on the **Save** button to save your changes.
+
+7. Enable the scheduler by clicking the toggle button. 
+
+![Add picture with marked toggle button  enable job scheduler]()
+
+Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
+all tables associated with that connection. 
+
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
+
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example. 
 
 ## YAML configuration file
 
@@ -275,5 +292,6 @@ Results returned by the sensor:
 - For details on the [nulls_cont check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- 
 - DQO provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
  
