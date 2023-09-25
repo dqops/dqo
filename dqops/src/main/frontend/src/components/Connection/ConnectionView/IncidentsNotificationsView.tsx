@@ -24,9 +24,12 @@ import { IRootState } from "../../../redux/reducers";
 import clsx from "clsx";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
-  label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+  label: item
+  .replace(/_(?=dimension)/, " / Quality ")
+  .replace(/_(?=(name|type|category))/g, " / Check ")
+  .replace(/^\w/g, c => c.toUpperCase()),
   value: item
-}));
+}));  
 
 const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
   label: item.charAt(0).toUpperCase() + item.slice(1),
