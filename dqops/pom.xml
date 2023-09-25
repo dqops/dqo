@@ -181,7 +181,7 @@
 						<version>1.14.0</version>
 						<configuration>
 							<workingDirectory>src/main/frontend</workingDirectory>
-							<nodeVersion>v18.18.0</nodeVersion>
+							<nodeVersion>v18.16.0</nodeVersion>
 							<npmVersion>9.6.7</npmVersion>
 						</configuration>
 						<executions>
