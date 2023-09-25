@@ -95,6 +95,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
         this.setDefaultObservabilityChecks(new DefaultObservabilityCheckWrapperImpl());
+        this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl());
     }
 
     /**
