@@ -73,14 +73,13 @@ def handle_io(signal, frame):
 def stream_json_objects(file_obj: TextIO, buf_size=1024):
     if os.name != 'nt':
         # invoke handle_io on a SIGIO event
-        # signal.signal(signal.SIGIO, handle_io)
-        # # send io events on stdin (fd 0) to our process
-        # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
-        # # tell the os to produce SIGIO events when data is written to stdin
-        # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
-        # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
-        stream_flags = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETFL, 0)
-        fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, stream_flags & ~os.O_NONBLOCK)
+        signal.signal(signal.SIGIO, handle_io)
+        # send io events on stdin (fd 0) to our process
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
+        # tell the os to produce SIGIO events when data is written to stdin
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
+        # stream_flags = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETFL, 0)
+        # fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, stream_flags & ~os.O_NONBLOCK)
 
     decoder = JSONDecoder(object_hook=ObjectHook)
     buf = ""
@@ -92,14 +91,13 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
         #     io_event.clear()
 
         if file_obj.closed:
-            print('Python: Input stream was closed', file=sys.stderr)
+#            print('Python: Input stream was closed', file=sys.stderr)
             break
 
         if not block:
             if os.name != 'nt':
-                print('Python: read from input stream returned an empty response', file=sys.stderr)
-#                 io_event.wait()
-#            else:
+                io_event.wait()
+                io_event.clear()
                 continue
 
         if not started_at:
@@ -133,16 +131,16 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
 
 def stream_json_dicts(file_obj: TextIO, buf_size=512):
     if os.name != 'nt':
-        # # invoke handle_io on a SIGIO event
-        # signal.signal(signal.SIGIO, handle_io)
-        # # send io events on stdin (fd 0) to our process
-        # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
-        # # tell the os to produce SIGIO events when data is written to stdin
-        # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
-        stream_flags = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETFL, 0)
-        fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, stream_flags & ~os.O_NONBLOCK)
-        pipe_size = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETPIPE_SZ, 0)
-        print('Pipe size: ' + str(pipe_size), file=sys.stderr)
+        # invoke handle_io on a SIGIO event
+        signal.signal(signal.SIGIO, handle_io)
+        # send io events on stdin (fd 0) to our process
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETOWN, os.getpid()) == 0
+        # tell the os to produce SIGIO events when data is written to stdin
+        assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
+        # stream_flags = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETFL, 0)
+        # fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, stream_flags & ~os.O_NONBLOCK)
+        # pipe_size = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETPIPE_SZ, 0)
+        # print('Pipe size: ' + str(pipe_size), file=sys.stderr)
 
     decoder = JSONDecoder()
     buf = ""
@@ -150,18 +148,17 @@ def stream_json_dicts(file_obj: TextIO, buf_size=512):
     started_at = None
     while True:
         block = file_obj.read(buf_size)
-        if os.name != 'nt':
-            io_event.clear()
+        # if os.name != 'nt':
+        #     io_event.clear()
 
         if file_obj.closed:
-            print('Python: Input stream was closed', file=sys.stderr)
+#            print('Python: Input stream was closed', file=sys.stderr)
             break
 
         if not block:
             if os.name != 'nt':
-                print('Python: read from input stream returned an empty response', file=sys.stderr)
-                #     io_event.wait()
-                # else:
+                io_event.wait()
+                io_event.clear()
                 continue
 
         if not started_at:
@@ -189,8 +186,5 @@ def stream_json_dicts(file_obj: TextIO, buf_size=512):
                 yield obj, duration_millis
         buf = buf[pos:]
         started_at = None
-
-        # if os.name != 'nt':
-        #     io_event.wait()
     if ex is not None:
         raise ex
