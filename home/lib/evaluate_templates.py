@@ -83,8 +83,9 @@ class TemplateRunner:
 
 def main():
     template_runner = TemplateRunner()
+    post_response_padding = " " * 1024
     try:
-        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 512)
+        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
         for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
             started_at = datetime.now()
             response = template_runner.process_template_request(request)
@@ -92,7 +93,7 @@ def main():
             response["total_processing_millis"] = int((datetime.now() - started_at).total_seconds() * 1000.0) + receiving_millis
             sys.stdout.write(json.dumps(response))
             sys.stdout.write("\n")
-    #        sys.stdout.write(" " * 1024)  # padding
+            sys.stdout.write(post_response_padding)  # padding
             sys.stdout.flush()
     except Exception as ex:
         print ('Error rendering a sensor: ' + traceback.format_exc(), file=sys.stderr)

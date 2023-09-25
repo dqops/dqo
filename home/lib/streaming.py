@@ -70,7 +70,7 @@ def handle_io(signal, frame):
     io_event.set()
 
 
-def stream_json_objects(file_obj: TextIO, buf_size=512):
+def stream_json_objects(file_obj: TextIO, buf_size=1024):
     if os.name != 'nt':
         # invoke handle_io on a SIGIO event
         # signal.signal(signal.SIGIO, handle_io)
@@ -81,8 +81,6 @@ def stream_json_objects(file_obj: TextIO, buf_size=512):
         # assert fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, os.O_ASYNC) == 0
         stream_flags = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETFL, 0)
         fcntl.fcntl(file_obj.fileno(), fcntl.F_SETFL, stream_flags & ~os.O_NONBLOCK)
-        pipe_size = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETPIPE_SZ, 0)
-        print('Pipe size: ' + str(pipe_size), file=sys.stderr)
 
     decoder = JSONDecoder(object_hook=ObjectHook)
     buf = ""
@@ -94,10 +92,12 @@ def stream_json_objects(file_obj: TextIO, buf_size=512):
         #     io_event.clear()
 
         if file_obj.closed:
+            print('Python: Input stream was closed', file=sys.stderr)
             break
 
         if not block:
             if os.name != 'nt':
+                print('Python: read from input stream returned an empty response', file=sys.stderr)
 #                 io_event.wait()
 #            else:
                 continue
@@ -144,7 +144,6 @@ def stream_json_dicts(file_obj: TextIO, buf_size=512):
         pipe_size = fcntl.fcntl(file_obj.fileno(), fcntl.F_GETPIPE_SZ, 0)
         print('Pipe size: ' + str(pipe_size), file=sys.stderr)
 
-
     decoder = JSONDecoder()
     buf = ""
     ex = None
@@ -155,12 +154,14 @@ def stream_json_dicts(file_obj: TextIO, buf_size=512):
             io_event.clear()
 
         if file_obj.closed:
+            print('Python: Input stream was closed', file=sys.stderr)
             break
 
         if not block:
             if os.name != 'nt':
-            #     io_event.wait()
-            # else:
+                print('Python: read from input stream returned an empty response', file=sys.stderr)
+                #     io_event.wait()
+                # else:
                 continue
 
         if not started_at:

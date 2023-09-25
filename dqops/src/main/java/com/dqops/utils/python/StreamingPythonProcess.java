@@ -40,6 +40,7 @@ import java.util.concurrent.TimeoutException;
 public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private static final Logger LOG = LoggerFactory.getLogger(StreamingPythonProcess.class);
     private static final int PYTHON_BUFFER_SIZE = 1024; // buffer size used in the python streaming process in a call to TextIO.read(buffer_size)
+    private static final int PYTHON_RECEIVE_RESPONSE_BUFFER_SIZE = 512;
     private static final byte[] PYTHON_BUFFER_SPACE = StringUtils.repeat(' ', PYTHON_BUFFER_SIZE + 10).getBytes(StandardCharsets.UTF_8);
 
     private PipedOutputStream writeToProcessStream;
@@ -127,7 +128,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         } catch (PythonExecutionException ex) {
             throw ex;
         } catch (Exception e) {
-            throw new PythonExecutionException("Failed to a process", e);
+            throw new PythonExecutionException("Python process failed with a message: " + e.getMessage(), e);
         }
     }
 
@@ -146,7 +147,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 			this.readFromProcessStreamProcessSide = new PipedOutputStream();
 			this.readFromProcessStream = new PipedInputStream(this.readFromProcessStreamProcessSide);
 
-			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream, PYTHON_BUFFER_SIZE));
+			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream, PYTHON_RECEIVE_RESPONSE_BUFFER_SIZE));
 			this.errorStream = new ByteArrayOutputStream();
 			this.jsonFactory = new JsonFactory();
 			this.jsonParser = jsonFactory.createParser(this.readFromProcessStreamReader);
