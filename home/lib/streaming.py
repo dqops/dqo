@@ -93,8 +93,8 @@ def stream_json_objects(file_obj: TextIO, buf_size=512):
 
         if not block:
             if os.name != 'nt':
-                io_event.wait()
-            else:
+#                 io_event.wait()
+#            else:
                 continue
 
         if not started_at:
@@ -149,8 +149,8 @@ def stream_json_dicts(file_obj: TextIO, buf_size=512):
 
         if not block:
             if os.name != 'nt':
-                io_event.wait()
-            else:
+            #     io_event.wait()
+            # else:
                 continue
 
         if not started_at:

@@ -173,7 +173,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 
             PumpStreamHandler streamHandler = new FlushingPumpStreamHandler(
                     new FlushingOutputStream(this.readFromProcessStreamProcessSide),
-                    errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
+                    //errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
+                    System.err,
 					this.writeToProcessStreamProcessSide);
 			this.executor = new DefaultExecutor();
 			this.executor.setStreamHandler(streamHandler);
