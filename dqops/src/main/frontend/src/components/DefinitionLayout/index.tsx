@@ -68,7 +68,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
               activeTab={activeTab}
               onChange={handleChange}
               onRemoveTab={closeTab}
-              limit={10}
+              limit={7}
             />
             <div
               className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"

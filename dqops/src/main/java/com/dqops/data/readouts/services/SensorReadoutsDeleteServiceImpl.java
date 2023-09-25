@@ -22,6 +22,7 @@ import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,8 +87,13 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
 
             Collection<SensorReadoutsSnapshot> sensorReadoutsSnapshots = tables.stream()
                     .filter(schemaTableName ->
-                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().getTableNameSearchPattern().match(schemaTableName.getTableName()))
+                    {
+                        SearchPattern schemaNameSearchPattern = filter.getTableSearchFilters().getSchemaNameSearchPattern();
+                        SearchPattern tableNameSearchPattern = filter.getTableSearchFilters().getTableNameSearchPattern();
+
+                        return (schemaNameSearchPattern == null || schemaNameSearchPattern.match(schemaTableName.getSchemaName())) &&
+                                (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
+                    })
                     .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName

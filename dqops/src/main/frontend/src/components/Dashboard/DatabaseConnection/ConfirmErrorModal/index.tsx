@@ -9,7 +9,7 @@ interface ConfirmErrorModalProps {
   onConfirm: () => void;
 }
 
-const ConfirmErrorModal = ({ open, onClose, message}: ConfirmErrorModalProps) => {
+const ConfirmErrorModal = ({ open, onClose, message, onConfirm}: ConfirmErrorModalProps) => {
   return (
     <Dialog open={open} handler={onClose} className="min-w-200">
       <DialogBody className="pt-6 pb-2 px-6">
@@ -23,6 +23,13 @@ const ConfirmErrorModal = ({ open, onClose, message}: ConfirmErrorModalProps) =>
         </div>
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
+        <Button
+          color="primary"
+          className="px-8"
+          onClick={onConfirm}
+          label="No"
+          variant="outlined"
+        />
         <Button
           color="primary"
           className="px-8"

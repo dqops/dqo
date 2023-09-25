@@ -8,18 +8,19 @@ import {
 import SvgIcon from '../SvgIcon';
 import { RuleBasicModel, SensorBasicFolderModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { addFirstLevelTab, refreshRuleFolderTree } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
 import { RulesApi } from '../../services/apiClient';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
+import { useSelector } from 'react-redux';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
   singleRule?: boolean;
   rule?: RuleBasicModel;
-  indicateChanges?: () => void;
 }
 
 const RuleContextMenu = ({
@@ -27,8 +28,10 @@ const RuleContextMenu = ({
   path,
   singleRule,
   rule,
-  indicateChanges
 }: RuleContextMenuProps) => {
+  const {
+    refreshRulesTreeIndicator 
+  } = useSelector((state: IRootState) => state.definition);
   const [open, setOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const dispatch = useActionDispatch();
@@ -85,7 +88,7 @@ const RuleContextMenu = ({
 
   const deleteRuleFromTree = async () => {
     await RulesApi.deleteRule(rule?.full_rule_name ?? '').then(
-      () => indicateChanges && indicateChanges()
+      () => dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
     );
   };
 

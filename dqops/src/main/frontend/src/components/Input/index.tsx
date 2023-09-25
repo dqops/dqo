@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import "./style.css"
 
 export interface IInputProps {
   type?: string;
@@ -79,8 +80,8 @@ const Input = ({
         className={clsx(
           error
             ? 'border border-red-500'
-            : 'focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300',
-          'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full text-sm rounded',
+            : 'focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 ',
+          'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full text-sm rounded ',
           className
         )}
         value={value !== undefined ? value : ''}

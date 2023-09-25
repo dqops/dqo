@@ -29,7 +29,7 @@ import java.util.Objects;
  * Shared credential file wrapper.
  */
 public class SharedCredentialWrapperImpl extends AbstractPojoElementWrapper<String, FileContent> implements SharedCredentialWrapper {
-    private static final ChildHierarchyNodeFieldMapImpl<SharedCredentialWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
+    private static final ChildHierarchyNodeFieldMapImpl<SharedCredentialWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractPojoElementWrapper.FIELDS) {
         {
         }
     };

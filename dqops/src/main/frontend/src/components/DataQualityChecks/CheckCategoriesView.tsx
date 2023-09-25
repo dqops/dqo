@@ -83,7 +83,7 @@ const CheckCategoriesView = ({
   useEffect(() => {
     shouldExtend();
   }, []);
-
+console.log(category.category)
   return (
     <Fragment>
       <tr>
@@ -91,7 +91,7 @@ const CheckCategoriesView = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="font-semibold text-gray-700 capitalize flex items-center justify-center gap-x-3 cursor-pointer"
+                className="font-semibold text-gray-700 flex items-center justify-center gap-x-3 cursor-pointer"
                 onClick={() => setIsExtended(!isExtended)}
               >
                 {isExtended === false ? (
@@ -105,7 +105,7 @@ const CheckCategoriesView = ({
                     className="w-5 h-5 text-gray-700"
                   />
                 )}
-                {category.category}
+                {category.category?.replace(/^\w/, c => c.toUpperCase())}
               </div>
             </div>
             <div> </div>

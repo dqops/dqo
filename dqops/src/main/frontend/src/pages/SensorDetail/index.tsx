@@ -9,7 +9,8 @@ import {
   createSensor,
   getSensor,
   setUpdatedSensor,
-  closeFirstLevelTab
+  closeFirstLevelTab,
+  refreshSensorsFolderTree
 } from '../../redux/actions/definition.actions';
 import Tabs from '../../components/Tabs';
 import SensorDefinition from './SensorDefinition';
@@ -23,6 +24,7 @@ import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
 import { ROUTES } from '../../shared/routes';
 import { SensorsApi } from '../../services/apiClient';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
 
 const tabs = [
   {
@@ -63,6 +65,9 @@ export const SensorDetail = () => {
   const { full_sensor_name, sensorDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
+  const {
+    refreshSensorsTreeIndicator 
+  } = useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -236,7 +241,8 @@ export const SensorDetail = () => {
 
   const onDelete = async () => {
     SensorsApi.deleteSensor(full_sensor_name).then(async () =>
-      closeSensorFirstLevelTab()
+      closeSensorFirstLevelTab(),
+      dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
   };
 

@@ -42,7 +42,7 @@ const Dashboards = () => {
           activeTab={activeTab}
           onChange={(tab: TabOption) => setActiveTab(tab.value)}
           onRemoveTab={closeTab}
-          limit={8}
+          limit={7}
         />
         <div className=" bg-white border border-gray-300 flex-auto relative">
           {!tabs?.length && (
@@ -98,7 +98,7 @@ const Dashboards = () => {
             This DQO instance is not licensed. You are using a complimentary
             data quality warehousing service that is limited <br />
             to showing the results of 5 tables from the first connected data
-            source. Please contact DQO sales for upgrade.
+            source. Please contact DQO sales for an upgrade.
           </div>
         )}
       </div>

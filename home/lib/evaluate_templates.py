@@ -17,6 +17,7 @@
 import json
 import sys
 import traceback
+import os
 from pathlib import Path
 from datetime import datetime
 import streaming
@@ -82,14 +83,21 @@ class TemplateRunner:
 
 def main():
     template_runner = TemplateRunner()
-    for request, receiving_millis in streaming.stream_json_dicts(sys.stdin):
-        started_at = datetime.now()
-        response = template_runner.process_template_request(request)
-        response["receiving_millis"] = receiving_millis
-        response["total_processing_millis"] = int((datetime.now() - started_at).total_seconds() * 1000.0) + receiving_millis
-        sys.stdout.write(json.dumps(response))
+    try:
+        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 512)
+        for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
+            started_at = datetime.now()
+            response = template_runner.process_template_request(request)
+            response["receiving_millis"] = receiving_millis
+            response["total_processing_millis"] = int((datetime.now() - started_at).total_seconds() * 1000.0) + receiving_millis
+            sys.stdout.write(json.dumps(response))
+            sys.stdout.write("\n")
+    #        sys.stdout.write(" " * 1024)  # padding
+            sys.stdout.flush()
+    except Exception as ex:
+        print ('Error rendering a sensor: ' + traceback.format_exc(), file=sys.stderr)
+        sys.stdout.write(json.dumps({"error": traceback.format_exc()}))
         sys.stdout.write("\n")
-#        sys.stdout.write(" " * 1024)  # padding
         sys.stdout.flush()
 
 

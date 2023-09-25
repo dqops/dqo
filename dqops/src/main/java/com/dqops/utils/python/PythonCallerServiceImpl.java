@@ -18,6 +18,7 @@ package com.dqops.utils.python;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.utils.serialization.JsonSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -40,6 +41,7 @@ import java.util.*;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Slf4j
 public class PythonCallerServiceImpl implements PythonCallerService, DisposableBean {
     private final DqoConfigurationProperties configurationProperties;
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
@@ -141,6 +143,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         catch (Exception ex) {
             // when the process fails, we want to stat a new process
             streamingPythonProcess.close();
+            log.error("Python process failed: " + ex.getMessage(), ex);
             throw new PythonExecutionException("Python process failed: " + ex.getMessage(), ex);
         }
     }
@@ -193,6 +196,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                 return results;
             }
         } catch (IOException e) {
+            log.error("Python process failed: " + e.getMessage(), e);
             throw new PythonExecutionException("Failed to execute python script " + pythonFilePathInHome, e);
         }
     }
