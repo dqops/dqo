@@ -30,6 +30,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 /**
@@ -59,6 +60,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private JsonParser jsonParser;
     private Thread processingThread;
     private BlockingQueue<PythonRequestReplyMessage<?,?>> requestReplyMessages = new LinkedBlockingDeque<>();
+    private boolean closed;
 
     /**
      * Streaming python process wrapper. Keeps a reference to a python process that was started in the background.
@@ -70,6 +72,14 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         this.jsonSerializer = jsonSerializer;
         this.commandLineText = commandLineText;
         this.timeoutSeconds = timeoutSeconds;
+    }
+
+    /**
+     * Returns true if the python process was closed, probably due to a timeout.
+     * @return true - the process was closed.
+     */
+    public boolean isClosed() {
+        return closed;
     }
 
     /**
@@ -155,40 +165,55 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             this.writeToProcessStream.write(PYTHON_BUFFER_SPACE);  // python buffer flush overflow to avoid blocking...
             this.writeToProcessStream.flush();
 
-            CompletableFuture<Object> receiveResponseFuture = CompletableFuture.supplyAsync(() -> {
-                try {
-                    ObjectMapper objectMapper = this.jsonSerializer.getMapper();
-                    Object deserializedResponse = objectMapper.readValue(this.jsonParser, outputType);
-
-                    return deserializedResponse;
-                } catch (Exception ex) {
-                    if (!this.outputDetectedOnStderrFuture.isDone()) {
-                        throw new PythonExecutionException("Failed to parse a response from a python process, message: " + ex.getMessage(), ex);
-                    }
-                    else {
-                        return null;
-                    }
+            CompletableFuture<Boolean> timeoutCompletableFuture = new CompletableFuture<>();
+            timeoutCompletableFuture.completeOnTimeout(false, this.timeoutSeconds, TimeUnit.SECONDS);
+            CompletableFuture<Object> completedFuture = CompletableFuture.anyOf(timeoutCompletableFuture,
+                    this.outputDetectedOnStderrFuture, this.processFinishedErrorFuture, this.processFinishedSuccessFuture);
+            CompletableFuture<Object> finishedFuture = completedFuture.handleAsync((Object result, Throwable ex) -> {
+                if (Objects.equals(result,true)) {
+                    // result received
+                    return null;
                 }
+
+                if (Objects.equals(result,false)) {
+                    // time out
+                    this.close();
+                    return null;
+                }
+
+                if (ex != null) {
+                    this.close();
+                    String message = "Waiting for a response from Python failed with an error: " + ex.getMessage();
+                    log.error(message, ex);
+                    throw new PythonExecutionException(message, ex);
+                }
+
+                if (this.outputDetectedOnStderrFuture.isDone() || processFinishedErrorFuture.isDone() || processFinishedSuccessFuture.isDone()) {
+                    this.close();
+                    String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
+                    throw new PythonExecutionException("Python command " + this.commandLineText + " failed, stderr:\n" + errStreamText);
+                }
+
+                return null;
             });
 
-            CompletableFuture<Object> completedFuture = CompletableFuture.anyOf(receiveResponseFuture, this.processFinishedErrorFuture, this.processFinishedSuccessFuture);
             try {
-                Object futureResult = completedFuture.get(this.timeoutSeconds, TimeUnit.SECONDS);
-            }
-            catch (TimeoutException tex) {
+                ObjectMapper objectMapper = this.jsonSerializer.getMapper();
+                Object deserializedResponse = objectMapper.readValue(this.jsonParser, outputType);
+                timeoutCompletableFuture.complete(true);
+
+                return deserializedResponse;
+            } catch (Exception ex) {
+                this.close();
+
                 if (!this.outputDetectedOnStderrFuture.isDone()) {
+                    throw new PythonExecutionException("Failed to parse a response from a python process, message: " + ex.getMessage(), ex);
+                }
+                else {
                     String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
-                    throw new PythonExecutionException("Python command " + this.commandLineText + " failed with a timeout, stderr:\n" + errStreamText);
+                    throw new PythonExecutionException("Python command " + this.commandLineText + " failed, stderr:\n" + errStreamText, ex);
                 }
             }
-
-            if (this.outputDetectedOnStderrFuture.isDone() || processFinishedErrorFuture.isDone() || processFinishedSuccessFuture.isDone()) {
-                String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
-                throw new PythonExecutionException("Python command " + this.commandLineText + " failed, stderr:\n" + errStreamText);
-            }
-
-            Object result = receiveResponseFuture.get(1, TimeUnit.MILLISECONDS);
-            return result;
         } catch (PythonExecutionException ex) {
             throw ex;
         } catch (Exception e) {
@@ -239,8 +264,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 
             PumpStreamHandler streamHandler = new FlushingPumpStreamHandler(
                     new FlushingOutputStream(this.readFromProcessStreamProcessSide),
-                    //errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
-                    System.err,
+                    errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
+                    //System.err,
                     this.writeToProcessStreamProcessSide);
             this.executor = new DefaultExecutor();
             this.executor.setStreamHandler(streamHandler);
@@ -279,6 +304,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     @Override
     public void onProcessComplete(int i) {
 		this.processFinishedSuccessFuture.complete(i);
+        this.close();
     }
 
     /**
@@ -289,6 +315,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     public void onProcessFailed(ExecuteException e) {
         log.error("Python process failed, error: " + e.getMessage(), e);
 		this.processFinishedErrorFuture.complete(e);
+        this.close();
     }
 
     /**
@@ -298,6 +325,14 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
      */
     @Override
     public void close() {
+        synchronized (this) {
+            if (this.closed) {
+                return;
+            }
+
+            this.closed = true;
+        }
+
         try {
             this.requestReplyMessages.put(PythonRequestReplyMessage.createEmpty()); // poison pill message
         }

@@ -58,6 +58,10 @@ class TemplateRunner:
 
             if template_home_path is not None:
                 template_id = template_home_path
+                if request.get("home_type") == "USER_HOME":
+                    template_id = Path(request.get("user_home_path")).joinpath("sensors").joinpath(
+                        template_home_path)
+
                 if template_id not in self.templates or self.templates[template_id].template_last_modified != template_last_modified:
                     if request.get("home_type") == "DQO_HOME":
                         template_object = self.environment.get_template(template_home_path)
@@ -83,7 +87,7 @@ class TemplateRunner:
 
 def main():
     template_runner = TemplateRunner()
-    post_response_padding = " " * 1024
+#    post_response_padding = " " * 1024
     try:
         stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
         for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
@@ -94,10 +98,10 @@ def main():
             sys.stdout.write(json.dumps(response))
             sys.stdout.write("\n")
             sys.stdout.flush()
-            sys.stdout.write(post_response_padding)  # padding
-            sys.stdout.flush()
+            # sys.stdout.write(post_response_padding)  # padding
+            # sys.stdout.flush()
     except Exception as ex:
-        print ('Error rendering a sensor: ' + traceback.format_exc(), file=sys.stderr)
+        print ('Error rendering a sensor, exiting: ' + traceback.format_exc(), file=sys.stderr)
         sys.stdout.write(json.dumps({"error": traceback.format_exc()}))
         sys.stdout.write("\n")
         sys.stdout.flush()

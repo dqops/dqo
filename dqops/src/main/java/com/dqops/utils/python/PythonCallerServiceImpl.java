@@ -112,24 +112,31 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         StreamingPythonProcess streamingPythonProcess = null;
 
         synchronized (this.processDictionaryLock) {
-            availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);
-            if (availableProcessesStack == null) {
-                availableProcessesStack = new Stack<>();
-                this.pythonModuleProcesses.put(pythonFilePathInHome, availableProcessesStack);
-            }
+            for (int retry = 0; retry < 10; retry++) {
+                availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);
+                if (availableProcessesStack == null) {
+                    availableProcessesStack = new Stack<>();
+                    this.pythonModuleProcesses.put(pythonFilePathInHome, availableProcessesStack);
+                }
 
-            if (availableProcessesStack.isEmpty()) {
-                String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
-                PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-                String commandLineText = String.format(
-                        "\"%s\" -u \"%s\"",
-                        virtualEnv.getPythonInterpreterPath(),
-                        absolutePythonPath
-                );
-                streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
-                streamingPythonProcess.startProcess(virtualEnv);
-            } else {
-                streamingPythonProcess = availableProcessesStack.pop();
+                if (availableProcessesStack.isEmpty()) {
+                    String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
+                    PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
+                    String commandLineText = String.format(
+                            "\"%s\" -u \"%s\"",
+                            virtualEnv.getPythonInterpreterPath(),
+                            absolutePythonPath
+                    );
+                    streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
+                    streamingPythonProcess.startProcess(virtualEnv);
+                } else {
+                    streamingPythonProcess = availableProcessesStack.pop();
+                }
+
+                if (!streamingPythonProcess.isClosed()) {
+                    break; // we can use this process
+                }
+                // else, the process was taken out from the pool, but it is already closed, so we are abandoning it
             }
         }
 
