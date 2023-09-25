@@ -14,7 +14,7 @@ We want to verify the number of null values on `source ` column.
 
 **SOLUTION**
 
-We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
+We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [nulls_count](../../checks/column/nulls/nulls-count.md) column check.
 Our goal is to verify that the number of null values in the `source ` column does not exceed the set thresholds.
 
@@ -54,11 +54,11 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-null-count-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks.png)
 
-1. Go to the **Profiling** section.
+1. Go to the **Monitoring** section.
     
-    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+    The Monitoring section enables the configuration of advanced monitoring data quality checks that are designed for the monthly and daily evaluation of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -66,16 +66,16 @@ To execute the check prepared in the example using the [graphical interface](../
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md). 
 
 
-3. Select the **Profiling Checks** tab.
+3. Select the **Monitoring Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+    In this tab you can find a list of data quality checks. On **Monitoring** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
 
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
 
-    ![Run check](https://dqops.com/docs/images/examples/null-count-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -85,7 +85,7 @@ To execute the check prepared in the example using the [graphical interface](../
     that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
     that occurred during the check's execution.
  
-    ![Check details](https://dqops.com/docs/images/examples/null-count-check-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-null-count-check-details.png)
 
 
 6. Review the results which should be similar to the one below.
@@ -93,7 +93,7 @@ To execute the check prepared in the example using the [graphical interface](../
     The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
     The check gives a warning result (notice the yellow square on the left of the name of the check).
 
-    ![Null-count check results](https://dqops.com/docs/images/examples/null-count-check-results.png)
+    ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results.png)
 
 
 7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
@@ -103,10 +103,24 @@ To execute the check prepared in the example using the [graphical interface](../
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
-    Below you can see the results displayed on the Affected tables dashboard showing results by issues per connection, issues per schema, issues per check category and severity level.
+    Below you can see the results displayed on the Issue severity status per column and day dashboard showing results by schemas, connections, data group, tables and highest issue severity per column and day of month.
 
-    ![Null-count check results on Affected tables dashboard](https://dqops.com/docs/images/examples/null-count-check-results-on-affected-tables-dashboard.png)
+    ![Null-count check results on Issue severity status per column and day dashboard](https://dqops.com/docs/images/examples/daily-null-count-check-results-on-issue-severity-status-per-column-and-day-dashboard.png)
 
+## Configure scheduler
+
+To make better use of that data, and accurately predict operational issues so that we can resolve them before they
+negatively impact our business, we want to monitor various data quality aspects.
+
+![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+
+If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+You can read more about scheduling [here](../../working-with-dqo/schedules/index.md).
+
+By setting up a schedule, data can be constantly monitored, and errors can be triggered to alert about potential
+issues with the data quality or operational processes.
+
+You can learn more about different types of configurations by referring the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md).
 
 ## YAML configuration file
 
@@ -118,72 +132,78 @@ In this example, we have set three maximum number thresholds levels for the chec
 - error: 10
 - fatal: 15
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `nulls_count` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_nulls_count` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="46-57"
+```yaml hl_lines="42-51"
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    report_type:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    measure_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    state_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    subpopulation:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    value:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-    lower_ci:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-    upper_ci:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
+  profiling_checks:
+    volume:
+      profile_row_count: {}
+    availability:
+      profile_table_availability:
+        warning:
+          max_failures: 0
+    schema:
+      profile_column_count_changed:
+        warning: {}
+      profile_column_list_changed:
+        warning: {}
+      profile_column_list_or_order_changed:
+        warning: {}
+      profile_column_types_changed:
+        warning: {}
     source:
       type_snapshot:
         column_type: STRING
         nullable: true
       profiling_checks:
         nulls:
-          profile_nulls_count:
-            comments:
-            - date: 2023-05-08T12:08:21.558+00:00
-              comment_by: user
-              comment: "In this exmple, values in the `source ` column are verified\
-                \ whether the number of null values does not exceed the set thresholds."
+          profile_nulls_percent_anomaly_stationary:
             warning:
-              max_count: 5
-            error:
-              max_count: 10
-            fatal:
-              max_count: 15
-    source_date:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
+              anomaly_percent: 1.0
+          profile_nulls_percent_change_yesterday:
+            warning:
+              max_percent: 10.0
+              exact_day: false
+        schema:
+          profile_column_exists:
+            warning:
+              expected_value: 1
+          profile_column_type_changed:
+            warning: {}
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_count:
+              warning:
+                max_count: 5
+              error:
+                max_count: 10
+              fatal:
+                max_count: 15
+            daily_nulls_percent_anomaly_stationary:
+              warning:
+                anomaly_percent: 1.0
+            daily_nulls_percent_change_yesterday:
+              warning:
+                max_percent: 10.0
+                exact_day: false
+          datatype:
+            daily_string_datatype_changed:
+              warning: {}
+          schema:
+            daily_column_exists:
+              warning:
+                expected_value: 1
+            daily_column_type_changed:
+              warning: {}
 ```
 
 ## Running the checks in the example and evaluating the results using DQO Shell
@@ -196,7 +216,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 Review the results which should be similar to the one below.
-The number of null values in the `source ` column is above 5 and the check raised warning.
+The number of null values in the `source` column is above 5 and the check raised warning.
 
 ```
 Check evaluation summary per table:
