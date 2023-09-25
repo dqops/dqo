@@ -38,7 +38,7 @@ public class MaxFailuresRule1ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
-    @JsonPropertyDescription("Maximum number of consecutive check failures, a check is failed when the sensor's query failed to execute due to a connection error, missing table or a corrupted table.")
+    @JsonPropertyDescription("Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.")
     private Long maxFailures = 1L;
 
     /**
