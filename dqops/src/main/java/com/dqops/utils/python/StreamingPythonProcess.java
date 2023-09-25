@@ -86,13 +86,15 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 
             byte[] inputBytes = inputText.getBytes(StandardCharsets.UTF_8);
 			this.writeToProcessStream.write(inputBytes);
-			this.writeToProcessStream.write(PYTHON_BUFFER_SPACE);  // python buffer flush overflow to avoid blocking...
+            this.writeToProcessStream.flush();
+            this.writeToProcessStream.write(PYTHON_BUFFER_SPACE);  // python buffer flush overflow to avoid blocking...
 			this.writeToProcessStream.flush();
 
             CompletableFuture<O> receiveResponseFuture = CompletableFuture.supplyAsync(() -> {
                 try {
                     ObjectMapper objectMapper = this.jsonSerializer.getMapper();
                     O deserializedResponse = objectMapper.readValue(this.jsonParser, outputType);
+
                     return deserializedResponse;
                 } catch (Exception ex) {
                     if (!this.outputDetectedOnStderrFuture.isDone()) {

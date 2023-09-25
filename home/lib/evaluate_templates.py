@@ -17,6 +17,7 @@
 import json
 import sys
 import traceback
+import os
 from pathlib import Path
 from datetime import datetime
 import streaming
@@ -83,7 +84,8 @@ class TemplateRunner:
 def main():
     template_runner = TemplateRunner()
     try:
-        for request, receiving_millis in streaming.stream_json_dicts(sys.stdin):
+        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 512)
+        for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
             started_at = datetime.now()
             response = template_runner.process_template_request(request)
             response["receiving_millis"] = receiving_millis

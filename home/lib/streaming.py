@@ -64,10 +64,13 @@ class ObjectEncoder(JSONEncoder):
 
 if os.name != 'nt':
     io_event = threading.Event()
+
+
 def handle_io(signal, frame):
     io_event.set()
 
-def stream_json_objects(file_obj: TextIO, buf_size=1024):
+
+def stream_json_objects(file_obj: TextIO, buf_size=512):
     if os.name != 'nt':
         # invoke handle_io on a SIGIO event
         signal.signal(signal.SIGIO, handle_io)
@@ -89,7 +92,10 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
             break
 
         if not block:
-            continue
+            if os.name != 'nt':
+                io_event.wait()
+            else:
+                continue
 
         if not started_at:
             started_at = datetime.now()
@@ -116,14 +122,11 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
                 yield obj, duration_millis
         buf = buf[pos:]
         started_at = None
-
-        if os.name != 'nt':
-            io_event.wait()
     if ex is not None:
         raise ex
 
 
-def stream_json_dicts(file_obj: TextIO, buf_size=1024):
+def stream_json_dicts(file_obj: TextIO, buf_size=512):
     if os.name != 'nt':
         # invoke handle_io on a SIGIO event
         signal.signal(signal.SIGIO, handle_io)
@@ -145,7 +148,10 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
             break
 
         if not block:
-            continue
+            if os.name != 'nt':
+                io_event.wait()
+            else:
+                continue
 
         if not started_at:
             started_at = datetime.now()
