@@ -93,6 +93,7 @@ def main():
             response["total_processing_millis"] = int((datetime.now() - started_at).total_seconds() * 1000.0) + receiving_millis
             sys.stdout.write(json.dumps(response))
             sys.stdout.write("\n")
+            sys.stdout.flush()
             sys.stdout.write(post_response_padding)  # padding
             sys.stdout.flush()
     except Exception as ex:

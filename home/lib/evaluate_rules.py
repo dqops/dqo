@@ -116,6 +116,7 @@ def main():
             response = rule_runner.process_rule_request(request)
             sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
             sys.stdout.write("\n")
+            sys.stdout.flush()
             sys.stdout.write(post_response_padding)  # padding
             sys.stdout.flush()
     except Exception as ex:
