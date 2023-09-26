@@ -70,7 +70,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
 
-    expected_value = filtered[-1].sensor_readout if len(filtered) > 0 else None
+    expected_value = filtered[-1] if len(filtered) > 0 else None
     lower_bound = expected_value
     upper_bound = expected_value
     passed = len(filtered) == 0 or (filtered[-1] == rule_parameters.actual_value)
