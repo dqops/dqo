@@ -24,14 +24,33 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
+      - name: Restore cached npm packages
+        id: restore-cached-npm-packages
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            dqops/src/main/frontend/node
+            dqops/src/main/frontend/node_modules
+          key: 'npm'
+
       - name: Build with Maven
         run: mvn package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+
+      - name: Save cached npm packages
+        id: save-cached-npm-packages
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            dqops/src/main/frontend/node
+            dqops/src/main/frontend/node_modules
+          key: 'npm'
 
       - uses: docker-practice/actions-setup-docker@master
 

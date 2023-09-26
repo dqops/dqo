@@ -283,7 +283,6 @@ const ProfilingView = () => {
         <TableReferenceComparisons
           checkTypes={checkTypes}
           checksUI={checksUI}
-          fetchChecks={onUpdate}
         />
       )}
     </div>

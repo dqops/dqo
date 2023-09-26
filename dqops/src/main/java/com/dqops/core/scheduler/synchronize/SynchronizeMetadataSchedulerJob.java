@@ -113,25 +113,19 @@ public class SynchronizeMetadataSchedulerJob implements Job {
                 return;
             }
 
-            jobRunCount++;
             SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
             SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
 
             if (this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
-                switch (this.dqoSchedulerConfigurationProperties.getSynchronizedFolders()) {
-                    case all: {
-                        jobParameters.synchronizeAllFolders();
-                        break;
-                    }
-
-                    case locally_changed:
-                    default: {
-                        jobParameters.setSynchronizeFolderWithLocalChanges(true);
-                        break;
-                    }
+                if (jobRunCount == 0 ||  // first synchronization when the application starts, must download everything
+                        this.dqoSchedulerConfigurationProperties.getSynchronizedFolders() == ScheduledSynchronizationFolderSelectionMode.all) {
+                    jobParameters.synchronizeAllFolders();
+                } else {
+                    jobParameters.setSynchronizeFolderWithLocalChanges(true);
                 }
             }
 
+            jobRunCount++;
             jobParameters.setDetectCronSchedules(true);
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 

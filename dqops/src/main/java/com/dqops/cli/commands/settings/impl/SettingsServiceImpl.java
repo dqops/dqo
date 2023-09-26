@@ -196,7 +196,6 @@ public class SettingsServiceImpl implements SettingsService {
 			cliOperationStatus.setFailedMessage("Settings file does not exist");
 			return cliOperationStatus;
 		}
-		settings.setStatus(InstanceStatus.TO_BE_DELETED);
 		settings.markForDeletion();
 		userHomeContext.flush();
 

@@ -15,14 +15,12 @@ type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
-  fetchChecks: () => Promise<void>;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
   timePartitioned,
   checksUI,
-  fetchChecks
 }: TableReferenceComparisonsProps) => {
   const {
     connection,
@@ -56,7 +54,6 @@ export const TableReferenceComparisons = ({
   useEffect(() => {
     getNewTableComparison();
     setIsCreting(false);
-    fetchChecks();
   }, [isComparisonDeleted]);
 
   const getNewTableComparison = () => {
@@ -92,7 +89,6 @@ export const TableReferenceComparisons = ({
       });
     }
     setIsCreting(false);
-    fetchChecks();
   };
 
   const onEditReference = (reference: TableComparisonConfigurationModel) => {
@@ -167,7 +163,6 @@ export const TableReferenceComparisons = ({
           })
         );
         if (isCreating === true) {
-          fetchChecks();
           getNewTableComparison();
         }
         history.push(url);
@@ -193,7 +188,6 @@ export const TableReferenceComparisons = ({
           })
         );
         if (isCreating === true) {
-          fetchChecks();
           getNewTableComparison();
         }
         history.push(url);
@@ -219,7 +213,6 @@ export const TableReferenceComparisons = ({
           })
         );
         if (isCreating === true) {
-          fetchChecks();
           getNewTableComparison();
         }
         history.push(url);
