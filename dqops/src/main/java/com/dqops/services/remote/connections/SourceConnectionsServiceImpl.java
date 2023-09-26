@@ -89,7 +89,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
             connectionTestModel.setConnectionTestResult(ConnectionTestStatus.SUCCESS);
 
         } catch (Exception e) {
-            log.debug("Failed to test a connection, error: " + e.getMessage(), e);
+            log.info("Failed to test a connection, error: " + e.getMessage(), e);
             connectionTestModel.setConnectionTestResult(ConnectionTestStatus.FAILURE);
             connectionTestModel.setErrorMessage(e.getMessage());
         }

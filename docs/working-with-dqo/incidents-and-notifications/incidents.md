@@ -6,10 +6,10 @@ these issues into incident and allows you to view and filter them, as well as ma
 Issues can be grouped into incidents based on the following categories:
 
 - Table
-- Table dimension
-- Table dimension category
-- Table dimension category type
-- Table dimension category name
+- Table and quality dimension
+- Table, quality dimension and check category
+- Table, quality dimension, check category and check type
+- Table, quality dimension, check category and check name
 
 ## Configure incidents
 

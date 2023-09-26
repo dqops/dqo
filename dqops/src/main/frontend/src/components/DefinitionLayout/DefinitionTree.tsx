@@ -180,9 +180,10 @@ export const DefinitionTree = () => {
       { category: 'Data quality checks', isOpen: false },
       { category: 'Default checks configuration', isOpen: false }
     ];
-    for (let i = 0; i < tabs.length; i++) {
-      if (tabs[i].url.includes('default_checks')) {
-        configuration[3].isOpen = true;
+    if(tabs && tabs.length !== 0){
+      for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].url.includes('default_checks')) {
+          configuration[3].isOpen = true;
       } else if (tabs[i].url.includes('sensors')) {
         configuration[0].isOpen = true;
         const arrayOfElemsToToggle = (
@@ -210,7 +211,10 @@ export const DefinitionTree = () => {
       }
       dispatch(toggleFirstLevelFolder(configuration));
     }
-  }, [activeTab]);
+  }else{
+    dispatch(toggleFirstLevelFolder(configuration));
+  }
+  }, []);
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,

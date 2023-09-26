@@ -195,7 +195,6 @@ public class SensorsController {
         }
 
         SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(fullSensorName);
-        userHomeContext.flush();
 
         sensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
         ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
@@ -203,9 +202,10 @@ public class SensorsController {
             ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(n.getProviderType());
             providerSensorDefinitionWrapper.setSqlTemplate(n.getSqlTemplate());
             providerSensorDefinitionWrapper.setSpec(n.getProviderSensorDefinitionSpec());
-            userHomeContext.flush();
+
         });
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
     }
 
@@ -286,7 +286,6 @@ public class SensorsController {
                         userProviderSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
                 if (userHomeProviderSensorDefinitionWrapper != null){
                     userHomeProviderSensorDefinitionWrapper.markForDeletion();
-                    userHomeContext.flush();
                 }
             }
             userHomeSensorDefinitionWrapper.markForDeletion();
