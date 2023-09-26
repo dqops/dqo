@@ -22,8 +22,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotificationMessageTextCreator {
 
-    private static final String BOLD = "**";
-    private static final String KEY_VALUE_FORMAT = BOLD + "%s" + BOLD + ": %s";
+    private static final String KEY_VALUE_FORMAT = "%s" + ": %s";
     private static final String NEW_LINE = " \n";
 
     private final InstanceCloudLoginService instanceCloudLoginService;
@@ -93,7 +92,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
 
         stringBuilder.append(getBlockQuotedLine(formatToLink(
                 prepareUrlToIncident(messageParameters),
-                BOLD + "View in DQOps" + BOLD
+                "View in DQOps"
         )));
 
         return stringBuilder.toString();
@@ -139,9 +138,9 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
                                  String fullTableName){
         String commonPart = String.format("in %s table", fullTableName);
         if(incidentStatus.equals(IncidentStatus.open)){
-            return BOLD + "New incident detected " + commonPart + "." + BOLD;
+            return "New incident detected " + commonPart + ".";
         }
-        return BOLD + "The incident " + commonPart + " has been " + incidentStatus.name() + "." + BOLD;
+        return "The incident " + commonPart + " has been " + incidentStatus.name() + ".";
     }
 
     /**
