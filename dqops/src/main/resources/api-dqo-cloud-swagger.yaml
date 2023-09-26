@@ -16,6 +16,7 @@ host: "api.dqo.ai"
 basePath: "/"
 tags:
 - name: "AccessTokenIssue"
+- name: "AccountUsers"
 - name: "ApiKeyRequest"
 - name: "LookerStudioKeyRequest"
 - name: "RefreshTokenIssue"
@@ -385,6 +386,132 @@ paths:
             type: "string"
       security:
       - api_key: []
+  /api/v1/uses:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "listAccountUsers"
+      description: "Returns a list of users for the current account. Only a user with\
+        \ an ADMIN role can call this operation."
+      operationId: "listAccountUsers"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "createAccountUser"
+      description: "Adds a new user to a multi-user account. Only accounts on a TEAM\
+        \ or ENTERPRISE license can add new users."
+      operationId: "createAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New user model"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/uses/{email}:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "getAccountUser"
+      description: "Returns the information about a single user."
+      operationId: "getAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    put:
+      tags:
+      - "AccountUsers"
+      summary: "updateAccountUser"
+      description: "Updates a new user in a multi-user account. Supports changing\
+        \ the account role and/or updating the password. For a free user account,\
+        \ only the password is changed if it is provided."
+      operationId: "updateAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Updated user model with a new role and possibly a new password"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "AccountUsers"
+      summary: "deleteAccountUser"
+      description: "Deletes a user from a multi-user account. Only a user with an\
+        \ ADMIN right for a multi-user account (TEAM or ENTERPRISE edition) can perform\
+        \ this operation."
+      operationId: "deleteAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/uses/{email}/password:
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "changeAccountUserPassword"
+      description: "Changes the password of the given user. The user can change his\
+        \ own password."
+      operationId: "changeAccountUserPassword"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New password"
+        required: false
+        schema:
+          type: "string"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
 securityDefinitions:
   api_key:
     type: "apiKey"
@@ -397,6 +524,26 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
 definitions:
+  DqoUserModel:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Email that identifies the user."
+      accountRole:
+        type: "string"
+        description: "Global account role assigned to the user."
+        enum:
+        - "admin"
+        - "editor"
+        - "operator"
+        - "viewer"
+        - "none"
+      newPassword:
+        type: "string"
+        description: "Write-only property used to update the password. This field\
+          \ does not return the current password."
+    description: "DQO Cloud user model that describes a user in multi-user SaaS deployments."
   RefreshTableRequest:
     type: "object"
     properties:
