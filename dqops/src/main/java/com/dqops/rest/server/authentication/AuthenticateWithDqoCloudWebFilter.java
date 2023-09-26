@@ -115,8 +115,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
                 Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
-                if (log.isInfoEnabled()) {
-                    log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with an API Key for the user " + singleUserAuthenticationToken.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with an API Key for the user " + singleUserAuthenticationToken.getName());
                 }
 
                 ServerWebExchange mutatedExchange = exchange.mutate()
@@ -134,8 +134,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 Authentication userTokenAuthentication = this.dqoAuthenticationTokenFactory.createAuthenticatedWithUserToken(
                         decodedAuthenticationToken.getTarget());
 
-                if (log.isInfoEnabled()) {
-                    log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with a bearer token for the user " + userTokenAuthentication.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with a bearer token for the user " + userTokenAuthentication.getName());
                 }
 
                 ServerWebExchange mutatedExchange = exchange.mutate()
@@ -157,8 +157,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
-            if (log.isInfoEnabled()) {
-                log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQO Cloud Pairing Key for the user " +
+            if (log.isDebugEnabled()) {
+                log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQO Cloud Pairing Key for the user " +
                         singleUserAuthenticationToken.getName());
             }
 
@@ -193,8 +193,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 hostHeader = hostHeader.substring(0, portPrefixIndex);
             }
 
-            if (log.isInfoEnabled()) {
-                log.info("Returning a DQOAccessToken cookie for the user " + signedAuthenticationToken.getTarget().getUser() + " in the tenant " +
+            if (log.isDebugEnabled()) {
+                log.debug("Returning a DQOAccessToken cookie for the user " + signedAuthenticationToken.getTarget().getUser() + " in the tenant " +
                         signedAuthenticationToken.getTarget().getTenantId() + ", the cookie is valid for " + hostHeader + " host");
             }
 
@@ -205,8 +205,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             exchange.getResponse().getCookies().add("DQOAccessToken", dqoAccessTokenCookie);
             exchange.getResponse().getHeaders().add("Location", returnUrl);
 
-            if (log.isInfoEnabled()) {
-                log.info("Processing the refresh token from Cloud DQO for the user " + signedAuthenticationToken.getTarget().getUser());
+            if (log.isDebugEnabled()) {
+                log.debug("Processing the refresh token from Cloud DQO for the user " + signedAuthenticationToken.getTarget().getUser());
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
@@ -234,8 +234,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     Authentication userTokenAuthentication = this.dqoAuthenticationTokenFactory.createAuthenticatedWithUserToken(
                             decodedAuthenticationToken.getTarget());
 
-                    if (log.isInfoEnabled()) {
-                        log.info("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with local credentials for the user " + userTokenAuthentication.getName());
+                    if (log.isDebugEnabled()) {
+                        log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with local credentials for the user " + userTokenAuthentication.getName());
                     }
 
                     ServerWebExchange mutatedExchange = exchange.mutate()
@@ -265,8 +265,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 String requestUrl = exchange.getRequest().getURI().toString();
                 String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLoginUrl(requestUrl);
 
-                if (log.isInfoEnabled()) {
-                    log.info("Redirecting the user to authenticate with DQO Cloud federated authentication");
+                if (log.isDebugEnabled()) {
+                    log.debug("Redirecting the user to authenticate with DQO Cloud federated authentication");
                 }
 
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
