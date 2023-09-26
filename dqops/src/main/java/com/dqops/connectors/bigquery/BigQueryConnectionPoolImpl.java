@@ -117,7 +117,7 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             }
             if(googleCredentials instanceof ServiceAccountCredentials) {
                 ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) googleCredentials;
-                defaultProjectFromCredentials = serviceAccountCredentials.getQuotaProjectId();
+                defaultProjectFromCredentials = serviceAccountCredentials.getProjectId();
             }
 
             String effectiveJobProjectId = null;
@@ -138,7 +138,10 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
                     effectiveJobProjectId = bigQueryParametersSpec.getSourceProjectId();
             }
 
-            String effectiveQuotaProjectId = MoreObjects.firstNonNull(bigQueryParametersSpec.getQuotaProjectId(), effectiveJobProjectId);
+            String effectiveQuotaProjectId =
+                    bigQueryParametersSpec.getQuotaProjectId() != null ? bigQueryParametersSpec.getQuotaProjectId() :
+                            effectiveJobProjectId != null ? effectiveJobProjectId :
+                                    bigQueryParametersSpec.getSourceProjectId(); // fallback - use the source project
 
             BigQueryOptions.Builder builder = BigQueryOptions.newBuilder()
                     .setCredentials(googleCredentials)
