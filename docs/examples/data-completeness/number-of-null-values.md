@@ -130,7 +130,7 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 7. Enable the scheduler by clicking the toggle button. 
 
-![Add picture with marked toggle button  enable job scheduler]()
+![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection. 
@@ -153,48 +153,30 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="42-51"
+```yaml hl_lines="20-33"
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  profiling_checks:
-    volume:
-      profile_row_count: {}
-    availability:
-      profile_table_availability:
-        warning:
-          max_failures: 0
-    schema:
-      profile_column_count_changed:
-        warning: {}
-      profile_column_list_changed:
-        warning: {}
-      profile_column_list_or_order_changed:
-        warning: {}
-      profile_column_types_changed:
-        warning: {}
+  columns:
+    edition:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    report_type:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    measure_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
     source:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        nulls:
-          profile_nulls_percent_anomaly_stationary:
-            warning:
-              anomaly_percent: 1.0
-          profile_nulls_percent_change_yesterday:
-            warning:
-              max_percent: 10.0
-              exact_day: false
-        schema:
-          profile_column_exists:
-            warning:
-              expected_value: 1
-          profile_column_type_changed:
-            warning: {}
       monitoring_checks:
         daily:
           nulls:
@@ -205,22 +187,6 @@ spec:
                 max_count: 10
               fatal:
                 max_count: 15
-            daily_nulls_percent_anomaly_stationary:
-              warning:
-                anomaly_percent: 1.0
-            daily_nulls_percent_change_yesterday:
-              warning:
-                max_percent: 10.0
-                exact_day: false
-          datatype:
-            daily_string_datatype_changed:
-              warning: {}
-          schema:
-            daily_column_exists:
-              warning:
-                expected_value: 1
-            daily_column_type_changed:
-              warning: {}
 ```
 
 ## Running the checks in the example and evaluating the results using DQO Shell
@@ -292,6 +258,6 @@ Results returned by the sensor:
 - For details on the [nulls_cont check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
-- 
+
 - DQO provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
  
