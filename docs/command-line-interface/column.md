@@ -33,7 +33,7 @@ dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dataType`<br/>|Data type| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-e`<br/>`--sql-expression`<br/>|SQL expression for a calculated column| ||
@@ -72,7 +72,7 @@ dqo> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
@@ -113,7 +113,7 @@ dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dataType`<br/>|Data type| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-e`<br/>`--sql-expression`<br/>|SQL expression for a calculated column| ||
@@ -154,7 +154,7 @@ dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-C`<br/>`--column`<br/>|Connection name filter| ||
 |`-c`<br/>`--connection`<br/>|Connection name filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -194,7 +194,7 @@ dqo> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
@@ -232,7 +232,7 @@ dqo> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
@@ -270,7 +270,7 @@ dqo> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--newColumn`<br/>|New column name| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|

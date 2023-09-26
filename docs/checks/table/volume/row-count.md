@@ -2,13 +2,14 @@
 
 **Description**  
 Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule.
+ The default configuration for all severity rules (warning, error, fatal data quality issue) is to require at least one row, which checks if the table is not empty.
 
 ___
 
 ## **profile row count**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count.  
+Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -42,9 +43,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_row
     volume:
       profile_row_count:
         warning:
-          min_count: 0
+          min_count: 1
         error:
-          min_count: 5
+          min_count: 1
         fatal:
           min_count: 100
 ```
@@ -64,9 +65,9 @@ spec:
     volume:
       profile_row_count:
         warning:
-          min_count: 0
+          min_count: 1
         error:
-          min_count: 5
+          min_count: 1
         fatal:
           min_count: 100
   columns:
@@ -288,9 +289,9 @@ spec:
         volume:
           profile_row_count:
             warning:
-              min_count: 0
+              min_count: 1
             error:
-              min_count: 5
+              min_count: 1
             fatal:
               min_count: 100
       columns:
@@ -519,7 +520,7 @@ ___
 ## **daily row count**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
+Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -554,9 +555,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
       volume:
         daily_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
 ```
@@ -577,9 +578,9 @@ spec:
       volume:
         daily_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
   columns:
@@ -802,9 +803,9 @@ spec:
           volume:
             daily_row_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
-                min_count: 5
+                min_count: 1
               fatal:
                 min_count: 100
       columns:
@@ -1033,7 +1034,7 @@ ___
 ## **monthly row count**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1068,9 +1069,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
       volume:
         monthly_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
 ```
@@ -1091,9 +1092,9 @@ spec:
       volume:
         monthly_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
   columns:
@@ -1316,9 +1317,9 @@ spec:
           volume:
             monthly_row_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
-                min_count: 5
+                min_count: 1
               fatal:
                 min_count: 100
       columns:
@@ -1547,7 +1548,7 @@ ___
 ## **daily partition row count**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1582,9 +1583,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
       volume:
         daily_partition_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
 ```
@@ -1606,9 +1607,9 @@ spec:
       volume:
         daily_partition_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
   columns:
@@ -1841,9 +1842,9 @@ spec:
           volume:
             daily_partition_row_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
-                min_count: 5
+                min_count: 1
               fatal:
                 min_count: 100
       columns:
@@ -2075,7 +2076,7 @@ ___
 ## **monthly partition min row count**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2110,9 +2111,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
       volume:
         monthly_partition_min_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
 ```
@@ -2134,9 +2135,9 @@ spec:
       volume:
         monthly_partition_min_row_count:
           warning:
-            min_count: 0
+            min_count: 1
           error:
-            min_count: 5
+            min_count: 1
           fatal:
             min_count: 100
   columns:
@@ -2369,9 +2370,9 @@ spec:
           volume:
             monthly_partition_min_row_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
-                min_count: 5
+                min_count: 1
               fatal:
                 min_count: 100
       columns:

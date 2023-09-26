@@ -49,7 +49,10 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the tested table has at least a minimum accepted number of rows. " +
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. " +
+            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows." +
+            "Stores the most recent captured row count value for each day when the row count was evaluated.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyRowCount;
@@ -62,7 +65,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
     private TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.")
     private TableChangeRowCountCheckSpec dailyRowCountChange;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")

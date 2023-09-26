@@ -111,8 +111,7 @@ class RuleRunner:
 def main():
     try:
         rule_runner = RuleRunner()
-        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
-        for request, duration_millis in streaming.stream_json_objects(stdin_small_buffer):
+        for request, duration_millis in streaming.stream_json_objects(sys.stdin):
             response = rule_runner.process_rule_request(request)
             sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
             sys.stdout.write("\n")

@@ -44,7 +44,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_not
             warning:
               min_count: 5
             error:
-              min_count: 0
+              min_count: 1
             fatal:
               min_count: 100
 ```
@@ -68,7 +68,7 @@ spec:
             warning:
               min_count: 5
             error:
-              min_count: 0
+              min_count: 1
             fatal:
               min_count: 100
       labels:
@@ -306,7 +306,7 @@ spec:
                 warning:
                   min_count: 5
                 error:
-                  min_count: 0
+                  min_count: 1
                 fatal:
                   min_count: 100
           labels:
@@ -584,7 +584,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_not_n
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
 ```
@@ -609,7 +609,7 @@ spec:
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
       labels:
@@ -848,7 +848,7 @@ spec:
                   warning:
                     min_count: 5
                   error:
-                    min_count: 0
+                    min_count: 1
                   fatal:
                     min_count: 100
           labels:
@@ -1126,7 +1126,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_not
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
 ```
@@ -1151,7 +1151,7 @@ spec:
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
       labels:
@@ -1390,7 +1390,7 @@ spec:
                   warning:
                     min_count: 5
                   error:
-                    min_count: 0
+                    min_count: 1
                   fatal:
                     min_count: 100
           labels:
@@ -1668,7 +1668,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
 ```
@@ -1694,7 +1694,7 @@ spec:
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
       labels:
@@ -1943,7 +1943,7 @@ spec:
                   warning:
                     min_count: 5
                   error:
-                    min_count: 0
+                    min_count: 1
                   fatal:
                     min_count: 100
           labels:
@@ -2224,7 +2224,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
 ```
@@ -2250,7 +2250,7 @@ spec:
               warning:
                 min_count: 5
               error:
-                min_count: 0
+                min_count: 1
               fatal:
                 min_count: 100
       labels:
@@ -2499,7 +2499,7 @@ spec:
                   warning:
                     min_count: 5
                   error:
-                    min_count: 0
+                    min_count: 1
                   fatal:
                     min_count: 100
           labels:

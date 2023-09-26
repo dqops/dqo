@@ -519,7 +519,7 @@ ___
 ## **daily row count change**  
   
 **Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.  
+Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1033,7 +1033,7 @@ ___
 ## **monthly row count change**  
   
 **Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.  
+Verifies that the total row count of the tested table has changed by a fixed rate since the last month.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

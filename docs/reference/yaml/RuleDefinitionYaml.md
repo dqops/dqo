@@ -1,4 +1,33 @@
 
+## RuleDefinitionYaml  
+Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|[spec](#ruledefinitionspec)||[RuleDefinitionSpec](#ruledefinitionspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ParameterDefinitionSpec  
 Defines a single field that is a sensor parameter or a rule parameter.  
   
@@ -22,35 +51,6 @@ Defines a single field that is a sensor parameter or a rule parameter.
 |required|True when the value for the parameter must be provided.|boolean| | | |
 |allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
 |sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## RuleDefinitionYaml  
-Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#ruledefinitionspec)||[RuleDefinitionSpec](#ruledefinitionspec)| | | |
 
 
 

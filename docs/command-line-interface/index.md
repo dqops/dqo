@@ -83,6 +83,8 @@ ___
  | [dqo cloud sync sensors](./cloud/#dqo-cloud sync sensors) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder. |
  | [dqo cloud sync rules](./cloud/#dqo-cloud sync rules) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;rules&quot; folder. |
  | [dqo cloud sync checks](./cloud/#dqo-cloud sync checks) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;checks&quot; folder. |
+ | [dqo cloud sync settings](./cloud/#dqo-cloud sync settings) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;settings&quot; folder. |
+ | [dqo cloud sync credentials](./cloud/#dqo-cloud sync credentials) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;.credentials&quot; folder. |
  | [dqo cloud sync all](./cloud/#dqo-cloud sync all) | Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders. |
 
 

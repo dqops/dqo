@@ -95,8 +95,7 @@ class TemplateRunner:
 def main():
     template_runner = TemplateRunner()
     try:
-        stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
-        for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
+        for request, receiving_millis in streaming.stream_json_dicts(sys.stdin):
             started_at = datetime.now()
             response = template_runner.process_template_request(request)
             response["receiving_millis"] = receiving_millis

@@ -5,7 +5,7 @@
 table/availability/table_availability
 ```
 **Description**  
-Table availability sensor that executes a row count query. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
+Table availability sensor runs a simple table scan query to detect if the table is queryable. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
 
 
 
@@ -16,10 +16,7 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -28,7 +25,6 @@ Table availability sensor that executes a row count query. This sensor returns 0
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -38,10 +34,7 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -50,7 +43,6 @@ Table availability sensor that executes a row count query. This sensor returns 0
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -60,10 +52,7 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -72,7 +61,6 @@ Table availability sensor that executes a row count query. This sensor returns 0
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -82,10 +70,7 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -94,7 +79,6 @@ Table availability sensor that executes a row count query. This sensor returns 0
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -104,10 +88,7 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -116,7 +97,6 @@ Table availability sensor that executes a row count query. This sensor returns 0
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -126,17 +106,13 @@ Table availability sensor that executes a row count query. This sensor returns 0
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 ___

@@ -29,7 +29,7 @@ dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-n`<br/>`--name`<br/>|Connection name filter| ||
@@ -53,6 +53,7 @@ Creates a new connection to the database with the specified details such as conn
 $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
+                [--bigquery-jobs-create-project=<jobsCreateProject>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
@@ -90,6 +91,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
 dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
+                [--bigquery-jobs-create-project=<jobsCreateProject>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
@@ -129,12 +131,13 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`--bigquery-authentication-mode`<br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
+|`--bigquery-jobs-create-project`<br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
 |`--bigquery-json-key-path`<br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |`--bigquery-quota-project-id`<br/>|Bigquery quota GCP project id.| ||
 |`--bigquery-source-project-id`<br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`--mysql-database`<br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |`--mysql-host`<br/>|MySQL host name| ||
@@ -215,7 +218,7 @@ dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--name`<br/>|Connection name| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -238,6 +241,7 @@ Update the connection or connections that match the conditions specified in the 
 $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
+                   [--bigquery-jobs-create-project=<jobsCreateProject>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
@@ -276,6 +280,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
 dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
+                   [--bigquery-jobs-create-project=<jobsCreateProject>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
@@ -316,12 +321,13 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`--bigquery-authentication-mode`<br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
+|`--bigquery-jobs-create-project`<br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
 |`--bigquery-json-key-path`<br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |`--bigquery-quota-project-id`<br/>|Bigquery quota GCP project id.| ||
 |`--bigquery-source-project-id`<br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`--mysql-database`<br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |`--mysql-host`<br/>|MySQL host name| ||
@@ -404,7 +410,7 @@ dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-n`<br/>`--name`<br/>|Connection name filter| ||
@@ -445,7 +451,7 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -484,7 +490,7 @@ dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
@@ -519,7 +525,7 @@ dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 

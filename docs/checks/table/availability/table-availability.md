@@ -2,6 +2,8 @@
 
 **Description**  
 Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
+ The actual value (the result of the check) is the number of failures. When the table is accessible and a simple query was executed without errors, the result is 0.0.
+ The sensor result (the actual value) 1.0 means that there is a failure. A value higher than 1.0 is stored only in the check result table and it is the number of consecutive failures in following days.
 
 ___
 
@@ -84,10 +86,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -96,7 +95,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -105,10 +103,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM
@@ -119,7 +114,6 @@ spec:
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -130,10 +124,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -142,7 +133,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -151,10 +141,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM
@@ -165,7 +152,6 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -176,10 +162,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -188,7 +171,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -197,10 +179,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -211,7 +190,6 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -222,10 +200,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -234,7 +209,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -243,10 +217,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -257,7 +228,6 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -268,10 +238,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -280,7 +247,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -289,10 +255,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM
@@ -303,7 +266,6 @@ spec:
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -314,34 +276,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 
@@ -434,10 +388,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -446,7 +397,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -455,10 +405,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
     FROM
@@ -469,7 +416,6 @@ spec:
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -480,10 +426,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -492,7 +435,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -501,10 +443,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM
@@ -515,7 +454,6 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -526,10 +464,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -538,7 +473,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -547,10 +481,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -561,7 +492,6 @@ spec:
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -572,10 +502,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -584,7 +511,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -593,10 +519,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -607,7 +530,6 @@ spec:
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -618,10 +540,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -630,7 +549,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -639,10 +557,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
     FROM
@@ -653,7 +568,6 @@ spec:
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -664,34 +578,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 
@@ -784,10 +690,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -796,7 +699,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -805,10 +707,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM
@@ -819,7 +718,6 @@ spec:
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -830,10 +728,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -842,7 +737,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -851,10 +745,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM
@@ -865,7 +756,6 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -876,10 +766,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -888,7 +775,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -897,10 +783,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -911,7 +794,6 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -922,10 +804,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -934,7 +813,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -943,10 +821,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -957,7 +832,6 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -968,10 +842,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -980,7 +851,6 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -989,10 +859,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM
@@ -1003,7 +870,6 @@ spec:
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -1014,34 +880,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
             SELECT
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 

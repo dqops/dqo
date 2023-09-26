@@ -37,6 +37,17 @@ Checks whether the table is accessible and available for use.
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_row_count_match](./table/comparisons/row-count-match/#profile-row-count-match)|profiling|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|
+|[daily_row_count_match](./table/comparisons/row-count-match/#daily-row-count-match)|monitoring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_row_count_match](./table/comparisons/row-count-match/#monthly-row-count-match)|monitoring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_row_count_match](./table/comparisons/row-count-match/#daily-partition-row-count-match)|partitioned|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.|
+|[monthly_partition_row_count_match](./table/comparisons/row-count-match/#monthly-partition-row-count-match)|partitioned|Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_column_count_match](./table/comparisons/column-count-match/#profile-column-count-match)|profiling|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.|
+|[daily_column_count_match](./table/comparisons/column-count-match/#daily-column-count-match)|monitoring|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_column_count_match](./table/comparisons/column-count-match/#monthly-column-count-match)|monitoring|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.|
 
 
 
@@ -160,11 +171,11 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_row_count](./table/volume/row-count/#profile-row-count)|profiling|Verifies that the number of rows in a table does not exceed the minimum accepted count.|
-|[daily_row_count](./table/volume/row-count/#daily-row-count)|monitoring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_row_count](./table/volume/row-count/#monthly-row-count)|monitoring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_row_count](./table/volume/row-count/#daily-partition-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_min_row_count](./table/volume/row-count/#monthly-partition-min-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[profile_row_count](./table/volume/row-count/#profile-row-count)|profiling|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|
+|[daily_row_count](./table/volume/row-count/#daily-row-count)|monitoring|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.|
+|[monthly_row_count](./table/volume/row-count/#monthly-row-count)|monitoring|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.|
+|[daily_partition_row_count](./table/volume/row-count/#daily-partition-row-count)|partitioned|Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|
+|[monthly_partition_min_row_count](./table/volume/row-count/#monthly-partition-min-row-count)|partitioned|Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|
 
 
 | Check name | Check type | Description |
@@ -182,8 +193,8 @@ Evaluates the overall quality of the table by verifying the number of rows.
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_row_count_change](./table/volume/row-count-change/#profile-row-count-change)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
-|[daily_row_count_change](./table/volume/row-count-change/#daily-row-count-change)|monitoring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
-|[monthly_row_count_change](./table/volume/row-count-change/#monthly-row-count-change)|monitoring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+|[daily_row_count_change](./table/volume/row-count-change/#daily-row-count-change)|monitoring|Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.|
+|[monthly_row_count_change](./table/volume/row-count-change/#monthly-row-count-change)|monitoring|Verifies that the total row count of the tested table has changed by a fixed rate since the last month.|
 |[daily_partition_row_count_change](./table/volume/row-count-change/#daily-partition-row-count-change)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
 |[monthly_partition_row_count_change](./table/volume/row-count-change/#monthly-partition-row-count-change)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
 
@@ -505,31 +516,55 @@ Calculates the percentage of data in a Boolean format.
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_sum_match](./column/comparisons/sum-match/#profile-sum-match)|profiling|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_sum_match](./column/comparisons/sum-match/#daily-sum-match)|monitoring|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_sum_match](./column/comparisons/sum-match/#monthly-sum-match)|monitoring|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_sum_match](./column/comparisons/sum-match/#daily-partition-sum-match)|partitioned|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_sum_match](./column/comparisons/sum-match/#monthly-partition-sum-match)|partitioned|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_min_match](./column/comparisons/min-match/#profile-min-match)|profiling|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_min_match](./column/comparisons/min-match/#daily-min-match)|monitoring|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_min_match](./column/comparisons/min-match/#monthly-min-match)|monitoring|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_min_match](./column/comparisons/min-match/#daily-partition-min-match)|partitioned|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_min_match](./column/comparisons/min-match/#monthly-partition-min-match)|partitioned|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_max_match](./column/comparisons/max-match/#profile-max-match)|profiling|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_max_match](./column/comparisons/max-match/#daily-max-match)|monitoring|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_max_match](./column/comparisons/max-match/#monthly-max-match)|monitoring|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_max_match](./column/comparisons/max-match/#daily-partition-max-match)|partitioned|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_max_match](./column/comparisons/max-match/#monthly-partition-max-match)|partitioned|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_mean_match](./column/comparisons/mean-match/#profile-mean-match)|profiling|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_mean_match](./column/comparisons/mean-match/#daily-mean-match)|monitoring|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_mean_match](./column/comparisons/mean-match/#monthly-mean-match)|monitoring|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_mean_match](./column/comparisons/mean-match/#daily-partition-mean-match)|partitioned|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_mean_match](./column/comparisons/mean-match/#monthly-partition-mean-match)|partitioned|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_not_null_count_match](./column/comparisons/not-null-count-match/#profile-not-null-count-match)|profiling|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_not_null_count_match](./column/comparisons/not-null-count-match/#daily-not-null-count-match)|monitoring|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_not_null_count_match](./column/comparisons/not-null-count-match/#monthly-not-null-count-match)|monitoring|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_not_null_count_match](./column/comparisons/not-null-count-match/#daily-partition-not-null-count-match)|partitioned|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_not_null_count_match](./column/comparisons/not-null-count-match/#monthly-partition-not-null-count-match)|partitioned|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_null_count_match](./column/comparisons/null-count-match/#profile-null-count-match)|profiling|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_null_count_match](./column/comparisons/null-count-match/#daily-null-count-match)|monitoring|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_null_count_match](./column/comparisons/null-count-match/#monthly-null-count-match)|monitoring|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_null_count_match](./column/comparisons/null-count-match/#daily-partition-null-count-match)|partitioned|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_null_count_match](./column/comparisons/null-count-match/#monthly-partition-null-count-match)|partitioned|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 
@@ -1418,6 +1453,114 @@ Counts the number or percent of duplicate or unique values in a column.
 |[monthly_duplicate_percent](./column/uniqueness/duplicate-percent/#monthly-duplicate-percent)|monitoring|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_duplicate_percent](./column/uniqueness/duplicate-percent/#daily-partition-duplicate-percent)|partitioned|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_duplicate_percent](./column/uniqueness/duplicate-percent/#monthly-partition-duplicate-percent)|partitioned|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#profile-anomaly-differencing-distinct-count-30-days)|profiling|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[daily_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#daily-anomaly-differencing-distinct-count-30-days)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[monthly_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#monthly-anomaly-differencing-distinct-count-30-days)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#profile-anomaly-differencing-distinct-count)|profiling|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[daily_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#daily-anomaly-differencing-distinct-count)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[monthly_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#monthly-anomaly-differencing-distinct-count)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#profile-anomaly-stationary-distinct-percent-30-days)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[daily_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[monthly_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[daily_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[daily_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[monthly_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[monthly_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#profile-anomaly-stationary-distinct-percent)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[daily_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[monthly_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[daily_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[daily_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[monthly_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[monthly_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_count](./column/uniqueness/change-distinct-count/#profile-change-distinct-count)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+|[daily_change_distinct_count](./column/uniqueness/change-distinct-count/#daily-change-distinct-count)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+|[monthly_change_distinct_count](./column/uniqueness/change-distinct-count/#monthly-change-distinct-count)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+|[daily_partition_change_distinct_count](./column/uniqueness/change-distinct-count/#daily-partition-change-distinct-count)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+|[monthly_partition_change_distinct_count](./column/uniqueness/change-distinct-count/#monthly-partition-change-distinct-count)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#profile-change-distinct-count-since-7-days)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[daily_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#daily-change-distinct-count-since-7-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[monthly_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#monthly-change-distinct-count-since-7-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[daily_partition_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#daily-partition-change-distinct-count-since-7-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[monthly_partition_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#monthly-partition-change-distinct-count-since-7-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#profile-change-distinct-count-since-30-days)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[daily_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#daily-change-distinct-count-since-30-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[monthly_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#monthly-change-distinct-count-since-30-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[daily_partition_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#daily-partition-change-distinct-count-since-30-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[monthly_partition_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#monthly-partition-change-distinct-count-since-30-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#profile-change-distinct-count-since-yesterday)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[daily_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#daily-change-distinct-count-since-yesterday)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[monthly_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#monthly-change-distinct-count-since-yesterday)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[daily_partition_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#daily-partition-change-distinct-count-since-yesterday)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[monthly_partition_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#monthly-partition-change-distinct-count-since-yesterday)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_percent](./column/uniqueness/change-distinct-percent/#profile-change-distinct-percent)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+|[daily_change_distinct_percent](./column/uniqueness/change-distinct-percent/#daily-change-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+|[monthly_change_distinct_percent](./column/uniqueness/change-distinct-percent/#monthly-change-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+|[daily_partition_change_distinct_percent](./column/uniqueness/change-distinct-percent/#daily-partition-change-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+|[monthly_partition_change_distinct_percent](./column/uniqueness/change-distinct-percent/#monthly-partition-change-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#profile-change-distinct-percent-since-7-days)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[daily_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#daily-change-distinct-percent-since-7-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[monthly_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#monthly-change-distinct-percent-since-7-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[daily_partition_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#daily-partition-change-distinct-percent-since-7-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+|[monthly_partition_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#monthly-partition-change-distinct-percent-since-7-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#profile-change-distinct-percent-since-30-days)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[daily_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#daily-change-distinct-percent-since-30-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[monthly_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#monthly-change-distinct-percent-since-30-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[daily_partition_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#daily-partition-change-distinct-percent-since-30-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
+|[monthly_partition_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#monthly-partition-change-distinct-percent-since-30-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#profile-change-distinct-percent-since-yesterday)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[daily_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[monthly_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[daily_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+|[monthly_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 
 
 

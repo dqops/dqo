@@ -66,6 +66,7 @@ import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -98,7 +99,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
         tableSpec.getProfilingChecks().getVolume().setProfileRowCount(new TableRowCountCheckSpec());
-        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule1ParametersSpec(5L));
 
         tableSpec.setMonitoringChecks(new TableMonitoringChecksSpec());
         tableSpec.getMonitoringChecks().setDaily(new TableDailyMonitoringCheckCategoriesSpec());

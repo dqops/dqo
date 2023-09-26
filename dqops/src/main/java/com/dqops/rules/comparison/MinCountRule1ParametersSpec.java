@@ -28,13 +28,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value. The default value is 1 row, to detect if a table is not empty.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinCountRuleWarningParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MinCountRule1ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MinCountRule1ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -46,14 +46,14 @@ public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpe
     /**
      * Default constructor, the minimum accepted value is 0.
      */
-    public MinCountRuleWarningParametersSpec() {
+    public MinCountRule1ParametersSpec() {
     }
 
     /**
      * Creates a rule with a given value.
      * @param minCount Minimum accepted value.
      */
-    public MinCountRuleWarningParametersSpec(Long minCount) {
+    public MinCountRule1ParametersSpec(Long minCount) {
         this.minCount = minCount;
     }
 
@@ -61,7 +61,7 @@ public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpe
      * Creates a rule with a given value.
      * @param minCount Minimum accepted value.
      */
-    public MinCountRuleWarningParametersSpec(int minCount) {
+    public MinCountRule1ParametersSpec(int minCount) {
         this.minCount = (long)minCount;
     }
 

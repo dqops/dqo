@@ -147,7 +147,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
@@ -160,7 +160,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t2volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t2rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t2rowCountErrorSpec.setMinCount(100L);
         t2rowCountFatalSpec.setMinCount(10L);

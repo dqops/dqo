@@ -1,6 +1,6 @@
 
 ## IncidentNotificationMessage  
-  
+Notification message payload that is posted (HTTP POST) to a notification endpoint with the details of a new or updated data quality incident.  
   
 
 
@@ -29,6 +29,7 @@
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
 |status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
+|text|Notification text in Markdown format that contains the most important fields from the class.|string| | | |
 
 
 

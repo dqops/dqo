@@ -42,7 +42,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_dis
         uniqueness:
           profile_distinct_count:
             warning:
-              min_count: 0
+              min_count: 1
             error:
               min_count: 5
             fatal:
@@ -66,7 +66,7 @@ spec:
         uniqueness:
           profile_distinct_count:
             warning:
-              min_count: 0
+              min_count: 1
             error:
               min_count: 5
             fatal:
@@ -324,7 +324,7 @@ spec:
             uniqueness:
               profile_distinct_count:
                 warning:
-                  min_count: 0
+                  min_count: 1
                 error:
                   min_count: 5
                 fatal:
@@ -622,7 +622,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_disti
           uniqueness:
             daily_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -647,7 +647,7 @@ spec:
           uniqueness:
             daily_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -906,7 +906,7 @@ spec:
               uniqueness:
                 daily_distinct_count:
                   warning:
-                    min_count: 0
+                    min_count: 1
                   error:
                     min_count: 5
                   fatal:
@@ -1204,7 +1204,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_dis
           uniqueness:
             monthly_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -1229,7 +1229,7 @@ spec:
           uniqueness:
             monthly_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -1488,7 +1488,7 @@ spec:
               uniqueness:
                 monthly_distinct_count:
                   warning:
-                    min_count: 0
+                    min_count: 1
                   error:
                     min_count: 5
                   fatal:
@@ -1786,7 +1786,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           uniqueness:
             daily_partition_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -1812,7 +1812,7 @@ spec:
           uniqueness:
             daily_partition_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -2081,7 +2081,7 @@ spec:
               uniqueness:
                 daily_partition_distinct_count:
                   warning:
-                    min_count: 0
+                    min_count: 1
                   error:
                     min_count: 5
                   fatal:
@@ -2382,7 +2382,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           uniqueness:
             monthly_partition_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -2408,7 +2408,7 @@ spec:
           uniqueness:
             monthly_partition_distinct_count:
               warning:
-                min_count: 0
+                min_count: 1
               error:
                 min_count: 5
               fatal:
@@ -2677,7 +2677,7 @@ spec:
               uniqueness:
                 monthly_partition_distinct_count:
                   warning:
-                    min_count: 0
+                    min_count: 1
                   error:
                     min_count: 5
                   fatal:

@@ -249,10 +249,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                         try {
                             // we detected that some output was written to the stderr of the python process, it is an error and we will terminate...
                             Thread.sleep(100); // we need to wait for the remaining output
-                            this.writeToProcessStream.close();
-                            this.writeToProcessStreamProcessSide.close();
-                            this.readFromProcessStream.close();
-                            this.readFromProcessStreamProcessSide.close();
+                            this.close();
 
                             String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
                             log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText);

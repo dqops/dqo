@@ -20,7 +20,7 @@ Data quality rule that verifies if a data quality check readout is between from 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -132,7 +132,7 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -245,7 +245,7 @@ Data quality rule that verifies that a data quality check readout of a string_da
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -344,7 +344,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -450,7 +450,7 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -555,7 +555,7 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -653,7 +653,7 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D; https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -940,7 +940,7 @@ Data quality rule that verifies if the number of executive failures (the sensor 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum number of consecutive check failures, a check is failed when the sensor&#x27;s query failed to execute due to a connection error, missing table or a corrupted table.|long| ||
+|max_failures|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long| ||
 
 
 
@@ -954,7 +954,7 @@ spec:
   java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
-    prediction_time_window: 30
+    prediction_time_window: 60
     min_periods_with_readouts: 0
     historic_data_point_grouping: last_n_readouts
   fields:
@@ -1827,7 +1827,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
 
-    expected_value = filtered[-1].sensor_readout if len(filtered) > 0 else None
+    expected_value = filtered[-1] if len(filtered) > 0 else None
     lower_bound = expected_value
     upper_bound = expected_value
     passed = len(filtered) == 0 or (filtered[-1] == rule_parameters.actual_value)

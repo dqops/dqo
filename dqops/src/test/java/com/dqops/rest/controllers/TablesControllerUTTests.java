@@ -47,6 +47,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
 import com.dqops.services.check.CheckFlatConfigurationFactory;
 import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
@@ -195,7 +196,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
-        MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
+        MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
@@ -226,7 +227,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
-        MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
+        MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
@@ -375,7 +376,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
-        MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
+        MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
@@ -404,7 +405,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
-        MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
+        MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
@@ -437,7 +438,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
-        MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
+        MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);

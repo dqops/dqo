@@ -47,6 +47,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -172,7 +173,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
@@ -199,7 +200,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
@@ -281,7 +282,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -310,7 +311,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -339,7 +340,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(13));
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(12));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(12));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -368,7 +369,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(13));
-		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
+		this.checkSpec.setError(new MinCountRule1ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,

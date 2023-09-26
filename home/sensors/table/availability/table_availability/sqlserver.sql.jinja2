@@ -1,14 +1,10 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
 SELECT
-    CASE
-       WHEN COUNT(*) > 0 THEN COUNT(*)
-       ELSE 1.0
-    END AS actual_value
+    0.0 AS actual_value
 FROM
     (
         SELECT
             *
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{ lib.render_where_clause() }}
-        LIMIT 1
     ) AS tab_scan
