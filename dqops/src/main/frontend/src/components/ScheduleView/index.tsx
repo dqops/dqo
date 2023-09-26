@@ -16,10 +16,9 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
-  canUserEdit?: boolean
 }
 
-const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
@@ -193,7 +192,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
                 className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
-                disabled={canUserEdit !== true}
+                disabled={userProfile.can_manage_scheduler !== true}
               />
             </td>
           </tr>
@@ -201,12 +200,12 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
             <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className={clsx("px-4 py-2 text-sm", canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
+            <td className={clsx("px-4 py-2 text-sm", userProfile.can_manage_scheduler ? "" : "cursor-not-allowed pointer-events-none")}>
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
                   onChange={(value) => handleChange({ disabled: value })}
-                  disabled={canUserEdit !== true}
+                  disabled={userProfile.can_manage_scheduler !== true}
                 />
               </div>
             </td>
@@ -214,7 +213,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
         </tbody>
       </table>
 
-      <div className={clsx("flex flex-col text-sm" , canUserEdit ? "" : "cursor-not-allowed pointer-events-none")}>
+      <div className={clsx("flex flex-col text-sm" , userProfile.can_manage_scheduler ? "" : "cursor-not-allowed pointer-events-none")}>
         <div
           className={clsx(
             'flex items-center text-sm',
@@ -247,7 +246,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_scheduler !== true}
             />
             <div>minutes</div>
           </div>
@@ -270,7 +269,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_scheduler !== true}
             />
             <div>minutes past every hour</div>
           </div>
@@ -293,7 +292,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={hour}
               onChange={onChangeHour}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_scheduler !== true}
             />
             <div>:</div>
             <NumberInput
@@ -302,7 +301,7 @@ const ScheduleView = ({ schedule, handleChange, canUserEdit }: IScheduleViewProp
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={canUserEdit !== true}
+              disabled={userProfile.can_manage_scheduler !== true}
             />
           </div>
         </div>

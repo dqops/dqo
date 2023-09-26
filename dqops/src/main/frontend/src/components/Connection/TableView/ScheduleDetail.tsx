@@ -14,7 +14,7 @@ import Tabs from "../../Tabs";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
 import qs from "query-string";
-import { IRootState } from '../../../redux/reducers';
+
 
 const pageTabs = [
   {
@@ -49,9 +49,6 @@ const ScheduleDetail = () => {
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const history = useHistory();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
 
   const dispatch = useActionDispatch();
   const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
@@ -104,7 +101,7 @@ const ScheduleDetail = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} canUserEdit={userProfile.can_manage_data_sources}/>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule}/>
     </div>
   );
 };
