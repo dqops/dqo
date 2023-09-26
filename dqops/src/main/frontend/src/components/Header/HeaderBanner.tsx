@@ -21,10 +21,6 @@ type HeaderBannerProps = {
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [openPopover, setOpenPopover] = React.useState(false);
-  const triggers = {
-    onMouseEnter: () => setOpenPopover(true),
-    onMouseLeave: () => setOpenPopover(false)
-  };
   const {
     connection
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
@@ -76,8 +72,9 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   return (
     <div className="absolute z-10 top-0 left-0 right-0">
       <Popover open={openPopover} handler={setOpenPopover}>
-        <PopoverHandler {...triggers}>
-          <div className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90">
+        <PopoverHandler>
+          <div className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90 cursor-pointer"
+          onClick={() => setOpenPopover(!openPopover)}>
             <div className="flex items-center gap-2">
               <SvgIcon name="info" className="text-white" />
               <h4 className="text-white font-bold">
@@ -97,7 +94,6 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
         </PopoverHandler>
 
         <PopoverContent
-          {...triggers}
           className="max-w-250 z-50 !top-12 !left-0 rounded-none text-gray-700"
         >
           <div className="flex mb-4  items-center justify-between">
