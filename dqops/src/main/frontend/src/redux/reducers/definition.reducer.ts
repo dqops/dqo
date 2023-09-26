@@ -54,7 +54,7 @@ const initialState: IDefinitionState = {
   refreshRulesTreeIndicator: false,
   refreshSensorsTreeIndicator: false
 };
-console.log(initialState)
+
 const setActiveTabState = (
   state: IDefinitionState,
   action: Action,
