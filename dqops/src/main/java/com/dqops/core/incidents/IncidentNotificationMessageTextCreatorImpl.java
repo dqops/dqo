@@ -162,7 +162,7 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
      * Extracts a string value of instant from selected column for Row object and applies formatting.
      * @param incidentRow Row object
      * @param incidentsColumnName Column name used for extraction
-     * @return A formatted date time with GTM from selected column.
+     * @return A formatted date time with GMT from selected column.
      */
     private String extractInstantWithFormatting(Row incidentRow, String incidentsColumnName){
         Instant instant = incidentRow.getInstant(incidentsColumnName);
