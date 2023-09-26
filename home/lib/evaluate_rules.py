@@ -71,6 +71,7 @@ class LoadedModule:
         self.rule_module = rule_module
         self.rule_module_last_modified = rule_module_last_modified
 
+
 class RuleRunner:
     rule_modules = {}
 
@@ -110,17 +111,14 @@ class RuleRunner:
 def main():
     try:
         rule_runner = RuleRunner()
-        # post_response_padding = " " * 1024
         stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
         for request, duration_millis in streaming.stream_json_objects(stdin_small_buffer):
             response = rule_runner.process_rule_request(request)
             sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
             sys.stdout.write("\n")
             sys.stdout.flush()
-            # sys.stdout.write(post_response_padding)  # padding
-            # sys.stdout.flush()
     except Exception as ex:
-        print ('Error processing a rule: ' + traceback.format_exc(), file=sys.stderr)
+        print('Error processing a rule: ' + traceback.format_exc(), file=sys.stderr)
         sys.stdout.write(json.dumps(PythonRuleCallOutput(None, None, traceback.format_exc()), cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")
         sys.stdout.flush()

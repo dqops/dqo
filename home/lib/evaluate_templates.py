@@ -23,6 +23,7 @@ from datetime import datetime
 import streaming
 from jinja2 import Environment, FileSystemLoader, ChainableUndefined
 
+
 class ParsedTemplate:
     jinja_template: any
     template_last_modified: any
@@ -30,6 +31,7 @@ class ParsedTemplate:
     def __init__(self, jinja_template, template_last_modified):
         self.jinja_template = jinja_template
         self.template_last_modified = template_last_modified
+
 
 class TemplateRunner:
     templates = {}
@@ -79,15 +81,19 @@ class TemplateRunner:
             rendering_started_at = datetime.now()
             rendered_result = template_object.render(**template_parameters)
             rendering_millis = int((datetime.now() - rendering_started_at).total_seconds() * 1000)
-            return {"template": template_id, "parameters": template_parameters, "result": rendered_result,
-                    "parsing_template_millis" : parsing_millis, "rendering_millis": rendering_millis}
+            return {
+                "template": template_id,
+                "parameters": template_parameters,
+                "result": rendered_result,
+                "parsing_template_millis" : parsing_millis,
+                "rendering_millis": rendering_millis
+            }
         except Exception as ex:
             return {"template": template_id, "parameters": template_parameters, "error": traceback.format_exc()}
 
 
 def main():
     template_runner = TemplateRunner()
-#    post_response_padding = " " * 1024
     try:
         stdin_small_buffer = os.fdopen(sys.stdin.fileno(), 'r', 1024)
         for request, receiving_millis in streaming.stream_json_dicts(stdin_small_buffer):
@@ -98,10 +104,8 @@ def main():
             sys.stdout.write(json.dumps(response))
             sys.stdout.write("\n")
             sys.stdout.flush()
-            # sys.stdout.write(post_response_padding)  # padding
-            # sys.stdout.flush()
     except Exception as ex:
-        print ('Error rendering a sensor, exiting: ' + traceback.format_exc(), file=sys.stderr)
+        print('Error rendering a sensor, exiting: ' + traceback.format_exc(), file=sys.stderr)
         sys.stdout.write(json.dumps({"error": traceback.format_exc()}))
         sys.stdout.write("\n")
         sys.stdout.flush()
