@@ -60,8 +60,8 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
-    void timeWindowSettingsPredictionTimeWindow_whenMaxFailureSensor_thenRequiresHistorical30ReadoutsForRuleEvaluation() {
-        Assertions.assertEquals(30, this.timeWindowSettings.getPredictionTimeWindow());
+    void timeWindowSettingsPredictionTimeWindow_whenMaxFailureSensor_thenRequiresHistorical60ReadoutsForRuleEvaluation() {
+        Assertions.assertEquals(60, this.timeWindowSettings.getPredictionTimeWindow());
     }
 
     @Test
