@@ -98,8 +98,8 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
+      label: 'statistics',
+      value: 'statistics'
     }
   ],
   [CheckTypes.PARTITIONED]: [
@@ -143,8 +143,8 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
+      label: 'statistics',
+      value: 'statistics'
     }
   ],
   [CheckTypes.PARTITIONED]: [

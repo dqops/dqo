@@ -63,8 +63,18 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       connection,
       schema,
       table,
-      'detail'
+      'statistics'
     );
+    if(checkTypes === CheckTypes.SOURCES){
+      url = ROUTES.TABLE_LEVEL_PAGE(
+        item.value,
+        connection,
+        schema,
+        table,
+        'detail'
+      );
+    }
+
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 
     if (defaultTab) {
@@ -106,16 +116,7 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         );
         value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
       }
-    } else {
-      const tab =
-        item.value === CheckTypes.MONITORING ||
-        item.value === CheckTypes.PARTITIONED
-          ? 'daily'
-          : item.value === CheckTypes.PROFILING
-          ? 'statistics'
-          : 'detail';
-      url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
-    }
+    } 
     dispatch(
       addFirstLevelTab(item.value, {
         url,

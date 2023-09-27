@@ -1182,7 +1182,7 @@ function TreeProvider(props: any) {
       ) {
         tab = tab || 'daily';
       } else {
-        tab = tab || 'detail';
+        tab = tab || 'statistics';
       }
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -1682,7 +1682,7 @@ function TreeProvider(props: any) {
       ) {
         tab = tab || 'daily';
       } else {
-        tab = tab || 'detail';
+        tab = tab || 'statistics';
       }
 
       const url = ROUTES.COLUMN_LEVEL_PAGE(
