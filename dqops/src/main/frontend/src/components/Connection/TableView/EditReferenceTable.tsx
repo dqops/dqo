@@ -407,10 +407,8 @@ const EditReferenceTable = ({
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setName(e.target.value);
       setIsUpdated(true);
-    }
   };
 
   const changePropsTable = (value: string) => {
@@ -614,7 +612,7 @@ const EditReferenceTable = ({
         <div className="flex items-center justify-center gap-x-5">
           <div className="font-bold text-center">
             Table comparison configuration name:{' '}
-          </div>
+          </div>{(selectedReference === undefined || selectedReference.length === 0) ? 
           <Input
             className={
               name.length === 0 ? 'min-w-80 border border-red-500' : 'min-w-80'
@@ -623,6 +621,7 @@ const EditReferenceTable = ({
             onChange={onChangeName}
             placeholder="Table comparison configuration name"
           />
+          : <span className='font-bold'>{name}</span>}
         </div>
         {popUp === true && (
           <div className="bg-red-300 p-4 rounded-lg text-white border-2 border-red-500">
