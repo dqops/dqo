@@ -229,4 +229,13 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
 
         return super.isDefault();
     }
+
+    /**
+     * Converts the object to a string - returns the full object hierarchical ID.
+     * @return Object id.
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + ": " + (this.getHierarchyId() != null ? this.getHierarchyId().toString() : "(detached)");
+    }
 }

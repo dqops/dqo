@@ -138,6 +138,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
         }
 
         PythonVirtualEnv pythonVirtualEnv = new PythonVirtualEnv();
+        pythonVirtualEnv.setEnableDebugging(this.pythonConfigurationProperties.isEnableDebugging());
         if (!this.pythonConfigurationProperties.isUseHostPython()) {
             Path vEnvPath = getVEnvPath();
             pythonVirtualEnv.setVirtualEnvPath(vEnvPath);

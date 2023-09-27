@@ -146,6 +146,14 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
             this.checks = true;
         }
 
+        if (localFoldersStatusModel.getSettings() == FolderSynchronizationStatus.changed) {
+            this.settings = true;
+        }
+
+        if (localFoldersStatusModel.getCredentials() == FolderSynchronizationStatus.changed) {
+            this.credentials = true;
+        }
+
         if (localFoldersStatusModel.getDataSensorReadouts() == FolderSynchronizationStatus.changed) {
             this.dataSensorReadouts = true;
         }
@@ -175,6 +183,8 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         this.sensors = true;
         this.rules = true;
         this.checks = true;
+        this.settings = true;
+        this.credentials = true;
         this.dataSensorReadouts = true;
         this.dataCheckResults = true;
         this.dataStatistics = true;

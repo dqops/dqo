@@ -54,7 +54,7 @@ export const TableReferenceComparisons = ({
   useEffect(() => {
     getNewTableComparison();
     setIsCreting(false);
-  }, [isComparisonDeleted]);
+  }, [isComparisonDeleted, table, schema, connection]);
 
   const getNewTableComparison = () => {
     if (checkTypes === CheckTypes.PROFILING) {

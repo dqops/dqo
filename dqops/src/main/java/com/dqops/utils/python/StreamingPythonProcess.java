@@ -170,7 +170,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             CompletableFuture<Object> completedFuture = CompletableFuture.anyOf(timeoutCompletableFuture,
                     this.outputDetectedOnStderrFuture, this.processFinishedErrorFuture, this.processFinishedSuccessFuture);
             CompletableFuture<Object> finishedFuture = completedFuture.handleAsync((Object result, Throwable ex) -> {
-                if (Objects.equals(result,true)) {
+                if (timeoutCompletableFuture.isCancelled()) {
                     // result received
                     return null;
                 }
@@ -200,11 +200,14 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             try {
                 ObjectMapper objectMapper = this.jsonSerializer.getMapper();
                 Object deserializedResponse = objectMapper.readValue(this.jsonParser, outputType);
-                timeoutCompletableFuture.complete(true);
+                timeoutCompletableFuture.cancel(true);
+                finishedFuture.cancel(true);
 
                 return deserializedResponse;
             } catch (Exception ex) {
                 this.close();
+                timeoutCompletableFuture.cancel(true);
+                finishedFuture.cancel(true);
 
                 if (!this.outputDetectedOnStderrFuture.isDone()) {
                     throw new PythonExecutionException("Failed to parse a response from a python process, message: " + ex.getMessage(), ex);
@@ -270,7 +273,10 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             Map<String, String> systemEnvVariables = System.getenv();
             HashMap<String, String> processEnvVariables = new HashMap<>(systemEnvVariables);
             processEnvVariables.put("PYTHONUNBUFFERED", "1");
-            processEnvVariables.put("PYTHONIOENCODING", "utf-8");
+            processEnvVariables.put("PYTHONIOENCODING", "UTF-8");
+            if (pythonVirtualEnv.isEnableDebugging()) {
+                processEnvVariables.put("PYDEVD_USE_CYTHON", "NO"); // to enable debugging the python process
+            }
             processEnvVariables.remove("PYTHONHOME");
             for (Map.Entry<String, String> venvEnvironmentVarKeyValPair : pythonVirtualEnv.getEnvironmentVariables().entrySet()) {
                 processEnvVariables.put(venvEnvironmentVarKeyValPair.getKey(), venvEnvironmentVarKeyValPair.getValue());
@@ -361,5 +367,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 			this.readFromProcessStream = null;
 			this.readFromProcessStreamProcessSide = null;
         }
+
+        this.processingThread.interrupt();
     }
 }
