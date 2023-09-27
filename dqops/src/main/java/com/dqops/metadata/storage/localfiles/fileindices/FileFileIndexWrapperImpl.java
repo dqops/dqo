@@ -98,7 +98,7 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
             return; // do nothing
         }
 
-        if (this.getStatus() == InstanceStatus.UNCHANGED || super.getSpec() == null) {
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
             return; // nothing to do, the instance was never touched
         }
 
