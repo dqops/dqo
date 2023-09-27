@@ -16,6 +16,7 @@
 
 package com.dqops.core.dqocloud.login;
 
+import com.dqops.cloud.rest.model.DqoUserModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -50,5 +51,62 @@ public enum DqoUserRole {
      * No access rights role.
      */
     @JsonProperty("none")
-    NONE
+    NONE;
+
+    /**
+     * Converts an account role from a client generated from DQO Cloud Swagger.
+     * @param accountRole Account role enum from the code generated from swagger.
+     * @return DQO account role.
+     */
+    public static DqoUserRole convertFromApiEnum(DqoUserModel.AccountRoleEnum accountRole) {
+        if (accountRole == null) {
+            return null;
+        }
+
+        switch (accountRole) {
+            case ADMIN:
+                return ADMIN;
+
+            case EDITOR:
+                return EDITOR;
+
+            case OPERATOR:
+                return OPERATOR;
+
+            case VIEWER:
+                return VIEWER;
+
+            case NONE:
+                return NONE;
+
+            default:
+                throw new IllegalArgumentException("Account role " + accountRole + " not supported");
+        }
+    }
+
+    /**
+     * Converts the account role to a role defined in the DQO Cloud api.
+     * @return DQO Cloud API role.
+     */
+    public DqoUserModel.AccountRoleEnum convertToApiEnum() {
+        switch (this) {
+            case ADMIN:
+                return DqoUserModel.AccountRoleEnum.ADMIN;
+
+            case EDITOR:
+                return DqoUserModel.AccountRoleEnum.EDITOR;
+
+            case OPERATOR:
+                return DqoUserModel.AccountRoleEnum.OPERATOR;
+
+            case VIEWER:
+                return DqoUserModel.AccountRoleEnum.VIEWER;
+
+            case NONE:
+                return DqoUserModel.AccountRoleEnum.NONE;
+
+            default:
+                throw new IllegalArgumentException("Account role " + this + " not supported");
+        }
+    }
 }

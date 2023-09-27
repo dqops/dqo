@@ -27,10 +27,11 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "cloud", description = "Connect and synchronize the data with DQO Cloud",
+@CommandLine.Command(name = "cloud", description = "Manage the DQO Cloud account. This group of commands supports connecting this DQO instance to a DQO Cloud account, changing the password and synchronizing local data with the Data Quality Data Warehouse hosted by DQO Cloud",
         subcommands = {
-        CloudLoginCliCommand.class,
-        CloudSyncCliCommand.class
+            CloudLoginCliCommand.class,
+            CloudPasswordCliCommand.class,
+            CloudSyncCliCommand.class
 })
 public class CloudCliCommand extends BaseCommand {
 }

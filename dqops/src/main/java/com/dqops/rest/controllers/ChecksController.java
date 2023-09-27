@@ -121,7 +121,7 @@ public class ChecksController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json")
     @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -171,7 +171,7 @@ public class ChecksController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json")
     @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -356,7 +356,7 @@ public class ChecksController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks(
