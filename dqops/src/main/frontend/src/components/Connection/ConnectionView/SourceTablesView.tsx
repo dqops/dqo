@@ -152,7 +152,7 @@ const SourceTablesView = ({
             <tr className="border-b border-gray-300">
               <th />
               <th className="py-2 px-4 text-left">Source Table Name</th>
-              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th className="py-2 px-4 text-left">Import status</th>
             </tr>
           </thead>
           <tbody>

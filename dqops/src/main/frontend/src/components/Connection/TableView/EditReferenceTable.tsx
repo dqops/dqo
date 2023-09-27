@@ -90,7 +90,6 @@ const EditReferenceTable = ({
     table: string;
   } = useParams();
   const [isUpdated, setIsUpdated] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
   const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [normalList, setNormalList] = useState<Array<string>>();
@@ -266,9 +265,6 @@ const EditReferenceTable = ({
         .catch((err) => {
           console.log('err', err);
         })
-        .finally(() => {
-          setIsUpdating(false);
-        });
     } else {
       if (listOfExistingReferences.includes(name.toString())) {
         setPopUp(true);
@@ -296,9 +292,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
           timePartitioned === 'daily'
@@ -325,9 +318,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
           timePartitioned === 'monthly'
@@ -354,9 +344,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.MONITORING &&
           timePartitioned === 'daily'
@@ -383,9 +370,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.MONITORING &&
           timePartitioned === 'monthly'
@@ -412,23 +396,19 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         }
         combinedFunc(name);
         setPopUp(false);
       }
     }
     setIsButtonEnabled(false);
+    setIsUpdated(false)
     onChangeUpdatedParent(false);
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setName(e.target.value);
       setIsUpdated(true);
-    }
   };
 
   const changePropsTable = (value: string) => {
@@ -621,19 +601,18 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
+
   return (
     <div className="w-full">
       <TableActionGroup
-        onUpdate={onUpdate}
-        isUpdated={true}
-        isDisabled={!isButtonEnabled}
-        isUpdating={isUpdating}
+        onUpdate={() => undefined}
+        addSaveButton={false}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
         <div className="flex items-center justify-center gap-x-5">
           <div className="font-bold text-center">
             Table comparison configuration name:{' '}
-          </div>
+          </div>{(selectedReference === undefined || selectedReference.length === 0) ? 
           <Input
             className={
               name.length === 0 ? 'min-w-80 border border-red-500' : 'min-w-80'
@@ -642,6 +621,7 @@ const EditReferenceTable = ({
             onChange={onChangeName}
             placeholder="Table comparison configuration name"
           />
+          : <span className='font-bold'>{name}</span>}
         </div>
         {popUp === true && (
           <div className="bg-red-300 p-4 rounded-lg text-white border-2 border-red-500">
@@ -686,6 +666,13 @@ const EditReferenceTable = ({
               }
             />
           )}
+            <Button
+          onClick={onUpdate}
+          label="Save"
+          color="primary"
+          className='w-40'
+          disabled={!isButtonEnabled}
+          />
           <Button
             label="Back"
             color="primary"
