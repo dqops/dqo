@@ -16,6 +16,7 @@ function useConnectionSchemaTableExists(
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(connection, table, schema)
       const validate404Status = (status: number): boolean => {
         return status === 200 || status === 404;
       };
@@ -58,8 +59,9 @@ function useConnectionSchemaTableExists(
         setConnectionExist(false);
       }
     };
-
-    fetchData();
+    if(connection && connection.length!==0){
+      fetchData();
+    }
   }, [connection, schema, table]);
   return { tableExist, schemaExist, connectionExist };
 }
