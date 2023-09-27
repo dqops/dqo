@@ -35,6 +35,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     private boolean useHostPython;
     private int pipTimeoutSeconds = 120;
     private int pythonScriptTimeoutSeconds = 120;
+    private boolean enableDebugging;
 
     /**
      * Python runtime file name (python, python3, python.exe, python3.exe, etc.)
@@ -178,6 +179,22 @@ public class DqoPythonConfigurationProperties implements Cloneable {
      */
     public void setPythonScriptTimeoutSeconds(int pythonScriptTimeoutSeconds) {
         this.pythonScriptTimeoutSeconds = pythonScriptTimeoutSeconds;
+    }
+
+    /**
+     * Adds an environment variable PYDEVD_USE_CYTHON=NO which simplifies debugging.
+     * @return Enable debugging.
+     */
+    public boolean isEnableDebugging() {
+        return enableDebugging;
+    }
+
+    /**
+     * Decides if python should be started with an extra environment variable PYDEVD_USE_CYTHON=NO.
+     * @param enableDebugging True - add PYDEVD_USE_CYTHON=NO environment variable.
+     */
+    public void setEnableDebugging(boolean enableDebugging) {
+        this.enableDebugging = enableDebugging;
     }
 
     /**

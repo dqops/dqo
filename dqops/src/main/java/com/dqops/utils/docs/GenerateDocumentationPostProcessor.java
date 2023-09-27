@@ -75,6 +75,7 @@ import com.dqops.utils.reflection.ReflectionService;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.serialization.JsonSerializerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -84,12 +85,15 @@ import java.util.stream.Collectors;
  * Class called from the maven build. Generates documentation.
  */
 public class GenerateDocumentationPostProcessor {
+
     /**
      * Main method of the documentation generator that generates markdown documentation files for mkdocs.
      * @param args Command line arguments.
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        PythonCallerServiceImpl pythonCaller = null;
+
         try {
             if (args.length == 0) {
                 System.out.println("Documentation generator utility");
@@ -105,15 +109,23 @@ public class GenerateDocumentationPostProcessor {
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
             HandledClassesLinkageStore linkageStore = new HandledClassesLinkageStore();
 
+            pythonCaller = createPythonCaller(projectDir);
+
             generateDocumentationForSensors(projectDir, linkageStore, dqoHomeContext);
             generateDocumentationForRules(projectDir, linkageStore, dqoHomeContext);
             generateDocumentationForCliCommands(projectDir, linkageStore);
-            generateDocumentationForChecks(projectDir, linkageStore, dqoHomeContext);
+            generateDocumentationForChecks(projectDir, linkageStore, dqoHomeContext, pythonCaller);
             generateDocumentationForYaml(projectDir, linkageStore, dqoHomeContext);
             generateDocumentationForParquetFiles(projectDir, linkageStore);
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (pythonCaller != null) {
+                pythonCaller.destroy();
+            }
+
+            System.out.println("Documentation was generated");
         }
     }
 
@@ -209,10 +221,13 @@ public class GenerateDocumentationPostProcessor {
     }
 
 
-    public static void generateDocumentationForChecks(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForChecks(Path projectRoot,
+                                                      HandledClassesLinkageStore linkageStore,
+                                                      DqoHomeContext dqoHomeContext,
+                                                      PythonCallerServiceImpl pythonCallerService) {
         Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
         DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
-        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, linkageStore, dqoHomeContext);
+        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, linkageStore, dqoHomeContext, pythonCallerService);
         CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
 
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
@@ -226,25 +241,56 @@ public class GenerateDocumentationPostProcessor {
     }
 
     /**
+     * Creates a python caller service.
+     * @param projectRoot Path to the project root folder, required to find the DQO home.
+     * @return Python caller service. Must be disposed on exit.
+     */
+    protected static PythonCallerServiceImpl createPythonCaller(Path projectRoot) {
+        DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
+        configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = new DqoUserConfigurationProperties();
+        dqoUserConfigurationProperties.setHome(projectRoot.resolve("../userhome").toAbsolutePath().normalize().toString());
+        DqoPythonConfigurationProperties pythonConfigurationProperties = createPythonConfiguration();
+
+        PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
+                configurationProperties, createPythonConfiguration(), dqoUserConfigurationProperties);
+        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
+                configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+
+        return pythonCallerService;
+    }
+
+    /**
+     * Creates a python configuration that is applicable for the document generation.
+     * @return Python configuration.
+     */
+    @NotNull
+    private static DqoPythonConfigurationProperties createPythonConfiguration() {
+        DqoPythonConfigurationProperties dqoPythonConfigurationProperties = new DqoPythonConfigurationProperties();
+        dqoPythonConfigurationProperties.setPythonScriptTimeoutSeconds(5);
+        return dqoPythonConfigurationProperties;
+    }
+
+    /**
      * Creates a check documentation model factory.
      *
      * @param projectRoot    Project root path.
      * @param linkageStore
      * @param dqoHomeContext DQO Home context.
+     * @param pythonCallerService Python caller service.
      * @return Check documentation model factory.
      */
-    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, HandledClassesLinkageStore linkageStore, final DqoHomeContext dqoHomeContext){
+    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot,
+                                                                                      HandledClassesLinkageStore linkageStore,
+                                                                                      final DqoHomeContext dqoHomeContext,
+                                                                                      PythonCallerServiceImpl pythonCallerService){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
         DqoUserConfigurationProperties dqoUserConfigurationProperties = new DqoUserConfigurationProperties();
         dqoUserConfigurationProperties.setHome(projectRoot.resolve("../userhome").toAbsolutePath().normalize().toString());
-        DqoPythonConfigurationProperties pythonConfigurationProperties = new DqoPythonConfigurationProperties();
+        DqoPythonConfigurationProperties pythonConfigurationProperties = createPythonConfiguration();
 
-        PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
-                configurationProperties, new DqoPythonConfigurationProperties(), dqoUserConfigurationProperties);
-        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
-                configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 
         CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
                 createSimilarCheckMatchingService(reflectionService, dqoHomeContext),

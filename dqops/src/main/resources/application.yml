@@ -69,6 +69,7 @@ dqo:
     evaluate-rules-module: lib/evaluate_rules.py
     python-script-timeout-seconds: 120
     use-host-python: false
+    enable-debugging: false
   user:
     home: .
     has-local-home: true
