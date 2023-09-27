@@ -90,7 +90,6 @@ const EditReferenceTable = ({
     table: string;
   } = useParams();
   const [isUpdated, setIsUpdated] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
   const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [normalList, setNormalList] = useState<Array<string>>();
@@ -266,9 +265,6 @@ const EditReferenceTable = ({
         .catch((err) => {
           console.log('err', err);
         })
-        .finally(() => {
-          setIsUpdating(false);
-        });
     } else {
       if (listOfExistingReferences.includes(name.toString())) {
         setPopUp(true);
@@ -296,9 +292,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
           timePartitioned === 'daily'
@@ -325,9 +318,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
           timePartitioned === 'monthly'
@@ -354,9 +344,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.MONITORING &&
           timePartitioned === 'daily'
@@ -383,9 +370,6 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         } else if (
           checkTypes === CheckTypes.MONITORING &&
           timePartitioned === 'monthly'
@@ -412,15 +396,13 @@ const EditReferenceTable = ({
             .then(() => {
               onBack(false);
             })
-            .finally(() => {
-              setIsUpdating(false);
-            });
         }
         combinedFunc(name);
         setPopUp(false);
       }
     }
     setIsButtonEnabled(false);
+    setIsUpdated(false)
     onChangeUpdatedParent(false);
   };
 
@@ -621,13 +603,13 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
+  console.log(isButtonEnabled)
+
   return (
     <div className="w-full">
       <TableActionGroup
-        onUpdate={onUpdate}
-        isUpdated={true}
-        isDisabled={!isButtonEnabled}
-        isUpdating={isUpdating}
+        onUpdate={() => undefined}
+        addSaveButton={false}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
         <div className="flex items-center justify-center gap-x-5">
@@ -686,6 +668,13 @@ const EditReferenceTable = ({
               }
             />
           )}
+            <Button
+          onClick={onUpdate}
+          label="Save"
+          color="primary"
+          className='w-40'
+          disabled={!isButtonEnabled}
+          />
           <Button
             label="Back"
             color="primary"
