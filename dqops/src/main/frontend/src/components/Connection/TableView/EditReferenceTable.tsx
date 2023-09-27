@@ -603,7 +603,6 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
-  console.log(isButtonEnabled)
 
   return (
     <div className="w-full">
