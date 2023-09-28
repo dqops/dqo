@@ -195,4 +195,27 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
         cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
         return cloned;
     }
+
+    public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
+        IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
+
+        if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
+            clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentAcknowledgedWebhookUrl() == null){
+            clonedWebhooks.setIncidentAcknowledgedWebhookUrl(defaultWebhooks.getIncidentAcknowledgedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentResolvedWebhookUrl() == null){
+            clonedWebhooks.setIncidentResolvedWebhookUrl(defaultWebhooks.getIncidentResolvedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentMutedWebhookUrl() == null){
+            clonedWebhooks.setIncidentMutedWebhookUrl(defaultWebhooks.getIncidentMutedWebhookUrl());
+        }
+
+        return clonedWebhooks;
+    }
+
 }

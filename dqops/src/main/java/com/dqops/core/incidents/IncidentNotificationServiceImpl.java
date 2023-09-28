@@ -15,6 +15,7 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.utils.http.SharedHttpClientProvider;
@@ -42,17 +43,22 @@ import java.util.List;
 public class IncidentNotificationServiceImpl implements IncidentNotificationService {
     private SharedHttpClientProvider sharedHttpClientProvider;
     private JsonSerializer jsonSerializer;
+    private ExecutionContextFactory executionContextFactory;
 
     /**
      * Creates an incident notification service.
+     *
      * @param sharedHttpClientProvider Shared http client provider that manages the HTTP connection pooling.
-     * @param jsonSerializer Json serializer.
+     * @param jsonSerializer           Json serializer.
+     * @param executionContextFactory
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
-                                           JsonSerializer jsonSerializer) {
+                                           JsonSerializer jsonSerializer,
+                                           ExecutionContextFactory executionContextFactory) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
+        this.executionContextFactory = executionContextFactory;
     }
 
     /**
@@ -78,7 +84,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @return Awaitable Mono object.
      */
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-        final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks();
+
+        IncidentWebhookNotificationsSpec defaultWebhooks = executionContextFactory.create()
+                .getUserHomeContext().getUserHome().getDefaultNotificationWebhook().getSpec();
+
+        final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks()
+                .combineWithDefaults(defaultWebhooks);
 
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
