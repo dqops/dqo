@@ -10,7 +10,7 @@ The `ip4` column contains IP4 address values. We want to verify the number of in
 
 **SOLUTION**
 
-We will verify the data using profiling [string_invalid_ip4_address_count](../../checks/column/strings/string-invalid-ip4-address-count.md) column check.
+We will verify the data using monitoring [string_invalid_ip4_address_count](../../checks/column/strings/string-invalid-ip4-address-count.md) column check.
 Our goal is to verify if the number of invalid IP4 address values in `ip4` column does not exceed set thresholds.
 
 In this example, we will set three maximum count thresholds levels for the check:
@@ -57,44 +57,46 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-invalid-IP4-address-check.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-ip4-address-count-checks.png)
 
-1. Go to the **Profiling** section.
+1. Go to the **Monitoring** section.
 
-    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Profiling Checks** tab.
+3. Select the **Monitoring Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+   In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
 
-    ![Run check](https://dqops.com/docs/images/examples/invalid-IP4-address-run-check.png)
+   ![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-run-checks.png)
+
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
- 
-    ![Check details](https://dqops.com/docs/images/examples/invalid-IP4-address-check-details.png)
+   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+   that occurred during the check's execution.
+
+   ![Check details](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-details.png)
+
 
 6. Review the results which should be similar to the one below.
    
-    The actual value in this example is 10, which is above the maximum threshold level set in the warning (0).
-    The check gives an error (notice the orange square on the left of the name of the check).
+    The actual value in this example is 5, which is above the maximum threshold level set in the warning (0).
+    The check gives a warning (notice the yellow square on the left of the name of the check).
 
-    ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/invalid-IP4-address-check-results.png)
+    ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results.png)
 
 7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
 
@@ -103,9 +105,41 @@ To execute the check prepared in the example using the [graphical interface](../
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Current column status by dimension dashboard showing results by connection, schema, dimension and data group.
+    Below you can see the results displayed on the Issue severity status per table and day dashboard showing results by connection, schema, columns and data group.
 
-   ![String-invalid-ip4-address-count check on Current column status by dimension dashboard](https://dqops.com/docs/images/examples/invalid-ip4-address-on-current-column-status-by-dimension-dashboard.png)
+   ![String-invalid-ip4-address-count check on Issue severity status per table and day dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results-on-issue-severity-status-per-table-and-day-dashboard.png)
+
+## Configuring a schedule at connection level
+
+With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+table, or individual check.
+
+After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+
+![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+
+1. Navigate to the **Data Source** section.
+
+2. Choose the connection from the tree view on the left.
+
+3. Click on the **Schedule** tab.
+
+4. Select the Monitoring Daily tab
+
+5. Select the **Run every day at** option and specify the time as 12:00.
+
+6. Once you have set the schedule, click on the **Save** button to save your changes.
+
+7. Enable the scheduler by clicking the toggle button.
+
+![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
+
+Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
+all tables associated with that connection.
+
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
+
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -117,11 +151,11 @@ In this example, we have set three maximum count thresholds levels for the check
 - error: 5
 - fatal: 10
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `string_invalid_ip4_address_count` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_string_invalid_ip4_address_count` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="14-25"
+```yaml hl_lines="8-21"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -133,20 +167,16 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        strings:
-          profile_string_invalid_ip4_address_count:
-            comments:
-            - date: 2023-09-01T09:56:57.736
-              comment_by: user
-              comment: "In this example, values in \"ip4\" column are verified whether\
-                \ the number of IP4 address values does not exceed the indicated thresholds."
-            warning:
-              max_count: 0
-            error:
-              max_count: 5
-            fatal:
-              max_count: 10
+      monitoring_checks:
+        daily:
+          strings:
+            daily_string_invalid_ip4_address_count:
+              warning:
+                max_count: 0
+              error:
+                max_count: 5
+              fatal:
+                max_count: 10
     result:
       type_snapshot:
         column_type: INT64
