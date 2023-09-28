@@ -36,6 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Bootstrap component that configures console logging during boot.
  */
@@ -99,7 +101,9 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         errorLevelFilter.start();
         consoleAppenderError.addFilter(errorLevelFilter);
         if (this.loggingConfigurationProperties.isLogErrorsToStderr()) {
-            consoleAppenderError.setOutputStream(System.err);
+            consoleAppenderError.setOutputStream(new LogQuotingOutputStream(System.err));
+        } else {
+            consoleAppenderError.setOutputStream(new LogQuotingOutputStream(System.out));
         }
         consoleAppenderError.start();
         rootLogger.addAppender(consoleAppenderError);
@@ -112,6 +116,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         notErrorLevelFilter.setOnMismatch(FilterReply.NEUTRAL);
         notErrorLevelFilter.start();
         consoleAppenderNonError.addFilter(notErrorLevelFilter);
+        consoleAppenderNonError.setOutputStream(new LogQuotingOutputStream(System.out));
         consoleAppenderNonError.start();
         rootLogger.addAppender(consoleAppenderNonError);
     }
@@ -125,6 +130,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         PatternLayoutEncoder lineEncoder = new PatternLayoutEncoder();
         lineEncoder.setContext(loggerContext);
         lineEncoder.setPattern(this.loggingConfigurationProperties.getPattern());
+        lineEncoder.setCharset(StandardCharsets.UTF_8);
         lineEncoder.start();
         return lineEncoder;
     }
@@ -138,6 +144,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         LogstashEncoder jsonEncoder = new LogstashEncoder();
         jsonEncoder.setContext(loggerContext);
         jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        jsonEncoder.addKeyValueKeyFieldName("parameters");
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         jsonEncoder.setThrowableConverter(throwableConverter);
