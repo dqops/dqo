@@ -196,6 +196,11 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
         return cloned;
     }
 
+    /**
+     * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
+     * @param defaultWebhooks Default incident webhook notification spec
+     * @return Combined IncidentWebhookNotificationsSpec object with default webhooks.
+     */
     public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
         IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
 

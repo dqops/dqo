@@ -50,7 +50,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      *
      * @param sharedHttpClientProvider Shared http client provider that manages the HTTP connection pooling.
      * @param jsonSerializer           Json serializer.
-     * @param executionContextFactory
+     * @param executionContextFactory  Execution context factory.
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
