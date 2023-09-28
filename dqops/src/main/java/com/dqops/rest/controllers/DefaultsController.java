@@ -25,12 +25,15 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -629,22 +632,19 @@ public class DefaultsController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
-    // todo: api for default schedules - read and update methods
-    // todo: api for default webhooks - read and update methods
-
     /**
      * Returns the spec for the default schedule configuration for given scheduling group..
-     * @return Schedule speification for given scheduling group.
+     * @return Schedule spec for given scheduling group.
      */
     @GetMapping(value = "/defaultschedule/{schedulingGroup}", produces = "application/json")
     @ApiOperation(value = "getDefaultSchedules", notes = "Returns spec to show and edit the default configuration of schedules.",
-            response = CheckContainerModel.class,
+            response = MonitoringScheduleSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "OK", response = MonitoringScheduleSpec.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
@@ -691,7 +691,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<?>> updateDefaultSchedules(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Spec with default schedules changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
+            @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -712,6 +712,79 @@ public class DefaultsController {
 
         if (newMonitoringScheduleSpec.isPresent()) {
             monitoringSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+        }
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Returns the spec for the default notification webhooks.
+     * @return Notification webhooks spec.
+     */
+    @GetMapping(value = "/defaultwebhooks", produces = "application/json")
+    @ApiOperation(value = "getDefaultWebhooks", notes = "Returns spec to show and edit the default configuration of webhooks.",
+            response = IncidentWebhookNotificationsSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = IncidentWebhookNotificationsSpec.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<IncidentWebhookNotificationsSpec>> getDefaultWebhooks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+        IncidentWebhookNotificationsSpec defaultNotificationWebhooks = null;
+
+        if (userHome == null
+                || userHome.getDefaultNotificationWebhook() == null
+                || userHome.getDefaultNotificationWebhook().getSpec() == null
+        ) {
+            defaultNotificationWebhooks = new IncidentWebhookNotificationsSpec();
+        } else {
+            defaultNotificationWebhooks = userHome.getDefaultNotificationWebhook().getSpec();
+        }
+
+        return new ResponseEntity<>(Mono.just(defaultNotificationWebhooks), HttpStatus.OK);
+    }
+
+    /**
+     * Updates the configuration of default notification webhooks
+     * @param newIncidentWebhookNotificationsSpec New configuration of the default notification webhooks
+     * @return Empty response.
+     */
+    @PutMapping(value = "/defaultwebhooks", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultWebhooks",
+            notes = "New configuration of the default webhooks.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "The default configuration of notification webhooks successfully updated."),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<?>> updateDefaultWebhooks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
+            @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+
+        if (newIncidentWebhookNotificationsSpec.isPresent()) {
+            userHome.getDefaultNotificationWebhook().setSpec(newIncidentWebhookNotificationsSpec.get());
         }
 
         userHomeContext.flush();
