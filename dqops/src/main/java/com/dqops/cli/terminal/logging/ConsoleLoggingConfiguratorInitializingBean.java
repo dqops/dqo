@@ -24,6 +24,7 @@ import ch.qos.logback.classic.filter.LevelFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.Encoder;
+import ch.qos.logback.core.joran.spi.ConsoleTarget;
 import ch.qos.logback.core.spi.FilterReply;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import net.logstash.logback.encoder.LogstashEncoder;
@@ -68,8 +69,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
-        ConsoleAppender<ILoggingEvent> consoleAppenderError = new ConsoleAppender<>();
-        ConsoleAppender<ILoggingEvent> consoleAppenderNonError = new ConsoleAppender<>();
+        EncodingConsoleAppender<ILoggingEvent> consoleAppenderError = new EncodingConsoleAppender<>();
+        EncodingConsoleAppender<ILoggingEvent> consoleAppenderNonError = new EncodingConsoleAppender<>();
         Encoder<ILoggingEvent> encoderError = null;
         Encoder<ILoggingEvent> encoderNonError = null;
 
@@ -89,6 +90,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
                 encoderNonError = createJsonEncoder(loggerContext);
                 consoleAppenderError.setWithJansi(false);
                 consoleAppenderNonError.setWithJansi(false);
+                consoleAppenderError.setEncodeCharacters(true);
+                consoleAppenderNonError.setEncodeCharacters(true);
                 break;
         }
 
@@ -101,9 +104,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         errorLevelFilter.start();
         consoleAppenderError.addFilter(errorLevelFilter);
         if (this.loggingConfigurationProperties.isLogErrorsToStderr()) {
-            consoleAppenderError.setOutputStream(new LogQuotingOutputStream(System.err));
-        } else {
-            consoleAppenderError.setOutputStream(new LogQuotingOutputStream(System.out));
+            consoleAppenderError.setTarget(ConsoleTarget.SystemErr.getName());
         }
         consoleAppenderError.start();
         rootLogger.addAppender(consoleAppenderError);
@@ -116,7 +117,6 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         notErrorLevelFilter.setOnMismatch(FilterReply.NEUTRAL);
         notErrorLevelFilter.start();
         consoleAppenderNonError.addFilter(notErrorLevelFilter);
-        consoleAppenderNonError.setOutputStream(new LogQuotingOutputStream(System.out));
         consoleAppenderNonError.start();
         rootLogger.addAppender(consoleAppenderNonError);
     }
