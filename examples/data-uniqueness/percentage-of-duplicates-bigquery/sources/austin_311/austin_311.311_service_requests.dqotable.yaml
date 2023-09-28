@@ -10,36 +10,19 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        uniqueness:
-          profile_duplicate_percent:
-            comments:
-            - date: 2023-04-14T09:13:20.243+00:00
-              comment_by: user
-              comment: "In this example, values in \"unique_key\" column are verified\
-                \  whether the percentage of duplicated values does not exceed the\
-                \ indicated thresholds."
-            warning:
-              max_percent: 1.0
-            error:
-              max_percent: 2.0
-            fatal:
-              max_percent: 5.0
-    complaint_description:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
+      monitoring_checks:
+        daily:
+          uniqueness:
+            daily_duplicate_percent:
+              warning:
+                max_percent: 1.0
+              error:
+                max_percent: 2.0
+              fatal:
+                max_percent: 5.0
     source:
       type_snapshot:
         column_type: STRING
-        nullable: true
-    status:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    status_change_date:
-      type_snapshot:
-        column_type: TIMESTAMP
         nullable: true
     created_date:
       type_snapshot:

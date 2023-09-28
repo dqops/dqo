@@ -30,24 +30,19 @@ spec:
       type_snapshot:
         column_type: FLOAT64
         nullable: true
-      profiling_checks:
-        numeric:
-          profile_values_in_range_numeric_percent:
-            comments:
-            - date: 2023-05-09T07:28:29.188+00:00
-              comment_by: user
-              comment: "In this example, the values in the `values` column are verified\
-                \ that they are within the set range and that the percentage of these\
-                \ values does not exceed the set thresholds."
-            parameters:
-              min_value: 0.0
-              max_value: 100000.0
-            warning:
-              min_percent: 99.0
-            error:
-              min_percent: 95.0
-            fatal:
-              min_percent: 90.0
+      monitoring_checks:
+        daily:
+          numeric:
+            daily_values_in_range_numeric_percent:
+              parameters:
+                min_value: 0.0
+                max_value: 1000000.0
+              warning:
+                min_percent: 99.0
+              error:
+                min_percent: 95.0
+              fatal:
+                min_percent: 90.0
     lower_ci:
       type_snapshot:
         column_type: FLOAT64
