@@ -102,7 +102,8 @@ public class ConnectionsController {
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
         Stream<ConnectionBasicModel> modelStream = connections.toList().stream()
-                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator));
+                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
+                .sorted(Comparator.comparing(model -> model.getConnectionName()));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }

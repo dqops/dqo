@@ -45,6 +45,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -432,6 +433,7 @@ public class SensorsController {
 
             sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions);
         });
+
         return sensorFolderModel;
     }
 
@@ -455,6 +457,7 @@ public class SensorsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel(principal);
         List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
+        allSensors.sort(Comparator.comparing(model -> model.getFullSensorName()));
 
         return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);
     }

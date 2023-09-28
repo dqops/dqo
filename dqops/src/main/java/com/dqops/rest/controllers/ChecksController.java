@@ -363,6 +363,7 @@ public class ChecksController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel(principal);
         List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
+        allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
 
         return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
     }

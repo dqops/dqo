@@ -343,6 +343,7 @@ public class RulesController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel(principal);
         List<RuleBasicModel> allRules = ruleBasicFolderModel.getAllRules();
+        allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
 
         return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
     }

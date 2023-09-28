@@ -36,7 +36,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * REST API controller for managing users in a multi-user DQO installations.
@@ -74,7 +76,9 @@ public class UsersController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         try {
             Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
-            return new ResponseEntity<>(Flux.fromStream(dqoCloudUserModels.stream()), HttpStatus.OK);
+            Stream<DqoCloudUserModel> sortedStream = dqoCloudUserModels.stream()
+                    .sorted(Comparator.comparing(model -> model.getEmail()));
+            return new ResponseEntity<>(Flux.fromStream(sortedStream), HttpStatus.OK);
         }
         catch (DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
