@@ -26,6 +26,7 @@ import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private ScheduledJobListener scheduledJobListener;
     private DqoJobQueue dqoJobQueue;
     private ParentDqoJobQueue parentDqoJobQueue;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -70,6 +72,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param scheduledJobListener  Job listener that is notified when a job starts or finishes.
      * @param dqoJobQueue Standard job queue, used to ensure that the job queue starts before the job scheduler.
      * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -79,7 +82,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    JobDataMapAdapter jobDataMapAdapter,
                                    ScheduledJobListener scheduledJobListener,
                                    DqoJobQueue dqoJobQueue,
-                                   ParentDqoJobQueue parentDqoJobQueue) {
+                                   ParentDqoJobQueue parentDqoJobQueue,
+                                   DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
@@ -88,6 +92,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.scheduledJobListener = scheduledJobListener;
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -126,8 +131,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.synchronizationMode = synchronizationMode;
         this.checkRunReportingMode = checkRunReportingMode;
 
-        log.debug(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s",
-                synchronizationMode, checkRunReportingMode));
+        if (log.isInfoEnabled()) {
+            log.info(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s, using the time zone: %s",
+                    synchronizationMode, checkRunReportingMode, this.defaultTimeZoneProvider.getDefaultTimeZoneId()));
+        }
 
         if (this.started) {
             return;
