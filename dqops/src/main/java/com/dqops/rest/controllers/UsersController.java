@@ -42,7 +42,7 @@ import java.util.Objects;
  * REST API controller for managing users in a multi-user DQO installations.
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Users", description = "User management service")
 public class UsersController {
@@ -54,11 +54,39 @@ public class UsersController {
     }
 
     /**
+     * Returns a flat list of all users.
+     * @return List of all users.
+     */
+    @GetMapping(value = "users", produces = "application/json")
+    @ApiOperation(value = "getAllUsers", notes = "Returns a list of all users.",
+            response = DqoCloudUserModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel[].class),
+            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<DqoCloudUserModel>> getAllUsers(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        try {
+            Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
+            return new ResponseEntity<>(Flux.fromStream(dqoCloudUserModels.stream()), HttpStatus.OK);
+        }
+        catch (DqoCloudInvalidKeyException ex) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    /**
      * Returns the model of a user identified by email.
      * @param email User's email.
      * @return User's model that describes the user's role.
      */
-    @GetMapping(value = "/{email}", produces = "application/json")
+    @GetMapping(value = "users/{email}", produces = "application/json")
     @ApiOperation(value = "getUser", notes = "Returns the user model that describes the role of a user identified by an email", response = DqoCloudUserModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -93,39 +121,11 @@ public class UsersController {
     }
 
     /**
-     * Returns a flat list of all users.
-     * @return List of all users.
-     */
-    @GetMapping(value = "", produces = "application/json")
-    @ApiOperation(value = "getAllUsers", notes = "Returns a list of all users.",
-            response = DqoCloudUserModel[].class,
-            authorizations = {
-                    @Authorization(value = "authorization_bearer_api_key")
-            })
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel[].class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DqoCloudUserModel>> getAllUsers(
-            @AuthenticationPrincipal DqoUserPrincipal principal) {
-        try {
-            Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
-            return new ResponseEntity<>(Flux.fromStream(dqoCloudUserModels.stream()), HttpStatus.OK);
-        }
-        catch (DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
-        }
-    }
-
-    /**
      * Creates (adds) a new user to a multi-user account.
      * @param userModel User model to add.
      * @return Empty response.
      */
-    @PostMapping(value = "", consumes = "application/json")
+    @PostMapping(value = "users", consumes = "application/json")
     @ApiOperation(value = "createUser", notes = "Creates (adds) a new user to a multi-user account.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -166,7 +166,7 @@ public class UsersController {
      * @param userModel User model to update.
      * @return Empty response.
      */
-    @PutMapping(value = "/{email}", consumes = "application/json")
+    @PutMapping(value = "users/{email}", consumes = "application/json")
     @ApiOperation(value = "updateUser", notes = "Updates a user in a multi-user account. The user's email cannot be changed.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -206,7 +206,7 @@ public class UsersController {
      * @param email User's email.
      * @return Empty model.
      */
-    @DeleteMapping(value = "/{email}")
+    @DeleteMapping(value = "users/{email}")
     @ApiOperation(value = "deleteUser", notes = "Deletes a user from a multi-user account.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -247,7 +247,7 @@ public class UsersController {
      * @param password New password.
      * @return Empty response.
      */
-    @PutMapping(value = "/{email}/password", consumes = "text/plain")
+    @PutMapping(value = "users/{email}/password", consumes = "text/plain")
     @ApiOperation(value = "changeUserPassword", notes = "Changes the password of a user identified by the email.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -287,7 +287,7 @@ public class UsersController {
      * @param password New password.
      * @return Empty response.
      */
-    @PutMapping(value = "/mypassword", consumes = "text/plain")
+    @PutMapping(value = "mypassword", consumes = "text/plain")
     @ApiOperation(value = "changeCallerPassword", notes = "Changes the password of the calling user. When the user is identified by the DQO local API key, it is the user whose email is stored in the DQO API Key.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
