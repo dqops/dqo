@@ -23,7 +23,7 @@ public final class DqoPermissionNames {
     /**
      * Permission to manage the account - permissions, etc. Perform actions that only a person assigned the "ADMIN" role can perform.
      */
-    public static final String MANAGE_ACCOUNT = "manage_account";
+    public static final String ADMIN = "admin";
 
     /**
      * Permission to edit data sources and definitions.

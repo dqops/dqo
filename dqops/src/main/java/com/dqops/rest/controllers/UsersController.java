@@ -138,7 +138,7 @@ public class UsersController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
+    @Secured({DqoPermissionNames.ADMIN})
     public ResponseEntity<Mono<?>> createUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
@@ -178,7 +178,7 @@ public class UsersController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the email does not match"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
+    @Secured({DqoPermissionNames.ADMIN})
     public ResponseEntity<Mono<?>> updateUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
@@ -219,7 +219,7 @@ public class UsersController {
             @ApiResponse(code = 406, message = "User's email is not provided"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
+    @Secured({DqoPermissionNames.ADMIN})
     public ResponseEntity<Mono<?>> deleteUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
@@ -259,7 +259,7 @@ public class UsersController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the required fields are empty"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
+    @Secured({DqoPermissionNames.ADMIN})
     public ResponseEntity<Mono<?>> changeUserPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
