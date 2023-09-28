@@ -30,7 +30,7 @@ public final class DqoPermissionGrantedAuthorities {
     /**
      * Permission to manage the account - permissions, etc. Perform actions that only a person assigned the "ADMIN" role can perform.
      */
-    public static final SimpleGrantedAuthority MANAGE_ACCOUNT = new SimpleGrantedAuthority(DqoPermissionNames.ADMIN);
+    public static final SimpleGrantedAuthority MANAGE_ACCOUNT = new SimpleGrantedAuthority(DqoPermissionNames.MANAGE_ACCOUNT);
 
     /**
      * Permission to edit data sources and definitions.
