@@ -144,7 +144,6 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         LogstashEncoder jsonEncoder = new LogstashEncoder();
         jsonEncoder.setContext(loggerContext);
         jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        jsonEncoder.addKeyValueKeyFieldName("parameters");
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         jsonEncoder.setThrowableConverter(throwableConverter);
