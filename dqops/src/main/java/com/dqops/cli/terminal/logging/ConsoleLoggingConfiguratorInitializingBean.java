@@ -69,8 +69,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
-        EncodingConsoleAppender<ILoggingEvent> consoleAppenderError = new EncodingConsoleAppender<>();
-        EncodingConsoleAppender<ILoggingEvent> consoleAppenderNonError = new EncodingConsoleAppender<>();
+        ConsoleAppender<ILoggingEvent> consoleAppenderError = new ConsoleAppender<>();
+        ConsoleAppender<ILoggingEvent> consoleAppenderNonError = new ConsoleAppender<>();
         Encoder<ILoggingEvent> encoderError = null;
         Encoder<ILoggingEvent> encoderNonError = null;
 
@@ -90,8 +90,6 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
                 encoderNonError = createJsonEncoder(loggerContext);
                 consoleAppenderError.setWithJansi(false);
                 consoleAppenderNonError.setWithJansi(false);
-                consoleAppenderError.setEncodeCharacters(true);
-                consoleAppenderNonError.setEncodeCharacters(true);
                 break;
         }
 

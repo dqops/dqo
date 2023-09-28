@@ -105,13 +105,13 @@ public class YamlSerializerImpl implements YamlSerializer {
         }
         catch (JacksonException e) {
             JsonLocation location = e.getLocation();
-            String message = e.getOriginalMessage();
+            String message = e.getOriginalMessage().replace('"', '\'');
 
             if (location != null) {
                 message += " at line " + location.getLineNr() + ", column " + location.getColumnNr();
             }
 
-            throw new YamlDeserializationException(message, null, e);
+            throw new YamlDeserializationException(message, null);
         }
         catch (Exception ex) {
             throw new YamlDeserializationException("Failed to deserialize a YAML file, error: " + ex.getMessage(), null, ex);
@@ -133,7 +133,7 @@ public class YamlSerializerImpl implements YamlSerializer {
         }
         catch (JacksonException e) {
             JsonLocation location = e.getLocation();
-            String message = e.getOriginalMessage();
+            String message = e.getOriginalMessage().replace('"', '\'');
 
             if (location != null) {
                 message += " at line " + location.getLineNr() + ", column " + location.getColumnNr();
@@ -143,7 +143,7 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            log.warn("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, e);
+            log.warn("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage);
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
                 return emptyInstance;
