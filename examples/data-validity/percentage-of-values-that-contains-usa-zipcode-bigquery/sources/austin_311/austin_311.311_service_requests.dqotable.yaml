@@ -58,21 +58,16 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      profiling_checks:
-        pii:
-          profile_contains_usa_zipcode_percent:
-            comments:
-            - date: 2023-08-30T11:25:25.292
-              comment_by: user
-              comment: "In this example, values in \"incident_zip\" column are verified\
-                \ whether the percentage of USA zipcode values does not exceed the\
-                \ indicated thresholds."
-            warning:
-              max_percent: 10.0
-            error:
-              max_percent: 25.0
-            fatal:
-              max_percent: 35.0
+      monitoring_checks:
+        daily:
+          pii:
+            daily_contains_usa_zipcode_percent:
+              warning:
+                max_percent: 10.0
+              error:
+                max_percent: 25.0
+              fatal:
+                max_percent: 35.0
     county:
       type_snapshot:
         column_type: STRING

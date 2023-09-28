@@ -18,16 +18,12 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        strings:
-          profile_string_max_length:
-            comments:
-            - date: 2023-04-14T09:11:51.993+00:00
-              comment_by: user
-              comment: "In this example, values in \"measure_name\" column are verified\
-                \ whether the length of values does not exceed the indicated threshold."
-            error:
-              max_value: 30.0
+      monitoring_checks:
+        daily:
+          strings:
+            daily_string_max_length:
+              error:
+                max_value: 30.0
     state_name:
       type_snapshot:
         column_type: STRING

@@ -51,44 +51,46 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-table-availability-check-1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-table-availability-checks.png)
 
-1. Go to the **Profiling** section.
+1. Go to the **Monitoring** section.
 
-    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Profiling Checks** tab.
+3. Select the **Monitoring Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+   In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
 
-    ![Run check](https://dqops.com/docs/images/examples/table-availability-run-check-1.png)
+   ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks.png)
+
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
- 
-    ![Check details](https://dqops.com/docs/images/examples/table-availability-check-details-1.png)
+   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+   that occurred during the check's execution.
+
+   ![Check details](https://dqops.com/docs/images/examples/daily-table-availability-checks-details.png)
+
 
 6. Review the results which should be similar to the one below.
    
     The actual value in this example is 1.
     The check gives a warning result (notice the yellow square on the left of the name of the check).
 
-    ![Table-availability check results](https://dqops.com/docs/images/examples/table-availability-check-results-1.png)
+    ![Table-availability check results](https://dqops.com/docs/images/examples/daily-table-availability-checks-results.png)
 
 7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
 
@@ -97,9 +99,9 @@ To execute the check prepared in the example using the [graphical interface](../
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Issue severity status per check dashboard showing results by connection, schema, table and column.
+    Below you can see the results displayed on the Current table status per check category dashboard showing results by connection, schema, check category and data group.
 
-    ![Table-availability check results on the Issue severity status per check dashboard](https://dqops.com/docs/images/examples/table-availability-check-results-on-issue-severity-status-per-check.png)
+    ![Table-availability check results on the Current table status per check category dashboard](https://dqops.com/docs/images/examples/daily-table-availability-checks-results-on-current-table-status-per-check-category-dashboard.png)
 
     Also, you can see results on the Table availability dashboard showing affected tables and connections, 
     and a list of checks where the check result was > 0 which means that the table was corrupted or did not exist on a particular day.
@@ -117,11 +119,11 @@ In this example, we have set maximum failures for the check:
 - error: 5
 - fatal: 10
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `table_availability` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_table_availability` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="9-21"
+```yaml hl_lines="7-21"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -149,14 +151,6 @@ spec:
         column_type: INT64
         nullable: true
     report_type:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    measure_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    state_name:
       type_snapshot:
         column_type: STRING
         nullable: true
