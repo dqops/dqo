@@ -2,10 +2,12 @@ package com.dqops.checks.defaults.services;
 
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.userhome.UserHome;
+import org.springframework.stereotype.Component;
 
 /**
  * Provider that provides the default configuration of the data observability (the default checks) object.
  */
+@Component
 public class DefaultObservabilityCheckSettingsProviderImpl implements DefaultObservabilityCheckSettingsProvider {
 
     /**

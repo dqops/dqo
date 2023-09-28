@@ -25,6 +25,9 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -628,4 +631,92 @@ public class DefaultsController {
 
     // todo: api for default schedules - read and update methods
     // todo: api for default webhooks - read and update methods
+
+    /**
+     * Returns the spec for the default schedule configuration for given scheduling group..
+     * @return Schedule speification for given scheduling group.
+     */
+    @GetMapping(value = "/defaultschedule/{schedulingGroup}", produces = "application/json")
+    @ApiOperation(value = "getDefaultSchedules", notes = "Returns spec to show and edit the default configuration of schedules.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getDefaultSchedule(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+        MonitoringScheduleSpec defaultMonitoringScheduleSpec = null;
+
+        if (userHome == null
+                || userHome.getDefaultSchedules() == null
+                || userHome.getDefaultSchedules().getSpec() == null
+        ) {
+            defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+        } else {
+            defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
+                    .getScheduleForCheckSchedulingGroup(schedulingGroup);
+        }
+
+        return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
+    }
+
+    /**
+     * Updates the configuration of default schedules for given scheduling group.
+     * @param newMonitoringScheduleSpec New configuration of the default schedules
+     * @return Empty response.
+     */
+    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultSchedules",
+            notes = "New configuration of the default schedules.",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "The default configuration of schedules successfully updated."),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<?>> updateDefaultSchedules(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Spec with default schedules changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
+            @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+
+        MonitoringSchedulesSpec monitoringSchedulesSpec = null;
+
+        if (userHome == null
+                || userHome.getDefaultSchedules() == null
+                || userHome.getDefaultSchedules().getSpec() == null
+        ) {
+            monitoringSchedulesSpec = new MonitoringSchedulesSpec();
+        } else {
+            monitoringSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+        }
+
+        if (newMonitoringScheduleSpec.isPresent()) {
+            monitoringSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+        }
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
 }
