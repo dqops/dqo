@@ -73,7 +73,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
             connection,
             schema,
             table,
-            'statistics'
+            'detail'
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(
             CheckTypes.SOURCES,
@@ -91,7 +91,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
           connection,
           schema,
           table,
-          'statistics'
+          'detail'
         )
       );
       return;
@@ -103,7 +103,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
       schema,
       table,
       column,
-      'statistics'
+      'detail'
     );
     let value = ROUTES.COLUMN_LEVEL_VALUE(
       item.value,
@@ -154,7 +154,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
           ? 'daily'
           : item.value === CheckTypes.PROFILING
           ? 'statistics'
-          : 'statistics';
+          : 'detail';
       url = ROUTES.COLUMN_LEVEL_PAGE(
         item.value,
         connection,
