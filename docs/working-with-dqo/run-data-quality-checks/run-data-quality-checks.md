@@ -50,7 +50,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
     To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
 
-### Configure date or datetime column for partition checks
+### **Configure date or datetime column for partition checks**
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
@@ -72,7 +72,7 @@ To configure the date or datetime colum:
 4. Click the Save button in the upper right corner.
 
 
-### Configure event and ingestion timestamp columns for timeliness checks
+### **Configure event and ingestion timestamp columns for timeliness checks**
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 
@@ -211,7 +211,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
     **************************************************
     ```
 
-### Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks
+### **Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks**
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 To run partition checks you need to configure Date or datetime colum which will be used as the time partitioning key for the table.

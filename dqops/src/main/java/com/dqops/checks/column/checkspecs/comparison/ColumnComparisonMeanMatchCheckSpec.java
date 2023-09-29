@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
+ * Column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
  * Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

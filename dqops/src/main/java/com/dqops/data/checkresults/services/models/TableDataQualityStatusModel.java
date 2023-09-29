@@ -109,9 +109,9 @@ public class TableDataQualityStatusModel {
 
     /**
      * The names of failed data quality checks (keys) and severity of the highest data quality issue that was detected.
-     * Table level checks are identified by the check name. Column level checks are identified as a check_name[column_name].
+     * Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].
      */
     @JsonPropertyDescription("The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected. " +
-            "Table level checks are identified by the check name. Column level checks are identified as a check_name[column_name].")
+            "Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].")
     private Map<String, CheckResultStatus> failedChecksStatuses = new HashMap<>();
 }

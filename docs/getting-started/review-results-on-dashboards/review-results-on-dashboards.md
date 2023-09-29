@@ -1,8 +1,7 @@
 # Review results on dashboards
 
-In the [previous step](../run-data-quality-checks/run-data-quality-checks.md) we run two data quality check: table-level
-[row_count](../../checks/table/volume/row-count.md) and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
-on BigQuery public dataset Austin Crime Data. 
+In the [previous step](../review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md) we reviewed
+the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks.
 
 Now let's review the results on the data quality dashboards. This is a unique feature of DQO allowing for the display of [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 
