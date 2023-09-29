@@ -117,6 +117,15 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         );
         value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
       }
+    } else {
+        const tab =
+          item.value === CheckTypes.MONITORING ||
+          item.value === CheckTypes.PARTITIONED
+            ? 'daily'
+            : item.value === CheckTypes.PROFILING
+            ? 'statistics'
+            : 'detail';
+        url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
     } 
     dispatch(
       addFirstLevelTab(item.value, {
