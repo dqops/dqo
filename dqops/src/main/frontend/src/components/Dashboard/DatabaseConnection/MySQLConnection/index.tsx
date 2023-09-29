@@ -85,7 +85,7 @@ const MySQLConnection = ({
         onChange={(value) => handleChange({ database: value })}
       />
       <Select
-        label="Ssl mode"
+        label="SSL mode"
         options={sslModes}
         className="mb-4"
         value={
