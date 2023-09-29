@@ -52,8 +52,8 @@ export default function UserListDetail() {
     }
 
     //WRONG API REQUEST, FIX IT
-    const changeDqoCloudUserPassword =async ( newEmail: string) => {
-        await UsersApi.updateUser(selectedEmail, {email: newEmail })
+    const changeDqoCloudUserPassword = async (password: string) => {
+        await UsersApi.changeUserPassword(selectedEmail, password)
         .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
         .catch((err) => console.error(err))
     }
@@ -64,7 +64,7 @@ export default function UserListDetail() {
              url: ROUTES.USER_DETAIL("new"),
              value: ROUTES.USER_DETAIL_VALUE("new"),
              label: "Create User",
-             state: {create: true, 
+             state: {create: true
              }
            })
          )
@@ -97,9 +97,18 @@ export default function UserListDetail() {
                 <tr key={index}>
                     <td className='px-6 py-2 text-left'>{user.email}</td>
                     <td className='px-6 py-2 text-left'>{user.accountRole}</td>
-                    <td className='px-6 py-2 text-left'><Button label='edit' variant='text' color='primary' onClick={() =>user.email ?  editDqoCloudUser(user.email) : null}/></td>
-                    <td className="px-6 py-2 text-left"><Button label='delete' variant='text' color='primary' onClick={() => deleteDqoCloudUser(user.email ?? '')}/></td>
-                    <td className="px-6 py-2 text-left"><Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmail(user.email ?? '')} disabled={userProfile.account_role !== "admin"}/></td>
+                    <td className='px-6 py-2 text-left'>
+                        <Button label='edit' variant='text' color='primary' 
+                        onClick={() =>user.email ?  editDqoCloudUser(user.email) : null}/>
+                    </td>
+                    <td className="px-6 py-2 text-left">
+                        <Button label='delete' variant='text' color='primary' 
+                        onClick={() => deleteDqoCloudUser(user.email ?? '')}/>
+                    </td>
+                    <td className="px-6 py-2 text-left">
+                        <Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmail(user.email ?? '')} 
+                        disabled={userProfile.account_role !== "admin"}/>
+                    </td>
                 </tr>
                 )}
             </tbody>

@@ -5,7 +5,7 @@ import Button from '../../components/Button';
 interface AddColumnDialogProps {
   open: boolean;
   onClose: () => void;
-  handleSubmit: (newEmail: string) => Promise<void>
+  handleSubmit: (password: string) => Promise<void>
 }
 const generatePassword = (length : number) => {
   const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
