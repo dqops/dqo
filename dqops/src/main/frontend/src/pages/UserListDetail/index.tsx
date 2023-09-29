@@ -28,8 +28,6 @@ export default function UserListDetail() {
        .then((res) => setDqoCloudUsers(res.data))
        .catch((err) => console.error(err))
        .finally(() => setLoading(false))
-
-       setDqoCloudUsers([{email: "123@gmail.com", accountRole: "admin"}])
     }, [reshreshUsersIndicator])
 
     const editDqoCloudUser = (email: string) => {
@@ -46,9 +44,9 @@ export default function UserListDetail() {
     }
 
     const deleteDqoCloudUser = async (email: string) => {
-    //    await UsersApi.deleteUser(email)
-    //    .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
-    //    .catch((err) => console.error(err))
+       await UsersApi.deleteUser(email)
+       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
+       .catch((err) => console.error(err))
     }
 
     //WRONG API REQUEST, FIX IT
