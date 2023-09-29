@@ -39,6 +39,7 @@ import NotFound from "./pages/NotFound";
 import TableIncidents from "./pages/TableIncidents";
 import CheckDetail from "./pages/CheckDetail";
 import DefaultCheckDetail from "./pages/DefaultChecksDetail"
+import UserListDetail from "./pages/UserListDetail";
 
 const Routes = () => {
   return (
@@ -77,6 +78,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
+      <Route exact path={ROUTES.PATTERNS.USERS_LIST_DETAIL} component={UserListDetail} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
       <Route exact path="*" component={NotFound} />
     </Switch>
