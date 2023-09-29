@@ -6,6 +6,7 @@ import Button from '../../components/Button'
 import { useSelector } from 'react-redux'
 import { IRootState } from '../../redux/reducers'
 import ChangeUserPasswordDialog from './ChangeUserPasswordDialog'
+import SvgIcon from '../../components/SvgIcon'
 
 
 export default function UserListDetail() {
@@ -13,12 +14,15 @@ export default function UserListDetail() {
     const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoCloudUserModel[]>([])
     const [reshreshUsersIndicator, setRefreshUsersIndicator] = useState<boolean>(false)
     const [selectedEmail, setSelectedEmail] = useState('')
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
+        setLoading(true)
        UsersApi.getAllUsers()
        .then((res) => setDqoCloudUsers(res.data))
        .catch((err) => console.error(err))
+       .finally(() => setLoading(false))
     }, [reshreshUsersIndicator])
 
     const editDqoCloudUser = (
@@ -26,9 +30,9 @@ export default function UserListDetail() {
     ) => {}
 
     const deleteDqoCloudUser = async (email: string) => {
-       await UsersApi.deleteUser(email)
-       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
-       .catch((err) => console.error(err))
+    //    await UsersApi.deleteUser(email)
+    //    .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
+    //    .catch((err) => console.error(err))
     }
 
     const changeDqoCloudUserPassword =async ( newEmail: string) => {
@@ -37,8 +41,19 @@ export default function UserListDetail() {
         .catch((err) => console.error(err))
     }
 
-    const addDqoCloudUser = () => {}
-
+    const addDqoCloudUser =async () => {
+        await UsersApi.createUser({email: "xyz123@op.pl", accountRole: "editor" })
+        .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
+        .catch((err) => console.error(err))
+    }
+    if(loading){
+        return(
+        <DefinitionLayout>
+            <div className='w-full h-screen flex items-center justify-center'>
+             <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
+            </div>
+        </DefinitionLayout>
+    )}
 
   return (
     <DefinitionLayout>
