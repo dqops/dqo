@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux'
 import { IRootState } from '../../redux/reducers'
 import ChangeUserPasswordDialog from './ChangeUserPasswordDialog'
 import SvgIcon from '../../components/SvgIcon'
+import { useActionDispatch } from '../../hooks/useActionDispatch'
+import { addFirstLevelTab } from '../../redux/actions/definition.actions'
+import { ROUTES } from '../../shared/routes'
 
 
 export default function UserListDetail() {
@@ -16,6 +19,8 @@ export default function UserListDetail() {
     const [selectedEmail, setSelectedEmail] = useState('')
     const [loading, setLoading] = useState(false)
 
+    const dispatch = useActionDispatch()
+
 
     useEffect(() => {
         setLoading(true)
@@ -23,11 +28,22 @@ export default function UserListDetail() {
        .then((res) => setDqoCloudUsers(res.data))
        .catch((err) => console.error(err))
        .finally(() => setLoading(false))
+
+       setDqoCloudUsers([{email: "123@gmail.com", accountRole: "admin"}])
     }, [reshreshUsersIndicator])
 
-    const editDqoCloudUser = (
-        //TODO: opening new tab
-    ) => {}
+    const editDqoCloudUser = (email: string) => {
+        dispatch(
+            addFirstLevelTab({
+              url: ROUTES.USER_DETAIL(email),
+              value: ROUTES.USER_DETAIL_VALUE(email),
+              label: `Edit user ${email}`,
+              state: {create: false, 
+             email
+              }
+            })
+          )
+    }
 
     const deleteDqoCloudUser = async (email: string) => {
     //    await UsersApi.deleteUser(email)
@@ -35,16 +51,23 @@ export default function UserListDetail() {
     //    .catch((err) => console.error(err))
     }
 
+    //WRONG API REQUEST, FIX IT
     const changeDqoCloudUserPassword =async ( newEmail: string) => {
         await UsersApi.updateUser(selectedEmail, {email: newEmail })
         .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
         .catch((err) => console.error(err))
     }
 
-    const addDqoCloudUser =async () => {
-        await UsersApi.createUser({email: "xyz123@op.pl", accountRole: "editor" })
-        .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
-        .catch((err) => console.error(err))
+    const addDqoCloudUser = () => {
+         dispatch(
+           addFirstLevelTab({
+             url: ROUTES.USER_DETAIL("new"),
+             value: ROUTES.USER_DETAIL_VALUE("new"),
+             label: "Create User",
+             state: {create: true, 
+             }
+           })
+         )
     }
     if(loading){
         return(
@@ -74,7 +97,7 @@ export default function UserListDetail() {
                 <tr key={index}>
                     <td className='px-6 py-2 text-left'>{user.email}</td>
                     <td className='px-6 py-2 text-left'>{user.accountRole}</td>
-                    <td className='px-6 py-2 text-left'><Button label='edit' variant='text' color='primary' onClick={editDqoCloudUser}/></td>
+                    <td className='px-6 py-2 text-left'><Button label='edit' variant='text' color='primary' onClick={() =>user.email ?  editDqoCloudUser(user.email) : null}/></td>
                     <td className="px-6 py-2 text-left"><Button label='delete' variant='text' color='primary' onClick={() => deleteDqoCloudUser(user.email ?? '')}/></td>
                     <td className="px-6 py-2 text-left"><Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmail(user.email ?? '')} disabled={userProfile.account_role !== "admin"}/></td>
                 </tr>
