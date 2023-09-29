@@ -128,7 +128,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     );
     history.push(url);
   };
-console.log(tab)
   return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (

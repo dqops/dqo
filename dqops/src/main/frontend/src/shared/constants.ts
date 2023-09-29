@@ -100,7 +100,15 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'statistics',
       value: 'statistics'
-    }
+    }, 
+    {
+      label: 'advanced',
+      value: 'advanced'
+    },
+    {
+      label: 'table-comparison',
+      value: 'table-comparison'
+    },
   ],
   [CheckTypes.PARTITIONED]: [
     {

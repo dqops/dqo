@@ -11,6 +11,7 @@ import qs from "query-string";
 import axios from 'axios';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { checkIfTabCouldExist } from '../../utils';
 
 interface ConnectionLayoutProps {
   children: any;
@@ -29,6 +30,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const [objectNotFound, setObjectNotFound] = useState(false)
 
   const handleChange = (tab: TabOption) => {
+    console.log("here")
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
     if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
@@ -46,14 +48,14 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       label: item.label
     }))
   }, [pageTabs]);
-
+console.log(activeTab, pageTabs)
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
       const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
         if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
-          history.push(activeUrl);
+          history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
         }
       }
     }
