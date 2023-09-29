@@ -248,8 +248,6 @@ const ProfilingView = () => {
       fetchColumns()
     }
   }, [job_dictionary_state])
-  console.log(tab,activeTab)
-  console.log(checkIfTabCouldExist(checkTypes, tab))
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
