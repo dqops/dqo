@@ -57,6 +57,7 @@ import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -756,6 +757,14 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(SharedCredentialList sharedCredentialWrappers, P parameter);
+
+    /**
+     * Accepts a default monitoring schedules.
+     * @param monitoringSchedulesWrapper Default monitoring schedules wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
 
     /**
      * Accepts a default observability check.

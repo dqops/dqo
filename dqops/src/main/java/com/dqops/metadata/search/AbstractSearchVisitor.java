@@ -55,6 +55,7 @@ import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -986,6 +987,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(SharedCredentialList sharedCredentialWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default monitoring schedule wrapper instance.
+     *
+     * @param monitoringSchedulesWrapper Default monitoring schedule wrapper instance.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
