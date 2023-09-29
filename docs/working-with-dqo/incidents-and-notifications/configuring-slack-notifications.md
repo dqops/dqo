@@ -74,12 +74,12 @@ To add a Webhook URL to DQO:
 
 Each notification has a slightly different message.
 
-#### New incident message example
+#### **New incident message example**
 
 ![slack-message-open](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-open.png)
 
 
-#### Acknowledged incident message example
+#### **Acknowledged incident message example**
 ![slack-message-acknowledged](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-acknowledged.png)
 
 **Acknowledged**, **Resolved** and **Muted** status messages only differ in the headers.

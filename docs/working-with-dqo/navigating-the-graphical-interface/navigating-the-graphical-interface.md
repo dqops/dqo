@@ -55,7 +55,7 @@ In the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, w
 table or column is displayed in bold on the tree view. In the **Data Source** section the bolded column or table name indicates
 that there is a check configured on any category. 
 
-### Tree view menu
+### **Tree view menu**
 
 ![Tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
 

@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
+ * Column-level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
