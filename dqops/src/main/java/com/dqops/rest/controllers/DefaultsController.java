@@ -350,7 +350,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -401,7 +402,7 @@ public class DefaultsController {
         }
 
         DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
-                .getDefaultObservabilityChecks().getSpec();
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -452,7 +453,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -503,7 +505,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -554,7 +557,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
@@ -605,7 +609,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {

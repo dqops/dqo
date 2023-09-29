@@ -32,6 +32,7 @@ import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
 
 /**
@@ -124,10 +125,16 @@ public interface UserHome extends Flushable, HierarchyNode {
     MonitoringSchedulesWrapper getDefaultSchedules();
 
     /**
+     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
+     * @return User's default data observability checks configuration.
+     */
+    DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks();
+
+    /**
      * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
      * @return Collection of default observability checks definitions.
      */
-    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks();
+    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks(boolean createIfNull);
 
     /**
      * Returns a default notification webhooks.

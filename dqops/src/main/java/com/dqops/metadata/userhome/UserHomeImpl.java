@@ -332,12 +332,21 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
-     * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
+     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
      * @return User's default data observability checks configuration.
      */
     public DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks() {
+        return getDefaultObservabilityChecks(false);
+    }
 
-        if (defaultObservabilityChecks == null || defaultObservabilityChecks.getSpec() == null) {
+    /**
+     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
+     * @param createIfNull Creates a new empty specification, when it does not exist.
+     * @return User's default data observability checks configuration.
+     */
+    public DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks(boolean createIfNull) {
+
+        if (createIfNull && (defaultObservabilityChecks == null || defaultObservabilityChecks.getSpec() == null)) {
             DefaultObservabilityCheckWrapperImpl wrapper = new DefaultObservabilityCheckWrapperImpl();
             wrapper.setSpec(new DefaultObservabilityCheckSettingsSpec());
             this.setDefaultObservabilityChecks(wrapper);
