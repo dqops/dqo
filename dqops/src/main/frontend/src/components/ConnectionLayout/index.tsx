@@ -48,7 +48,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       label: item.label
     }))
   }, [pageTabs]);
-console.log(activeTab, pageTabs)
+
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
