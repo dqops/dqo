@@ -70,7 +70,7 @@ axios.interceptors.response.use(undefined, function (error) {
 
   return (
     <MainLayout>
-      <div className="flex-1 h-full flex flex-col">
+      <div className="h-full flex flex-col">
         <PageTabs
           tabs={tabOptions}
           activeTab={activeTab}
@@ -79,11 +79,10 @@ axios.interceptors.response.use(undefined, function (error) {
           limit={7}
         />
         <div
-          className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-          style={{ maxHeight: "calc(100vh - 80px)" }}
+          className=" bg-white border border-gray-300 min-h-0 overflow-auto h-full w-full"
         >
           {!!activeTab && pageTabs.length ? (
-            <div>
+            <div className='w-full h-full'>
               {children}
             </div>
           ) : null}
