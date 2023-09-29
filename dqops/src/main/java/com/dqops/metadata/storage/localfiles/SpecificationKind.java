@@ -48,13 +48,13 @@ public enum SpecificationKind {
     @JsonProperty("dashboards")
     DASHBOARDS,
 
-    @JsonProperty("default_schedules")
-    MONITORING_SCHEDULES,
+    @JsonProperty("schedules")
+    SCHEDULES,
 
-    @JsonProperty("default_data_observability_checks")
-    OBSERVABILITY_CHECK_SETTINGS,
+    @JsonProperty("observability_checks")
+    OBSERVABILITY_CHECKS,
 
-    @JsonProperty("default_incident_webhooks_notifications")
+    @JsonProperty("notification_webhooks")
     NOTIFICATION_WEBHOOKS
 
 }

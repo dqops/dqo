@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
@@ -133,5 +134,11 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of default observability checks definitions.
      */
     DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
+
+    /**
+     * Provides default data observability checks from user home. When specification does not exist, a new empty one is created.
+     * @return The default data observability checks.
+     */
+    DefaultObservabilityCheckSettingsSpec resolveDefaultObservabilityChecks();
 
 }

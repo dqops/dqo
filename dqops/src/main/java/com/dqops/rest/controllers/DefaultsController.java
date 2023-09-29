@@ -20,7 +20,6 @@ import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSetting
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsProvider;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
@@ -32,8 +31,6 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -62,18 +59,15 @@ public class DefaultsController {
     private ExecutionContextFactory executionContextFactory;
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
-    private DefaultObservabilityCheckSettingsProvider defaultObservabilityCheckSettingsProvider;
 
     @Autowired
     public DefaultsController(
             ExecutionContextFactory executionContextFactory,
             SpecToModelCheckMappingService specToModelCheckMappingService,
-            ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-            DefaultObservabilityCheckSettingsProvider defaultObservabilityCheckSettingsProvider) {
+            ModelToSpecCheckMappingService modelToSpecCheckMappingService) {
         this.executionContextFactory = executionContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
-        this.defaultObservabilityCheckSettingsProvider = defaultObservabilityCheckSettingsProvider;
     }
 
     /**
@@ -327,7 +321,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default profiling checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json")
     @ApiOperation(value = "updateDefaultProfilingTableChecks", notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -346,8 +340,9 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -355,8 +350,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();;
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -378,7 +372,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default profiling checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json")
     @ApiOperation(value = "updateDefaultProfilingColumnChecks", notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.",
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -397,8 +391,8 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -406,8 +400,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -429,7 +422,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringTableChecks",
             notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.",
             authorizations = {
@@ -449,8 +442,8 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -458,8 +451,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -481,7 +473,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
             notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.",
             authorizations = {
@@ -501,8 +493,8 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -510,8 +502,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
@@ -533,7 +524,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
             notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.",
             authorizations = {
@@ -553,8 +544,8 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -562,8 +553,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
@@ -585,7 +575,7 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
             notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.",
             authorizations = {
@@ -605,8 +595,8 @@ public class DefaultsController {
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -614,8 +604,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = defaultObservabilityCheckSettingsProvider
-                .provideFromUserHomeContext(userHomeContext.getUserHome());
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.resolveDefaultObservabilityChecks();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
@@ -633,7 +622,7 @@ public class DefaultsController {
     }
 
     /**
-     * Returns the spec for the default schedule configuration for given scheduling group..
+     * Returns the spec for the default schedule configuration for given scheduling group.
      * @return Schedule spec for given scheduling group.
      */
     @GetMapping(value = "/defaultschedule/{schedulingGroup}", produces = "application/json")
@@ -675,7 +664,7 @@ public class DefaultsController {
      * @param newMonitoringScheduleSpec New configuration of the default schedules
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json")
     @ApiOperation(value = "updateDefaultSchedules",
             notes = "New configuration of the default schedules.",
             authorizations = {
@@ -760,7 +749,7 @@ public class DefaultsController {
      * @param newIncidentWebhookNotificationsSpec New configuration of the default notification webhooks
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultwebhooks", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/defaultwebhooks", consumes = "application/json")
     @ApiOperation(value = "updateDefaultWebhooks",
             notes = "New configuration of the default webhooks.",
             authorizations = {

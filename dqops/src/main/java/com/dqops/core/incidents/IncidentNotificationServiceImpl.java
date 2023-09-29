@@ -15,9 +15,13 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
@@ -85,11 +89,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      */
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
 
-        IncidentWebhookNotificationsSpec defaultWebhooks = executionContextFactory.create()
-                .getUserHomeContext().getUserHome().getDefaultNotificationWebhook().getSpec();
-
-        final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks()
-                .combineWithDefaults(defaultWebhooks);
+        final IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping);
 
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
@@ -128,4 +128,19 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         return responseSent.retry(3).thenReturn(webhookUrl);
     }
+
+    private IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping){
+        ExecutionContext executionContext = executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultIncidentWebhookNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultNotificationWebhook();
+        IncidentWebhookNotificationsSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
+
+        if(incidentGrouping == null || incidentGrouping.getWebhooks() == null){
+            return defaultWebhooks.deepClone();
+        } else {
+            return incidentGrouping.getWebhooks().combineWithDefaults(defaultWebhooks);
+        }
+    }
+
 }

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class DefaultIncidentWebhookNotificationsWrapperImpl extends AbstractElementWrapper<String, IncidentWebhookNotificationsSpec> implements DefaultIncidentWebhookNotificationsWrapper {
 
     @JsonIgnore
-    private final static String NAME = "default_incident_webhooks_notifications";
+    private final static String NAME = "default_notification_webhooks";
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.

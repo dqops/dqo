@@ -4,10 +4,13 @@ import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
+/**
+ * DQO observability check setting definition YAML schema for a data quality observability checks setting specification.
+ */
 public class ObservabilityCheckSettingsYaml {
 
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.OBSERVABILITY_CHECK_SETTINGS;
+    private SpecificationKind kind = SpecificationKind.OBSERVABILITY_CHECKS;
     private DefaultObservabilityCheckSettingsSpec spec = new DefaultObservabilityCheckSettingsSpec();
 
     public ObservabilityCheckSettingsYaml() {

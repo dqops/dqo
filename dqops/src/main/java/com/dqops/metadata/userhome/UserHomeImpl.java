@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
@@ -47,8 +48,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
-            put("default_data_observability_checks", o -> o.defaultObservabilityChecks);
-            put("default_incident_webhooks_notifications", o -> o.defaultNotificationWebhooks);
+            put("default_observability_checks", o -> o.defaultObservabilityChecks);
+            put("default_notification_webhooks", o -> o.defaultNotificationWebhooks);
         }
     };
 
@@ -345,9 +346,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
     public void setDefaultObservabilityChecks(DefaultObservabilityCheckWrapperImpl defaultObservabilityChecks) {
         this.defaultObservabilityChecks = defaultObservabilityChecks;
         if (this.defaultObservabilityChecks != null) {
-            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_data_observability_checks");
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_observability_checks");
             this.defaultObservabilityChecks.setHierarchyId(childHierarchyId);
-            assert FIELDS.get("default_data_observability_checks").apply(this).getHierarchyId().equals(childHierarchyId);
+            assert FIELDS.get("default_observability_checks").apply(this).getHierarchyId().equals(childHierarchyId);
         }
     }
 
@@ -366,9 +367,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
     public void setDefaultNotificationWebhooks(DefaultIncidentWebhookNotificationsWrapperImpl defaultNotificationWebhooks) {
         this.defaultNotificationWebhooks = defaultNotificationWebhooks;
         if (this.defaultNotificationWebhooks != null) {
-            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_incident_webhooks_notifications");
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "default_notification_webhooks");
             this.defaultNotificationWebhooks.setHierarchyId(childHierarchyId);
-            assert FIELDS.get("default_incident_webhooks_notifications").apply(this).getHierarchyId().equals(childHierarchyId);
+            assert FIELDS.get("default_notification_webhooks").apply(this).getHierarchyId().equals(childHierarchyId);
         }
     }
 
@@ -631,4 +632,19 @@ public class UserHomeImpl implements UserHome, Cloneable {
             throw new UnsupportedOperationException("Cannot clone object", ex);
         }
     }
+
+    /**
+     * Resolves default data observability checks from user home. When specification does not exist, a new empty one is created.
+     * @return The default data observability checks.
+     */
+    public DefaultObservabilityCheckSettingsSpec resolveDefaultObservabilityChecks(){
+        if (getDefaultObservabilityChecks() == null || getDefaultObservabilityChecks().getSpec() == null) {
+            DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
+            getDefaultObservabilityChecks().setSpec(defaultDataObservabilityChecks);
+            return defaultDataObservabilityChecks;
+        } else {
+            return getDefaultObservabilityChecks().getSpec();
+        }
+    }
+
 }

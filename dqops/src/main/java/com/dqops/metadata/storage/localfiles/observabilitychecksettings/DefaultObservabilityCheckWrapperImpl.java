@@ -14,7 +14,7 @@ public class DefaultObservabilityCheckWrapperImpl
         implements DefaultObservabilityCheckWrapper {
 
     @JsonIgnore
-    private final static String NAME = "default_data_observability_checks";
+    private final static String NAME = "default_observability_checks";
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.

@@ -4,6 +4,9 @@ import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
+/**
+ * DQO incident webhook notification YAML schema for a default notification webhooks specification.
+ */
 public class DefaultIncidentWebhookNotificationsYaml {
 
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;

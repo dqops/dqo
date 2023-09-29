@@ -49,7 +49,7 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
                 if (deserializedSpec == null) {
                     MonitoringSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, MonitoringSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.MONITORING_SCHEDULES) {
+                    if (deserialized.getKind() != SpecificationKind.SCHEDULES) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {

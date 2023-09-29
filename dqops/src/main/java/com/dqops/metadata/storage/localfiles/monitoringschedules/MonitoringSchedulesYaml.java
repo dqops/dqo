@@ -4,10 +4,13 @@ import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
+/**
+ * DQO schedules definition YAML schema for a schedules' specification.
+ */
 public class MonitoringSchedulesYaml {
 
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.MONITORING_SCHEDULES;
+    private SpecificationKind kind = SpecificationKind.SCHEDULES;
     private MonitoringSchedulesSpec spec = new MonitoringSchedulesSpec();
 
     public MonitoringSchedulesYaml() {
