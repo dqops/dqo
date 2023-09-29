@@ -77,7 +77,7 @@ const Select = ({
         <div className="flex space-x-1">
           <div
             className={clsx(
-              'block text-sm font-regular text-gray-700 mb-1',
+              'block font-regular text-gray-700 mb-1',
               error ? 'text-red-500' : ''
             )}
           >

@@ -88,7 +88,7 @@ const PostgreSQLConnection = ({
         onChange={(value) => handleChange({ password: value })}
       />
       <Select
-        label="Ssl mode"
+        label="SSL mode"
         options={sslModes}
         className="mb-4"
         value={
