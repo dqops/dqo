@@ -461,7 +461,7 @@ public class ConnectionsController {
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
 
         userHomeContext.flush();
@@ -510,7 +510,7 @@ public class ConnectionsController {
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionBasicModel.copyToConnectionSpecification(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();

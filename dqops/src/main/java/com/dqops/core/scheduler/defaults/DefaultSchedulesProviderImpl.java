@@ -20,8 +20,8 @@ import com.dqops.core.configuration.DqoSchedulerDefaultSchedulesConfigurationPro
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
-import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.metadata.userhome.UserHome;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -86,9 +86,8 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return New monitoring schedule configuration for a new connection.
      */
     @Override
-    public MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        MonitoringSchedulesWrapper schedulesWrapper = userHomeContext.getUserHome().getDefaultSchedules();
+    public MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
+        MonitoringSchedulesWrapper schedulesWrapper = userHome.getDefaultSchedules();
         if (schedulesWrapper == null || schedulesWrapper.getSpec() == null) {
             return createDefaultMonitoringSchedules();
         }
