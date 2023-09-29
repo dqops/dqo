@@ -59,12 +59,14 @@ const ProfilingView = () => {
     checkTypes,
     connection: connectionName,
     schema: schemaName,
-    table: tableName
+    table: tableName, 
+    tab
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
+    tab: string
   } = useParams();
   const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     getFirstLevelState(checkTypes)
@@ -239,6 +241,7 @@ const ProfilingView = () => {
       fetchColumns()
     }
   }, [job_dictionary_state])
+  console.log(tab)
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
