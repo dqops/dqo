@@ -47,8 +47,8 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	}
 
 	/**
-	 * Loads the table spec with the table details.
-	 * @return Loaded table specification.
+	 * Loads the settings specification.
+	 * @return Loaded settings specification.
 	 */
 	@Override
 	public SettingsSpec getSpec() {

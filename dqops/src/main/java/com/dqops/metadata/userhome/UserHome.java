@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
@@ -24,11 +25,15 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
@@ -112,4 +117,29 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of dashboards definitions.
      */
     DashboardFolderListSpecWrapper getDashboards();
+
+    /**
+     * Returns a default schedules definitions.
+     * @return Collection of default schedules definitions.
+     */
+    MonitoringSchedulesWrapper getDefaultSchedules();
+
+    /**
+     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
+     * @return User's default data observability checks configuration.
+     */
+    DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks();
+
+    /**
+     * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
+     * @return Collection of default observability checks definitions.
+     */
+    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks(boolean createIfNull);
+
+    /**
+     * Returns a default notification webhooks.
+     * @return Collection of default observability checks definitions.
+     */
+    DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
+
 }

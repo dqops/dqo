@@ -37,8 +37,13 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
+import com.dqops.metadata.storage.localfiles.monitoringschedules.MonitoringSchedulesYaml;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.ObservabilityCheckSettingsYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
+import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
@@ -226,10 +231,6 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path localSettingsPath = userHomePath.resolve(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(localSettingsPath)) {
                 SettingsYaml settingsYaml = new SettingsYaml();
-                SettingsSpec settingsSpec = settingsYaml.getSpec();
-                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
-                settingsSpec.setDefaultDataObservabilityChecks(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
-
                 String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
                 Files.writeString(localSettingsPath, emptyLocalSettings);
             }
@@ -239,6 +240,30 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 DashboardYaml dashboardYaml = new DashboardYaml();
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
+            }
+
+            Path defaultSchedulesPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(defaultSchedulesPath)) {
+                MonitoringSchedulesYaml schedulesYaml = new MonitoringSchedulesYaml();
+                schedulesYaml.setSpec(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
+                String defaultSchedules = this.yamlSerializer.serialize(schedulesYaml);
+                Files.writeString(defaultSchedulesPath, defaultSchedules);
+            }
+
+            Path defaultDataObservabilityChecksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS)
+                    .resolve(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(defaultDataObservabilityChecksPath)) {
+                ObservabilityCheckSettingsYaml observabilityCheckSettingsYaml = new ObservabilityCheckSettingsYaml();
+                observabilityCheckSettingsYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
+                String defaultObservabilityChecks = this.yamlSerializer.serialize(observabilityCheckSettingsYaml);
+                Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
+            }
+
+            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATION_WEBHOOKS_FILE_NAME_YAML);
+            if (!Files.exists(defaultNotificaitonWebhooksPath)) {
+                DefaultIncidentWebhookNotificationsYaml webhooksYaml = new DefaultIncidentWebhookNotificationsYaml();
+                String defaultWebhooks = this.yamlSerializer.serialize(webhooksYaml);
+                Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
             }
 
             Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
@@ -327,9 +352,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (settingsSpec != null &&
-                settingsSpec.getDefaultDataObservabilityChecks() != null &&
-                settingsSpec.getDefaultSchedules() != null &&
+        if (userHome != null &&
+                userHome.getDefaultObservabilityChecks() != null &&
+                userHome.getDefaultSchedules() != null &&
                 (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
             return;
         }
@@ -339,14 +364,16 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             userHome.getSettings().setSpec(settingsSpec);
         }
 
-        if (settingsSpec.getDefaultDataObservabilityChecks() == null) {
+        if (userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
             DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultObservabilityCheckSettingsSpec);
+            userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityCheckSettingsSpec);
         }
 
-        if (settingsSpec.getDefaultSchedules() == null) {
+        if (userHome.getDefaultSchedules() == null
+                || userHome.getDefaultSchedules().getSpec() == null) {
             MonitoringSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultMonitoringSchedules();
-            settingsSpec.setDefaultSchedules(defaultMonitoringSchedules);
+            userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 
         if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

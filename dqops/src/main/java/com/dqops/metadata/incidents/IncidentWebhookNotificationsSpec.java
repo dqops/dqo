@@ -41,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements Cloneable {
+public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentWebhookNotificationsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -195,4 +195,32 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
         cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
         return cloned;
     }
+
+    /**
+     * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
+     * @param defaultWebhooks Default incident webhook notification spec
+     * @return Combined IncidentWebhookNotificationsSpec object with default webhooks.
+     */
+    public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
+        IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
+
+        if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
+            clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentAcknowledgedWebhookUrl() == null){
+            clonedWebhooks.setIncidentAcknowledgedWebhookUrl(defaultWebhooks.getIncidentAcknowledgedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentResolvedWebhookUrl() == null){
+            clonedWebhooks.setIncidentResolvedWebhookUrl(defaultWebhooks.getIncidentResolvedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentMutedWebhookUrl() == null){
+            clonedWebhooks.setIncidentMutedWebhookUrl(defaultWebhooks.getIncidentMutedWebhookUrl());
+        }
+
+        return clonedWebhooks;
+    }
+
 }

@@ -19,9 +19,9 @@ package com.dqops.core.scheduler.defaults;
 import com.dqops.core.configuration.DqoSchedulerDefaultSchedulesConfigurationProperties;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
-import com.dqops.metadata.settings.SettingsWrapper;
-import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.metadata.userhome.UserHome;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -86,18 +86,17 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return New monitoring schedule configuration for a new connection.
      */
     @Override
-    public MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-        if (settingsWrapper == null || settingsWrapper.getSpec() == null) {
+    public MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
+        MonitoringSchedulesWrapper schedulesWrapper = userHome.getDefaultSchedules();
+        if (schedulesWrapper == null || schedulesWrapper.getSpec() == null) {
             return createDefaultMonitoringSchedules();
         }
 
-        if (settingsWrapper.getSpec().getDefaultSchedules() == null) {
+        if (schedulesWrapper.getSpec() == null) {
             return null;
         }
 
-        MonitoringSchedulesSpec defaultSchedules = settingsWrapper.getSpec().getDefaultSchedules();
+        MonitoringSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
         MonitoringSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
 
         return clonedSchedules;
