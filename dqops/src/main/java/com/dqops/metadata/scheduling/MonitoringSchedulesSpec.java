@@ -201,6 +201,39 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     }
 
     /**
+     * Sets the configuration of schedule for a given scheduling group (type of checks that share a schedule configuration).
+     * @param newScheduleSpec Schedule specification to be replaces in the MonitoringSchedulesSpec object.
+     * @param schedulingGroup Check run scheduling group.
+     */
+    public void setScheduleForCheckSchedulingGroup(MonitoringScheduleSpec newScheduleSpec,
+                                                   CheckRunScheduleGroup schedulingGroup) {
+        switch (schedulingGroup) {
+            case profiling:
+                setProfiling(newScheduleSpec);
+                break;
+
+            case monitoring_daily:
+                setMonitoringDaily(newScheduleSpec);
+                break;
+
+            case monitoring_monthly:
+                setMonitoringMonthly(newScheduleSpec);
+                break;
+
+            case partitioned_daily:
+                setPartitionedDaily(newScheduleSpec);
+                break;
+
+            case partitioned_monthly:
+                setPartitionedMonthly(newScheduleSpec);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
+        }
+    }
+
+    /**
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override
@@ -232,4 +265,5 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
         }
         return cloned;
     }
+
 }

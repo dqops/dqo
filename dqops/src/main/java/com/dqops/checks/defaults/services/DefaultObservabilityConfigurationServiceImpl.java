@@ -38,12 +38,12 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
      */
     @Override
     public void applyDefaultChecks(List<TableSpec> tableSpecList, ProviderDialectSettings providerDialectSettings, UserHome userHome) {
-        if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null ||
-                userHome.getSettings().getSpec().getDefaultDataObservabilityChecks() == null) {
+        if (userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
             return;
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getSettings().getSpec().getDefaultDataObservabilityChecks();
+        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
         for (TableSpec targetTableSpec :  tableSpecList) {
             defaultDataObservabilityChecks.applyOnTable(targetTableSpec, providerDialectSettings);
 

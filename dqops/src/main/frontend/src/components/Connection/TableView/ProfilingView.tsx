@@ -33,6 +33,7 @@ import {
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
+import { checkIfTabCouldExist } from '../../../utils';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -59,19 +60,21 @@ const ProfilingView = () => {
     checkTypes,
     connection: connectionName,
     schema: schemaName,
-    table: tableName
+    table: tableName, 
+    tab
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
+    tab: string
   } = useParams();
   const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState('statistics');
+  const [activeTab, setActiveTab] = useState(checkIfTabCouldExist(checkTypes, ("/" + checkTypes + "/" + tab)) ? tab : "statistics");
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
@@ -104,6 +107,12 @@ const ProfilingView = () => {
       fetchColumns();
     }
   }, [connectionName, schemaName, tableName, activeTab]);
+
+  // useEffect(() => {
+  //   if(tab !== activeTab && checkIfTabCouldExist(checkTypes, tab)){
+  //     setActiveTab(tab)
+  //   }
+  // }, [tab])
 
   useEffect(() => {
     dispatch(

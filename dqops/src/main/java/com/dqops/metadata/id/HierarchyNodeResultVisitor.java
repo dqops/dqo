@@ -57,6 +57,9 @@ import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
+import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapper;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
@@ -754,4 +757,29 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(SharedCredentialList sharedCredentialWrappers, P parameter);
+
+    /**
+     * Accepts a default monitoring schedules.
+     * @param monitoringSchedulesWrapper Default monitoring schedules wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
+
+    /**
+     * Accepts a default observability check.
+     * @param defaultObservabilityCheckWrapper Default observability check wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, P parameter);
+
+    /**
+     * Accepts a default incident webhook notifications.
+     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notifications wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, P parameter);
+
 }

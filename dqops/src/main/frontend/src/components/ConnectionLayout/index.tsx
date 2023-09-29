@@ -11,6 +11,7 @@ import qs from "query-string";
 import axios from 'axios';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { checkIfTabCouldExist } from '../../utils';
 
 interface ConnectionLayoutProps {
   children: any;
@@ -29,6 +30,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const [objectNotFound, setObjectNotFound] = useState(false)
 
   const handleChange = (tab: TabOption) => {
+    console.log("here")
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
     if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
@@ -53,7 +55,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
         if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
-          history.push(activeUrl);
+          history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
         }
       }
     }
@@ -70,7 +72,7 @@ axios.interceptors.response.use(undefined, function (error) {
 
   return (
     <MainLayout>
-      <div className="flex-1 h-full flex flex-col">
+      <div className="h-full flex flex-col">
         <PageTabs
           tabs={tabOptions}
           activeTab={activeTab}
@@ -79,11 +81,10 @@ axios.interceptors.response.use(undefined, function (error) {
           limit={7}
         />
         <div
-          className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-          style={{ maxHeight: "calc(100vh - 80px)" }}
+          className=" bg-white border border-gray-300 min-h-0 overflow-auto h-full w-full"
         >
           {!!activeTab && pageTabs.length ? (
-            <div>
+            <div className='w-full h-full'>
               {children}
             </div>
           ) : null}

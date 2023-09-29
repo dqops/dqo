@@ -42,12 +42,10 @@ import java.util.Objects;
 public class SettingsSpec extends AbstractSpec {
 	private static final ChildHierarchyNodeFieldMapImpl<SettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
-			put("default_schedules", o -> o.defaultSchedules);
-			put("default_data_observability_checks", o -> o.defaultDataObservabilityChecks);
 		}
 	};
 
-	@JsonPropertyDescription("Editor name spec (VSC, Eclipse, Intellj)")
+	@JsonPropertyDescription("Editor name spec (VSC, Eclipse, Intellij)")
 	private String editorName;
 
 	@JsonPropertyDescription("Editor path on user's computer")
@@ -61,16 +59,6 @@ public class SettingsSpec extends AbstractSpec {
 
 	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.")
 	private String timeZone;
-
-	@JsonPropertyDescription("Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.")
-//	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-//	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)    // NOTE: we are intentionally commenting this out, because when the field is null, we will create a default configuration. An empty configuration is defined by an empty object (with no schedules configured).
-	private MonitoringSchedulesSpec defaultSchedules;
-
-	@JsonPropertyDescription("The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.")
-//	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-//	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)    // NOTE: we are intentionally commenting this out, because when the field is null, we will create a default configuration. An empty configuration is defined by an empty object (with no checks configured).
-	private DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks;
 
 	/**
 	 * Default constructor.
@@ -171,42 +159,6 @@ public class SettingsSpec extends AbstractSpec {
 	}
 
 	/**
-	 * Returns the default configuration of schedules.
-	 * @return The default configuration of schedules.
-	 */
-	public MonitoringSchedulesSpec getDefaultSchedules() {
-		return defaultSchedules;
-	}
-
-	/**
-	 * Sets the default configuration of schedules for new connections.
-	 * @param defaultSchedules The default configuration of schedules for new connections.
-	 */
-	public void setDefaultSchedules(MonitoringSchedulesSpec defaultSchedules) {
-		setDirtyIf(!Objects.equals(this.defaultSchedules, defaultSchedules));
-		this.defaultSchedules = defaultSchedules;
-		propagateHierarchyIdToField(defaultSchedules, "default_schedules");
-	}
-
-	/**
-	 * Returns the default configuration of Data Observability checks to be applied on new tables and columns.
-	 * @return Data observability checks configuration.
-	 */
-	public DefaultObservabilityCheckSettingsSpec getDefaultDataObservabilityChecks() {
-		return defaultDataObservabilityChecks;
-	}
-
-	/**
-	 * Sets the default configuration of data observability checks.
-	 * @param defaultDataObservabilityChecks The default configuration of data observability checks.
-	 */
-	public void setDefaultDataObservabilityChecks(DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks) {
-		setDirtyIf(!Objects.equals(this.defaultDataObservabilityChecks, defaultDataObservabilityChecks));
-		this.defaultDataObservabilityChecks = defaultDataObservabilityChecks;
-		propagateHierarchyIdToField(defaultDataObservabilityChecks, "default_data_observability_checks");
-	}
-
-	/**
 	 * Returns the child map on the spec class with all fields.
 	 *
 	 * @return Return the field map.
@@ -221,14 +173,7 @@ public class SettingsSpec extends AbstractSpec {
 	 */
 	@Override
 	public SettingsSpec deepClone() {
-		SettingsSpec cloned = (SettingsSpec) super.deepClone();
-		if (this.defaultSchedules != null) {
-			cloned.setDefaultSchedules(this.defaultSchedules.deepClone());
-		}
-		if (this.defaultDataObservabilityChecks != null) {
-			cloned.setDefaultDataObservabilityChecks((DefaultObservabilityCheckSettingsSpec) this.defaultDataObservabilityChecks.deepClone());
-		}
-		return cloned;
+		return (SettingsSpec) super.deepClone();
 	}
 
 	/**
@@ -244,10 +189,6 @@ public class SettingsSpec extends AbstractSpec {
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath, lookupContext);
 		cloned.editorName = secretValueProvider.expandValue(this.editorName, lookupContext);
 		cloned.timeZone = secretValueProvider.expandValue(this.timeZone, lookupContext);
-		if (cloned.defaultSchedules != null) {
-			cloned.defaultSchedules = cloned.defaultSchedules.expandAndTrim(secretValueProvider, lookupContext);
-		}
-		cloned.defaultDataObservabilityChecks = null;
         return cloned;
 	}
 

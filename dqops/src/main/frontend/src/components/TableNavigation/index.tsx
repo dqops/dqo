@@ -40,7 +40,8 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     connection,
     schema,
     table,
-    checkTypes
+    checkTypes,
+    tab
   }: {
     connection: string;
     schema: string;
@@ -116,6 +117,15 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         );
         value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
       }
+    } else {
+        const tab =
+          item.value === CheckTypes.MONITORING ||
+          item.value === CheckTypes.PARTITIONED
+            ? 'daily'
+            : item.value === CheckTypes.PROFILING
+            ? 'statistics'
+            : 'detail';
+        url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
     } 
     dispatch(
       addFirstLevelTab(item.value, {
@@ -127,7 +137,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     );
     history.push(url);
   };
-
   return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (

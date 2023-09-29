@@ -15,8 +15,13 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.execution.ExecutionContext;
+import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
@@ -42,17 +47,22 @@ import java.util.List;
 public class IncidentNotificationServiceImpl implements IncidentNotificationService {
     private SharedHttpClientProvider sharedHttpClientProvider;
     private JsonSerializer jsonSerializer;
+    private ExecutionContextFactory executionContextFactory;
 
     /**
      * Creates an incident notification service.
+     *
      * @param sharedHttpClientProvider Shared http client provider that manages the HTTP connection pooling.
-     * @param jsonSerializer Json serializer.
+     * @param jsonSerializer           Json serializer.
+     * @param executionContextFactory  Execution context factory.
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
-                                           JsonSerializer jsonSerializer) {
+                                           JsonSerializer jsonSerializer,
+                                           ExecutionContextFactory executionContextFactory) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
+        this.executionContextFactory = executionContextFactory;
     }
 
     /**
@@ -63,23 +73,18 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      */
     @Override
     public void sendNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-        if (incidentGrouping == null || incidentGrouping.getWebhooks() == null) {
-            return;
-        }
-
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentGrouping);
+        IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
     /**
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
-     * @param incidentGrouping Incident grouping configuration with the webhook.
+     * @param webhooksSpec Webhook specification.
      * @return Awaitable Mono object.
      */
-    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-        final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks();
-
+    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentWebhookNotificationsSpec webhooksSpec) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
                 .flatMap(message -> sendNotification(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
@@ -117,4 +122,19 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         return responseSent.retry(3).thenReturn(webhookUrl);
     }
+
+    private IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping){
+        ExecutionContext executionContext = executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultIncidentWebhookNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultNotificationWebhook();
+        IncidentWebhookNotificationsSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
+
+        if(incidentGrouping == null || incidentGrouping.getWebhooks() == null){
+            return defaultWebhooks.deepClone();
+        } else {
+            return incidentGrouping.getWebhooks().combineWithDefaults(defaultWebhooks);
+        }
+    }
+
 }

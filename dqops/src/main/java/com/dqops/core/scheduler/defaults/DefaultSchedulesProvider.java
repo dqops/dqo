@@ -17,6 +17,7 @@
 package com.dqops.core.scheduler.defaults;
 
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.userhome.UserHome;
 
 /**
  * Retrieves and creates the default configuration of schedules for new connections.
@@ -34,5 +35,5 @@ public interface DefaultSchedulesProvider {
      *
      * @return New monitoring schedule configuration for a new connection.
      */
-    MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection();
+    MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome);
 }

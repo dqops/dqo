@@ -2181,30 +2181,7 @@ public class TablesController {
         }
 
         MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
-        switch (schedulingGroup) {
-            case profiling:
-                schedules.setProfiling(newScheduleSpec);
-                break;
-
-            case monitoring_daily:
-                schedules.setMonitoringDaily(newScheduleSpec);
-                break;
-
-            case monitoring_monthly:
-                schedules.setMonitoringMonthly(newScheduleSpec);
-                break;
-
-            case partitioned_daily:
-                schedules.setPartitionedDaily(newScheduleSpec);
-                break;
-
-            case partitioned_monthly:
-                schedules.setPartitionedMonthly(newScheduleSpec);
-                break;
-
-            default:
-                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
-        }
+        schedules.setScheduleForCheckSchedulingGroup(newScheduleSpec, schedulingGroup);
 
         userHomeContext.flush();
 

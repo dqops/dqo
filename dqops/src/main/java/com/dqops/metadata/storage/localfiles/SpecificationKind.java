@@ -46,5 +46,15 @@ public enum SpecificationKind {
     FILE_INDEX,
 
     @JsonProperty("dashboards")
-    DASHBOARDS
+    DASHBOARDS,
+
+    @JsonProperty("schedules")
+    SCHEDULES,
+
+    @JsonProperty("observability_checks")
+    OBSERVABILITY_CHECKS,
+
+    @JsonProperty("notification_webhooks")
+    NOTIFICATION_WEBHOOKS
+
 }
