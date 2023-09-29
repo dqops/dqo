@@ -48,7 +48,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 if (deserializedSpec == null) {
                     ObservabilityCheckSettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, ObservabilityCheckSettingsYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.OBSERVABILITY_CHECK_SETTINGS) {
+                    if (deserialized.getKind() != SpecificationKind.OBSERVABILITY_CHECKS) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {

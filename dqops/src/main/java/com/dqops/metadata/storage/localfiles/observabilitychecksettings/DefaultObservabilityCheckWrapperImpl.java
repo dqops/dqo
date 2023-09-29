@@ -52,7 +52,7 @@ public class DefaultObservabilityCheckWrapperImpl
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return null;
+        return visitor.accept(this, parameter);
     }
 
 }
