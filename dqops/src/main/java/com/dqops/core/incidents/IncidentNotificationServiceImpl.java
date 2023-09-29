@@ -73,24 +73,18 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      */
     @Override
     public void sendNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-        if (incidentGrouping == null || incidentGrouping.getWebhooks() == null) {
-            return;
-        }
-
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentGrouping);
+        IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
     /**
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
-     * @param incidentGrouping Incident grouping configuration with the webhook.
+     * @param webhooksSpec Webhook specification.
      * @return Awaitable Mono object.
      */
-    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-
-        final IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping);
-
+    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentWebhookNotificationsSpec webhooksSpec) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
                 .flatMap(message -> sendNotification(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
