@@ -74,7 +74,7 @@ const ProfilingView = () => {
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState(checkIfTabCouldExist(checkTypes, tab) ? tab : "statistics");
+  const [activeTab, setActiveTab] = useState(checkIfTabCouldExist(checkTypes, ("/" + checkTypes + "/" + tab)) ? tab : "statistics");
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
@@ -107,6 +107,12 @@ const ProfilingView = () => {
       fetchColumns();
     }
   }, [connectionName, schemaName, tableName, activeTab]);
+
+  // useEffect(() => {
+  //   if(tab !== activeTab && checkIfTabCouldExist(checkTypes, tab)){
+  //     setActiveTab(tab)
+  //   }
+  // }, [tab])
 
   useEffect(() => {
     dispatch(
@@ -242,6 +248,8 @@ const ProfilingView = () => {
       fetchColumns()
     }
   }, [job_dictionary_state])
+  console.log(tab,activeTab)
+  console.log(checkIfTabCouldExist(checkTypes, tab))
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
