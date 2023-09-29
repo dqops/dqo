@@ -332,10 +332,17 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
-     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
+     * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
      * @return User's default data observability checks configuration.
      */
     public DefaultObservabilityCheckWrapperImpl getDefaultObservabilityChecks() {
+
+        if (defaultObservabilityChecks == null || defaultObservabilityChecks.getSpec() == null) {
+            DefaultObservabilityCheckWrapperImpl wrapper = new DefaultObservabilityCheckWrapperImpl();
+            wrapper.setSpec(new DefaultObservabilityCheckSettingsSpec());
+            this.setDefaultObservabilityChecks(wrapper);
+        }
+
         return defaultObservabilityChecks;
     }
 
@@ -630,20 +637,6 @@ public class UserHomeImpl implements UserHome, Cloneable {
         }
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone object", ex);
-        }
-    }
-
-    /**
-     * Resolves default data observability checks from user home. When specification does not exist, a new empty one is created.
-     * @return The default data observability checks.
-     */
-    public DefaultObservabilityCheckSettingsSpec resolveDefaultObservabilityChecks(){
-        if (getDefaultObservabilityChecks() == null || getDefaultObservabilityChecks().getSpec() == null) {
-            DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            getDefaultObservabilityChecks().setSpec(defaultDataObservabilityChecks);
-            return defaultDataObservabilityChecks;
-        } else {
-            return getDefaultObservabilityChecks().getSpec();
         }
     }
 

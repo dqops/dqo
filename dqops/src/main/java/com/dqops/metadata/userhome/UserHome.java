@@ -118,27 +118,21 @@ public interface UserHome extends Flushable, HierarchyNode {
     DashboardFolderListSpecWrapper getDashboards();
 
     /**
-     * Returns a list of default schedules definitions.
+     * Returns a default schedules definitions.
      * @return Collection of default schedules definitions.
      */
     MonitoringSchedulesWrapper getDefaultSchedules();
 
     /**
-     * Returns a list of default observability checks definitions.
+     * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
      * @return Collection of default observability checks definitions.
      */
     DefaultObservabilityCheckWrapper getDefaultObservabilityChecks();
 
     /**
-     * Returns a list of default notification webhooks
+     * Returns a default notification webhooks.
      * @return Collection of default observability checks definitions.
      */
     DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
-
-    /**
-     * Provides default data observability checks from user home. When specification does not exist, a new empty one is created.
-     * @return The default data observability checks.
-     */
-    DefaultObservabilityCheckSettingsSpec resolveDefaultObservabilityChecks();
 
 }
