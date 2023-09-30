@@ -82,6 +82,7 @@ dqo:
     console-immediate-flush: false
     console: OFF
     log-errors-to-stderr: false
+    encode-double-quotes-in-json: true
   storage:
     gcp:
       upload-buffer-size: 5000000

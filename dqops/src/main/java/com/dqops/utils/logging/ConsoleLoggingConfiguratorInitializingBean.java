@@ -27,6 +27,8 @@ import ch.qos.logback.core.encoder.Encoder;
 import ch.qos.logback.core.joran.spi.ConsoleTarget;
 import ch.qos.logback.core.spi.FilterReply;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
+import net.logstash.logback.composite.JsonProvider;
+import net.logstash.logback.composite.loggingevent.MessageJsonProvider;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.fieldnames.LogstashFieldNames;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
@@ -38,6 +40,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Bootstrap component that configures console logging during boot.
@@ -142,16 +146,29 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         LogstashEncoder jsonEncoder = new LogstashEncoder();
         jsonEncoder.setContext(loggerContext);
         jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        EncodingShortenedThrowableConverter throwableConverter = new EncodingShortenedThrowableConverter();
+
+        ShortenedThrowableConverter throwableConverter =
+                this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson() ?
+                new EncodingShortenedThrowableConverter() : new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         jsonEncoder.setThrowableConverter(throwableConverter);
+
         LogstashFieldNames fieldNames = new LogstashFieldNames();
         if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldLevel())) {
             fieldNames.setLevel(this.loggingConfigurationProperties.getJsonLogFieldLevel());
         }
         jsonEncoder.setFieldNames(fieldNames);
+
+        if (this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson()) {
+            List<JsonProvider<ILoggingEvent>> providersList = jsonEncoder.getProviders().getProviders();
+            Optional<JsonProvider<ILoggingEvent>> defaultMessageProvider = providersList.stream()
+                    .filter(p -> p instanceof MessageJsonProvider)
+                    .findFirst();
+            jsonEncoder.getProviders().removeProvider(defaultMessageProvider.get());
+            jsonEncoder.getProviders().addProvider(new EncodingMessageProvider());
+        }
+
         jsonEncoder.start();
         return jsonEncoder;
     }
-
 }

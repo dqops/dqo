@@ -51,6 +51,7 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private boolean consoleImmediateFlush;
     private boolean logErrorsToStderr;
     private String jsonLogFieldLevel;
+    private boolean encodeDoubleQuotesInJson = true;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -194,6 +195,23 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setJsonLogFieldLevel(String jsonLogFieldLevel) {
         this.jsonLogFieldLevel = jsonLogFieldLevel;
+    }
+
+    /**
+     * Applies additional quoting of double quote " when logging to console in JSON format is enabled.
+     * This option is enabled by default, to enable proper logging of message when DQO runs inside a docker container.
+     * @return Encode double quotes in JSON log entries.
+     */
+    public boolean isEncodeDoubleQuotesInJson() {
+        return encodeDoubleQuotesInJson;
+    }
+
+    /**
+     * Turns on the flag to encode double quotes.
+     * @param encodeDoubleQuotesInJson Encode double quotes.
+     */
+    public void setEncodeDoubleQuotesInJson(boolean encodeDoubleQuotesInJson) {
+        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
     }
 
     /**
