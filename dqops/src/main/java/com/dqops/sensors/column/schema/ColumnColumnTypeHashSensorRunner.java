@@ -215,7 +215,9 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
+            if (log.isInfoEnabled()) {
+                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
+            }
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

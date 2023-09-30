@@ -555,4 +555,39 @@ public class SensorExecutionRunParameters {
         }
         this.additionalFilters.add(filter);
     }
+
+    /**
+     * Returns a string representation of the object.
+     * The output describes the target connection, table, column, check, sensor.
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (this.check != null) {
+            stringBuilder.append("Check ");
+            stringBuilder.append(this.check.getHierarchyId() != null ? this.check.getHierarchyId().toString() : "");
+        } else if (this.profiler != null) {
+            stringBuilder.append("Statistics collector ");
+            stringBuilder.append(this.profiler.getHierarchyId() != null ? this.profiler.getHierarchyId().toString() : "");
+        } else {
+            stringBuilder.append("Sensor ");
+        }
+
+        if (this.connection != null) {
+            stringBuilder.append(", on connection: ");
+            stringBuilder.append(this.connection.getConnectionName());
+        }
+
+        if (this.table != null) {
+            stringBuilder.append(", table: ");
+            stringBuilder.append(this.table.getPhysicalTableName());
+        }
+
+        if (this.column != null) {
+            stringBuilder.append(", column: ");
+            stringBuilder.append(this.column.getColumnName());
+        }
+
+        return stringBuilder.toString();
+    }
 }
