@@ -144,6 +144,17 @@ export const DefinitionTree = () => {
     );
   };
 
+  const openAllUsersFirstLevelTab = () => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.USERS_LIST_DETAIL(),
+        value: ROUTES.USERS_LIST_DETAIL_VALUE(),
+        label: "All users"
+      })
+    );
+  };
+
+
   const toggleFolderRecursively = (
     elements: string[],
     index = 0,
@@ -182,9 +193,9 @@ export const DefinitionTree = () => {
     ];
     if(tabs && tabs.length !== 0){
       for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url.includes('default_checks')) {
+        if (tabs[i].url?.includes('default_checks')) {
           configuration[3].isOpen = true;
-      } else if (tabs[i].url.includes('sensors')) {
+      } else if (tabs[i]?.url?.includes('sensors')) {
         configuration[0].isOpen = true;
         const arrayOfElemsToToggle = (
           tabs[i].state.full_sensor_name as string
@@ -192,7 +203,7 @@ export const DefinitionTree = () => {
         if (arrayOfElemsToToggle) {
           toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
         }
-      } else if (tabs[i].url.includes('checks')) {
+      } else if (tabs[i]?.url?.includes('checks')) {
         configuration[2].isOpen = true;
         const arrayOfElemsToToggle = (
           tabs[i].state.fullCheckName as string
@@ -200,7 +211,7 @@ export const DefinitionTree = () => {
         if (arrayOfElemsToToggle) {
           toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
         }
-      } else if (tabs[i].url.includes('rules')) {
+      } else if (tabs[i]?.url?.includes('rules')) {
         configuration[1].isOpen = true;
         const arrayOfElemsToToggle = (
           tabs[i].state.full_rule_name as string
@@ -546,6 +557,16 @@ export const DefinitionTree = () => {
             )}
         </div>
       ))}
+      <div onClick={openAllUsersFirstLevelTab} 
+        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
+        <SvgIcon
+           name="userprofile"
+            className="w-4 h-4 min-w-4 "
+        />
+        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+          Manage users
+        </div>
+      </div>
     </div>
   );
 };

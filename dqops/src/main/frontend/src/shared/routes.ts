@@ -45,6 +45,8 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL: (defaultCheck: string) => `/definitions/default_checks/${defaultCheck}`,
   INCIDENT_CONNECTION: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
+  USERS_LIST_DETAIL: () => '/definitions/users/all',
+  USER_DETAIL: (email: string) => `/definitions/user/${email}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -64,6 +66,8 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL_VALUE: (defaultCheck: string) => `/definitions/default_checks/${defaultCheck}`,
   INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${name}`,
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
+  USERS_LIST_DETAIL_VALUE: () => '/definitions/users/all',
+  USER_DETAIL_VALUE: (email: string) => `/definitions/user/${email}`,
 
   PATTERNS: {
     INDEX: '/',
@@ -101,5 +105,7 @@ export const ROUTES = {
     CHECK_DEFAULT_DETAIL: '/definitions/default_checks/:defaultCheck',
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
+    USERS_LIST_DETAIL: '/definitions/users/all',
+    USER_DETAIL: '/definitions/user/:email'
   }
 };
