@@ -10,13 +10,15 @@ import SvgIcon from '../../components/SvgIcon'
 import { useActionDispatch } from '../../hooks/useActionDispatch'
 import { addFirstLevelTab } from '../../redux/actions/definition.actions'
 import { ROUTES } from '../../shared/routes'
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog'
 
 
 export default function UserListDetail() {
     const { userProfile } = useSelector((state: IRootState) => state.job || {});
     const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoCloudUserModel[]>([])
     const [reshreshUsersIndicator, setRefreshUsersIndicator] = useState<boolean>(false)
-    const [selectedEmail, setSelectedEmail] = useState('')
+    const [selectedEmailToChangePassword, setSelectedEmailToChangePassword] = useState('')
+    const [selectedEmailToDelete, setSelectedEmailToDelete] = useState('')
     const [loading, setLoading] = useState(false)
 
     const dispatch = useActionDispatch()
@@ -24,10 +26,10 @@ export default function UserListDetail() {
 
     useEffect(() => {
         setLoading(true)
-       UsersApi.getAllUsers()
-       .then((res) => setDqoCloudUsers(res.data))
-       .catch((err) => console.error(err))
-       .finally(() => setLoading(false))
+        UsersApi.getAllUsers()
+        .then((res) => setDqoCloudUsers(res.data))
+        .catch((err) => console.error(err))
+        .finally(() => setLoading(false))
     }, [reshreshUsersIndicator])
 
     const editDqoCloudUser = (email: string) => {
@@ -43,15 +45,15 @@ export default function UserListDetail() {
           )
     }
 
-    const deleteDqoCloudUser = async (email: string) => {
-       await UsersApi.deleteUser(email)
+    const deleteDqoCloudUser = async () => {
+       await UsersApi.deleteUser(selectedEmailToDelete)
        .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
        .catch((err) => console.error(err))
     }
 
     //WRONG API REQUEST, FIX IT
     const changeDqoCloudUserPassword = async (password: string) => {
-        await UsersApi.changeUserPassword(selectedEmail, password)
+        await UsersApi.changeUserPassword(selectedEmailToChangePassword, password)
         .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
         .catch((err) => console.error(err))
     }
@@ -101,17 +103,18 @@ export default function UserListDetail() {
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='delete' variant='text' color='primary' 
-                        onClick={() => deleteDqoCloudUser(user.email ?? '')}/>
+                        onClick={() => setSelectedEmailToDelete(user.email ?? '')}/>
                     </td>
                     <td className="px-6 py-2 text-left">
-                        <Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmail(user.email ?? '')} 
+                        <Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
                         disabled={userProfile.account_role !== "admin"}/>
                     </td>
                 </tr>
                 )}
             </tbody>
         </table>
-        <ChangeUserPasswordDialog open={selectedEmail.length!==0} onClose={() => setSelectedEmail('')} handleSubmit={changeDqoCloudUserPassword}  />
+        <ConfirmDialog open={selectedEmailToDelete.length!==0} onClose={() => setSelectedEmailToDelete('')} onConfirm={deleteDqoCloudUser} message={`Are you sure you want to delete ${selectedEmailToDelete} user?`}/>
+        <ChangeUserPasswordDialog open={selectedEmailToChangePassword.length!==0} onClose={() => setSelectedEmailToChangePassword('')} handleSubmit={changeDqoCloudUserPassword}  />
     </DefinitionLayout>
   )
 }
