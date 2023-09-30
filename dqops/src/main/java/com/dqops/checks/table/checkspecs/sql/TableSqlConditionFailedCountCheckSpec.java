@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
+ * Table-level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

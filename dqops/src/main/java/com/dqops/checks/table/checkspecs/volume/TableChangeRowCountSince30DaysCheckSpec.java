@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that the row count changed by a fixed rate since the last readout from last month.
+ * Table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

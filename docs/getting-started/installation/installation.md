@@ -82,4 +82,4 @@ To use DQO you need:
 
 ## Next step
 
-Now that you have installed and opened DQO, it is time to [connect your first data source](../adding-data-source-connection/adding-data-source-connection.md).
+Now that you have installed and opened DQO, it is time to [connect your first data source](../add-data-source-connection/add-data-source-connection.md).

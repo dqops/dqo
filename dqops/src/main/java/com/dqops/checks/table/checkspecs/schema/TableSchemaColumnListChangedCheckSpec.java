@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that detects if the list of columns has changed since the last time this check was run.
+ * Table-level check that detects if the list of columns has changed since the last time the check was run.
  * This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names.
  * A data quality issue will be detected if new columns were added or columns that existed during the previous test were dropped.
  */
