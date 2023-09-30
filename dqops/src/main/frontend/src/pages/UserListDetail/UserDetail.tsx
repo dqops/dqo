@@ -12,8 +12,9 @@ import { closeFirstLevelTab } from '../../redux/actions/definition.actions'
 
 export default function UserDetail() {
   const { create, email, role } = useSelector(getFirstLevelSensorState);
-  const [userEmail, setUserEmail] = useState(email ?? "")
+  const [userEmail, setUserEmail] = useState(email)
   const [userRole, setUserRole] = useState<DqoCloudUserModelAccountRoleEnum>(role)
+  const [isUpdated, setIsUpdated] = useState(false)
   console.log(create, email, userEmail, userRole)
   const dispatch = useActionDispatch()
 
@@ -41,19 +42,20 @@ export default function UserDetail() {
          variant='contained'
          className=' w-40 mr-10 my-3'
          onClick={(create===true || email === undefined) ? addDqoCloudUser : editDqoCloudUser}
+         disabled={!(isUpdated && userRole && userEmail)}
       /></div>
       <div className='w-100 px-5 mt-5'>
         <Input 
           label='Email' 
           value={userEmail}
-          onChange={(e) => setUserEmail(e.target.value)}
+          onChange={(e) => {setIsUpdated(true), setUserEmail(e.target.value)}}
           disabled={create !== true || email !== undefined }
         />     
         <Select
           label='Select user role'
           options={Object.values(DqoCloudUserModelAccountRoleEnum).map((x) => ({label: x, value: x}))}
           value={userRole}
-          onChange={(value) => setUserRole(value)}
+          onChange={(value) => {setIsUpdated(true), setUserRole(value)}}
           className='my-5 '
         />
       </div>
