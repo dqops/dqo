@@ -15,7 +15,7 @@
  */
 package com.dqops.core.configuration;
 
-import com.dqops.cli.terminal.logging.DqoConsoleLoggingMode;
+import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

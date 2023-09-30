@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.cli.terminal.logging;
+package com.dqops.utils.logging;
 
 /**
  * Console logging mode configuration. Decides how DQO sends logging events to the console.

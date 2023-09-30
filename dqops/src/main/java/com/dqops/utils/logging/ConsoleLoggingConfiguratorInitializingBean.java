@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.cli.terminal.logging;
+package com.dqops.utils.logging;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;

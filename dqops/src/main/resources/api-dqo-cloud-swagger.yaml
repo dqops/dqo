@@ -386,7 +386,7 @@ paths:
             type: "string"
       security:
       - api_key: []
-  /api/v1/uses:
+  /api/v1/users:
     get:
       tags:
       - "AccountUsers"
@@ -423,7 +423,7 @@ paths:
           description: "successful operation"
       security:
       - api_key: []
-  /api/v1/uses/{email}:
+  /api/v1/users/{email}:
     get:
       tags:
       - "AccountUsers"
@@ -487,7 +487,7 @@ paths:
           description: "successful operation"
       security:
       - api_key: []
-  /api/v1/uses/{email}/password:
+  /api/v1/users/{email}/password:
     post:
       tags:
       - "AccountUsers"

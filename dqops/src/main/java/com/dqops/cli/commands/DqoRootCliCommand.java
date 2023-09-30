@@ -29,7 +29,7 @@ import com.dqops.cli.commands.settings.SettingsCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
-import com.dqops.cli.terminal.logging.DqoConsoleLoggingMode;
+import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.synchronize.ScheduledSynchronizationFolderSelectionMode;
