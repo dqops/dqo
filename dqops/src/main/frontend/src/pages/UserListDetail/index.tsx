@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DefinitionLayout from '../../components/DefinitionLayout'
 import { UsersApi } from '../../services/apiClient'
-import { DqoCloudUserModel } from '../../api'
+import { DqoCloudUserModel, DqoCloudUserModelAccountRoleEnum } from '../../api'
 import Button from '../../components/Button'
 import { useSelector } from 'react-redux'
 import { IRootState } from '../../redux/reducers'
@@ -32,14 +32,15 @@ export default function UserListDetail() {
         .finally(() => setLoading(false))
     }, [reshreshUsersIndicator])
 
-    const editDqoCloudUser = (email: string) => {
+    const editDqoCloudUser = (email: string, role?: DqoCloudUserModelAccountRoleEnum) => {
         dispatch(
             addFirstLevelTab({
               url: ROUTES.USER_DETAIL(email),
               value: ROUTES.USER_DETAIL_VALUE(email),
               label: `Edit user ${email}`,
               state: {create: false, 
-             email
+             email,
+             role: role
               }
             })
           )
@@ -99,7 +100,7 @@ export default function UserListDetail() {
                     <td className='px-6 py-2 text-left'>{user.accountRole}</td>
                     <td className='px-6 py-2 text-left'>
                         <Button label='edit' variant='text' color='primary' 
-                        onClick={() =>user.email ?  editDqoCloudUser(user.email) : null}/>
+                        onClick={() =>user.email ?  editDqoCloudUser(user.email, user.accountRole) : null}/>
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='delete' variant='text' color='primary' 

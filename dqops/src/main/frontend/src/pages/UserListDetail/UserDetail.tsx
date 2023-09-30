@@ -9,11 +9,11 @@ import Button from '../../components/Button'
 import { UsersApi } from '../../services/apiClient'
 
 export default function UserDetail() {
-  const { create, email } = useSelector(
+  const { create, email, role } = useSelector(
     getFirstLevelSensorState
   );
   const [userEmail, setUserEmail] = useState(email ?? "")
-  const [userRole, setUserRole] = useState<DqoCloudUserModelAccountRoleEnum>()
+  const [userRole, setUserRole] = useState<DqoCloudUserModelAccountRoleEnum>(role)
   console.log(create, email, userEmail, userRole)
 
   const addDqoCloudUser = async () => {
@@ -22,7 +22,7 @@ export default function UserDetail() {
   }
 
   const editDqoCloudUser = async () => {
-    await UsersApi.updateUser(email, {accountRole: userRole})
+    await UsersApi.updateUser(String(email), {accountRole: userRole, email: String(email)})
     .catch((err) => console.error(err))
   }
 
