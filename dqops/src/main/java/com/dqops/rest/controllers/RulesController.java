@@ -68,6 +68,31 @@ public class RulesController {
     }
 
     /**
+     * Returns a flat list of all rules.
+     * @return List of all rules.
+     */
+    @GetMapping(value = "/rules", produces = "application/json")
+    @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
+            response = RuleBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<RuleBasicModel>> getAllRules(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel(principal);
+        List<RuleBasicModel> allRules = ruleBasicFolderModel.getAllRules();
+        allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
+
+        return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
+    }
+
+    /**
      * Returns the configuration of a rule, first checking if it is a custom rule, then checking if it is a built-in rule.
      * @param fullRuleName Full rule name.
      * @return Model of the rule with specific rule name.
@@ -321,30 +346,5 @@ public class RulesController {
             ruleBasicFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true, canEditRule);
         }
         return ruleBasicFolderModel;
-    }
-
-    /**
-     * Returns a flat list of all rules.
-     * @return List of all rules.
-     */
-    @GetMapping(value = "/rules", produces = "application/json")
-    @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
-            response = RuleBasicModel[].class,
-            authorizations = {
-                    @Authorization(value = "authorization_bearer_api_key")
-            })
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
-    })
-    @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<RuleBasicModel>> getAllRules(
-            @AuthenticationPrincipal DqoUserPrincipal principal) {
-        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel(principal);
-        List<RuleBasicModel> allRules = ruleBasicFolderModel.getAllRules();
-        allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
-
-        return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
     }
 }

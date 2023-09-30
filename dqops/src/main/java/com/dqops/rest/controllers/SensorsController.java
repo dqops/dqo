@@ -75,6 +75,31 @@ public class SensorsController {
     }
 
     /**
+     * Returns a flat list of all sensors.
+     * @return List of all sensors.
+     */
+    @GetMapping(value = "/sensors", produces = "application/json")
+    @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
+            response = SensorBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel(principal);
+        List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
+        allSensors.sort(Comparator.comparing(model -> model.getFullSensorName()));
+
+        return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);
+    }
+
+    /**
      * Returns the configuration of a sensor, first checking if it is a custom sensor,
      * then checking if it is a built-in sensor.
      * @param fullSensorName Full sensor name.
@@ -435,30 +460,5 @@ public class SensorsController {
         });
 
         return sensorFolderModel;
-    }
-
-    /**
-     * Returns a flat list of all sensors.
-     * @return List of all sensors.
-     */
-    @GetMapping(value = "/sensors", produces = "application/json")
-    @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
-            response = SensorBasicModel[].class,
-            authorizations = {
-                    @Authorization(value = "authorization_bearer_api_key")
-            })
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
-    })
-    @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors(
-            @AuthenticationPrincipal DqoUserPrincipal principal) {
-        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel(principal);
-        List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
-        allSensors.sort(Comparator.comparing(model -> model.getFullSensorName()));
-
-        return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);
     }
 }

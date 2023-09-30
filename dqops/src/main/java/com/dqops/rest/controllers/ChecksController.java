@@ -69,6 +69,31 @@ public class ChecksController {
     }
 
     /**
+     * Returns a flat list of all checks
+     * @return List of all checks
+     */
+    @GetMapping(value = "/checks", produces = "application/json")
+    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
+            response = CheckSpecBasicModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel(principal);
+        List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
+        allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
+
+        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
+    }
+
+    /**
      * Returns the configuration of a check, first looking up if it is a custom check, then looking up if it is a built-in check.
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
@@ -246,7 +271,7 @@ public class ChecksController {
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom check definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 200, message = "Custom check definition successfully deleted"),
             @ApiResponse(code = 404, message = "Custom check not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -341,30 +366,5 @@ public class ChecksController {
         checkSpecFolderBasicModel.addFolderIfMissing("column/partitioned/monthly/custom");
 
         return checkSpecFolderBasicModel;
-    }
-
-    /**
-     * Returns a flat list of all checks
-     * @return List of all checks
-     */
-    @GetMapping(value = "/checks", produces = "application/json")
-    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckSpecBasicModel[].class,
-            authorizations = {
-                    @Authorization(value = "authorization_bearer_api_key")
-            })
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks(
-            @AuthenticationPrincipal DqoUserPrincipal principal) {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel(principal);
-        List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
-        allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
-
-        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
     }
 }

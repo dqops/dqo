@@ -23,7 +23,7 @@ import com.dqops.metadata.credentials.SharedCredentialWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * File based shared credential file wrapper. Loads and writes shared credential files in the user's home folder.
+ * File based shared credential file wrapper. Loads and writes shared credential files in the user's home .credentials/ folder.
  */
 public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl {
     @JsonIgnore
@@ -54,22 +54,21 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
      */
     @Override
     public FileContent getObject() {
-        FileContent spec = super.getObject();
-        if (spec == null) {
+        FileContent object = super.getObject();
+        if (object == null) {
             FileTreeNode fileNode = this.credentialsFolderNode.getChildFileByFileName(this.getObjectName());
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
-                FileContent clonedFileContent = fileContent.clone();
-
-                this.setObject(clonedFileContent);
+                object = fileContent.clone();
+                this.setObject(object);
             }
             else {
-                FileContent emptyFileContent = new FileContent();
-                this.setObject(emptyFileContent);
-                return emptyFileContent;
+                object = new FileContent();
+                this.setObject(object);
+                return object;
             }
         }
-        return spec;
+        return object;
     }
 
     /**
