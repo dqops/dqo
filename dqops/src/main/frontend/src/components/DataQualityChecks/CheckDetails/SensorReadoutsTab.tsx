@@ -6,6 +6,7 @@ import { useTree } from '../../../contexts/treeContext';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
+import { getLocalDateInUserTimeZone } from '../../../utils';
 
 interface SensorReadoutsTabProps {
   sensorReadouts: SensorReadoutsListModel[];
@@ -126,7 +127,10 @@ const SensorReadoutsTab = ({
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.sensorReadoutEntries || []}
+            data={result.sensorReadoutEntries?.map((item) => ({
+              ...item,
+              executedAt: getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+            })) || []}
           />
         </div>
       ))}

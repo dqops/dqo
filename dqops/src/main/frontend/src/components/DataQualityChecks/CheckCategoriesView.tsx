@@ -83,7 +83,7 @@ const CheckCategoriesView = ({
   useEffect(() => {
     shouldExtend();
   }, []);
-console.log(category.category)
+
   return (
     <Fragment>
       <tr>
