@@ -27,7 +27,7 @@ const ConfirmErrorModal = ({ open, onClose, message, onConfirm}: ConfirmErrorMod
           color="primary"
           className="px-8"
           onClick={onConfirm}
-          label="No"
+          label="Yes"
           variant="outlined"
         />
         <Button
