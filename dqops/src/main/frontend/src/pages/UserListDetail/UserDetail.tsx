@@ -7,23 +7,30 @@ import { useSelector } from 'react-redux'
 import { getFirstLevelSensorState } from '../../redux/selectors'
 import Button from '../../components/Button'
 import { UsersApi } from '../../services/apiClient'
+import { useActionDispatch } from '../../hooks/useActionDispatch'
+import { closeFirstLevelTab } from '../../redux/actions/definition.actions'
 
 export default function UserDetail() {
-  const { create, email, role } = useSelector(
-    getFirstLevelSensorState
-  );
+  const { create, email, role } = useSelector(getFirstLevelSensorState);
   const [userEmail, setUserEmail] = useState(email ?? "")
   const [userRole, setUserRole] = useState<DqoCloudUserModelAccountRoleEnum>(role)
   console.log(create, email, userEmail, userRole)
+  const dispatch = useActionDispatch()
 
   const addDqoCloudUser = async () => {
     await UsersApi.createUser({email: userEmail, accountRole: userRole})
-    .catch((err) => console.error(err))
+    .catch((err) => console.error(err)).then(() => 
+    dispatch(
+      closeFirstLevelTab('/definitions/user/new')
+    ))
   }
 
   const editDqoCloudUser = async () => {
     await UsersApi.updateUser(String(email), {accountRole: userRole, email: String(email)})
-    .catch((err) => console.error(err))
+    .catch((err) => console.error(err)).then(() => 
+    dispatch(
+      closeFirstLevelTab('/definitions/user/' + email)
+    ))
   }
 
   return (
