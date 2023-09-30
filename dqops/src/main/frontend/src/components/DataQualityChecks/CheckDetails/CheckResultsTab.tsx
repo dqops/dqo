@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { IconButton } from '@material-tailwind/react';
+import { getLocalDateInUserTimeZone } from '../../../utils';
 
 interface CheckResultsTabProps {
   results: CheckResultsListModel[];
@@ -383,7 +384,8 @@ const CheckResultsTab = ({
               columns={columns}
               data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
-                checkName: results[0].checkName
+                checkName: results[0].checkName,
+                executedAt: getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
               }))}
               emptyMessage="No Data"
               getRowClass={getSeverityClass}

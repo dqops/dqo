@@ -5,6 +5,7 @@ import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
 import moment from 'moment/moment';
 import ErrorText from './ErrorText';
+import { getLocalDateInUserTimeZone } from '../../../utils';
 
 interface CheckErrorsTabProps {
   errors: ErrorsListModel[];
@@ -61,6 +62,7 @@ const CheckErrorsTab = ({
         }))
     ];
   }, []);
+  console.log(errors)
 
   return (
     <div
@@ -98,7 +100,8 @@ const CheckErrorsTab = ({
             columns={columns}
             data={(result.errorEntries || []).map((item) => ({
               ...item,
-              checkName: result.checkName
+              checkName: result.checkName,
+              executedAt: getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
             }))}
             emptyMessage="No Data"
           />

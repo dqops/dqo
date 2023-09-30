@@ -26,6 +26,7 @@ import Checkbox from '../Checkbox';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { getLocalDateInUserTimeZone } from '../../utils';
 
 export interface ITab {
   label: string;
@@ -261,21 +262,6 @@ const CheckListItem = ({
       newValue.toString()
     );
     setShowDetails(newValue);
-  };
-  const getLocalDateInUserTimeZone = (date: Date): string => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone: userTimeZone
-    };
-
-    return date.toLocaleString('en-US', options);
   };
 
   useEffect(() => {

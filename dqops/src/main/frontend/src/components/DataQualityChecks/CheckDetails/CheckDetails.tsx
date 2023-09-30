@@ -274,8 +274,6 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
-  console.log(filters)
-
   return (
     <div
       className="my-4"

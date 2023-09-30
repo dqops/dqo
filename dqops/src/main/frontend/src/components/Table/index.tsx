@@ -100,7 +100,6 @@ export const Table: React.FC<TableProps> = ({
                             : column.value === 'timePeriod' ||
                               column.value === 'executedAt'
                             ? (item[column.value] as string)
-                                .replace(/T/gi, ' ')
                                 .replace(/Z/gi, '')
                             : item[column.value]}
                         </td>
