@@ -142,7 +142,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         LogstashEncoder jsonEncoder = new LogstashEncoder();
         jsonEncoder.setContext(loggerContext);
         jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
+        EncodingShortenedThrowableConverter throwableConverter = new EncodingShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         jsonEncoder.setThrowableConverter(throwableConverter);
         LogstashFieldNames fieldNames = new LogstashFieldNames();
@@ -153,4 +153,5 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         jsonEncoder.start();
         return jsonEncoder;
     }
+
 }
