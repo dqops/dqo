@@ -19,6 +19,7 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import com.dqops.core.scheduler.JobSchedulerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
  * Spring boot shutdown manager - allows the application to request the shutdown, because the web server must be stopped.
  */
 @Component
+@Slf4j
 public class ApplicationShutdownManagerImpl implements ApplicationShutdownManager {
     private ApplicationContext applicationContext;
     private DqoJobQueue dqoJobQueue;
@@ -62,6 +64,9 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
      */
     @Override
     public void initiateShutdown(int returnCode) {
+        if (log.isDebugEnabled()) {
+            log.debug("Shutdown initialized with a return code: " + returnCode);
+        }
         this.dqoJobQueue.stop();
         this.parentDqoJobQueue.stop();
         this.jobQueueMonitoringService.stop();
