@@ -19,24 +19,16 @@ if [ -z "$DQO_JAVA_OPTS" ]; then
   export DQO_JAVA_OPTS=-Xmx2048m
 fi
 
-if [ -z "$DQO_SIGTERM_TIMEOUT" ]; then
-  export DQO_SIGTERM_TIMEOUT=30000
-fi
-
-if [ -z "$DQO_SIGKILL_TIMEOUT" ]; then
-  export DQO_SIGKILL_TIMEOUT=30000
-fi
-
 _term() {
-  trap - SIGINT SIGTERM # clear the trap, otherwise the bash script will start an endless loop
-  kill -TERM --timeout $DQO_SIGTERM_TIMEOUT TERM -- -$$ # Sends SIGTERM to child/sub processes
+  kill -TERM $child
+  wait $child
 }
 
 trap _term SIGTERM
-trap _ter SIGINT
+trap _term SIGINT
 
 exec 3<&0 java $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED -cp /dqo/app:/dqo/app/lib/* com.dqops.cli.CliApplication $* <&3 &
 
 child=$!
 wait $child
-#exit $?
+exit $?
