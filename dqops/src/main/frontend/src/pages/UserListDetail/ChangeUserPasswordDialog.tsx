@@ -14,10 +14,22 @@ const generatePassword = (length : number) => {
 
 const ChangeUserPasswordDialog = ({ open, onClose, handleSubmit }: AddColumnDialogProps) => {
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState<string>()
 
   useEffect(()=> {
     setPassword(generatePassword(8))
   },[open])
+
+  useEffect(() => {
+    if(password.length!==0 && password.length<=8){
+        setMessage("Password must be at least 8 characters long")
+    }
+    else if(password.length!==0 && !password.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/)){
+        setMessage("Password must contain small letters, capital letters and digits")
+    }else{
+        setMessage(undefined)
+    }
+}, [password])
   
   return (
     <Dialog open={open} handler={onClose} size="xs">
@@ -34,6 +46,7 @@ const ChangeUserPasswordDialog = ({ open, onClose, handleSubmit }: AddColumnDial
             />
           </div>
         </div>
+        {message ? <div className='text-red-500'>{message}</div> : null}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button
