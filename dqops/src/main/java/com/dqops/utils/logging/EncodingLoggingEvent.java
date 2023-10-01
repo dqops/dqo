@@ -32,9 +32,26 @@ import java.util.Map;
  */
 public class EncodingLoggingEvent implements ILoggingEvent {
     private ILoggingEvent wrappedEvent;
+    private Object[] augmentedArgumentArray;
+    private boolean encodeDoubleQuotesInJson;
+    private List<KeyValuePair> keyValuePairs;
 
-    public EncodingLoggingEvent(ILoggingEvent wrappedEvent) {
+    /**
+     * Creates a wrapper over an original logging event.
+     *
+     * @param wrappedEvent             The original logging event.
+     * @param augmentedArgumentArray   An alternate array of arguments, added to the "attrs" (or "attributes") dictionary.
+     * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param keyValuePairs            Alternative list of key-value pairs.
+     */
+    public EncodingLoggingEvent(ILoggingEvent wrappedEvent,
+                                Object[] augmentedArgumentArray,
+                                boolean encodeDoubleQuotesInJson,
+                                List<KeyValuePair> keyValuePairs) {
         this.wrappedEvent = wrappedEvent;
+        this.augmentedArgumentArray = augmentedArgumentArray;
+        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+        this.keyValuePairs = keyValuePairs;
     }
 
     @Override
@@ -52,9 +69,13 @@ public class EncodingLoggingEvent implements ILoggingEvent {
         return wrappedEvent.getMessage();
     }
 
+    /**
+     * Returns an augmented argument array.
+     * @return Augmented argument array.
+     */
     @Override
     public Object[] getArgumentArray() {
-        return wrappedEvent.getArgumentArray();
+        return this.augmentedArgumentArray;
     }
 
     /**
@@ -65,7 +86,7 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     @Override
     public String getFormattedMessage() {
         String formattedMessage = wrappedEvent.getFormattedMessage();
-        if (formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
+        if (this.encodeDoubleQuotesInJson && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
             formattedMessage = formattedMessage.replace("\"", "\\\"");
         }
         return formattedMessage;
@@ -144,6 +165,9 @@ public class EncodingLoggingEvent implements ILoggingEvent {
 
     @Override
     public List<KeyValuePair> getKeyValuePairs() {
+        if (this.keyValuePairs != null) {
+            return this.keyValuePairs;
+        }
         return wrappedEvent.getKeyValuePairs();
     }
 

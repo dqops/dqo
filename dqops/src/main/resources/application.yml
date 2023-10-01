@@ -83,6 +83,10 @@ dqo:
     console: OFF
     log-errors-to-stderr: false
     encode-double-quotes-in-json: true
+    json-log-field-message: log
+    json-log-field-timestamp: time
+    json-log-field-arguments: attrs
+    json-timestamp-pattern: "[ISO_INSTANT]"
   storage:
     gcp:
       upload-buffer-size: 5000000

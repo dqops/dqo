@@ -73,8 +73,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
-        ConsoleAppender<ILoggingEvent> consoleAppenderError = new ConsoleAppender<>();
-        ConsoleAppender<ILoggingEvent> consoleAppenderNonError = new ConsoleAppender<>();
+        ConsoleAppender<ILoggingEvent> consoleAppenderError = createConsoleAppender();
+        ConsoleAppender<ILoggingEvent> consoleAppenderNonError = createConsoleAppender();
         Encoder<ILoggingEvent> encoderError = null;
         Encoder<ILoggingEvent> encoderNonError = null;
 
@@ -124,6 +124,17 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
     }
 
     /**
+     * Creates a valid console appender. When JSON logging is enabled, creates a special appender.
+     * @return Console appender.
+     */
+    private ConsoleAppender<ILoggingEvent> createConsoleAppender() {
+        ConsoleAppender<ILoggingEvent> consoleAppender =
+                this.loggingConfigurationProperties.getConsole() == DqoConsoleLoggingMode.JSON
+                        ? new AugmentingConsoleAppender(this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson()) : new ConsoleAppender<>();
+        return consoleAppender;
+    }
+
+    /**
      * Creates a pattern layout formatter.
      * @param loggerContext Logger context.
      * @return Patter layout formatter encoder.
@@ -145,7 +156,10 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
     private LogstashEncoder createJsonEncoder(LoggerContext loggerContext) {
         LogstashEncoder jsonEncoder = new LogstashEncoder();
         jsonEncoder.setContext(loggerContext);
-        jsonEncoder.setTimestampPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        String timestampPattern = !Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonTimestampPattern())
+                ? this.loggingConfigurationProperties.getJsonTimestampPattern()
+                : "[ISO_INSTANT]";
+        jsonEncoder.setTimestampPattern(timestampPattern);
 
         ShortenedThrowableConverter throwableConverter =
                 this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson() ?
@@ -157,16 +171,20 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldLevel())) {
             fieldNames.setLevel(this.loggingConfigurationProperties.getJsonLogFieldLevel());
         }
+        if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldMessage())) {
+            fieldNames.setMessage(this.loggingConfigurationProperties.getJsonLogFieldMessage());
+        }
+        if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldTimestamp())) {
+            fieldNames.setTimestamp(this.loggingConfigurationProperties.getJsonLogFieldTimestamp());
+        }
+        if (!Strings.isNullOrEmpty(this.loggingConfigurationProperties.getJsonLogFieldArguments())) {
+            fieldNames.setArguments(this.loggingConfigurationProperties.getJsonLogFieldArguments());
+        }
         jsonEncoder.setFieldNames(fieldNames);
 
-        if (this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson()) {
-            List<JsonProvider<ILoggingEvent>> providersList = jsonEncoder.getProviders().getProviders();
-            Optional<JsonProvider<ILoggingEvent>> defaultMessageProvider = providersList.stream()
-                    .filter(p -> p instanceof MessageJsonProvider)
-                    .findFirst();
-            jsonEncoder.getProviders().removeProvider(defaultMessageProvider.get());
-            jsonEncoder.getProviders().addProvider(new EncodingMessageProvider());
-        }
+        jsonEncoder.setIncludeKeyValuePairs(true);
+        jsonEncoder.setIncludeStructuredArguments(true);
+        jsonEncoder.setIncludeNonStructuredArguments(true);
 
         jsonEncoder.start();
         return jsonEncoder;

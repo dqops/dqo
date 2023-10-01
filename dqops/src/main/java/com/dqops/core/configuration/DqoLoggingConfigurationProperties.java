@@ -51,6 +51,10 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private boolean consoleImmediateFlush;
     private boolean logErrorsToStderr;
     private String jsonLogFieldLevel;
+    private String jsonLogFieldMessage;
+    private String jsonLogFieldTimestamp;
+    private String jsonLogFieldArguments;
+    private String jsonTimestampPattern;
     private boolean encodeDoubleQuotesInJson = true;
 
     /**
@@ -195,6 +199,70 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setJsonLogFieldLevel(String jsonLogFieldLevel) {
         this.jsonLogFieldLevel = jsonLogFieldLevel;
+    }
+
+    /**
+     * Returns the field name in json where the "message" is saved. By default, it is "message".
+     * @return The field name to store the message of a log entry.
+     */
+    public String getJsonLogFieldMessage() {
+        return jsonLogFieldMessage;
+    }
+
+    /**
+     * Sets the json field name where the message is stored.
+     * @param jsonLogFieldMessage Field name to store the message.
+     */
+    public void setJsonLogFieldMessage(String jsonLogFieldMessage) {
+        this.jsonLogFieldMessage = jsonLogFieldMessage;
+    }
+
+    /**
+     * Returns the json field name where the timestamp is stored. The default is "time".
+     * @return The field name in json where the timestamp of the log event is stored.
+     */
+    public String getJsonLogFieldTimestamp() {
+        return jsonLogFieldTimestamp;
+    }
+
+    /**
+     * Sets the field name where the timestamp is stored.
+     * @param jsonLogFieldTimestamp The field where the timestamp is stored.
+     */
+    public void setJsonLogFieldTimestamp(String jsonLogFieldTimestamp) {
+        this.jsonLogFieldTimestamp = jsonLogFieldTimestamp;
+    }
+
+    /**
+     * Returns the field name in a json message that is a key/value object with additional event arguments.
+     * @return The field name in a json message that is a key/value object with additional event arguments.
+     */
+    public String getJsonLogFieldArguments() {
+        return jsonLogFieldArguments;
+    }
+
+    /**
+     * Sets the field name in a json message that is a key/value object with additional event arguments.
+     * @param jsonLogFieldArguments The field name in a json message that is a key/value object with additional event arguments.
+     */
+    public void setJsonLogFieldArguments(String jsonLogFieldArguments) {
+        this.jsonLogFieldArguments = jsonLogFieldArguments;
+    }
+
+    /**
+     * Returns the pattern used to format the event's timestamp field in a json formatted log.
+     * @return Json field timestamp pattern.
+     */
+    public String getJsonTimestampPattern() {
+        return jsonTimestampPattern;
+    }
+
+    /**
+     * Sets the timestamp's field pattern that the event timestamp is formatted in json logs.
+     * @param jsonTimestampPattern Timestamp pattern.
+     */
+    public void setJsonTimestampPattern(String jsonTimestampPattern) {
+        this.jsonTimestampPattern = jsonTimestampPattern;
     }
 
     /**
