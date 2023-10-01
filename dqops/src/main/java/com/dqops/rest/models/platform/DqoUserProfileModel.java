@@ -181,6 +181,18 @@ public class DqoUserProfileModel {
     private boolean canCompareTables;
 
     /**
+     * User can manage other users, add users to a multi-user account, change access rights, reset passwords.
+     */
+    @JsonPropertyDescription("User can manage other users, add users to a multi-user account, change access rights, reset passwords.")
+    private boolean canManageUses;
+
+    /**
+     * User can manage shared credentials and view (or download) already defined shared credentials.
+     */
+    @JsonPropertyDescription("User can manage shared credentials and view (or download) already defined shared credentials.")
+    private boolean canManageAndViewSharedCredentials;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQO cloud api key.
      * @return User profile.
@@ -202,6 +214,8 @@ public class DqoUserProfileModel {
             setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageDefinitions(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setCanManageUses(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
+            setCanManageAndViewSharedCredentials(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         if (dqoCloudApiKey != null) {
