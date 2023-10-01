@@ -31,6 +31,7 @@ public class DqoConfigurationProperties implements Cloneable {
     private String home;
     private String yamlSchemaServer = "https://cloud.dqops.com/dqo-yaml-schema/";
     private String defaultTimeZone = TimeZone.getDefault().getID();
+    private String javaOpts;
 
     /**
      * Returns the location of the dqo.io home folder (installation folder). The installation folder contains
@@ -81,6 +82,22 @@ public class DqoConfigurationProperties implements Cloneable {
      */
     public void setDefaultTimeZone(String defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
+    }
+
+    /**
+     * Returns the value that was passed as the DQO_JAVA_OPTS environment variable.
+     * @return The value of the DQO_JAVA_OPTS env value.
+     */
+    public String getJavaOpts() {
+        return javaOpts;
+    }
+
+    /**
+     * Sets the parameter captured from the DQO_JAVA_OPTS environment variable, just to allow previewing it in the settings popup as a DQO configuration parameter.
+     * @param javaOpts DQO_JAVA_OPTS value.
+     */
+    public void setJavaOpts(String javaOpts) {
+        this.javaOpts = javaOpts;
     }
 
     /**

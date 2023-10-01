@@ -100,6 +100,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
      * picocli to fail because a parameter is unknown, so we make all these overridable parameters known to picocli.
      */
 
+
+    @CommandLine.Option(names = {"--DQO_JAVA_OPTS"},
+            description = "Configures additional JVM (Java Virtual Machine) options such as the memory limit. " +
+                    "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -Xmx2048m which sets the upper memory limit for 2 GB. " +
+                    "This parameter is not supported as a command line parameter, it is only supported as an environment variable. " +
+                    "Set (and export) the environment variable DQO_JAVA_OPTS before starting DQO.", defaultValue = "-Xmx2048m")
+    private String DQO_JAVA_OPTS;
+
     @CommandLine.Option(names = {"--silent"},
             description = "Starts DQO in a silent mode, without showing the banner and any other information.", defaultValue = "false")
     private boolean silent;
