@@ -6,7 +6,7 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { RuleBasicModel, SensorBasicFolderModel } from '../../api';
+import { RuleListModel, SensorFolderModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab, refreshRuleFolderTree } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
@@ -17,10 +17,10 @@ import { IRootState } from '../../redux/reducers';
 import { useSelector } from 'react-redux';
 
 interface RuleContextMenuProps {
-  folder?: SensorBasicFolderModel;
+  folder?: SensorFolderModel;
   path?: string[];
   singleRule?: boolean;
-  rule?: RuleBasicModel;
+  rule?: RuleListModel;
 }
 
 const RuleContextMenu = ({

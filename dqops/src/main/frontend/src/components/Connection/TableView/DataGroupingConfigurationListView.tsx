@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGroupingConfigurationBasicModel } from '../../../api';
+import { DataGroupingConfigurationListModel } from '../../../api';
 import Button from '../../Button';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
@@ -12,10 +12,10 @@ import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 
 interface IDataGroupingConfigurationListViewProps {
-  dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
+  dataGroupingConfigurations: DataGroupingConfigurationListModel[];
   getDataGroupingConfigurations: () => void;
   onCreate: () => void;
-  onEdit: (groupingConfiguration: DataGroupingConfigurationBasicModel) => void;
+  onEdit: (groupingConfiguration: DataGroupingConfigurationListModel) => void;
 }
 
 const DataGroupingConfigurationListView = ({
@@ -27,11 +27,11 @@ const DataGroupingConfigurationListView = ({
   const [open, setOpen] = useState(false);
   const [defaultOpen, setDefaultOpen] = useState(false);
   const [selectedGroupingConfiguration, setSelectedGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
+    useState<DataGroupingConfigurationListModel>();
   const [messageBox, setMessageBox] = useState<boolean>(false);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const setDefaultGroupingConfiguration = async (
-    groupingConfiguration: DataGroupingConfigurationBasicModel,
+    groupingConfiguration: DataGroupingConfigurationListModel,
     nameOfGrouping?: string
   ) => {
     try {
@@ -48,7 +48,7 @@ const DataGroupingConfigurationListView = ({
   };
 
   const deleteGroupingConfiguration = async (
-    groupingConfiguration?: DataGroupingConfigurationBasicModel
+    groupingConfiguration?: DataGroupingConfigurationListModel
   ) => {
     if (!groupingConfiguration) {
       return;
@@ -68,14 +68,14 @@ const DataGroupingConfigurationListView = ({
   };
 
   const openConfirmDeleteModal = (
-    groupingConfiguration: DataGroupingConfigurationBasicModel
+    groupingConfiguration: DataGroupingConfigurationListModel
   ) => {
     setOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
 
   const openConfirmDefaultModal = (
-    groupingConfiguration: DataGroupingConfigurationBasicModel
+    groupingConfiguration: DataGroupingConfigurationListModel
   ) => {
     setDefaultOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
@@ -89,7 +89,7 @@ const DataGroupingConfigurationListView = ({
     }
   }, [dataGroupingConfigurations]);
 
-  const elem: DataGroupingConfigurationBasicModel | undefined =
+  const elem: DataGroupingConfigurationListModel | undefined =
     dataGroupingConfigurations.find(
       (x) => x.default_data_grouping_configuration === true
     );

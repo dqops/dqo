@@ -15,7 +15,6 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.connectors.ProviderType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,21 +23,27 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Provider sensor basic model that is returned by the REST API.
+ * Basic model for data grouping configuration on a table, returned by the rest api.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor basic model")
-public class ProviderSensorBasicModel {
-    @JsonPropertyDescription("Provider type.")
-    private ProviderType providerType;
+@ApiModel(value = "DataGroupingConfigurationListModel", description = "Data grouping configurations list model not containing nested objects, but only the name of the grouping configuration.")
+public class DataGroupingConfigurationListModel {
+    @JsonPropertyDescription("Connection name.")
+    private String connectionName;
 
-    @JsonPropertyDescription("This connection specific template is a custom sensor template or was customized by the user.")
-    private boolean custom;
+    @JsonPropertyDescription("Schema name.")
+    private String schemaName;
 
-    @JsonPropertyDescription("This connection specific template is provided with DQO as a built-in sensor.")
-    private boolean builtIn;
+    @JsonPropertyDescription("Table name.")
+    private String tableName;
+
+    @JsonPropertyDescription("Data grouping configuration name.")
+    private String dataGroupingConfigurationName;
+
+    @JsonPropertyDescription("True when this is the default data grouping configuration for the table.")
+    private boolean defaultDataGroupingConfiguration;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -46,19 +51,6 @@ public class ProviderSensorBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
 
-    public ProviderSensorBasicModel() {
-    }
-
-    /**
-     * Sets the custom or builtIn flag to true to match the source of the sensor definition.
-     * @param sensorDefinitionSource Source sensor definition.
-     */
-    public void setSensorSource(SensorDefinitionSource sensorDefinitionSource) {
-        if (sensorDefinitionSource == SensorDefinitionSource.CUSTOM) {
-            this.setCustom(true);
-        }
-        else if (sensorDefinitionSource == SensorDefinitionSource.BUILT_IN) {
-            this.setBuiltIn(true);
-        }
+    public DataGroupingConfigurationListModel() {
     }
 }

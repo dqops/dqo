@@ -15,7 +15,7 @@ import { useParams, useRouteMatch } from "react-router-dom";
 import { findTreeNode } from "../../../utils/tree";
 import { AxiosResponse } from "axios";
 import {
-  ConnectionBasicModel,
+  ConnectionModel,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
@@ -82,7 +82,7 @@ const Tree = () => {
       let newTreeData = [...(treeData || [])];
 
       if (!newTreeData.length) {
-        const res: AxiosResponse<ConnectionBasicModel[]> =
+        const res: AxiosResponse<ConnectionModel[]> =
           await ConnectionApiClient.getAllConnections();
         const mappedConnectionsToTreeData = res.data.map((item) => ({
           id: item.connection_name ?? '',
@@ -91,7 +91,7 @@ const Tree = () => {
           items: [],
           level: TREE_LEVEL.DATABASE,
           tooltip: item.connection_name,
-          run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
+          run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionModel],
           collect_statistics_job_template: item.collect_statistics_job_template,
           data_clean_job_template: item.data_clean_job_template,
           open: false

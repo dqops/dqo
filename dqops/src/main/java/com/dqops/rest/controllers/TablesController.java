@@ -50,7 +50,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
-import com.dqops.rest.models.metadata.TableBasicModel;
+import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.metadata.TableModel;
 import com.dqops.rest.models.metadata.TablePartitioningModel;
 import com.dqops.rest.models.metadata.TableStatisticsModel;
@@ -58,7 +58,7 @@ import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
@@ -133,18 +133,18 @@ public class TablesController {
      * @return List of tables inside a connection's schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
-    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableBasicModel[].class,
+    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = TableBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableListModel[].class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<TableBasicModel>> getTables(
+    public ResponseEntity<Flux<TableListModel>> getTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName) {
@@ -166,8 +166,8 @@ public class TablesController {
 
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        Stream<TableBasicModel> modelStream = tableSpecs.stream()
-                .map(ts -> TableBasicModel.fromTableSpecificationForListEntry(
+        Stream<TableListModel> modelStream = tableSpecs.stream()
+                .map(ts -> TableListModel.fromTableSpecificationForListEntry(
                         connectionName, ts, isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
@@ -231,18 +231,18 @@ public class TablesController {
      * @return Table basic information for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", produces = "application/json")
-    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableBasicModel.class,
+    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table basic information returned", response = TableBasicModel.class),
+            @ApiResponse(code = 200, message = "Table basic information returned", response = TableListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableBasicModel>> getTableBasic(
+    public ResponseEntity<Mono<TableListModel>> getTableBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -263,12 +263,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableBasicModel tableBasicModel = TableBasicModel.fromTableSpecification(
+        TableListModel tableListModel = TableListModel.fromTableSpecification(
                 connectionWrapper.getName(), tableSpec,
                 principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
                 principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(tableBasicModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(tableListModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -1017,18 +1017,18 @@ public class TablesController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model/basic", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table",
-            response = CheckContainerBasicModel.class,
+            response = CheckContainerListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableProfilingChecksBasicModel(
+    public ResponseEntity<Mono<CheckContainerListModel>> getTableProfilingChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1054,7 +1054,7 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType(),
@@ -1073,18 +1073,18 @@ public class TablesController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/basic", produces = "application/json")
     @ApiOperation(value = "getTableMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale",
-            response = CheckContainerBasicModel.class,
+            response = CheckContainerListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableMonitoringChecksBasicModel(
+    public ResponseEntity<Mono<CheckContainerListModel>> getTableMonitoringChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1111,7 +1111,7 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType(),
@@ -1130,18 +1130,18 @@ public class TablesController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/basic", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale",
-            response = CheckContainerBasicModel.class,
+            response = CheckContainerListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTablePartitionedChecksBasicModel(
+    public ResponseEntity<Mono<CheckContainerListModel>> getTablePartitionedChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1168,7 +1168,7 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType(),
                 principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
@@ -1928,7 +1928,7 @@ public class TablesController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param tableBasicModel Basic table model with the new values.
+     * @param tableListModel Basic table model with the new values.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", consumes = "application/json", produces = "application/json")
@@ -1950,16 +1950,16 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Table basic model with the updated settings") @RequestBody TableBasicModel tableBasicModel) {
+            @ApiParam("Table basic model with the updated settings") @RequestBody TableListModel tableListModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        if (tableBasicModel.getTarget() == null ||
-                !Objects.equals(schemaName, tableBasicModel.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tableBasicModel.getTarget().getTableName())) {
+        if (tableListModel.getTarget() == null ||
+                !Objects.equals(schemaName, tableListModel.getTarget().getSchemaName()) ||
+                !Objects.equals(tableName, tableListModel.getTarget().getTableName())) {
             return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
                     HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
@@ -1981,7 +1981,7 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        tableBasicModel.copyToTableSpecification(tableSpec);
+        tableListModel.copyToTableSpecification(tableSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

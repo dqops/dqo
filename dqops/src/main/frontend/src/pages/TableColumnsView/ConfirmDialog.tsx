@@ -1,12 +1,12 @@
 import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import { ColumnBasicModel } from '../../api';
+import { ColumnListModel } from '../../api';
 import Button from '../../components/Button';
 
 interface ConfirmDialogProps {
   open: boolean;
   onClose: () => void;
-  column?: ColumnBasicModel;
+  column?: ColumnListModel;
   onConfirm: () => void;
 }
 

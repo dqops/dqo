@@ -25,23 +25,35 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Sensor basic model that is returned by the REST API.
+ * Sensor list model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
-public class SensorBasicModel {
-    @JsonPropertyDescription("Sensor name")
+@ApiModel(value = "SensorListModel", description = "Sensor list model")
+public class SensorListModel {
+    /**
+     * Sensor name, excluding the parent folder.
+     */
+    @JsonPropertyDescription("Sensor name, excluding the parent folder.")
     private String sensorName;
 
-    @JsonPropertyDescription("Full sensor name")
+    /**
+     * Full sensor name, including the folder path within the "sensors" folder where the sensor definitions are stored. This is the unique identifier of the sensor.
+     */
+    @JsonPropertyDescription("Full sensor name, including the folder path within the \"sensors\" folder where the sensor definitions are stored. This is the unique identifier of the sensor.")
     private String fullSensorName;
 
-    @JsonPropertyDescription("This sensor has is a custom sensor or was customized by the user.")
+    /**
+     * This sensor has is a custom sensor or was customized by the user. This is a read-only flag.
+     */
+    @JsonPropertyDescription("This sensor has is a custom sensor or was customized by the user. This is a read-only flag.")
     private boolean custom;
 
-    @JsonPropertyDescription("This sensor is provided with DQO as a built-in sensor.")
+    /**
+     * This sensor is provided with DQO as a built-in sensor. This is a read-only flag.
+     */
+    @JsonPropertyDescription("This sensor is provided with DQO as a built-in sensor. This is a read-only flag.")
     private boolean builtIn;
 
     /**
@@ -50,20 +62,23 @@ public class SensorBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
 
-    @JsonPropertyDescription("Provider sensor basic model list")
-    private List<ProviderSensorBasicModel> providerSensorBasicModels;
+    /**
+     * List of provider (database) specific models.
+     */
+    @JsonPropertyDescription("List of provider (database) specific models.")
+    private List<ProviderSensorListModel> providerSensors;
 
-    public SensorBasicModel() {
+    public SensorListModel() {
     }
 
-    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn, boolean canEdit,
-                            List<ProviderSensorBasicModel> providerSensorBasicModels) {
+    public SensorListModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn, boolean canEdit,
+                           List<ProviderSensorListModel> providerSensors) {
         this.sensorName = sensorName;
         this.fullSensorName = fullSensorName;
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
-        this.providerSensorBasicModels = providerSensorBasicModels;
+        this.providerSensors = providerSensors;
     }
 
     /**
@@ -81,12 +96,12 @@ public class SensorBasicModel {
 
     /**
      * Adds a list of provider specific sensor definitions (sensor templates).
-     * @param providerSensorBasicModels List of sensor templates.
+     * @param providerSensorListModels List of sensor templates.
      */
-    public void addProviderSensorBasicModel(List<ProviderSensorBasicModel> providerSensorBasicModels) {
-        for (ProviderSensorBasicModel newModel : providerSensorBasicModels) {
+    public void addProviderSensorBasicModel(List<ProviderSensorListModel> providerSensorListModels) {
+        for (ProviderSensorListModel newModel : providerSensorListModels) {
             boolean modelExists = false;
-            for (ProviderSensorBasicModel model : this.providerSensorBasicModels) {
+            for (ProviderSensorListModel model : this.providerSensors) {
                 if (model.getProviderType() == newModel.getProviderType()) {
                     if (newModel.isCustom()) {
                         model.setCustom(newModel.isCustom());
@@ -99,7 +114,7 @@ public class SensorBasicModel {
                 }
             }
             if (!modelExists) {
-                this.providerSensorBasicModels.add(newModel);
+                this.providerSensors.add(newModel);
             }
         }
     }

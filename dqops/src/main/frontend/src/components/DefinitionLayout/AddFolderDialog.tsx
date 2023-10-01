@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
-import { RuleBasicFolderModel, SensorBasicFolderModel } from '../../api';
+import { RuleFolderModel, SensorFolderModel } from '../../api';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { updateSensorFolderTree } from '../../redux/actions/definition.actions';
@@ -13,7 +13,7 @@ interface AddFolderDialogProps {
   open: boolean;
   onClose: () => void;
   path?: string[];
-  folder?: SensorBasicFolderModel;
+  folder?: SensorFolderModel;
   type?: 'sensor' | 'rule';
 }
 
@@ -54,12 +54,12 @@ const AddFolderDialog = ({
         return;
       }
 
-      const newSensorFolderTree: SensorBasicFolderModel =
+      const newSensorFolderTree: SensorFolderModel =
         structuredClone(sensorFolderTree);
       let data = newSensorFolderTree;
 
       for (const key of path || []) {
-        data = data.folders?.[key] as SensorBasicFolderModel;
+        data = data.folders?.[key] as SensorFolderModel;
       }
 
       data.folders = {
@@ -73,12 +73,12 @@ const AddFolderDialog = ({
         return;
       }
 
-      const newRuleFolderTree: RuleBasicFolderModel =
+      const newRuleFolderTree: RuleFolderModel =
         structuredClone(ruleFolderTree);
       let data = newRuleFolderTree;
 
       for (const key of path || []) {
-        data = data.folders?.[key] as RuleBasicFolderModel;
+        data = data.folders?.[key] as RuleFolderModel;
       }
 
       data.folders = {

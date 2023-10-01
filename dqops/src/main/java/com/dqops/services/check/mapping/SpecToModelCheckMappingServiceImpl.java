@@ -51,8 +51,8 @@ import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
-import com.dqops.services.check.mapping.basicmodels.CheckBasicModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.services.check.matching.SimilarCheckCache;
 import com.dqops.utils.reflection.ClassInfo;
@@ -326,14 +326,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @return Simplistic model of data quality checks' container.
      */
     @Override
-    public CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                                     ExecutionContext executionContext,
-                                                     ProviderType providerType,
-                                                     boolean canManageChecks) {
-        CheckContainerBasicModel checkContainerBasicModel = new CheckContainerBasicModel();
-        checkContainerBasicModel.setCanEdit(canManageChecks);
-        checkContainerBasicModel.setCanRunChecks(canManageChecks);
-        checkContainerBasicModel.setCanDeleteData(canManageChecks);
+    public CheckContainerListModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                                    ExecutionContext executionContext,
+                                                    ProviderType providerType,
+                                                    boolean canManageChecks) {
+        CheckContainerListModel checkContainerListModel = new CheckContainerListModel();
+        checkContainerListModel.setCanEdit(canManageChecks);
+        checkContainerListModel.setCanRunChecks(canManageChecks);
+        checkContainerListModel.setCanDeleteData(canManageChecks);
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
@@ -361,15 +361,15 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
                 AbstractCheckSpec<?,?,?,?> checkSpecObject = (AbstractCheckSpec<?,?,?,?>)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
 
-                CheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
+                CheckListModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
                 checkModel.setConfigured(checkIsConfigured);
                 checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
-                checkContainerBasicModel.getChecks().add(checkModel);
+                checkContainerListModel.getChecks().add(checkModel);
             }
         }
 
-        checkContainerBasicModel.getChecks().sort(CheckBasicModel::compareTo);
-        return checkContainerBasicModel;
+        checkContainerListModel.getChecks().sort(CheckListModel::compareTo);
+        return checkContainerListModel;
     }
 
     /**
@@ -705,13 +705,13 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check basic model.
      */
-    protected CheckBasicModel createCheckBasicModel(FieldInfo checkFieldInfo,
-                                                    AbstractCheckSpec<?,?,?,?> checkSpec,
-                                                    ExecutionContext executionContext,
-                                                    ProviderType providerType,
-                                                    CheckType checkType,
-                                                    CheckTimeScale checkTimeScale) {
-        CheckBasicModel checkModel = new CheckBasicModel();
+    protected CheckListModel createCheckBasicModel(FieldInfo checkFieldInfo,
+                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
+                                                   ExecutionContext executionContext,
+                                                   ProviderType providerType,
+                                                   CheckType checkType,
+                                                   CheckTimeScale checkTimeScale) {
+        CheckListModel checkModel = new CheckListModel();
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
 

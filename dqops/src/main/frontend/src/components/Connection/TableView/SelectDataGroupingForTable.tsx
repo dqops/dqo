@@ -1,7 +1,7 @@
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import React, { useEffect, useState } from 'react';
 import {
-  DataGroupingConfigurationBasicModel,
+  DataGroupingConfigurationListModel,
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpecSourceEnum
 } from '../../../api';
@@ -14,10 +14,10 @@ import { useHistory } from 'react-router-dom';
 type SelectDataGroupingForTableProps = {
   title: string;
   className?: string;
-  dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
-  dataGroupingConfiguration?: DataGroupingConfigurationBasicModel;
+  dataGroupingConfigurations: DataGroupingConfigurationListModel[];
+  dataGroupingConfiguration?: DataGroupingConfigurationListModel;
   setDataGroupingConfiguration: (
-    value?: DataGroupingConfigurationBasicModel
+    value?: DataGroupingConfigurationListModel
   ) => void;
   goToCreateNew: () => void;
 };

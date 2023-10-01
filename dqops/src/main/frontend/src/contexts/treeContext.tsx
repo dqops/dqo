@@ -3,11 +3,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import {
   CheckSearchFilters,
-  ColumnBasicModel,
-  ConnectionBasicModel,
+  ColumnListModel,
+  ConnectionModel,
   SchemaModel,
-  TableBasicModel,
-  CheckBasicModel,
+  TableListModel,
+  CheckListModel,
   RunChecksParameters
 } from '../api';
 import {
@@ -102,7 +102,7 @@ function TreeProvider(props: any) {
 
   const getConnections = async () => {
     try {
-      const res: AxiosResponse<ConnectionBasicModel[]> =
+      const res: AxiosResponse<ConnectionModel[]> =
         await ConnectionApiClient.getAllConnections();
       const mappedConnectionsToTreeData = res.data.map((item) => ({
         id: item.connection_name ?? '',
@@ -115,7 +115,7 @@ function TreeProvider(props: any) {
           item[
             checkTypesToJobTemplateKey[
               checkTypes as keyof typeof checkTypesToJobTemplateKey
-            ] as keyof ConnectionBasicModel
+            ] as keyof ConnectionModel
           ],
         collect_statistics_job_template: item.collect_statistics_job_template,
         data_clean_job_template: item.data_clean_job_template,
@@ -139,7 +139,7 @@ function TreeProvider(props: any) {
     }
   };
 
-  const addConnection = async (connection: ConnectionBasicModel) => {
+  const addConnection = async (connection: ConnectionModel) => {
     const newNode = {
       id: connection.connection_name ?? '',
       parentId: null,
@@ -150,7 +150,7 @@ function TreeProvider(props: any) {
       run_checks_job_template: connection[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
-        ] as keyof ConnectionBasicModel
+        ] as keyof ConnectionModel
       ] as CheckSearchFilters,
       collect_statistics_job_template:
         connection.collect_statistics_job_template,
@@ -270,7 +270,7 @@ function TreeProvider(props: any) {
     node: CustomTreeNode,
     reset = true
   ): Promise<CustomTreeNode[]> => {
-    const res: AxiosResponse<TableBasicModel[]> =
+    const res: AxiosResponse<TableListModel[]> =
       await TableApiClient.getTables(
         node.parentId?.toString() || '',
         node.label
@@ -288,12 +288,12 @@ function TreeProvider(props: any) {
         !!table?.[
           checkTypesToHasConfiguredCheckKey[
             checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
-          ] as keyof TableBasicModel
+          ] as keyof TableListModel
         ],
       run_checks_job_template: table[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
-        ] as keyof TableBasicModel
+        ] as keyof TableListModel
       ] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
@@ -464,7 +464,7 @@ function TreeProvider(props: any) {
   const refreshColumnsNode = async (node: CustomTreeNode, reset = true) => {
     const { connection, schema, table } = parseNodeId(node.id);
 
-    const res: AxiosResponse<ColumnBasicModel[]> =
+    const res: AxiosResponse<ColumnListModel[]> =
       await ColumnApiClient.getColumns(
         connection ?? '',
         schema ?? '',
@@ -481,12 +481,12 @@ function TreeProvider(props: any) {
         !!column?.[
           checkTypesToHasConfiguredCheckKey[
             checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
-          ] as keyof ColumnBasicModel
+          ] as keyof ColumnListModel
         ],
       run_checks_job_template: column[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
-        ] as keyof ColumnBasicModel
+        ] as keyof ColumnListModel
       ] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       data_clean_job_template: column.data_clean_job_template,
@@ -623,7 +623,7 @@ function TreeProvider(props: any) {
   };
 
   const addChecks = (
-    checks: CheckBasicModel[],
+    checks: CheckListModel[],
     node: CustomTreeNode,
     tooltipSuffix: string,
     reset = true

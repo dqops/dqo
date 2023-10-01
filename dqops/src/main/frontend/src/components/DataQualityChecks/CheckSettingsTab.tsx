@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
-import { DataGroupingConfigurationBasicModel, CheckModel } from '../../api';
+import { DataGroupingConfigurationListModel, CheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataGroupingConfigurationsApi } from '../../services/apiClient';
@@ -22,7 +22,7 @@ interface ICheckSettingsTabProps {
 
 const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
   const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationListModel[]>([]);
   const history = useHistory()
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector(

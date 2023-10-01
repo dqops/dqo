@@ -21,7 +21,7 @@ import { SOURCE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   CommentSpec,
-  ConnectionBasicModel,
+  ConnectionModel,
   DataGroupingConfigurationSpec,
   MonitoringScheduleSpec
 } from '../../api';
@@ -32,7 +32,7 @@ export const getConnectionsRequest = () => ({
   type: SOURCE_ACTION.GET_CONNECTIONS
 });
 
-export const getConnectionsSuccess = (data: ConnectionBasicModel[]) => ({
+export const getConnectionsSuccess = (data: ConnectionModel[]) => ({
   type: SOURCE_ACTION.GET_CONNECTIONS_SUCCESS,
   data
 });
@@ -45,7 +45,7 @@ export const getConnectionsFailed = (error: unknown) => ({
 export const getAllConnections = () => async (dispatch: Dispatch) => {
   dispatch(getConnectionsRequest());
   try {
-    const res: AxiosResponse<ConnectionBasicModel[]> =
+    const res: AxiosResponse<ConnectionModel[]> =
       await ConnectionApiClient.getAllConnections();
     dispatch(getConnectionsSuccess(res.data));
   } catch (err) {
@@ -59,7 +59,7 @@ export const getConnectionBasicRequest = (checkType: CheckTypes, activeTab: stri
   activeTab,
 });
 
-export const getConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionBasicModel) => ({
+export const getConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionModel) => ({
   type: SOURCE_ACTION.GET_CONNECTION_BASIC_SUCCESS,
   checkType,
   activeTab,
@@ -100,7 +100,7 @@ export const updateConnectionBasicFailed = (error: unknown) => ({
 });
 
 export const updateConnectionBasic =
-  (checkTypes: CheckTypes, activeTab: string, connectionName: string, data: ConnectionBasicModel) =>
+  (checkTypes: CheckTypes, activeTab: string, connectionName: string, data: ConnectionModel) =>
   async (dispatch: Dispatch) => {
     dispatch(updateConnectionBasicRequest(checkTypes, activeTab));
     try {
@@ -377,7 +377,7 @@ export const updateConnectionDefaultGroupingConfiguration =
 export const setConnectionBasic = (
   checkType: CheckTypes,
   activeTab: string,
-  connectionBasic?: ConnectionBasicModel
+  connectionBasic?: ConnectionModel
 ) => ({
   type: SOURCE_ACTION.SET_UPDATED_CONNECTION_BASIC,
   checkType,

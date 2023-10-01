@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import { CheckSpecModel, ColumnBasicModel, RuleBasicModel, SensorBasicModel } from '../../api';
+import { CheckDefinitionModel, ColumnListModel, RuleListModel, SensorListModel } from '../../api';
 import Button from '../Button';
 import Input from '../Input';
 import Select from '../Select';
@@ -9,7 +9,7 @@ import { RulesApi, SensorsApi } from '../../services/apiClient';
 interface CreateCheckProps {
   open: boolean;
   onClose: () => void;
-  onConfirm: (fullCheckName: string, body?: CheckSpecModel) => Promise<void>
+  onConfirm: (fullCheckName: string, body?: CheckDefinitionModel) => Promise<void>
 }
 
 const CreateCheckDialog = ({
@@ -23,8 +23,8 @@ const CreateCheckDialog = ({
     onClose();
   };
 
-  const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
-  const [allRules, setAllRules] = useState<RuleBasicModel[]>()
+  const [allSensors, setAllSensors] = useState<SensorListModel[]>()
+  const [allRules, setAllRules] = useState<RuleListModel[]>()
   const [selectedSensor, setSelectedSensor] = useState("")
   const [selectedRule, setSelectedRule] = useState("")
   const [nameOfCheck, setNameOfCheck] = useState("")

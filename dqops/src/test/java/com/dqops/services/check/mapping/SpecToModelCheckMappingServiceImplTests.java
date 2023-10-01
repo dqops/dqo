@@ -38,9 +38,9 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObject
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
-import com.dqops.services.check.mapping.basicmodels.CheckBasicModel;
-import com.dqops.services.check.mapping.utils.CheckContainerBasicModelUtility;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
+import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -125,7 +125,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(
             CheckContainerModel uiModel,
-            CheckContainerBasicModel uiBasicModel) {
+            CheckContainerListModel uiBasicModel) {
 
         Iterable<String> checksModel =
                 uiModel.getCategories().stream()
@@ -138,7 +138,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
         Iterable<String> checksBasicModel =
                 uiBasicModel.getChecks().stream()
-                        .map(CheckBasicModel::getCheckName)
+                        .map(CheckListModel::getCheckName)
                         .sorted().collect(Collectors.toList());
 
         return new AbstractMap.SimpleEntry<>(checksModel, checksBasicModel);
@@ -149,10 +149,10 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
-        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
+        CheckContainerListModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(6, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
@@ -164,10 +164,10 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
-        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
+        CheckContainerListModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 

@@ -4,7 +4,7 @@ import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { TableBasicModel } from '../../api';
+import { TableListModel } from '../../api';
 import { TableApiClient } from '../../services/apiClient';
 import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
@@ -27,7 +27,7 @@ const SchemaPage = () => {
     tab: string;
     checkTypes: CheckTypes;
   } = useParams();
-  const [tables, setTables] = useState<TableBasicModel[]>([]);
+  const [tables, setTables] = useState<TableListModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();

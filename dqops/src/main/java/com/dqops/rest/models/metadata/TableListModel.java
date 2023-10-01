@@ -33,13 +33,13 @@ import lombok.Data;
 import org.apache.parquet.Strings;
 
 /**
- * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
+ * Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableBasicModel", description = "Basic table model with a subset of parameters, excluding all nested objects.")
-public class TableBasicModel {
+@ApiModel(value = "TableListModel", description = "Table list model with a subset of parameters, excluding all nested objects.")
+public class TableListModel {
     /**
      * Connection name.
      */
@@ -203,12 +203,12 @@ public class TableBasicModel {
      * @param isOperator     The current user has the operator permission.
      * @return Basic table model.
      */
-    public static TableBasicModel fromTableSpecificationForListEntry(
+    public static TableListModel fromTableSpecificationForListEntry(
             String connectionName,
             TableSpec tableSpec,
             boolean isEditor,
             boolean isOperator) {
-        return new TableBasicModel() {{
+        return new TableListModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
@@ -268,12 +268,12 @@ public class TableBasicModel {
      * @param isOperator     The current user has the operator permission.
      * @return Basic table model.
      */
-    public static TableBasicModel fromTableSpecification(
+    public static TableListModel fromTableSpecification(
             String connectionName,
             TableSpec tableSpec,
             boolean isEditor,
             boolean isOperator) {
-        return new TableBasicModel() {{
+        return new TableListModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());

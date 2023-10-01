@@ -31,10 +31,10 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckContainerBasicModel", description = "Simplistic model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
-public class CheckContainerBasicModel {
+@ApiModel(value = "CheckContainerListModel", description = "Simplistic model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
+public class CheckContainerListModel {
     @JsonPropertyDescription("Simplistic list of all data quality checks.")
-    private List<CheckBasicModel> checks = new ArrayList<>();
+    private List<CheckListModel> checks = new ArrayList<>();
 
     /**
      * Boolean flag that decides if the current user can edit the check.
@@ -54,6 +54,6 @@ public class CheckContainerBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
     private boolean canDeleteData;
 
-    public CheckContainerBasicModel() {
+    public CheckContainerListModel() {
     }
 }

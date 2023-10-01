@@ -15,6 +15,7 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.dqops.connectors.ProviderType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,24 +24,20 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Rule basic model that is returned by the REST API.
+ * Provider sensor list model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "RuleBasicModel", description = "Rule basic model")
-public class RuleBasicModel {
+@ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor list model")
+public class ProviderSensorListModel {
+    @JsonPropertyDescription("Provider type.")
+    private ProviderType providerType;
 
-    @JsonPropertyDescription("Rule name")
-    private String ruleName;
-
-    @JsonPropertyDescription("Full rule name")
-    private String fullRuleName;
-
-    @JsonPropertyDescription("This rule has is a custom rule or was customized by the user.")
+    @JsonPropertyDescription("This connection specific template is a custom sensor template or was customized by the user.")
     private boolean custom;
 
-    @JsonPropertyDescription("This rule is provided with DQO as a built-in rule.")
+    @JsonPropertyDescription("This connection specific template is provided with DQO as a built-in sensor.")
     private boolean builtIn;
 
     /**
@@ -49,6 +46,19 @@ public class RuleBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
 
-    public RuleBasicModel() {
+    public ProviderSensorListModel() {
+    }
+
+    /**
+     * Sets the custom or builtIn flag to true to match the source of the sensor definition.
+     * @param sensorDefinitionSource Source sensor definition.
+     */
+    public void setSensorSource(SensorDefinitionSource sensorDefinitionSource) {
+        if (sensorDefinitionSource == SensorDefinitionSource.CUSTOM) {
+            this.setCustom(true);
+        }
+        else if (sensorDefinitionSource == SensorDefinitionSource.BUILT_IN) {
+            this.setBuiltIn(true);
+        }
     }
 }

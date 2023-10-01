@@ -26,7 +26,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.rest.models.metadata.DataGroupingConfigurationBasicModel;
+import com.dqops.rest.models.metadata.DataGroupingConfigurationListModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import com.dqops.sampledata.SampleCsvFileNames;
@@ -85,14 +85,14 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
     void getDataStreams_whenSampleTableRequested_thenReturnsListOfDataStreams() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<DataGroupingConfigurationBasicModel>> responseEntity = this.sut.getTableGroupingConfigurations(
+        ResponseEntity<Flux<DataGroupingConfigurationListModel>> responseEntity = this.sut.getTableGroupingConfigurations(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        List<DataGroupingConfigurationBasicModel> result = responseEntity.getBody().collectList().block();
+        List<DataGroupingConfigurationListModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(

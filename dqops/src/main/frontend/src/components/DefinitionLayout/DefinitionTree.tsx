@@ -17,12 +17,12 @@ import {
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
-  CheckSpecFolderBasicModel,
-  RuleBasicFolderModel,
-  RuleBasicModel,
-  SensorBasicFolderModel,
-  SensorBasicModel,
-  CheckSpecBasicModel
+  CheckDefinitionFolderModel,
+  RuleFolderModel,
+  RuleListModel,
+  SensorFolderModel,
+  SensorListModel,
+  CheckDefinitionListModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import clsx from 'clsx';
@@ -89,7 +89,7 @@ export const DefinitionTree = () => {
     dispatch(opendataQualityChecksFolderTree(fullPath));
   };
 
-  const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
+  const openSensorFirstLevelTab = (sensor: SensorListModel) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ''),
@@ -102,7 +102,7 @@ export const DefinitionTree = () => {
     );
   };
 
-  const openRuleFirstLevelTab = (rule: RuleBasicModel) => {
+  const openRuleFirstLevelTab = (rule: RuleListModel) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.RULE_DETAIL(rule.rule_name ?? ''),
@@ -115,7 +115,7 @@ export const DefinitionTree = () => {
     );
   };
 
-  const openCheckFirstLevelTab = (check: CheckSpecBasicModel) => {
+  const openCheckFirstLevelTab = (check: CheckDefinitionListModel) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
@@ -228,7 +228,7 @@ export const DefinitionTree = () => {
   }, []);
 
   const renderSensorFolderTree = (
-    folder?: SensorBasicFolderModel,
+    folder?: SensorFolderModel,
     path?: string[],
     previousFolder?: string
   ) => {
@@ -312,7 +312,7 @@ export const DefinitionTree = () => {
   };
 
   const renderRuleFolderTree = (
-    folder?: RuleBasicFolderModel,
+    folder?: RuleFolderModel,
     path?: string[],
     previousFolder?: string
   ) => {
@@ -396,7 +396,7 @@ export const DefinitionTree = () => {
   };
 
   const renderChecksFolderTree = (
-    folder?: CheckSpecFolderBasicModel,
+    folder?: CheckDefinitionFolderModel,
     path?: string[],
     previousFolder?: string
   ) => {

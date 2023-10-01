@@ -29,16 +29,14 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.LinkedHashSet;
-
 /**
- * Basic column model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
+ * Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "ColumnBasicModel", description = "Basic column model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.")
-public class ColumnBasicModel {
+@ApiModel(value = "ColumnListModel", description = "Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.")
+public class ColumnListModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
@@ -131,13 +129,13 @@ public class ColumnBasicModel {
      * @param isOperator        The current user has the operator permission.
      * @return Basic column model.
      */
-    public static ColumnBasicModel fromColumnSpecificationForListEntry(String connectionName,
-                                                                       PhysicalTableName physicalTableName,
-                                                                       String columnName,
-                                                                       ColumnSpec columnSpec,
-                                                                       boolean isEditor,
-                                                                       boolean isOperator) {
-        return new ColumnBasicModel() {{
+    public static ColumnListModel fromColumnSpecificationForListEntry(String connectionName,
+                                                                      PhysicalTableName physicalTableName,
+                                                                      String columnName,
+                                                                      ColumnSpec columnSpec,
+                                                                      boolean isEditor,
+                                                                      boolean isOperator) {
+        return new ColumnListModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);
@@ -219,13 +217,13 @@ public class ColumnBasicModel {
      * @param isOperator        The current user has the operator permission.
      * @return Basic column model.
      */
-    public static ColumnBasicModel fromColumnSpecification(String connectionName,
-                                                           PhysicalTableName physicalTableName,
-                                                           String columnName,
-                                                           ColumnSpec columnSpec,
-                                                           boolean isEditor,
-                                                           boolean isOperator) {
-        return new ColumnBasicModel() {{
+    public static ColumnListModel fromColumnSpecification(String connectionName,
+                                                          PhysicalTableName physicalTableName,
+                                                          String columnName,
+                                                          ColumnSpec columnSpec,
+                                                          boolean isEditor,
+                                                          boolean isOperator) {
+        return new ColumnListModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);

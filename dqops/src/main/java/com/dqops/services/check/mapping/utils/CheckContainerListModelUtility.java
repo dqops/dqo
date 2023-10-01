@@ -16,24 +16,24 @@
 
 package com.dqops.services.check.mapping.utils;
 
-import com.dqops.services.check.mapping.basicmodels.CheckBasicModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Utility class for operations related to {@link CheckContainerBasicModel}.
+ * Utility class for operations related to {@link CheckContainerListModel}.
  */
-public class CheckContainerBasicModelUtility {
+public class CheckContainerListModelUtility {
     /**
      * Get all categories to which the checks from the model belong.
-     * @param model {@link CheckContainerBasicModel} from which to extract.
+     * @param model {@link CheckContainerListModel} from which to extract.
      * @return Distinct list of category names in the checks of the model, sorted ascending.
      */
-    public static List<String> getCheckCategoryNames(CheckContainerBasicModel model) {
+    public static List<String> getCheckCategoryNames(CheckContainerListModel model) {
         return model.getChecks().stream()
-                .map(CheckBasicModel::getCheckCategory)
+                .map(CheckListModel::getCheckCategory)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());

@@ -20,7 +20,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.rest.models.metadata.ColumnBasicModel;
+import com.dqops.rest.models.metadata.ColumnListModel;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -60,7 +60,7 @@ public class ColumnsControllerITTests extends BaseTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve();
 
-        List<ColumnBasicModel> result = response.bodyToFlux(ColumnBasicModel.class)
+        List<ColumnListModel> result = response.bodyToFlux(ColumnListModel.class)
                 .collectList()
                 .block();
 
@@ -85,7 +85,7 @@ public class ColumnsControllerITTests extends BaseTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve();
 
-        ColumnBasicModel result = response.bodyToMono(ColumnBasicModel.class)
+        ColumnListModel result = response.bodyToMono(ColumnListModel.class)
                 .block();
 
         response.onStatus(status -> true, r -> {

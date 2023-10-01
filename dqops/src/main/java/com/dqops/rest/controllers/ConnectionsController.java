@@ -31,8 +31,8 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dictionaries.CommonColumnModel;
-import com.dqops.rest.models.metadata.ConnectionBasicModel;
 import com.dqops.rest.models.metadata.ConnectionModel;
+import com.dqops.rest.models.metadata.ConnectionSpecificationModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -84,25 +84,25 @@ public class ConnectionsController {
      * @return List of connections.
      */
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class,
+    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ConnectionBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = ConnectionModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<ConnectionBasicModel>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
+    public ResponseEntity<Flux<ConnectionModel>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        Stream<ConnectionBasicModel> modelStream = connections.toList().stream()
-                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
+        Stream<ConnectionModel> modelStream = connections.toList().stream()
+                .map(cw -> ConnectionModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
                 .sorted(Comparator.comparing(model -> model.getConnectionName()));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
@@ -114,18 +114,18 @@ public class ConnectionsController {
      * @return Full connection model with the connection name and the connection specification.
      */
     @GetMapping(value = "/{connectionName}", produces = "application/json")
-    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionModel.class,
+    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionSpecificationModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection returned", response = ConnectionModel.class),
+            @ApiResponse(code = 200, message = "Connection returned", response = ConnectionSpecificationModel.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ConnectionModel>> getConnection(
+    public ResponseEntity<Mono<ConnectionSpecificationModel>> getConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -138,14 +138,14 @@ public class ConnectionsController {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionModel connectionModel = new ConnectionModel() {{
+        ConnectionSpecificationModel connectionSpecificationModel = new ConnectionSpecificationModel() {{
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setSpec(connectionSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
-        return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(connectionSpecificationModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -154,18 +154,18 @@ public class ConnectionsController {
      * @return Connection basic model with the connection name and the connection parameters.
      */
     @GetMapping(value = "/{connectionName}/basic", produces = "application/json")
-    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionBasicModel.class,
+    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection basic information returned", response = ConnectionBasicModel.class),
+            @ApiResponse(code = 200, message = "Connection basic information returned", response = ConnectionModel.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ConnectionBasicModel>> getConnectionBasic(
+    public ResponseEntity<Mono<ConnectionModel>> getConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -180,10 +180,10 @@ public class ConnectionsController {
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        ConnectionBasicModel connectionBasicModel = ConnectionBasicModel.fromConnectionSpecification(
+        ConnectionModel connectionModel = ConnectionModel.fromConnectionSpecification(
                 connectionName, connectionSpec, isEditor, isOperator);
 
-        return new ResponseEntity<>(Mono.just(connectionBasicModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -473,7 +473,7 @@ public class ConnectionsController {
     /**
      * Creates (adds) a new connection given teh basic information.
      * @param connectionName Connection name.
-     * @param connectionBasicModel Basic connection model.
+     * @param connectionModel Basic connection model.
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
@@ -493,8 +493,8 @@ public class ConnectionsController {
     public ResponseEntity<Mono<?>> createConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
-        if (Strings.isNullOrEmpty(connectionName) || connectionBasicModel == null || connectionBasicModel.getProviderType() == null) {
+            @ApiParam("Basic connection model") @RequestBody ConnectionModel connectionModel) {
+        if (Strings.isNullOrEmpty(connectionName) || connectionModel == null || connectionModel.getProviderType() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -509,7 +509,7 @@ public class ConnectionsController {
 
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionBasicModel.copyToConnectionSpecification(connectionSpec);
+        connectionModel.copyToConnectionSpecification(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
             connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
@@ -561,7 +561,7 @@ public class ConnectionsController {
     /**
      * Updates the basic details of an existing connection.
      * @param connectionName       Connection name.
-     * @param connectionBasicModel Connection basic model.
+     * @param connectionModel Connection basic model.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
@@ -580,8 +580,8 @@ public class ConnectionsController {
     public ResponseEntity<Mono<?>> updateConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Connection basic details") @RequestBody ConnectionBasicModel connectionBasicModel) {
-        if (!Objects.equals(connectionName, connectionBasicModel.getConnectionName())) {
+            @ApiParam("Connection basic details") @RequestBody ConnectionModel connectionModel) {
+        if (!Objects.equals(connectionName, connectionModel.getConnectionName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
         }
 
@@ -595,7 +595,7 @@ public class ConnectionsController {
         }
 
         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        connectionBasicModel.copyToConnectionSpecification(existingConnectionSpec);
+        connectionModel.copyToConnectionSpecification(existingConnectionSpec);
         // TODO: some validation should be executed before flushing
 
         userHomeContext.flush();

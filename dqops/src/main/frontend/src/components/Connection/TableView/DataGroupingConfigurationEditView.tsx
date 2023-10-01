@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import ActionGroup from './TableActionGroup';
 import DataGroupingConfigurationView from '../DataGroupingConfigurationView';
 import {
-  DataGroupingConfigurationBasicModel,
+  DataGroupingConfigurationListModel,
   DataGroupingDimensionSpecSourceEnum,
   DataGroupingConfigurationSpec
 } from '../../../api';
@@ -14,7 +14,7 @@ import { values } from 'lodash';
 
 interface IDataGroupingConfigurationEditViewProps {
   onBack: () => void;
-  selectedGroupingConfiguration?: DataGroupingConfigurationBasicModel;
+  selectedGroupingConfiguration?: DataGroupingConfigurationListModel;
   connection: string;
   schema: string;
   table: string;

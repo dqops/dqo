@@ -21,7 +21,7 @@ import Input from '../../components/Input';
 import CheckEditor from './CheckEditor';
 import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
-import { CheckSpecModel } from '../../api';
+import { CheckDefinitionModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
 
@@ -35,9 +35,9 @@ export const SensorDetail = () => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
-  const activeCheckDetail: CheckSpecModel = tabs.find(
+  const activeCheckDetail: CheckDefinitionModel = tabs.find(
     (x) => x.url === activeTab
-  )?.state?.checkDetail as CheckSpecModel;
+  )?.state?.checkDetail as CheckDefinitionModel;
 
   const [checkName, setcheckName] = useState('');
   const [selectedSensor, setSelectedSensor] = useState(

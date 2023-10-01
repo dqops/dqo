@@ -23,7 +23,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.DataGroupingConfigurationBasicModel;
+import com.dqops.rest.models.metadata.DataGroupingConfigurationListModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
@@ -69,18 +69,18 @@ public class DataGroupingConfigurationsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings", produces = "application/json")
     @ApiOperation(value = "getTableGroupingConfigurations", notes = "Returns the list of data grouping configurations on a table",
-            response = DataGroupingConfigurationBasicModel[].class,
+            response = DataGroupingConfigurationListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DataGroupingConfigurationBasicModel>> getTableGroupingConfigurations(
+    public ResponseEntity<Flux<DataGroupingConfigurationListModel>> getTableGroupingConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -97,12 +97,12 @@ public class DataGroupingConfigurationsController {
         }
 
         boolean canEditConfiguration = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        List<DataGroupingConfigurationBasicModel> result = new LinkedList<>();
+        List<DataGroupingConfigurationListModel> result = new LinkedList<>();
         List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
         for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
             String groupingConfigurationName = dataGroupingNamesList.get(i);
             boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultGroupingName(), groupingConfigurationName);
-            result.add(new DataGroupingConfigurationBasicModel(){{
+            result.add(new DataGroupingConfigurationListModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
                 setTableName(tableName);

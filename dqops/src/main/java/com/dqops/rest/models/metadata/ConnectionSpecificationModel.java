@@ -15,6 +15,7 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,36 +24,30 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * CheckSpec basic model that is returned by the REST API.
+ * Connection model returned by the rest api.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckSpecBasicModel", description = "Check spec basic model")
-public class CheckSpecBasicModel {
+@ApiModel(value = "ConnectionSpecificationModel", description = "Full connection model")
+public class ConnectionSpecificationModel {
     /**
-     * Check name at the leaf level of the check tree.
+     * Connection name.
      */
-    @JsonPropertyDescription("Check name")
-    private String checkName;
+    @JsonPropertyDescription("Connection name.")
+    private String connectionName;
 
     /**
-     * Full check name.
+     * Connection hash that identifies the connection using a unique hash code.
      */
-    @JsonPropertyDescription("Full check name")
-    private String fullCheckName;
+    @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
+    private Long connectionHash;
 
     /**
-     * True when the check is a custom check or is customized by the user.
+     * Full connection specification, including all nested objects (but not a list of tables).
      */
-    @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
-    private boolean custom;
-
-    /**
-     * True when this check is provided with DQO as a built-in check.
-     */
-    @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
-    private boolean builtIn;
+    @JsonPropertyDescription("Full connection specification, including all nested objects (but not a list of tables).")
+    private ConnectionSpec spec;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -60,6 +55,6 @@ public class CheckSpecBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
 
-    public CheckSpecBasicModel() {
+    public ConnectionSpecificationModel() {
     }
 }

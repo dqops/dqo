@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { RuleBasicModel, SensorBasicModel } from '../../api';
+import { RuleListModel, SensorListModel } from '../../api';
 import { RulesApi, SensorsApi } from '../../services/apiClient';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
@@ -31,8 +31,8 @@ const CheckEditor = ({
   onChangeHelpText,
   canEditDefinitions
 }: CreateCheckProps) => {
-  const [allSensors, setAllSensors] = useState<SensorBasicModel[]>();
-  const [allRules, setAllRules] = useState<RuleBasicModel[]>();
+  const [allSensors, setAllSensors] = useState<SensorListModel[]>();
+  const [allRules, setAllRules] = useState<RuleListModel[]>();
   const dispatch = useActionDispatch();
 
   const getAllSensors = async () => {

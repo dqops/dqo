@@ -20,12 +20,12 @@ import { ChecksApi, RulesApi, SensorsApi } from '../../services/apiClient';
 import { DEFINITION_ACTION } from '../types/definition.types';
 import { AxiosResponse } from 'axios';
 import {
-  CheckSpecFolderBasicModel,
-  CheckSpecModel,
+  CheckDefinitionFolderModel,
+  CheckDefinitionModel,
   DataGroupingConfigurationSpec,
-  RuleBasicFolderModel,
+  RuleFolderModel,
   RuleModel,
-  SensorBasicFolderModel,
+  SensorFolderModel,
   SensorModel
 } from '../../api';
 import { JOB_ACTION } from '../types';
@@ -34,7 +34,7 @@ export const getSensorFolderTreeRequest = () => ({
   type: DEFINITION_ACTION.GET_SENSOR_FOLDER_TREE
 });
 
-export const getSensorFolderTreeSuccess = (data: SensorBasicFolderModel) => ({
+export const getSensorFolderTreeSuccess = (data: SensorFolderModel) => ({
   type: DEFINITION_ACTION.GET_SENSOR_FOLDER_TREE_SUCCESS,
   data
 });
@@ -47,7 +47,7 @@ export const getSensorFolderTreeFailed = (error: unknown) => ({
 export const getSensorFolderTree = () => async (dispatch: Dispatch) => {
   dispatch(getSensorFolderTreeRequest());
   try {
-    const res: AxiosResponse<SensorBasicFolderModel> =
+    const res: AxiosResponse<SensorFolderModel> =
       await SensorsApi.getSensorFolderTree();
     dispatch(getSensorFolderTreeSuccess(res.data));
   } catch (err) {
@@ -55,7 +55,7 @@ export const getSensorFolderTree = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const updateSensorFolderTree = (data: SensorBasicFolderModel) => ({
+export const updateSensorFolderTree = (data: SensorFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_SENSOR_FOLDER_TREE,
   data
 });
@@ -265,7 +265,7 @@ export const getdataQualityChecksFolderTreeRequest = () => ({
 });
 
 export const getdataQualityChecksFolderTreeSuccess = (
-  data: CheckSpecFolderBasicModel
+  data: CheckDefinitionFolderModel
 ) => ({
   type: DEFINITION_ACTION.GET_DATA_QUALITY_CHECKS_FOLDER_TREE_SUCCESS,
   data
@@ -280,7 +280,7 @@ export const getdataQualityChecksFolderTree =
   () => async (dispatch: Dispatch) => {
     dispatch(getdataQualityChecksFolderTreeRequest());
     try {
-      const res: AxiosResponse<CheckSpecFolderBasicModel> =
+      const res: AxiosResponse<CheckDefinitionFolderModel> =
         await ChecksApi.getCheckFolderTree();
       dispatch(getdataQualityChecksFolderTreeSuccess(res.data));
     } catch (err) {
@@ -298,7 +298,7 @@ export const opendataQualityChecksFolderTree = (fullPath: string) => ({
 });
 
 export const updatedataQualityChecksFolderTree = (
-  data: CheckSpecFolderBasicModel
+  data: CheckDefinitionFolderModel
 ) => ({
   type: DEFINITION_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE,
   data
@@ -335,7 +335,7 @@ export const getCheckRequest = () => ({
   type: DEFINITION_ACTION.GET_CHECK_DETAIL
 });
 
-export const getCheckSuccess = (data: CheckSpecModel) => ({
+export const getCheckSuccess = (data: CheckDefinitionModel) => ({
   type: DEFINITION_ACTION.GET_CHECK_DETAIL_SUCCESS,
   data
 });
@@ -343,7 +343,7 @@ export const getCheckSuccess = (data: CheckSpecModel) => ({
 export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
   dispatch(getCheckRequest());
   try {
-    const res: AxiosResponse<CheckSpecModel> = await ChecksApi.getCheck(
+    const res: AxiosResponse<CheckDefinitionModel> = await ChecksApi.getCheck(
       checkName
     );
     dispatch(getCheckSuccess(res.data));
@@ -353,7 +353,7 @@ export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
 };
 
 export const createCheck =
-  (fullCheckName: string, body: CheckSpecModel) =>
+  (fullCheckName: string, body: CheckDefinitionModel) =>
   async (dispatch: Dispatch) => {
     dispatch(createCheckRequest());
     try {
@@ -369,7 +369,7 @@ export const createCheck =
   };
 
 export const updateCheck =
-  (fullCheckName: string, body: CheckSpecModel) =>
+  (fullCheckName: string, body: CheckDefinitionModel) =>
   async (dispatch: Dispatch) => {
     dispatch(updateCheckRequest());
     try {
@@ -398,7 +398,7 @@ export const getRuleFolderTreeRequest = () => ({
   type: DEFINITION_ACTION.GET_RULE_FOLDER_TREE
 });
 
-export const getRuleFolderTreeSuccess = (data: RuleBasicFolderModel) => ({
+export const getRuleFolderTreeSuccess = (data: RuleFolderModel) => ({
   type: DEFINITION_ACTION.GET_RULE_FOLDER_TREE_SUCCESS,
   data
 });
@@ -411,7 +411,7 @@ export const getRuleFolderTreeFailed = (error: unknown) => ({
 export const getRuleFolderTree = () => async (dispatch: Dispatch) => {
   dispatch(getRuleFolderTreeRequest());
   try {
-    const res: AxiosResponse<RuleBasicFolderModel> =
+    const res: AxiosResponse<RuleFolderModel> =
       await RulesApi.getRuleFolderTree();
     dispatch(getRuleFolderTreeSuccess(res.data));
   } catch (err) {
@@ -443,7 +443,7 @@ export const refreshChecksFolderTree = (refreshChecksTreeIndicator: boolean) => 
   refreshChecksTreeIndicator
 });
 
-export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
+export const updateRuleFolderTree = (data: RuleFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE,
   data
 });

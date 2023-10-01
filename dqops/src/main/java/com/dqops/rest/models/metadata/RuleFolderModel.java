@@ -25,25 +25,31 @@ import lombok.Data;
 import java.util.*;
 
 /**
- * Rule basic folder model that is returned by the REST API.
+ * Rule folder model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "RuleBasicFolderModel", description = "Rule basic folder model")
-public class RuleBasicFolderModel {
-    @JsonPropertyDescription("A map of folder-level children rules.")
+@ApiModel(value = "RuleFolderModel", description = "Rule folder model with a list of rules defined in this folder and nested folders that contain additional rules.")
+public class RuleFolderModel {
+    /**
+     * A dictionary of nested folders with rules, the keys are the folder names.
+     */
+    @JsonPropertyDescription("A dictionary of nested folders with rules, the keys are the folder names.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, RuleBasicFolderModel> folders = new LinkedHashMap<>();
-
-    @JsonPropertyDescription("Rule basic model list")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<RuleBasicModel> rules = new ArrayList<>();
+    private LinkedHashMap<String, RuleFolderModel> folders = new LinkedHashMap<>();
 
     /**
-     * Creates a new instance of RuleBasicFolderModel with empty lists.
+     * List of rules defined in this folder.
      */
-    public RuleBasicFolderModel() {
+    @JsonPropertyDescription("List of rules defined in this folder.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<RuleListModel> rules = new ArrayList<>();
+
+    /**
+     * Creates a new instance of RuleFolderModel with empty lists.
+     */
+    public RuleFolderModel() {
     }
 
     /**
@@ -56,28 +62,28 @@ public class RuleBasicFolderModel {
     public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {
         String[] ruleFolders = fullRuleName.split("/");
         String ruleName = ruleFolders[ruleFolders.length - 1];
-        RuleBasicFolderModel folderModel = this;
+        RuleFolderModel folderModel = this;
 
         for (int i = 0; i < ruleFolders.length - 1; i++) {
             String name = ruleFolders[i];
-            RuleBasicFolderModel nextRuleFolder = folderModel.folders.get(name);
+            RuleFolderModel nextRuleFolder = folderModel.folders.get(name);
             if (nextRuleFolder == null) {
-                nextRuleFolder = new RuleBasicFolderModel();
+                nextRuleFolder = new RuleFolderModel();
                 folderModel.folders.put(name, nextRuleFolder);
             }
             folderModel = nextRuleFolder;
         }
 
-        Optional<RuleBasicModel> existingRule = folderModel.rules.stream().filter(m -> Objects.equals(m.getRuleName(), ruleName)).findFirst();
+        Optional<RuleListModel> existingRule = folderModel.rules.stream().filter(m -> Objects.equals(m.getRuleName(), ruleName)).findFirst();
 
         if (!existingRule.isPresent()) {
-            RuleBasicModel ruleBasicModel = new RuleBasicModel();
-            ruleBasicModel.setRuleName(ruleName);
-            ruleBasicModel.setFullRuleName(fullRuleName);
-            ruleBasicModel.setCustom(isCustom);
-            ruleBasicModel.setBuiltIn(isBuiltIn);
-            ruleBasicModel.setCanEdit(canEdit);
-            folderModel.rules.add(ruleBasicModel);
+            RuleListModel ruleListModel = new RuleListModel();
+            ruleListModel.setRuleName(ruleName);
+            ruleListModel.setFullRuleName(fullRuleName);
+            ruleListModel.setCustom(isCustom);
+            ruleListModel.setBuiltIn(isBuiltIn);
+            ruleListModel.setCanEdit(canEdit);
+            folderModel.rules.add(ruleListModel);
         } else {
             if (isCustom){
                 existingRule.get().setCustom(true);
@@ -92,9 +98,9 @@ public class RuleBasicFolderModel {
      * Collects all rules from all tree levels.
      * @return A list of all rules.
      */
-    public List<RuleBasicModel> getAllRules()  {
-        List<RuleBasicModel> allRules = new ArrayList<>(this.getRules());
-        for (RuleBasicFolderModel folder : this.folders.values()) {
+    public List<RuleListModel> getAllRules()  {
+        List<RuleListModel> allRules = new ArrayList<>(this.getRules());
+        for (RuleFolderModel folder : this.folders.values()) {
             allRules.addAll(folder.getAllRules());
         }
 

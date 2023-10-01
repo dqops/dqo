@@ -80,20 +80,20 @@ public class SensorsController {
      */
     @GetMapping(value = "/sensors", produces = "application/json")
     @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
-            response = SensorBasicModel[].class,
+            response = SensorListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = SensorListModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors(
+    public ResponseEntity<Flux<SensorListModel>> getAllSensors(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel(principal);
-        List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
+        SensorFolderModel sensorFolderModel = createSensorTreeModel(principal);
+        List<SensorListModel> allSensors = sensorFolderModel.getAllSensors();
         allSensors.sort(Comparator.comparing(model -> model.getFullSensorName()));
 
         return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);
@@ -392,19 +392,19 @@ public class SensorsController {
      */
     @GetMapping(value = "/definitions/sensors", produces = "application/json")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
-            response = SensorBasicFolderModel.class,
+            response = SensorFolderModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
+            @ApiResponse(code = 200, message = "OK", response = SensorFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderTree(
+    public ResponseEntity<Mono<SensorFolderModel>> getSensorFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        SensorBasicFolderModel sensorFolderModel = createSensorTreeModel(principal);
+        SensorFolderModel sensorFolderModel = createSensorTreeModel(principal);
 
         return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
     }
@@ -414,7 +414,7 @@ public class SensorsController {
      * @return A tree with all defined sensors.
      */
     @NotNull
-    private SensorBasicFolderModel createSensorTreeModel(DqoUserPrincipal principal) {
+    private SensorFolderModel createSensorTreeModel(DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -422,41 +422,41 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
 
-        SensorBasicFolderModel sensorFolderModel = new SensorBasicFolderModel();
+        SensorFolderModel sensorFolderModel = new SensorFolderModel();
         boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
         dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
             SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper =
                     dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
 
-            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
+            List<ProviderSensorListModel> providerSensorListModelList = new ArrayList<>();
             for (ProviderType providerType : ProviderType.values()) {
                 ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper =
                         dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
                 if (providerSensorDefinitionWrapper != null) {
-                    ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
-                    providerSensorBasicModel.setProviderType(providerType);
-                    providerSensorBasicModel.setSensorSource(SensorDefinitionSource.BUILT_IN);
-                    providerSensorBasicModel.setCanEdit(canEditDefinitions);
-                    providerSensorBasicModelList.add(providerSensorBasicModel);
+                    ProviderSensorListModel providerSensorListModel = new ProviderSensorListModel();
+                    providerSensorListModel.setProviderType(providerType);
+                    providerSensorListModel.setSensorSource(SensorDefinitionSource.BUILT_IN);
+                    providerSensorListModel.setCanEdit(canEditDefinitions);
+                    providerSensorListModelList.add(providerSensorListModel);
                 }
             }
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.BUILT_IN, canEditDefinitions);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.BUILT_IN, canEditDefinitions);
         });
 
         userHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
+            List<ProviderSensorListModel> providerSensorListModelList = new ArrayList<>();
             sensorDefinitionWrapper.getProviderSensors().forEach(providerSensorDefinitionWrapper -> {
-                ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
+                ProviderSensorListModel providerSensorListModel = new ProviderSensorListModel();
                 if (providerSensorDefinitionWrapper != null) {
-                    providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
-                    providerSensorBasicModel.setSensorSource(SensorDefinitionSource.CUSTOM);
-                    providerSensorBasicModel.setCanEdit(canEditDefinitions);
+                    providerSensorListModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
+                    providerSensorListModel.setSensorSource(SensorDefinitionSource.CUSTOM);
+                    providerSensorListModel.setCanEdit(canEditDefinitions);
                 }
-                providerSensorBasicModelList.add(providerSensorBasicModel);
+                providerSensorListModelList.add(providerSensorListModel);
             });
 
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions);
         });
 
         return sensorFolderModel;

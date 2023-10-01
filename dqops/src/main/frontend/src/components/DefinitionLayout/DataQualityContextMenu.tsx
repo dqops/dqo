@@ -7,9 +7,9 @@ import {
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
 import {
-  CheckSpecBasicModel,
-  CheckSpecModel,
-  SensorBasicFolderModel
+  CheckDefinitionListModel,
+  CheckDefinitionModel,
+  SensorFolderModel
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -27,10 +27,10 @@ import { IRootState } from '../../redux/reducers';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface RuleContextMenuProps {
-  folder?: SensorBasicFolderModel;
+  folder?: SensorFolderModel;
   path?: string[];
   singleCheck?: boolean;
-  check?: CheckSpecBasicModel;
+  check?: CheckDefinitionListModel;
 }
 
 const DataQualityContextMenu = ({
@@ -59,7 +59,7 @@ const DataQualityContextMenu = ({
     setOpen(false);
   };
 
-  const createCheck = async (fullCheckName: string, body?: CheckSpecModel) => {
+  const createCheck = async (fullCheckName: string, body?: CheckDefinitionModel) => {
     await ChecksApi.createCheck(fullCheckName, body);
   };
 

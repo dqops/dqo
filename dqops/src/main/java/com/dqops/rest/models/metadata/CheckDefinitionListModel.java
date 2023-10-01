@@ -23,27 +23,36 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Basic model for data grouping configuration on a table, returned by the rest api.
+ * Check list model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DataGroupingConfigurationBasicModel", description = "Basic data grouping configuration model not containing nested objects, but only the name of the grouping configuration.")
-public class DataGroupingConfigurationBasicModel {
-    @JsonPropertyDescription("Connection name.")
-    private String connectionName;
+@ApiModel(value = "CheckDefinitionListModel", description = "Data quality check definition list model.")
+public class CheckDefinitionListModel {
+    /**
+     * Check name at the leaf level of the check tree.
+     */
+    @JsonPropertyDescription("Check name")
+    private String checkName;
 
-    @JsonPropertyDescription("Schema name.")
-    private String schemaName;
+    /**
+     * Full check name.
+     */
+    @JsonPropertyDescription("Full check name")
+    private String fullCheckName;
 
-    @JsonPropertyDescription("Table name.")
-    private String tableName;
+    /**
+     * True when the check is a custom check or is customized by the user.
+     */
+    @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
+    private boolean custom;
 
-    @JsonPropertyDescription("Data grouping configuration name.")
-    private String dataGroupingConfigurationName;
-
-    @JsonPropertyDescription("True when this is the default data grouping configuration for the table.")
-    private boolean defaultDataGroupingConfiguration;
+    /**
+     * True when this check is provided with DQO as a built-in check.
+     */
+    @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
+    private boolean builtIn;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -51,6 +60,6 @@ public class DataGroupingConfigurationBasicModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
 
-    public DataGroupingConfigurationBasicModel() {
+    public CheckDefinitionListModel() {
     }
 }

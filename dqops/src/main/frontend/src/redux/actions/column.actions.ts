@@ -18,7 +18,7 @@ import { Dispatch } from 'redux';
 
 import { ColumnApiClient } from '../../services/apiClient';
 import { SOURCE_ACTION } from '../types';
-import { ColumnBasicModel, CommentSpec, CheckContainerModel } from '../../api';
+import { ColumnListModel, CommentSpec, CheckContainerModel } from '../../api';
 import { CheckTypes } from "../../shared/routes";
 
 export const getColumnBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
@@ -27,7 +27,7 @@ export const getColumnBasicRequest = (checkType: CheckTypes, activeTab: string) 
   activeTab,
 });
 
-export const getColumnBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ColumnBasicModel) => ({
+export const getColumnBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ColumnListModel) => ({
   type: SOURCE_ACTION.GET_COLUMN_BASIC_SUCCESS,
   checkType,
   activeTab,
@@ -91,7 +91,7 @@ export const updateColumnBasic =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: ColumnBasicModel
+    data: ColumnListModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnBasicRequest(checkType, activeTab));
@@ -767,7 +767,7 @@ export const updateColumnMonthlyPartitionedChecks =
     }
   };
 
-export const setUpdatedColumnBasic = (checkType: CheckTypes, activeTab: string, column?: ColumnBasicModel) => ({
+export const setUpdatedColumnBasic = (checkType: CheckTypes, activeTab: string, column?: ColumnListModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_COLUMN_BASIC,
   checkType,
   activeTab,

@@ -25,7 +25,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.FieldModel;
@@ -66,10 +66,10 @@ public interface SpecToModelCheckMappingService {
      * @param canManageChecks The user is an operator and can run any operation.
      * @return Simplistic model of data quality checks' container.
      */
-    CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                              ExecutionContext executionContext,
-                                              ProviderType providerType,
-                                              boolean canManageChecks);
+    CheckContainerListModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                             ExecutionContext executionContext,
+                                             ProviderType providerType,
+                                             boolean canManageChecks);
 
     /**
      * Creates a list of fields to edit all values in the sensor parameters specification.

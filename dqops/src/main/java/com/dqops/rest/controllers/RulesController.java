@@ -25,8 +25,8 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.RuleBasicFolderModel;
-import com.dqops.rest.models.metadata.RuleBasicModel;
+import com.dqops.rest.models.metadata.RuleFolderModel;
+import com.dqops.rest.models.metadata.RuleListModel;
 import com.dqops.rest.models.metadata.RuleModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
@@ -73,20 +73,20 @@ public class RulesController {
      */
     @GetMapping(value = "/rules", produces = "application/json")
     @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
-            response = RuleBasicModel[].class,
+            response = RuleListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = RuleListModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<RuleBasicModel>> getAllRules(
+    public ResponseEntity<Flux<RuleListModel>> getAllRules(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel(principal);
-        List<RuleBasicModel> allRules = ruleBasicFolderModel.getAllRules();
+        RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
+        List<RuleListModel> allRules = ruleFolderModel.getAllRules();
         allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
 
         return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
@@ -298,21 +298,21 @@ public class RulesController {
      */
     @GetMapping(value = "/definitions/rules", produces = "application/json")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
-            response = RuleBasicFolderModel.class,
+            response = RuleFolderModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicFolderModel.class),
+            @ApiResponse(code = 200, message = "OK", response = RuleFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<RuleBasicFolderModel>> getRuleFolderTree(
+    public ResponseEntity<Mono<RuleFolderModel>> getRuleFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel(principal);
+        RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
 
-        return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(ruleFolderModel), HttpStatus.OK);
     }
 
     /**
@@ -320,8 +320,8 @@ public class RulesController {
      * @return A tree with all rules.
      */
     @NotNull
-    private RuleBasicFolderModel createRuleTreeModel(DqoUserPrincipal principal) {
-        RuleBasicFolderModel ruleBasicFolderModel = new RuleBasicFolderModel();
+    private RuleFolderModel createRuleTreeModel(DqoUserPrincipal principal) {
+        RuleFolderModel ruleFolderModel = new RuleFolderModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -338,13 +338,13 @@ public class RulesController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
             String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
-            ruleBasicFolderModel.addRule(ruleNameUserHome, true, builtInRuleNames.contains(ruleNameUserHome), canEditRule);
+            ruleFolderModel.addRule(ruleNameUserHome, true, builtInRuleNames.contains(ruleNameUserHome), canEditRule);
         }
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            ruleBasicFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true, canEditRule);
+            ruleFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true, canEditRule);
         }
-        return ruleBasicFolderModel;
+        return ruleFolderModel;
     }
 }

@@ -27,25 +27,31 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
- * CheckSpec basic folder model that is returned by the REST API.
+ * Check list folder model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckSpecFolderBasicModel", description = "Check spec folder basic model")
-public class CheckSpecFolderBasicModel {
-    @JsonPropertyDescription("A map of folder-level children checks.")
+@ApiModel(value = "CheckDefinitionFolderModel", description = "Check folder list model with a list of data quality checks in this folder or a list of nested folders.")
+public class CheckDefinitionFolderModel {
+    /**
+     * A dictionary of nested folders with data quality checks. The keys are the folder names.
+     */
+    @JsonPropertyDescription("A dictionary of nested folders with data quality checks. The keys are the folder names.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, CheckSpecFolderBasicModel> folders = new LinkedHashMap<>();
+    private LinkedHashMap<String, CheckDefinitionFolderModel> folders = new LinkedHashMap<>();
 
-    @JsonPropertyDescription("Check basic model list of checks defined at this level.")
+    /**
+     * List of data quality checks defined in this folder.
+     */
+    @JsonPropertyDescription("List of data quality checks defined in this folder.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<CheckSpecBasicModel> checks;
+    private List<CheckDefinitionListModel> checks;
 
     /**
      * Creates a new instance of RuleBasicFolderModel with empty lists.
      */
-    public CheckSpecFolderBasicModel() {
+    public CheckDefinitionFolderModel() {
     }
 
     /**
@@ -59,34 +65,34 @@ public class CheckSpecFolderBasicModel {
 
         String[] checkFolders = fullCheckName.split("/");
         String checkName = checkFolders[checkFolders.length - 1];
-        CheckSpecFolderBasicModel folderModel = this;
+        CheckDefinitionFolderModel folderModel = this;
 
         for (int i = 0; i < checkFolders.length - 1; i++) {
             String name = checkFolders[i];
-            CheckSpecFolderBasicModel nextCheckFolder = folderModel.folders.get(name);
+            CheckDefinitionFolderModel nextCheckFolder = folderModel.folders.get(name);
             if (nextCheckFolder == null) {
-                nextCheckFolder = new CheckSpecFolderBasicModel();
+                nextCheckFolder = new CheckDefinitionFolderModel();
                 folderModel.folders.put(name, nextCheckFolder);
             }
             folderModel = nextCheckFolder;
         }
 
-        Optional<CheckSpecBasicModel> existingCheck =
+        Optional<CheckDefinitionListModel> existingCheck =
                 folderModel.checks != null
                 ? folderModel.checks.stream().filter(m -> Objects.equals(m.getCheckName(), checkName)).findFirst()
                 : Optional.empty();
 
         if (!existingCheck.isPresent()) {
-            CheckSpecBasicModel checkSpecBasicModel = new CheckSpecBasicModel();
-            checkSpecBasicModel.setCheckName(checkName);
-            checkSpecBasicModel.setFullCheckName(fullCheckName);
-            checkSpecBasicModel.setCustom(isCustom);
-            checkSpecBasicModel.setBuiltIn(isBuiltIn);
-            checkSpecBasicModel.setCanEdit(canEdit);
+            CheckDefinitionListModel checkDefinitionListModel = new CheckDefinitionListModel();
+            checkDefinitionListModel.setCheckName(checkName);
+            checkDefinitionListModel.setFullCheckName(fullCheckName);
+            checkDefinitionListModel.setCustom(isCustom);
+            checkDefinitionListModel.setBuiltIn(isBuiltIn);
+            checkDefinitionListModel.setCanEdit(canEdit);
             if (folderModel.checks == null) {
                 folderModel.checks = new ArrayList<>();
             }
-            folderModel.checks.add(checkSpecBasicModel);
+            folderModel.checks.add(checkDefinitionListModel);
         } else {
             if (isCustom){
                 existingCheck.get().setCustom(true);
@@ -102,9 +108,9 @@ public class CheckSpecFolderBasicModel {
      * @return A list of all checks.
      */
     @JsonIgnore
-    public List<CheckSpecBasicModel> getAllChecks() {
-        List<CheckSpecBasicModel> allChecks = this.checks != null ? new ArrayList<>(this.checks) : new ArrayList<>();
-        for (CheckSpecFolderBasicModel folder : this.folders.values()) {
+    public List<CheckDefinitionListModel> getAllChecks() {
+        List<CheckDefinitionListModel> allChecks = this.checks != null ? new ArrayList<>(this.checks) : new ArrayList<>();
+        for (CheckDefinitionFolderModel folder : this.folders.values()) {
             allChecks.addAll(folder.getAllChecks());
         }
 
@@ -117,9 +123,9 @@ public class CheckSpecFolderBasicModel {
      */
     public void addFolderIfMissing(String fullFolderName) {
         String[] folderElements = StringUtils.split(fullFolderName, '/');
-        CheckSpecFolderBasicModel childFolder = this.folders.get(folderElements[0]);
+        CheckDefinitionFolderModel childFolder = this.folders.get(folderElements[0]);
         if (childFolder == null) {
-            childFolder = new CheckSpecFolderBasicModel();
+            childFolder = new CheckDefinitionFolderModel();
             if (folderElements.length == 1) {
                 // top most folder with checks
                 childFolder.checks = new ArrayList<>();

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ConnectionBasicModel,
+  ConnectionModel,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum,
   ConnectionSpecProviderTypeEnum
@@ -38,7 +38,7 @@ const ConnectionDetail = () => {
   const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { connectionBasic, isUpdatedConnectionBasic, isUpdating }: {
-    connectionBasic?: ConnectionBasicModel
+    connectionBasic?: ConnectionModel
     isUpdatedConnectionBasic?: boolean;
     isUpdating?: boolean;
   } = useSelector(getFirstLevelState(checkTypes));

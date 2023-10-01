@@ -21,21 +21,33 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Basic table model that is returned when a data source is introspected to retrieve the list of tables available in a data source.
+ * Remote table list model that is returned when a data source is introspected to retrieve the list of tables available in a data source.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RemoteTableBasicModel", description = "Table remote basic model")
-public class RemoteTableBasicModel {
+@ApiModel(value = "RemoteTableListModel", description = "Table remote list model")
+public class RemoteTableListModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    /**
+     * Schema name.
+     */
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
+    /**
+     * Table name.
+     */
     @JsonPropertyDescription("Table name.")
     private String tableName;
 
-    @JsonPropertyDescription("Has the table been imported.")
+    /**
+     * A flag that tells if the table been already imported.
+     */
+    @JsonPropertyDescription("A flag that tells if the table been already imported.")
     private boolean alreadyImported;
 }

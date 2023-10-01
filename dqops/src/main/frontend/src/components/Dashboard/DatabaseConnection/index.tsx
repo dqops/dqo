@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from '../../Button';
 import Input from '../../Input';
 import {
-  ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum,
+  ConnectionModel,
+  ConnectionModelProviderTypeEnum,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum
 } from '../../../api';
@@ -33,8 +33,8 @@ import SvgIcon from '../../SvgIcon';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
-  database: ConnectionBasicModel;
-  onChange: (db: ConnectionBasicModel) => void;
+  database: ConnectionModel;
+  onChange: (db: ConnectionModel) => void;
   nameOfdatabase?: string;
 }
 
@@ -128,21 +128,21 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionBasicModelProviderTypeEnum) => {
+  const getTitle = (provider?: ConnectionModelProviderTypeEnum) => {
     switch (provider) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+      case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return 'Snowflake Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return 'Amazon Redshift Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return 'Microsoft SQL Server Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.mysql:
         return 'MySQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
       default:
         return 'Database Connection Settings';
@@ -150,43 +150,43 @@ const DatabaseConnection = ({
   };
 
   const components = {
-    [ConnectionBasicModelProviderTypeEnum.bigquery]: (
+    [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
         bigquery={database.bigquery}
         onChange={(bigquery) => onChange({ ...database, bigquery })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.snowflake]: (
+    [ConnectionModelProviderTypeEnum.snowflake]: (
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.postgresql]: (
+    [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.redshift]: (
+    [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
+    [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.mysql]: (
+    [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.oracle]: (
+    [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
           oracle={database.oracle}
           onChange={(oracle) => onChange({ ...database, oracle })}
@@ -196,19 +196,19 @@ const DatabaseConnection = ({
 
   const dbImage = useMemo(() => {
     switch (database.provider_type) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+      case ConnectionModelProviderTypeEnum.bigquery:
         return BigqueryLogo;
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return SnowflakeLogo;
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return RedshiftLogo;
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.mysql:
         return MySQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
       default:
         return '';

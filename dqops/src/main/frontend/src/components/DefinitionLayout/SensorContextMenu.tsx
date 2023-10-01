@@ -6,7 +6,7 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { SensorBasicFolderModel, SensorBasicModel } from '../../api';
+import { SensorFolderModel, SensorListModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab, refreshSensorsFolderTree } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
@@ -17,10 +17,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 
 interface SensorContextMenuProps {
-  folder?: SensorBasicFolderModel;
+  folder?: SensorFolderModel;
   path?: string[];
   singleSensor?: boolean;
-  sensor?: SensorBasicModel;
+  sensor?: SensorListModel;
 }
 
 const SensorContextMenu = ({

@@ -23,7 +23,7 @@ import {
   DataGroupingConfigurationSpec,
   MonitoringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
-  TableBasicModel,
+  TableListModel,
   CheckContainerModel, TablePartitioningModel
 } from '../../api';
 import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
@@ -34,7 +34,7 @@ export const getTableBasicRequest = (checkType: CheckTypes, activeTab: string) =
   checkType, activeTab,
 });
 
-export const getTableBasicSuccess = (checkType: CheckTypes, activeTab: string, data: TableBasicModel) => ({
+export const getTableBasicSuccess = (checkType: CheckTypes, activeTab: string, data: TableListModel) => ({
   type: SOURCE_ACTION.GET_TABLE_BASIC_SUCCESS,
   checkType, activeTab,
   data
@@ -83,7 +83,7 @@ export const updateTableBasic =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: TableBasicModel
+    data: TableListModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableBasicRequest(checkType, activeTab));
@@ -817,7 +817,7 @@ export const updateTableMonthlyPartitionedChecks =
     }
   };
 
-export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, table?: TableBasicModel) => ({
+export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, table?: TableListModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_TABLE_BASIC,
   data: table,
   checkType,

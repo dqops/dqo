@@ -15,26 +15,26 @@
 ///
 
 import {
-  CheckSpecFolderBasicModel,
-  CheckSpecModel,
-  RuleBasicFolderModel,
-  SensorBasicFolderModel
+  CheckDefinitionFolderModel,
+  CheckDefinitionModel,
+  RuleFolderModel,
+  SensorFolderModel
 } from '../../api';
 import { DEFINITION_ACTION } from '../types/definition.types';
 import { Action, INestTab } from './source.reducer';
 
 export interface IDefinitionState {
-  sensorFolderTree?: SensorBasicFolderModel;
+  sensorFolderTree?: SensorFolderModel;
   loading?: boolean;
   error?: any;
   sensorState: Record<string, boolean>;
   tabs: INestTab[];
   activeTab?: string;
-  ruleFolderTree?: RuleBasicFolderModel;
+  ruleFolderTree?: RuleFolderModel;
   ruleState: Record<string, boolean>;
-  checksFolderTree?: CheckSpecFolderBasicModel;
+  checksFolderTree?: CheckDefinitionFolderModel;
   dataQualityChecksState: Record<string, boolean>;
-  checkDetail?: CheckSpecModel;
+  checkDetail?: CheckDefinitionModel;
 
   definitionFirstLevelFolder?: Array<{ category: string; isOpen: boolean }>;
   refreshChecksTreeIndicator?: boolean;

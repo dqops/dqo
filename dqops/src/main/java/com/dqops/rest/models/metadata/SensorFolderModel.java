@@ -25,25 +25,31 @@ import lombok.Data;
 import java.util.*;
 
 /**
- * Sensor basic folder model that is returned by the REST API.
+ * Sensor folder model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorBasicFolderModel", description = "Sensor basic folder model")
-public class SensorBasicFolderModel {
-    @JsonPropertyDescription("A map of folder-level children sensors.")
+@ApiModel(value = "SensorFolderModel", description = "Sensor folder model that contains sensors defined in this folder or a list of nested folders with sensors.")
+public class SensorFolderModel {
+    /**
+     * A dictionary of nested folders with sensors, the keys are the folder names.
+     */
+    @JsonPropertyDescription("A dictionary of nested folders with sensors, the keys are the folder names.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, SensorBasicFolderModel> folders;
-
-    @JsonPropertyDescription("Whether the sensor is a User Home sensor.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<SensorBasicModel> sensors;
+    private Map<String, SensorFolderModel> folders;
 
     /**
-     * Creates a new instance of SensorBasicFolderModel with empty lists.
+     * List of sensors defined in this folder.
      */
-    public SensorBasicFolderModel() {
+    @JsonPropertyDescription("List of sensors defined in this folder.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<SensorListModel> sensors;
+
+    /**
+     * Creates a new instance of SensorFolderModel with empty lists.
+     */
+    public SensorFolderModel() {
         sensors = new ArrayList<>();
         folders = new HashMap<>();
     }
@@ -51,25 +57,25 @@ public class SensorBasicFolderModel {
     /**
      * Adds a sensor to this folder based on the given path.
      * @param fullSensorName the path of the sensor
-     * @param providerSensorBasicModelList  List of provider specific sensor definitions.
+     * @param providerSensorListModelList  List of provider specific sensor definitions.
      * @param sensorDefinitionSource Sensor source (custom or built-in).
      * @param canEdit The current user can edit the sensor definition.
      */
     public void addSensor(String fullSensorName,
-                          List<ProviderSensorBasicModel> providerSensorBasicModelList,
+                          List<ProviderSensorListModel> providerSensorListModelList,
                           SensorDefinitionSource sensorDefinitionSource,
                           boolean canEdit) {
 
         String[] sensorFolders = fullSensorName.split("/");
         String sensorName = sensorFolders[sensorFolders.length - 1];
-        SensorBasicFolderModel folderModel = this;
+        SensorFolderModel folderModel = this;
 
 
         for (int i = 0; i < sensorFolders.length - 1; i++) {
             String name = sensorFolders[i];
-            SensorBasicFolderModel nextSensorFolder = folderModel.folders.get(name);
+            SensorFolderModel nextSensorFolder = folderModel.folders.get(name);
             if (nextSensorFolder == null) {
-                nextSensorFolder = new SensorBasicFolderModel();
+                nextSensorFolder = new SensorFolderModel();
                 folderModel.folders.put(name, nextSensorFolder);
             }
             folderModel = nextSensorFolder;
@@ -77,10 +83,10 @@ public class SensorBasicFolderModel {
 
         boolean sensorExists = false;
         if (folderModel.sensors != null) {
-            for (SensorBasicModel sensor : folderModel.sensors) {
+            for (SensorListModel sensor : folderModel.sensors) {
                 if (Objects.equals(sensor.getSensorName(), sensorName)) {
                     sensor.setSensorSource(sensorDefinitionSource);
-                    sensor.addProviderSensorBasicModel(providerSensorBasicModelList);
+                    sensor.addProviderSensorBasicModel(providerSensorListModelList);
                     sensorExists = true;
                     break;
                 }
@@ -90,13 +96,13 @@ public class SensorBasicFolderModel {
         }
 
         if (!sensorExists) {
-            SensorBasicModel sensorBasicModel = new SensorBasicModel();
-            sensorBasicModel.setSensorName(sensorName);
-            sensorBasicModel.setFullSensorName(fullSensorName);
-            sensorBasicModel.setSensorSource(sensorDefinitionSource);
-            sensorBasicModel.setProviderSensorBasicModels(providerSensorBasicModelList);
-            sensorBasicModel.setCanEdit(canEdit);
-            folderModel.sensors.add(sensorBasicModel);
+            SensorListModel sensorListModel = new SensorListModel();
+            sensorListModel.setSensorName(sensorName);
+            sensorListModel.setFullSensorName(fullSensorName);
+            sensorListModel.setSensorSource(sensorDefinitionSource);
+            sensorListModel.setProviderSensors(providerSensorListModelList);
+            sensorListModel.setCanEdit(canEdit);
+            folderModel.sensors.add(sensorListModel);
         }
     }
 
@@ -104,9 +110,9 @@ public class SensorBasicFolderModel {
      * Collects all sensors from all tree levels.
      * @return A list of all sensors.
      */
-    public List<SensorBasicModel> getAllSensors() {
-        List<SensorBasicModel> allSensors = new ArrayList<>(this.getSensors());
-        for (SensorBasicFolderModel folder : this.folders.values()) {
+    public List<SensorListModel> getAllSensors() {
+        List<SensorListModel> allSensors = new ArrayList<>(this.getSensors());
+        for (SensorFolderModel folder : this.folders.values()) {
             allSensors.addAll(folder.getAllSensors());
         }
 

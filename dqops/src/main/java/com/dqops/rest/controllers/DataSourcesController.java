@@ -18,11 +18,11 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.rest.models.metadata.ConnectionBasicModel;
+import com.dqops.rest.models.metadata.ConnectionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.models.remote.ConnectionTestModel;
 import com.dqops.rest.models.remote.SchemaRemoteModel;
-import com.dqops.rest.models.remote.RemoteTableBasicModel;
+import com.dqops.rest.models.remote.RemoteTableListModel;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.remote.connections.SourceConnectionsService;
 import com.dqops.services.remote.schemas.SourceSchemasService;
@@ -73,7 +73,7 @@ public class DataSourcesController {
     /**
      * Returns an enum value of connection status
      * and if the connection status value is FAILURE then it returns error message.
-     * @param connectionBasicModel Connection connectionBasicModel. Required import.
+     * @param connectionModel Connection connectionBasicModel. Required import.
      * @param verifyNameUniqueness True when the connection uniqueness must be checked.
      * @return Enum value of connection status and error message.
      */
@@ -91,16 +91,16 @@ public class DataSourcesController {
     @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<ConnectionTestModel>> testConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam(value = "Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel,
+            @ApiParam(value = "Basic connection model") @RequestBody ConnectionModel connectionModel,
             @ApiParam(name = "verifyNameUniqueness", value = "Verify if the connection name is unique, the default value is true", required = false)
             @RequestParam(required = false) Optional<Boolean> verifyNameUniqueness) {
         ConnectionTestModel connectionTestModel;
 
         ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionBasicModel.copyToConnectionSpecification(connectionSpec);
+        connectionModel.copyToConnectionSpecification(connectionSpec);
         Boolean verifyNameUniquenessValue = verifyNameUniqueness.orElse(true);
 
-        connectionTestModel = sourceConnectionsService.testConnection(connectionBasicModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
+        connectionTestModel = sourceConnectionsService.testConnection(connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
         return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
     }
 
@@ -150,24 +150,24 @@ public class DataSourcesController {
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
-            response = RemoteTableBasicModel[].class,
+            response = RemoteTableListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The list of tables on a remote data source was introspected and is returned",
-                    response = RemoteTableBasicModel[].class),
+                    response = RemoteTableListModel[].class),
             @ApiResponse(code = 400, message = "Error accessing the remote source database", response = SpringErrorPayload.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Flux<RemoteTableBasicModel>> getRemoteDataSourceTables(
+    public ResponseEntity<Flux<RemoteTableListModel>> getRemoteDataSourceTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName) {
-        List<RemoteTableBasicModel> result;
+        List<RemoteTableListModel> result;
         try {
             result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName);
         }

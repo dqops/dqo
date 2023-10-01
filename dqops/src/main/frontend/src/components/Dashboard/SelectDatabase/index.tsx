@@ -2,11 +2,11 @@ import React from 'react';
 
 import { DATABASE_TYPE } from '../../../shared/enums';
 import SvgIcon from '../../SvgIcon';
-import { ConnectionBasicModelProviderTypeEnum } from '../../../api';
+import { ConnectionModelProviderTypeEnum } from '../../../api';
 
 interface ISelectDatabaseProps {
   onSelect: (
-    db: ConnectionBasicModelProviderTypeEnum,
+    db: ConnectionModelProviderTypeEnum,
     nameOfdatabase?: string
   ) => void;
 }
@@ -23,7 +23,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'AlloyDB'
               )
             }
@@ -38,7 +38,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'Amazon Aurora'
               )
             }
@@ -51,7 +51,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
               className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
               onClick={() =>
-                  onSelect(ConnectionBasicModelProviderTypeEnum.redshift)
+                  onSelect(ConnectionModelProviderTypeEnum.redshift)
               }
           >
             <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
@@ -61,7 +61,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
+                ConnectionModelProviderTypeEnum.mysql,
                 'Amazon RDS for mySQL'
               )
             }
@@ -75,7 +75,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'Amazon RDS for PostgreSQL'
               )
             }
@@ -89,7 +89,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                ConnectionModelProviderTypeEnum.sqlserver,
                 'Amazon RDS for SQL Server'
               )
             }
@@ -103,7 +103,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
+                ConnectionModelProviderTypeEnum.mysql,
                 'Azure Database for MySQL'
               )
             }
@@ -120,7 +120,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'Azure Database for PostgreSQL'
               )
             }
@@ -137,7 +137,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                ConnectionModelProviderTypeEnum.sqlserver,
                 'Azure SQL Database'
               )
             }
@@ -155,7 +155,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                ConnectionModelProviderTypeEnum.sqlserver,
                 'Azure SQL Managed Instance'
               )
             }
@@ -173,7 +173,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                ConnectionModelProviderTypeEnum.sqlserver,
                 'Azure Synapse Analytics'
               )
             }
@@ -190,7 +190,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.bigquery)
+              onSelect(ConnectionModelProviderTypeEnum.bigquery)
             }
           >
             <SvgIcon name="big-query" className="mb-3 w-16" />
@@ -200,7 +200,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
+                ConnectionModelProviderTypeEnum.mysql,
                 'Cloud SQL for MySQL'
               )
             }
@@ -217,7 +217,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'Cloud SQL for PostgreSQL'
               )
             }
@@ -235,7 +235,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                ConnectionModelProviderTypeEnum.sqlserver,
                 'Cloud SQL for SQL Server'
               )
             }
@@ -253,7 +253,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'CockroachDB'
               )
             }
@@ -267,7 +267,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.mysql, 'MariaDB')
+              onSelect(ConnectionModelProviderTypeEnum.mysql, 'MariaDB')
             }
           >
             <SvgIcon name="mariadb" className="mb-3 w-20 text-blue-500" />
@@ -276,7 +276,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)
+              onSelect(ConnectionModelProviderTypeEnum.sqlserver)
             }
           >
             <SvgIcon name="sqlserver" className="mb-3 w-20 text-blue-500" />
@@ -287,7 +287,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
 
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+            onClick={() => onSelect(ConnectionModelProviderTypeEnum.mysql)}
           >
             <SvgIcon name="mysql" className="mb-3 w-20 text-blue-500" />
             <div className="text-xl font-semibold text-gray-700">MySQL</div>
@@ -296,7 +296,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
               className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
               onClick={() =>
-                  onSelect(ConnectionBasicModelProviderTypeEnum.oracle)
+                  onSelect(ConnectionModelProviderTypeEnum.oracle)
               }
           >
             <SvgIcon name="oracle" className="mb-3 w-16 text-blue-500" />
@@ -307,7 +307,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
+                ConnectionModelProviderTypeEnum.mysql,
                 'Percona Server for MySQL'
               )
             }
@@ -323,7 +323,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+              onSelect(ConnectionModelProviderTypeEnum.postgresql)
             }
           >
             <SvgIcon name="postgresql" className="mb-3 w-16 text-blue-500" />
@@ -335,7 +335,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.snowflake)
+              onSelect(ConnectionModelProviderTypeEnum.snowflake)
             }
           >
             <SvgIcon name="snowflake" className="mb-3 w-16 text-blue-500" />
@@ -346,7 +346,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
               onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
+                ConnectionModelProviderTypeEnum.postgresql,
                 'YugabyteDB'
               )
             }
