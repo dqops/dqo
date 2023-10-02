@@ -184,7 +184,7 @@ public class DqoUserProfileModel {
      * User can manage other users, add users to a multi-user account, change access rights, reset passwords.
      */
     @JsonPropertyDescription("User can manage other users, add users to a multi-user account, change access rights, reset passwords.")
-    private boolean canManageUses;
+    private boolean canManageUsers;
 
     /**
      * User can manage shared credentials and view (or download) already defined shared credentials.
@@ -214,7 +214,7 @@ public class DqoUserProfileModel {
             setCanEditLabels(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageDefinitions(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-            setCanManageUses(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
+            setCanManageUsers(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanManageAndViewSharedCredentials(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
