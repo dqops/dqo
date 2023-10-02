@@ -193,7 +193,7 @@ public class CheckModel implements Cloneable {
      * List of configuration errors that must be fixed before the data quality check could be executed.
      */
     @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
-    private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;
+    private List<String> configurationRequirementsErrors;
 
     /**
      * List of similar checks in other check types or in other time scales.
@@ -300,7 +300,7 @@ public class CheckModel implements Cloneable {
      * Adds a configuration error to the list of errors.
      * @param configurationRequirementsError Configuration requirement error.
      */
-    public void pushError(CheckConfigurationRequirementsError configurationRequirementsError) {
+    public void pushError(String configurationRequirementsError) {
         if (this.configurationRequirementsErrors == null) {
             this.configurationRequirementsErrors = new ArrayList<>();
         }

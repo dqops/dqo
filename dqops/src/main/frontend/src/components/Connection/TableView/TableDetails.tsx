@@ -141,7 +141,7 @@ const TableDetails = () => {
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Advanced profile results storage</td>
+            <td className="px-4 py-2">Profiling checks result truncation</td>
             <td className="px-4 py-2">
               <Select
                 options={[
@@ -150,7 +150,7 @@ const TableDetails = () => {
                     TableListModelProfilingChecksResultTruncationEnum
                   ).map((x) => ({ label: x, value: x }))
                 ]}
-                value={tableBasic?.advanced_profiling_result_truncation}
+                value={tableBasic?.advanced_profiling_result_truncation ?? TableListModelProfilingChecksResultTruncationEnum.one_per_month}
                 onChange={(selected) =>
                   handleChange({
                     advanced_profiling_result_truncation: selected
