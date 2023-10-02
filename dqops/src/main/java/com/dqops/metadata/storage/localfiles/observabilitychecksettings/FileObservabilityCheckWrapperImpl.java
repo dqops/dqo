@@ -6,6 +6,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -38,7 +39,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
     @Override
     public DefaultObservabilityCheckSettingsSpec getSpec() {
         DefaultObservabilityCheckSettingsSpec spec = super.getSpec();
-        if (spec == null) {
+        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -61,6 +62,8 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
+            } else {
+                this.setSpec(null);
             }
         }
         return spec;
@@ -71,12 +74,12 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
-            return; // nothing to do, the instance was never touched
+            return; // nothing to do, the instance is empty (no file)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {

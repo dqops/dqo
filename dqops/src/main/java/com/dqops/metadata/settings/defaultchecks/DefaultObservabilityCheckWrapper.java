@@ -1,4 +1,4 @@
-package com.dqops.metadata.storage.localfiles.observabilitychecksettings;
+package com.dqops.metadata.settings.defaultchecks;
 
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.basespecs.ElementWrapper;

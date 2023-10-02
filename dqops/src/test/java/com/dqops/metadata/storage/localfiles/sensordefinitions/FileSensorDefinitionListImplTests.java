@@ -46,7 +46,7 @@ public class FileSensorDefinitionListImplTests extends BaseTest {
     void createNewElement_whenCalled_createsElementWithEmptyModel() {
         SensorDefinitionWrapperImpl wrapper = this.sut.createNewElement("test");
         Assertions.assertEquals("test", wrapper.getName());
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, wrapper.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, wrapper.getStatus());
         Assertions.assertNotNull(wrapper.getSpec());
     }
 

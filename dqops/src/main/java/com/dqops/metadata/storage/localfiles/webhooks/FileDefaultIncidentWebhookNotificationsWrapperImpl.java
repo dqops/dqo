@@ -38,7 +38,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
     @Override
     public IncidentWebhookNotificationsSpec getSpec() {
         IncidentWebhookNotificationsSpec spec = super.getSpec();
-        if (spec == null) {
+        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_NOTIFICATION_WEBHOOKS_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -61,6 +61,8 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
                 deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
+            } else {
+                setSpec(null);
             }
         }
         return spec;
@@ -72,12 +74,12 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
-            return; // nothing to do, the instance was never touched
+            return; // nothing to do, the instance is empty (no file)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {

@@ -43,7 +43,7 @@ public class SensorDefinitionListImplTests extends BaseTest {
         int sutSize = this.sut.size();
         SensorDefinitionWrapper wrapper = this.sut.createNewElement("src");
         Assertions.assertEquals("src", wrapper.getName());
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, wrapper.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, wrapper.getStatus());
         Assertions.assertNotNull(wrapper.getSpec());
         Assertions.assertEquals(sutSize, this.sut.size());
     }

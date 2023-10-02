@@ -41,7 +41,7 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
 
     private V spec;
     @JsonIgnore
-    private InstanceStatus status = InstanceStatus.UNCHANGED;
+    private InstanceStatus status = InstanceStatus.NOT_TOUCHED;
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.
@@ -70,13 +70,25 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
         if (this.spec != null && this.spec != spec) {
 			setDirty();
         }
-        if (this.spec == null && this.status == InstanceStatus.UNCHANGED && spec != null) {
-            spec.clearDirty(false);
+
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            this.status = InstanceStatus.UNCHANGED;
+            if (spec != null) {
+                spec.clearDirty(false);
+            }
+        } else {
+            if (this.spec == null && spec != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED)) {
+                this.status = InstanceStatus.ADDED;
+            } else if (this.spec != null) {
+                if (this.status == InstanceStatus.ADDED) {
+                    this.status = spec != null ? InstanceStatus.ADDED : InstanceStatus.UNCHANGED;
+                } else {
+                    this.status = spec != null ? InstanceStatus.MODIFIED : InstanceStatus.TO_BE_DELETED;  // mark as modified or to be deleted
+                }
+            }
         }
-        if (this.spec != null && this.status != InstanceStatus.ADDED) {
-			this.status = InstanceStatus.MODIFIED;  // mark as modified
-        }
-        this.spec = spec; // TODO: consider storing a replaced model in another field, maybe we will need to perform comparison to detect changes
+
+        this.spec = spec;
         if (spec != null) {
 			this.propagateHierarchyIdToField(spec, "spec");
         }
@@ -107,7 +119,7 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
             return;
         }
 
-        if (this.status == InstanceStatus.UNCHANGED) {
+        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED) {
 			this.status = InstanceStatus.MODIFIED;
 			this.setDirty();
         }
@@ -135,6 +147,10 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
      * this method and perform a store specific serialization.
      */
     public void flush() {
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            return;
+        }
+
         if (this.spec != null && this.spec.isDirty() && this.status == InstanceStatus.UNCHANGED) {
 			this.setStatus(InstanceStatus.MODIFIED);
 			this.clearDirty(true);

@@ -27,6 +27,7 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -38,12 +39,10 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.monitoringschedules.MonitoringSchedulesYaml;
-import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.observabilitychecksettings.ObservabilityCheckSettingsYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
 import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
@@ -181,7 +180,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         // we are not checking the existence of other folders (like rules, sensors, sources) because they
-        // may have been empty when teh code was checked into Git and the user just checked the configuration out
+        // may have been empty when the code was checked into Git and the user just checked the configuration out
         // those folders will be created on first use anyway, we need to ensure that the "marker" is there
 
         return true;
@@ -352,9 +351,10 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (userHome != null &&
-                userHome.getDefaultObservabilityChecks() != null &&
-                userHome.getDefaultSchedules() != null &&
+        if (settingsSpec != null &&
+                userHome.getDefaultObservabilityChecks() != null && userHome.getDefaultObservabilityChecks().getSpec() != null &&
+                userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() != null &&
+                userHome.getDashboards() != null && userHome.getDashboards().getSpec() != null &&
                 (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
             return;
         }
@@ -364,16 +364,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             userHome.getSettings().setSpec(settingsSpec);
         }
 
-        if (userHome.getDefaultObservabilityChecks() == null
-                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
+        if (userHome.getDefaultObservabilityChecks() == null || userHome.getDefaultObservabilityChecks().getSpec() == null) {
             DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
             userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityCheckSettingsSpec);
         }
 
-        if (userHome.getDefaultSchedules() == null
-                || userHome.getDefaultSchedules().getSpec() == null) {
+        if (userHome.getDefaultSchedules() == null || userHome.getDefaultSchedules().getSpec() == null) {
             MonitoringSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultMonitoringSchedules();
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
+        }
+
+        if (userHome.getDashboards() == null || userHome.getDashboards().getSpec() == null) {
+            userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
         }
 
         if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

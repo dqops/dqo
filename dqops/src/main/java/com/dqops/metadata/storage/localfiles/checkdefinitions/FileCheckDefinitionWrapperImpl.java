@@ -125,12 +125,12 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
-            return; // nothing to do, the instance was never touched
+            return; // nothing to do, the instance is null (not present)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {

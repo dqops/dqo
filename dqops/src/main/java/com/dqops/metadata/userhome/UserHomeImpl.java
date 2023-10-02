@@ -29,7 +29,7 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
