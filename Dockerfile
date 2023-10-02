@@ -34,7 +34,7 @@ WORKDIR /dqo
 # copy dqo home
 COPY home home
 WORKDIR /dqo/home
-RUN rm -rf venv/
+RUN rm -rf venv/ && rm lib/requirements_dev.txt
 
 # recreate venv
 ENV VIRTUAL_ENV=/dqo/home/venv
@@ -45,7 +45,7 @@ RUN pip3 install -r $VIRTUAL_ENV/home_requirements.txt
 
 RUN python3 -m compileall ./
 
-FROM python:3.11.3-slim-bullseye AS dqo-main
+FROM python:3.11.5-slim-bullseye AS dqo-main
 EXPOSE 8888
 WORKDIR /dqo
 
