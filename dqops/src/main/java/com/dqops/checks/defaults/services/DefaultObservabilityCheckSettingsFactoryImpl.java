@@ -182,7 +182,9 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnSchema.setProfileColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
             setWarning(new EqualsInteger1RuleParametersSpec());
         }});
-        columnSchema.setProfileColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec());
+        columnSchema.setProfileColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
+            setWarning(new ValueChangedParametersSpec());
+        }});
         defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();

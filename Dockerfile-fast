@@ -8,7 +8,7 @@ RUN unzip /workspace/app/temp/dqo-distribution-$(cat /workspace/app/temp/VERSION
 WORKDIR /workspace/app/home
 RUN mkdir -p /workspace/app/home/expanded && (cd expanded; jar -xf ../jars/dqo-dqops-$(cat /workspace/app/temp/VERSION).jar) && rm /workspace/app/home/jars/dqo-dqops-$(cat /workspace/app/temp/VERSION).jar
 
-FROM python:3.11.3-slim-bullseye AS dqo-home
+FROM python:3.11.5-slim-bookworm AS dqo-home
 WORKDIR /dqo
 
 # copy dqo home
@@ -25,7 +25,7 @@ RUN pip3 install -r $VIRTUAL_ENV/home_requirements.txt
 
 RUN python3 -m compileall ./
 
-FROM python:3.11.5-slim-bullseye AS dqo-main
+FROM python:3.11.5-slim-bookworm AS dqo-main
 EXPOSE 8888
 WORKDIR /dqo
 
