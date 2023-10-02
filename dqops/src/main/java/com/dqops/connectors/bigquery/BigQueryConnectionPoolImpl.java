@@ -155,7 +155,7 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             return bigQueryInternalConnection;
         }
         catch (Exception ex) {
-            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionName, ex);
+            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionName + ", error: " + ex.getMessage(), ex);
         }
     }
 }
