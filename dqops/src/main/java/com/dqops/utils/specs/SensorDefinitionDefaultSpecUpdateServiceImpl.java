@@ -91,6 +91,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                     continue;
                 }
             }
+            sensorDefinitionWrapper.getSpec().setDefaultValue(abstractSensorParametersSpec.getDefaultValue());
 
             ProviderSensorDefinitionList providerSensors = sensorDefinitionWrapper.getProviderSensors();
             for (ProviderSensorDefinitionWrapper providerSensorWrapper : providerSensors) {
