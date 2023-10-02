@@ -16,9 +16,10 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
+  isDefault?: boolean
 }
 
-const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
