@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DefinitionLayout from '../../components/DefinitionLayout'
 import Input from '../../components/Input'
 import { DqoCloudUserModelAccountRoleEnum } from '../../api'
@@ -12,10 +12,11 @@ import { closeFirstLevelTab } from '../../redux/actions/definition.actions'
 
 export default function UserDetail() {
   const { create, email, role } = useSelector(getFirstLevelSensorState);
-  const [userEmail, setUserEmail] = useState(email)
+  const [userEmail, setUserEmail] = useState<string>(email)
   const [userRole, setUserRole] = useState<DqoCloudUserModelAccountRoleEnum>(role)
   const [isUpdated, setIsUpdated] = useState(false)
-  console.log(create, email, userEmail, userRole)
+  const [message, setMessage] = useState<string>()
+
   const dispatch = useActionDispatch()
 
   const addDqoCloudUser = async () => {
@@ -34,6 +35,18 @@ export default function UserDetail() {
     ))
   }
 
+  useEffect(() => {
+    if(create === true){
+      if(userEmail && userEmail.length !== 0 && 
+        !userEmail.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g  )){
+        setMessage("Incorrect email format")
+      }else{
+        setMessage(undefined)
+      }
+    }
+  }, [userEmail])
+
+
   return (
     <DefinitionLayout>
       <div className='w-full border-b border-b-gray-400 flex justify-end '>  
@@ -42,7 +55,7 @@ export default function UserDetail() {
          variant='contained'
          className=' w-40 mr-10 my-3'
          onClick={(create===true || email === undefined) ? addDqoCloudUser : editDqoCloudUser}
-         disabled={!(isUpdated && userRole && userEmail)}
+         disabled={!(isUpdated && userRole && userEmail && !message)}
       /></div>
       <div className='w-100 px-5 mt-5'>
         <Input 
@@ -51,6 +64,7 @@ export default function UserDetail() {
           onChange={(e) => {setIsUpdated(true), setUserEmail(e.target.value)}}
           disabled={create !== true || email !== undefined }
         />     
+       {message ? <div className='text-red-500'>{message}</div> : null}
         <Select
           label='Select user role'
           options={Object.values(DqoCloudUserModelAccountRoleEnum).map((x) => ({label: x, value: x}))}
