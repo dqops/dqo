@@ -1,6 +1,6 @@
 package com.dqops.metadata.settings.defaultchecks;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Observability check spec wrapper.
  */
 public class DefaultObservabilityCheckWrapperImpl
-        extends AbstractElementWrapper<String, DefaultObservabilityCheckSettingsSpec>
+        extends AbstractElementWrapper<String, DefaultObservabilityChecksSpec>
         implements DefaultObservabilityCheckWrapper {
 
     @JsonIgnore

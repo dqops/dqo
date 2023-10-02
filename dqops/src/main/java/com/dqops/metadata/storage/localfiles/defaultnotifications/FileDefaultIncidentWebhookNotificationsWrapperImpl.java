@@ -1,21 +1,22 @@
-package com.dqops.metadata.storage.localfiles.monitoringschedules;
+package com.dqops.metadata.storage.localfiles.defaultnotifications;
 
-import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * File based monitoring schedules spec wrapper. Loads and writes the monitoring schedules information to a yaml file in the user's home folder.
+ * Default incident webhook notification spec wrapper.
  */
-public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapperImpl {
+@Slf4j
+public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultIncidentWebhookNotificationsWrapperImpl {
 
     @JsonIgnore
     private final FolderTreeNode settingsFolderNode;
@@ -23,51 +24,53 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
     private final YamlSerializer yamlSerializer;
 
     /**
-     * Creates a monitoring schedules wrapper for a monitoring schedules specification that uses yaml files for storage.
-     * @param settingsFolderNode Folder with yaml files for settings specifications.
+     * Creates a default notification webhooks wrapper for its specification that uses yaml files for storage.
+     * @param settingsFolderNode Folder with yaml files for webhooks specifications.
      * @param yamlSerializer Yaml serializer.
      */
-    public FileMonitoringSchedulesWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
+    public FileDefaultIncidentWebhookNotificationsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
         this.settingsFolderNode = settingsFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
 
     /**
-     * Loads the default schedules specification from a .yaml file.
-     * @return Loaded default schedules specification.
+     * Loads the default notification webhooks specification from a .yaml file.
+     * @return Loaded default notification webhooks specification.
      */
     @Override
-    public MonitoringSchedulesSpec getSpec() {
-        MonitoringSchedulesSpec spec = super.getSpec();
+    public IncidentWebhookNotificationsSpec getSpec() {
+        IncidentWebhookNotificationsSpec spec = super.getSpec();
         if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
-            FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
+            FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                MonitoringSchedulesSpec deserializedSpec = (MonitoringSchedulesSpec) fileContent.getCachedObjectInstance();
+                IncidentWebhookNotificationsSpec deserializedSpec = (IncidentWebhookNotificationsSpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
-                    MonitoringSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, MonitoringSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());
+                    DefaultNotificationsYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultNotificationsYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.SCHEDULES) {
-                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                    if (deserialized.getKind() != SpecificationKind.DEFAULT_NOTIFICATIONS) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_NOTIFICATIONS);
+//                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
                         fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
                     }
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = (IncidentWebhookNotificationsSpec) deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
                 deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
             } else {
-                this.setSpec(null);
+                setSpec(null);
             }
         }
         return spec;
     }
+
 
     /**
      * Flushes changes to the persistent storage.
@@ -87,10 +90,11 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
             this.setStatus(InstanceStatus.MODIFIED);
         }
 
-        MonitoringSchedulesYaml monitoringSchedulesYaml = new MonitoringSchedulesYaml(this.getSpec());
-        String specAsYaml = this.yamlSerializer.serialize(monitoringSchedulesYaml);
+        DefaultNotificationsYaml defaultNotificationsYaml
+                = new DefaultNotificationsYaml(this.getSpec());
+        String specAsYaml = this.yamlSerializer.serialize(defaultNotificationsYaml);
         FileContent newFileContent = new FileContent(specAsYaml);
-        String fileNameWithExt = SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML;
+        String fileNameWithExt = SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML;
 
         switch (this.getStatus()) {
             case ADDED:

@@ -20,7 +20,7 @@ import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;

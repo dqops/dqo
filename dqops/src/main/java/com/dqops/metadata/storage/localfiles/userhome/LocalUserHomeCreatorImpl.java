@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -38,10 +38,10 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
-import com.dqops.metadata.storage.localfiles.monitoringschedules.MonitoringSchedulesYaml;
-import com.dqops.metadata.storage.localfiles.observabilitychecksettings.ObservabilityCheckSettingsYaml;
+import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
+import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsYaml;
+import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -243,7 +243,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
             Path defaultSchedulesPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (!Files.exists(defaultSchedulesPath)) {
-                MonitoringSchedulesYaml schedulesYaml = new MonitoringSchedulesYaml();
+                DefaultSchedulesYaml schedulesYaml = new DefaultSchedulesYaml();
                 schedulesYaml.setSpec(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
                 String defaultSchedules = this.yamlSerializer.serialize(schedulesYaml);
                 Files.writeString(defaultSchedulesPath, defaultSchedules);
@@ -252,15 +252,15 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path defaultDataObservabilityChecksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS)
                     .resolve(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(defaultDataObservabilityChecksPath)) {
-                ObservabilityCheckSettingsYaml observabilityCheckSettingsYaml = new ObservabilityCheckSettingsYaml();
-                observabilityCheckSettingsYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
-                String defaultObservabilityChecks = this.yamlSerializer.serialize(observabilityCheckSettingsYaml);
+                DefaultObservabilityChecksYaml defaultObservabilityChecksYaml = new DefaultObservabilityChecksYaml();
+                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
+                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
                 Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
             }
 
-            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATION_WEBHOOKS_FILE_NAME_YAML);
+            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
             if (!Files.exists(defaultNotificaitonWebhooksPath)) {
-                DefaultIncidentWebhookNotificationsYaml webhooksYaml = new DefaultIncidentWebhookNotificationsYaml();
+                DefaultNotificationsYaml webhooksYaml = new DefaultNotificationsYaml();
                 String defaultWebhooks = this.yamlSerializer.serialize(webhooksYaml);
                 Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
             }
@@ -365,8 +365,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (userHome.getDefaultObservabilityChecks() == null || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
-            userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityCheckSettingsSpec);
+            DefaultObservabilityChecksSpec defaultObservabilityChecksSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
+            userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityChecksSpec);
         }
 
         if (userHome.getDefaultSchedules() == null || userHome.getDefaultSchedules().getSpec() == null) {

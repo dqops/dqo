@@ -31,7 +31,7 @@ import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,

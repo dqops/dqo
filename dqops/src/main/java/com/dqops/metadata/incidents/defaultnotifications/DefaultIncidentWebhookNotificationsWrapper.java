@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.defaults.services;
+package com.dqops.metadata.incidents.defaultnotifications;
 
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
+import com.dqops.metadata.basespecs.ElementWrapper;
+import com.dqops.metadata.basespecs.ObjectName;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 
-/**
- * Factory that creates the default configuration of checks, when DQO is initialized and the initial configuration is loaded into the local settings.
- */
-public interface DefaultObservabilityCheckSettingsFactory {
-    /**
-     * Creates the default check settings to be stored in the local settings. This is an initial, default configuration.
-     *
-     * @return Default observability settings.
-     */
-    DefaultObservabilityChecksSpec createDefaultCheckSettings();
+public interface DefaultIncidentWebhookNotificationsWrapper extends ElementWrapper<IncidentWebhookNotificationsSpec>, ObjectName<String> {
 }

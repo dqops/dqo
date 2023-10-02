@@ -1,21 +1,22 @@
-package com.dqops.metadata.storage.localfiles.observabilitychecksettings;
+package com.dqops.metadata.storage.localfiles.defaultschedules;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
-import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * File based observability check settings spec wrapper. Loads and writes the observability check settings to a yaml file in the user's home folder.
+ * File based monitoring schedules spec wrapper. Loads and writes the monitoring schedules information to a yaml file in the user's home folder.
  */
-public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheckWrapperImpl {
+@Slf4j
+public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapperImpl {
 
     @JsonIgnore
     private final FolderTreeNode settingsFolderNode;
@@ -23,40 +24,41 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
     private final YamlSerializer yamlSerializer;
 
     /**
-     * Creates an observability check wrapper for its specification that uses yaml files for storage.
+     * Creates a monitoring schedules wrapper for a monitoring schedules specification that uses yaml files for storage.
      * @param settingsFolderNode Folder with yaml files for settings specifications.
      * @param yamlSerializer Yaml serializer.
      */
-    public FileObservabilityCheckWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
+    public FileMonitoringSchedulesWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
         this.settingsFolderNode = settingsFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
 
     /**
-     * Loads the default observability check setting specification from a .yaml file.
+     * Loads the default schedules specification from a .yaml file.
      * @return Loaded default schedules specification.
      */
     @Override
-    public DefaultObservabilityCheckSettingsSpec getSpec() {
-        DefaultObservabilityCheckSettingsSpec spec = super.getSpec();
+    public MonitoringSchedulesSpec getSpec() {
+        MonitoringSchedulesSpec spec = super.getSpec();
         if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
-            FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
+            FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                DefaultObservabilityCheckSettingsSpec deserializedSpec = (DefaultObservabilityCheckSettingsSpec) fileContent.getCachedObjectInstance();
+                MonitoringSchedulesSpec deserializedSpec = (MonitoringSchedulesSpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
-                    ObservabilityCheckSettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, ObservabilityCheckSettingsYaml.class, fileNode.getPhysicalAbsolutePath());
+                    DefaultSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.OBSERVABILITY_CHECKS) {
-                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                    if (deserialized.getKind() != SpecificationKind.DEFAULT_SCHEDULES) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_SCHEDULES);
+//                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
                         fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
                     }
                 } else {
-                    deserializedSpec = (DefaultObservabilityCheckSettingsSpec) deserializedSpec.deepClone();
+                    deserializedSpec = deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
                 deserializedSpec.clearDirty(true);
@@ -87,10 +89,10 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
             this.setStatus(InstanceStatus.MODIFIED);
         }
 
-        ObservabilityCheckSettingsYaml observabilityCheckSettingsYaml = new ObservabilityCheckSettingsYaml(this.getSpec());
-        String specAsYaml = this.yamlSerializer.serialize(observabilityCheckSettingsYaml);
+        DefaultSchedulesYaml defaultSchedulesYaml = new DefaultSchedulesYaml(this.getSpec());
+        String specAsYaml = this.yamlSerializer.serialize(defaultSchedulesYaml);
         FileContent newFileContent = new FileContent(specAsYaml);
-        String fileNameWithExt = SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML;
+        String fileNameWithExt = SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML;
 
         switch (this.getStatus()) {
             case ADDED:

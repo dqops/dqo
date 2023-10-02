@@ -32,7 +32,7 @@ import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecks
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
@@ -68,8 +68,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      * @return Default observability settings.
      */
     @Override
-    public DefaultObservabilityCheckSettingsSpec createDefaultCheckSettings() {
-        DefaultObservabilityCheckSettingsSpec defaultSettings = new DefaultObservabilityCheckSettingsSpec();
+    public DefaultObservabilityChecksSpec createDefaultCheckSettings() {
+        DefaultObservabilityChecksSpec defaultSettings = new DefaultObservabilityChecksSpec();
         defaultSettings.setProfiling(createDefaultProfilingChecks());
         defaultSettings.setMonitoringDaily(createDefaultDailyMonitoringChecks());
         defaultSettings.setMonitoringMonthly(createDefaultMonthlyMonitoringChecks());

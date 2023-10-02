@@ -1,22 +1,23 @@
-package com.dqops.metadata.storage.localfiles.observabilitychecksettings;
+package com.dqops.metadata.storage.localfiles.defaultschedules;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.core.filesystem.ApiVersion;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
- * DQO observability check setting definition YAML schema for a data quality observability checks setting specification.
+ * The configuration of default schedules for running data quality checks.
+ * The default schedules are stored in the settings/defaultschedules.dqoschedules.yaml file in the DQO user's home folder.
  */
-public class ObservabilityCheckSettingsYaml {
+public class DefaultSchedulesYaml {
 
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.OBSERVABILITY_CHECKS;
-    private DefaultObservabilityCheckSettingsSpec spec = new DefaultObservabilityCheckSettingsSpec();
+    private SpecificationKind kind = SpecificationKind.DEFAULT_SCHEDULES;
+    private MonitoringSchedulesSpec spec = new MonitoringSchedulesSpec();
 
-    public ObservabilityCheckSettingsYaml() {
+    public DefaultSchedulesYaml() {
     }
 
-    public ObservabilityCheckSettingsYaml(DefaultObservabilityCheckSettingsSpec spec) {
+    public DefaultSchedulesYaml(MonitoringSchedulesSpec spec) {
         this.spec = spec;
     }
 
@@ -56,7 +57,7 @@ public class ObservabilityCheckSettingsYaml {
      * Returns a data source specification.
      * @return Data source specification.
      */
-    public DefaultObservabilityCheckSettingsSpec getSpec() {
+    public MonitoringSchedulesSpec getSpec() {
         return spec;
     }
 
@@ -64,7 +65,7 @@ public class ObservabilityCheckSettingsYaml {
      * Sets a data source specification.
      * @param spec Data source specification.
      */
-    public void setSpec(DefaultObservabilityCheckSettingsSpec spec) {
+    public void setSpec(MonitoringSchedulesSpec spec) {
         this.spec = spec;
     }
 

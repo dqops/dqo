@@ -16,7 +16,7 @@
 
 package com.dqops.checks.defaults.services;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -43,7 +43,7 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
             return;
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
         for (TableSpec targetTableSpec :  tableSpecList) {
             defaultDataObservabilityChecks.applyOnTable(targetTableSpec, providerDialectSettings);
 

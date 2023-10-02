@@ -23,7 +23,7 @@ import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
@@ -57,7 +57,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
@@ -690,11 +690,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
     /**
      * Accepts a configuration of default observability checks to enable on new tables and columns.
      *
-     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
      * @param parameter                             Visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, P parameter);
+    R accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, P parameter);
 
     /**
      * Accepts a configuration of default observability checks to enable on new tables and columns.
