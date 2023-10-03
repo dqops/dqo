@@ -8,6 +8,7 @@ import RuleFields from '../../components/Sensors/RuleFields';
 import RuleParameters from '../../components/Sensors/RuleParameters';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import Input from '../../components/Input';
 
 type SensorDefinitionProps = {
   sensor: SensorModel;
@@ -40,6 +41,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
     );
   };
 
+console.log(sensor)
   return (
     <div className="p-4">
       <div className="mb-8">
@@ -72,6 +74,21 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                 }
               })
             }
+            disabled={userProfile.can_manage_definitions !== true}
+          />
+        </div>
+        <div className="flex gap-4 text-sm items-center mb-4">
+          <p className="w-60">Default value when the table is empty:</p>
+          <Input
+            onChange={(e) =>
+              onChange({
+                sensor_definition_spec: {
+                  ...(sensor?.sensor_definition_spec || {}),
+                  default_value: Number(e.target.value)
+                }
+              })
+            }
+            value={sensor?.sensor_definition_spec?.default_value}
             disabled={userProfile.can_manage_definitions !== true}
           />
         </div>
