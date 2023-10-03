@@ -262,7 +262,7 @@ const TableColumns = ({
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schemaName + '.' + tableName &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
@@ -271,7 +271,7 @@ const TableColumns = ({
   const filteredColumns = filteredJobs?.flatMap(
     (x) =>
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.columnNames
+        ?.statistics_collector_search_filters?.columnNames
   );
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>

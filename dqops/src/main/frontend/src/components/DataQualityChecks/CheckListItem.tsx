@@ -191,7 +191,7 @@ const CheckListItem = ({
     }
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: check?.run_checks_job_template,
+      check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})

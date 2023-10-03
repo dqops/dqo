@@ -110,8 +110,8 @@ const ContextMenu = ({
 
   const setSetectedRun = (selected: TimeWindowFilterParameters) => {
     const obj: RunChecksParameters = {
-      timeWindowFilter: selected,
-      checkSearchFilters: node.run_checks_job_template
+      time_window_filter: selected,
+      check_search_filters: node.run_checks_job_template
     };
     return obj;
   };

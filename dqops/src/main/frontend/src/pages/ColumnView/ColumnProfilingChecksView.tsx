@@ -155,6 +155,8 @@ const ColumnProfilingChecksView = ({
     try {
       setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
+        false,
+        undefined,
         statistics?.collect_column_statistics_job_template
       );
     } finally {

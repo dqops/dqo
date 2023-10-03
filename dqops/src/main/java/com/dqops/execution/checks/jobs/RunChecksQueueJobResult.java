@@ -19,6 +19,8 @@ import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +32,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksQueueJobResult", description = "Object returned from the operation that queues a \"run checks\" job. The result contains the job id that was started and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the \"run checks\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
 public class RunChecksQueueJobResult {
     /**
@@ -44,7 +47,7 @@ public class RunChecksQueueJobResult {
      */
     @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private RunChecksJobResult result;
+    private RunChecksResult result;
 
     /**
      * Job status.
@@ -62,7 +65,7 @@ public class RunChecksQueueJobResult {
      * @param result Job result.
      * @param status Job status.
      */
-    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksJobResult result, DqoJobStatus status) {
+    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksResult result, DqoJobStatus status) {
         this.jobId = jobId;
         this.result = result;
         this.status = status;

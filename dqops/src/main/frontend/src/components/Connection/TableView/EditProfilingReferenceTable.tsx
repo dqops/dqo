@@ -455,7 +455,7 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  const onRunChecksRowCount = async () => {
+  const onRunChecks = async () => {
     try {
       setLoading(true);
       const res = await JobApiClient.runChecks(
@@ -463,7 +463,7 @@ export const EditProfilingReferenceTable = ({
         undefined,
         categoryCheck?.run_checks_job_template
           ? {
-              checkSearchFilters: categoryCheck?.run_checks_job_template
+              check_search_filters: categoryCheck?.run_checks_job_template
             }
           : undefined
       );
@@ -583,7 +583,7 @@ export const EditProfilingReferenceTable = ({
           selectedReference={selectedReference}
           isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
-          onRunChecksRowCount={onRunChecksRowCount}
+          onRunChecksRowCount={onRunChecks}
           disabled={disabled || loading}
           isCreating={isCreating}
           goToRefTable={goToRefTable}

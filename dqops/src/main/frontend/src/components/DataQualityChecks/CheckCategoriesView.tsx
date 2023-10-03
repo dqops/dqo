@@ -62,7 +62,7 @@ const CheckCategoriesView = ({
   const onRunChecks = async () => {
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: category?.run_checks_job_template,
+      check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})

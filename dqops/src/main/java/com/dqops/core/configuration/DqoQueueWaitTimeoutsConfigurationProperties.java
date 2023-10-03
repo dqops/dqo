@@ -36,6 +36,11 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
     private long runChecks = 120L;
 
     /**
+     * Wait timeout for the "collect statistics" job.
+     */
+    private long collectStatistics = 120L;
+
+    /**
      * The default wait timeout for any kind of job.
      */
     private long defaultWaitTimeout = 120L;
@@ -65,6 +70,10 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
             case RUN_CHECKS_ON_TABLE:
             case RUN_SCHEDULED_CHECKS_CRON:
                 return this.runChecks;
+
+            case COLLECT_STATISTICS:
+            case COLLECT_STATISTICS_ON_TABLE:
+                return this.collectStatistics;
 
             default:
                 return this.defaultWaitTimeout;

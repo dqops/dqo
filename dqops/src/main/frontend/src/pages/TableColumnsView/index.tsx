@@ -78,8 +78,9 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     try {
       await JobApiClient.collectStatisticsOnTable(
-         collectStiatisticsObject
-         )
+        false,
+        undefined,
+        collectStiatisticsObject);
       }catch (err){
       console.error(err)
     }
@@ -95,7 +96,7 @@ const TableColumnsView = () => {
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schemaName + '.' + tableName &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
@@ -189,9 +190,9 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName
               )
                 ? 'Collecting...'
@@ -204,9 +205,9 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName
               )
                 ? 'secondary'
@@ -216,9 +217,9 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.collectorName === 
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName
               ) ? (
                 <SvgIcon name="sync" className="w-4 h-4" />

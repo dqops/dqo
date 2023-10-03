@@ -80,10 +80,13 @@ const TableActionGroup = ({
   const collectStatistics = async () => {
       try {
         setLoadingJob(true);
-        await JobApiClient.collectStatisticsOnTable({
-          ...statistics?.collect_column_statistics_job_template,
-           columnNames: selectedColumns
-      });
+        await JobApiClient.collectStatisticsOnTable(
+          false,
+          undefined,
+          {
+            ...statistics?.collect_column_statistics_job_template,
+             columnNames: selectedColumns
+          });
       } finally {
         setLoadingJob(false);
       }
@@ -93,9 +96,9 @@ const TableActionGroup = ({
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.connectionName === 
+         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connectionName === 
         connection &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||

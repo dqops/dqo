@@ -151,6 +151,7 @@ dqo:
     get-job-changes-since-wait-seconds: 20
     wait-timeouts:
       run-checks: 120
+      collect-statistics: 120
       default-wait-timeout: 120
   scheduler:
     #start: true

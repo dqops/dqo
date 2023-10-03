@@ -70,7 +70,7 @@ const TableHeader = ({
   const onRunChecks = async () => {
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: checksUI?.run_checks_job_template,
+      check_search_filters: checksUI?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})

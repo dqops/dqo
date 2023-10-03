@@ -99,9 +99,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </td>
             </tr>
 
-            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+            {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
-                job?.parameters?.runChecksParameters?.checkSearchFilters
+                job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>
@@ -153,10 +153,10 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </>
             )}
             {job?.parameters?.collectStatisticsParameters
-              ?.statisticsCollectorSearchFilters &&
+              ?.statistics_collector_search_filters &&
               Object.entries(
                 job?.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters
+                  ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>

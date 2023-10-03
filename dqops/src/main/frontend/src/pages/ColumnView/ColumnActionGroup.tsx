@@ -52,9 +52,9 @@ const ColumnActionGroup = ({
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters?.connectionName === 
+         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connectionName === 
         connection &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||

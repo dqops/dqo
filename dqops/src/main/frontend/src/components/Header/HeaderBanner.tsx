@@ -42,7 +42,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
 
   const runProfilingChecks = () => {
     JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: {
+      check_search_filters: {
         connectionName: advisorObject.connectionName,
         checkType: CheckTypes.PROFILING
       }

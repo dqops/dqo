@@ -37,7 +37,7 @@ import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
-import com.dqops.execution.checks.jobs.RunChecksJobResult;
+import com.dqops.execution.checks.jobs.RunChecksResult;
 import com.dqops.execution.checks.jobs.RunChecksQueueJobResult;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
@@ -45,6 +45,8 @@ import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJob;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
+import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobResult;
+import com.dqops.execution.statistics.jobs.CollectStatisticsResult;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
@@ -168,9 +170,9 @@ public class JobsController {
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(summary -> {
-                        RunChecksJobResult runChecksJobResult = RunChecksJobResult.fromCheckExecutionSummary(summary);
+                        RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
-                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksJobResult, jobHistoryEntryModel.getStatus());
+                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, jobHistoryEntryModel.getStatus());
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -240,20 +242,24 @@ public class JobsController {
      */
     @PostMapping(value = "/collectstatistics/table", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table",
-            response = DqoQueueJobId.class,
+            response = CollectStatisticsQueueJobResult.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = CollectStatisticsQueueJobResult.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnTable(
+    public ResponseEntity<Mono<CollectStatisticsQueueJobResult>> collectStatisticsOnTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
+            @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
+            @ApiParam(name = "wait", value = "Wait until the statistic collection job finish to run, the default value is false (queue a background job and return the job id)", required = false)
+            @RequestParam(required = false) Optional<Boolean> wait,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
         CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
         StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
                 StatisticsCollectorExecutionReportingMode.silent, false);
@@ -265,7 +271,25 @@ public class JobsController {
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 
         PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
-        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+
+        if (wait.isPresent() && wait.get()) {
+            // wait for the result
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+                    .map(summary -> {
+                        CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
+                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
+                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, jobHistoryEntryModel.getStatus());
+                    });
+
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+        }
+
+        Mono<CollectStatisticsQueueJobResult> resultWithOnlyJobId = Mono.just(new CollectStatisticsQueueJobResult(pushJobResult.getJobId()));
+        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
     }
 
     /**
