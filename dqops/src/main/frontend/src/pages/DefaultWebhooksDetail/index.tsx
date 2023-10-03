@@ -5,10 +5,15 @@ import SectionWrapper from '../../components/Dashboard/SectionWrapper'
 import { SettingsApi } from '../../services/apiClient'
 import { IncidentWebhookNotificationsSpec } from '../../api'
 import Button from '../../components/Button'
+import { useSelector } from 'react-redux'
+import { IRootState } from '../../redux/reducers'
 
 export default function DefaultWebhooksDetail() {
-
-    const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] = useState<IncidentWebhookNotificationsSpec>()
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] = useState<IncidentWebhookNotificationsSpec>()
+  const [isUpdated, setIsUpdated] = useState(false)
 
     const getDefaultWebhooksConfiguration = async () => {
         await SettingsApi.getDefaultWebhooks()
@@ -18,19 +23,19 @@ export default function DefaultWebhooksDetail() {
     const onChangeWebhooks = (obj: Partial<IncidentWebhookNotificationsSpec>) => {
         setDefaultWebhooksConfiguration((prevState) => ({
             ...prevState,
-            obj
+            ...obj
         }))
+        setIsUpdated(true)
     }
 
     const updateDefaultWebhooksConfiguration = async () => {
         await SettingsApi.updateDefaultWebhooks(defaultWebhooksConfiguration)
+          .then(()=> setIsUpdated(false))
     }
     
     useEffect(() => {
         getDefaultWebhooksConfiguration()
     },[])
-
-    console.log(defaultWebhooksConfiguration)
 
     return (
     <DefinitionLayout>
@@ -38,7 +43,7 @@ export default function DefaultWebhooksDetail() {
           <div className="flex items-center justify-between w-full">
             <div className="text-xl font-semibold truncate">Default webhooks configuration</div>
           </div>
-            <Button label="Save" color='primary' className='w-45' onClick={updateDefaultWebhooksConfiguration}/>
+            <Button label="Save" color='primary' className='w-45' onClick={updateDefaultWebhooksConfiguration} disabled={!(isUpdated && userProfile.can_manage_definitions === true)}/>
         </div>
         <SectionWrapper
           title="Webhooks for notifications of an incident state change"
@@ -49,24 +54,29 @@ export default function DefaultWebhooksDetail() {
             label="A new incident was opened (detected):"
             value={defaultWebhooksConfiguration?.incident_opened_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_opened_webhook_url: e.target.value })}
+            disabled={userProfile.can_manage_definitions !== true}
+
           />
           <Input
             className="mb-4"
             label="An incident was acknowledged:"
             value={defaultWebhooksConfiguration?.incident_acknowledged_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_acknowledged_webhook_url: e.target.value })}
+            disabled={userProfile.can_manage_definitions !== true}
           />
           <Input
             className="mb-4"
             label="An incident was resolved:"
             value={defaultWebhooksConfiguration?.incident_resolved_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_resolved_webhook_url: e.target.value })}
+            disabled={userProfile.can_manage_definitions !== true}
           />
           <Input
             className="mb-4"
             label="An incident was muted:"
             value={defaultWebhooksConfiguration?.incident_muted_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_muted_webhook_url: e.target.value })}
+            disabled={userProfile.can_manage_definitions !== true}
           />
         </SectionWrapper>
     </DefinitionLayout>

@@ -92,6 +92,7 @@ import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-senso
 import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
+import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -191,7 +192,8 @@ const iconsMap: any = {
   definitionssensors: DefinitionsSensorsSvg,
   copytext : CopyTextSvg,
   done: DoneSvg,
-  warning: WarningSvg
+  warning: WarningSvg,
+  webhooks: WebhooksSvg
 };
 
 interface SvgIconProps {
