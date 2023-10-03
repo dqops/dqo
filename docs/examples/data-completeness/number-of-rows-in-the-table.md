@@ -11,22 +11,81 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
-
-We want to verify that the number of rows in a table does not exceed the minimum accepted count.
+For any database analysis, it is important that the tables are not empty. In this example, we will detect empty or too small tables.
 
 **SOLUTION**
-
 We will verify the data using monitoring [row_count](../../checks/table/volume/row-count.md) table check.
-Our goal is to verify if the number of rows does not fall below setup thresholds.
+Row_count check has a default configuration of threshold. First, we weill validate if a table is not empty.
+To do so, we will set minimum count threshold level for the check:
 
-In this example, we will set three minimum count thresholds levels for the check:
+- error: 1
+
+After you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
+We aim to verify if the table meets size requirements and is not too small
 
 - warning: 692
 - error: 381
 - fatal: 150
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+
+## Running the checks and evaluating the results using the graphical interface
+
+1. Go to the **Monitoring** section.
+   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+   Here you can see that the default check error threshold is 1 which allows you to validate whether your table is empty or not.
+   ![Row-count check configuration in the Monitoring section](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+
+2. Or go to the **Configuration** section
+   The Configuration section afford you to configure sensors, rules, data quality checks and default check configuration.
+   You can also configure row_count check in Configuration section.
+   ![Row-count check configuration in the Configuration section](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+
+3. Review the results which should be similar to the one below.
+   The actual value of rows in this example is 18155, which is above the minimum threshold level set in the error (1).
+   The check gives a valid result (notice the green square on the left of the name of the check).
+   Now you can be sure that you table is not empty.
+
+   ![Row-count check result](https://dqops.com/docs/images/examples/daily-row-count-check-result.png)
+
+4. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+   Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+5. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+
+   Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection, issues per schema, issues per quality dimension, issues per check category.
+
+   ![Row-count results on Issues count per table dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-issues-count-per-table-dashboard.png)
+
+## YAML configuration file
+
+The YAML configuration file stores both the table details and checks configurations.
+
+In this example, we have set minimum count threshold level for the check:
+
+- error: 1
+
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
+
+If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+
+```yaml hl_lines="7-16"
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count:
+          error:
+            min_count: 1
+```
+
+After you ensure that your table isn’t empty, you can set higher thresholds to ensure it meets size requirements.
 
 **VALUE**
 
