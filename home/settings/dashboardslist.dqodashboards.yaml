@@ -608,6 +608,18 @@ spec:
           height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Empty or too small tables
+          url: https://lookerstudio.google.com/reporting/263e1ff4-c620-498f-9618-c418708f24e8
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Too small partitions
+          url: https://lookerstudio.google.com/reporting/44394e69-6f83-4e16-a903-404418b2eddb
+          width: 1400
+          height: 2500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
 - folder_name: Statistics of data sources
   folders:
     - folder_name: Availability
