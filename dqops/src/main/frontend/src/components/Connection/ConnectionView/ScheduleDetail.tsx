@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  getConnectionSchedulingGroup, getConnectionsFailed, resetConnectionSchedulingGroup, setIsUpdatedSchedulingGroup, setUpdatedSchedulingGroup,
+  getConnectionSchedulingGroup, resetConnectionSchedulingGroup, setIsUpdatedSchedulingGroup, setUpdatedSchedulingGroup,
   updateConnectionSchedulingGroup
 
 } from '../../../redux/actions/connection.actions';
@@ -44,6 +44,7 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
   const [updatedSchedule, setUpdatedSchedule] = useState<MonitoringScheduleSpec | undefined>()
+  const [isDefaultUpdated, setIsDefaultUpdated] = useState(false)
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
   const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
@@ -64,8 +65,10 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     try {
         await SettingsApi.getDefaultSchedule(String(activeTab).replace(/\s/g, "_").toLowerCase() as 'profiling' | 'monitoring_daily' | 'monitoring_monthly' | 'partitioned_daily' | 'partitioned_monthly' ?? 'profiling') 
           .then((res) => setUpdatedSchedule(res.data));
+
     } catch (error) {
       console.error(error)
+
     }
   }
   useEffect(() => {
@@ -79,10 +82,21 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
     history.push(`${location.pathname}?activeTab=${tab}`)
   }
+  const updateDefaultSchedules = async (obj: MonitoringScheduleSpec | undefined) =>{
+    await SettingsApi.updateDefaultSchedules(String(activeTab).replace(/\s/g, "_").toLowerCase() as 'profiling' | 'monitoring_daily' | 'monitoring_monthly' | 'partitioned_daily' | 'partitioned_monthly' ?? 'profiling', obj)
+      .then(() => setIsDefaultUpdated(false))
+      .catch((err) => console.error(err))
 
-  const handleChange = (obj: any) => {
+  }
+
+  const handleChange = (obj: MonitoringScheduleSpec) => {
     if (isDefault === true) {
-     async () =>  await SettingsApi.updateDefaultSchedules(String(activeTab).replace(/\s/g, "_").toLowerCase() as 'profiling' | 'monitoring_daily' | 'monitoring_monthly' | 'partitioned_daily' | 'partitioned_monthly' ?? 'profiling', obj)
+      setUpdatedSchedule((prevState) => ({
+        ...prevState,
+        cron_expression: obj.cron_expression,
+        disabled: obj.disabled
+      }));
+      setIsDefaultUpdated(true)
     }
     dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, true));
     dispatch(
@@ -102,6 +116,9 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const onUpdate = async () => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
+    }
+    if (isDefault === true) {
+      updateDefaultSchedules(updatedSchedule)
     }
     await dispatch(updateConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab, updatedSchedule));
     await dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
@@ -185,13 +202,13 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     <div className="py-4 px-8">
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdatedSchedule}
+        isUpdated={isUpdatedSchedule || isDefaultUpdated}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault = { isDefault }/>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault={isDefault}/>
     </div>
   );
 };
