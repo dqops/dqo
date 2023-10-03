@@ -354,6 +354,7 @@ const DataQualityChecks = ({
         </div>
         }
         <div className="flex items-center justify-between">
+          <span className='pr-2'>Schedule configuration: </span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}
           </a>
