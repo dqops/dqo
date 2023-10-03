@@ -48,6 +48,7 @@ export const ROUTES = {
   USERS_LIST_DETAIL: () => '/definitions/users/all',
   USER_DETAIL: (email: string) => `/definitions/user/${email}`,
   SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
+  WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-webhooks',
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -70,6 +71,7 @@ export const ROUTES = {
   USERS_LIST_DETAIL_VALUE: () => '/definitions/users/all',
   USER_DETAIL_VALUE: (email: string) => `/definitions/user/${email}`,
   SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
+  WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-webhooks',
 
   PATTERNS: {
     INDEX: '/',
@@ -110,5 +112,6 @@ export const ROUTES = {
     USERS_LIST_DETAIL: '/definitions/users/all',
     USER_DETAIL: '/definitions/user/:email',
     SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
+    WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-webhooks',
   }
 };
