@@ -58,13 +58,14 @@ export default function TableStatisticsView({
           tableName
         );
       setRowCount(res.data);
+      console.log(res.data)
     } catch (err) {
       console.error(err);
     }
   };
   useEffect(() => {
     fetchRows();
-  }, [connectionName, schemaName, tableName]);
+  }, [connectionName, schemaName, tableName, statistics]);
 
   useEffect(() => {
     setNumberOfSelected(0);
