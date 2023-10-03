@@ -1,7 +1,7 @@
 **sql condition failed count on table** checks  
 
 **Description**  
-Table level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
+Table-level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
 
 ___
 

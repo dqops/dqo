@@ -1,7 +1,7 @@
 **change distinct percent since yesterday** checks  
 
 **Description**  
-Column level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+Column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 ___
 

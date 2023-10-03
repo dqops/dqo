@@ -1,7 +1,7 @@
 **nulls percent change 7 days** checks  
 
 **Description**  
-Column level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
+Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
 
 ___
 

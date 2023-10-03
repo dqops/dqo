@@ -1,7 +1,7 @@
 **string empty percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percent of empty strings in a monitored column.
+Column-level check that ensures that there are no more than a maximum percent of empty strings in a monitored column.
 
 ___
 

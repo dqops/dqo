@@ -1,7 +1,7 @@
 **nulls percent change** checks  
 
 **Description**  
-Column level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
+Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
 
 ___
 

@@ -1,7 +1,7 @@
 **valid longitude percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+Column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
 
 ___
 

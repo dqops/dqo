@@ -1,7 +1,7 @@
 **anomaly differencing distinct count 30 days** checks  
 
 **Description**  
-Column level check that ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Column-level check that ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 

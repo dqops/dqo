@@ -1,7 +1,7 @@
 **distinct count** checks  
 
 **Description**  
-Column level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+Column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
 
 ___
 

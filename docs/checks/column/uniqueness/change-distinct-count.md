@@ -1,7 +1,7 @@
 **change distinct count** checks  
 
 **Description**  
-Column level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
+Column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
 ___
 

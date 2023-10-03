@@ -1,7 +1,7 @@
 **date values in future percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a set percentage of date values in future in a monitored column.
+Column-level check that ensures that there are no more than a set percentage of date values in future in a monitored column.
 
 ___
 

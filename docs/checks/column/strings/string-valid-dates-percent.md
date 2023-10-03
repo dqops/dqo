@@ -1,7 +1,7 @@
 **string valid dates percent** checks  
 
 **Description**  
-Column level check that ensures that there is at least a minimum percentage of valid dates in a monitored column.
+Column-level check that ensures that there is at least a minimum percentage of valid dates in a monitored column.
 
 ___
 

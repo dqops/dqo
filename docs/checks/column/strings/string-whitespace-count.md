@@ -1,7 +1,7 @@
 **string whitespace count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of whitespace strings in a monitored column.
+Column-level check that ensures that there are no more than a maximum number of whitespace strings in a monitored column.
 
 ___
 

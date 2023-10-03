@@ -1,7 +1,7 @@
 **string null placeholder percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percent of rows with a null placeholder strings in a monitored column.
+Column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder strings in a monitored column.
 
 ___
 

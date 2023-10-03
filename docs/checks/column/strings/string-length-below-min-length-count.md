@@ -1,7 +1,7 @@
 **string length below min length count** checks  
 
 **Description**  
-Column level check that ensures that the number of strings in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
+Column-level check that ensures that the number of strings in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
 
 ___
 

@@ -34,6 +34,39 @@ dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 
 ___
+### **dqo cloud password**
+
+Changes the user&#x27;s password in DQO Cloud
+
+**Description**
+
+Allows the user to change the password that is used to log in to DQO Cloud account using the email and password.
+
+
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
+```
+dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**Options**  
+  
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
+
+
+___
 ### **dqo cloud sync data**
 
 Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQO Cloud

@@ -1,7 +1,7 @@
 **datetime value in range date percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a set percentage of date values in given range in a monitored column.
+Column-level check that ensures that there are no more than a set percentage of date values in given range in a monitored column.
 
 ___
 

@@ -1,7 +1,7 @@
 **sql aggregate expr table** checks  
 
 **Description**  
-Table level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+Table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
 
 ___
 

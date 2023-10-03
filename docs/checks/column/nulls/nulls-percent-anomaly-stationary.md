@@ -1,7 +1,7 @@
 **nulls percent anomaly stationary** checks  
 
 **Description**  
-Column level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 ___
 

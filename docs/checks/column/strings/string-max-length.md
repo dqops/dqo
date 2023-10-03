@@ -1,7 +1,7 @@
 **string max length** checks  
 
 **Description**  
-Column level check that ensures that the length of string in a column does not exceed the maximum accepted length.
+Column-level check that ensures that the length of string in a column does not exceed the maximum accepted length.
 
 ___
 

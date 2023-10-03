@@ -1,7 +1,7 @@
 **anomaly stationary distinct percent** checks  
 
 **Description**  
-Column level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 ___
 

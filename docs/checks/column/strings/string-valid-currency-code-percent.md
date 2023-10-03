@@ -1,7 +1,7 @@
 **string valid currency code percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.
+Column-level check that ensures that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.
 
 ___
 

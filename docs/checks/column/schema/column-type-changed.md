@@ -2,7 +2,7 @@
 
 **Description**  
 Column level check that detects if the data type of the column has changed since the last time it was retrieved.
- This check will calculate a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ This check calculates a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
  A data quality issue will be detected if the hash of the column&#x27;s data types has changed.
 
 ___
