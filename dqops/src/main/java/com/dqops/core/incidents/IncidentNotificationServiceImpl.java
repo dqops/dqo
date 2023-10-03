@@ -123,14 +123,22 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         return responseSent.retry(3).thenReturn(webhookUrl);
     }
 
-    private IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping){
+    /**
+     * Returns a combined list of web hooks, combining the default notification channels with the notification settings on a connection.
+     * @param incidentGrouping Incident grouping and notification settings from a connection.
+     * @return Effective notification settings with webhooks that could be the default values.
+     */
+    protected IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping){
         ExecutionContext executionContext = executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         DefaultIncidentWebhookNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultNotificationWebhook();
         IncidentWebhookNotificationsSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
+        if (defaultWebhooks == null) {
+            defaultWebhooks = new IncidentWebhookNotificationsSpec();
+        }
 
-        if(incidentGrouping == null || incidentGrouping.getWebhooks() == null){
+        if (incidentGrouping == null || incidentGrouping.getWebhooks() == null){
             return defaultWebhooks.deepClone();
         } else {
             return incidentGrouping.getWebhooks().combineWithDefaults(defaultWebhooks);
