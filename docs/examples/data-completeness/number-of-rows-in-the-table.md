@@ -21,7 +21,7 @@ To do so, we will set minimum count threshold level for the check:
 - error: 1
 
 After you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
-We aim to verify if the table meets size requirements and is not too small
+We aim to verify if the table meets size requirements and is not too small:
 
 - warning: 692
 - error: 381
