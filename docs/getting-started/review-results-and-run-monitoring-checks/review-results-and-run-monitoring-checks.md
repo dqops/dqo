@@ -42,7 +42,7 @@ In the previous step we have collected basic statistics for imported tables and 
 
 To review the results: 
 
-1. Go to the **Profiling** section. Select the "crime" table on the tree view on the right. The results are displayed under **Basic Statistics** tab. 
+1. Go to the **Profiling** section. Select the "crime" table on the tree view on the left. The results are displayed under **Basic Statistics** tab. 
 
     You can filter the columns by simply clicking on the sorting icon next to any column header.
 
@@ -84,10 +84,14 @@ In the previous step we have run profiling checks for imported tables and column
     A table will appear with more details about the run check. The check displayed Valid results with the actual value 116 675. 
 
     You can also review the results of other table checks on the list, as well as review the list of the column-level checks. 
-    Just select the column of interest form the tree view on the left.
-   
-    On the list of checks you can enable other checks, change their thresholds and run them. 
+    Just select the column of interest form the tree view on the left. 
 
+    On the list of checks you can enable other checks, change their thresholds and run them.
+
+    Note that some enabled checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
+    For those check a [sensor](../../dqo-concepts/sensors/sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
+    Based on the results, you can set the threshold for these checks.
+    
 
 ## Run monitoring checks
 

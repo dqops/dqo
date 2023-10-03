@@ -659,13 +659,13 @@ spec:
       #    ds0.p_check_category: all
     - folder_name: Timeliness
       dashboards:
-        - dashboard_name: Table freshness - tables with most current data
+        - dashboard_name: Table freshness - tables with the most current data
           url: https://lookerstudio.google.com/embed/reporting/19ab1796-a679-42ed-8a83-db6c56bdd0e6/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Table freshness-Tables with oldest data
+        - dashboard_name: Table freshness - tables with the oldest data
           url: https://lookerstudio.google.com/reporting/dbb9bfb4-639b-40df-bc9c-08bbcd59312a
           width: 1400
           height: 1800
