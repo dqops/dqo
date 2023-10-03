@@ -255,6 +255,9 @@ const ProfilingView = () => {
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+      </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
           shouldDelete={false}
@@ -278,7 +281,6 @@ const ProfilingView = () => {
           isUpdating={isUpdating}
         />
       )}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       {activeTab === 'statistics' && (
         <TableStatisticsView
           connectionName={connectionName}
