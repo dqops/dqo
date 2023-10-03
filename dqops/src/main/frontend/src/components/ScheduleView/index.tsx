@@ -16,9 +16,10 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
+  isDefault?: boolean
 }
 
-const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
@@ -170,7 +171,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   return (
     <div>
       {isCronScheduled === false ? (
-        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
+        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true) ? "pointer-events-none cursor-not-allowed" : "")}>
           Warning: the job scheduler is disabled and no scheduled jobs will be
           executed, enable the job scheduler?{' '}
           <Switch
@@ -200,7 +201,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
             <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className={clsx("px-4 py-2 text-sm", userProfile.can_manage_scheduler ? "" : "cursor-not-allowed pointer-events-none")}>
+            <td className={clsx("px-4 py-2 text-sm", userProfile.can_manage_scheduler || (isDefault === true && userProfile.can_manage_definitions !== true) ? "" : "cursor-not-allowed pointer-events-none")}>
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
@@ -213,7 +214,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
         </tbody>
       </table>
 
-      <div className={clsx("flex flex-col text-sm" , userProfile.can_manage_scheduler ? "" : "cursor-not-allowed pointer-events-none")}>
+      <div className={clsx("flex flex-col text-sm" , userProfile.can_manage_scheduler || (isDefault === true && userProfile.can_manage_definitions !== true) ? "" : "cursor-not-allowed pointer-events-none")}>
         <div
           className={clsx(
             'flex items-center text-sm',
@@ -246,7 +247,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true}
+              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true)}
             />
             <div>minutes</div>
           </div>
@@ -269,7 +270,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true}
+              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true)}
             />
             <div>minutes past every hour</div>
           </div>
@@ -292,7 +293,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={hour}
               onChange={onChangeHour}
-              disabled={userProfile.can_manage_scheduler !== true}
+              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true)}
             />
             <div>:</div>
             <NumberInput
@@ -301,7 +302,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               max={60}
               value={minutes}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true}
+              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true)}
             />
           </div>
         </div>

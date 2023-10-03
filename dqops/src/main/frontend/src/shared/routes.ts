@@ -47,6 +47,7 @@ export const ROUTES = {
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
   USERS_LIST_DETAIL: () => '/definitions/users/all',
   USER_DETAIL: (email: string) => `/definitions/user/${email}`,
+  SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -68,6 +69,7 @@ export const ROUTES = {
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
   USERS_LIST_DETAIL_VALUE: () => '/definitions/users/all',
   USER_DETAIL_VALUE: (email: string) => `/definitions/user/${email}`,
+  SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
 
   PATTERNS: {
     INDEX: '/',
@@ -106,6 +108,7 @@ export const ROUTES = {
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
     USERS_LIST_DETAIL: '/definitions/users/all',
-    USER_DETAIL: '/definitions/user/:email'
+    USER_DETAIL: '/definitions/user/:email',
+    SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
   }
 };

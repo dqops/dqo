@@ -154,6 +154,15 @@ export const DefinitionTree = () => {
     );
   };
 
+  const openDefaultSchedulesFirstLevelTab = () => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SCHEDULES_DEFAULT_DETAIL(),
+        value: ROUTES.SCHEDULES_DEFAULT_DETAIL_VALUE(),
+        label: "Default schedules"
+      })
+    );
+  };
 
   const toggleFolderRecursively = (
     elements: string[],
@@ -565,6 +574,16 @@ export const DefinitionTree = () => {
         />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Manage users
+        </div>
+      </div>
+      <div onClick={openDefaultSchedulesFirstLevelTab} 
+        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
+        <SvgIcon
+           name="clock"
+            className="w-4 h-4 min-w-4 "
+        />
+        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+          Default schedules
         </div>
       </div>
     </div>
