@@ -23,6 +23,7 @@ $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
+|`--DQO_JAVA_OPTS`<br/>|Configures additional JVM (Java Virtual Machine) options such as the memory limit. The default value for both the &#x27;dqops&#x27; python package and for the dqops/dqo Docker image is -Xmx2048m which sets the upper memory limit for 2 GB. This parameter is not supported as a command line parameter, it is only supported as an environment variable. Set (and export) the environment variable DQO_JAVA_OPTS before starting DQO.<br/>This parameter could be also configured by setting DQO_JAVA_OPTS  environment variable.| ||
 |`--dqo.cache.enabled`<br/>|Enables or disables the specification cache.<br/>This parameter could be also configured by setting DQO_CACHE_ENABLED  environment variable.| ||
 |`--dqo.cache.expire-after-seconds`<br/>|The time in seconds to expire the cache entries since they were added to the cache.<br/>This parameter could be also configured by setting DQO_CACHE_EXPIRE_AFTER_SECONDS  environment variable.| ||
 |`--dqo.cache.file-lists-limit`<br/>|The maximum number of folders for which the list of files are cached to avoid listing the files.<br/>This parameter could be also configured by setting DQO_CACHE_FILE_LISTS_LIMIT  environment variable.| ||

@@ -1,7 +1,7 @@
 **value above max value percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.
+Column-level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.
 
 ___
 

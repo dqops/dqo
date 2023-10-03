@@ -1,7 +1,7 @@
 **distinct percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
+Column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
 
 ___
 

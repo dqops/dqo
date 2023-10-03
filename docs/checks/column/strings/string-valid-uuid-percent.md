@@ -1,7 +1,7 @@
 **string valid uuid percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
+Column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
 
 ___
 

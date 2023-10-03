@@ -1,7 +1,7 @@
 **total row count match percent** checks  
 
 **Description**  
-Table level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
+Table-level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
 
 ___
 

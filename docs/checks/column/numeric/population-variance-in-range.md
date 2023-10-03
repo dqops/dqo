@@ -1,7 +1,7 @@
 **population variance in range** checks  
 
 **Description**  
-Column level check that ensures that the population variance is in a set range in a monitored column.
+Column-level check that ensures that the population variance is in a set range in a monitored column.
 
 ___
 

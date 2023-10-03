@@ -1,7 +1,7 @@
 **sql condition passed percent on table** checks  
 
 **Description**  
-Table level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+Table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
 
 ___
 

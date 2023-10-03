@@ -1,7 +1,7 @@
 **row count anomaly stationary** checks  
 
 **Description**  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 ___
 

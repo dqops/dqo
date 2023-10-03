@@ -25,6 +25,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -43,6 +44,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -61,6 +63,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -79,6 +82,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -97,6 +101,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -109,7 +114,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}

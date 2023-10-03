@@ -1,7 +1,7 @@
 **row count anomaly stationary 30 days** checks  
 
 **Description**  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
 
 ___
 

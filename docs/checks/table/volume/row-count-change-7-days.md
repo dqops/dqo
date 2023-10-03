@@ -1,7 +1,7 @@
 **row count change 7 days** checks  
 
 **Description**  
-Table level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+Table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
 
 ___
 

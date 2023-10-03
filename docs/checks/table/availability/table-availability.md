@@ -1,7 +1,7 @@
 **table availability** checks  
 
 **Description**  
-Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
+Table-level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
  The actual value (the result of the check) is the number of failures. When the table is accessible and a simple query was executed without errors, the result is 0.0.
  The sensor result (the actual value) 1.0 means that there is a failure. A value higher than 1.0 is stored only in the check result table and it is the number of consecutive failures in following days.
 
@@ -95,6 +95,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -114,6 +115,7 @@ spec:
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -133,6 +135,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -152,6 +155,7 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -171,6 +175,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -190,6 +195,7 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -209,6 +215,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -228,6 +235,7 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -247,6 +255,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -266,6 +275,7 @@ spec:
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -279,7 +289,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
@@ -292,7 +302,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
@@ -397,6 +407,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -416,6 +427,7 @@ spec:
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -435,6 +447,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -454,6 +467,7 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -473,6 +487,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -492,6 +507,7 @@ spec:
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -511,6 +527,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -530,6 +547,7 @@ spec:
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -549,6 +567,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -568,6 +587,7 @@ spec:
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -581,7 +601,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
@@ -594,7 +614,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
@@ -699,6 +719,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -718,6 +739,7 @@ spec:
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -737,6 +759,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -756,6 +779,7 @@ spec:
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -775,6 +799,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -794,6 +819,7 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -813,6 +839,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -832,6 +859,7 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -851,6 +879,7 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -870,6 +899,7 @@ spec:
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
+            LIMIT 1
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
@@ -883,7 +913,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
@@ -896,7 +926,7 @@ spec:
         0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             

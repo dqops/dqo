@@ -1,7 +1,7 @@
 **row count change yesterday** checks  
 
 **Description**  
-Table level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
+Table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
 
 ___
 

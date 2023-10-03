@@ -1,7 +1,7 @@
 **expected strings in top values count** checks  
 
 **Description**  
-Column level check that counts how many expected string values are among the TOP most popular values in the column.
+Column-level check that counts how many expected string values are among the TOP most popular values in the column.
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.

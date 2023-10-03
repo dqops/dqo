@@ -1,7 +1,7 @@
 **negative count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a set number of negative values in a monitored column.
+Column-level check that ensures that there are no more than a set number of negative values in a monitored column.
 
 ___
 

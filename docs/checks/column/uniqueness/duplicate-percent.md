@@ -1,7 +1,7 @@
 **duplicate percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+Column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
 ___
 

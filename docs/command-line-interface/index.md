@@ -78,6 +78,7 @@ ___
 | Command&nbsp;name | Description |
 |--------------|-------------|
  | [dqo cloud login](./cloud/#dqo-cloud login) | Allow user to provide login credentials if the user already has an account. |
+ | [dqo cloud password](./cloud/#dqo-cloud password) | Allows the user to change the password that is used to log in to DQO Cloud account using the email and password. |
  | [dqo cloud sync data](./cloud/#dqo-cloud sync data) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;data&quot; folder. |
  | [dqo cloud sync sources](./cloud/#dqo-cloud sync sources) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sources&quot; folder. |
  | [dqo cloud sync sensors](./cloud/#dqo-cloud sync sensors) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder. |

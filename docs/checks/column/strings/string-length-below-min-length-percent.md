@@ -1,7 +1,7 @@
 **string length below min length percent** checks  
 
 **Description**  
-Column level check that ensures that the percentage of strings in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+Column-level check that ensures that the percentage of strings in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
 
 ___
 

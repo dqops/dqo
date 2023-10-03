@@ -1,7 +1,7 @@
 **string invalid ip6 address count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
+Column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
 
 ___
 

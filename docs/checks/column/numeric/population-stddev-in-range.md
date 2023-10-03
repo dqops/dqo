@@ -1,7 +1,7 @@
 **population stddev in range** checks  
 
 **Description**  
-Column level check that ensures that the population standard deviation is in a set range in a monitored column.
+Column-level check that ensures that the population standard deviation is in a set range in a monitored column.
 
 ___
 

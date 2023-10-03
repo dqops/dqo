@@ -1,7 +1,7 @@
 **duplicate count** checks  
 
 **Description**  
-Column level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
+Column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
 
 ___
 

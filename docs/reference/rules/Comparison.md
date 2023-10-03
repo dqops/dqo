@@ -960,9 +960,9 @@ spec:
   fields:
   - field_name: max_failures
     display_name: max_failures
-    help_text: &quot;Maximum number of consecutive check failures, a check is failed when\
-      \ the sensor&#x27;s query failed to execute due to a connection error, missing table\
-      \ or a corrupted table.&quot;
+    help_text: &quot;Maximum number of consecutive days with check failures. A check is\
+      \ failed when a sensor query fails due to a connection error, missing or corrupted\
+      \ table.&quot;
     data_type: long
 ```
 

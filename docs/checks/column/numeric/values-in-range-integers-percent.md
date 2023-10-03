@@ -1,7 +1,7 @@
 **values in range integers percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a set number of values from range in a monitored column.
+Column-level check that ensures that there are no more than a set number of values from range in a monitored column.
 
 ___
 

@@ -1,7 +1,7 @@
 **sum anomaly stationary 30 days** checks  
 
 **Description**  
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 
