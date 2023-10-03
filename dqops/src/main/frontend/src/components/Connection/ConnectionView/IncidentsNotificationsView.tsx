@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "../../Select";
 import { CheckTypes } from "../../../shared/routes";
 import { useParams } from "react-router-dom";
@@ -22,6 +22,7 @@ import Input from "../../Input";
 import ConnectionActionGroup from "./ConnectionActionGroup";
 import { IRootState } from "../../../redux/reducers";
 import clsx from "clsx";
+import { SettingsApi } from "../../../services/apiClient";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item
@@ -44,10 +45,20 @@ export const IncidentsNotificationsView = () => {
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] = useState<IncidentWebhookNotificationsSpec>()
+
+  const getDefaultWebhooksConfiguration = async () => {
+      await SettingsApi.getDefaultWebhooks()
+          .then((res) => setDefaultWebhooksConfiguration(res.data))
+  }
 
   useEffect(() => {
     dispatch(getConnectionIncidentGrouping(checkTypes, firstLevelActiveTab, connection));
   }, [connection, checkTypes, firstLevelActiveTab]);
+  
+  useEffect(() => {
+    getDefaultWebhooksConfiguration()
+  }, [])
 
   const onChange = (obj: Partial<ConnectionIncidentGroupingSpec>) => {
     dispatch(setUpdateIncidentGroup(checkTypes, firstLevelActiveTab, {
@@ -134,24 +145,28 @@ export const IncidentsNotificationsView = () => {
             label="A new incident was opened (detected):"
             value={incidentGrouping?.webhooks?.incident_opened_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_opened_webhook_url: e.target.value })}
+            placeholder={defaultWebhooksConfiguration?.incident_opened_webhook_url}
           />
           <Input
             className="mb-4"
             label="An incident was acknowledged:"
             value={incidentGrouping?.webhooks?.incident_acknowledged_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_acknowledged_webhook_url: e.target.value })}
+            placeholder={defaultWebhooksConfiguration?.incident_acknowledged_webhook_url}
           />
           <Input
             className="mb-4"
             label="An incident was resolved:"
             value={incidentGrouping?.webhooks?.incident_resolved_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_resolved_webhook_url: e.target.value })}
+            placeholder={defaultWebhooksConfiguration?.incident_resolved_webhook_url}
           />
           <Input
             className="mb-4"
             label="An incident was muted:"
             value={incidentGrouping?.webhooks?.incident_muted_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_muted_webhook_url: e.target.value })}
+            placeholder={defaultWebhooksConfiguration?.incident_muted_webhook_url}
           />
         </SectionWrapper>
       </div>
