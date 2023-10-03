@@ -51,6 +51,11 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
     private long deleteStoredData = 120L;
 
     /**
+     * Wait timeout for the "synchronize multiple folders" job.
+     */
+    private long synchronizeMultipleFolders = 120L;
+
+    /**
      * The default wait timeout for any kind of job.
      */
     private long defaultWaitTimeout = 120L;

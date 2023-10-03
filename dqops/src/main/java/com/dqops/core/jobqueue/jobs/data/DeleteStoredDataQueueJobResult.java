@@ -57,7 +57,7 @@ public class DeleteStoredDataQueueJobResult {
      * Job status.
      */
     @JsonPropertyDescription("Job status")
-    private DqoJobStatus status;
+    private DqoJobStatus status = DqoJobStatus.queued;
 
     public DeleteStoredDataQueueJobResult(DqoQueueJobId jobId, DeleteStoredDataResult result, DqoJobStatus status) {
         this.jobId = jobId;

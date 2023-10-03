@@ -154,6 +154,7 @@ dqo:
       collect-statistics: 120
       import-tables: 120
       delete-stored-data: 120
+      synchronize-multiple-folders: 120
       default-wait-timeout: 120
   scheduler:
     #start: true

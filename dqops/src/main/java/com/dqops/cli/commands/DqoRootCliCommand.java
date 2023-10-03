@@ -276,6 +276,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDeleteStoredData;
 
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.synchronize-multiple-folders"},
+            description = "Sets the default timeout (in seconds) for the \"synchronize multiple folders\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsSynchronizeMultipleFolders;
+
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.default-wait-timeout"},
             description = "Sets the default wait timeout (in seconds) for waiting for a job when the \"waitTimeout\" parameter is not given to the call to the \"waitForJob\" operation from the DQO client..", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDefaultWaitTimeout;

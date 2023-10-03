@@ -335,7 +335,7 @@ public class JobsController {
         if (wait.isPresent() && wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getCollectStatistics();
             CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
@@ -542,7 +542,7 @@ public class JobsController {
         if (wait.isPresent() && wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getImportTables();
             CompletableFuture<ImportTablesResult> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
@@ -581,7 +581,7 @@ public class JobsController {
             @RequestBody DeleteStoredDataQueueJobParameters deleteStoredDataParameters,
             @ApiParam(name = "wait", value = "Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
-            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
@@ -590,7 +590,7 @@ public class JobsController {
         if (wait.isPresent() && wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getDeleteStoredData();
             CompletableFuture<DeleteStoredDataResult> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
@@ -614,25 +614,45 @@ public class JobsController {
     @PostMapping(value = "/synchronize",consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
             "The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).",
-            response = DqoQueueJobId.class,
+            response = SynchronizeMultipleFoldersQueueJobResult.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = SynchronizeMultipleFoldersQueueJobResult.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<DqoQueueJobId>> synchronizeFolders(
+    public ResponseEntity<Mono<SynchronizeMultipleFoldersQueueJobResult>> synchronizeFolders(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Selection of folders that should be synchronized to the DQO Cloud")
-            @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters) {
+            @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters,
+            @ApiParam(name = "wait", value = "Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @RequestParam(required = false) Optional<Boolean> wait,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQO Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
         SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
         synchronizeMultipleFoldersJob.setParameters(synchronizeFolderParameters);
-        PushJobResult<Void> jobPushResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
+        PushJobResult<Void> pushJobResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
 
-        return new ResponseEntity<>(Mono.just(jobPushResult.getJobId()), HttpStatus.CREATED); // 201
+        if (wait.isPresent() && wait.get()) {
+            // wait for the result
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getSynchronizeMultipleFolders();
+            CompletableFuture<Void> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+                    .then(Mono.fromCallable(() -> {
+                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
+                        return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), jobHistoryEntryModel.getStatus());
+                    }));
+
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+        }
+
+        Mono<SynchronizeMultipleFoldersQueueJobResult> resultWithOnlyJobId = Mono.just(new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId()));
+        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
     }
 
     /**

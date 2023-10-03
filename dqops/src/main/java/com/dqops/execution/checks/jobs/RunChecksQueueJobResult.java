@@ -52,7 +52,7 @@ public class RunChecksQueueJobResult {
      * Job status.
      */
     @JsonPropertyDescription("Job status")
-    private DqoJobStatus status;
+    private DqoJobStatus status = DqoJobStatus.queued;
 
 
     public RunChecksQueueJobResult() {
