@@ -21,7 +21,7 @@ import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const initTabs = [
   {
-    label: 'Column',
+    label: 'Column metadata',
     value: 'detail'
   },
   {
