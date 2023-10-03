@@ -1,18 +1,20 @@
-package com.dqops.metadata.storage.localfiles.webhooks;
+package com.dqops.metadata.settings.defaultchecks;
 
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Default incident webhook notification spec wrapper.
+ * Observability check spec wrapper.
  */
-public class DefaultIncidentWebhookNotificationsWrapperImpl extends AbstractElementWrapper<String, IncidentWebhookNotificationsSpec> implements DefaultIncidentWebhookNotificationsWrapper {
+public class DefaultObservabilityCheckWrapperImpl
+        extends AbstractElementWrapper<String, DefaultObservabilityChecksSpec>
+        implements DefaultObservabilityCheckWrapper {
 
     @JsonIgnore
-    private final static String NAME = "default_notification_webhooks";
+    private final static String NAME = "default_observability_checks";
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.

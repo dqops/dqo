@@ -1,20 +1,34 @@
-package com.dqops.metadata.storage.localfiles.observabilitychecksettings;
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+package com.dqops.metadata.incidents.defaultnotifications;
+
 import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Observability check spec wrapper.
+ * Default incident webhook notification spec wrapper.
  */
-public class DefaultObservabilityCheckWrapperImpl
-        extends AbstractElementWrapper<String, DefaultObservabilityCheckSettingsSpec>
-        implements DefaultObservabilityCheckWrapper {
+public class DefaultIncidentWebhookNotificationsWrapperImpl extends AbstractElementWrapper<String, IncidentWebhookNotificationsSpec> implements DefaultIncidentWebhookNotificationsWrapper {
 
     @JsonIgnore
-    private final static String NAME = "default_observability_checks";
+    private final static String NAME = "default_notification_webhooks";
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.

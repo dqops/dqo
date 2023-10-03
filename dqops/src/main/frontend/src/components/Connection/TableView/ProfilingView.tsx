@@ -81,6 +81,7 @@ const ProfilingView = () => {
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
+  const [filteredJob, setFilteredJob] = useState<number>()
   
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -90,12 +91,13 @@ const ProfilingView = () => {
          await ColumnApiClient.getColumnsStatistics(
            connectionName,
            schemaName,
-           tableName
-           ).then((res) => 
+           tableName)
+           .then((res) => 
            setStatistics(res.data))
-          }catch (err){
+           setFilteredJob(undefined)
+          } catch (err) {
             console.error(err)
-          }
+        }
   };
 
   const onChangeSelectedColumns = (columns: string[]) : void  => {
@@ -232,25 +234,30 @@ const ProfilingView = () => {
     );
     setActiveTab(tab);
   };
-  const filteredJobs = Object.values(job_dictionary_state)?.filter(
-    (x) =>
-      x.jobType === 'collect statistics' &&
-      x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
-        schemaName + '.' + tableName &&
-      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  );
 
   useEffect(() => {
-    if(filteredJobs !== undefined){
-      fetchColumns()
+    setFilteredJob(Object.values(job_dictionary_state)?.find(
+      (x) =>
+        x.jobType === 'collect statistics' &&
+        x.parameters?.collectStatisticsParameters
+          ?.statisticsCollectorSearchFilters?.schemaTableName ===
+          schemaName + '.' + tableName &&
+        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    )?.jobId?.jobId)
+    if (filteredJob) {
+      if (job_dictionary_state[filteredJob ?? ""]?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+        fetchColumns()
+      }
     }
-  }, [job_dictionary_state])
+  }, [job_dictionary_state]);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+      </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
           shouldDelete={false}
@@ -274,7 +281,6 @@ const ProfilingView = () => {
           isUpdating={isUpdating}
         />
       )}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       {activeTab === 'statistics' && (
         <TableStatisticsView
           connectionName={connectionName}

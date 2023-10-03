@@ -21,24 +21,63 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).
  */
 public enum TimePeriodGradient {
+    /**
+     * One value per year.
+     */
     @JsonProperty("year")
-    year,
+    year(1),
 
+    /**
+     * One value per quarter.
+     */
     @JsonProperty("quarter")
-    quarter,
+    quarter(2),
 
+    /**
+     * One value per month.
+     */
     @JsonProperty("month")
-    month,
+    month(3),
 
+    /**
+     * One value per week.
+     */
     @JsonProperty("week")
-    week,
+    week(4),
 
+    /**
+     * One value per day.
+     */
     @JsonProperty("day")
-    day,
+    day(5),
 
+    /**
+     * One value per hour.
+     */
     @JsonProperty("hour")
-    hour,
+    hour(6),
 
+    /**
+     * One value per millisecond, which effectively means collecting all values.
+     */
     @JsonProperty("millisecond")
-    millisecond
+    millisecond(7);
+
+    private int rank;
+
+    /**
+     * Defines an enum with a sortable rank. Smaller values are for more coarse scales (monthly, etc).
+     * @param rank Sortable rank.
+     */
+    TimePeriodGradient(int rank) {
+        this.rank = rank;
+    }
+
+    /**
+     * Returns the rank of the value.
+     * @return Rank, smaller value means a more coarse time period. Bigger values - more precise values.
+     */
+    public int getRank() {
+        return rank;
+    }
 }

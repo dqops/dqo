@@ -90,7 +90,7 @@ export default function UserListDetail() {
                  className='absolute right-2 top-2 w-40'
                  onClick={addDqoCloudUser}
                  disabled={!!(userProfile.users_limit && userProfile.users_limit <= dqoCloudUsers?.length  &&
-                 (userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE'))} 
+                 (userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE') || userProfile.can_manage_users !== true)} 
                 />
             </thead>
             <tbody>
@@ -101,17 +101,17 @@ export default function UserListDetail() {
                     <td className='px-6 py-2 text-left'>
                         <Button label='edit' variant='text' color='primary' 
                         onClick={() =>user.email ?  editDqoCloudUser(user.email, user.accountRole) : null}
-                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE')}
+                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}
                         />
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='delete' variant='text' color='primary' 
                         onClick={() => setSelectedEmailToDelete(user.email ?? '')}
-                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE')}/>
+                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
-                        disabled={userProfile.account_role !== "admin" && !(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE')}/>
+                        disabled={userProfile.account_role !== "admin" && !(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
                     </td>
                 </tr>
                 )}

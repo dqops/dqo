@@ -18,7 +18,7 @@ package com.dqops.rest.controllers;
 
 import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
@@ -350,7 +350,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
@@ -401,7 +401,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
@@ -453,7 +453,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
@@ -505,7 +505,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
@@ -557,7 +557,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
@@ -609,7 +609,7 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = userHome
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
                 .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();

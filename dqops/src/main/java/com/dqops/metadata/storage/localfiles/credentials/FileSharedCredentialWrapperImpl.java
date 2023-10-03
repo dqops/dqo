@@ -77,12 +77,12 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getObject() == null) {
-            return; // nothing to do, the instance was never touched
+            return; // nothing to do, the instance is empty
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getObject() != null && super.getObject().isDirty()) {

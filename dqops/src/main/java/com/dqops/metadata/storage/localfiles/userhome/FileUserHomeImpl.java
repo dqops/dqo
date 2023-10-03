@@ -21,13 +21,13 @@ import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitio
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
-import com.dqops.metadata.storage.localfiles.monitoringschedules.FileMonitoringSchedulesWrapperImpl;
-import com.dqops.metadata.storage.localfiles.observabilitychecksettings.FileObservabilityCheckWrapperImpl;
+import com.dqops.metadata.storage.localfiles.defaultschedules.FileMonitoringSchedulesWrapperImpl;
+import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.FileObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
-import com.dqops.metadata.storage.localfiles.webhooks.FileDefaultIncidentWebhookNotificationsWrapperImpl;
+import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;

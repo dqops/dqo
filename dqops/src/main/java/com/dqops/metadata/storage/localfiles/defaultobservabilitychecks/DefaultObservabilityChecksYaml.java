@@ -1,22 +1,22 @@
-package com.dqops.metadata.storage.localfiles.monitoringschedules;
+package com.dqops.metadata.storage.localfiles.defaultobservabilitychecks;
 
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
- * DQO schedules definition YAML schema for a schedules' specification.
+ * The configuration of default data quality checks that are activated for all imported tables and columns.
+ * The default observability checks are stored in the settings/defaultchecks.dqochecks.yaml file in the DQO user's home folder.
  */
-public class MonitoringSchedulesYaml {
-
+public class DefaultObservabilityChecksYaml {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.SCHEDULES;
-    private MonitoringSchedulesSpec spec = new MonitoringSchedulesSpec();
+    private SpecificationKind kind = SpecificationKind.DEFAULT_CHECKS;
+    private DefaultObservabilityChecksSpec spec = new DefaultObservabilityChecksSpec();
 
-    public MonitoringSchedulesYaml() {
+    public DefaultObservabilityChecksYaml() {
     }
 
-    public MonitoringSchedulesYaml(MonitoringSchedulesSpec spec) {
+    public DefaultObservabilityChecksYaml(DefaultObservabilityChecksSpec spec) {
         this.spec = spec;
     }
 
@@ -56,7 +56,7 @@ public class MonitoringSchedulesYaml {
      * Returns a data source specification.
      * @return Data source specification.
      */
-    public MonitoringSchedulesSpec getSpec() {
+    public DefaultObservabilityChecksSpec getSpec() {
         return spec;
     }
 
@@ -64,7 +64,7 @@ public class MonitoringSchedulesYaml {
      * Sets a data source specification.
      * @param spec Data source specification.
      */
-    public void setSpec(MonitoringSchedulesSpec spec) {
+    public void setSpec(DefaultObservabilityChecksSpec spec) {
         this.spec = spec;
     }
 

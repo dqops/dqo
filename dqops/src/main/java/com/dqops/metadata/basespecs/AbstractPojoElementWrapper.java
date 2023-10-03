@@ -40,7 +40,7 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
 
     private V object;
     @JsonIgnore
-    private InstanceStatus status = InstanceStatus.UNCHANGED;
+    private InstanceStatus status = InstanceStatus.NOT_TOUCHED;
 
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.
@@ -69,9 +69,21 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
         if (this.object != null && this.object != object) {
 			setDirty();
         }
-        if (this.object != null && this.status != InstanceStatus.ADDED) {
-			this.status = InstanceStatus.MODIFIED;  // mark as modified
+
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            this.status = InstanceStatus.UNCHANGED;
+        } else {
+            if (this.object == null && object != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED)) {
+                this.status = InstanceStatus.ADDED;
+            } else if (this.object != null) {
+                if (this.status == InstanceStatus.ADDED) {
+                    this.status = object != null ? InstanceStatus.ADDED : InstanceStatus.UNCHANGED;
+                } else {
+                    this.status = object != null ? InstanceStatus.MODIFIED : InstanceStatus.TO_BE_DELETED;  // mark as modified or to be deleted
+                }
+            }
         }
+
         this.object = object;
     }
 
@@ -100,7 +112,7 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
             return;
         }
 
-        if (this.status == InstanceStatus.UNCHANGED) {
+        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED) {
 			this.status = InstanceStatus.MODIFIED;
 			this.setDirty();
         }
@@ -128,6 +140,10 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
      * this method and perform a store specific serialization.
      */
     public void flush() {
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            return;
+        }
+
         if (this.object != null && this.status == InstanceStatus.UNCHANGED) {
 			this.setStatus(InstanceStatus.MODIFIED);
 			this.clearDirty(true);

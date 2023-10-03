@@ -141,4 +141,11 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     public boolean getAlwaysSupportedOnAllProviders() {
         return false;
     }
+
+    /**
+     * Returns the default value that is used when the sensor returned no rows.
+     * @return Default value to use when the sensor returned no rows.
+     */
+    @JsonIgnore
+    public Double getDefaultValue() { return null;}
 }

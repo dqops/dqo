@@ -142,7 +142,7 @@ const ColumnStatisticsView = () => {
       <div className="w-full flex gap-8 flex-wrap">
         <SectionWrapper title='Nulls' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center">
-            <div className="ml-2 font-light">Null count</div>
+            <div className="ml-2 font-light">Nulls count</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -155,7 +155,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
           <div className="h-10 flex justify-between items-center ">
-            <div className="ml-2 font-light">Null percent</div>
+            <div className="ml-2 font-light">Nulls percent</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (

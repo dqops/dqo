@@ -511,6 +511,17 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
+        <div className='flex justify-center items-center mt-4'>
+        {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
+          <Tooltip
+                content={check.configuration_requirements_errors?.map((x) => x)}
+                className='pr-5 max-w-80 py-4 px-4 bg-gray-800'>
+                <div>
+                  <SvgIcon name='warning' className='w-8 h-8'/>
+                </div>
+          </Tooltip>
+        : null }
+        </div>
         <td className="py-2 px-4 flex items-end justify-end">
           <div className=" space-x-2">
             <div className="text-gray-700 text-sm w-full ">

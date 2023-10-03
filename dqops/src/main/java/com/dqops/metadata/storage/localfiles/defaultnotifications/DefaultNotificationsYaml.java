@@ -1,22 +1,22 @@
-package com.dqops.metadata.storage.localfiles.webhooks;
+package com.dqops.metadata.storage.localfiles.defaultnotifications;
 
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
- * DQO incident webhook notification YAML schema for a default notification webhooks specification.
+ * The default configuration of notifications. Notifications are published by calling webhooks defined in this object.
+ * The default notification settings are stored in the settings/defaultnotifications.dqonotifications.yaml file in the DQO user's home folder.
  */
-public class DefaultIncidentWebhookNotificationsYaml {
-
+public class DefaultNotificationsYaml {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.NOTIFICATION_WEBHOOKS;
+    private SpecificationKind kind = SpecificationKind.DEFAULT_NOTIFICATIONS;
     private IncidentWebhookNotificationsSpec spec = new IncidentWebhookNotificationsSpec();
 
-    public DefaultIncidentWebhookNotificationsYaml() {
+    public DefaultNotificationsYaml() {
     }
 
-    public DefaultIncidentWebhookNotificationsYaml(IncidentWebhookNotificationsSpec spec) {
+    public DefaultNotificationsYaml(IncidentWebhookNotificationsSpec spec) {
         this.spec = spec;
     }
 

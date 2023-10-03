@@ -2,6 +2,7 @@
 apiVersion: dqo/v1
 kind: sensor
 spec:
+  default_value: 0.0
   fields:
   - field_name: referenced_table
     display_name: referenced_table

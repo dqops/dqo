@@ -15,26 +15,32 @@
  */
 package com.dqops.services.check.mapping.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-
 /**
- * Enumeration of errors on a check, such as an event timestamp column is not configured on a table.
+ * Constants with error messages on a check that will be shown in the check editor when the table is not configured correctly to run the check.
  */
-public enum CheckConfigurationRequirementsError {
-    @JsonProperty("missing_event_timestamp_column")
-    @JsonPropertyDescription("Configuration of the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) is missing and must be configured at the table level.")
-    missing_event_timestamp_column,
+public final class CheckConfigurationRequirementsError {
+    /**
+     * Configuration of the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) is missing and must be configured at the table level.
+     */
+    public static final String MISSING_EVENT_TIMESTAMP_COLUMN = "Configuration of the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) is missing and must be configured at the table level.";
 
-    @JsonProperty("missing_ingestion_timestamp_column")
-    @JsonPropertyDescription("Configuration of the ingestion timestamp column that identifies the timestamp when the row was loaded is missing and must be configured at the table level.")
-    missing_ingestion_timestamp_column,
+    /**
+     * Configuration of the ingestion timestamp column that identifies the timestamp when the row was loaded is missing and must be configured at the table level.
+     */
+    public static final String MISSING_INGESTION_TIMESTAMP_COLUMN = "Configuration of the ingestion timestamp column that identifies the timestamp when the row was loaded is missing and must be configured at the table level.";
 
-    @JsonProperty("missing_event_and_ingestion_columns")
-    @JsonPropertyDescription("Configuration of both the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) and the ingestion timestamp column that identifies the timestamp when the row was loaded are missing and must be configured at the table level.")
-    missing_event_and_ingestion_columns,
+    /**
+     * Configuration of both the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) and the ingestion timestamp column that identifies the timestamp when the row was loaded are missing and must be configured at the table level.
+     */
+    public static final String MISSING_EVENT_AND_INGESTION_COLUMNS = "Configuration of both the event timestamp column that identifies the timestamp of the event (transaction, click, operation, etc.) and the ingestion timestamp column that identifies the timestamp when the row was loaded are missing and must be configured at the table level.";
 
-    @JsonProperty("missing_time_period_partitioning_column")
-    @JsonPropertyDescription("Configuration of column that is used to partition the table by a time period (day, month, etc.) is missing and must be configured at the table level.")
-    missing_time_period_partitioning_column,
+    /**
+     * Configuration of column that is used to partition the table by a time period (day, month, etc.) is missing and must be configured at the table level.
+     */
+    public static final String MISSING_PARTITION_BY_COLUMN = "Configuration of column that is used to partition the table by a time period (day, month, etc.) is missing and must be configured at the table level.";
+
+    /**
+     * The result truncation for profiling checks configured for the table is too coarse. Please change the "Profiling checks result scale" on the table's configuration to collect at one result per day, per hour or all results. The current time period is too coarse and the time series (anomaly detection) data quality checks cannot detect changes when the results are truncated to store only one result per week or per month
+     */
+    public static final String PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE = "The result truncation for profiling checks configured for the table is too coarse. Please change the \"Profiling checks result scale\" on the table's configuration to collect at one result per day, per hour or all results. The current time period is too coarse and the time series (anomaly detection) data quality checks cannot detect changes when the results are truncated to store only one result per week or per month";
 }

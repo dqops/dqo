@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
-spec: {}
+spec:
+  default_value: 0.0

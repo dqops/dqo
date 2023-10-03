@@ -87,7 +87,7 @@ const labels = [
   'Scale',
   'Min value',
   'Max value',
-  'Null count'
+  'Nulls count'
 ];
 
 const TableColumns = ({
@@ -494,7 +494,7 @@ const TableColumns = ({
       case 'Scale':
         sortData<MyData>('scale');
         break;
-      case 'Null count':
+      case 'Nulls count':
         sortData<MyData>('null_count');
         break;
       case 'Min value':
@@ -767,7 +767,7 @@ const TableColumns = ({
                   style={{
                     justifyContent:
                       x === 'Min value' ||
-                      x === 'Null count' ||
+                      x === 'Nulls count' ||
                       x === 'Max value'
                         ? 'flex-end'
                         : 'flex-start'
@@ -791,7 +791,7 @@ const TableColumns = ({
                 onClick={() => sortData<MyData>('null_percent')}
               >
                 <div onClick={() => updateData('updated data')}>
-                  Null percent
+                  Nulls percent
                 </div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />

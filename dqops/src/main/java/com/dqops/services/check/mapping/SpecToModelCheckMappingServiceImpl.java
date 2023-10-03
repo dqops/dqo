@@ -47,8 +47,11 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.CustomRuleParametersSpec;
+import com.dqops.rules.HistoricDataPointsGrouping;
+import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.services.check.mapping.basicmodels.CheckListModel;
@@ -615,20 +618,24 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
+            if (checkType == CheckType.partitioned && Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
+                checkModel.pushError(CheckConfigurationRequirementsError.MISSING_PARTITION_BY_COLUMN);
+            }
+
             checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
                 if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
-                    checkModel.pushError(CheckConfigurationRequirementsError.missing_event_and_ingestion_columns);
+                    checkModel.pushError(CheckConfigurationRequirementsError.MISSING_EVENT_AND_INGESTION_COLUMNS);
                 } else {
-                    checkModel.pushError(CheckConfigurationRequirementsError.missing_event_timestamp_column);
+                    checkModel.pushError(CheckConfigurationRequirementsError.MISSING_EVENT_TIMESTAMP_COLUMN);
                 }
             } else {
                 if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
-                    checkModel.pushError(CheckConfigurationRequirementsError.missing_ingestion_timestamp_column);
+                    checkModel.pushError(CheckConfigurationRequirementsError.MISSING_INGESTION_TIMESTAMP_COLUMN);
                 }
             }
         }
@@ -689,6 +696,41 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
                         (CustomCheckSpec) checkSpec, customCheckDefinitionSpec, executionContext);
                 checkModel.setRule(ruleModel);
+            }
+        }
+
+        if (executionContext != null && executionContext.getUserHomeContext() != null) {
+            String ruleName = checkModel.getRule().getWarning() != null ? checkModel.getRule().getWarning().getRuleName() : null;
+
+            if (ruleName != null) {
+                RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
+                if (ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null) {
+                    RuleTimeWindowSettingsSpec ruleTimeWindow = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
+                    if (ruleTimeWindow != null) {
+                        if (checkType == CheckType.profiling) {
+                            if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
+                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
+                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
+                                checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
+                            }
+                        } else if (ruleTimeWindow.getHistoricDataPointGrouping() != null && checkTimeScale != null) {
+                            TimePeriodGradient ruleTimePeriodGradient =
+                                    ruleTimeWindow.getHistoricDataPointGrouping() == HistoricDataPointsGrouping.last_n_readouts
+                                            ? checkTimeScale.toTimeSeriesGradient() : ruleTimeWindow.getHistoricDataPointGrouping().toTimePeriodGradient();
+                            TimePeriodGradient checkTypeGradient = checkTimeScale.toTimeSeriesGradient();
+
+                            if (checkTypeGradient.getRank() < ruleTimePeriodGradient.getRank()) {
+                                StringBuilder errorBuilder = new StringBuilder();
+                                errorBuilder.append("This data quality check cannot be correctly validated by a rule because the rule requires a time series that has a scale at least one value per ");
+                                errorBuilder.append(ruleTimePeriodGradient);
+                                errorBuilder.append(", but this type of check collects the sensor readout data (data quality measures) ");
+                                errorBuilder.append(checkTimeScale);
+                                errorBuilder.append(". Please reconfigure the custom check in the configuration section using a different rule that has a matching time scale requirement for historic data from the time series.");
+                                checkModel.pushError(errorBuilder.toString());
+                            }
+                        }
+                    }
+                }
             }
         }
 

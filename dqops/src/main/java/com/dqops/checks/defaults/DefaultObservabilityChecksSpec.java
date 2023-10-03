@@ -40,8 +40,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<DefaultObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DefaultObservabilityChecksSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<DefaultObservabilityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("profiling", o -> o.profiling);
             put("monitoring_daily", o -> o.monitoringDaily);

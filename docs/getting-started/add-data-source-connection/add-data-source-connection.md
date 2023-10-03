@@ -44,7 +44,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 ## Import metadata using the graphical interface
 
-When you add a new connection, it will appear in the tree view on the right, and you will be redirected to the Import Metadata screen.
+When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
 Now we can import schemas and tables.
 
 1. Import the "austin_crime" schema by clicking on the **Import Tables** button.
@@ -82,13 +82,13 @@ Within the Advisor, you can collect basic statistics, run profiling checks or mo
 
     At the connection level there are the following tabs: 
 
-    - Connection - provide details about the connection parameters
-    - Schedule - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md)
-    - Comments - allows adding comments to your connection
-    - Labels - allows adding labels to your connection
-    - Schemas - displays currently imported schemas and allows importing more schemas and tables.
-    - Default grouping template - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-    - Incidents and notifications - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../working-with-dqo/incidents-and-notifications/notifications.md) whenever a new incident is created or modified.
+    - **Connection** - provide details about the connection parameters.
+    - **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
+    - **Comments** - allows adding comments to your connection.
+    - **Labels** - allows adding labels to your connection.
+    - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
+    - **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+    - **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../working-with-dqo/incidents-and-notifications/notifications.md) whenever a new incident is created or modified.
 
 3. Check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
 
@@ -96,14 +96,13 @@ Within the Advisor, you can collect basic statistics, run profiling checks or mo
    
     At the table level there are the following tabs:
 
-    - Table - provide details about the table and allows you to add filter, priority or stage name (for example, "Ingestion")
-    - Data streams - allows configuring columns for data streams segmentation. Learn more about [data streams segmentation in Concept section](../../dqo-concepts/data-grouping/data-grouping.md). 
-    - Date and time columns - allows setting date and time columns for [partition checks type](../../dqo-concepts/checks/partition-checks/partition-checks.md) and table timeliness checks subcategory. 
-    - Comments - allows adding comments to your tables
-    - Labels - allows adding labels to your tables
-    - Data groupings - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-    - Date and time columns - allows [configuring event and ingestion timestamp columns for timeliness checks]( ../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks/#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks/#configure-date-or-datetime-column-for-partition-checks).
-    - Incident configuration - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+    - **Table** - provide details about the table and allows you to add filter, priority or stage name (for example, "Ingestion").
+    - **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
+    - **Comments** - allows adding comments to your tables.
+    - **Labels** - allows adding labels to your tables.
+    - **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+    - **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks]( ../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks/#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks/#configure-date-or-datetime-column-for-partition-checks).
+    - **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring.
 
 
 ## Next step

@@ -80,13 +80,13 @@ public final class SpecFileNames {
     public static final String DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML = "defaultschedules.dqoschedules.yaml";
 
     /**
-     * Default monitoring schedules file name.
+     * Default checks file name.
      */
     public static final String DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML = "defaultchecks.dqochecks.yaml";
 
     /**
-     * Default notification webhooks file name.
+     * Default notification configuration file name.
      */
-    public static final String DEFAULT_NOTIFICATION_WEBHOOKS_FILE_NAME_YAML = "defaultwebhooks.dqowebhooks.yaml";
+    public static final String DEFAULT_NOTIFICATIONS_FILE_NAME_YAML = "defaultnotifications.dqonotifications.yaml";
 
 }

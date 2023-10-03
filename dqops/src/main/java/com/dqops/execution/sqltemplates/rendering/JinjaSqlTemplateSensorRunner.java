@@ -144,6 +144,13 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken,
                             sensorRunParameters.getRowCountLimit(),
                             sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
+                    Double defaultValue = sensorPrepareResult.getSensorDefinition().getSensorDefinitionSpec().getDefaultValue();
+                    if (sensorResultRows.rowCount() == 0 && defaultValue != null) {
+                        Table defaultValueResultTable = GenericSensorResultsFactory.createResultTableWithResult(defaultValue,
+                                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
+                        return new SensorExecutionResult(sensorRunParameters, defaultValueResultTable);
+                    }
+
                     return new SensorExecutionResult(sensorRunParameters, sensorResultRows);
                 }
             }
@@ -182,49 +189,57 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
 
         Table multiSensorTableResult = groupedSensorExecutionResult.getTableResult();
         Table sensorResultRows = Table.create(multiSensorTableResult.name());
-        Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());
-        if (actualValueColumn != null) {
-            if (!Objects.equals(actualValueColumn.name(), SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME)) {
-                actualValueColumn = actualValueColumn.copy();
-                actualValueColumn.setName(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+
+        Double sensorDefaultValuePlaceholder = sensorPrepareResult.getSensorDefinition().getSensorDefinitionSpec().getDefaultValue();
+        if (multiSensorTableResult.rowCount() == 0 && sensorDefaultValuePlaceholder != null) {
+            DoubleColumn defaultValueColumn = DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+            defaultValueColumn.append(sensorDefaultValuePlaceholder);
+            sensorResultRows.addColumns(defaultValueColumn);
+        } else {
+            Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());
+            if (actualValueColumn != null) {
+                if (!Objects.equals(actualValueColumn.name(), SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME)) {
+                    actualValueColumn = actualValueColumn.copy();
+                    actualValueColumn.setName(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+                }
+                sensorResultRows.addColumns(actualValueColumn);
             }
-            sensorResultRows.addColumns(actualValueColumn);
-        }
 
-        Column<?> expectedValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getExpectedValueAlias());
-        if (expectedValueColumn != null) {
-            if (!Objects.equals(expectedValueColumn.name(), SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
-                expectedValueColumn = expectedValueColumn.copy();
-                expectedValueColumn.setName(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+            Column<?> expectedValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getExpectedValueAlias());
+            if (expectedValueColumn != null) {
+                if (!Objects.equals(expectedValueColumn.name(), SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
+                    expectedValueColumn = expectedValueColumn.copy();
+                    expectedValueColumn.setName(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+                }
+                sensorResultRows.addColumns(expectedValueColumn);
             }
-            sensorResultRows.addColumns(expectedValueColumn);
-        }
 
-        Column<?> timePeriodColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        if (timePeriodColumn != null) {
-            sensorResultRows.addColumns(timePeriodColumn);
-        }
-        Column<?> timePeriodUtcColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
-        if (timePeriodUtcColumn != null) {
-            sensorResultRows.addColumns(timePeriodUtcColumn);
-        }
+            Column<?> timePeriodColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+            if (timePeriodColumn != null) {
+                sensorResultRows.addColumns(timePeriodColumn);
+            }
+            Column<?> timePeriodUtcColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+            if (timePeriodUtcColumn != null) {
+                sensorResultRows.addColumns(timePeriodUtcColumn);
+            }
 
-        // statistics (column sampling) specific columns
-        Column<?> sampleCountColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
-        if (sampleCountColumn != null) {
-            sensorResultRows.addColumns(sampleCountColumn);
-        }
-        Column<?> sampleIndexColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
-        if (sampleIndexColumn != null) {
-            sensorResultRows.addColumns(sampleIndexColumn);
-        }
+            // statistics (column sampling) specific columns
+            Column<?> sampleCountColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
+            if (sampleCountColumn != null) {
+                sensorResultRows.addColumns(sampleCountColumn);
+            }
+            Column<?> sampleIndexColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
+            if (sampleIndexColumn != null) {
+                sensorResultRows.addColumns(sampleIndexColumn);
+            }
 
-        List<Column<?>> allSourceColumns = multiSensorTableResult.columns();
-        Column<?>[] dataStreamLevelColumns = allSourceColumns.stream()
-                .filter(c -> c.name() != null && c.name().startsWith(SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX))
-                .toArray(Column<?>[]::new);
-        if (dataStreamLevelColumns.length > 0) {
-            sensorResultRows.addColumns(dataStreamLevelColumns);
+            List<Column<?>> allSourceColumns = multiSensorTableResult.columns();
+            Column<?>[] dataStreamLevelColumns = allSourceColumns.stream()
+                    .filter(c -> c.name() != null && c.name().startsWith(SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX))
+                    .toArray(Column<?>[]::new);
+            if (dataStreamLevelColumns.length > 0) {
+                sensorResultRows.addColumns(dataStreamLevelColumns);
+            }
         }
 
         return new SensorExecutionResult(sensorPrepareResult.getSensorRunParameters(), sensorResultRows);

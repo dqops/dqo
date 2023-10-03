@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
@@ -29,8 +29,8 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.storage.localfiles.observabilitychecksettings.DefaultObservabilityCheckWrapperImpl;
-import com.dqops.metadata.storage.localfiles.webhooks.DefaultIncidentWebhookNotificationsWrapperImpl;
+import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapperImpl;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -348,7 +348,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 
         if (createIfNull && (defaultObservabilityChecks == null || defaultObservabilityChecks.getSpec() == null)) {
             DefaultObservabilityCheckWrapperImpl wrapper = new DefaultObservabilityCheckWrapperImpl();
-            wrapper.setSpec(new DefaultObservabilityCheckSettingsSpec());
+            wrapper.setSpec(new DefaultObservabilityChecksSpec());
             this.setDefaultObservabilityChecks(wrapper);
         }
 

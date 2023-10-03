@@ -105,14 +105,14 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
 		this.getProviderSensors().flush(); // the first call to flush, maybe all provider checks are deleted and the check is deleted right after
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
-            return; // nothing to do, the instance was never touched
+            return; // nothing to do, the instance is empty (no file)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
