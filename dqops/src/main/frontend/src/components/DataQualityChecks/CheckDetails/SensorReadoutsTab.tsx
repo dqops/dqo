@@ -52,6 +52,11 @@ const SensorReadoutsTab = ({
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
+      label: 'Executed At',
+      value: 'executedAt',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
       label: 'Actual Value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
