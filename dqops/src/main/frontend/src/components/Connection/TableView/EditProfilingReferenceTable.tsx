@@ -878,8 +878,8 @@ export const EditProfilingReferenceTable = ({
                         'Max',
                         'Sum',
                         'Mean',
-                        'Null count',
-                        'Not null count'
+                        'Nulls count',
+                        'Not nulls count'
                       ].map((x, index) => (
                         <th
                           className="text-center px-4 py-1.5 pr-1 w-1/12"
