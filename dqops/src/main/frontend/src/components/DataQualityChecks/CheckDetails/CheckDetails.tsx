@@ -339,7 +339,10 @@ const CheckDetails = ({
           onClose={() => setDeleteDataDialogOpened(false)}
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
-            JobApiClient.deleteStoredData({
+            JobApiClient.deleteStoredData(
+              false,
+              undefined,
+              {
               ...(data_clean_job_template || {}),
               ...params
             });

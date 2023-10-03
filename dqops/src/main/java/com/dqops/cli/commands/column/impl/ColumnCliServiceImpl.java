@@ -23,6 +23,7 @@ import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.ColumnSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -215,11 +216,11 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			return cliOperationStatus;
 		}
 
-		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(
+		List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.columnService.deleteColumns(
 				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs), principal);
 
 		try {
-			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+			for (PushJobResult<DeleteStoredDataResult> job : backgroundJobs) {
 				job.getFinishedFuture().get();
 			}
 		} catch (InterruptedException e) {

@@ -71,7 +71,7 @@ const CheckCategoriesView = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
 
@@ -183,7 +183,10 @@ const CheckCategoriesView = ({
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
+          JobApiClient.deleteStoredData(
+            false,
+            undefined,
+            {
             ...category.data_clean_job_template,
             ...params
           });

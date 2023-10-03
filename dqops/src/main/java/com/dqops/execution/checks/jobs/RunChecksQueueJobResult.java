@@ -32,7 +32,6 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksQueueJobResult", description = "Object returned from the operation that queues a \"run checks\" job. The result contains the job id that was started and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the \"run checks\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
 public class RunChecksQueueJobResult {
     /**

@@ -25,7 +25,7 @@ import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJobResult> {
+public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult> {
     private ErrorsDeleteService errorsDeleteService;
     private StatisticsDeleteService statisticsDeleteService;
     private CheckResultsDeleteService checkResultsDeleteService;
@@ -159,32 +159,30 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public DeleteStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+    public DeleteStoredDataResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         if (this.deletionParameters.getConnectionName() == null) {
             throw new IllegalArgumentException("Connection not specified for data delete job.");
         }
 
-        DeleteStoredDataQueueJobResult result = new DeleteStoredDataQueueJobResult();
-        DataDeleteResult operationResult = new DataDeleteResult();
-        result.setOperationResult(operationResult);
+        DeleteStoredDataResult result = new DeleteStoredDataResult();
 
         if (this.deletionParameters.isDeleteErrors()) {
-            DataDeleteResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
-            operationResult.concat(errorsResult);
+            DeleteStoredDataResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
+            result.concat(errorsResult);
         }
         if (this.deletionParameters.isDeleteStatistics()) {
-            DataDeleteResult statisticsResult = this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
-            operationResult.concat(statisticsResult);
+            DeleteStoredDataResult statisticsResult = this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
+            result.concat(statisticsResult);
         }
         if (this.deletionParameters.isDeleteCheckResults()) {
-            DataDeleteResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
-            operationResult.concat(checkResultsResult);
+            DeleteStoredDataResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
+            result.concat(checkResultsResult);
         }
         if (this.deletionParameters.isDeleteSensorReadouts()) {
-            DataDeleteResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
-            operationResult.concat(sensorReadoutsResult);
+            DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
+            result.concat(sensorReadoutsResult);
         }
 
         return result;

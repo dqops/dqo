@@ -200,10 +200,10 @@ const CheckListItem = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId?.jobId);
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;

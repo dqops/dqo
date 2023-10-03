@@ -25,9 +25,10 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.storage.ParquetPartitionId;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -70,33 +71,32 @@ public class DataCliServiceImpl implements DataCliService {
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataQueueJobParameters);
         DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
-        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
+        PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
 
-        DataDeleteResult dataDeleteResult = null;
+        DeleteStoredDataResult deleteStoredDataResult = null;
 
         try {
-            DeleteStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
-            dataDeleteResult = jobResult.getOperationResult();
-            cliOperationStatus.setSuccessMessage(String.format("%d affected partitions.", dataDeleteResult.getPartitionResults().size()));
+            deleteStoredDataResult= pushJobResult.getFinishedFuture().get();
+            cliOperationStatus.setSuccessMessage(String.format("%d affected partitions.", deleteStoredDataResult.getPartitionResults().size()));
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         }
 
-        if (dataDeleteResult != null) {
-            cliOperationStatus.setTable(dataDeleteResultAsTable(dataDeleteResult));
+        if (deleteStoredDataResult != null) {
+            cliOperationStatus.setTable(dataDeleteResultAsTable(deleteStoredDataResult));
         }
         return cliOperationStatus;
     }
 
     /**
-     * Convert {@link DataDeleteResult} to a Tablesaw format.
-     * @param dataDeleteResult Results of "data delete" operation.
+     * Convert {@link DeleteStoredDataResult} to a Tablesaw format.
+     * @param deleteStoredDataResult Results of "data delete" operation.
      * @return Tabular representation of the results.
      */
-    protected Table dataDeleteResultAsTable(DataDeleteResult dataDeleteResult) {
-        Map<ParquetPartitionId, DataDeleteResultPartition> partitionMap = dataDeleteResult.getPartitionResults();
+    protected Table dataDeleteResultAsTable(DeleteStoredDataResult deleteStoredDataResult) {
+        Map<ParquetPartitionId, DataDeleteResultPartition> partitionMap = deleteStoredDataResult.getPartitionResults();
         Iterable<ParquetPartitionId> partitionIds = partitionMap.keySet().stream().sorted().collect(Collectors.toList());
 
         Table resultTable = Table.create().addColumns(

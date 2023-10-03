@@ -18,6 +18,7 @@ package com.dqops.services.metadata;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -46,7 +47,7 @@ public interface ConnectionService {
      * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(String connectionName, DqoUserPrincipal principal);
+    PushJobResult<DeleteStoredDataResult> deleteConnection(String connectionName, DqoUserPrincipal principal);
 
     /**
      * Deletes connections from metadata and flushes user context.
@@ -55,5 +56,5 @@ public interface ConnectionService {
      * @param principal Principal that will be used to run the job.
      * @return List of asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<String> connectionNames, DqoUserPrincipal principal);
+    List<PushJobResult<DeleteStoredDataResult>> deleteConnections(Iterable<String> connectionNames, DqoUserPrincipal principal);
 }

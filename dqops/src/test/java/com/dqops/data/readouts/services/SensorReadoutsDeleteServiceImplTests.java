@@ -30,7 +30,7 @@ import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactory;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
@@ -370,7 +370,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
         Assertions.assertTrue(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
@@ -433,7 +433,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
         Assertions.assertFalse(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(

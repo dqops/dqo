@@ -19,7 +19,7 @@ import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
 import com.dqops.metadata.search.pattern.SearchPattern;
@@ -49,7 +49,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
      * @return Data delete operation summary.
      */
     @Override
-    public DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -63,13 +63,13 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
         if (connections == null) {
             // No connections present.
-            return dataDeleteResult;
+            return deleteStoredDataResult;
         }
 
         List<String> filteredConnections = connections.stream()
@@ -110,13 +110,13 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                     continue;
                 }
 
-                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
-                dataDeleteResult.concat(snapshotDataDeleteResult);
+                DeleteStoredDataResult snapshotDeleteStoredDataResult = currentSnapshot.getDeleteResults();
+                deleteStoredDataResult.concat(snapshotDeleteStoredDataResult);
 
                 currentSnapshot.save();
             }
         }
 
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 }

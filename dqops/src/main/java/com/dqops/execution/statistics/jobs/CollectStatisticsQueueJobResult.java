@@ -35,7 +35,6 @@ import lombok.EqualsAndHashCode;
         "The result contains the job id that was started and optionally can also contain the result of collecting the statistics  " +
         "if the operation was started with wait=true parameter to wait for the \"collect statistics\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
 public class CollectStatisticsQueueJobResult {
     /**

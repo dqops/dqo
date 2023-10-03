@@ -67,36 +67,45 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    const res = await JobApiClient.importTables({
+    const res = await JobApiClient.importTables(
+      false, 
+      undefined,
+      {
       connectionName,
       schemaName,
       tableNames: selectedTables
-    })
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          (res.data as any)?.jobId?.jobId
-        )
-      );
-      setJobId((res.data as any)?.jobId);
-    dispatch(toggleAdvisor(true)); 
-  };
-
-  const importAllTables = async () => {
-    const res = await JobApiClient.importTables({
-      connectionName,
-      schemaName,
-      tableNames: tables.map((item) => item.tableName ?? '')
-    })
+    });
+    
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId);
+    
+    setJobId(res.data?.jobId?.jobId);
+    dispatch(toggleAdvisor(true)); 
+  };
+
+  const importAllTables = async () => {
+    const res = await JobApiClient.importTables(
+      false,
+      undefined,
+      {
+      connectionName,
+      schemaName,
+      tableNames: tables.map((item) => item.tableName ?? '')
+    });
+
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        res.data?.jobId?.jobId ?? 0
+      )
+    );
+    setJobId(res.data?.jobId?.jobId);
     dispatch(toggleAdvisor(true));
   };
 

@@ -35,7 +35,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const collectStatistics = () => {
     setIsCollected(true);
 
-    JobApiClient.collectStatisticsOnDataGroups({
+    JobApiClient.collectStatisticsOnTable(false, undefined, {
       connectionName: advisorObject.connectionName
     });
   };

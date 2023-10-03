@@ -34,6 +34,7 @@ import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.search.TableSearchFilters;
@@ -332,10 +333,10 @@ public class TableCliServiceImpl implements TableCliService {
         connToTablesMap.put(connectionName, tableNames);
 
         DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap, principal);
+        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap, principal);
 
         try {
-            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+            for (PushJobResult<DeleteStoredDataResult> job: backgroundJobs) {
                 job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {

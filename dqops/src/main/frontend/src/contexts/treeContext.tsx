@@ -1078,7 +1078,9 @@ function TreeProvider(props: any) {
       if (colArr && colArr.length > 0) {
         node.data_clean_job_template.columnNames = colArr;
       }
-      JobApiClient.deleteStoredData({
+      JobApiClient.deleteStoredData(false,
+        undefined,
+        {
         ...node.data_clean_job_template,
 
         checkType,
@@ -1101,7 +1103,10 @@ function TreeProvider(props: any) {
           checkType = undefined;
           break;
       }
-      JobApiClient.deleteStoredData({
+      JobApiClient.deleteStoredData(
+        false,
+        undefined,
+        {
         connectionName: node.collect_statistics_job_template?.connectionName,
         schemaTableName: node.collect_statistics_job_template?.schemaTableName,
         checkType,

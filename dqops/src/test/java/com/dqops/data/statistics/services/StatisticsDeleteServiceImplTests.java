@@ -30,7 +30,7 @@ import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactory;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactoryImpl;
@@ -371,7 +371,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
         Assertions.assertTrue(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
@@ -434,7 +434,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
         Assertions.assertFalse(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(

@@ -31,6 +31,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
@@ -2929,7 +2930,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(
+        PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
                 connectionName, tableWrapper.getPhysicalTableName(), principal);
 
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200

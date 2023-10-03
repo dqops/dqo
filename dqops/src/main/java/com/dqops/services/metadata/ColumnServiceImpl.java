@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -87,10 +88,10 @@ public class ColumnServiceImpl implements ColumnService {
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(String connectionName,
-                                                                      PhysicalTableName tableName,
-                                                                      String columnName,
-                                                                      DqoUserPrincipal principal) {
+    public PushJobResult<DeleteStoredDataResult> deleteColumn(String connectionName,
+                                                              PhysicalTableName tableName,
+                                                              String columnName,
+                                                              DqoUserPrincipal principal) {
         List<String> columnNameList = new LinkedList<>();
         columnNameList.add(columnName);
 
@@ -100,7 +101,7 @@ public class ColumnServiceImpl implements ColumnService {
         Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new HashMap<>();
         connToTabToColMapping.put(connectionName, tableToColumnMapping);
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteColumns(connToTabToColMapping, principal);
+        List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteColumns(connToTabToColMapping, principal);
 
         return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
@@ -113,7 +114,7 @@ public class ColumnServiceImpl implements ColumnService {
      * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(
+    public List<PushJobResult<DeleteStoredDataResult>> deleteColumns(
             Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns, DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -153,11 +154,11 @@ public class ColumnServiceImpl implements ColumnService {
             }
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
+        List<PushJobResult<DeleteStoredDataResult>> results = new ArrayList<>();
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
-            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
+            PushJobResult<DeleteStoredDataResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
             results.add(jobResult);
         }
 

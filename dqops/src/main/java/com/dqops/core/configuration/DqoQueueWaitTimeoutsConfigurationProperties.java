@@ -41,6 +41,16 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
     private long collectStatistics = 120L;
 
     /**
+     * Wait timeout for the "import tables" job.
+     */
+    private long importTables = 120L;
+
+    /**
+     * Wait timeout for the "delete stored data" job.
+     */
+    private long deleteStoredData = 120L;
+
+    /**
      * The default wait timeout for any kind of job.
      */
     private long defaultWaitTimeout = 120L;
@@ -74,6 +84,13 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
             case COLLECT_STATISTICS:
             case COLLECT_STATISTICS_ON_TABLE:
                 return this.collectStatistics;
+
+            case DELETE_STORED_DATA:
+                return this.deleteStoredData;
+
+            case IMPORT_SCHEMA:
+            case IMPORT_TABLES:
+                return this.importTables;
 
             default:
                 return this.defaultWaitTimeout;
