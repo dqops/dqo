@@ -79,7 +79,7 @@ export default function SingleSharedCredential() {
 
 
     const isBinaryString = (input: string) => {
-        const binaryPattern = /^[01]+$/;
+       const binaryPattern = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
         if (binaryPattern.test(input) === false && type === "binary") {
             setIncorrectBinaryText(true)
         } else {
@@ -115,7 +115,7 @@ export default function SingleSharedCredential() {
             <RadioButton label='Text' checked={type === "text"} onClick={() => setType("text")}/>
             <RadioButton label='Binary' checked={type === "binary"} onClick={() => setType("binary")}/>
         </div>
-        {incorrectBinaryText ? <div className='text-red-500 pt-5 text-xl'>Incorrect binary code</div> : null}
+        {incorrectBinaryText ? <div className='text-red-500 pt-5 text-xl'>Invalid base64 text</div> : null}
         <FieldTypeTextarea className='w-300 h-300 mt-4' value={textAreaValue} onChange={(value) => setTextAreaValue(value)}/>
         </div>
     </>

@@ -58,6 +58,13 @@ export default function SharedCredentailsDetail() {
       
   }
 
+  const downlandSharedCredentail = async (credential: string) => {
+    await SharedCredentailsApi.downloadSharedCredential(credential)
+    .then((res) => console.log(res.data))
+    .catch((err) => console.error(err))
+      
+  }
+
   useEffect(() => {
     setLoading(true)
     getSharedCredentailList()
@@ -104,7 +111,8 @@ export default function SharedCredentailsDetail() {
                         onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name ?? "")}/>
                     </td>
                     <td className="px-6 py-2 text-left">
-                        <Button label='downland' variant='text' color='primary'  />
+                        <Button label='downland' variant='text' color='primary' 
+                        onClick={() => downlandSharedCredentail(credential.credential_name ?? "")} />
                     </td>
                 </tr>
                 )}
