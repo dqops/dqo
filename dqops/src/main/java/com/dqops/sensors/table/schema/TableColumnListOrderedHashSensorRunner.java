@@ -202,7 +202,8 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
         }
         catch (Throwable exception) {
             if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
+                log.info(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             }
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
