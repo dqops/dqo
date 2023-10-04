@@ -161,10 +161,10 @@ dqo:
       synchronize-multiple-folders: 120
       default-wait-timeout: 120
   scheduler:
-    #start: true
+    start: true
     synchronization-mode: silent
     check-run-mode: silent
-    synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:

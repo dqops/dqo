@@ -308,7 +308,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Long dqoQueueWaitTimeoutsDefaultWaitTimeout;
 
     @CommandLine.Option(names = {"--dqo.scheduler.start"},
-            description = "Starts the job scheduler on startup (true) or disables the job scheduler (false).")
+            description = "Starts the job scheduler on startup (true) or disables the job scheduler (false).", defaultValue = "true")
     private Boolean dqoSchedulerStart;
 
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
@@ -316,7 +316,9 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoSchedulerEnableCloudSync;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronize-cron-schedule"},
-            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new cron schedules. Synchronization with DQO cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "*/10 * * * *")
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new cron schedules. " +
+                    "The default schedule will synchronize local files with DQO Cloud and refresh the data quality data warehouse 5 minutes past each hour. " +
+                    "Synchronization with DQO cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "5 * * * *")
     private String dqoSchedulerSynchronizeCronSchedule;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronized-folders"},
