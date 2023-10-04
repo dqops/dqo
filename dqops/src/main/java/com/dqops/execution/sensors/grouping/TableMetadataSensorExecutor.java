@@ -111,8 +111,10 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, fakeTableSpec);
         }
         catch (Throwable exception) {
-            log.warn("Metadata sensor failed to read the metadata of the table:" +
-                    physicalTableName.toTableSearchFilter(), exception);
+            if (log.isInfoEnabled()) {
+                log.info("Metadata sensor failed to read the metadata of the table: " +
+                        physicalTableName.toTableSearchFilter() + ", error: " + exception.getMessage(), exception);
+            }
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }
