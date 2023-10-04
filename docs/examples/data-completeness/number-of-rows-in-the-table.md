@@ -1,6 +1,6 @@
 # Number of rows in the table
 
-Verifies that the table is not empty and meets size requirements.
+Verifies that the table is not empty and meets the size requirements.
 
 **PROBLEM**
 
@@ -14,13 +14,10 @@ the world’s largest, annual population-based telephone survey of over 400,000 
 For any database analysis, it is important that the tables are not empty. In this example, we will detect empty or too small tables.
 
 **SOLUTION**
-We will verify the data using monitoring [row_count](../../checks/table/volume/row-count.md) table check.
-Row_count check has a default configuration of threshold. First, we weill validate if a table is not empty.
-To do so, we will set minimum count threshold level for the check:
+You will verify the data using monitoring [row_count](../../checks/table/volume/row-count.md) table check.
+Row_count check has a default configuration of warning threshold set to 1. You will use this check to validate if a table is not empty.
 
-- error: 1
-
-After you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
+Next, after you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
 We aim to verify if the table meets size requirements and is not too small:
 
 - warning: 692
@@ -28,6 +25,26 @@ We aim to verify if the table meets size requirements and is not too small:
 - fatal: 150
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+
+**VALUE**
+
+If the number of rows falls below 692, a warning alert will be triggered.
+
+## Data structure
+
+The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.
+
+| edition | report_type             | measure_name | state_name    | subpopulation | value |
+|:--------|:------------------------|:-------------|:--------------|:--------------|:------|
+| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | 79    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |               | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |               | 88    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia |               | 77    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | 78    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | California    | Female        | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | Female        | 87    |
 
 ## Running the checks and evaluating the results using the graphical interface
 
@@ -37,8 +54,9 @@ If you want to learn more about checks and threshold levels, please refer to the
    ![Row-count check configuration in the Monitoring section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-monitoring-section.png)
 
 2. Or go to the **Configuration** section
-   The Configuration section afford you to configure sensors, rules, data quality checks and default check configuration.
+   The Configuration section allows you to configure sensors, rules, data quality checks and default check configuration.
    You can also configure row_count check in Configuration section.
+
    ![Row-count check configuration in the Configuration section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-configuration-section.png)
 
 3. Review the results which should be similar to the one below.
@@ -86,26 +104,6 @@ spec:
 ```
 
 After you ensure that your table isn’t empty, you can set higher thresholds to ensure it meets size requirements.
-
-**VALUE**
-
-If the number of rows falls below 692, a warning alert will be triggered.
-
-## Data structure
-
-The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.
-
-| edition | report_type             | measure_name | state_name    | subpopulation | value |
-|:--------|:------------------------|:-------------|:--------------|:--------------|:------|
-| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | 79    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |               | 88    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia |               | 77    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | 78    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | California    | Female        | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | Female        | 87    |
 
 ## Running the checks in the example and evaluating the results using the graphical interface
 
