@@ -17,6 +17,7 @@ export default function SingleSharedCredential() {
     const [editingCredential, setEditingCredential] = useState<SharedCredentialModel>()
     const [type, setType] = useState<SharedCredentialModelTypeEnum>("text")
     const [textAreaValue, setTextAreaValue] = useState<string>("")
+    const [incorrectBinaryText, setIncorrectBinaryText] = useState(false)
 
     const dispatch = useActionDispatch()
 
@@ -38,9 +39,9 @@ export default function SingleSharedCredential() {
             .catch((err) => console.error(err))
 
         } else {
-            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, binary_value: textAreaValue})
-            .catch((err) => console.error(err))
-            
+                await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, binary_value: textAreaValue})
+                .catch((err) => console.error(err)) 
+           
         }
       
       dispatch(
@@ -70,25 +71,44 @@ export default function SingleSharedCredential() {
         }
     }, [credential_name, editingCredential])
 
+    useEffect(() => {
+        isBinaryString(textAreaValue)
+    }, [textAreaValue, type])
+
     console.log(editingCredential, credential_name)
 
+    const isBinaryString = (input: string) => {
+        const binaryPattern = /^[01]+$/;
+        if (binaryPattern.test(input) === false && type === "binary") {
+            setIncorrectBinaryText(true)
+        } else {
+            setIncorrectBinaryText(false)
+        } 
+    }
     
 
   return (
     <DefinitionLayout>
-        <div className='w-full border-b border-b-gray-400 flex justify-end '>  
+        <div className='w-full border-b border-b-gray-400 flex justify-between'>
+        <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
+            <div>
+                Shared credential: 
+            </div>
+                <Input value={credentialName} onChange={(e) => setCredentialName(e.target.value)} disabled={credential_name}/>
+        </div>
         <Button label={credential_name ? 'Edit shared credential' : 'Add shared credential'}
          color='primary'
          variant='contained'
          className='w-55 mr-10 my-3'
          onClick={credential_name ? editSharedCredential : addSharedCredential}
+         disabled={incorrectBinaryText === true}
         />
       </div>
       <div className='w-100 px-5 '>
-        <div className='text-lg py-3'>
+        {/* <div className='text-lg py-3'>
           Credential name:  
         </div>
-        <Input value={credentialName} onChange={(e) => setCredentialName(e.target.value)}/>
+        <Input value={credentialName} onChange={(e) => setCredentialName(e.target.value)}/> */}
         <div className='text-lg py-3'>
           Type of credential:  
         </div>
@@ -96,6 +116,7 @@ export default function SingleSharedCredential() {
             <RadioButton label='Text' checked={type === "text"} onClick={() => setType("text")}/>
             <RadioButton label='Binary' checked={type === "binary"} onClick={() => setType("binary")}/>
         </div>
+        {incorrectBinaryText ? <div className='text-red-500 pt-5 text-xl'>Incorrect binary code</div> : null}
         <FieldTypeTextarea className='w-300 h-300 mt-4' value={textAreaValue} onChange={(value) => setTextAreaValue(value)}/>
     </div>
     </DefinitionLayout>
