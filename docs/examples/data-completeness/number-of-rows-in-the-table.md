@@ -1,6 +1,6 @@
 # Number of rows in the table
 
-Verifies that the number of rows in a table does not exceed the minimum accepted count.
+Verifies that the table is not empty and meets size requirements.
 
 **PROBLEM**
 
@@ -34,12 +34,12 @@ If you want to learn more about checks and threshold levels, please refer to the
 1. Go to the **Monitoring** section.
    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
    Here you can see that the default check error threshold is 1 which allows you to validate whether your table is empty or not.
-   ![Row-count check configuration in the Monitoring section](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+   ![Row-count check configuration in the Monitoring section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-monitoring-section.png)
 
 2. Or go to the **Configuration** section
    The Configuration section afford you to configure sensors, rules, data quality checks and default check configuration.
    You can also configure row_count check in Configuration section.
-   ![Row-count check configuration in the Configuration section](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+   ![Row-count check configuration in the Configuration section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-configuration-section.png)
 
 3. Review the results which should be similar to the one below.
    The actual value of rows in this example is 18155, which is above the minimum threshold level set in the error (1).
@@ -54,9 +54,9 @@ If you want to learn more about checks and threshold levels, please refer to the
 5. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-   Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection, issues per schema, issues per quality dimension, issues per check category.
+   Below you can see the results displayed on the Empty or too small tables dashboard showing results by check name, severity, table stage, table, connection and schema.
 
-   ![Row-count results on Issues count per table dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-issues-count-per-table-dashboard.png)
+   ![Row-count results on Empty or too small tables dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-result-on-empty-or-too-small-tables-dashboard.png)
 
 ## YAML configuration file
 
