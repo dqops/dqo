@@ -896,7 +896,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            log.warn("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.checkExecutionLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }
@@ -1013,7 +1013,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            log.warn("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.checkExecutionLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }
