@@ -58,12 +58,11 @@ export default function SharedCredentailsDetail() {
       
   }
 
-  const downlandSharedCredentail = async (credential: string) => {
-    await SharedCredentailsApi.downloadSharedCredential(credential)
-    .then((res) => console.log(res.data))
-    .catch((err) => console.error(err))
-      
-  }
+  // const downlandSharedCredentail = async (credential: string) => {
+  //   await SharedCredentailsApi.downloadSharedCredential(credential)
+  //   .then((res) => console.log(res.data))
+  //   .catch((err) => console.error(err))
+  // }
 
   useEffect(() => {
     setLoading(true)
@@ -111,8 +110,9 @@ export default function SharedCredentailsDetail() {
                         onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name ?? "")}/>
                     </td>
                     <td className="px-6 py-2 text-left">
-                        <Button label='downland' variant='text' color='primary' 
-                        onClick={() => downlandSharedCredentail(credential.credential_name ?? "")} />
+                        {/* <Button label='downland' variant='text' color='primary' 
+                        onClick={() => downlandSharedCredentail(credential.credential_name ?? "")} /> */}
+                        <a href={`/api/credentials/${credential.credential_name}/download`} rel="noreferrer" target="_blank" className='text-teal-500'>downland</a>
                     </td>
                 </tr>
                 )}

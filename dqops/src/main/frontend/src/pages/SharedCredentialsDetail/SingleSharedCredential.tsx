@@ -99,13 +99,21 @@ export default function SingleSharedCredential() {
             </div>
                 <Input value={credentialName} onChange={(e) => setCredentialName(e.target.value)} disabled={credential_name}/>
         </div>
+        <div className='flex items-center justify-center space-x-1 pr-5 overflow-hidden'>
+        {credential_name ? 
+        <a href={`/api/credentials/${credential_name}/download`} rel="noreferrer" target="_blank">
+            <Button label='Downland'
+            color='primary'
+            variant='contained'/>
+            </a> : null }
         <Button label={credential_name ? 'Edit shared credential' : 'Add shared credential'}
          color='primary'
          variant='contained'
          className='w-55 mr-10 my-3'
          onClick={credential_name ? editSharedCredential : addSharedCredential}
          disabled={incorrectBinaryText === true}
-        />
+         />
+         </div>
       </div>
       <div className='w-100 px-5 '>
         <div className='text-lg py-3'>
