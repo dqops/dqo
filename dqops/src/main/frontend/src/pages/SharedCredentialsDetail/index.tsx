@@ -14,7 +14,7 @@ export default function SharedCredentailsDetail() {
   const dispatch = useActionDispatch()
   
   const [sharedCredentialList, setSharedCredentialList] = useState<SharedCredentialListModel[]>();
-  const [selectedSharedCredentialToDelete, setSelectedSharedCredentialToDelete] = useState<string>()
+  const [selectedSharedCredentialToDelete, setSelectedSharedCredentialToDelete] = useState<string>("")
   const [reshreshIndicator, setRefreshIndicator] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
 
@@ -98,7 +98,7 @@ export default function SharedCredentailsDetail() {
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='delete' variant='text' color='primary' 
-                        onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name)}/>
+                        onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name ?? "")}/>
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='downland' variant='text' color='primary'  />
