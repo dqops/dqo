@@ -92,7 +92,7 @@ export default function SingleSharedCredential() {
     <DefinitionLayout>
     {userProfile.can_manage_and_view_shared_credentials === true ? 
     <>
-        <div className='w-full border-b border-b-gray-400 flex justify-between'>
+        <div className='w-full border-b border-b-gray-400 flex justify-between '>
         <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
             <div>
                 Shared credential: 
@@ -124,7 +124,7 @@ export default function SingleSharedCredential() {
             <RadioButton label='Binary' checked={type === "binary"} onClick={() => setType("binary")}/>
         </div>
         {incorrectBinaryText ? <div className='text-red-500 pt-5 text-xl'>Invalid base64 text</div> : null}
-        <FieldTypeTextarea className='w-300 h-300 mt-4' value={textAreaValue} onChange={(value) => setTextAreaValue(value)}/>
+        <FieldTypeTextarea className='w-300 mt-4' value={textAreaValue} onChange={(value) => setTextAreaValue(value)}/>
         </div>
     </>
     : 
