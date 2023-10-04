@@ -29,8 +29,8 @@ export default function SharedCredentailsDetail() {
   const addSharedCredential = async () => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTAILS_DETAIL(),
-        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(),
+        url: ROUTES.SHARED_CREDENTAILS_DETAIL("new"),
+        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE("new"),
         label: "Add credential",
       })
     );
@@ -39,8 +39,8 @@ export default function SharedCredentailsDetail() {
   const updateSharedCredential = async (credential_name : string) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTAILS_DETAIL(),
-        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(),
+        url: ROUTES.SHARED_CREDENTAILS_DETAIL(credential_name),
+        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(credential_name),
         label: "Edit credential",
         state: {
           credential_name

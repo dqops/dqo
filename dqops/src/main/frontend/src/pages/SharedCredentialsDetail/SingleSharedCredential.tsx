@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DefinitionLayout from '../../components/DefinitionLayout'
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
@@ -7,13 +7,14 @@ import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 import { SharedCredentailsApi } from '../../services/apiClient';
 import RadioButton from '../../components/RadioButton';
 import Button from '../../components/Button';
-import { SharedCredentialModelTypeEnum } from '../../api';
+import { SharedCredentialModel, SharedCredentialModelTypeEnum } from '../../api';
 import Input from '../../components/Input';
 import FieldTypeTextarea from '../../components/Connection/ConnectionView/FieldTypeTextarea';
 
 export default function SingleSharedCredential() {
     const { credential_name } = useSelector(getFirstLevelSensorState);
     const [credentialName, setCredentialName] = useState("")
+    const [editingCredential, setEditingCredential] = useState<SharedCredentialModel>()
     const [type, setType] = useState<SharedCredentialModelTypeEnum>("text")
     const [textAreaValue, setTextAreaValue] = useState<string>("")
 
@@ -37,6 +38,23 @@ export default function SingleSharedCredential() {
       ))
     }
 
+    useEffect(() => {
+        if(credential_name){
+           async () => await SharedCredentailsApi.getSharedCredential(credential_name)
+                .then((res) => setEditingCredential(res.data))
+                .catch((err) => console.error(err))
+            }
+    }, [])
+
+    useEffect(() => {
+        if(editingCredential){
+            setType(editingCredential.type ?? "text")
+            setTextAreaValue((editingCredential.type === "text" ? 
+            editingCredential.text_value : editingCredential.binary_value) ?? "")
+            }
+    }, [credential_name, editingCredential])
+
+    
 
   return (
     <DefinitionLayout>
