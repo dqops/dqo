@@ -215,7 +215,8 @@ public class SwaggerFileUpgradeUtility {
                             Field parameter;
                             try {
                                 parameter = model.getDeclaredField(parameterName);
-                            } catch (NoSuchFieldException e) {
+                            } catch (Exception e) {
+                                System.err.println("Cannot find parameter " + parameterName + " on the model " + model + ", error: " + e.toString());
                                 throw new RuntimeException(e);
                             }
 
