@@ -17,6 +17,9 @@
 package com.dqops.utils.logging;
 
 import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.Strings;
 import org.slf4j.Logger;
@@ -56,15 +59,19 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
     private final Logger checksLogger = LoggerFactory.getLogger(LOGGER_NAME_CHECKS);
     private final Logger statisticsLogger = LoggerFactory.getLogger(LOGGER_NAME_STATISTICS);
     private final DqoLoggingExecutionConfigurationProperties configurationProperties;
+    private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
     /**
      * Dependency injection constructor.
      * @param configurationProperties Logging configuration properties.
+     * @param dqoCloudApiKeyProvider API Key provider, used to log additional information.
      */
     @Autowired
-    public CheckExecutionLoggerImpl(DqoLoggingExecutionConfigurationProperties configurationProperties) {
+    public CheckExecutionLoggerImpl(DqoLoggingExecutionConfigurationProperties configurationProperties,
+                                    DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
 
         this.configurationProperties = configurationProperties;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
     }
 
     /**
@@ -140,6 +147,17 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
             for (String keyValuePair : keyValuePairs) {
                 String[] keyValuePairElements = StringUtils.split(keyValuePair, '=');
                 loggingEventBuilder.addKeyValue(keyValuePairElements[0], keyValuePairElements[1]);
+            }
+        }
+
+        if (this.dqoCloudApiKeyProvider != null) {
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            if (apiKey != null) {
+                DqoCloudApiKeyPayload apiKeyPayload = apiKey.getApiKeyPayload();
+                loggingEventBuilder.addKeyValue("tenantId", apiKeyPayload.getTenantId());
+                if (apiKeyPayload.getAccountName() !=  null) {
+                    loggingEventBuilder.addKeyValue("account", apiKeyPayload.getAccountName());
+                }
             }
         }
 
