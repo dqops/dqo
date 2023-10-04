@@ -37,7 +37,7 @@ export default function SingleSharedCredential() {
   
     const editSharedCredential = async () => {
         if (type ==="text"){
-            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, text_value: textAreaValue})
+            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name: credential_name, type: type, text_value: textAreaValue})
             .catch((err) => console.error(err))
 
         } else {
@@ -86,6 +86,7 @@ export default function SingleSharedCredential() {
             setIncorrectBinaryText(false)
         } 
     }
+    console.log(textAreaValue, credential_name, type)
     
 
   return (
