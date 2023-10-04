@@ -8,9 +8,11 @@ import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 export default function SharedCredentailsDetail() {
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch()
   
   const [sharedCredentialList, setSharedCredentialList] = useState<SharedCredentialListModel[]>();
@@ -75,6 +77,7 @@ export default function SharedCredentailsDetail() {
 
   return (
     <DefinitionLayout>
+      {userProfile.can_manage_and_view_shared_credentials === true ? 
           <table className='w-full '>
             <thead className='border-b w-full border-b-gray-400 relative'>
                 <th className="px-6 py-4 text-left">Credential name</th>
@@ -107,6 +110,11 @@ export default function SharedCredentailsDetail() {
                 )}
             </tbody>
         </table>
+        : 
+        <div className='w-full h-screen flex items-center justify-center text-red-500 text-2xl'>
+         Access denied
+        </div> 
+      }
         <ConfirmDialog open={selectedSharedCredentialToDelete?.length!==0} onClose={() => setSelectedSharedCredentialToDelete('')} onConfirm={deleteSharedCredentail} message={`Are you sure you want to delete ${selectedSharedCredentialToDelete} credential?`}/>
     </DefinitionLayout>
   )

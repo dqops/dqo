@@ -10,8 +10,10 @@ import Button from '../../components/Button';
 import { SharedCredentialModel, SharedCredentialModelTypeEnum } from '../../api';
 import Input from '../../components/Input';
 import FieldTypeTextarea from '../../components/Connection/ConnectionView/FieldTypeTextarea';
+import { IRootState } from '../../redux/reducers';
 
 export default function SingleSharedCredential() {
+    const { userProfile } = useSelector((state: IRootState) => state.job || {});
     const { credential_name } = useSelector(getFirstLevelSensorState);
     const [credentialName, setCredentialName] = useState("")
     const [editingCredential, setEditingCredential] = useState<SharedCredentialModel>()
@@ -75,7 +77,6 @@ export default function SingleSharedCredential() {
         isBinaryString(textAreaValue)
     }, [textAreaValue, type])
 
-    console.log(editingCredential, credential_name)
 
     const isBinaryString = (input: string) => {
         const binaryPattern = /^[01]+$/;
@@ -89,6 +90,8 @@ export default function SingleSharedCredential() {
 
   return (
     <DefinitionLayout>
+    {userProfile.can_manage_and_view_shared_credentials === true ? 
+    <>
         <div className='w-full border-b border-b-gray-400 flex justify-between'>
         <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
             <div>
@@ -105,10 +108,6 @@ export default function SingleSharedCredential() {
         />
       </div>
       <div className='w-100 px-5 '>
-        {/* <div className='text-lg py-3'>
-          Credential name:  
-        </div>
-        <Input value={credentialName} onChange={(e) => setCredentialName(e.target.value)}/> */}
         <div className='text-lg py-3'>
           Type of credential:  
         </div>
@@ -118,7 +117,13 @@ export default function SingleSharedCredential() {
         </div>
         {incorrectBinaryText ? <div className='text-red-500 pt-5 text-xl'>Incorrect binary code</div> : null}
         <FieldTypeTextarea className='w-300 h-300 mt-4' value={textAreaValue} onChange={(value) => setTextAreaValue(value)}/>
-    </div>
+        </div>
+    </>
+    : 
+    <div className='w-full h-screen flex items-center justify-center text-red-500 text-2xl'>
+     Access denied
+    </div> 
+  }
     </DefinitionLayout>
   )
 }
