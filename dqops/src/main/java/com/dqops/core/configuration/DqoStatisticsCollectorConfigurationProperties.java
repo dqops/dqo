@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 public class DqoStatisticsCollectorConfigurationProperties implements Cloneable {
     private int truncatedStringsLength = 50;
     private int viewedStatisticsAgeMonths = 3;
-    private Level logLevel = Level.WARN;
 
     /**
      * Returns the length of a the results returned by a statistics collector (for min, max operations) on string columns.
@@ -61,22 +60,6 @@ public class DqoStatisticsCollectorConfigurationProperties implements Cloneable 
      */
     public void setViewedStatisticsAgeMonths(int viewedStatisticsAgeMonths) {
         this.viewedStatisticsAgeMonths = viewedStatisticsAgeMonths;
-    }
-
-    /**
-     * Returns the logging level for reporting any errors encountered during statistics collection.
-     * @return The logging error level for statistics collection errors.
-     */
-    public Level getLogLevel() {
-        return logLevel;
-    }
-
-    /**
-     * Sets the logging level for statistics collection errors.
-     * @param logLevel Logging level for statistics collection errors.
-     */
-    public void setLogLevel(Level logLevel) {
-        this.logLevel = logLevel;
     }
 
     /**

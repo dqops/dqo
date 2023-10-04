@@ -35,6 +35,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.CheckExecutionLogger;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
@@ -63,20 +64,24 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
     public static final String CLASS_NAME = TableColumnListOrderedHashSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
     private TableMetadataSensorExecutor tableMetadataSensorExecutor;
+    private CheckExecutionLogger checkExecutionLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
      * @param tableMetadataSensorExecutor Table metadata shared executor.
+     * @param checkExecutionLogger Check execution logger.
      */
     @Autowired
     public TableColumnListOrderedHashSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
                                                   DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                                  TableMetadataSensorExecutor tableMetadataSensorExecutor) {
+                                                  TableMetadataSensorExecutor tableMetadataSensorExecutor,
+                                                  CheckExecutionLogger checkExecutionLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
+        this.checkExecutionLogger = checkExecutionLogger;
     }
 
     /**
@@ -135,7 +140,7 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            this.checkExecutionLogger.logSensor("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }
@@ -201,10 +206,8 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+            this.checkExecutionLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
                         ", error: " + exception.getMessage(), exception);
-            }
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

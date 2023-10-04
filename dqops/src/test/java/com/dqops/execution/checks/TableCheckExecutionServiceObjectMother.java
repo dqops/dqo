@@ -17,6 +17,7 @@
 package com.dqops.execution.checks;
 
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
+import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
@@ -59,6 +60,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
+import com.dqops.utils.logging.CheckExecutionLoggerImpl;
 
 import java.nio.file.Path;
 
@@ -115,7 +117,8 @@ public class TableCheckExecutionServiceObjectMother {
                 errorsSnapshotFactory,
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
-                sensorLimitsConfigurationProperties);
+                sensorLimitsConfigurationProperties,
+                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
 
         return tableCheckExecutionService;
     }

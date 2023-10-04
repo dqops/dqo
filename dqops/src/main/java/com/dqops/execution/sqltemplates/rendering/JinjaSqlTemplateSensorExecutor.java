@@ -31,6 +31,7 @@ import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.CheckExecutionLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -48,17 +49,21 @@ import java.time.Instant;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecutor {
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private final CheckExecutionLogger checkExecutionLogger;
 
     /**
      * Creates a sql template runner.
      * @param connectionProviderRegistry Connection provider registry.
      * @param defaultTimeZoneProvider Default time zone provider. Returns the default server time zone.
+     * @param checkExecutionLogger Check execution logger.
      */
     @Autowired
     public JinjaSqlTemplateSensorExecutor(ConnectionProviderRegistry connectionProviderRegistry,
-                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                          CheckExecutionLogger checkExecutionLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.checkExecutionLogger = checkExecutionLogger;
     }
 
     /**
@@ -104,10 +109,8 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+            this.checkExecutionLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
                         ", error: " + exception.getMessage(), exception);
-            }
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }
