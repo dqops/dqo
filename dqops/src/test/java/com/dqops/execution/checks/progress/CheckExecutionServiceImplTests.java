@@ -162,7 +162,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
                 DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
-                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties(), null));
+                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

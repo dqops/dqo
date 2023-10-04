@@ -118,7 +118,7 @@ public class TableCheckExecutionServiceObjectMother {
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
                 sensorLimitsConfigurationProperties,
-                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties(), null));
+                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
 
         return tableCheckExecutionService;
     }
