@@ -240,7 +240,7 @@ const ProfilingView = () => {
       (x) =>
         x.jobType === 'collect statistics' &&
         x.parameters?.collectStatisticsParameters
-          ?.statisticsCollectorSearchFilters?.schemaTableName ===
+          ?.statistics_collector_search_filters?.schemaTableName ===
           schemaName + '.' + tableName &&
         (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
           x.status === DqoJobHistoryEntryModelStatusEnum.queued ||

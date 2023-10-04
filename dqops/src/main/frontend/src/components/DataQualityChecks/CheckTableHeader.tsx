@@ -70,7 +70,7 @@ const TableHeader = ({
   const onRunChecks = async () => {
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: checksUI?.run_checks_job_template,
+      check_search_filters: checksUI?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})
@@ -79,7 +79,7 @@ const TableHeader = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
   };
@@ -352,7 +352,10 @@ const TableHeader = ({
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
+          JobApiClient.deleteStoredData(
+            false,
+            undefined,
+            {
             ...checksUI.data_clean_job_template,
             ...params
           });

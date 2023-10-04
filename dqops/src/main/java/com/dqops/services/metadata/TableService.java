@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
@@ -101,7 +102,7 @@ public interface TableService {
      * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(
+    PushJobResult<DeleteStoredDataResult> deleteTable(
             String connectionName, PhysicalTableName tableName, DqoUserPrincipal principal);
 
     /**
@@ -111,6 +112,6 @@ public interface TableService {
      * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(
+    List<PushJobResult<DeleteStoredDataResult>> deleteTables(
             Map<String, Iterable<PhysicalTableName>> connectionToTables, DqoUserPrincipal principal);
 }

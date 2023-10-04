@@ -570,7 +570,10 @@ const EditReferenceTable = ({
     setDeleteDataDialogOpened(false);
     try {
       setDeletingData(!isDataDeleted);
-      const res = await JobApiClient.deleteStoredData({
+      const res = await JobApiClient.deleteStoredData(
+        false, 
+        undefined,
+        {
         ...(cleanDataTemplate || {}),
         ...params
       });
@@ -578,10 +581,10 @@ const EditReferenceTable = ({
         setCurrentJobId(
           checkTypes,
           firstLevelActiveTab,
-          (res.data as any)?.jobId
+          res.data?.jobId?.jobId ?? 0
         )
       );
-      setJobId((res.data as any)?.jobId);
+      setJobId(res.data?.jobId?.jobId);
     } catch (err) {
       console.error(err);
     }

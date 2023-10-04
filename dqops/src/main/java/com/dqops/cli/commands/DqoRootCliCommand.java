@@ -163,6 +163,29 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
     private String dqoLoggingTotalSizeCap;
 
+    @CommandLine.Option(names = {"--dqo.logging.execution.sensors-log-level"},
+            description = "The logging level at which any errors captured during the data quality sensor (query) execution are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+                    "Sensor logs are logged under the com.dqops.execution.sensors log.", defaultValue = "WARN")
+    private Level dqologgingExecutionSensorsLogLevel;
+
+    @CommandLine.Option(names = {"--dqo.logging.execution.rules-log-level"},
+            description = "The logging level at which any errors captured during the data quality rule (python function) evaluation are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+                    "Rule logs are logged under the com.dqops.execution.rules log.", defaultValue = "WARN")
+    private Level dqologgingExecutionRulesLogLevel;
+
+    @CommandLine.Option(names = {"--dqo.logging.execution.checks-log-level"},
+            description = "The logging level at which any errors captured during the data quality check evaluation are reported. " +
+                    "When a data quality check is executed and the error is related to a sensor (query) or a rule (python) function, they are reported as sensor or rules issues." +
+                    "Only data quality check configuration issues that prevent running a data quality check are reported as check issues. " +
+                    "The logging level for the whole application must be equal or higher to this level for effective logging. " +
+                    "Check logs are logged under the com.dqops.execution.checks log.", defaultValue = "WARN")
+    private Level dqologgingExecutionChecksLogLevel;
+
+    @CommandLine.Option(names = {"--dqo.logging.execution.statistics-log-level"},
+            description = "The logging level at which any errors captured during the statistics collection are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+            "Statistics logs are logged under the com.dqops.execution.statistics log.", defaultValue = "WARN")
+    private Level dqologgingExecutionStatisticsLogLevel;
+
     @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},
             description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts.", defaultValue = "120")
     private Integer dqoPythonPythonScriptTimeoutSeconds;
@@ -264,6 +287,22 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the default timeout (in seconds) for the \"run checks\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsRunChecks;
 
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.collect-statistics"},
+            description = "Sets the default timeout (in seconds) for the \"collect statistics\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsCollectStatistics;
+
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.import-tables"},
+            description = "Sets the default timeout (in seconds) for the \"import tables\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsImportTables;
+
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.delete-stored-data"},
+            description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsDeleteStoredData;
+
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.synchronize-multiple-folders"},
+            description = "Sets the default timeout (in seconds) for the \"synchronize multiple folders\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsSynchronizeMultipleFolders;
+
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.default-wait-timeout"},
             description = "Sets the default wait timeout (in seconds) for waiting for a job when the \"waitTimeout\" parameter is not given to the call to the \"waitForJob\" operation from the DQO client..", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDefaultWaitTimeout;
@@ -344,10 +383,6 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.statistics.viewed-statistics-age-months"},
             description = "The maximum age (in months) of the basic statistics that are shown on the basic statistics screen. Statistics values captured earlier are still stored, but are not shown in the DQO UI.", defaultValue = "3")
     private int dqoStatisticsViewedStatisticsAgeMonths;
-
-    @CommandLine.Option(names = {"--dqo.statistics.log-level"},
-            description = "The logging level at which any errors captured during the statistics collection are reported. The logging level for the whole application must be equal or higher to this level for effective logging.", defaultValue = "WARN")
-    private Level dqoStatisticsLogLevel;
 
     @CommandLine.Option(names = {"--dqo.cache.expire-after-seconds"},
             description = "The time in seconds to expire the cache entries since they were added to the cache.", defaultValue = "86400")

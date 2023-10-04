@@ -16,12 +16,20 @@
 
 package com.dqops.data.models;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 /**
  * Results of the "data delete" job for the monthly partition.
  */
 public class DataDeleteResultPartition {
+    @JsonPropertyDescription("The number of rows that were deleted from the partition.")
     private Integer rowsAffectedCount;
+
+    @JsonPropertyDescription("True if a whole partition (a parquet file) was deleted instead of removing only selected rows.")
     private boolean partitionDeleted = false;
+
+    public DataDeleteResultPartition() {
+    }
 
     public DataDeleteResultPartition(Integer rowsAffectedCount, boolean partitionDeleted) {
         this.rowsAffectedCount = rowsAffectedCount;

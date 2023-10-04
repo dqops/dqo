@@ -97,10 +97,10 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
                     statisticsCollectionExecutionSummary.getFirstException());
         }
 
-        CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
-                CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
+        CollectStatisticsResult collectStatisticsResult =
+                CollectStatisticsResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
         CollectStatisticsOnTableQueueJobParameters clonedParameters = this.getParameters().clone();
-        clonedParameters.setCollectStatisticsResult(collectStatisticsQueueJobResult);
+        clonedParameters.setCollectStatisticsResult(collectStatisticsResult);
         setParameters(clonedParameters);
 
         return statisticsCollectionExecutionSummary;

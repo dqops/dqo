@@ -25,7 +25,6 @@ import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
 import com.dqops.execution.statistics.StatisticsCollectorsExecutionService;
-import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -96,10 +95,10 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                     statisticsCollectionExecutionSummary.getFirstException());
         }
 
-        CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
-                CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
+        CollectStatisticsResult collectStatisticsResult =
+                CollectStatisticsResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
         CollectStatisticsQueueJobParameters clonedParameters = this.getParameters().clone();
-        clonedParameters.setCollectStatisticsResult(collectStatisticsQueueJobResult);
+        clonedParameters.setCollectStatisticsResult(collectStatisticsResult);
         setParameters(clonedParameters);
 
         return statisticsCollectionExecutionSummary;

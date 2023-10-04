@@ -18,7 +18,7 @@ export const SynchronizeButton = () => {
   const syncAllFolders = async () => {
     try {
       setLoading(true);
-      const res = await JobApiClient.synchronizeFolders({
+      const res = await JobApiClient.synchronizeFolders(false, undefined, {
         sources: true,
         sensors: true,
         rules: true,
@@ -32,7 +32,7 @@ export const SynchronizeButton = () => {
         credentials: true
       });
       if (res.data) {
-        setJobId(res.data.jobId);
+        setJobId(res.data.jobId?.jobId);
       }
     } finally {
       setLoading(false);

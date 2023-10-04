@@ -136,10 +136,10 @@ const JobItem = ({
                       className="w-3 h-3"
                       style={{
                         backgroundColor: getColor(
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.highestSeverity
+                          job.parameters?.runChecksParameters?.run_checks_result
+                            ?.highest_severity
                             ? job.parameters?.runChecksParameters
-                                ?.runChecksResult?.highestSeverity
+                                ?.run_checks_result?.highest_severity
                             : 'error'
                         )
                       }}
@@ -164,17 +164,17 @@ const JobItem = ({
                       <div
                         style={{
                           color: getColor(
-                            job.parameters?.runChecksParameters?.runChecksResult
-                              ?.highestSeverity
+                            job.parameters?.runChecksParameters?.run_checks_result
+                              ?.highest_severity
                               ? job.parameters?.runChecksParameters
-                                  ?.runChecksResult?.highestSeverity
+                                  ?.run_checks_result?.highest_severity
                               : 'error'
                           )
                         }}
                       >
                         {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.highestSeverity
+                          job.parameters?.runChecksParameters?.run_checks_result
+                            ?.highest_severity
                         }
                       </div>
                     </div>
@@ -182,59 +182,59 @@ const JobItem = ({
                       <div className="font-light">Executed check:</div>
                       <div>
                         {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.executedChecks
+                          job.parameters?.runChecksParameters?.run_checks_result
+                            ?.executed_checks
                         }
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Valid result:</div>
                       <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.validResults === 0
+                        {job.parameters?.runChecksParameters?.run_checks_result
+                          ?.valid_results === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.validResults}
+                          : job.parameters?.runChecksParameters?.run_checks_result
+                              ?.valid_results}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Warnings:</div>
                       <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
+                        {job.parameters?.runChecksParameters?.run_checks_result
                           ?.warnings === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
+                          : job.parameters?.runChecksParameters?.run_checks_result
                               ?.warnings}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Errors</div>
                       <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
+                        {job.parameters?.runChecksParameters?.run_checks_result
                           ?.errors === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
+                          : job.parameters?.runChecksParameters?.run_checks_result
                               ?.errors}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Fatals:</div>
                       <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
+                        {job.parameters?.runChecksParameters?.run_checks_result
                           ?.fatals === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
+                          : job.parameters?.runChecksParameters?.run_checks_result
                               ?.fatals}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Execution Fatals:</div>
                       <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.executionErrors === 0
+                        {job.parameters?.runChecksParameters?.run_checks_result
+                          ?.execution_errors === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.executionErrors}
+                          : job.parameters?.runChecksParameters?.run_checks_result
+                              ?.execution_errors}
                       </div>
                     </div>
                   </div>
@@ -263,9 +263,9 @@ const JobItem = ({
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
-            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+            {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
-                job?.parameters?.runChecksParameters?.checkSearchFilters
+                job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
                   <td>{key}</td>
@@ -317,10 +317,10 @@ const JobItem = ({
               </>
             )}
             {job?.parameters?.collectStatisticsParameters
-              ?.statisticsCollectorSearchFilters &&
+              ?.statistics_collector_search_filters &&
               Object.entries(
                 job?.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters
+                  ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
                   <td>{key}</td>

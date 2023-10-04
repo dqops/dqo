@@ -191,7 +191,7 @@ const CheckListItem = ({
     }
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: check?.run_checks_job_template,
+      check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})
@@ -200,10 +200,10 @@ const CheckListItem = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId?.jobId);
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;

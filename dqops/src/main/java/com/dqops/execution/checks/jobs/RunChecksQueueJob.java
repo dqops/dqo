@@ -25,7 +25,6 @@ import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.checks.CheckExecutionService;
 import com.dqops.execution.checks.CheckExecutionSummary;
-import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -87,7 +86,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 jobExecutionContext.getCancellationToken(),
                 this.getPrincipal());
 
-        RunChecksJobResult jobResultSummary = RunChecksJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        RunChecksResult jobResultSummary = RunChecksResult.fromCheckExecutionSummary(checkExecutionSummary);
         RunChecksParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setRunChecksResult(jobResultSummary);
         this.setParameters(clonedParameters);

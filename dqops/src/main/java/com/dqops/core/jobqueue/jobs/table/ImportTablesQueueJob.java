@@ -40,13 +40,14 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Queue job that imports a single table from a source connection.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult> {
+public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
@@ -108,7 +109,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public ImportTablesQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+    public ImportTablesResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -127,21 +128,25 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            // TODO: Separate jobs for each table.
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                     this.importParameters.getSchemaName(),
                     this.importParameters.getTableNames());
 
-            this.defaultObservabilityConfigurationService.applyDefaultChecks(sourceTableSpecs,
+            List<TableSpec> importedTablesSpecs = sourceTableSpecs
+                    .stream()
+                    .map(tableSpec -> tableSpec.deepClone())
+                    .collect(Collectors.toList());
+
+            this.defaultObservabilityConfigurationService.applyDefaultChecks(importedTablesSpecs,
                     connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
 
             TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());
+            currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());
             userHomeContext.flush();
 
-            Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);
+            Table resultTable = createDatasetTableFromTableSpecs(importedTablesSpecs);
 
-            return new ImportTablesQueueJobResult(resultTable);
+            return new ImportTablesResult(resultTable, sourceTableSpecs);
         }
     }
 

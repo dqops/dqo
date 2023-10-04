@@ -300,7 +300,7 @@ public class SharedCredentialsController {
         SharedCredentialList sharedCredentialList = userHome.getCredentials();
         SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
 
-        if (sharedCredentialWrapper == null) {
+        if (sharedCredentialWrapper == null || sharedCredentialWrapper.getObject() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 

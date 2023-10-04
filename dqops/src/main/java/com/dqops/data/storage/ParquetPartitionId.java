@@ -17,6 +17,7 @@ package com.dqops.data.storage;
 
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -26,9 +27,16 @@ import java.util.Objects;
  * Identifies a single partition for hive partitioned tables stored as parquet files.
  */
 public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
+    @JsonPropertyDescription("Table type.")
     private DqoRoot tableType;
+
+    @JsonPropertyDescription("Connection name.")
     private String connectionName;
+
+    @JsonPropertyDescription("Table name (schema.table).")
     private PhysicalTableName tableName;
+
+    @JsonPropertyDescription("The date of teh first day of the month that identifies a monthly partition.")
     private LocalDate month;
 
     /**

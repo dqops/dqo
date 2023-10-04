@@ -18,6 +18,7 @@ package com.dqops.services.metadata;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.userhome.UserHome;
@@ -51,10 +52,10 @@ public interface ColumnService {
      * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(String connectionName,
-                                                               PhysicalTableName tableName,
-                                                               String columnName,
-                                                               DqoUserPrincipal principal);
+    PushJobResult<DeleteStoredDataResult> deleteColumn(String connectionName,
+                                                       PhysicalTableName tableName,
+                                                       String columnName,
+                                                       DqoUserPrincipal principal);
 
     /**
      * Deletes columns from metadata and flushes user context.
@@ -63,6 +64,6 @@ public interface ColumnService {
      * @param principal Principal that will be used to run the job.
      * @return List of asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(
+    List<PushJobResult<DeleteStoredDataResult>> deleteColumns(
             Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns, DqoUserPrincipal principal);
 }

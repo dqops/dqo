@@ -24,7 +24,7 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Table profiling status per data quality dimension
+        - dashboard_name: Column profiling status per data quality dimension
           url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
           width: 1400
           height: 1760
@@ -33,7 +33,7 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Table profiling status per check category
+        - dashboard_name: Column profiling status per check category
           url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
           width: 1400
           height: 1760
@@ -622,7 +622,7 @@ spec:
       #  parameters:
       #    ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Min, max, avg timeliness
-          url: https://lookerstudio.google.com/u/0/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
           width: 1400
           height: 1400
           parameters:
@@ -685,6 +685,44 @@ spec:
 
 - folder_name: Aggregated results for all check types
   folders:
+  - folder_name: Current status
+    dashboards:
+      - dashboard_name: Issue severity status per table and day
+        url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
+        width: 1400
+        height: 1600
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: all
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Issue severity status per column and day
+        url: https://lookerstudio.google.com/embed/reporting/474cb75b-e9f0-486b-bf12-e910d0330d8b/page/c5B8C
+        width: 1400
+        height: 1600
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: all
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Issue severity status per data grouping and day
+        url: https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/c5B8C
+        width: 1400
+        height: 1600
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: all
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Issue severity status per check and day
+        url: https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/c5B8C
+        width: 1400
+        height: 1600
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: all
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
   - folder_name: Data quality issues count
     dashboards:
       - dashboard_name: Count summary
@@ -727,44 +765,6 @@ spec:
         url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
         width: 1400
         height: 2100
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
-  - folder_name: Current status
-    dashboards:
-      - dashboard_name: Issue severity status per table and day
-        url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
-        width: 1400
-        height: 1600
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
-      - dashboard_name: Issue severity status per column and day
-        url: https://lookerstudio.google.com/embed/reporting/474cb75b-e9f0-486b-bf12-e910d0330d8b/page/c5B8C
-        width: 1400
-        height: 1600
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
-      - dashboard_name: Issue severity status per data grouping and day
-        url: https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/c5B8C
-        width: 1400
-        height: 1600
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
-      - dashboard_name: Issue severity status per check and day
-        url: https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/c5B8C
-        width: 1400
-        height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all

@@ -199,4 +199,11 @@ public class IncidentNotificationMessage {
         return message;
     }
 
+    @Override
+    public String toString() {
+        return "IncidentNotificationMessage{" +
+                "incidentId='" + incidentId + '\'' +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

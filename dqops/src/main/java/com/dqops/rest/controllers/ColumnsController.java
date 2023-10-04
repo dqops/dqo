@@ -30,6 +30,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.data.statistics.services.models.StatisticsResultsForColumnModel;
@@ -2116,7 +2117,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
         }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.columnService.deleteColumn(
+        PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
                 connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }

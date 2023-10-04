@@ -19,18 +19,21 @@ import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.
+ * Returns the result (the highest data quality check severity and the finished checks count) for the checks that were recently executed.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksJobResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
+@ApiModel(value = "RunChecksResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
 @EqualsAndHashCode(callSuper = false)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
-public class RunChecksJobResult {
+public class RunChecksResult {
     /**
      * The highest check severity for the data quality checks executed in this batch.
      */
@@ -76,7 +79,7 @@ public class RunChecksJobResult {
     /**
      * The default parameterless constructor.
      */
-    public RunChecksJobResult() {
+    public RunChecksResult() {
     }
 
     /**
@@ -84,12 +87,12 @@ public class RunChecksJobResult {
      * @param checkExecutionSummary Check execution summary.
      * @return The job result object.
      */
-    public static RunChecksJobResult fromCheckExecutionSummary(CheckExecutionSummary checkExecutionSummary) {
+    public static RunChecksResult fromCheckExecutionSummary(CheckExecutionSummary checkExecutionSummary) {
         if (checkExecutionSummary == null) {
             return null;
         }
 
-        RunChecksJobResult runChecksJobResult = new RunChecksJobResult() {{
+        RunChecksResult runChecksResult = new RunChecksResult() {{
             setExecutedChecks(checkExecutionSummary.getTotalChecksExecutedCount());
             setValidResults(checkExecutionSummary.getValidResultsCount());
             setWarnings(checkExecutionSummary.getWarningSeverityIssuesCount());
@@ -98,18 +101,18 @@ public class RunChecksJobResult {
             setExecutionErrors(checkExecutionSummary.getTotalExecutionErrorsCount());
         }};
 
-        if (runChecksJobResult.getFatals() > 0) {
-            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.fatal);
+        if (runChecksResult.getFatals() > 0) {
+            runChecksResult.setHighestSeverity(RuleSeverityLevel.fatal);
         }
-        else if (runChecksJobResult.getErrors() > 0) {
-            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.error);
+        else if (runChecksResult.getErrors() > 0) {
+            runChecksResult.setHighestSeverity(RuleSeverityLevel.error);
         }
-        else if (runChecksJobResult.getWarnings() > 0) {
-            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.warning);
+        else if (runChecksResult.getWarnings() > 0) {
+            runChecksResult.setHighestSeverity(RuleSeverityLevel.warning);
         } else {
-            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.valid);
+            runChecksResult.setHighestSeverity(RuleSeverityLevel.valid);
         }
 
-        return runChecksJobResult;
+        return runChecksResult;
     }
 }

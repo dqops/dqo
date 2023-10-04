@@ -30,6 +30,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.ConnectionSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.TableSearchFilters;
@@ -465,11 +466,11 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 .collect(Collectors.toList());
 
         DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
+        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.connectionService.deleteConnections(
                 connectionNames, userPrincipal);
 
         try {
-            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+            for (PushJobResult<DeleteStoredDataResult> job: backgroundJobs) {
                 job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {

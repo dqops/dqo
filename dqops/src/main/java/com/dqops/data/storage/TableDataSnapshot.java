@@ -15,8 +15,7 @@
  */
 package com.dqops.data.storage;
 
-import com.dqops.data.errors.factory.ErrorsColumnNames;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -529,8 +528,8 @@ public class TableDataSnapshot {
         tableDataChanges.getDeletedIds().addAll(idsToDelete);
     }
 
-    public DataDeleteResult getDeleteResults() {
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+    public DeleteStoredDataResult getDeleteResults() {
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
         Set<String> deletedIds = this.getTableDataChanges().getDeletedIds();
 
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
@@ -548,9 +547,9 @@ public class TableDataSnapshot {
             boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
             DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
 
-            dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+            deleteStoredDataResult.getPartitionResults().put(partitionId, partitionResult);
         }
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 
     /**

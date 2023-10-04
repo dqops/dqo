@@ -15,77 +15,70 @@
  */
 package com.dqops.execution.statistics.jobs;
 
-import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
+import com.dqops.core.jobqueue.DqoQueueJobId;
+import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
+import com.dqops.execution.checks.jobs.RunChecksResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Returns the result with the summary of the statistics collected.
+ * Object returned from the operation that queues a "collect statistics" job. The result contains the job id that was started
+ * and optionally can also contain the result of collecting the statistics if the operation was started with wait=true parameter to wait for the "collect statistics" job to finish.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "CollectStatisticsQueueJobResult", description = "Returns the result with the summary of the statistics collected.")
+@ApiModel(value = "CollectStatisticsQueueJobResult", description = "Object returned from the operation that queues a \"collect statistics\" job. " +
+        "The result contains the job id that was started and optionally can also contain the result of collecting the statistics  " +
+        "if the operation was started with wait=true parameter to wait for the \"collect statistics\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class CollectStatisticsQueueJobResult {
     /**
-     * The total count of all executed statistics collectors.
+     * Job id that identifies a job that was started on the DQO job queue.
      */
-    @JsonPropertyDescription("The total count of all executed statistics collectors.")
-    private int executedStatisticsCollectors;
+    @JsonPropertyDescription("Job id that identifies a job that was started on the DQO job queue.")
+    private DqoQueueJobId jobId;
 
     /**
-     * The count of executed statistics collectors.
+     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
+     * The calling code (the data pipeline) can decide if further processing should be continued.
      */
-    @JsonPropertyDescription("The count of executed statistics collectors.")
-    private int totalCollectorsExecuted;
+    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"collect statistics\" job has finished. " +
+            "Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). ")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private CollectStatisticsResult result;
 
     /**
-     * The count of columns for which DQO executed a collector and tried to read the statistics.
+     * Job status.
      */
-    @JsonPropertyDescription("The count of columns for which DQO executed a collector and tried to read the statistics.")
-    private int columnsAnalyzed;
+    @JsonPropertyDescription("Job status")
+    private DqoJobStatus status = DqoJobStatus.queued;
 
-    /**
-     * The count of columns for which DQO managed to obtain statistics.
-     */
-    @JsonPropertyDescription("The count of columns for which DQO managed to obtain statistics.")
-    private int columnsSuccessfullyAnalyzed;
 
-    /**
-     * The count of statistics collectors that failed to execute.
-     */
-    @JsonPropertyDescription("The count of statistics collectors that failed to execute.")
-    private int totalCollectorsFailed;
-
-    /**
-     * The total number of results that were collected.
-     */
-    @JsonPropertyDescription("The total number of results that were collected.")
-    private int totalCollectedResults;
-
-    /**
-     * The default parameterless constructor.
-     */
     public CollectStatisticsQueueJobResult() {
     }
 
     /**
-     * Creates a collect statistics job result from the execution summary.
-     * @param statisticsCollectionExecutionSummary Statistics collection execution summary.
-     * @return The job result object.
+     * Creates a new model given all parameters.
+     * @param jobId Job id.
+     * @param result Job result.
+     * @param status Job status.
      */
-    public static CollectStatisticsQueueJobResult fromStatisticsExecutionSummary(StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary) {
-        CollectStatisticsQueueJobResult runChecksQueueJobResult = new CollectStatisticsQueueJobResult() {{
-            setExecutedStatisticsCollectors(statisticsCollectionExecutionSummary.getTotalCollectorsExecuted());
-            setColumnsAnalyzed(statisticsCollectionExecutionSummary.getColumnsAnalyzedCount());
-            setColumnsSuccessfullyAnalyzed(statisticsCollectionExecutionSummary.getColumnsSuccessfullyAnalyzed());
-            setTotalCollectorsFailed(statisticsCollectionExecutionSummary.getTotalCollectorsFailed());
-            setTotalCollectedResults(statisticsCollectionExecutionSummary.getTotalCollectedResults());
-        }};
+    public CollectStatisticsQueueJobResult(DqoQueueJobId jobId, CollectStatisticsResult result, DqoJobStatus status) {
+        this.jobId = jobId;
+        this.result = result;
+        this.status = status;
+    }
 
-        return runChecksQueueJobResult;
+    /**
+     * Creates a new model given all parameters.
+     * @param jobId Job id.
+     */
+    public CollectStatisticsQueueJobResult(DqoQueueJobId jobId) {
+        this.jobId = jobId;
     }
 }
