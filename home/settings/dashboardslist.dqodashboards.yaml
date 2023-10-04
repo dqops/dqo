@@ -622,7 +622,7 @@ spec:
       #  parameters:
       #    ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Min, max, avg timeliness
-          url: https://lookerstudio.google.com/u/0/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
           width: 1400
           height: 1400
           parameters:
