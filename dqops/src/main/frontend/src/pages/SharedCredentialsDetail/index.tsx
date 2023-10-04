@@ -3,32 +3,79 @@ import DefinitionLayout from '../../components/DefinitionLayout'
 import { SharedCredentailsApi } from '../../services/apiClient'
 import { SharedCredentialListModel } from '../../api'
 import Button from '../../components/Button';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { ROUTES } from '../../shared/routes';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import SvgIcon from '../../components/SvgIcon';
 
 export default function SharedCredentailsDetail() {
-  
-  const [sharedCredentailList, setSharedCredentailList] = useState<SharedCredentialListModel[]>();
 
+  const dispatch = useActionDispatch()
+  
+  const [sharedCredentialList, setSharedCredentialList] = useState<SharedCredentialListModel[]>();
+  const [selectedSharedCredentialToDelete, setSelectedSharedCredentialToDelete] = useState<string>()
+  const [reshreshIndicator, setRefreshIndicator] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false)
 
   const getSharedCredentailList = async () => {
+
     await SharedCredentailsApi.getAllSharedCredentials()
-      .then((res) => setSharedCredentailList(res.data))
+      .then((res) => setSharedCredentialList(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
   }
 
   const addSharedCredential = async () => {
-    await SharedCredentailsApi.createSharedCredential({credential_name: "xyz", type: "text", text_value: "1234567"})
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SHARED_CREDENTAILS_DETAIL(),
+        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(),
+        label: "Add credential",
+      })
+    );
   }
 
+  const updateSharedCredential = async (credential_name : string) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SHARED_CREDENTAILS_DETAIL(),
+        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(),
+        label: "Edit credential",
+        state: {
+          credential_name
+        }
+      })
+    );
+  }
 
+  const deleteSharedCredentail = async () => {
+    await SharedCredentailsApi.deleteSharedCredential(selectedSharedCredentialToDelete ?? "")
+    .then(() => setRefreshIndicator(!reshreshIndicator))
+    .catch((err) => console.error(err))
+      
+  }
 
   useEffect(() => {
+    setLoading(true)
     getSharedCredentailList()
-  }, [])
+  }, [reshreshIndicator])
 
-  console.log(sharedCredentailList)
+  console.log(sharedCredentialList)
+
+  if(loading){
+    return(
+    <DefinitionLayout>
+        <div className='w-full h-screen flex items-center justify-center'>
+         <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
+        </div>
+    </DefinitionLayout>
+)}
+
 
   return (
     <DefinitionLayout>
-              <table className='w-full '>
+          <table className='w-full '>
             <thead className='border-b w-full border-b-gray-400 relative'>
                 <th className="px-6 py-4 text-left">Credential name</th>
                 <th className="px-6 py-4 text-left">Credential type</th>
@@ -40,15 +87,18 @@ export default function SharedCredentailsDetail() {
                 />
             </thead>
             <tbody>
-                {sharedCredentailList?.map((credential, index) => 
+                {sharedCredentialList?.map((credential, index) => 
                 <tr key={index}>
                     <td className='px-6 py-2 text-left'>{credential.credential_name}</td>
                     <td className='px-6 py-2 text-left'>{credential.type}</td>
                     <td className='px-6 py-2 text-left'>
-                        <Button label='edit' variant='text' color='primary' />
+                        <Button label='edit' variant='text' color='primary' 
+                        onClick={() => updateSharedCredential(credential.credential_name ?? "")}
+                        />
                     </td>
                     <td className="px-6 py-2 text-left">
-                        <Button label='delete' variant='text' color='primary' />
+                        <Button label='delete' variant='text' color='primary' 
+                        onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name)}/>
                     </td>
                     <td className="px-6 py-2 text-left">
                         <Button label='downland' variant='text' color='primary'  />
@@ -57,6 +107,7 @@ export default function SharedCredentailsDetail() {
                 )}
             </tbody>
         </table>
+        <ConfirmDialog open={selectedSharedCredentialToDelete?.length!==0} onClose={() => setSelectedSharedCredentialToDelete('')} onConfirm={deleteSharedCredentail} message={`Are you sure you want to delete ${selectedSharedCredentialToDelete} credential?`}/>
     </DefinitionLayout>
   )
 }

@@ -44,6 +44,7 @@ import UserDetail from "./pages/UserListDetail/UserDetail";
 import DefaultSchedules from "./pages/DefaultSchedulesDetail";
 import DefaultWebhooksDetail from "./pages/DefaultWebhooksDetail";
 import SharedCredentailsDetail from "./pages/SharedCredentialsDetail";
+import SingleSharedCredential from "./pages/SharedCredentialsDetail/SingleSharedCredential";
 
 const Routes = () => {
   return (
@@ -86,7 +87,8 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.USER_DETAIL} component={UserDetail} />
       <Route exact path={ROUTES.PATTERNS.SCHEDULES_DEFAULT_DETAIL} component={DefaultSchedules} />
       <Route exact path={ROUTES.PATTERNS.WEBHOOKS_DEFAULT_DETAIL} component={DefaultWebhooksDetail}/>
-      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTAILS_DETAIL} component={SharedCredentailsDetail}/>
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTAILS_LIST_DETAIL} component={SharedCredentailsDetail}/>
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTAILS_DETAIL} component={SingleSharedCredential}/>
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
       <Route exact path="*" component={NotFound} />
     </Switch>

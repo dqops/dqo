@@ -177,8 +177,8 @@ export const DefinitionTree = () => {
   const openSharedCredentailsFirstLevelTab = () => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTAILS_DETAIL(),
-        value: ROUTES.SHARED_CREDENTAILS_DETAIL_VALUE(),
+        url: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL(),
+        value: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL_VALUE(),
         label: "Shared credentails"
       })
     );

@@ -49,7 +49,8 @@ export const ROUTES = {
   USER_DETAIL: (email: string) => `/definitions/user/${email}`,
   SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-webhooks',
-  SHARED_CREDENTAILS_DETAIL: () => '/definitions/shared-credentails',
+  SHARED_CREDENTAILS_LIST_DETAIL: () => '/definitions/shared-credentails',
+  SHARED_CREDENTAILS_DETAIL: () => '/definitions/shared-credentail',
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -73,7 +74,8 @@ export const ROUTES = {
   USER_DETAIL_VALUE: (email: string) => `/definitions/user/${email}`,
   SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-webhooks',
-  SHARED_CREDENTAILS_DETAIL_VALUE: () => '/definitions/shared-credentails',
+  SHARED_CREDENTAILS_LIST_DETAIL_VALUE: () => '/definitions/shared-credentails',
+  SHARED_CREDENTAILS_DETAIL_VALUE: () => '/definitions/shared-credentail',
 
   PATTERNS: {
     INDEX: '/',
@@ -115,6 +117,7 @@ export const ROUTES = {
     USER_DETAIL: '/definitions/user/:email',
     SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
     WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-webhooks',
-    SHARED_CREDENTAILS_DETAIL: '/definitions/shared-credentails',
+    SHARED_CREDENTAILS_LIST_DETAIL: '/definitions/shared-credentails',
+    SHARED_CREDENTAILS_DETAIL: '/definitions/shared-credentail',
   }
 };
