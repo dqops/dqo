@@ -21,38 +21,56 @@ export default function SingleSharedCredential() {
     const dispatch = useActionDispatch()
 
     const addSharedCredential = async () => {
-      await SharedCredentailsApi.createSharedCredential()
-      .catch((err) => console.error(err))
-      .then(() => 
-      dispatch(
-        closeFirstLevelTab('/definitions/shared-credentail/new')
-      ))
+        if (type ==="text"){
+            await SharedCredentailsApi.createSharedCredential({credential_name: credentialName, type, text_value: textAreaValue})
+            .catch((err) => console.error(err))
+        } else {
+            await SharedCredentailsApi.createSharedCredential({credential_name: credentialName, type, binary_value: textAreaValue})
+            .catch((err) => console.error(err))
+
+        }
+        dispatch(closeFirstLevelTab('/definitions/shared-credentail/new'))
     }
   
     const editSharedCredential = async () => {
-        await SharedCredentailsApi.updateSharedCredential(credential_name)
-      .catch((err) => console.error(err))
-      .then(() => 
+        if (type ==="text"){
+            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, text_value: textAreaValue})
+            .catch((err) => console.error(err))
+
+        } else {
+            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, binary_value: textAreaValue})
+            .catch((err) => console.error(err))
+            
+        }
+      
       dispatch(
         closeFirstLevelTab('/definitions/shared-credentail/' + credential_name)
-      ))
+      )
     }
 
+    const getSharedCredential = async () => {
+       await SharedCredentailsApi.getSharedCredential(credential_name)
+            .then((res) => setEditingCredential(res.data))
+            .catch((err) => console.error(err))
+    }
+
+
     useEffect(() => {
-        if(credential_name){
-           async () => await SharedCredentailsApi.getSharedCredential(credential_name)
-                .then((res) => setEditingCredential(res.data))
-                .catch((err) => console.error(err))
-            }
+        if (credential_name) {
+            getSharedCredential()
+        }
     }, [])
 
     useEffect(() => {
-        if(editingCredential){
+        if (editingCredential) {
+            setCredentialName(credential_name)
             setType(editingCredential.type ?? "text")
             setTextAreaValue((editingCredential.type === "text" ? 
-            editingCredential.text_value : editingCredential.binary_value) ?? "")
-            }
+                editingCredential.text_value : editingCredential.binary_value) ?? "")
+        }
     }, [credential_name, editingCredential])
+
+    console.log(editingCredential, credential_name)
 
     
 
