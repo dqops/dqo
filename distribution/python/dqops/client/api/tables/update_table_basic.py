@@ -6,7 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.mono_object import MonoObject
-from ...models.table_basic_model import TableBasicModel
+from ...models.table_list_model import TableListModel
 from ...types import Response
 
 
@@ -16,7 +16,7 @@ def _get_kwargs(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: TableBasicModel,
+    json_body: TableListModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic".format(
         client.base_url,
@@ -71,7 +71,7 @@ def sync_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: TableBasicModel,
+    json_body: TableListModel,
 ) -> Response[MonoObject]:
     """updateTableBasic
 
@@ -81,7 +81,7 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        json_body (TableBasicModel): Basic table model with a subset of parameters, excluding all
+        json_body (TableListModel): Table list model with a subset of parameters, excluding all
             nested objects.
 
     Raises:
@@ -114,7 +114,7 @@ def sync(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: TableBasicModel,
+    json_body: TableListModel,
 ) -> Optional[MonoObject]:
     """updateTableBasic
 
@@ -124,7 +124,7 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        json_body (TableBasicModel): Basic table model with a subset of parameters, excluding all
+        json_body (TableListModel): Table list model with a subset of parameters, excluding all
             nested objects.
 
     Raises:
@@ -150,7 +150,7 @@ async def asyncio_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: TableBasicModel,
+    json_body: TableListModel,
 ) -> Response[MonoObject]:
     """updateTableBasic
 
@@ -160,7 +160,7 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        json_body (TableBasicModel): Basic table model with a subset of parameters, excluding all
+        json_body (TableListModel): Table list model with a subset of parameters, excluding all
             nested objects.
 
     Raises:
@@ -191,7 +191,7 @@ async def asyncio(
     table_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: TableBasicModel,
+    json_body: TableListModel,
 ) -> Optional[MonoObject]:
     """updateTableBasic
 
@@ -201,7 +201,7 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
-        json_body (TableBasicModel): Basic table model with a subset of parameters, excluding all
+        json_body (TableListModel): Table list model with a subset of parameters, excluding all
             nested objects.
 
     Raises:

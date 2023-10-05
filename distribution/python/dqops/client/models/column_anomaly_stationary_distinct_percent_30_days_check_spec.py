@@ -5,11 +5,11 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
-    )
     from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
         AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
+    )
+    from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
     )
     from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
         AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,
@@ -144,11 +144,11 @@ class ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
-        )
         from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
             AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
+        )
+        from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
         )
         from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
             AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,

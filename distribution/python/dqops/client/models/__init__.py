@@ -79,15 +79,16 @@ from .change_percent_30_days_rule_50_parameters_spec import (
 from .change_percent_rule_10_parameters_spec import ChangePercentRule10ParametersSpec
 from .change_percent_rule_20_parameters_spec import ChangePercentRule20ParametersSpec
 from .change_percent_rule_50_parameters_spec import ChangePercentRule50ParametersSpec
-from .check_basic_model import CheckBasicModel
 from .check_configuration_model import CheckConfigurationModel
-from .check_container_basic_model import CheckContainerBasicModel
+from .check_container_list_model import CheckContainerListModel
 from .check_container_model import CheckContainerModel
 from .check_container_type_model import CheckContainerTypeModel
+from .check_definition_folder_model import CheckDefinitionFolderModel
+from .check_definition_folder_model_folders import CheckDefinitionFolderModelFolders
+from .check_definition_list_model import CheckDefinitionListModel
+from .check_definition_model import CheckDefinitionModel
+from .check_list_model import CheckListModel
 from .check_model import CheckModel
-from .check_model_configuration_requirements_errors_item import (
-    CheckModelConfigurationRequirementsErrorsItem,
-)
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
 from .check_results_list_model import CheckResultsListModel
@@ -97,10 +98,6 @@ from .check_results_overview_data_model_statuses_item import (
 )
 from .check_run_schedule_group import CheckRunScheduleGroup
 from .check_search_filters import CheckSearchFilters
-from .check_spec_basic_model import CheckSpecBasicModel
-from .check_spec_folder_basic_model import CheckSpecFolderBasicModel
-from .check_spec_folder_basic_model_folders import CheckSpecFolderBasicModelFolders
-from .check_spec_model import CheckSpecModel
 from .check_target import CheckTarget
 from .check_target_model import CheckTargetModel
 from .check_template import CheckTemplate
@@ -114,6 +111,7 @@ from .collect_statistics_on_table_queue_job_parameters import (
 )
 from .collect_statistics_queue_job_parameters import CollectStatisticsQueueJobParameters
 from .collect_statistics_queue_job_result import CollectStatisticsQueueJobResult
+from .collect_statistics_result import CollectStatisticsResult
 from .column_accuracy_daily_monitoring_checks_spec import (
     ColumnAccuracyDailyMonitoringChecksSpec,
 )
@@ -248,7 +246,6 @@ from .column_anomaly_stationary_partition_sum_30_days_check_spec import (
 from .column_anomaly_stationary_partition_sum_check_spec import (
     ColumnAnomalyStationaryPartitionSumCheckSpec,
 )
-from .column_basic_model import ColumnBasicModel
 from .column_bool_daily_monitoring_checks_spec import (
     ColumnBoolDailyMonitoringChecksSpec,
 )
@@ -551,6 +548,7 @@ from .column_invalid_latitude_count_check_spec import (
 from .column_invalid_longitude_count_check_spec import (
     ColumnInvalidLongitudeCountCheckSpec,
 )
+from .column_list_model import ColumnListModel
 from .column_max_in_range_check_spec import ColumnMaxInRangeCheckSpec
 from .column_mean_in_range_check_spec import ColumnMeanInRangeCheckSpec
 from .column_median_in_range_check_spec import ColumnMedianInRangeCheckSpec
@@ -1252,19 +1250,21 @@ from .comment_spec import CommentSpec
 from .common_column_model import CommonColumnModel
 from .compare_thresholds_model import CompareThresholdsModel
 from .comparison_check_result_model import ComparisonCheckResultModel
-from .connection_basic_model import ConnectionBasicModel
 from .connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
 from .connection_model import ConnectionModel
 from .connection_spec import ConnectionSpec
+from .connection_specification_model import ConnectionSpecificationModel
 from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
+from .credential_type import CredentialType
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
 from .custom_sensor_parameters_spec import CustomSensorParametersSpec
 from .dashboard_spec import DashboardSpec
 from .dashboard_spec_parameters import DashboardSpecParameters
 from .dashboards_folder_spec import DashboardsFolderSpec
-from .data_grouping_configuration_basic_model import DataGroupingConfigurationBasicModel
+from .data_delete_result_partition import DataDeleteResultPartition
+from .data_grouping_configuration_list_model import DataGroupingConfigurationListModel
 from .data_grouping_configuration_model import DataGroupingConfigurationModel
 from .data_grouping_configuration_spec import DataGroupingConfigurationSpec
 from .data_grouping_configuration_trimmed_model import (
@@ -1275,7 +1275,13 @@ from .data_grouping_dimension_spec import DataGroupingDimensionSpec
 from .datatype_equals_rule_parameters_spec import DatatypeEqualsRuleParametersSpec
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
+from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
+from .delete_stored_data_result import DeleteStoredDataResult
+from .delete_stored_data_result_partition_results import (
+    DeleteStoredDataResultPartitionResults,
+)
 from .display_hint import DisplayHint
+from .dqo_cloud_user_model import DqoCloudUserModel
 from .dqo_job_change_model import DqoJobChangeModel
 from .dqo_job_entry_parameters_model import DqoJobEntryParametersModel
 from .dqo_job_history_entry_model import DqoJobHistoryEntryModel
@@ -1310,6 +1316,8 @@ from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
 from .historic_data_points_grouping import HistoricDataPointsGrouping
 from .import_schema_queue_job_parameters import ImportSchemaQueueJobParameters
 from .import_tables_queue_job_parameters import ImportTablesQueueJobParameters
+from .import_tables_queue_job_result import ImportTablesQueueJobResult
+from .import_tables_result import ImportTablesResult
 from .incident_daily_issues_count import IncidentDailyIssuesCount
 from .incident_grouping_level import IncidentGroupingLevel
 from .incident_issue_histogram_model import IncidentIssueHistogramModel
@@ -1345,6 +1353,7 @@ from .max_percent_rule_99_parameters_spec import MaxPercentRule99ParametersSpec
 from .max_percent_rule_100_parameters_spec import MaxPercentRule100ParametersSpec
 from .max_value_rule_parameters_spec import MaxValueRuleParametersSpec
 from .min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
+from .min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
 from .min_count_rule_fatal_parameters_spec import MinCountRuleFatalParametersSpec
 from .min_count_rule_warning_parameters_spec import MinCountRuleWarningParametersSpec
 from .min_percent_rule_0_parameters_spec import MinPercentRule0ParametersSpec
@@ -1387,6 +1396,9 @@ from .optional_connection_incident_grouping_spec import (
 from .optional_data_grouping_configuration_spec import (
     OptionalDataGroupingConfigurationSpec,
 )
+from .optional_incident_webhook_notifications_spec import (
+    OptionalIncidentWebhookNotificationsSpec,
+)
 from .optional_label_set_spec import OptionalLabelSetSpec
 from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .optional_table_daily_monitoring_check_categories_spec import (
@@ -1415,22 +1427,22 @@ from .postgreql_sslmode import PostgreqlSslmode
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
 from .profiling_time_period import ProfilingTimePeriod
-from .provider_sensor_basic_model import ProviderSensorBasicModel
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
     ProviderSensorDefinitionSpecParameters,
 )
+from .provider_sensor_list_model import ProviderSensorListModel
 from .provider_sensor_model import ProviderSensorModel
 from .provider_sensor_runner_type import ProviderSensorRunnerType
 from .provider_type import ProviderType
 from .quality_category_model import QualityCategoryModel
 from .redshift_parameters_spec import RedshiftParametersSpec
 from .redshift_parameters_spec_properties import RedshiftParametersSpecProperties
-from .remote_table_basic_model import RemoteTableBasicModel
+from .remote_table_list_model import RemoteTableListModel
 from .repair_stored_data_queue_job_parameters import RepairStoredDataQueueJobParameters
-from .rule_basic_folder_model import RuleBasicFolderModel
-from .rule_basic_folder_model_folders import RuleBasicFolderModelFolders
-from .rule_basic_model import RuleBasicModel
+from .rule_folder_model import RuleFolderModel
+from .rule_folder_model_folders import RuleFolderModelFolders
+from .rule_list_model import RuleListModel
 from .rule_model import RuleModel
 from .rule_model_parameters import RuleModelParameters
 from .rule_parameters_model import RuleParametersModel
@@ -1439,21 +1451,23 @@ from .rule_severity_level import RuleSeverityLevel
 from .rule_thresholds_model import RuleThresholdsModel
 from .rule_time_window_mode import RuleTimeWindowMode
 from .rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
-from .run_checks_job_result import RunChecksJobResult
 from .run_checks_on_table_parameters import RunChecksOnTableParameters
 from .run_checks_parameters import RunChecksParameters
 from .run_checks_queue_job_result import RunChecksQueueJobResult
+from .run_checks_result import RunChecksResult
 from .schedule_enabled_status_model import ScheduleEnabledStatusModel
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
-from .sensor_basic_folder_model import SensorBasicFolderModel
-from .sensor_basic_folder_model_folders import SensorBasicFolderModelFolders
-from .sensor_basic_model import SensorBasicModel
 from .sensor_definition_spec import SensorDefinitionSpec
 from .sensor_definition_spec_parameters import SensorDefinitionSpecParameters
+from .sensor_folder_model import SensorFolderModel
+from .sensor_folder_model_folders import SensorFolderModelFolders
+from .sensor_list_model import SensorListModel
 from .sensor_model import SensorModel
 from .sensor_readout_entry_model import SensorReadoutEntryModel
 from .sensor_readouts_list_model import SensorReadoutsListModel
+from .shared_credential_list_model import SharedCredentialListModel
+from .shared_credential_model import SharedCredentialModel
 from .similar_check_model import SimilarCheckModel
 from .snowflake_parameters_spec import SnowflakeParametersSpec
 from .snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
@@ -1470,6 +1484,9 @@ from .statistics_result_data_type import StatisticsResultDataType
 from .strings_built_in_date_formats import StringsBuiltInDateFormats
 from .synchronize_multiple_folders_dqo_queue_job_parameters import (
     SynchronizeMultipleFoldersDqoQueueJobParameters,
+)
+from .synchronize_multiple_folders_queue_job_result import (
+    SynchronizeMultipleFoldersQueueJobResult,
 )
 from .synchronize_root_folder_dqo_queue_job_parameters import (
     SynchronizeRootFolderDqoQueueJobParameters,
@@ -1531,7 +1548,6 @@ from .table_availability_profiling_checks_spec_custom_checks import (
 from .table_availability_sensor_parameters_spec import (
     TableAvailabilitySensorParametersSpec,
 )
-from .table_basic_model import TableBasicModel
 from .table_change_row_count_check_spec import TableChangeRowCountCheckSpec
 from .table_change_row_count_since_7_days_check_spec import (
     TableChangeRowCountSince7DaysCheckSpec,
@@ -1637,6 +1653,7 @@ from .table_data_quality_status_model_failed_checks_statuses_additional_property
 )
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
+from .table_list_model import TableListModel
 from .table_model import TableModel
 from .table_monitoring_checks_spec import TableMonitoringChecksSpec
 from .table_monthly_monitoring_check_categories_spec import (
@@ -1860,13 +1877,16 @@ __all__ = (
     "ChangePercentRule10ParametersSpec",
     "ChangePercentRule20ParametersSpec",
     "ChangePercentRule50ParametersSpec",
-    "CheckBasicModel",
     "CheckConfigurationModel",
-    "CheckContainerBasicModel",
+    "CheckContainerListModel",
     "CheckContainerModel",
     "CheckContainerTypeModel",
+    "CheckDefinitionFolderModel",
+    "CheckDefinitionFolderModelFolders",
+    "CheckDefinitionListModel",
+    "CheckDefinitionModel",
+    "CheckListModel",
     "CheckModel",
-    "CheckModelConfigurationRequirementsErrorsItem",
     "CheckResultEntryModel",
     "CheckResultsListModel",
     "CheckResultSortOrder",
@@ -1874,10 +1894,6 @@ __all__ = (
     "CheckResultsOverviewDataModelStatusesItem",
     "CheckRunScheduleGroup",
     "CheckSearchFilters",
-    "CheckSpecBasicModel",
-    "CheckSpecFolderBasicModel",
-    "CheckSpecFolderBasicModelFolders",
-    "CheckSpecModel",
     "CheckTarget",
     "CheckTargetModel",
     "CheckTemplate",
@@ -1887,6 +1903,7 @@ __all__ = (
     "CollectStatisticsOnTableQueueJobParameters",
     "CollectStatisticsQueueJobParameters",
     "CollectStatisticsQueueJobResult",
+    "CollectStatisticsResult",
     "ColumnAccuracyDailyMonitoringChecksSpec",
     "ColumnAccuracyDailyMonitoringChecksSpecCustomChecks",
     "ColumnAccuracyDailyPartitionedChecksSpec",
@@ -1933,7 +1950,6 @@ __all__ = (
     "ColumnAnomalyStationaryPartitionDistinctCountCheckSpec",
     "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec",
     "ColumnAnomalyStationaryPartitionSumCheckSpec",
-    "ColumnBasicModel",
     "ColumnBoolDailyMonitoringChecksSpec",
     "ColumnBoolDailyMonitoringChecksSpecCustomChecks",
     "ColumnBoolDailyPartitionedChecksSpec",
@@ -2048,6 +2064,7 @@ __all__ = (
     "ColumnIntegrityProfilingChecksSpecCustomChecks",
     "ColumnInvalidLatitudeCountCheckSpec",
     "ColumnInvalidLongitudeCountCheckSpec",
+    "ColumnListModel",
     "ColumnMaxInRangeCheckSpec",
     "ColumnMeanInRangeCheckSpec",
     "ColumnMedianInRangeCheckSpec",
@@ -2315,19 +2332,21 @@ __all__ = (
     "CommonColumnModel",
     "CompareThresholdsModel",
     "ComparisonCheckResultModel",
-    "ConnectionBasicModel",
     "ConnectionIncidentGroupingSpec",
     "ConnectionModel",
     "ConnectionSpec",
+    "ConnectionSpecificationModel",
     "ConnectionTestModel",
     "ConnectionTestStatus",
+    "CredentialType",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
     "CustomSensorParametersSpec",
     "DashboardsFolderSpec",
     "DashboardSpec",
     "DashboardSpecParameters",
-    "DataGroupingConfigurationBasicModel",
+    "DataDeleteResultPartition",
+    "DataGroupingConfigurationListModel",
     "DataGroupingConfigurationModel",
     "DataGroupingConfigurationSpec",
     "DataGroupingConfigurationTrimmedModel",
@@ -2336,7 +2355,11 @@ __all__ = (
     "DatatypeEqualsRuleParametersSpec",
     "DatetimeBuiltInDateFormats",
     "DeleteStoredDataQueueJobParameters",
+    "DeleteStoredDataQueueJobResult",
+    "DeleteStoredDataResult",
+    "DeleteStoredDataResultPartitionResults",
     "DisplayHint",
+    "DqoCloudUserModel",
     "DqoJobChangeModel",
     "DqoJobEntryParametersModel",
     "DqoJobHistoryEntryModel",
@@ -2367,6 +2390,8 @@ __all__ = (
     "HistoricDataPointsGrouping",
     "ImportSchemaQueueJobParameters",
     "ImportTablesQueueJobParameters",
+    "ImportTablesQueueJobResult",
+    "ImportTablesResult",
     "IncidentDailyIssuesCount",
     "IncidentGroupingLevel",
     "IncidentIssueHistogramModel",
@@ -2402,6 +2427,7 @@ __all__ = (
     "MaxPercentRule99ParametersSpec",
     "MaxValueRuleParametersSpec",
     "MinCountRule0ParametersSpec",
+    "MinCountRule1ParametersSpec",
     "MinCountRuleFatalParametersSpec",
     "MinCountRuleWarningParametersSpec",
     "MinimumGroupingSeverityLevel",
@@ -2430,6 +2456,7 @@ __all__ = (
     "OptionalCommentsListSpec",
     "OptionalConnectionIncidentGroupingSpec",
     "OptionalDataGroupingConfigurationSpec",
+    "OptionalIncidentWebhookNotificationsSpec",
     "OptionalLabelSetSpec",
     "OptionalMonitoringScheduleSpec",
     "OptionalTableDailyMonitoringCheckCategoriesSpec",
@@ -2448,20 +2475,20 @@ __all__ = (
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
     "ProfilingTimePeriod",
-    "ProviderSensorBasicModel",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
+    "ProviderSensorListModel",
     "ProviderSensorModel",
     "ProviderSensorRunnerType",
     "ProviderType",
     "QualityCategoryModel",
     "RedshiftParametersSpec",
     "RedshiftParametersSpecProperties",
-    "RemoteTableBasicModel",
+    "RemoteTableListModel",
     "RepairStoredDataQueueJobParameters",
-    "RuleBasicFolderModel",
-    "RuleBasicFolderModelFolders",
-    "RuleBasicModel",
+    "RuleFolderModel",
+    "RuleFolderModelFolders",
+    "RuleListModel",
     "RuleModel",
     "RuleModelParameters",
     "RuleParametersModel",
@@ -2470,21 +2497,23 @@ __all__ = (
     "RuleThresholdsModel",
     "RuleTimeWindowMode",
     "RuleTimeWindowSettingsSpec",
-    "RunChecksJobResult",
     "RunChecksOnTableParameters",
     "RunChecksParameters",
     "RunChecksQueueJobResult",
+    "RunChecksResult",
     "ScheduleEnabledStatusModel",
     "SchemaModel",
     "SchemaRemoteModel",
-    "SensorBasicFolderModel",
-    "SensorBasicFolderModelFolders",
-    "SensorBasicModel",
     "SensorDefinitionSpec",
     "SensorDefinitionSpecParameters",
+    "SensorFolderModel",
+    "SensorFolderModelFolders",
+    "SensorListModel",
     "SensorModel",
     "SensorReadoutEntryModel",
     "SensorReadoutsListModel",
+    "SharedCredentialListModel",
+    "SharedCredentialModel",
     "SimilarCheckModel",
     "SnowflakeParametersSpec",
     "SnowflakeParametersSpecProperties",
@@ -2500,6 +2529,7 @@ __all__ = (
     "StatisticsResultDataType",
     "StringsBuiltInDateFormats",
     "SynchronizeMultipleFoldersDqoQueueJobParameters",
+    "SynchronizeMultipleFoldersQueueJobResult",
     "SynchronizeRootFolderDqoQueueJobParameters",
     "SynchronizeRootFolderParameters",
     "TableAccuracyDailyMonitoringChecksSpec",
@@ -2522,7 +2552,6 @@ __all__ = (
     "TableAvailabilityProfilingChecksSpec",
     "TableAvailabilityProfilingChecksSpecCustomChecks",
     "TableAvailabilitySensorParametersSpec",
-    "TableBasicModel",
     "TableChangeRowCountCheckSpec",
     "TableChangeRowCountSince30DaysCheckSpec",
     "TableChangeRowCountSince7DaysCheckSpec",
@@ -2566,6 +2595,7 @@ __all__ = (
     "TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty",
     "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
+    "TableListModel",
     "TableModel",
     "TableMonitoringChecksSpec",
     "TableMonthlyMonitoringCheckCategoriesSpec",

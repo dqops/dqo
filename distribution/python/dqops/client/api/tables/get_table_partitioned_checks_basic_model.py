@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.check_container_basic_model import CheckContainerBasicModel
+from ...models.check_container_list_model import CheckContainerListModel
 from ...models.check_time_scale import CheckTimeScale
 from ...types import Response
 
@@ -41,9 +41,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[CheckContainerBasicModel]:
+) -> Optional[CheckContainerListModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = CheckContainerBasicModel.from_dict(response.json())
+        response_200 = CheckContainerListModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -54,7 +54,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[CheckContainerBasicModel]:
+) -> Response[CheckContainerListModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -70,7 +70,7 @@ def sync_detailed(
     time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-) -> Response[CheckContainerBasicModel]:
+) -> Response[CheckContainerListModel]:
     """getTablePartitionedChecksBasicModel
 
      Return a simplistic UI friendly model of table level data quality partitioned checks on a table for
@@ -87,7 +87,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckContainerBasicModel]
+        Response[CheckContainerListModel]
     """
 
     kwargs = _get_kwargs(
@@ -113,7 +113,7 @@ def sync(
     time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-) -> Optional[CheckContainerBasicModel]:
+) -> Optional[CheckContainerListModel]:
     """getTablePartitionedChecksBasicModel
 
      Return a simplistic UI friendly model of table level data quality partitioned checks on a table for
@@ -130,7 +130,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckContainerBasicModel
+        CheckContainerListModel
     """
 
     return sync_detailed(
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-) -> Response[CheckContainerBasicModel]:
+) -> Response[CheckContainerListModel]:
     """getTablePartitionedChecksBasicModel
 
      Return a simplistic UI friendly model of table level data quality partitioned checks on a table for
@@ -166,7 +166,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckContainerBasicModel]
+        Response[CheckContainerListModel]
     """
 
     kwargs = _get_kwargs(
@@ -190,7 +190,7 @@ async def asyncio(
     time_scale: CheckTimeScale,
     *,
     client: AuthenticatedClient,
-) -> Optional[CheckContainerBasicModel]:
+) -> Optional[CheckContainerListModel]:
     """getTablePartitionedChecksBasicModel
 
      Return a simplistic UI friendly model of table level data quality partitioned checks on a table for
@@ -207,7 +207,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckContainerBasicModel
+        CheckContainerListModel
     """
 
     return (

@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.sensor_basic_folder_model import SensorBasicFolderModel
+from ...models.sensor_folder_model import SensorFolderModel
 from ...types import Response
 
 
@@ -30,9 +30,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[SensorBasicFolderModel]:
+) -> Optional[SensorFolderModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = SensorBasicFolderModel.from_dict(response.json())
+        response_200 = SensorFolderModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -43,7 +43,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[SensorBasicFolderModel]:
+) -> Response[SensorFolderModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,7 +55,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[SensorBasicFolderModel]:
+) -> Response[SensorFolderModel]:
     """getSensorFolderTree
 
      Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
@@ -66,7 +66,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[SensorBasicFolderModel]
+        Response[SensorFolderModel]
     """
 
     kwargs = _get_kwargs(
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[SensorBasicFolderModel]:
+) -> Optional[SensorFolderModel]:
     """getSensorFolderTree
 
      Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
@@ -95,7 +95,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        SensorBasicFolderModel
+        SensorFolderModel
     """
 
     return sync_detailed(
@@ -106,7 +106,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[SensorBasicFolderModel]:
+) -> Response[SensorFolderModel]:
     """getSensorFolderTree
 
      Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
@@ -117,7 +117,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[SensorBasicFolderModel]
+        Response[SensorFolderModel]
     """
 
     kwargs = _get_kwargs(
@@ -133,7 +133,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[SensorBasicFolderModel]:
+) -> Optional[SensorFolderModel]:
     """getSensorFolderTree
 
      Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
@@ -144,7 +144,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        SensorBasicFolderModel
+        SensorFolderModel
     """
 
     return (

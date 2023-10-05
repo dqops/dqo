@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.dqo_queue_job_id import DqoQueueJobId
+from ...models.mono_object import MonoObject
 from ...types import Response
 
 
@@ -33,9 +33,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[DqoQueueJobId]:
+) -> Optional[MonoObject]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = DqoQueueJobId.from_dict(response.json())
+        response_200 = MonoObject.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -46,7 +46,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[DqoQueueJobId]:
+) -> Response[MonoObject]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -59,7 +59,7 @@ def sync_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[DqoQueueJobId]:
+) -> Response[MonoObject]:
     """deleteCheck
 
      Deletes a custom check definition
@@ -72,7 +72,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoQueueJobId]
+        Response[MonoObject]
     """
 
     kwargs = _get_kwargs(
@@ -92,7 +92,7 @@ def sync(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[DqoQueueJobId]:
+) -> Optional[MonoObject]:
     """deleteCheck
 
      Deletes a custom check definition
@@ -105,7 +105,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoQueueJobId
+        MonoObject
     """
 
     return sync_detailed(
@@ -118,7 +118,7 @@ async def asyncio_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[DqoQueueJobId]:
+) -> Response[MonoObject]:
     """deleteCheck
 
      Deletes a custom check definition
@@ -131,7 +131,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoQueueJobId]
+        Response[MonoObject]
     """
 
     kwargs = _get_kwargs(
@@ -149,7 +149,7 @@ async def asyncio(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[DqoQueueJobId]:
+) -> Optional[MonoObject]:
     """deleteCheck
 
      Deletes a custom check definition
@@ -162,7 +162,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoQueueJobId
+        MonoObject
     """
 
     return (

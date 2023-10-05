@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.connection_basic_model import ConnectionBasicModel
+from ...models.connection_model import ConnectionModel
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/basic".format(
         client.base_url, connectionName=connection_name
@@ -64,7 +64,7 @@ def sync_detailed(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
 ) -> Response[MonoObject]:
     """createConnectionBasic
 
@@ -72,8 +72,8 @@ def sync_detailed(
 
     Args:
         connection_name (str):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -101,7 +101,7 @@ def sync(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
 ) -> Optional[MonoObject]:
     """createConnectionBasic
 
@@ -109,8 +109,8 @@ def sync(
 
     Args:
         connection_name (str):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -131,7 +131,7 @@ async def asyncio_detailed(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
 ) -> Response[MonoObject]:
     """createConnectionBasic
 
@@ -139,8 +139,8 @@ async def asyncio_detailed(
 
     Args:
         connection_name (str):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,7 +166,7 @@ async def asyncio(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
 ) -> Optional[MonoObject]:
     """createConnectionBasic
 
@@ -174,8 +174,8 @@ async def asyncio(
 
     Args:
         connection_name (str):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

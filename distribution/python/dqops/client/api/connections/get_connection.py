@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.connection_model import ConnectionModel
+from ...models.connection_specification_model import ConnectionSpecificationModel
 from ...types import Response
 
 
@@ -33,9 +33,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[ConnectionModel]:
+) -> Optional[ConnectionSpecificationModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = ConnectionModel.from_dict(response.json())
+        response_200 = ConnectionSpecificationModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -46,7 +46,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[ConnectionModel]:
+) -> Response[ConnectionSpecificationModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -59,7 +59,7 @@ def sync_detailed(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ConnectionModel]:
+) -> Response[ConnectionSpecificationModel]:
     """getConnection
 
      Return the full details of a connection given the connection name
@@ -72,7 +72,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionModel]
+        Response[ConnectionSpecificationModel]
     """
 
     kwargs = _get_kwargs(
@@ -92,7 +92,7 @@ def sync(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ConnectionModel]:
+) -> Optional[ConnectionSpecificationModel]:
     """getConnection
 
      Return the full details of a connection given the connection name
@@ -105,7 +105,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionModel
+        ConnectionSpecificationModel
     """
 
     return sync_detailed(
@@ -118,7 +118,7 @@ async def asyncio_detailed(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ConnectionModel]:
+) -> Response[ConnectionSpecificationModel]:
     """getConnection
 
      Return the full details of a connection given the connection name
@@ -131,7 +131,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionModel]
+        Response[ConnectionSpecificationModel]
     """
 
     kwargs = _get_kwargs(
@@ -149,7 +149,7 @@ async def asyncio(
     connection_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ConnectionModel]:
+) -> Optional[ConnectionSpecificationModel]:
     """getConnection
 
      Return the full details of a connection given the connection name
@@ -162,7 +162,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionModel
+        ConnectionSpecificationModel
     """
 
     return (

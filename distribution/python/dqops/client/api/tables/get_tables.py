@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.table_basic_model import TableBasicModel
+from ...models.table_list_model import TableListModel
 from ...types import Response
 
 
@@ -34,12 +34,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["TableBasicModel"]]:
+) -> Optional[List["TableListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = TableBasicModel.from_dict(response_200_item_data)
+            response_200_item = TableListModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -52,7 +52,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["TableBasicModel"]]:
+) -> Response[List["TableListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,7 +66,7 @@ def sync_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[List["TableBasicModel"]]:
+) -> Response[List["TableListModel"]]:
     """getTables
 
      Returns a list of tables inside a connection/schema
@@ -80,7 +80,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['TableBasicModel']]
+        Response[List['TableListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -102,7 +102,7 @@ def sync(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[List["TableBasicModel"]]:
+) -> Optional[List["TableListModel"]]:
     """getTables
 
      Returns a list of tables inside a connection/schema
@@ -116,7 +116,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['TableBasicModel']
+        List['TableListModel']
     """
 
     return sync_detailed(
@@ -131,7 +131,7 @@ async def asyncio_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[List["TableBasicModel"]]:
+) -> Response[List["TableListModel"]]:
     """getTables
 
      Returns a list of tables inside a connection/schema
@@ -145,7 +145,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['TableBasicModel']]
+        Response[List['TableListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -165,7 +165,7 @@ async def asyncio(
     schema_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[List["TableBasicModel"]]:
+) -> Optional[List["TableListModel"]]:
     """getTables
 
      Returns a list of tables inside a connection/schema
@@ -179,7 +179,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['TableBasicModel']
+        List['TableListModel']
     """
 
     return (

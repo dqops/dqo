@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.column_basic_model import ColumnBasicModel
+from ...models.column_list_model import ColumnListModel
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -17,7 +17,7 @@ def _get_kwargs(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic".format(
         client.base_url,
@@ -74,7 +74,7 @@ def sync_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Response[MonoObject]:
     """updateColumnBasic
 
@@ -86,8 +86,8 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -121,7 +121,7 @@ def sync(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Optional[MonoObject]:
     """updateColumnBasic
 
@@ -133,8 +133,8 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -161,7 +161,7 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Response[MonoObject]:
     """updateColumnBasic
 
@@ -173,8 +173,8 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -206,7 +206,7 @@ async def asyncio(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Optional[MonoObject]:
     """updateColumnBasic
 
@@ -218,8 +218,8 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
