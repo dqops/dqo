@@ -302,7 +302,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec sampleProfilingCheck = new ColumnProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setNulls(nullChecks);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnProfilingChecks(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnProfilingChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -339,7 +339,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnMonitoringChecksRootSpec sampleMonitoring = new ColumnMonitoringChecksRootSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnMonitoringChecksDaily(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnMonitoringChecksDaily(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -377,7 +377,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
         samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),

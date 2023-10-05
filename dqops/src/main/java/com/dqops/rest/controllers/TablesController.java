@@ -1820,20 +1820,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)",
+    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table successfully created"),
+            @ApiResponse(code = 201, message = "New table successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Table with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createTable(
+    public ResponseEntity<Mono<Void>> createTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1877,20 +1877,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields",
+    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table successfully updated"),
+            @ApiResponse(code = 204, message = "Table successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTable(
+    public ResponseEntity<Mono<Void>> updateTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1933,20 +1933,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.",
+    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table successfully updated"),
+            @ApiResponse(code = 204, message = "Table successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTableBasic(
+    public ResponseEntity<Mono<Void>> updateTableBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1961,8 +1961,7 @@ public class TablesController {
         if (tableListModel.getTarget() == null ||
                 !Objects.equals(schemaName, tableListModel.getTarget().getSchemaName()) ||
                 !Objects.equals(tableName, tableListModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -1997,20 +1996,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.",
+    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table partitioning successfully updated"),
+            @ApiResponse(code = 204, message = "Table partitioning successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTablePartitioning(
+    public ResponseEntity<Mono<Void>> updateTablePartitioning(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2025,8 +2024,7 @@ public class TablesController {
         if (tablePartitioningModel.getTarget() == null ||
                 !Objects.equals(schemaName, tablePartitioningModel.getTarget().getSchemaName()) ||
                 !Objects.equals(tableName, tablePartitioningModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -2061,20 +2059,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.",
+    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTableDefaultGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> updateTableDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2132,20 +2130,20 @@ public class TablesController {
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableSchedulingGroupOverride",
-            notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).",
+            notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTableSchedulingGroupOverride(
+    public ResponseEntity<Mono<Void>> updateTableSchedulingGroupOverride(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2199,20 +2197,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.",
+    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's incident grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's incident grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTableIncidentGrouping(
+    public ResponseEntity<Mono<Void>> updateTableIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2260,20 +2258,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.",
+    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's labels successfully updated"),
+            @ApiResponse(code = 204, message = "Table's labels successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableLabels(
+    public ResponseEntity<Mono<Void>> updateTableLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2322,20 +2320,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.",
+    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's comments successfully updated"),
+            @ApiResponse(code = 204, message = "Table's comments successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableComments(
+    public ResponseEntity<Mono<Void>> updateTableComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2413,20 +2411,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.",
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableProfilingChecks(
+    public ResponseEntity<Mono<Void>> updateTableProfilingChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2469,20 +2467,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.",
+    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableDailyMonitoringChecks(
+    public ResponseEntity<Mono<Void>> updateTableDailyMonitoringChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2527,20 +2525,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.",
+    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality monitoring successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableMonitoringChecksMonthly(
+    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2585,20 +2583,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.",
+    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecksDaily(
+    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2643,20 +2641,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.",
+    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecksMonthly(
+    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2740,20 +2738,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.",
+    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableProfilingChecksModel(
+    public ResponseEntity<Mono<Void>> updateTableProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2793,20 +2791,20 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.",
+    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality monitoring successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTableMonitoringChecksModel(
+    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2847,13 +2845,13 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.",
+    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),

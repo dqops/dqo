@@ -43,8 +43,8 @@ class TableDataQualityStatusModel:
                 python rules. When an execution error is reported, the configuration of a data quality check on a table must be
                 updated.
             failed_checks_statuses (Union[Unset, TableDataQualityStatusModelFailedChecksStatuses]): The paths to all failed
-                data quality checks (keys) and severity of the highest data quality issue that was detected. Table level checks
-                are identified by the check name. Column level checks are identified as a check_name[column_name].
+                data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
+                are identified by the check name. Column-level checks are identified as a check_name[column_name].
     """
 
     connection_name: Union[Unset, str] = UNSET

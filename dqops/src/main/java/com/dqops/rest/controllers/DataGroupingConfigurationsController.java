@@ -171,20 +171,20 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableGroupingConfiguration", notes = "Updates a data grouping configuration according to the provided model",
+    @ApiOperation(value = "updateTableGroupingConfiguration", notes = "Updates a data grouping configuration according to the provided model", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Data grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or data grouping not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 409, message = "Data grouping configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateTableGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> updateTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -241,20 +241,20 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableGroupingConfiguration", notes = "Creates a new data grouping configuration on a table level",
+    @ApiOperation(value = "createTableGroupingConfiguration", notes = "Creates a new data grouping configuration on a table level", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New data grouping configuration successfully created"),
+            @ApiResponse(code = 201, message = "New data grouping configuration successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Data grouping configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createTableGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> createTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -293,18 +293,18 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PatchMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault", produces = "application/json")
-    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping",
+    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table"),
+            @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or data grouping configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> setTableDefaultGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> setTableDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -341,19 +341,19 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "deleteTableGroupingConfiguration", notes = "Deletes a data grouping configuration from a table",
+    @ApiOperation(value = "deleteTableGroupingConfiguration", notes = "Deletes a data grouping configuration from a table", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data grouping configuration removed"),
+            @ApiResponse(code = 204, message = "Data grouping configuration removed", response = Void.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 406, message = "Invalid request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> deleteTableGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> deleteTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,

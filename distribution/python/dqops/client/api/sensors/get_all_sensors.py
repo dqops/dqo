@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.sensor_basic_model import SensorBasicModel
+from ...models.sensor_list_model import SensorListModel
 from ...types import Response
 
 
@@ -30,12 +30,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["SensorBasicModel"]]:
+) -> Optional[List["SensorListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = SensorBasicModel.from_dict(response_200_item_data)
+            response_200_item = SensorListModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -48,7 +48,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["SensorBasicModel"]]:
+) -> Response[List["SensorListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -60,7 +60,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[List["SensorBasicModel"]]:
+) -> Response[List["SensorListModel"]]:
     """getAllSensors
 
      Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or
@@ -71,7 +71,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorBasicModel']]
+        Response[List['SensorListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -89,7 +89,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[List["SensorBasicModel"]]:
+) -> Optional[List["SensorListModel"]]:
     """getAllSensors
 
      Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or
@@ -100,7 +100,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorBasicModel']
+        List['SensorListModel']
     """
 
     return sync_detailed(
@@ -111,7 +111,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[List["SensorBasicModel"]]:
+) -> Response[List["SensorListModel"]]:
     """getAllSensors
 
      Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or
@@ -122,7 +122,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorBasicModel']]
+        Response[List['SensorListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -138,7 +138,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[List["SensorBasicModel"]]:
+) -> Optional[List["SensorListModel"]]:
     """getAllSensors
 
      Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or
@@ -149,7 +149,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorBasicModel']
+        List['SensorListModel']
     """
 
     return (

@@ -6,7 +6,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
+    from ..models.min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
     from ..models.min_count_rule_fatal_parameters_spec import (
         MinCountRuleFatalParametersSpec,
     )
@@ -49,7 +49,7 @@ class TableRowCountCheckSpec:
             table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
         warning (Union[Unset, MinCountRuleWarningParametersSpec]):
-        error (Union[Unset, MinCountRule0ParametersSpec]):
+        error (Union[Unset, MinCountRule1ParametersSpec]):
         fatal (Union[Unset, MinCountRuleFatalParametersSpec]):
     """
 
@@ -63,7 +63,7 @@ class TableRowCountCheckSpec:
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
     warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinCountRule0ParametersSpec"] = UNSET
+    error: Union[Unset, "MinCountRule1ParametersSpec"] = UNSET
     fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -135,8 +135,8 @@ class TableRowCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.min_count_rule_0_parameters_spec import (
-            MinCountRule0ParametersSpec,
+        from ..models.min_count_rule_1_parameters_spec import (
+            MinCountRule1ParametersSpec,
         )
         from ..models.min_count_rule_fatal_parameters_spec import (
             MinCountRuleFatalParametersSpec,
@@ -191,11 +191,11 @@ class TableRowCountCheckSpec:
             warning = MinCountRuleWarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinCountRule0ParametersSpec]
+        error: Union[Unset, MinCountRule1ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinCountRule0ParametersSpec.from_dict(_error)
+            error = MinCountRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MinCountRuleFatalParametersSpec]

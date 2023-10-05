@@ -7,7 +7,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.dqo_queue_job_id import DqoQueueJobId
-    from ..models.run_checks_job_result import RunChecksJobResult
+    from ..models.run_checks_result import RunChecksResult
 
 
 T = TypeVar("T", bound="RunChecksQueueJobResult")
@@ -21,13 +21,13 @@ class RunChecksQueueJobResult:
 
         Attributes:
             job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
-            result (Union[Unset, RunChecksJobResult]): Returns the result (highest data quality check severity and the
-                finished checks count) for the checks that were recently executed.
+            result (Union[Unset, RunChecksResult]): Returns the result (highest data quality check severity and the finished
+                checks count) for the checks that were recently executed.
             status (Union[Unset, DqoJobStatus]):
     """
 
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
-    result: Union[Unset, "RunChecksJobResult"] = UNSET
+    result: Union[Unset, "RunChecksResult"] = UNSET
     status: Union[Unset, DqoJobStatus] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -59,7 +59,7 @@ class RunChecksQueueJobResult:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.dqo_queue_job_id import DqoQueueJobId
-        from ..models.run_checks_job_result import RunChecksJobResult
+        from ..models.run_checks_result import RunChecksResult
 
         d = src_dict.copy()
         _job_id = d.pop("jobId", UNSET)
@@ -70,11 +70,11 @@ class RunChecksQueueJobResult:
             job_id = DqoQueueJobId.from_dict(_job_id)
 
         _result = d.pop("result", UNSET)
-        result: Union[Unset, RunChecksJobResult]
+        result: Union[Unset, RunChecksResult]
         if isinstance(_result, Unset):
             result = UNSET
         else:
-            result = RunChecksJobResult.from_dict(_result)
+            result = RunChecksResult.from_dict(_result)
 
         _status = d.pop("status", UNSET)
         status: Union[Unset, DqoJobStatus]

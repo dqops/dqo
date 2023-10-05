@@ -134,7 +134,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -169,7 +169,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -203,7 +203,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -233,7 +233,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         DataGroupingConfigurationSpec specBeforeAction = sampleTableSpec.getGroupings().get(dataStreamName);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.setTableDefaultGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.setTableDefaultGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -256,7 +256,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = DATASTREAM_NAME_1;
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -278,7 +278,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = DATASTREAM_NAME_2;
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -300,7 +300,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = "I'm_not_there";
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),

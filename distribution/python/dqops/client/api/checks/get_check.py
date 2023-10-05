@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.check_spec_model import CheckSpecModel
+from ...models.check_definition_model import CheckDefinitionModel
 from ...types import Response
 
 
@@ -33,9 +33,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[CheckSpecModel]:
+) -> Optional[CheckDefinitionModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = CheckSpecModel.from_dict(response.json())
+        response_200 = CheckDefinitionModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -46,7 +46,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[CheckSpecModel]:
+) -> Response[CheckDefinitionModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -59,7 +59,7 @@ def sync_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[CheckSpecModel]:
+) -> Response[CheckDefinitionModel]:
     """getCheck
 
      Returns a check definition
@@ -72,7 +72,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckSpecModel]
+        Response[CheckDefinitionModel]
     """
 
     kwargs = _get_kwargs(
@@ -92,7 +92,7 @@ def sync(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[CheckSpecModel]:
+) -> Optional[CheckDefinitionModel]:
     """getCheck
 
      Returns a check definition
@@ -105,7 +105,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckSpecModel
+        CheckDefinitionModel
     """
 
     return sync_detailed(
@@ -118,7 +118,7 @@ async def asyncio_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[CheckSpecModel]:
+) -> Response[CheckDefinitionModel]:
     """getCheck
 
      Returns a check definition
@@ -131,7 +131,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckSpecModel]
+        Response[CheckDefinitionModel]
     """
 
     kwargs = _get_kwargs(
@@ -149,7 +149,7 @@ async def asyncio(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[CheckSpecModel]:
+) -> Optional[CheckDefinitionModel]:
     """getCheck
 
      Returns a check definition
@@ -162,7 +162,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckSpecModel
+        CheckDefinitionModel
     """
 
     return (

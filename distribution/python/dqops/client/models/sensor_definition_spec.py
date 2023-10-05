@@ -29,12 +29,16 @@ class SensorDefinitionSpec:
             ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the
             ingestion (created_at, loaded_at, etc.) timestamp must be specified in the
             timestamp_columns.ingestion_timestamp_column field on the table.
+        default_value (Union[Unset, float]): Default value that is used when the sensor returns no rows. A row count
+            sensor may return no rows when a GROUP BY condition is added to capture the database server's local time zone.
+            In order to always return a value, a sensor may have a default value configured.
         parameters (Union[Unset, SensorDefinitionSpecParameters]): Additional sensor definition parameters
     """
 
     fields: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     requires_event_timestamp: Union[Unset, bool] = UNSET
     requires_ingestion_timestamp: Union[Unset, bool] = UNSET
+    default_value: Union[Unset, float] = UNSET
     parameters: Union[Unset, "SensorDefinitionSpecParameters"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -49,6 +53,7 @@ class SensorDefinitionSpec:
 
         requires_event_timestamp = self.requires_event_timestamp
         requires_ingestion_timestamp = self.requires_ingestion_timestamp
+        default_value = self.default_value
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -62,6 +67,8 @@ class SensorDefinitionSpec:
             field_dict["requires_event_timestamp"] = requires_event_timestamp
         if requires_ingestion_timestamp is not UNSET:
             field_dict["requires_ingestion_timestamp"] = requires_ingestion_timestamp
+        if default_value is not UNSET:
+            field_dict["default_value"] = default_value
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
 
@@ -86,6 +93,8 @@ class SensorDefinitionSpec:
 
         requires_ingestion_timestamp = d.pop("requires_ingestion_timestamp", UNSET)
 
+        default_value = d.pop("default_value", UNSET)
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, SensorDefinitionSpecParameters]
         if isinstance(_parameters, Unset):
@@ -97,6 +106,7 @@ class SensorDefinitionSpec:
             fields=fields,
             requires_event_timestamp=requires_event_timestamp,
             requires_ingestion_timestamp=requires_ingestion_timestamp,
+            default_value=default_value,
             parameters=parameters,
         )
 

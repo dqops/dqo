@@ -8,7 +8,7 @@ spring:
   application:
     name: dqo
   lifecycle:
-    timeout-per-shutdown-phase: 10s
+    timeout-per-shutdown-phase: 60s
   codec:
     max-in-memory-size: 10MB
   mvc:
@@ -87,11 +87,12 @@ dqo:
     json-log-field-timestamp: time
     json-log-field-arguments: attrs
     json-timestamp-pattern: "[ISO_INSTANT]"
-    execution:
+    user-errors:
       sensors-log-level: WARN
       rules-log-level: WARN
       checks-log-level: WARN
       statistics-log-level: WARN
+      yaml-log-level: WARN
   storage:
     gcp:
       upload-buffer-size: 5000000
@@ -164,7 +165,7 @@ dqo:
     start: true
     synchronization-mode: silent
     check-run-mode: silent
-    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour
+    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour, but a free version starts just once an hour on a minute that is 5 minutes after the start
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:

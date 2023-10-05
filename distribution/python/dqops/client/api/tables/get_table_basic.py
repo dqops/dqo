@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.table_basic_model import TableBasicModel
+from ...models.table_list_model import TableListModel
 from ...types import Response
 
 
@@ -38,9 +38,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[TableBasicModel]:
+) -> Optional[TableListModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = TableBasicModel.from_dict(response.json())
+        response_200 = TableListModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -51,7 +51,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[TableBasicModel]:
+) -> Response[TableListModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,7 +66,7 @@ def sync_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[TableBasicModel]:
+) -> Response[TableListModel]:
     """getTableBasic
 
      Return the basic table information
@@ -81,7 +81,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableBasicModel]
+        Response[TableListModel]
     """
 
     kwargs = _get_kwargs(
@@ -105,7 +105,7 @@ def sync(
     table_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[TableBasicModel]:
+) -> Optional[TableListModel]:
     """getTableBasic
 
      Return the basic table information
@@ -120,7 +120,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableBasicModel
+        TableListModel
     """
 
     return sync_detailed(
@@ -137,7 +137,7 @@ async def asyncio_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[TableBasicModel]:
+) -> Response[TableListModel]:
     """getTableBasic
 
      Return the basic table information
@@ -152,7 +152,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableBasicModel]
+        Response[TableListModel]
     """
 
     kwargs = _get_kwargs(
@@ -174,7 +174,7 @@ async def asyncio(
     table_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[TableBasicModel]:
+) -> Optional[TableListModel]:
     """getTableBasic
 
      Return the basic table information
@@ -189,7 +189,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableBasicModel
+        TableListModel
     """
 
     return (

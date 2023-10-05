@@ -112,6 +112,23 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
 
+    - folder_name: Volume
+      dashboards:
+        - dashboard_name: Largest tables by number of rows
+          url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
+          width: 1400
+          height: 1700
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: profile_row_count
+        - dashboard_name: Empty or too small tables
+          url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: profile_row_count
+
 - folder_name: Monitoring
   folders:
     - folder_name: Current table status
@@ -152,7 +169,10 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Highest severity issue per table and day
+
+    - folder_name: Highest issue severity per day
+      dashboards:
+        - dashboard_name: Highest issue severity per table and day
           url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
           width: 1400
           height: 1600
@@ -161,7 +181,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Highest severity issue per column and day
+        - dashboard_name: Highest issue severity per column and day
           url: https://lookerstudio.google.com/embed/reporting/474cb75b-e9f0-486b-bf12-e910d0330d8b/page/c5B8C
           width: 1400
           height: 1600
@@ -170,7 +190,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Highest severity issue per data grouping and day
+        - dashboard_name: Highest issue severity per data grouping and day
           url: https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/c5B8C
           width: 1400
           height: 1600
@@ -179,7 +199,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Highest severity issue per check and day
+        - dashboard_name: Highest issue severity per check and day
           url: https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/c5B8C
           width: 1400
           height: 1600
@@ -242,7 +262,7 @@ spec:
         - dashboard_name: KPIs per table - summary
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
-          height: 2150
+          height: 2210
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -311,6 +331,23 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+
+    - folder_name: Volume
+      dashboards:
+        - dashboard_name: Largest tables by number of rows
+          url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
+          width: 1400
+          height: 1700
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: daily_row_count
+        - dashboard_name: Empty or too small tables
+          url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_name: daily_row_count
 
 - folder_name: Partitions
   folders:
@@ -520,7 +557,12 @@ spec:
           height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-
+        - dashboard_name: Too small partitions
+          url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb
+          width: 1400
+          height: 2500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
 
 - folder_name: Statistics of data sources
   folders:
@@ -540,26 +582,7 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_name: daily_table_availability
-    - folder_name: Volume
-      dashboards:
-        - dashboard_name: Largest tables by number of rows
-          url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
-          width: 1400
-          height: 1700
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Empty or too small tables
-          url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Too small partitions
-          url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb
-          width: 1400
-          height: 2500
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
+
     - folder_name: Data completeness
       dashboards:
         - dashboard_name: Null checks - summary

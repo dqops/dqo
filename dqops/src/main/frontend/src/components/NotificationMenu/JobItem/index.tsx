@@ -114,7 +114,6 @@ const JobItem = ({
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
             <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType : "Error"}</div>
-            { renderStatus() }
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -145,7 +144,8 @@ const JobItem = ({
                       }}
                     />
                   )}
-                <div>
+                <div className='flex gap-x-2 items-center'>
+                  {renderStatus()}
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
@@ -252,8 +252,8 @@ const JobItem = ({
               <td>{job?.status}</td>
               {hasInvalidApiKeyError && (
                     <span className="px-2 text-red-500">
-                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
-                      {"'"}cloud login{"'"} from DQO shell)
+                      (Cloud DQO Api Key is invalid. Your trial period has expired or a new version of DQO was released.{' '}
+                      Please run {"'"}cloud login{"'"} from DQO shell)
                     </span>
                   )}
             </tr>

@@ -84,11 +84,15 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
         TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
         TextColumn columnNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        DateTimeColumn collectedAtColumn = sortedResults.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
+        IntColumn sampleIndexColumn = sortedResults.intColumn(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
 
         int rowCount = sortedResults.rowCount();
         for (int i = 0; i < rowCount ; i++) {
             String category = categoryColumn.get(i);
             String collectorName = collectorNameColumn.get(i);
+            LocalDateTime collectedAt = collectedAtColumn.get(i);
+            Integer sampleIndex = sampleIndexColumn.get(i);
 
             if (columnNameColumn.isMissing(i)) {
                 // table level
@@ -114,7 +118,10 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                 }
 
                 if (columnModel.getMetrics().stream()
-                        .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getCollector(), collectorName))) {
+                        .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
+                                Objects.equal(m.getCollector(), collectorName) &&
+                                !Objects.equal(m.getCollectedAt(), collectedAt) && // a newer result was already added, so we are skipping
+                                Objects.equal(m.getSampleIndex(), sampleIndex))) {
                     columnModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
@@ -156,16 +163,20 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
         TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
         DateTimeColumn collectedAtColumn = sortedResults.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
+        IntColumn sampleIndexColumn = sortedResults.intColumn(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
 
         int rowCount = sortedResults.rowCount();
         for (int i = 0; i < rowCount ; i++) {
             String category = categoryColumn.get(i);
             String collectorName = collectorNameColumn.get(i);
             LocalDateTime collectedAt = collectedAtColumn.get(i);
+            Integer sampleIndex = sampleIndexColumn.get(i);
+
             if (columnStatisticsResults.getMetrics().stream()
                     .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
                             Objects.equal(m.getCollector(), collectorName) &&
-                            !Objects.equal(m.getCollectedAt(), collectedAt))) {
+                            !Objects.equal(m.getCollectedAt(), collectedAt) &&  // a newer result was already added, so we are skipping
+                            Objects.equal(m.getSampleIndex(), sampleIndex))) {
                 columnStatisticsResults.getMetrics().add(createMetricModel(sortedResults.row(i)));
             }
         }

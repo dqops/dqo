@@ -46,6 +46,10 @@ class DqoUserProfileModel:
         can_manage_definitions (Union[Unset, bool]): User can manage definitions of sensors, rules, checks and the
             default data quality check configuration that is applied on imported tables.
         can_compare_tables (Union[Unset, bool]): User can define table comparison configurations and compare tables.
+        can_manage_users (Union[Unset, bool]): User can manage other users, add users to a multi-user account, change
+            access rights, reset passwords.
+        can_manage_and_view_shared_credentials (Union[Unset, bool]): User can manage shared credentials and view (or
+            download) already defined shared credentials.
     """
 
     user: Union[Unset, str] = UNSET
@@ -72,6 +76,8 @@ class DqoUserProfileModel:
     can_edit_labels: Union[Unset, bool] = UNSET
     can_manage_definitions: Union[Unset, bool] = UNSET
     can_compare_tables: Union[Unset, bool] = UNSET
+    can_manage_users: Union[Unset, bool] = UNSET
+    can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -102,6 +108,10 @@ class DqoUserProfileModel:
         can_edit_labels = self.can_edit_labels
         can_manage_definitions = self.can_manage_definitions
         can_compare_tables = self.can_compare_tables
+        can_manage_users = self.can_manage_users
+        can_manage_and_view_shared_credentials = (
+            self.can_manage_and_view_shared_credentials
+        )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -154,6 +164,12 @@ class DqoUserProfileModel:
             field_dict["can_manage_definitions"] = can_manage_definitions
         if can_compare_tables is not UNSET:
             field_dict["can_compare_tables"] = can_compare_tables
+        if can_manage_users is not UNSET:
+            field_dict["can_manage_users"] = can_manage_users
+        if can_manage_and_view_shared_credentials is not UNSET:
+            field_dict[
+                "can_manage_and_view_shared_credentials"
+            ] = can_manage_and_view_shared_credentials
 
         return field_dict
 
@@ -213,6 +229,12 @@ class DqoUserProfileModel:
 
         can_compare_tables = d.pop("can_compare_tables", UNSET)
 
+        can_manage_users = d.pop("can_manage_users", UNSET)
+
+        can_manage_and_view_shared_credentials = d.pop(
+            "can_manage_and_view_shared_credentials", UNSET
+        )
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -238,6 +260,8 @@ class DqoUserProfileModel:
             can_edit_labels=can_edit_labels,
             can_manage_definitions=can_manage_definitions,
             can_compare_tables=can_compare_tables,
+            can_manage_users=can_manage_users,
+            can_manage_and_view_shared_credentials=can_manage_and_view_shared_credentials,
         )
 
         dqo_user_profile_model.additional_properties = d

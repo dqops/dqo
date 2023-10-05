@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.column_basic_model import ColumnBasicModel
-from ...models.mono_object import MonoObject
+from ...models.column_list_model import ColumnListModel
+from ...models.mono_void import MonoVoid
 from ...types import Response
 
 
@@ -17,7 +17,7 @@ def _get_kwargs(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
+    json_body: ColumnListModel,
 ) -> Dict[str, Any]:
     url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic".format(
         client.base_url,
@@ -43,11 +43,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[MonoObject]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonoObject.from_dict(response.json())
+        response_200 = MonoVoid.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -56,9 +54,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[MonoObject]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -74,8 +70,8 @@ def sync_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
-) -> Response[MonoObject]:
+    json_body: ColumnListModel,
+) -> Response[MonoVoid]:
     """updateColumnBasic
 
      Updates an existing column, changing only the basic information like the expected data type (the
@@ -86,15 +82,15 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -121,8 +117,8 @@ def sync(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
-) -> Optional[MonoObject]:
+    json_body: ColumnListModel,
+) -> Optional[MonoVoid]:
     """updateColumnBasic
 
      Updates an existing column, changing only the basic information like the expected data type (the
@@ -133,15 +129,15 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return sync_detailed(
@@ -161,8 +157,8 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
-) -> Response[MonoObject]:
+    json_body: ColumnListModel,
+) -> Response[MonoVoid]:
     """updateColumnBasic
 
      Updates an existing column, changing only the basic information like the expected data type (the
@@ -173,15 +169,15 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -206,8 +202,8 @@ async def asyncio(
     column_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: ColumnBasicModel,
-) -> Optional[MonoObject]:
+    json_body: ColumnListModel,
+) -> Optional[MonoVoid]:
     """updateColumnBasic
 
      Updates an existing column, changing only the basic information like the expected data type (the
@@ -218,15 +214,15 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        json_body (ColumnBasicModel): Basic column model that returns the basic fields from a
-            column specification, excluding nested nodes like a list of activated checks.
+        json_body (ColumnListModel): Column list model that returns the basic fields from a column
+            specification, excluding nested nodes like a list of activated checks.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return (
