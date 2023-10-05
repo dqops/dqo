@@ -114,7 +114,6 @@ const JobItem = ({
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
             <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType : "Error"}</div>
-            { renderStatus() }
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -145,7 +144,8 @@ const JobItem = ({
                       }}
                     />
                   )}
-                <div>
+                <div className='flex gap-x-2 items-center'>
+                  {renderStatus()}
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
