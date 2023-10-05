@@ -164,7 +164,7 @@ dqo:
     start: true
     synchronization-mode: silent
     check-run-mode: silent
-    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour
+    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour, but a free version starts just once an hour on a minute that is 5 minutes after the start
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:

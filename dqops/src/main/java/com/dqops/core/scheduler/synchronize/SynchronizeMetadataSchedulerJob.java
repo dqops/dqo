@@ -51,7 +51,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     /**
      * The number of seconds to sleep before starting.
      */
-    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 5 * 60;
+    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 60;
 
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
@@ -183,7 +183,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
         this.interrupted = true;
         SynchronizeMultipleFoldersDqoQueueJob job = this.synchronizeMultipleFoldersJob;
         if (job != null) {
-            job.getCancellationToken().cancel();
+            this.dqoJobQueue.cancelJob(job.getJobId());
         }
     }
 }

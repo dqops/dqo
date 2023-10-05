@@ -16,6 +16,10 @@
 package com.dqops.core.scheduler;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.scheduler.quartz.*;
@@ -34,6 +38,9 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
@@ -57,6 +64,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private DqoJobQueue dqoJobQueue;
     private ParentDqoJobQueue parentDqoJobQueue;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -73,6 +81,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param dqoJobQueue Standard job queue, used to ensure that the job queue starts before the job scheduler.
      * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
      * @param defaultTimeZoneProvider Default time zone provider.
+     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -83,7 +92,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    ScheduledJobListener scheduledJobListener,
                                    DqoJobQueue dqoJobQueue,
                                    ParentDqoJobQueue parentDqoJobQueue,
-                                   DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                   DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                   DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
@@ -93,6 +103,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
     }
 
     /**
@@ -190,6 +201,16 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
+            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            if (dqoCloudApiKey != null) {
+                DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
+                if (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
+                        (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.PERSONAL && apiKeyPayload.getExpiresAt() != null)) {
+                    int minuteToStart = (Instant.now().get(ChronoField.MINUTE_OF_HOUR) + 5) % 60;
+                    scanMetadataCronSchedule = minuteToStart + " * * * *";
+                }
+            }
+
             MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
             Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
 
