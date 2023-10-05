@@ -82,7 +82,7 @@ dqo:
     console-immediate-flush: false
     console: OFF
     log-errors-to-stderr: false
-    encode-double-quotes-in-json: true
+    encode-message: true
     json-log-field-message: log
     json-log-field-timestamp: time
     json-log-field-arguments: attrs
