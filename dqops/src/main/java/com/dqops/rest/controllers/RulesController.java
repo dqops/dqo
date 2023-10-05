@@ -146,20 +146,20 @@ public class RulesController {
      * @return Empty response.
      */
     @PostMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.",
+    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New custom rule successfully created"),
+            @ApiResponse(code = 201, message = "New custom rule successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Custom rule with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createRule(
+    public ResponseEntity<Mono<Void>> createRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName,
             @ApiParam("Rule model") @RequestBody RuleModel ruleModel) {
@@ -192,19 +192,19 @@ public class RulesController {
      * @return Empty response.
      */
     @PutMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present",
+    @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Custom rule successfully updated"),
+            @ApiResponse(code = 204, message = "Custom rule successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateRule(
+    public ResponseEntity<Mono<Void>> updateRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("List of rule definitions") @RequestBody RuleModel ruleModel,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
@@ -257,18 +257,18 @@ public class RulesController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/rules/{fullRuleName}", produces = "application/json")
-    @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition",
+    @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Custom rule definition successfully deleted"),
+            @ApiResponse(code = 204, message = "Custom rule definition successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Custom rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> deleteRule(
+    public ResponseEntity<Mono<Void>> deleteRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
 

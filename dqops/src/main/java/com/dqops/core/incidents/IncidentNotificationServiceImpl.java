@@ -87,10 +87,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentWebhookNotificationsSpec webhooksSpec) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
-                .flatMap(message -> sendNotification(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
+                .map(message -> new MessageWebhookPair(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
+                .filter(messageUrlPair -> !Strings.isNullOrEmpty(messageUrlPair.getWebhookUrl()))
+                .flatMap(messageUrlPair -> sendNotification(messageUrlPair))
                 .onErrorContinue((Throwable ex, Object msg) -> {
                     log.error("Failed to send notification to webhook: " +
-                            msg.toString() + ", message: " + ex.getMessage(), ex);
+                            msg + ", error: " + ex.getMessage(), ex);
                 })
                 .subscribeOn(Schedulers.parallel())
                 .then();
@@ -100,13 +102,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
     /**
      * Sets a single notification with one incident.
-     * @param incidentNotificationMessage Incident notification payload.
-     * @param webhookUrl Target webhook url.
+     * @param messageWebhookPair Incident notification payload and webhook url pair.
      * @return Mono that returns the target webhook url.
      */
-    protected Mono<String> sendNotification(IncidentNotificationMessage incidentNotificationMessage, String webhookUrl) {
+    protected Mono<MessageWebhookPair> sendNotification(MessageWebhookPair messageWebhookPair) {
         HttpClient httpClient = this.sharedHttpClientProvider.getHttp11SharedClient();
-        String serializedJsonMessage = this.jsonSerializer.serialize(incidentNotificationMessage);
+        String serializedJsonMessage = this.jsonSerializer.serialize(messageWebhookPair.getIncidentNotificationMessage());
         byte[] messageBytes = serializedJsonMessage.getBytes(StandardCharsets.UTF_8);
 
         Mono<Void> responseSent = httpClient
@@ -115,12 +116,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     httpHeaders.add(HttpHeaders.CONTENT_LENGTH, messageBytes.length);
                 })
                 .post()
-                .uri(webhookUrl)
+                .uri(messageWebhookPair.getWebhookUrl())
                 .send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)))
                 .response()
                 .then();
 
-        return responseSent.retry(3).thenReturn(webhookUrl);
+        return responseSent.retry(3).thenReturn(messageWebhookPair);
     }
 
     /**

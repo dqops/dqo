@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.connection_basic_model import ConnectionBasicModel
+from ...models.connection_model import ConnectionModel
 from ...models.connection_test_model import ConnectionTestModel
 from ...types import UNSET, Response, Unset
 
@@ -13,7 +13,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}api/datasource/testconnection".format(client.base_url)
@@ -67,7 +67,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Response[ConnectionTestModel]:
     """testConnection
@@ -76,8 +76,8 @@ def sync_detailed(
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,7 +104,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Optional[ConnectionTestModel]:
     """testConnection
@@ -113,8 +113,8 @@ def sync(
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,7 +134,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Response[ConnectionTestModel]:
     """testConnection
@@ -143,8 +143,8 @@ async def asyncio_detailed(
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -169,7 +169,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Optional[ConnectionTestModel]:
     """testConnection
@@ -178,8 +178,8 @@ async def asyncio(
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

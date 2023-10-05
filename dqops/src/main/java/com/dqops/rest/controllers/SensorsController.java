@@ -188,20 +188,20 @@ public class SensorsController {
      * @param sensorModel sensor model
      */
     @PostMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.",
+    @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New sensor successfully created"),
+            @ApiResponse(code = 201, message = "New sensor successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Sensor with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createSensor(
+    public ResponseEntity<Mono<Void>> createSensor(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
@@ -242,19 +242,19 @@ public class SensorsController {
      */
     @PutMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
-            "Removes sensor if custom definition is same as Dqo Home sensor",
+            "Removes sensor if custom definition is same as Dqo Home sensor", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Sensor model successfully updated"),
+            @ApiResponse(code = 204, message = "Sensor model successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateSensor(
+    public ResponseEntity<Mono<Void>> updateSensor(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
@@ -351,18 +351,18 @@ public class SensorsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
-    @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition",
+    @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Custom sensor definition successfully deleted"),
+            @ApiResponse(code = 204, message = "Custom sensor definition successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Custom sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> deleteSensor(
+    public ResponseEntity<Mono<Void>> deleteSensor(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
 

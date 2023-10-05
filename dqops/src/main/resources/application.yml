@@ -87,6 +87,11 @@ dqo:
     json-log-field-timestamp: time
     json-log-field-arguments: attrs
     json-timestamp-pattern: "[ISO_INSTANT]"
+    execution:
+      sensors-log-level: WARN
+      rules-log-level: WARN
+      checks-log-level: WARN
+      statistics-log-level: WARN
   storage:
     gcp:
       upload-buffer-size: 5000000
@@ -137,7 +142,6 @@ dqo:
   statistics:
     truncated-strings-length: 50
     viewed-statistics-age-months: 3
-    log-level: WARN
   incidents:
     count-open-incidents-days: 60
     column-histogram-size: 10
@@ -157,10 +161,10 @@ dqo:
       synchronize-multiple-folders: 120
       default-wait-timeout: 120
   scheduler:
-    #start: true
+    start: true
     synchronization-mode: silent
     check-run-mode: silent
-    synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour, but a free version starts just once an hour on a minute that is 5 minutes after the start
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:

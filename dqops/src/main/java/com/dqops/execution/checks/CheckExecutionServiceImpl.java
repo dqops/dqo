@@ -15,24 +15,15 @@
  */
 package com.dqops.execution.checks;
 
-import com.dqops.connectors.ConnectionProviderRegistry;
-import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
-import com.dqops.data.errors.normalization.ErrorsNormalizationService;
-import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
-import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
-import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.jobs.RunChecksOnTableQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksOnTableParameters;
 import com.dqops.execution.checks.progress.*;
-import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
 import com.dqops.execution.checks.scheduled.ScheduledChecksCollection;
 import com.dqops.execution.checks.scheduled.ScheduledTableChecksCollection;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
-import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.*;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;

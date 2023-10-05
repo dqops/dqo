@@ -29,7 +29,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor list model")
+@ApiModel(value = "ProviderSensorListModel", description = "Provider sensor list model")
 public class ProviderSensorListModel {
     @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;

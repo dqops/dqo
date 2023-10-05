@@ -33,6 +33,7 @@ import com.dqops.execution.sensors.runners.AbstractSensorRunner;
 import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.CheckExecutionLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -56,20 +57,24 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
     public static final String CLASS_NAME = ColumnColumnExistsSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
     private TableMetadataSensorExecutor tableMetadataSensorExecutor;
+    private CheckExecutionLogger checkExecutionLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
      * @param tableMetadataSensorExecutor Table metadata shared executor.
+     * @param checkExecutionLogger Check execution logger.
      */
     @Autowired
     public ColumnColumnExistsSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
                                           DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                          TableMetadataSensorExecutor tableMetadataSensorExecutor) {
+                                          TableMetadataSensorExecutor tableMetadataSensorExecutor,
+                                          CheckExecutionLogger checkExecutionLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
+        this.checkExecutionLogger = checkExecutionLogger;
     }
 
     /**
@@ -124,7 +129,7 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            this.checkExecutionLogger.logSensor("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }
@@ -186,9 +191,8 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
-            }
+            this.checkExecutionLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query:" + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

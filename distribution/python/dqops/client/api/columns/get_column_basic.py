@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.column_basic_model import ColumnBasicModel
+from ...models.column_list_model import ColumnListModel
 from ...types import Response
 
 
@@ -40,9 +40,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[ColumnBasicModel]:
+) -> Optional[ColumnListModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = ColumnBasicModel.from_dict(response.json())
+        response_200 = ColumnListModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -53,7 +53,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[ColumnBasicModel]:
+) -> Response[ColumnListModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -69,7 +69,7 @@ def sync_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ColumnBasicModel]:
+) -> Response[ColumnListModel]:
     """getColumnBasic
 
      Returns the column specification
@@ -85,7 +85,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ColumnBasicModel]
+        Response[ColumnListModel]
     """
 
     kwargs = _get_kwargs(
@@ -111,7 +111,7 @@ def sync(
     column_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ColumnBasicModel]:
+) -> Optional[ColumnListModel]:
     """getColumnBasic
 
      Returns the column specification
@@ -127,7 +127,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ColumnBasicModel
+        ColumnListModel
     """
 
     return sync_detailed(
@@ -146,7 +146,7 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ColumnBasicModel]:
+) -> Response[ColumnListModel]:
     """getColumnBasic
 
      Returns the column specification
@@ -162,7 +162,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ColumnBasicModel]
+        Response[ColumnListModel]
     """
 
     kwargs = _get_kwargs(
@@ -186,7 +186,7 @@ async def asyncio(
     column_name: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ColumnBasicModel]:
+) -> Optional[ColumnListModel]:
     """getColumnBasic
 
      Returns the column specification
@@ -202,7 +202,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ColumnBasicModel
+        ColumnListModel
     """
 
     return (

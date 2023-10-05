@@ -19,6 +19,8 @@ package com.dqops.utils.logging;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.joran.spi.ConsoleTarget;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.event.KeyValuePair;
 
@@ -31,13 +33,17 @@ import java.util.Objects;
  */
 public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
     private boolean encodeDoubleQuotesInJson;
+    private final DqoCloudApiKeyPayload apiKeyPayload;
 
     /**
      * Creates an augmenting console appender.
      * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param apiKeyPayload DQO Cloud api key.
      */
-    public AugmentingConsoleAppender(boolean encodeDoubleQuotesInJson) {
+    public AugmentingConsoleAppender(boolean encodeDoubleQuotesInJson,
+                                     DqoCloudApiKeyPayload apiKeyPayload) {
         this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+        this.apiKeyPayload = apiKeyPayload;
     }
 
     /**
@@ -56,6 +62,14 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
         List<KeyValuePair> keyValuePairs = originalEvent.getKeyValuePairs() != null
                 ? new ArrayList<>(originalEvent.getKeyValuePairs()) : new ArrayList<>();
         keyValuePairs.add(new KeyValuePair("stream", Objects.equals(this.getTarget(), ConsoleTarget.SystemErr.getName()) ? "stderr" : "stdout"));
+
+        if (apiKeyPayload != null) {
+            keyValuePairs.add(new KeyValuePair("tenantId", apiKeyPayload.getTenantId()));
+            if (apiKeyPayload.getAccountName() !=  null) {
+                keyValuePairs.add(new KeyValuePair("account", apiKeyPayload.getAccountName()));
+            }
+        }
+
         EncodingLoggingEvent augmentedLoggingEvent = new EncodingLoggingEvent(
                 originalEvent, augmentedArgumentArray, this.encodeDoubleQuotesInJson, keyValuePairs);
 

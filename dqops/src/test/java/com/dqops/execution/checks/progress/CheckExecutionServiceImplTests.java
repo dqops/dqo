@@ -29,6 +29,7 @@ import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheck
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
@@ -71,6 +72,7 @@ import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
+import com.dqops.utils.logging.CheckExecutionLoggerImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -159,7 +161,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
-                DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault());
+                DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
+                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

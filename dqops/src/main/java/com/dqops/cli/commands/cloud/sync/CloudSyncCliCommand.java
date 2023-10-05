@@ -37,4 +37,9 @@ import picocli.CommandLine;
         CloudSyncAllCliCommand.class
 })
 public class CloudSyncCliCommand extends BaseCommand {
+    /**
+     * Message shown by CLI operations when the DQO Cloud api key is invalid.
+     */
+    public static final String API_KEY_INVALID_MESSAGE = "Invalid DQO Cloud credentials, probably your trial period has expired or a new version of DQO was released. " +
+            "Please run \"cloud login\" from the command-line to get a new DQO Cloud API Key.";
 }

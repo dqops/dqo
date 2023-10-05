@@ -11,8 +11,8 @@ T = TypeVar("T", bound="MaxFailuresRule5ParametersSpec")
 class MaxFailuresRule5ParametersSpec:
     """
     Attributes:
-        max_failures (Union[Unset, int]): Maximum number of consecutive check failures, a check is failed when the
-            sensor's query failed to execute due to a connection error, missing table or a corrupted table.
+        max_failures (Union[Unset, int]): Maximum number of consecutive days with check failures. A check is failed when
+            a sensor query fails due to a connection error, missing or corrupted table.
     """
 
     max_failures: Union[Unset, int] = UNSET
