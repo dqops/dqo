@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BigQueryAuthenticationMode } from '../../../../shared/enums/bigquery.enum';
 import Select from '../../../Select';
@@ -12,6 +12,7 @@ import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
+import { SharedCredentailsApi } from '../../../../services/apiClient';
 
 const options = [
   {
@@ -40,6 +41,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
+  const [sharedCredentials, setSharedCredentials] = useState<any>()
   const handleChange = (obj: Partial<BigQueryParametersSpec>) => {
     if (!onChange) return;
 
@@ -48,6 +50,16 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       ...obj
     });
   };
+  console.log(bigquery)
+
+  const getSharedCredentials = async () => {
+    await SharedCredentailsApi.getAllSharedCredentials()
+      .then((res) => setSharedCredentials(res.data))
+  }
+
+  useEffect(() => {
+    getSharedCredentials()
+  },[])
 
   return (
     <SectionWrapper title="BigQuery connection parameters" className="mb-4">
@@ -116,6 +128,8 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.quota_project_id}
         onChange={(value) => handleChange({ quota_project_id: value })}
         disabled={userProfile.can_manage_data_sources!== true}
+        data={sharedCredentials}
+        credential={true}
       />
     </SectionWrapper>
   );
