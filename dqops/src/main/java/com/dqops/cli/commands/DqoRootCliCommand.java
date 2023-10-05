@@ -318,6 +318,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.scheduler.synchronize-cron-schedule"},
             description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new cron schedules. " +
                     "The default schedule will synchronize local files with DQO Cloud and refresh the data quality data warehouse 5 minutes past each hour. " +
+                    "A DQO instance that uses a FREE or a trial PERSONAL license will ignore this setting and synchronize files once an hour, on a random time. " +
                     "Synchronization with DQO cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "5 * * * *")
     private String dqoSchedulerSynchronizeCronSchedule;
 
