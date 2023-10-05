@@ -70,12 +70,35 @@ export default function TablePreview({statistics} : tablePreviewProps) {
           length: x.type_snapshot?.length,
           scale: x.type_snapshot?.scale,
           importedDatatype: String(x.type_snapshot?.column_type),
-          
         };
         return newData;
       });
 
+
+      const arrayOfSamples = statistics.column_statistics?.map((x) => {
+        const newData = {
+          sampleArray: x.statistics?.filter((item) => item.collector === "column_samples").map((c) => c.result)
+        }
+        return newData;
+      })
+
+      let count = 0;
+      if (arrayOfSamples) {
+        arrayOfSamples.forEach((x) => {
+          if (x.sampleArray && x.sampleArray.length > count) {
+            count = x.sampleArray.length;
+          }
+        });
+      }
+   const arrayOfSamplesIndexes = [];
+
+for (let i = 1; i <= count; i++) {
+  arrayOfSamplesIndexes.push(i);
+}
+      console.log(count);
+
   console.log(statistics)
+  console.log(arrayOfSamples)
 
   return (
         <table className='w-screen mt-5 p-4'>
@@ -91,8 +114,15 @@ export default function TablePreview({statistics} : tablePreviewProps) {
                     {dataArray.map((y, jIndex) => 
                     <td key={jIndex} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y[x.value as keyof MyData])}</td>
                     )}
-                    
-                </tr>
+                    </tr> 
+              )}
+               {arrayOfSamplesIndexes?.map((x, index) =>
+                <tr key= {index} className='flex'>
+                    <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{"Sample value " + (Number(index) + 1)}</td>
+                  {/* {arrayOfSamples?.map((y) => 
+                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y.sampleArray)}</td>
+                  )} */}
+                </tr> 
               )}
             </tbody>
         </table>
