@@ -108,15 +108,20 @@ export default function TablePreview({statistics} : tablePreviewProps) {
                 <tr key= {index} className='flex'>
                     <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{x.label}</td>
                     {dataArray.map((y, jIndex) => 
-                    <td key={jIndex} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y[x.value as keyof MyData])}</td>
+                    <td key={jIndex} className='px-6 py-2 text-left block w-50 border border-gray-300 whitespace-normal break-words'>{renderValue(y[x.value as keyof MyData])}</td>
                     )}
-                    </tr> 
+                </tr> 
               )}
+          
+                <tr className='flex w-full h-10'>
+                    <td className='px-6 py-2 text-left  block w-50  font-semibold' ></td>
+                </tr> 
+              
                {arrayOfSamplesIndexes?.map((x, index) =>
                 <tr key= {index} className='flex'>
                     <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{"Sample value " + (Number(index) + 1)}</td>
                   {arrayOfSamples?.map((y) => 
-                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y.sampleArray?.at(x-1))}</td>
+                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300 whitespace-normal break-words'>{renderValue(y.sampleArray?.at(x-1))}</td>
                   )}
                 </tr> 
               )}
