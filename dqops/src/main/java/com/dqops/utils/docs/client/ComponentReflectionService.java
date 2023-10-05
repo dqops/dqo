@@ -16,8 +16,6 @@
 
 package com.dqops.utils.docs.client;
 
-import com.dqops.utils.docs.client.apimodel.ComponentModel;
-
 public interface ComponentReflectionService {
-    void fillComponentsDocsRefs(Iterable<ComponentModel> componentModels);
+    Class<?> getClassFromClassSimpleName(String className);
 }

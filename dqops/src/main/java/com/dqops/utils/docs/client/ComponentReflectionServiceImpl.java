@@ -16,45 +16,43 @@
 
 package com.dqops.utils.docs.client;
 
-import com.dqops.utils.docs.client.apimodel.ComponentModel;
-import com.dqops.utils.reflection.ClassInfo;
-import com.dqops.utils.reflection.ReflectionService;
-import com.google.common.reflect.ClassPath;
+import com.dqops.utils.reflection.TargetClassSearchUtility;
+import joptsimple.internal.Strings;
 
-import java.io.IOException;
-import java.util.*;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ComponentReflectionServiceImpl implements ComponentReflectionService {
-    private final ReflectionService reflectionService;
+    private final Path projectDir;
+    private Map<String, Class<?>> reflectedClasses = null;
 
-    public ComponentReflectionServiceImpl(ReflectionService reflectionService) {
-        this.reflectionService = reflectionService;
+    public ComponentReflectionServiceImpl(Path projectDir) {
+        this.projectDir = projectDir;
     }
 
-    @Override
-    public void fillComponentsDocsRefs(Iterable<ComponentModel> componentModels) {
-        ClassPath classPath;
-        try {
-            classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-        } catch (IOException e) {
-            throw new RuntimeException("Couldn't obtain class-path.", e);
+    public Class<?> getClassFromClassSimpleName(String className) {
+        if (reflectedClasses == null) {
+            reflectedClasses = initReflectedClasses();
         }
 
-        Map<String, ComponentModel> componentClasses = new HashMap<>();
-        for (ComponentModel componentModel : componentModels) {
-            componentClasses.put(componentModel.getClassName(), componentModel);
+        return reflectedClasses.get(className);
+    }
+
+    private Map<String, Class<?>> initReflectedClasses() {
+        List<Class<?>> classList = TargetClassSearchUtility.findClasses("com.dqops", projectDir, Object.class);
+        Map<String, Class<?>> result = new HashMap<>();
+
+        for (Class<?> clazz : classList) {
+            String className = clazz.getSimpleName();
+            if (!Strings.isNullOrEmpty(className) && !result.containsKey(className)) {
+                result.put(className, clazz);
+            }
         }
 
-//        List<ClassInfo> classInfos = classPath
-        List<Class<?>> classes = classPath
-                .getAllClasses()
-                .stream()
-                .filter(clazz -> componentClasses.containsKey(clazz.getSimpleName()))
-                .map(ClassPath.ClassInfo::load).collect(Collectors.toList());
-        List<ClassInfo> classInfos = classes.stream()
-                .map(reflectionService::getClassInfoForClass).collect(Collectors.toList());
-
-        System.out.println("Done!");
+        return result;
     }
 }

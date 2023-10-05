@@ -17,6 +17,7 @@
 package com.dqops.utils.docs.client.apimodel;
 
 import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.ComponentReflectionService;
 import com.dqops.utils.docs.client.DocsModelLinkageService;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -31,17 +32,18 @@ import java.util.stream.Collectors;
 @Data
 public class OpenAPIModel {
     private OpenAPI sourceModel;
-    private final Map<String, Set<OperationModel>> controllersMethods = new HashMap<>();
+    private final Map<String, List<OperationModel>> controllersMethods = new HashMap<>();
     private final Set<ComponentModel> models = new HashSet<>();
 
     public static OpenAPIModel fromOpenAPI(OpenAPI openAPI,
                                            LinkageStore<String> linkageStore,
-                                           DocsModelLinkageService docsModelLinkageService) {
+                                           DocsModelLinkageService docsModelLinkageService,
+                                           ComponentReflectionService componentReflectionService) {
         OpenAPIModel model = new OpenAPIModel();
         model.sourceModel = openAPI;
 
         for (Tag tag : openAPI.getTags()) {
-            model.controllersMethods.put(tag.getName(), new HashSet<>());
+            model.controllersMethods.put(tag.getName(), new ArrayList<>());
         }
 
         for (Map.Entry<String, PathItem> pathItemEntry: openAPI.getPaths().entrySet()) {
@@ -60,8 +62,12 @@ public class OpenAPIModel {
             }
         }
 
+        model.controllersMethods.values().forEach(
+                operationModels -> operationModels.sort(Comparator.comparing(o -> o.getOperation().getOperationId()))
+        );
+
         Collection<ComponentModel> componentModels = openAPI.getComponents().getSchemas().entrySet().stream()
-                .map(entry -> new ComponentModel(entry.getKey(), entry.getValue()))
+                .map(entry -> new ComponentModel(entry.getKey(), entry.getValue(), componentReflectionService.getClassFromClassSimpleName(entry.getKey())))
                 .collect(Collectors.toList());
 
         for (ComponentModel component : componentModels) {

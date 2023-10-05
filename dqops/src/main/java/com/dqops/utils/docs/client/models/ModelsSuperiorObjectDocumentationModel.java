@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.dqops.utils.docs.client.models;
 
-package com.dqops.utils.docs.client.apimodel;
-
-import io.swagger.v3.oas.models.media.Schema;
 import lombok.Data;
 
-import java.nio.file.Path;
+import java.util.List;
 
+/**
+ * Models superior class description model. Contains info about superior class and the objects it comprises.
+ */
 @Data
-public class ComponentModel {
-    private final String className;
-    private final Schema<?> objectSchema;
-    private final Class<?> reflectedClass;
-    private Path docsLink;
+public class ModelsSuperiorObjectDocumentationModel {
+    /**
+     * List of all superior class fields.
+     */
+    private List<ModelsObjectDocumentationModel> classObjects;
 
-    public ComponentModel(String className, Schema<?> objectSchema, Class<?> reflectedClass) {
-        this.className = className;
-        this.objectSchema = objectSchema;
-        this.reflectedClass = reflectedClass;
+    public String getLocationFilePath() {
+        return  "models.md";
     }
+
 }

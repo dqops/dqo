@@ -40,28 +40,28 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
     public List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPIModel openAPIModel) {
         List<ControllersSuperiorObjectDocumentationModel> controllersDocumentation = new ArrayList<>();
 
-        for (Map.Entry<String, Set<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
-            String controllerName = controller.getKey();
-            Set<OperationModel> controllerMethods = controller.getValue();
-            ControllersSuperiorObjectDocumentationModel controllersSuperiorObjectDocumentationModel = new ControllersSuperiorObjectDocumentationModel();
-            controllersSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
-            controllersSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(controllerName));
-
-            Map<Class<?>, ControllersObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
-
-//            generateYamlObjectDocumentationModelRecursive(
-//                    yamlClass, yamlObjectDocumentationModels);
+//        for (Map.Entry<String, Set<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
+//            String controllerName = controller.getKey();
+//            Set<OperationModel> controllerMethods = controller.getValue();
+//            ControllersSuperiorObjectDocumentationModel controllersSuperiorObjectDocumentationModel = new ControllersSuperiorObjectDocumentationModel();
+//            controllersSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
+//            controllersSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(controllerName));
 //
-//            controllersSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
-            controllersSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
+//            Map<Class<?>, ControllersObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
 //
-//            for (Map.Entry<Class<?>, ControllersObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
-//                controllersSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
-//                linkageStore.put(yamlObject.getKey(), yamlObject.getValue().getObjectClassPath());
-//            }
-
-            controllersDocumentation.add(controllersSuperiorObjectDocumentationModel);
-        }
+////            generateYamlObjectDocumentationModelRecursive(
+////                    yamlClass, yamlObjectDocumentationModels);
+////
+////            controllersSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
+//            controllersSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
+////
+////            for (Map.Entry<Class<?>, ControllersObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
+////                controllersSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
+////                linkageStore.put(yamlObject.getKey(), yamlObject.getValue().getObjectClassPath());
+////            }
+//
+//            controllersDocumentation.add(controllersSuperiorObjectDocumentationModel);
+//        }
         return controllersDocumentation;
     }
 
