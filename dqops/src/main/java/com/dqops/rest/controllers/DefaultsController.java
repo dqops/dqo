@@ -321,20 +321,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default profiling checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingTableChecks", notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.",
+    @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultProfilingTableChecks",
+            notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultProfilingTableChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultProfilingTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -373,20 +374,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default profiling checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingColumnChecks", notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.",
+    @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultProfilingColumnChecks",
+            notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultProfilingColumnChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultProfilingColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -424,21 +426,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringTableChecks",
-            notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyMonitoringTableChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -476,21 +478,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
-            notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyMonitoringColumnChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -528,21 +530,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
-            notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.",
+            notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -580,21 +582,21 @@ public class DefaultsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-            notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.",
+            notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
@@ -670,21 +672,21 @@ public class DefaultsController {
      * @param newMonitoringScheduleSpec New configuration of the default schedules
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json")
+    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultSchedules",
-            notes = "New configuration of the default schedules.",
+            notes = "New configuration of the default schedules.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of schedules successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of schedules successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultSchedules(
+    public ResponseEntity<Mono<Void>> updateDefaultSchedules(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
@@ -755,21 +757,21 @@ public class DefaultsController {
      * @param newIncidentWebhookNotificationsSpec New configuration of the default notification webhooks
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultwebhooks", consumes = "application/json")
+    @PutMapping(value = "/defaultwebhooks", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultWebhooks",
-            notes = "New configuration of the default webhooks.",
+            notes = "New configuration of the default webhooks.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of notification webhooks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of notification webhooks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateDefaultWebhooks(
+    public ResponseEntity<Mono<Void>> updateDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
             @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {

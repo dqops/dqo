@@ -203,21 +203,23 @@ public class SharedCredentialsController {
      * @param sharedCredentialModel Check model to save.
      * @return Empty response.
      */
-    @PostMapping(value = "/credentials", consumes = "application/json")
-    @ApiOperation(value = "createSharedCredential", notes = "Creates (adds) a new shared credential, which creates a file in the DQO user's home .credentials/ folder named as the credential and with the content that is provided in this call.",
+    @PostMapping(value = "/credentials", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createSharedCredential",
+            notes = "Creates (adds) a new shared credential, which creates a file in the DQO user's home .credentials/ folder named as the credential " +
+                    "and with the content that is provided in this call.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New shared credential successfully created"),
+            @ApiResponse(code = 201, message = "New shared credential successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Shared credential with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createSharedCredential(
+    public ResponseEntity<Mono<Void>> createSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel) {
         if (Strings.isNullOrEmpty(sharedCredentialModel.getCredentialName())) {
@@ -269,20 +271,20 @@ public class SharedCredentialsController {
      * @param credentialName Credential file name.
      * @return Empty response.
      */
-    @PutMapping(value = "/credential/{credentialName}", consumes = "application/json")
-    @ApiOperation(value = "updateSharedCredential", notes = "Updates an existing shared credential, replacing the credential's file content.",
+    @PutMapping(value = "/credential/{credentialName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateSharedCredential", notes = "Updates an existing shared credential, replacing the credential's file content.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Shared credential successfully updated"),
+            @ApiResponse(code = 204, message = "Shared credential successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Shared credential not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateSharedCredential(
+    public ResponseEntity<Mono<Void>> updateSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel,
             @ApiParam("Credential file name that will be updated") @PathVariable String credentialName) {
@@ -339,20 +341,20 @@ public class SharedCredentialsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/credentials/{credentialName}", produces = "application/json")
-    @ApiOperation(value = "deleteSharedCredential", notes = "Deletes a shared credential file from the DQO user's home .credentials/ folder.",
+    @ApiOperation(value = "deleteSharedCredential", notes = "Deletes a shared credential file from the DQO user's home .credentials/ folder.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Shared credential file successfully deleted"),
+            @ApiResponse(code = 200, message = "Shared credential file successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Shared credential file not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> deleteSharedCredential(
+    public ResponseEntity<Mono<Void>> deleteSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Full check name") @PathVariable String credentialName) {
+            @ApiParam("Full shared credential name") @PathVariable String credentialName) {
 
         if (Strings.isNullOrEmpty(credentialName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

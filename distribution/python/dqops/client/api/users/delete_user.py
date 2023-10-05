@@ -5,6 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.mono_void import MonoVoid
 from ...types import Response
 
 
@@ -28,14 +29,18 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Any]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
+    if response.status_code == HTTPStatus.OK:
+        response_200 = MonoVoid.from_dict(response.json())
+
+        return response_200
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[Any]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -48,7 +53,7 @@ def sync_detailed(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any]:
+) -> Response[MonoVoid]:
     """deleteUser
 
      Deletes a user from a multi-user account.
@@ -61,7 +66,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -77,11 +82,11 @@ def sync_detailed(
     return _build_response(client=client, response=response)
 
 
-async def asyncio_detailed(
+def sync(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any]:
+) -> Optional[MonoVoid]:
     """deleteUser
 
      Deletes a user from a multi-user account.
@@ -94,7 +99,33 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any]
+        MonoVoid
+    """
+
+    return sync_detailed(
+        email=email,
+        client=client,
+    ).parsed
+
+
+async def asyncio_detailed(
+    email: str,
+    *,
+    client: AuthenticatedClient,
+) -> Response[MonoVoid]:
+    """deleteUser
+
+     Deletes a user from a multi-user account.
+
+    Args:
+        email (str):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -106,3 +137,31 @@ async def asyncio_detailed(
         response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
+
+async def asyncio(
+    email: str,
+    *,
+    client: AuthenticatedClient,
+) -> Optional[MonoVoid]:
+    """deleteUser
+
+     Deletes a user from a multi-user account.
+
+    Args:
+        email (str):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        MonoVoid
+    """
+
+    return (
+        await asyncio_detailed(
+            email=email,
+            client=client,
+        )
+    ).parsed

@@ -385,19 +385,19 @@ public class IncidentsController {
      * @return None.
      */
     @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/status", produces = "application/json")
-    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.",
+    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data quality incident's status successfully updated"),
+            @ApiResponse(code = 204, message = "Data quality incident's status successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Connection was not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> setIncidentStatus(
+    public ResponseEntity<Mono<Void>> setIncidentStatus(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -431,18 +431,18 @@ public class IncidentsController {
      * @return None.
      */
     @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl", produces = "application/json")
-    @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.",
+    @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data quality incident's issueUrl successfully updated"),
+            @ApiResponse(code = 204, message = "Data quality incident's issueUrl successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> setIncidentIssueUrl(
+    public ResponseEntity<Mono<Void>> setIncidentIssueUrl(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,

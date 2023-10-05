@@ -1369,6 +1369,7 @@ from .monitoring_schedules_spec import MonitoringSchedulesSpec
 from .mono import Mono
 from .mono_dqo_queue_job_id import MonoDqoQueueJobId
 from .mono_object import MonoObject
+from .mono_void import MonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
@@ -2443,6 +2444,7 @@ __all__ = (
     "Mono",
     "MonoDqoQueueJobId",
     "MonoObject",
+    "MonoVoid",
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",

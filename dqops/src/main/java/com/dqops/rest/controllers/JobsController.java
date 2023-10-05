@@ -456,17 +456,17 @@ public class JobsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/jobs/{jobId}", produces = "application/json")
-    @ApiOperation(value = "cancelJob", notes = "Cancels a running job",
+    @ApiOperation(value = "cancelJob", notes = "Cancels a running job", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Job was cancelled"),
+            @ApiResponse(code = 204, message = "Job was cancelled", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> cancelJob(
+    public ResponseEntity<Mono<Void>> cancelJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable long jobId) {
         DqoQueueJobId dqoQueueJobId = new DqoQueueJobId(jobId);
@@ -691,11 +691,11 @@ public class JobsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The cron scheduler was started or was already running",
-                    response = Boolean.class),
+                    response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> startCronScheduler(
+    public ResponseEntity<Mono<Void>> startCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         if (!this.jobSchedulerService.isStarted()) {
             this.jobSchedulerService.start(
@@ -719,11 +719,11 @@ public class JobsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The cron scheduler was stopped or was already not running",
-                    response = Boolean.class),
+                    response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> stopCronScheduler(
+    public ResponseEntity<Mono<Void>> stopCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         if (this.jobSchedulerService.isStarted()) {
             this.jobSchedulerService.shutdown();

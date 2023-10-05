@@ -429,21 +429,21 @@ public class ConnectionsController {
      * @param connectionSpec Connection specification.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnection", notes = "Creates a new connection",
+    @PostMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createConnection", notes = "Creates a new connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Connection with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createConnection(
+    public ResponseEntity<Mono<Void>> createConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
@@ -478,20 +478,20 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.",
+    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Connection with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createConnectionBasic(
+    public ResponseEntity<Mono<Void>> createConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Basic connection model") @RequestBody ConnectionModel connectionModel) {
@@ -527,19 +527,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection",
+    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully updated"),
+            @ApiResponse(code = 204, message = "Connection successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateConnection(
+    public ResponseEntity<Mono<Void>> updateConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
@@ -566,19 +566,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection",
+    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's basic parameters successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's basic parameters successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateConnectionBasic(
+    public ResponseEntity<Mono<Void>> updateConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection basic details") @RequestBody ConnectionModel connectionModel) {
@@ -612,19 +612,20 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schedules/{schedulingGroup}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionSchedulingGroup", notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)",
+    @ApiOperation(value = "updateConnectionSchedulingGroup",
+            notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's schedule successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's schedule successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateConnectionSchedulingGroup(
+    public ResponseEntity<Mono<Void>> updateConnectionSchedulingGroup(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
@@ -683,19 +684,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection",
+    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's labels successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's labels successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateConnectionLabels(
+    public ResponseEntity<Mono<Void>> updateConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of labels") @RequestBody Optional<LabelSetSpec> labelSetSpec) {
@@ -726,19 +727,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection",
+    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's comments successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's comments successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateConnectionComments(
+    public ResponseEntity<Mono<Void>> updateConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
@@ -769,19 +770,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection",
+    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateConnectionDefaultGroupingConfiguration(
+    public ResponseEntity<Mono<Void>> updateConnectionDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
@@ -814,19 +815,20 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionIncidentGrouping", notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.",
+    @ApiOperation(value = "updateConnectionIncidentGrouping",
+            notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateConnectionIncidentGrouping(
+    public ResponseEntity<Mono<Void>> updateConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<ConnectionIncidentGroupingSpec> incidentGroupingSpec) {
@@ -859,19 +861,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkenable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter",
+    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks enabled in bulk"),
+            @ApiResponse(code = 204, message = "Checks enabled in bulk", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> bulkEnableConnectionChecks(
+    public ResponseEntity<Mono<Void>> bulkEnableConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
@@ -905,19 +907,19 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdisable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter",
+    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks disabled"),
+            @ApiResponse(code = 204, message = "Checks disabled", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> bulkDisableConnectionChecks(
+    public ResponseEntity<Mono<Void>> bulkDisableConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
