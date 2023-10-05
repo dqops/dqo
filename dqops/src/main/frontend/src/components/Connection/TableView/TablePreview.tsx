@@ -92,13 +92,9 @@ export default function TablePreview({statistics} : tablePreviewProps) {
       }
    const arrayOfSamplesIndexes = [];
 
-for (let i = 1; i <= count; i++) {
-  arrayOfSamplesIndexes.push(i);
-}
-      console.log(count);
-
-  console.log(statistics)
-  console.log(arrayOfSamples)
+    for (let i = 1; i <= count; i++) {
+      arrayOfSamplesIndexes.push(i);
+    }
 
   return (
         <table className='w-screen mt-5 p-4'>
@@ -119,9 +115,9 @@ for (let i = 1; i <= count; i++) {
                {arrayOfSamplesIndexes?.map((x, index) =>
                 <tr key= {index} className='flex'>
                     <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{"Sample value " + (Number(index) + 1)}</td>
-                  {/* {arrayOfSamples?.map((y) => 
-                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y.sampleArray)}</td>
-                  )} */}
+                  {arrayOfSamples?.map((y) => 
+                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300'>{renderValue(y.sampleArray?.at(x-1))}</td>
+                  )}
                 </tr> 
               )}
             </tbody>
