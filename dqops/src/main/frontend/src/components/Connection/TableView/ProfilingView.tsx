@@ -34,6 +34,7 @@ import {
 import { TableReferenceComparisons } from './TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
 import { checkIfTabCouldExist } from '../../../utils';
+import TablePreview from './TablePreview';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -44,6 +45,10 @@ const tabs = [
   {
     label: 'Basic data statistics',
     value: 'statistics'
+  },
+  {
+    label: 'Table Preview',
+    value: 'preview'
   },
   {
     label: 'Profiling Checks',
@@ -293,6 +298,7 @@ const ProfilingView = () => {
           onChangeSelectedColumns= {onChangeSelectedColumns}
         />
       )}
+      {activeTab === 'preview' && <TablePreview statistics={statistics ?? {}}/>}
       {activeTab === 'advanced' && <TableProfilingChecks />}
       {activeTab === 'reference-comparisons' && (
         <TableReferenceComparisons
