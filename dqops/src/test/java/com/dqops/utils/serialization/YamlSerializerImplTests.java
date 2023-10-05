@@ -18,7 +18,9 @@ package com.dqops.utils.serialization;
 import com.dqops.BaseTest;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,8 @@ public class YamlSerializerImplTests extends BaseTest {
     @BeforeEach
     void setUp() {
 		configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-		this.sut = new YamlSerializerImpl(configurationProperties);
+        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingExecutionConfigurationProperties());
+        this.sut = new YamlSerializerImpl(configurationProperties, userErrorLogger);
     }
 
     @Test
