@@ -16,7 +16,7 @@
 
 package com.dqops.utils.logging;
 
-import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.Strings;
 import org.slf4j.Logger;
@@ -61,14 +61,14 @@ public class UserErrorLoggerImpl implements UserErrorLogger {
     private final Logger checksLogger = LoggerFactory.getLogger(LOGGER_NAME_CHECKS);
     private final Logger statisticsLogger = LoggerFactory.getLogger(LOGGER_NAME_STATISTICS);
     private final Logger yamlLogger = LoggerFactory.getLogger(LOGGER_NAME_YAML);
-    private final DqoLoggingExecutionConfigurationProperties configurationProperties;
+    private final DqoLoggingUserErrorsConfigurationProperties configurationProperties;
 
     /**
      * Dependency injection constructor.
      * @param configurationProperties Logging configuration properties.
      */
     @Autowired
-    public UserErrorLoggerImpl(DqoLoggingExecutionConfigurationProperties configurationProperties) {
+    public UserErrorLoggerImpl(DqoLoggingUserErrorsConfigurationProperties configurationProperties) {
 
         this.configurationProperties = configurationProperties;
     }

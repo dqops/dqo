@@ -16,7 +16,7 @@
 package com.dqops.utils.serialization;
 
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
-import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.logging.UserErrorLoggerImpl;
 import org.springframework.beans.factory.BeanFactory;
@@ -30,7 +30,7 @@ public final class YamlSerializerObjectMother {
      * @return Yaml serializer.
      */
     public static YamlSerializer createNew() {
-        return new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), new UserErrorLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
+        return new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
     }
 
     /**

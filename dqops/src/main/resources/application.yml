@@ -87,7 +87,7 @@ dqo:
     json-log-field-timestamp: time
     json-log-field-arguments: attrs
     json-timestamp-pattern: "[ISO_INSTANT]"
-    execution:
+    user-errors:
       sensors-log-level: WARN
       rules-log-level: WARN
       checks-log-level: WARN

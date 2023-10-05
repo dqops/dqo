@@ -17,7 +17,7 @@
 package com.dqops.execution.checks;
 
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
-import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
@@ -106,7 +106,7 @@ public class TableCheckExecutionServiceObjectMother {
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
                 sensorLimitsConfigurationProperties,
-                new UserErrorLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
+                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
 
         return tableCheckExecutionService;
     }

@@ -17,7 +17,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.BaseTest;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
-import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemFactory;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
@@ -40,7 +40,7 @@ public class UserHomeContextFactoryImplTests extends BaseTest {
         LocalFolderTreeNode localHomeFolder = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
         LocalFileSystemFactory factoryMock = mock(LocalFileSystemFactory.class);
         when(factoryMock.openLocalUserHome()).thenReturn(localHomeFolder);
-        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingExecutionConfigurationProperties());
+        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
         YamlSerializer yamlSerializer = new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), userErrorLogger);
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.createNew();
         UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock);

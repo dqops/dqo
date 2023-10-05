@@ -22,13 +22,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for the dqo.logging.execution that configures how user errors of running checks are reported.
+ * Configuration POJO with the configuration for the dqo.logging.user-errors that configures how user errors of running checks or parsing YAML files are reported.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.logging.execution")
+@ConfigurationProperties(prefix = "dqo.logging.user-errors")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
+public class DqoLoggingUserErrorsConfigurationProperties implements Cloneable {
     /**
      * Log level for reporting issues captured by sensors.
      */
@@ -84,9 +84,9 @@ public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
      * @return Cloned instance.
      */
     @Override
-    public DqoLoggingExecutionConfigurationProperties clone() {
+    public DqoLoggingUserErrorsConfigurationProperties clone() {
         try {
-            DqoLoggingExecutionConfigurationProperties cloned = (DqoLoggingExecutionConfigurationProperties) super.clone();
+            DqoLoggingUserErrorsConfigurationProperties cloned = (DqoLoggingUserErrorsConfigurationProperties) super.clone();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
