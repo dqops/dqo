@@ -10,6 +10,7 @@ import { IRootState } from '../../../redux/reducers';
 import SvgIcon from '../../SvgIcon';
 import { useDashboard } from '../../../contexts/dashboardContext';
 import { DashboardsFolderSpec } from '../../../api';
+import clsx from 'clsx';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -70,6 +71,7 @@ const LeftView = () => {
     );
 
     const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     let timeout: NodeJS.Timeout | null = null;
     
     const handleMouseEnter = (index: number) => {
@@ -84,6 +86,10 @@ const LeftView = () => {
         timeout = null;
       }
       setActiveTooltip(null);
+    };
+
+    const handleImageLoad = () => {
+      setIsImageLoaded(true);
     };
 
     useEffect(() => {
@@ -146,12 +152,20 @@ const LeftView = () => {
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
                       onMouseEnter={() => handleMouseEnter(jIndex)}
                       onMouseLeave={handleMouseLeave}>
-                  {activeTooltip === jIndex && (
-                <div className="max-w-60 py-4 px-2 bg-gray-800 text-white absolute bottom-5 z-1000 text-xs text-left rounded-1 whitespace-normal"
-                style={{left: "0"}}>
+                   {activeTooltip === jIndex && (
+              <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal", dashboard.dashboard_name?.includes("profiling status") ? "top-5" : "bottom-5")} style={{ left: "0" }}>
                 {dashboard.dashboard_name}
-                </div>
-                 )}
+                <img
+                src={`${dashboard.url}/thumbnail`}
+                alt=""
+                style={{ display: isImageLoaded ? "block" : "none" }}
+                onLoad={handleImageLoad}
+                className='pt-2'
+                loading='eager'
+                />
+              {!isImageLoaded && <p className='pt-5'>Loading...</p>}
+            </div>
+            )}
                   {dashboard.dashboard_name}
                 </div>
               </div>
