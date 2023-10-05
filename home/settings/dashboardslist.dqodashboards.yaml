@@ -245,7 +245,7 @@ spec:
         - dashboard_name: KPIs per table - summary
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
-          height: 2150
+          height: 2210
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
