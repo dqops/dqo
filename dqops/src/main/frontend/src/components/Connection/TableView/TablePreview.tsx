@@ -96,36 +96,64 @@ export default function TablePreview({statistics} : tablePreviewProps) {
       arrayOfSamplesIndexes.push(i);
     }
 
+    console.log(statistics)
+    console.log(arrayOfSamples)
   return (
-        <table className='w-screen mt-5 p-4'>
-            <thead className='border-b border-b-gray-400 relative flex '>
-                <th className="px-6 py-4 text-left border border-gray-300 block w-50">Column name</th>
-                {statistics.column_statistics?.map((x, index) => 
-                 <th key={index} className="px-6 py-4 text-left border border-gray-300 block w-50">{x.column_name}</th>)}
-            </thead>
-            <tbody className=''>
-                {firstColumnObjects.map((x, index) =>
-                <tr key= {index} className='flex'>
-                    <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{x.label}</td>
-                    {dataArray.map((y, jIndex) => 
-                    <td key={jIndex} className='px-6 py-2 text-left block w-50 border border-gray-300 whitespace-normal break-words'>{renderValue(y[x.value as keyof MyData])}</td>
-                    )}
-                </tr> 
-              )}
-          
-                <tr className='flex w-full h-10'>
-                    <td className='px-6 py-2 text-left  block w-50  font-semibold' ></td>
-                </tr> 
-              
-               {arrayOfSamplesIndexes?.map((x, index) =>
-                <tr key= {index} className='flex'>
-                    <td className='px-6 py-2 text-left  block w-50 border border-gray-300 font-semibold' >{"Sample value " + (Number(index) + 1)}</td>
-                  {arrayOfSamples?.map((y) => 
-                    <td key={index} className='px-6 py-2 text-left block w-50 border border-gray-300 whitespace-normal break-words'>{renderValue(y.sampleArray?.at(x-1))}</td>
-                  )}
-                </tr> 
-              )}
-            </tbody>
-        </table>
+    <div className='w-screen mt-5 p-4 grid grid-cols-1 gap-4'>
+    <table className='w-full'>
+      <thead className='border-b border-b-gray-400'>
+        <tr>
+          <th className='px-6 py-4 text-left border border-gray-300' style={{ whiteSpace: 'nowrap' }}>
+            Column name
+          </th>
+          {statistics.column_statistics?.map((x, index) => (
+            <th key={index} className='px-6 py-4 text-left border border-gray-300'>
+              {x.column_name}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {firstColumnObjects.map((x, index) => (
+          <tr key={index}>
+            <td className='px-6 py-2 text-left border border-gray-300 font-semibold' style={{ whiteSpace: 'nowrap' }}>
+              {x.label}
+            </td>
+            {dataArray.map((y, jIndex) => (
+              <td
+                key={jIndex}
+                className='px-6 py-2 text-left border border-gray-300'
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                {renderValue(y[x.value as keyof MyData])}
+              </td>
+            ))}
+          </tr>
+        ))}
+  
+        <tr className='w-full h-10'>
+          <td className='px-6 py-2 text-left font-semibold' style={{ whiteSpace: 'nowrap' }}>
+          </td>
+        </tr>
+  
+        {arrayOfSamplesIndexes?.map((x, index) => (
+          <tr key={index}>
+            <td className='px-6 py-2 text-left border border-gray-300 font-semibold' style={{ whiteSpace: 'nowrap' }}>
+              {"Sample value " + (Number(index) + 1)}
+            </td>
+            {arrayOfSamples?.map((y, jIndex) => (
+              <td
+                key={jIndex}
+                className='px-6 py-2 text-left border border-gray-300'
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                {renderValue(y.sampleArray?.at(index))}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>  
   )
 }
