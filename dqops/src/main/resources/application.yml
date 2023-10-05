@@ -8,7 +8,7 @@ spring:
   application:
     name: dqo
   lifecycle:
-    timeout-per-shutdown-phase: 10s
+    timeout-per-shutdown-phase: 60s
   codec:
     max-in-memory-size: 10MB
   mvc:
