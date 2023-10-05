@@ -57,6 +57,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final Object directoryWatchersLock = new Object();
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
+    private boolean wasRecentlyInvalidated;
 
     /**
      * Dependency injection constructor.
@@ -277,6 +278,11 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         this.startFolderWatcher(filePath.getParent());
+        if (this.wasRecentlyInvalidated) {
+            this.wasRecentlyInvalidated = false;
+            processFileChanges(true);
+        }
+
         this.fileContentsCache.put(filePath, fileContent);
 
         Path parentFolderPath = filePath.getParent();
@@ -314,6 +320,11 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         this.startFolderWatcher(filePath.getParent());
+        if (this.wasRecentlyInvalidated) {
+            this.wasRecentlyInvalidated = false;
+            processFileChanges(true);
+        }
+
         this.parquetFilesCache.put(filePath, table);
 
         Path parentFolderPath = filePath.getParent();
@@ -335,6 +346,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
+        this.wasRecentlyInvalidated = true;
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -391,6 +403,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
+        this.wasRecentlyInvalidated = true;
 
         Path folderPath = filePath.getParent();
         if (folderPath != null) {
@@ -408,6 +421,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileListsCache.invalidateAll();
         this.fileContentsCache.invalidateAll();
         this.parquetFilesCache.invalidateAll();
+        this.wasRecentlyInvalidated = true;
 
         if (this.dqoCacheConfigurationProperties.isWatchFileSystemChanges() && this.watchService != null) {
             synchronized (this.directoryWatchersLock) {
