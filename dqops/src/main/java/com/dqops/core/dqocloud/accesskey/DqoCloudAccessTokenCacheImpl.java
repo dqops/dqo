@@ -25,8 +25,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -79,8 +77,8 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
             return null;
         }
 
-        Instant expirationTimeWithGracePeriod = Instant.now().minus(REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS, ChronoUnit.SECONDS);
-        boolean accessTokenNotExpired = dqoCloudCredentials.getCreatedAt().isAfter(expirationTimeWithGracePeriod);
+        Date testedExpirationDate = new Date(System.currentTimeMillis() + REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS * 1000L);
+        boolean accessTokenNotExpired = dqoCloudCredentials.getAccessToken().getExpirationTime().after(testedExpirationDate);
         if (accessTokenNotExpired) {
             return dqoCloudCredentials;
         }
