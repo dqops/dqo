@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
-    public static final int REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS = 300; // refresh the access token if it is about to expire in 300 seconds
+    public static final int REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS = 900; // refresh the access token if it is about to expire in 900 seconds
 
     private DqoCloudCredentialsProvider dqoCloudCredentialsProvider;
     private final HashMap<DqoRoot, Supplier<DqoCloudCredentials>> rootCredentialSuppliers = new LinkedHashMap<>();
