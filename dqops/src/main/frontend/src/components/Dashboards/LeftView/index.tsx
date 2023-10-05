@@ -155,6 +155,7 @@ const LeftView = () => {
                    {activeTooltip === jIndex && (
               <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal", dashboard.dashboard_name?.includes("profiling status") ? "top-5" : "bottom-5")} style={{ left: "0" }}>
                 {dashboard.dashboard_name}
+                {dashboard.disable_thumbnail !== true &&
                 <img
                 src={`${dashboard.url}/thumbnail`}
                 alt=""
@@ -163,7 +164,8 @@ const LeftView = () => {
                 className='pt-2'
                 loading='eager'
                 />
-              {!isImageLoaded && <p className='pt-5'>Loading...</p>}
+              }
+              {!isImageLoaded && dashboard.disable_thumbnail !== true && <p className='pt-5'>Loading...</p>}
             </div>
             )}
                   {dashboard.dashboard_name}
