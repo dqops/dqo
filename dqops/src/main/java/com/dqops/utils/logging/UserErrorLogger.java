@@ -19,7 +19,7 @@ package com.dqops.utils.logging;
 /**
  * Logger used for logging check, sensor and rule execution issues, selecting the logger name and severity.
  */
-public interface CheckExecutionLogger {
+public interface UserErrorLogger {
     /**
      * Logs a sensor issue.
      *
@@ -51,4 +51,12 @@ public interface CheckExecutionLogger {
      * @param cause   Exception to log (optional).
      */
     void logStatistics(String message, Throwable cause);
+
+    /**
+     * Logs a yaml schema issues (invalid YAML files).
+     *
+     * @param message Message to log.
+     * @param cause   Exception to log (optional).
+     */
+    void logYaml(String message, Throwable cause);
 }

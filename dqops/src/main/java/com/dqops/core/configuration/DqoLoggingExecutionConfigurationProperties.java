@@ -50,6 +50,11 @@ public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
     private Level statisticsLogLevel = Level.WARN;
 
     /**
+     * Log level for reporting issues captured when parsing YAML files.
+     */
+    private Level yamlLogLevel = Level.WARN;
+
+    /**
      * Comma separated list of key-value pairs added to log messages with issues from sensors.
      */
     private String sensorsAdditionalKeyValuePairs;
@@ -68,6 +73,11 @@ public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
      * Comma separated list of key-value pairs added to log messages with issues from statistics collection.
      */
     private String statisticsAdditionalKeyValuePairs;
+
+    /**
+     * Comma separated list of key-value pairs added to log messages with issues from parsing invalid YAML files.
+     */
+    private String yamlAdditionalKeyValuePairs;
 
     /**
      * Creates a clone of the object.

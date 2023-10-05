@@ -92,6 +92,7 @@ dqo:
       rules-log-level: WARN
       checks-log-level: WARN
       statistics-log-level: WARN
+      yaml-log-level: WARN
   storage:
     gcp:
       upload-buffer-size: 5000000

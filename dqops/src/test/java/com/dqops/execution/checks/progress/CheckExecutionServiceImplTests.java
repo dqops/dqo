@@ -66,13 +66,12 @@ import com.dqops.metadata.traversal.HierarchyNodeTreeWalker;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
-import com.dqops.utils.logging.CheckExecutionLoggerImpl;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -162,7 +161,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
                 DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
-                new CheckExecutionLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
+                new UserErrorLoggerImpl(new DqoLoggingExecutionConfigurationProperties()));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

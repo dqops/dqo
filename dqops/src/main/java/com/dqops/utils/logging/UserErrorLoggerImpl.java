@@ -17,9 +17,6 @@
 package com.dqops.utils.logging;
 
 import com.dqops.core.configuration.DqoLoggingExecutionConfigurationProperties;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.Strings;
 import org.slf4j.Logger;
@@ -33,31 +30,37 @@ import org.springframework.stereotype.Component;
  * Logger used for logging check, sensor and rule execution issues, selecting the logger name and severity.
  */
 @Component
-public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
+public class UserErrorLoggerImpl implements UserErrorLogger {
     /**
      * Logger name for issues from sensors.
      */
-    public static final String LOGGER_NAME_SENSORS = "com.dqops.execution.sensors";
+    public static final String LOGGER_NAME_SENSORS = "com.dqops.user-errors.sensors";
 
     /**
      * Logger name for issues from rules.
      */
-    public static final String LOGGER_NAME_RULES = "com.dqops.execution.rules";
+    public static final String LOGGER_NAME_RULES = "com.dqops.user-errors.rules";
 
     /**
      * Logger name for issues from running checks.
      */
-    public static final String LOGGER_NAME_CHECKS = "com.dqops.execution.checks";
+    public static final String LOGGER_NAME_CHECKS = "com.dqops.user-errors.checks";
 
     /**
      * Logger name for issues from statistics.
      */
-    public static final String LOGGER_NAME_STATISTICS = "com.dqops.execution.statistics";
+    public static final String LOGGER_NAME_STATISTICS = "com.dqops.user-errors.statistics";
+
+    /**
+     * Logger name for issues from parsing YAML files.
+     */
+    public static final String LOGGER_NAME_YAML = "com.dqops.user-errors.yaml";
 
     private final Logger sensorsLogger = LoggerFactory.getLogger(LOGGER_NAME_SENSORS);
     private final Logger rulesLogger = LoggerFactory.getLogger(LOGGER_NAME_RULES);
     private final Logger checksLogger = LoggerFactory.getLogger(LOGGER_NAME_CHECKS);
     private final Logger statisticsLogger = LoggerFactory.getLogger(LOGGER_NAME_STATISTICS);
+    private final Logger yamlLogger = LoggerFactory.getLogger(LOGGER_NAME_YAML);
     private final DqoLoggingExecutionConfigurationProperties configurationProperties;
 
     /**
@@ -65,7 +68,7 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
      * @param configurationProperties Logging configuration properties.
      */
     @Autowired
-    public CheckExecutionLoggerImpl(DqoLoggingExecutionConfigurationProperties configurationProperties) {
+    public UserErrorLoggerImpl(DqoLoggingExecutionConfigurationProperties configurationProperties) {
 
         this.configurationProperties = configurationProperties;
     }
@@ -77,7 +80,7 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
      */
     @Override
     public void logSensor(String message, Throwable cause) {
-        logInternal(message, cause, sensorsLogger, this.configurationProperties.getSensorsLogLevel(),
+        logInternal(message, cause, this.sensorsLogger, this.configurationProperties.getSensorsLogLevel(),
                 this.configurationProperties.getSensorsAdditionalKeyValuePairs());
     }
 
@@ -88,7 +91,7 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
      */
     @Override
     public void logRule(String message, Throwable cause) {
-        logInternal(message, cause, rulesLogger, this.configurationProperties.getRulesLogLevel(),
+        logInternal(message, cause, this.rulesLogger, this.configurationProperties.getRulesLogLevel(),
                 this.configurationProperties.getRulesAdditionalKeyValuePairs());
     }
 
@@ -99,7 +102,7 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
      */
     @Override
     public void logCheck(String message, Throwable cause) {
-        logInternal(message, cause, checksLogger, this.configurationProperties.getChecksLogLevel(),
+        logInternal(message, cause, this.checksLogger, this.configurationProperties.getChecksLogLevel(),
                 this.configurationProperties.getChecksAdditionalKeyValuePairs());
     }
 
@@ -110,8 +113,20 @@ public class CheckExecutionLoggerImpl implements CheckExecutionLogger {
      */
     @Override
     public void logStatistics(String message, Throwable cause) {
-        logInternal(message, cause, statisticsLogger, this.configurationProperties.getStatisticsLogLevel(),
+        logInternal(message, cause, this.statisticsLogger, this.configurationProperties.getStatisticsLogLevel(),
                 this.configurationProperties.getStatisticsAdditionalKeyValuePairs());
+    }
+
+    /**
+     * Logs a yaml schema issues (invalid YAML files).
+     *
+     * @param message Message to log.
+     * @param cause   Exception to log (optional).
+     */
+    @Override
+    public void logYaml(String message, Throwable cause) {
+        logInternal(message, cause, this.yamlLogger, this.configurationProperties.getYamlLogLevel(),
+                this.configurationProperties.getYamlAdditionalKeyValuePairs());
     }
 
     /**

@@ -16,6 +16,7 @@
 package com.dqops.utils.serialization;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,14 +42,18 @@ import java.nio.file.Path;
 public class YamlSerializerImpl implements YamlSerializer {
     private final ObjectMapper mapper;
     private final DqoConfigurationProperties configurationProperties;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a yaml serializer.
      * @param configurationProperties Configuration properties.
+     * @param userErrorLogger User error logger.
      */
     @Autowired
-    public YamlSerializerImpl(DqoConfigurationProperties configurationProperties) {
+    public YamlSerializerImpl(DqoConfigurationProperties configurationProperties,
+                              UserErrorLogger userErrorLogger) {
         this.configurationProperties = configurationProperties;
+        this.userErrorLogger = userErrorLogger;
         YAMLFactory yamlFactory = new YAMLFactory();
         yamlFactory.disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
         yamlFactory.enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
@@ -143,7 +148,10 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            log.warn("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage);
+            if (this.userErrorLogger != null) {
+                this.userErrorLogger.logYaml("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, null);
+            }
+
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
                 return emptyInstance;
