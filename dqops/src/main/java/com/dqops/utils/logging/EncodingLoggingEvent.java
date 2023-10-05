@@ -33,7 +33,7 @@ import java.util.Map;
 public class EncodingLoggingEvent implements ILoggingEvent {
     private ILoggingEvent wrappedEvent;
     private Object[] augmentedArgumentArray;
-    private boolean encodeDoubleQuotesInJson;
+    private boolean quoteMessage;
     private List<KeyValuePair> keyValuePairs;
 
     /**
@@ -41,16 +41,16 @@ public class EncodingLoggingEvent implements ILoggingEvent {
      *
      * @param wrappedEvent             The original logging event.
      * @param augmentedArgumentArray   An alternate array of arguments, added to the "attrs" (or "attributes") dictionary.
-     * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param quoteMessage             Encodes all double quotes and backslashes the message field again.
      * @param keyValuePairs            Alternative list of key-value pairs.
      */
     public EncodingLoggingEvent(ILoggingEvent wrappedEvent,
                                 Object[] augmentedArgumentArray,
-                                boolean encodeDoubleQuotesInJson,
+                                boolean quoteMessage,
                                 List<KeyValuePair> keyValuePairs) {
         this.wrappedEvent = wrappedEvent;
         this.augmentedArgumentArray = augmentedArgumentArray;
-        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+        this.quoteMessage = quoteMessage;
         this.keyValuePairs = keyValuePairs;
     }
 
@@ -86,8 +86,11 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     @Override
     public String getFormattedMessage() {
         String formattedMessage = wrappedEvent.getFormattedMessage();
-        if (this.encodeDoubleQuotesInJson && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
+        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
             formattedMessage = formattedMessage.replace("\"", "\\\"");
+        }
+        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('\\') >= 0) {
+            formattedMessage = formattedMessage.replace("\\", "\\\\");
         }
         return formattedMessage;
     }
