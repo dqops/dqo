@@ -105,7 +105,7 @@ export const getSensor = (sensorName: string) => async (dispatch: Dispatch) => {
   dispatch(getSensorRequest());
   try {
     const res: AxiosResponse<SensorModel> = await SensorsApi.getSensor(
-      sensorName
+      urlencodeDecoder(sensorName)
     );
     dispatch(getSensorSuccess(res.data));
   } catch (err) {

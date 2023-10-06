@@ -93,12 +93,12 @@ export const DefinitionTree = () => {
   const openSensorFirstLevelTab = (sensor: SensorListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(sensor.sensor_name ?? ''),
+        url: ROUTES.SENSOR_DETAIL(urlencodeEncoder(sensor.sensor_name) ?? ''),
+        value: ROUTES.SENSOR_DETAIL_VALUE(urlencodeEncoder(sensor.sensor_name) ?? ''),
         state: {
-          full_sensor_name: sensor.full_sensor_name
+          full_sensor_name: urlencodeEncoder(sensor.full_sensor_name)
         },
-        label: sensor.sensor_name
+        label: urlencodeEncoder(sensor.sensor_name)
       })
     );
   };
@@ -106,12 +106,12 @@ export const DefinitionTree = () => {
   const openRuleFirstLevelTab = (rule: RuleListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(rule.rule_name ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(rule.rule_name ?? ''),
+        url: ROUTES.RULE_DETAIL(urlencodeEncoder(rule.rule_name) ?? ''),
+        value: ROUTES.RULE_DETAIL_VALUE(urlencodeEncoder(rule.rule_name) ?? ''),
         state: {
-          full_rule_name: rule.full_rule_name
+          full_rule_name: urlencodeEncoder(rule.full_rule_name)
         },
-        label: rule.rule_name
+        label: urlencodeEncoder(rule.rule_name)
       })
     );
   };

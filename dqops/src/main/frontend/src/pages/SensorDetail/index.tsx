@@ -25,6 +25,7 @@ import { ROUTES } from '../../shared/routes';
 import { SensorsApi } from '../../services/apiClient';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
+import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
 
 const tabs = [
   {
@@ -140,14 +141,14 @@ export const SensorDetail = () => {
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
     if (type === 'create' && copied !== true) {
-      await dispatch(createSensor(fullName, sensorDetail));
+      await dispatch(createSensor(urlencodeDecoder(fullName), sensorDetail));
     } else if (copied === true) {
       await dispatch(
         createSensor(
-          String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+          urlencodeDecoder(String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName),
           {
             ...sensorDetail,
-            full_sensor_name: full_sensor_name,
+            full_sensor_name: urlencodeDecoder(full_sensor_name),
             custom: true,
             built_in: false
           }
@@ -178,7 +179,7 @@ export const SensorDetail = () => {
               built_in: false
             }
           },
-          label: sensorName
+          label: urlencodeEncoder(sensorName)
         })
       );
     }
