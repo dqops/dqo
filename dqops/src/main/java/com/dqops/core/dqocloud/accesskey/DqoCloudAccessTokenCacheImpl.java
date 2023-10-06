@@ -60,12 +60,14 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             credentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == null) {
+                final Object supplierLock = new Object();
+
                 credentialsSupplier = Suppliers.memoize(() -> {
                     if (log.isInfoEnabled()) {
                         log.info("Requesting a new access token for " + dqoRoot);
                     }
 
-                    synchronized (dqoRoot) {
+                    synchronized (supplierLock) {
                         if (log.isInfoEnabled()) {
                             log.info("Requesting new tenant access token to access the folder " + dqoRoot);
                         }
@@ -98,12 +100,14 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             Supplier<DqoCloudCredentials> currentCredentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == currentCredentialsSupplier) {
+                final Object supplierLock = new Object();
+
                 credentialsSupplier = Suppliers.memoize(() -> {
                     if (log.isInfoEnabled()) {
                         log.info("Requesting a new access token for " + dqoRoot);
                     }
 
-                    synchronized (dqoRoot) {
+                    synchronized (supplierLock) {
                         if (log.isInfoEnabled()) {
                             log.info("Requesting new tenant access token to access the folder " + dqoRoot +
                                     ", because the the current access token will expire at " + dqoCloudCredentials.getAccessToken().getExpirationTime());
