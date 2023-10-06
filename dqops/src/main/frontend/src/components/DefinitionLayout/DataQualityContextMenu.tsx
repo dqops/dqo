@@ -102,7 +102,7 @@ const DataQualityContextMenu = ({
   };
 
   const deleteChecksFromTree = async () => {
-    await dispatch(deleteCheck(check?.full_check_name ?? '')).then(
+    await dispatch(deleteCheck(urlencodeDecoder(check?.full_check_name ?? '') ?? '')).then(
       () =>dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
     );
   };

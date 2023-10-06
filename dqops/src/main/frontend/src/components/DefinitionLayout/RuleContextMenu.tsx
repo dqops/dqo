@@ -15,6 +15,7 @@ import { RulesApi } from '../../services/apiClient';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
 import { useSelector } from 'react-redux';
+import { urlencodeDecoder } from '../../utils';
 
 interface RuleContextMenuProps {
   folder?: SensorFolderModel;
@@ -87,7 +88,7 @@ const RuleContextMenu = ({
   };
 
   const deleteRuleFromTree = async () => {
-    await RulesApi.deleteRule(rule?.full_rule_name ?? '').then(
+    await RulesApi.deleteRule(urlencodeDecoder(rule?.full_rule_name ?? '') ?? '').then(
       () => dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
     );
   };

@@ -154,16 +154,16 @@ export const SensorDetail = () => {
     await dispatch(
       deleteCheck(
         full_check_name
-          ? full_check_name
-          : Array.from(path).join('/') + '/' + checkName
+          ? urlencodeDecoder(full_check_name)
+          : urlencodeDecoder(Array.from(path).join('/') + '/' + checkName)
       )
     );
     dispatch(
       closeFirstLevelTab(
         '/definitions/checks/' +
-          String(full_check_name).split('/')[
+        urlencodeDecoder(String(full_check_name).split('/')[
             String(full_check_name).split('/').length - 1
-          ]
+          ])
       )
     );
     dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))

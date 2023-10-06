@@ -129,7 +129,7 @@ export const getRuleFailed = (error: unknown) => ({
 export const getRule = (ruleName: string) => async (dispatch: Dispatch) => {
   dispatch(getRuleRequest());
   try {
-    const res: AxiosResponse<RuleModel> = await RulesApi.getRule(ruleName);
+    const res: AxiosResponse<RuleModel> = await RulesApi.getRule(urlencodeDecoder(ruleName));
     dispatch(getRuleSuccess(res.data));
   } catch (err) {
     dispatch(getRuleFailed(err));
@@ -165,7 +165,7 @@ export const updateSensor =
     dispatch(updateSensorRequest());
     try {
       const res: AxiosResponse<SensorModel> = await SensorsApi.updateSensor(
-        sensorName,
+        urlencodeDecoder(sensorName),
         body
       );
       dispatch(updateSensorSuccess(res.data));
@@ -223,7 +223,7 @@ export const updateRule =
     dispatch(updateRuleRequest());
     try {
       const res: AxiosResponse<SensorModel> = await RulesApi.updateRule(
-        ruleName,
+        urlencodeDecoder(ruleName),
         body
       );
       dispatch(updateRuleSuccess(res.data));
@@ -377,9 +377,9 @@ export const updateCheck =
       const checkName = fullCheckName.split('/');
       const newObject = Object.assign(
         {},
-        { ...body, check_name: checkName[checkName.length - 1], custom: true }
+        { ...body, check_name: urlencodeDecoder(checkName[checkName.length - 1]), custom: true }
       );
-      await ChecksApi.updateCheck(fullCheckName, newObject);
+      await ChecksApi.updateCheck(urlencodeDecoder(fullCheckName), newObject);
     } catch (err) {
       console.error(err);
     }
@@ -389,7 +389,7 @@ export const deleteCheck =
   (fullCheckName: string) => async (dispatch: Dispatch) => {
     dispatch(deleteCheckRequest());
     try {
-      await ChecksApi.deleteCheck(fullCheckName);
+      await ChecksApi.deleteCheck(urlencodeDecoder(fullCheckName));
     } catch (err) {
       console.error(err);
     }

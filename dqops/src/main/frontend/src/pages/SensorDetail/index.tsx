@@ -101,10 +101,10 @@ export const SensorDetail = () => {
     dispatch(
       closeFirstLevelTab(
         '/definitions/sensors/' +
-          String(full_sensor_name).split('/')[
+        urlencodeDecoder(String(full_sensor_name).split('/')[
             String(full_sensor_name).split('/').length - 1
           ]
-      )
+      ))
     );
   };
 
@@ -158,14 +158,14 @@ export const SensorDetail = () => {
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.SENSOR_DETAIL(
-            String(full_sensor_name).split('/')[
+            urlencodeDecoder(String(full_sensor_name).split('/')[
               String(full_sensor_name).split('/').length - 1
             ] ?? ''
-          ),
+          )),
           value: ROUTES.SENSOR_DETAIL_VALUE(
-            String(full_sensor_name).split('/')[
+            urlencodeDecoder(String(full_sensor_name).split('/')[
               String(full_sensor_name).split('/').length - 1
-            ] ?? ''
+            ]) ?? ''
           ),
           state: {
             full_sensor_name:
@@ -241,7 +241,7 @@ export const SensorDetail = () => {
   };
 
   const onDelete = async () => {
-    SensorsApi.deleteSensor(full_sensor_name).then(async () =>
+    SensorsApi.deleteSensor(urlencodeDecoder(full_sensor_name)).then(async () =>
       closeSensorFirstLevelTab(),
       dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
