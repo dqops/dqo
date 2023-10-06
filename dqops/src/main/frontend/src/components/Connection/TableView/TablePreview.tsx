@@ -44,10 +44,18 @@ const firstColumnObjects = [
 export default function TablePreview({statistics} : tablePreviewProps) {
 
     const renderValue = (value: any) => {
-        if (typeof value === 'boolean') {
+      if(typeof value === 'number' ){
+        if(isNaN(value)){
+          return ''
+        }
+        else if(Number(value) % 1 !== 0) {
+          return Math.round(Number(value) * 100) / 100
+        }
+      }
+      else if (typeof value === 'boolean') {
           return value ? 'Yes' : 'No';
         }
-        if (typeof value === 'object') {
+      else if (typeof value === 'object') {
           return value.toString();
         }
         return value;
@@ -122,10 +130,10 @@ export default function TablePreview({statistics} : tablePreviewProps) {
             {dataArray.map((y, jIndex) => (
               <td
                 key={jIndex}
-                className='px-6 py-2 text-left border border-gray-300'
+                className='px-6 py-2 text-left border border-gray-300 '
                 style={{ whiteSpace: 'nowrap' }}
               >
-                {renderValue(y[x.value as keyof MyData])}
+                {renderValue(y[x.value as keyof MyData])} {x.label.includes("percent") ? "%" : ""}
               </td>
             ))}
           </tr>
@@ -144,10 +152,9 @@ export default function TablePreview({statistics} : tablePreviewProps) {
             {arrayOfSamples?.map((y, jIndex) => (
               <td
                 key={jIndex}
-                className='px-6 py-2 text-left border border-gray-300'
-                style={{ whiteSpace: 'nowrap' }}
+                className='px-6 py-2 text-left border border-gray-300 max-w-45 whitespace-normal break-all'
               >
-                {renderValue(y.sampleArray?.at(index))}
+                {renderValue(y.sampleArray?.at(index) ? String(y.sampleArray?.at(index)).slice(0, 50) : "" )}
               </td>
             ))}
           </tr>
