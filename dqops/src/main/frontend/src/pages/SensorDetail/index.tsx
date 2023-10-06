@@ -141,11 +141,12 @@ export const SensorDetail = () => {
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
     if (type === 'create' && copied !== true) {
-      await dispatch(createSensor(urlencodeDecoder(fullName), sensorDetail));
+      await dispatch(createSensor(urlencodeDecoder(fullName), 
+      {...sensorDetail, full_sensor_name:  urlencodeDecoder(fullName), custom: true, built_in: false, can_edit: true, sensor_definition_spec : sensorDetail.sensor_definition_spec ?? {}}));
     } else if (copied === true) {
       await dispatch(
         createSensor(
-          urlencodeDecoder(String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName),
+          urlencodeDecoder(String(urlencodeDecoder(full_sensor_name)).replace(/\/[^/]*$/, '/') + sensorName),
           {
             ...sensorDetail,
             full_sensor_name: urlencodeDecoder(full_sensor_name),
@@ -154,27 +155,28 @@ export const SensorDetail = () => {
           }
         )
       );
+    }
       closeSensorFirstLevelTab();
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.SENSOR_DETAIL(
-            urlencodeDecoder(String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
+            urlencodeDecoder(String(full_sensor_name ??  fullName).split('/')[
+              String(full_sensor_name ?? fullName).split('/').length - 1
             ] ?? ''
           )),
           value: ROUTES.SENSOR_DETAIL_VALUE(
-            urlencodeDecoder(String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
+            urlencodeDecoder(String(full_sensor_name ?? fullName).split('/')[
+              String(full_sensor_name ?? fullName).split('/').length - 1
             ]) ?? ''
           ),
           state: {
             full_sensor_name:
-              String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+             full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
             path: path,
             sensorDetail: {
               ...sensorDetail,
               full_sensor_name:
-                String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+               full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
               custom: true,
               built_in: false
             }
@@ -182,7 +184,7 @@ export const SensorDetail = () => {
           label: urlencodeEncoder(sensorName)
         })
       );
-    }
+    
   };
 
   const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {

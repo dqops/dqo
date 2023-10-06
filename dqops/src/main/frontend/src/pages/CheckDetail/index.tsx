@@ -161,9 +161,9 @@ export const SensorDetail = () => {
     dispatch(
       closeFirstLevelTab(
         '/definitions/checks/' +
-        urlencodeDecoder(String(full_check_name).split('/')[
+        String(full_check_name).split('/')[
             String(full_check_name).split('/').length - 1
-          ])
+          ]
       )
     );
     dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))

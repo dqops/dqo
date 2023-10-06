@@ -94,28 +94,29 @@ export const RuleDetail = () => {
           built_in: false
         })
       );
+    }
       closeRuleFirstLevelTab();
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.RULE_DETAIL(
-            String(full_rule_name).split('/')[
-              String(full_rule_name).split('/').length - 1
+            String(full_rule_name ?? fullName).split('/')[
+              String(full_rule_name ?? fullName).split('/').length - 1
             ] ?? ''
           ),
           value: ROUTES.RULE_DETAIL_VALUE(
-            String(full_rule_name).split('/')[
-              String(full_rule_name).split('/').length - 1
+            String(full_rule_name ?? fullName).split('/')[
+              String(full_rule_name ?? fullName).split('/').length - 1
             ] ?? ''
           ),
           state: {
             full_rule_name:
-              String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+              full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
             path: path,
             ruleDetail: {
               ...ruleDetail,
               rule_name: ruleName,
               full_rule_name:
-                String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+               full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
               custom: true,
               built_in: false
             }
@@ -123,17 +124,16 @@ export const RuleDetail = () => {
           label: ruleName
         })
       );
-    }
   };
 
   const closeRuleFirstLevelTab = () => {
     dispatch(
       closeFirstLevelTab(
         '/definitions/rules/' +
-        urlencodeDecoder(String(full_rule_name).split('/')[
+        String(full_rule_name).split('/')[
             String(full_rule_name).split('/').length - 1
           ]
-      ))
+      )
     );
   };
 

@@ -89,6 +89,7 @@ const SensorContextMenu = ({
   };
 
   const deleteSensorFromTree = async () => {
+    console.log(urlencodeDecoder(sensor?.full_sensor_name ?? ''))
     await SensorsApi.deleteSensor(urlencodeDecoder(sensor?.full_sensor_name ?? '') ?? '').then(
       () => dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
