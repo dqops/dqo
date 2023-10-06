@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.controllers;
+package com.dqops.utils.docs.client.operations;
 
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 
@@ -23,13 +24,14 @@ import java.nio.file.Path;
 /**
  * Yaml documentation generator that generate documentation for yaml.
  */
-public interface ControllersDocumentationGenerator {
+public interface OperationsDocumentationGenerator {
     /**
      * Renders documentation for all yaml classes as markdown files.
      *
-     * @param projectRootPath         Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param openAPIModel
+     * @param linkageStore
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderControllersDocumentation(Path projectRootPath, OpenAPIModel openAPIModel);
+    DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel, LinkageStore<String> linkageStore);
 }

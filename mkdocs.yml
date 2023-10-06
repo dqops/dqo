@@ -108,6 +108,10 @@ nav:
     - run: 'command-line-interface/run.md'
     - rule: 'command-line-interface/rule.md'
 ########## END INCLUDE CLI COMMANDS
+########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
+  - Python client:
+    - models: 'client/models.md'
+########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:
     - table:
@@ -362,13 +366,6 @@ nav:
       - sensor_readouts: 'reference/parquetfiles/sensor_readouts.md'
       - statistics: 'reference/parquetfiles/statistics.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
-########## INCLUDE CLIENT MODELS REFERENCE - DO NOT MODIFY MANUALLY
-    - Python client:
-      - models: 'client/models.md'
-########## END INCLUDE CLIENT MODELS REFERENCE
-########## INCLUDE CONTROLLERS REFERENCE - DO NOT MODIFY MANUALLY
-    # TODO
-########## END INCLUDE CONTROLLERS REFERENCE
 extra_css:
   - stylesheets/extra.css
 # Visual settings

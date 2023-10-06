@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.controllers;
+package com.dqops.utils.docs.client.operations;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.reflection.EnumValueInfo;
@@ -25,7 +25,7 @@ import java.util.Map;
  * Yaml fields description model. Contains info about each object field.
  */
 @Data
-public class ControllersDocumentationModel {
+public class OperationsDocumentationModel {
     /**
      * Field name.
      */

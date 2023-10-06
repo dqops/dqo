@@ -861,7 +861,7 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
+						<arg>-Ajavadoc.packages=com.dqops.services,com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

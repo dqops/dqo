@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.controllers;
+package com.dqops.utils.docs.client.operations;
 
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 
 import java.util.List;
 
-public interface ControllersDocumentationModelFactory {
-    List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPIModel openAPIModel);
+public interface OperationsDocumentationModelFactory {
+    List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel);
 }

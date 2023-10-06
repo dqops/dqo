@@ -13,40 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.controllers;
+package com.dqops.utils.docs.client.operations;
 
 import lombok.Data;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
- * Yaml superior class description model. Contains info about superior class and the objects it comprises.
+ * Yaml class object description model. Contains info about object and list of their fields.
  */
 @Data
-public class ControllersSuperiorObjectDocumentationModel {
+public class OperationsOperationDocumentationModel {
     /**
-     * Superior class full name.
+     * Object class full name.
      */
-    private String superiorClassFullName;
+    private String classFullName;
     /**
-     * Superior class simple name.
+     * Object class simple name.
      */
-    private String superiorClassSimpleName;
+    private String classSimpleName;
     /**
-     * Superior class.
+     * Object class description.
      */
-    private Class<?> reflectedSuperiorClass;
+    private String classDescription;
     /**
-     * List of all superior class fields.
+     * Object class.
      */
-    private List<ControllersObjectDocumentationModel> classObjects;
-
-    public String getLocationFilePath() {
-        if (this.superiorClassSimpleName == null) {
-            return null;
-        }
-
-        return this.superiorClassSimpleName + ".md";
-    }
+    private Class<?> reflectedClass;
+    /**
+     * Object class path.
+     */
+    private Path objectClassPath;
+    /**
+     * List of all object fields.
+     */
+    private List<OperationsDocumentationModel> objectFields;
 
 }

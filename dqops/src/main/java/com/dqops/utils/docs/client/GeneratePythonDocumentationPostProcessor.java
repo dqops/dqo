@@ -32,9 +32,9 @@ import com.dqops.utils.docs.client.models.ModelsDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
-import com.dqops.utils.docs.client.controllers.ControllersDocumentationGenerator;
-import com.dqops.utils.docs.client.controllers.ControllersDocumentationGeneratorImpl;
-import com.dqops.utils.docs.client.controllers.ControllersDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.OperationsDocumentationGenerator;
+import com.dqops.utils.docs.client.operations.OperationsDocumentationGeneratorImpl;
+import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
  * Class called from the maven build. Generates documentation for the Python client.
  */
 public class GeneratePythonDocumentationPostProcessor {
-    public static final Path baseClientDocsPath = Path.of("/docs", "client");
+    public static final Path baseClientDocsPath = Path.of("docs", "client");
     public static LinkageStore<String> linkageStore;
 
     /**
@@ -110,23 +110,20 @@ public class GeneratePythonDocumentationPostProcessor {
             DocumentationFolder currentClientDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             DocumentationFolder clientFolder = new DocumentationFolder();
             clientFolder.setFolderName("client");
-            clientFolder.setLinkName("Python client");
             clientFolder.setDirectPath(projectDir.resolve("../docs/client").toAbsolutePath().normalize());
 
             generateDocumentationForModels(clientFolder, openAPIModel);
-
             clientFolder.writeModifiedFiles(currentClientDocFiles);
 
-            List<String> renderedIndexYaml = clientFolder.generateMkDocsNavigation(4);
+            generateDocumentationForOperations(projectDir, openAPIModel);
+
+            DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
+            modifiedClientFolder.setLinkName("Python client");
+            List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
             MkDocsIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
                     renderedIndexYaml,
-                    "########## INCLUDE CLIENT MODELS REFERENCE - DO NOT MODIFY MANUALLY",
-                    "########## END INCLUDE CLIENT MODELS REFERENCE");
-
-            generateDocumentationForControllers(projectDir, dqoHomeContext, openAPIModel);
-
-
-
+                    "########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY",
+                    "########## END INCLUDE PYTHON CLIENT REFERENCE");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,13 +144,20 @@ public class GeneratePythonDocumentationPostProcessor {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
 
-                linkageStore.put(modelName, baseClientDocsPath.resolve(
-                        Path.of("controllers", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence), "#" + modelName)
+                linkageStore.put(modelName, Path.of("/")
+                        .resolve(baseClientDocsPath)
+                        .resolve(Path.of("operations",
+                                CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence),
+                                "#" + modelName
+                        )
                 ));
             } else {
                 // Model is used in several places.
-                linkageStore.put(modelName, baseClientDocsPath.resolve(
-                        Path.of("models", "#" + modelName)
+                linkageStore.put(modelName, Path.of("/")
+                        .resolve(baseClientDocsPath)
+                        .resolve(Path.of("models",
+                                "#" + modelName
+                        )
                 ));
             }
         }
@@ -221,37 +225,28 @@ public class GeneratePythonDocumentationPostProcessor {
 
     protected static void generateDocumentationForModels(DocumentationFolder projectFolder,
                                                          OpenAPIModel openAPIModel) {
-
         ModelsDocumentationGenerator modelsDocumentationGenerator = new ModelsDocumentationGeneratorImpl(new ModelsDocumentationModelFactoryImpl());
 
-        DocumentationMarkdownFile renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectFolder.getDirectPath(), openAPIModel.getModels(), linkageStore);
+        DocumentationMarkdownFile renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(
+                projectFolder.getDirectPath(),
+                openAPIModel.getModels(),
+                linkageStore
+        );
         projectFolder.addNestedFile(renderedDocumentation);
     }
 
-    protected static void generateDocumentationForControllers(Path projectRoot,
-                                                              DqoHomeContext dqoHomeContext,
+    protected static void generateDocumentationForOperations(Path projectRoot,
                                                               OpenAPIModel openAPIModel) {
-        Path controllersDocPath = projectRoot
+        Path operationsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)
-                .resolve("controllers")
+                .resolve("operations")
                 .toAbsolutePath().normalize();
-        DocumentationFolder currentControllersDocFiles = DocumentationFolderFactory.loadCurrentFiles(controllersDocPath);
-        ControllersDocumentationGenerator controllersDocumentationGenerator = new ControllersDocumentationGeneratorImpl(new ControllersDocumentationModelFactoryImpl());
+        DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
+        OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(new OperationsDocumentationModelFactoryImpl());
 
-
-//        DocumentationFolder renderedDocumentation = parquetFilesDocumentationGenerator.renderParquetDocumentation(projectRoot);
-//        renderedDocumentation.writeModifiedFiles(currentParquetsDocFiles);
-
-//        List<ControllersDocumentationSchemaNode> controllersDocumentationSchema = getYamlDocumentationSchema();
-        DocumentationFolder renderedDocumentation = controllersDocumentationGenerator.renderControllersDocumentation(projectRoot, openAPIModel);
-//        renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
-
-//        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
-//        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
-//                renderedIndexYaml,
-//                "########## INCLUDE CONTROLLERS REFERENCE - DO NOT MODIFY MANUALLY",
-//                "########## END INCLUDE CONTROLLERS REFERENCE");
+        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel, linkageStore);
+        renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
     }
 
     private static OpenAPI getParsedSwaggerFile(Path pathToSwaggerFile) {

@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.controllers;
+package com.dqops.utils.docs.client.operations;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
-import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -31,38 +30,38 @@ import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.*;
 
-public class ControllersDocumentationModelFactoryImpl implements ControllersDocumentationModelFactory {
+public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
 
     private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     @Override
-    public List<ControllersSuperiorObjectDocumentationModel> createDocumentationForControllers(OpenAPIModel openAPIModel) {
-        List<ControllersSuperiorObjectDocumentationModel> controllersDocumentation = new ArrayList<>();
+    public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel) {
+        List<OperationsSuperiorObjectDocumentationModel> operationsDocumentation = new ArrayList<>();
 
-//        for (Map.Entry<String, Set<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
-//            String controllerName = controller.getKey();
-//            Set<OperationModel> controllerMethods = controller.getValue();
-//            ControllersSuperiorObjectDocumentationModel controllersSuperiorObjectDocumentationModel = new ControllersSuperiorObjectDocumentationModel();
-//            controllersSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
-//            controllersSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(controllerName));
+//        for (Map.Entry<String, Set<OperationModel>> operation : openAPIModel.getOperationsMethods().entrySet()) {
+//            String operationName = operation.getKey();
+//            Set<OperationModel> operationMethods = operation.getValue();
+//            OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel = new OperationsSuperiorObjectDocumentationModel();
+//            operationsSuperiorObjectDocumentationModel.setSuperiorClassFullName(operationName);
+//            operationsSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(operationName));
 //
-//            Map<Class<?>, ControllersObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
+//            Map<Class<?>, OperationsObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
 //
 ////            generateYamlObjectDocumentationModelRecursive(
 ////                    yamlClass, yamlObjectDocumentationModels);
 ////
-////            controllersSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
-//            controllersSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
+////            operationsSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
+//            operationsSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
 ////
-////            for (Map.Entry<Class<?>, ControllersObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
-////                controllersSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
+////            for (Map.Entry<Class<?>, OperationsObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
+////                operationsSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
 ////                linkageStore.put(yamlObject.getKey(), yamlObject.getValue().getObjectClassPath());
 ////            }
 //
-//            controllersDocumentation.add(controllersSuperiorObjectDocumentationModel);
+//            operationsDocumentation.add(operationsSuperiorObjectDocumentationModel);
 //        }
-        return controllersDocumentation;
+        return operationsDocumentation;
     }
 
     private String getObjectSimpleName(String name) {
@@ -77,18 +76,18 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
      */
     private void generateYamlObjectDocumentationModelRecursive(Path superiorObjectFileName,
                                                                Class<?> targetClass,
-                                                               Map<Class<?>, ControllersObjectDocumentationModel> visitedObjects) {
+                                                               Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects) {
         if (!visitedObjects.containsKey(targetClass)) {
             visitedObjects.put(targetClass, null);
 
-            ControllersObjectDocumentationModel controllersObjectDocumentationModel = new ControllersObjectDocumentationModel();
-            List<ControllersDocumentationModel> controllersDocumentationModels = new ArrayList<>();
+            OperationsObjectDocumentationModel operationsObjectDocumentationModel = new OperationsObjectDocumentationModel();
+            List<OperationsDocumentationModel> operationsDocumentationModels = new ArrayList<>();
 
             ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(targetClass);
             if (classJavadoc != null) {
                 if (classJavadoc.getComment() != null) {
                     String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
-                    controllersObjectDocumentationModel.setClassDescription(formattedClassComment);
+                    operationsObjectDocumentationModel.setClassDescription(formattedClassComment);
                 }
             }
 
@@ -103,10 +102,10 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
             ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
             List<FieldInfo> infoFields = classInfo.getFields();
 
-            controllersObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
-            controllersObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
-            controllersObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
-            controllersObjectDocumentationModel.setObjectClassPath(
+            operationsObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
+            operationsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
+            operationsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
+            operationsObjectDocumentationModel.setObjectClassPath(
                     Path.of("/").resolve(superiorObjectFileName).resolve("#" + classInfo.getReflectedClass().getSimpleName())
             );
 
@@ -118,32 +117,32 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
                     generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects);
                 }
 
-                ControllersDocumentationModel controllersDocumentationModel = new ControllersDocumentationModel();
-                controllersDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
+                OperationsDocumentationModel operationsDocumentationModel = new OperationsDocumentationModel();
+                operationsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
 //                if (linkageStore.containsKey(info.getClazz())) {
 //                    Path infoClassPath = linkageStore.get(info.getClazz());
-//                    controllersDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
+//                    operationsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
 //                } else {
-//                    controllersDocumentationModel.setClassUsedOnTheFieldPath(
-//                            "#" + controllersDocumentationModel.getClassNameUsedOnTheField());
+//                    operationsDocumentationModel.setClassUsedOnTheFieldPath(
+//                            "#" + operationsDocumentationModel.getClassNameUsedOnTheField());
 //                }
 
-                controllersDocumentationModel.setClassFieldName(info.getClassFieldName());
-                controllersDocumentationModel.setYamlFieldName(info.getYamlFieldName());
-                controllersDocumentationModel.setDisplayName(info.getDisplayName());
-                controllersDocumentationModel.setHelpText(info.getHelpText());
-                controllersDocumentationModel.setClazz(info.getClazz());
-                controllersDocumentationModel.setDataType(info.getDataType());
-                controllersDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
-                controllersDocumentationModel.setDefaultValue(info.getDefaultValue());
-                controllersDocumentationModel.setSampleValues(info.getSampleValues());
+                operationsDocumentationModel.setClassFieldName(info.getClassFieldName());
+                operationsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
+                operationsDocumentationModel.setDisplayName(info.getDisplayName());
+                operationsDocumentationModel.setHelpText(info.getHelpText());
+                operationsDocumentationModel.setClazz(info.getClazz());
+                operationsDocumentationModel.setDataType(info.getDataType());
+                operationsDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
+                operationsDocumentationModel.setDefaultValue(info.getDefaultValue());
+                operationsDocumentationModel.setSampleValues(info.getSampleValues());
 
-                controllersDocumentationModels.add(controllersDocumentationModel);
+                operationsDocumentationModels.add(operationsDocumentationModel);
 
             }
-            controllersObjectDocumentationModel.setObjectFields(controllersDocumentationModels);
-            visitedObjects.put(targetClass, controllersObjectDocumentationModel);
+            operationsObjectDocumentationModel.setObjectFields(operationsDocumentationModels);
+            visitedObjects.put(targetClass, operationsObjectDocumentationModel);
         }
     }
 
@@ -158,7 +157,7 @@ public class ControllersDocumentationModelFactoryImpl implements ControllersDocu
     /**
      * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
      */
-    private void processGenericTypes(Path superiorObjectFileName, Type type, Map<Class<?>, ControllersObjectDocumentationModel> visitedObjects) {
+    private void processGenericTypes(Path superiorObjectFileName, Type type, Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
