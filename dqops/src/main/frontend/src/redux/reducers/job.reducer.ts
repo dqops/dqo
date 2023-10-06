@@ -134,27 +134,22 @@ const schemaReducer = (state = initialState, action: any) => {
               }
             }
           }
-          
-        if (
-          (nowDate.diff(obj[Object.keys(obj)[0]].statusChangedAt, 'minutes') > 30 &&
-          obj[Object.keys(obj)[0]].status !== 'running' &&
-          obj[Object.keys(obj)[0]].status !== 'queued' &&
-          obj[Object.keys(obj)[0]].status !== 'waiting') 
-        ) {
+          let shouldBreak = false;
           for (const key in obj) {
             if (
               (nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
-            obj[key].status !== 'running' &&
-            obj[key].status !== 'queued' &&
-            obj[key].status !== 'waiting') 
+              obj[key].status !== 'running' &&
+              obj[key].status !== 'queued' &&
+              obj[key].status !== 'waiting') 
             ) {
               delete filteredObject[key];
             } else {
+              shouldBreak = true;
+            }
+            if (shouldBreak) {
               break;
             }
           }
-        }
-        
         return filteredObject;
       };
       
