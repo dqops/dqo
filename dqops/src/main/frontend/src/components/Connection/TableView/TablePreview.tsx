@@ -25,6 +25,7 @@ interface MyData {
 
 const firstColumnObjects = [
     { value: "detectedDatatypeVar", label: "Detected datatype" },
+    { value: "importedDatatype", label: "Imported datatype"},
     // { value: "length", label: "length" },
     // { value: "scale", label: "scale" },
     { value: "minimalValue", label: "Min value" },
@@ -33,11 +34,10 @@ const firstColumnObjects = [
     { value: "unique_percent", label:"Distinct percent"},
     { value: "duplicate_value", label: "Duplicate count" },
     { value: "duplicate_percent", label:"Duplicate percent"},
-    { value: "null_count", label: "Null count" },
-    { value: "null_percent", label: "Null percent" },
-    { value: "not_null_count", label: "Not null count" },
-    { value: "not_null_percent", label: "Not null percent" },
-
+    { value: "null_count", label: "Nulls count" },
+    { value: "null_percent", label: "Nulls percent" },
+    { value: "not_null_count", label: "Not nulls count" },
+    { value: "not_null_percent", label: "Not nulls percent" },
   ];
 
   
@@ -104,18 +104,16 @@ export default function TablePreview({statistics} : tablePreviewProps) {
       arrayOfSamplesIndexes.push(i);
     }
 
-    console.log(statistics)
-    console.log(arrayOfSamples)
   return (
     <div className='w-screen mt-5 p-4 grid grid-cols-1 gap-4'>
     <table className='w-full'>
       <thead className='border-b border-b-gray-400'>
         <tr>
-          <th className='px-6 py-4 text-left border border-gray-300' style={{ whiteSpace: 'nowrap' }}>
+          <th className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all' >
             Column name
           </th>
           {statistics.column_statistics?.map((x, index) => (
-            <th key={index} className='px-6 py-4 text-left border border-gray-300'>
+            <th key={index} className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all'>
               {x.column_name}
             </th>
           ))}
@@ -124,14 +122,14 @@ export default function TablePreview({statistics} : tablePreviewProps) {
       <tbody>
         {firstColumnObjects.map((x, index) => (
           <tr key={index}>
-            <td className='px-6 py-2 text-left border border-gray-300 font-semibold' style={{ whiteSpace: 'nowrap' }}>
+            <td className='px-6 py-2 text-left border border-gray-300 font-semibold bg-gray-50 max-w-60 whitespace-normal break-all' >
               {x.label}
             </td>
             {dataArray.map((y, jIndex) => (
               <td
                 key={jIndex}
-                className='px-6 py-2 text-left border border-gray-300 '
-                style={{ whiteSpace: 'nowrap' }}
+                className='px-6 py-2 text-left border border-gray-300 bg-gray-50 max-w-60 whitespace-normal break-all'
+                
               >
                 {renderValue(y[x.value as keyof MyData])} {(x.label.includes("percent") && y[x.value as keyof MyData]) ? "%" : ""}
               </td>
@@ -139,20 +137,21 @@ export default function TablePreview({statistics} : tablePreviewProps) {
           </tr>
         ))}
   
-        <tr className='w-full h-10'>
+        <tr className='w-full h-12'>
           <td className='px-6 py-2 text-left font-semibold' style={{ whiteSpace: 'nowrap' }}>
+            Sample values
           </td>
         </tr>
   
         {arrayOfSamplesIndexes?.map((x, index) => (
           <tr key={index}>
             <td className='px-6 py-2 text-left border border-gray-300 font-semibold' style={{ whiteSpace: 'nowrap' }}>
-              {"Sample value " + (Number(index) + 1)}
+              # {(Number(index) + 1)}
             </td>
             {arrayOfSamples?.map((y, jIndex) => (
               <td
                 key={jIndex}
-                className='px-6 py-2 text-left border border-gray-300 max-w-45 whitespace-normal break-all'
+                className='px-6 py-2 text-left border border-gray-300 max-w-60 whitespace-normal break-all'
               >
                 {renderValue(y.sampleArray?.at(index) ? String(y.sampleArray?.at(index)).slice(0, 50) : "" )}
               </td>
