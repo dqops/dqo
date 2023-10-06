@@ -86,12 +86,14 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     @Override
     public String getFormattedMessage() {
         String formattedMessage = wrappedEvent.getFormattedMessage();
-        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
-            formattedMessage = formattedMessage.replace("\"", "\\\"");
-        }
         if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('\\') >= 0) {
             formattedMessage = formattedMessage.replace("\\", "\\\\");
         }
+
+        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
+            formattedMessage = formattedMessage.replace("\"", "\\\"");
+        }
+
         return formattedMessage;
     }
 
