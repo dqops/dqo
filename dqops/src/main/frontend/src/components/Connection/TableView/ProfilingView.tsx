@@ -110,7 +110,7 @@ const ProfilingView = () => {
   }
 
   useEffect(() => {
-    if (activeTab === 'statistics') {
+    if (activeTab === 'statistics' || activeTab === 'preview') {
       fetchColumns();
     }
   }, [connectionName, schemaName, tableName, activeTab]);

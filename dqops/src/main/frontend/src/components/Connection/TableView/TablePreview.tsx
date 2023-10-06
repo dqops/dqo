@@ -133,7 +133,7 @@ export default function TablePreview({statistics} : tablePreviewProps) {
                 className='px-6 py-2 text-left border border-gray-300 '
                 style={{ whiteSpace: 'nowrap' }}
               >
-                {renderValue(y[x.value as keyof MyData])} {x.label.includes("percent") ? "%" : ""}
+                {renderValue(y[x.value as keyof MyData])} {(x.label.includes("percent") && y[x.value as keyof MyData]) ? "%" : ""}
               </td>
             ))}
           </tr>
