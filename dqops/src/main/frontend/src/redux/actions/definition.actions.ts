@@ -29,6 +29,7 @@ import {
   SensorModel
 } from '../../api';
 import { JOB_ACTION } from '../types';
+import { urlencodeDecoder } from '../../utils';
 
 export const getSensorFolderTreeRequest = () => ({
   type: DEFINITION_ACTION.GET_SENSOR_FOLDER_TREE
@@ -193,7 +194,7 @@ export const createSensor =
     dispatch(createSensorRequest());
     try {
       const res: AxiosResponse<SensorModel> = await SensorsApi.createSensor(
-        sensorName,
+        urlencodeDecoder(sensorName),
         body
       );
       dispatch(createSensorSuccess(res.data));
@@ -250,7 +251,7 @@ export const createRule =
     dispatch(createRuleRequest());
     try {
       const res: AxiosResponse<SensorModel> = await RulesApi.createRule(
-        ruleName,
+        urlencodeDecoder(ruleName),
         body
       );
       dispatch(createRuleSuccess(res.data));
@@ -344,7 +345,7 @@ export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
   dispatch(getCheckRequest());
   try {
     const res: AxiosResponse<CheckDefinitionModel> = await ChecksApi.getCheck(
-      checkName
+      urlencodeDecoder(checkName)
     );
     dispatch(getCheckSuccess(res.data));
   } catch (err) {
@@ -360,9 +361,9 @@ export const createCheck =
       const checkName = fullCheckName.split('/');
       const newObject = Object.assign(
         {},
-        { ...body, check_name: checkName[checkName.length - 1], custom: true }
+        { ...body, check_name: urlencodeDecoder(checkName[checkName.length - 1]), custom: true }
       );
-      await ChecksApi.createCheck(fullCheckName, newObject);
+      await ChecksApi.createCheck(urlencodeDecoder(fullCheckName), newObject);
     } catch (err) {
       console.error(err);
     }

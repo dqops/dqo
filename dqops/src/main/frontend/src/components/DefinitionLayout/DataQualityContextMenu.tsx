@@ -25,6 +25,7 @@ import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { urlencodeDecoder } from '../../utils';
 
 interface RuleContextMenuProps {
   folder?: SensorFolderModel;
@@ -60,7 +61,7 @@ const DataQualityContextMenu = ({
   };
 
   const createCheck = async (fullCheckName: string, body?: CheckDefinitionModel) => {
-    await ChecksApi.createCheck(fullCheckName, body);
+    await ChecksApi.createCheck(urlencodeDecoder(fullCheckName), body);
   };
 
   const openAddNewCheck = () => {

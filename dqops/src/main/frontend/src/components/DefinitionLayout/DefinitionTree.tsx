@@ -30,6 +30,7 @@ import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import DataQualityContextMenu from './DataQualityContextMenu';
+import { urlencodeEncoder } from '../../utils';
 
 const defaultChecks = [
   'Profiling checks',
@@ -118,13 +119,13 @@ export const DefinitionTree = () => {
   const openCheckFirstLevelTab = (check: CheckDefinitionListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
+        url: ROUTES.CHECK_DETAIL(urlencodeEncoder(check.check_name) ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(urlencodeEncoder(check.check_name) ?? ''),
         state: {
-          full_check_name: check.full_check_name,
+          full_check_name: urlencodeEncoder(check.full_check_name),
           custom: check.custom
         },
-        label: check.check_name
+        label: urlencodeEncoder(check.check_name)
       })
     );
   };
@@ -327,7 +328,7 @@ export const DefinitionTree = () => {
                 className="w-4 h-4 min-w-4 shrink-0"
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {sensor.sensor_name}
+              {urlencodeEncoder(sensor.sensor_name ?? '')}
               </div>
               <SensorContextMenu
                 singleSensor={true}
@@ -411,7 +412,7 @@ export const DefinitionTree = () => {
                 className="w-4 h-4 min-w-4 shrink-0"
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {rule.rule_name}
+                {urlencodeEncoder(rule.rule_name ?? '')}
               </div>
               <RuleContextMenu
                 singleRule={true}
@@ -501,7 +502,7 @@ export const DefinitionTree = () => {
                     className="w-4 h-4 min-w-4 shrink-0"
                   />
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                    {check.check_name}
+                    {urlencodeEncoder(check.check_name ?? '')}
                   </div>
                   <DataQualityContextMenu
                     singleCheck={true}
