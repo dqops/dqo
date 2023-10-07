@@ -33,16 +33,20 @@ import java.util.Objects;
 public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
     private boolean quoteMessage;
     private final DqoCloudApiKeyPayload apiKeyPayload;
+    private final Integer ignoredJsonMessageMaxLength;
 
     /**
      * Creates an augmenting console appender.
      * @param quoteMessage  Encodes all double quotes and backslashes the message field again.
      * @param apiKeyPayload DQO Cloud api key.
+     * @param ignoredJsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
     public AugmentingConsoleAppender(boolean quoteMessage,
-                                     DqoCloudApiKeyPayload apiKeyPayload) {
+                                     DqoCloudApiKeyPayload apiKeyPayload,
+                                     Integer ignoredJsonMessageMaxLength) {
         this.quoteMessage = quoteMessage;
         this.apiKeyPayload = apiKeyPayload;
+        this.ignoredJsonMessageMaxLength = ignoredJsonMessageMaxLength;
     }
 
     /**
@@ -70,7 +74,7 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
         }
 
         EncodingLoggingEvent augmentedLoggingEvent = new EncodingLoggingEvent(
-                originalEvent, augmentedArgumentArray, this.quoteMessage, keyValuePairs);
+                originalEvent, augmentedArgumentArray, this.quoteMessage, keyValuePairs, this.ignoredJsonMessageMaxLength);
 
         super.append(augmentedLoggingEvent);
     }

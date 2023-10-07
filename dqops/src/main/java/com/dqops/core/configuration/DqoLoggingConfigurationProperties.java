@@ -56,6 +56,7 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private String jsonLogFieldArguments;
     private String jsonTimestampPattern;
     private boolean encodeMessage = true;
+    private Integer jsonMessageMaxLength;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -263,6 +264,22 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
      */
     public void setJsonTimestampPattern(String jsonTimestampPattern) {
         this.jsonTimestampPattern = jsonTimestampPattern;
+    }
+
+    /**
+     * Returns the maximum length of the message field in a json formatted log entry. Remaining characters are truncated.
+     * @return Maximum length of the message field.
+     */
+    public Integer getJsonMessageMaxLength() {
+        return jsonMessageMaxLength;
+    }
+
+    /**
+     * Sets the maximum length of a message field in a json formatted log entry.
+     * @param jsonMessageMaxLength Maximum length in characters.
+     */
+    public void setJsonMessageMaxLength(Integer jsonMessageMaxLength) {
+        this.jsonMessageMaxLength = jsonMessageMaxLength;
     }
 
     /**

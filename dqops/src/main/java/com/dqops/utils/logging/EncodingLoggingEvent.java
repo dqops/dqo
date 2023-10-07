@@ -35,6 +35,7 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     private Object[] augmentedArgumentArray;
     private boolean quoteMessage;
     private List<KeyValuePair> keyValuePairs;
+    private Integer jsonMessageMaxLength;
 
     /**
      * Creates a wrapper over an original logging event.
@@ -43,15 +44,18 @@ public class EncodingLoggingEvent implements ILoggingEvent {
      * @param augmentedArgumentArray   An alternate array of arguments, added to the "attrs" (or "attributes") dictionary.
      * @param quoteMessage             Encodes all double quotes and backslashes the message field again.
      * @param keyValuePairs            Alternative list of key-value pairs.
+     * @param jsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
     public EncodingLoggingEvent(ILoggingEvent wrappedEvent,
                                 Object[] augmentedArgumentArray,
                                 boolean quoteMessage,
-                                List<KeyValuePair> keyValuePairs) {
+                                List<KeyValuePair> keyValuePairs,
+                                Integer jsonMessageMaxLength) {
         this.wrappedEvent = wrappedEvent;
         this.augmentedArgumentArray = augmentedArgumentArray;
         this.quoteMessage = quoteMessage;
         this.keyValuePairs = keyValuePairs;
+        this.jsonMessageMaxLength = jsonMessageMaxLength;
     }
 
     @Override
@@ -66,7 +70,13 @@ public class EncodingLoggingEvent implements ILoggingEvent {
 
     @Override
     public String getMessage() {
-        return wrappedEvent.getMessage();
+        String message = wrappedEvent.getMessage();
+        if (message != null && this.jsonMessageMaxLength != null) {
+            if (message.length() > this.jsonMessageMaxLength) {
+                message = message.substring(0, this.jsonMessageMaxLength);
+            }
+        }
+        return message;
     }
 
     /**

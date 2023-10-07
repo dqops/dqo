@@ -137,7 +137,9 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         ConsoleAppender<ILoggingEvent> consoleAppender =
                 this.loggingConfigurationProperties.getConsole() == DqoConsoleLoggingMode.JSON
-                        ? new AugmentingConsoleAppender(this.loggingConfigurationProperties.isEncodeMessage(), apiKeyPayload) : new ConsoleAppender<>();
+                        ? new AugmentingConsoleAppender(this.loggingConfigurationProperties.isEncodeMessage(), apiKeyPayload,
+                                                        this.loggingConfigurationProperties.getJsonMessageMaxLength()) :
+                        new ConsoleAppender<>();
         return consoleAppender;
     }
 
