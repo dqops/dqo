@@ -16,6 +16,7 @@
 package com.dqops.metadata.storage.localfiles.credentials;
 
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
@@ -56,7 +57,8 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
     public FileContent getObject() {
         FileContent object = super.getObject();
         if (object == null) {
-            FileTreeNode fileNode = this.credentialsFolderNode.getChildFileByFileName(this.getObjectName());
+            String fileName = FileNameSanitizer.encodeForFileSystem(this.getObjectName());
+            FileTreeNode fileNode = this.credentialsFolderNode.getChildFileByFileName(fileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 object = fileContent.clone();
@@ -91,17 +93,18 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
         }
 
         FileContent newFileContent = this.getObject().clone();
+        String fileName = FileNameSanitizer.encodeForFileSystem(this.getObjectName());
 
         switch (this.getStatus()) {
             case ADDED:
-				this.credentialsFolderNode.addChildFile(this.getObjectName(), newFileContent);
+				this.credentialsFolderNode.addChildFile(fileName, newFileContent);
             case MODIFIED:
-                FileTreeNode modifiedFileNode = this.credentialsFolderNode.getChildFileByFileName(this.getObjectName());
+                FileTreeNode modifiedFileNode = this.credentialsFolderNode.getChildFileByFileName(fileName);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getObject().clearDirty(true);
                 break;
             case TO_BE_DELETED:
-				this.credentialsFolderNode.deleteChildFile(this.getObjectName());
+				this.credentialsFolderNode.deleteChildFile(fileName);
                 break;
         }
 

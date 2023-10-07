@@ -41,7 +41,7 @@ public class AllSimilarDashboardsContainerTests extends BaseTest {
         originalFolderList.collectSimilarDashboards(this.sut, originalFolderList);
 
         DashboardsFolderListSpec resultFolderList = this.sut.createDashboardFolderList();
-        Assertions.assertEquals(5, resultFolderList.size());
+        Assertions.assertEquals(6, resultFolderList.size());
     }
 
 }
