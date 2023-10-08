@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
+  ColumnApiClient,
   ConnectionApiClient,
   EnviromentApiClient,
   JobApiClient,
@@ -11,6 +12,7 @@ import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
   DqoSettingsModel,
+  TableColumnsStatisticsModel,
   TableComparisonConfigurationModelCheckTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TableComparisonModel
@@ -111,6 +113,7 @@ const EditReferenceTable = ({
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [popUp, setPopUp] = useState(false);
+  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>()
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
@@ -621,15 +624,42 @@ const EditReferenceTable = ({
 
   useEffect(() => {
     fetchProfileSettings()
+    getColumnsStatistics()
   }, [])
 
-  console.log(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) 
 
   const warningMessage = 
   `Warning: DQO compares up to --dqo.sensors.limit.sensor-readout-limit data groups which is set to ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} rows.
   You have selected a column which has more distinct values or the distinct row count statistics is not captured. Also when multiple columns are selected,
   the number of groupings may exceed the ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} limit`
 
+  const getColumnsStatistics = async () => {
+    try{
+      await ColumnApiClient.getColumnsStatistics(
+        connection,
+        schema,
+        table)
+        .then((res) => 
+        setStatistics(res.data))
+       } catch (err) {
+         console.error(err)
+     }
+};
+
+  const checkIfDistinctCountIsBiggerThanLimit = (columnName: string, index: number) => {
+    const column = statistics?.column_statistics?.find((col) => col.column_name === columnName)
+    const columnStatistics =  column?.statistics?.find((stat) => stat.collector === "distinct_count")
+
+    if (columnStatistics?.result === undefined
+      || profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']=== undefined
+      || columnStatistics?.result > profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) {
+        setListOfWarnings((prevState) => ({
+          ...prevState, 
+          [index] : true
+        }))
+      }
+  }
+console.log(listOfWarnings)
 
   return (
     <div className="w-full">
@@ -807,6 +837,9 @@ const EditReferenceTable = ({
               onSetNormalList={onSetNormalList}
               object={normalObj}
               responseList={splitArrays()?.comparedArr}
+              warningMessageList={listOfWarnings}
+              checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
+              dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
             />
 
             <SelectGroupColumnsTable
