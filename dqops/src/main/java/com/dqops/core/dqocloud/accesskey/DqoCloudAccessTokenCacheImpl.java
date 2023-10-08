@@ -63,13 +63,13 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
                 final Object supplierLock = new Object();
 
                 credentialsSupplier = Suppliers.memoize(() -> {
-                    if (log.isInfoEnabled()) {
-                        log.info("Requesting a new access token for " + dqoRoot);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Requesting a new access token for " + dqoRoot);
                     }
 
                     synchronized (supplierLock) {
-                        if (log.isInfoEnabled()) {
-                            log.info("Requesting new tenant access token to access the folder " + dqoRoot);
+                        if (log.isDebugEnabled()) {
+                            log.debug("Requesting new tenant access token to access the folder " + dqoRoot);
                         }
 
                         TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
@@ -103,13 +103,13 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
                 final Object supplierLock = new Object();
 
                 credentialsSupplier = Suppliers.memoize(() -> {
-                    if (log.isInfoEnabled()) {
-                        log.info("Requesting a new access token for " + dqoRoot);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Requesting a new access token for " + dqoRoot);
                     }
 
                     synchronized (supplierLock) {
-                        if (log.isInfoEnabled()) {
-                            log.info("Requesting new tenant access token to access the folder " + dqoRoot +
+                        if (log.isDebugEnabled()) {
+                            log.debug("Requesting new tenant access token to access the folder " + dqoRoot +
                                     ", because the the current access token will expire at " + dqoCloudCredentials.getAccessToken().getExpirationTime());
                         }
                         TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
