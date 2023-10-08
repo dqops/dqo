@@ -96,6 +96,12 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     @Override
     public String getFormattedMessage() {
         String formattedMessage = wrappedEvent.getFormattedMessage();
+        if (formattedMessage != null && this.jsonMessageMaxLength != null) {
+            if (formattedMessage.length() > this.jsonMessageMaxLength) {
+                formattedMessage = formattedMessage.substring(0, this.jsonMessageMaxLength);
+            }
+        }
+
         if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('\\') >= 0) {
             formattedMessage = formattedMessage.replace("\\", "\\\\");
         }
