@@ -653,10 +653,10 @@ const EditReferenceTable = ({
     if (columnStatistics?.result === undefined
       || profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']=== undefined
       || columnStatistics?.result > profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) {
-        setListOfWarnings((prevState) => ({
-          ...prevState, 
-          [index] : true
-        }))
+
+        const tnp = listOfWarnings
+        tnp[index] = true
+        setListOfWarnings(tnp)
       }
   }
 console.log(listOfWarnings)
@@ -799,7 +799,9 @@ console.log(listOfWarnings)
             </a>
           </div>
         )}
-        {<div className='text-red-500'>{warningMessage}</div>}
+          {listOfWarnings && listOfWarnings.includes(true) ? (
+        <div className='text-red-500 mb-5'>{warningMessage}</div>
+        ) : null}
         {(isCreating || extendDg) && tableExist ? (
           <div className="flex gap-4">
             <div className="mr-20 mt-0 relative">
