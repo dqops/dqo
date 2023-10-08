@@ -131,12 +131,34 @@ public final class FileNameSanitizer {
      * @param path Source path.
      * @return Path with encoded components.
      */
+    public static Path convertRawPathToEncodedPath(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        String[] pathElements = StringUtils.split(path.replace('\\', '/'), '/');
+        String[] encodedPathElements = new String[pathElements.length];
+
+        for (int i = 0; i < pathElements.length; i++) {
+            encodedPathElements[i] = encodeForFileSystem(pathElements[i]);
+        }
+
+        String[] secondAndLaterElements = ArraysUtil.subarray(encodedPathElements, 1, encodedPathElements.length - 1);
+        Path encodedPath = Path.of(encodedPathElements[0], secondAndLaterElements);
+        return encodedPath;
+    }
+
+    /**
+     * Converts a path that contains raw path component names (not encoded) into a path that contains encoded names: some characters encoded.
+     * @param path Source path.
+     * @return Path with encoded components.
+     */
     public static Path convertRawPathToEncodedPath(Path path) {
         if (path == null) {
             return null;
         }
 
-        String[] pathElements = StringUtils.split(path.toString(), '/');
+        String[] pathElements = StringUtils.split(path.toString().replace('\\', '/'), '/');
         String[] encodedPathElements = new String[pathElements.length];
 
         for (int i = 0; i < pathElements.length; i++) {
@@ -158,12 +180,13 @@ public final class FileNameSanitizer {
             return null;
         }
 
-        String[] pathElements = StringUtils.split(path.toString(), '/');
+        String[] pathElements = StringUtils.split(path.toString().replace('\\', '/'), '/');
         String[] urlEncodedPathElements = new String[pathElements.length];
 
         for (int i = 0; i < pathElements.length; i++) {
             String rawName = decodeFileSystemName(pathElements[i]);
-            urlEncodedPathElements[i] = URLEncoder.encode(rawName, StandardCharsets.UTF_8);
+            urlEncodedPathElements[i] = URLEncoder.encode(rawName, StandardCharsets.UTF_8)
+                    .replace("+", "%20"); // fixing spaces, because GCP storage bucket does not use '+' for a space
         }
 
         String[] secondAndLaterElements = ArraysUtil.subarray(urlEncodedPathElements, 1, urlEncodedPathElements.length - 1);
@@ -181,7 +204,7 @@ public final class FileNameSanitizer {
             return null;
         }
 
-        String[] pathElements = StringUtils.split(path.toString(), '/');
+        String[] pathElements = StringUtils.split(path.toString().replace('\\', '/'), '/');
         String[] decodedPathElements = new String[pathElements.length];
 
         for (int i = 0; i < pathElements.length; i++) {

@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.filesystems.gcp;
 
 import com.dqops.BaseIntegrationTest;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSystemServiceFactoryImpl;
 import com.dqops.core.synchronization.contract.DownloadFileResponse;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
@@ -26,6 +27,7 @@ import com.dqops.core.synchronization.filesystems.gcp.GSRemoteFileSystemSynchron
 import com.dqops.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactoryImpl;
 import com.dqops.core.filesystem.metadata.FileMetadata;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
@@ -178,5 +180,46 @@ public class GSRemoteFileSystemSynchronizationOperationsImplIntegrationTests ext
         FolderMetadata folderMetadataAfterDelete = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
         Assertions.assertNotNull(folderMetadataAfterDelete);
         Assertions.assertEquals(0, folderMetadataAfterDelete.getFolders().size());
+    }
+
+    @Test
+    void downloadFileAsync_whenLocalFileUploadedAndFileHasSpacesAndSpecialCharacters_thenFileCouldBeDownloaded() {
+        SynchronizationRoot remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.credentials);
+
+        SharedCredentialWrapper credentialWrapper = this.emptyUserHomeContext.getUserHome().getCredentials().createAndAddNew("Some credential %?.txt");
+        credentialWrapper.setObject(new FileContent("Text content"));
+        emptyUserHomeContext.flush();
+
+        SynchronizationRoot localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.credentials);
+        Path relativeFilePath = Path.of("Some credential %25%3F.txt");
+        Assertions.assertTrue(localFileSystem.getFileSystemRoot().getRootPath().resolve(relativeFilePath).toFile().exists());
+
+        FileSystemSynchronizationOperations localFileSystemFileSystemSynchronizationOperations = localFileSystem.getFileSystemService();
+        FileMetadata localFileMetadata = localFileSystemFileSystemSynchronizationOperations.readFileMetadata(localFileSystem.getFileSystemRoot(), relativeFilePath, null);
+        Assertions.assertNotNull(localFileMetadata);
+        Mono<DownloadFileResponse> downloadLocalFileMono = localFileSystemFileSystemSynchronizationOperations.downloadFileAsync(localFileSystem.getFileSystemRoot(), relativeFilePath, localFileMetadata);
+
+        Mono<FileMetadata> uploadMono = this.sut.uploadFileAsync(remoteFileSystem.getFileSystemRoot(),
+                relativeFilePath, downloadLocalFileMono);
+        uploadMono.block();
+
+        FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
+        Assertions.assertNotNull(folderMetadata);
+        Assertions.assertNotNull(folderMetadata.getFiles().get("Some credential %25%3F.txt"));
+
+        Mono<ByteBuf> fileResult = this.sut.downloadFileAsync(remoteFileSystem.getFileSystemRoot(), relativeFilePath, localFileMetadata)
+                .flatMap(downloadFileResponse -> {
+                    return downloadFileResponse.getByteBufFlux().aggregate();
+                });
+
+        ByteBuf downloadedContent = fileResult.block();
+        Assertions.assertEquals(localFileMetadata.getFileLength(), (long)downloadedContent.capacity());
+
+        this.sut.deleteFolderAsync(remoteFileSystem.getFileSystemRoot(), null, true).block();
+
+        FolderMetadata folderMetadataAfterDelete = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
+        Assertions.assertNotNull(folderMetadataAfterDelete);
+        Assertions.assertEquals(0, folderMetadataAfterDelete.getFolders().size());
+        Assertions.assertEquals(0, folderMetadataAfterDelete.getFiles().size());
     }
 }
