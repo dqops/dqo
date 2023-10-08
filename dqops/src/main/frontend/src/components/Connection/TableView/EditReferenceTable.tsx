@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   ConnectionApiClient,
+  EnviromentApiClient,
   JobApiClient,
   SchemaApiClient,
   TableApiClient,
@@ -9,6 +10,7 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
+  DqoSettingsModel,
   TableComparisonConfigurationModelCheckTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TableComparisonModel
@@ -115,6 +117,10 @@ const EditReferenceTable = ({
 
   const history = useHistory();
   const dispatch = useActionDispatch();
+
+  const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
+
+  const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(Array(8).fill(false))
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(refConnection, refSchema, refTable);
@@ -604,6 +610,26 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
+  const fetchProfileSettings = async () => {
+    try {
+      const res= await EnviromentApiClient.getDqoSettings();
+      setProfileSettings(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileSettings()
+  }, [])
+
+  console.log(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) 
+
+  const warningMessage = 
+  `Warning: DQO compares up to --dqo.sensors.limit.sensor-readout-limit data groups which is set to ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} rows.
+  You have selected a column which has more distinct values or the distinct row count statistics is not captured. Also when multiple columns are selected,
+  the number of groupings may exceed the ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} limit`
+
 
   return (
     <div className="w-full">
@@ -743,7 +769,7 @@ const EditReferenceTable = ({
             </a>
           </div>
         )}
-
+        {<div className='text-red-500'>{warningMessage}</div>}
         {(isCreating || extendDg) && tableExist ? (
           <div className="flex gap-4">
             <div className="mr-20 mt-0 relative">
