@@ -667,6 +667,7 @@ const getReferenceTableStatistics = async () => {
     const stats = reference ? referenceTableStatistics : statistics 
     
     const column = stats?.column_statistics?.find((col) => col.column_name === columnName)
+
     const columnStatistics =  column?.statistics?.find((stat) => stat.collector === "distinct_count")
 
     if (columnStatistics?.result === undefined
@@ -682,19 +683,42 @@ const getReferenceTableStatistics = async () => {
       }
   }
 
+  const calculateTableDistinctCount = (comparedArray : string[], referenceArray : string []) => {
+
+    const filteredStatisticsCompared = comparedArray.flatMap((column) => (
+      statistics?.column_statistics?.filter((x) => x.column_name === column)
+    )) || [];
+
+    const filteredStatisticsReference = referenceArray.flatMap((column) => (
+      referenceTableStatistics?.column_statistics?.filter((x) => x.column_name === column)
+    )) || []; 
+
+  let comparedTableDistinctCount = 1;
+  let referenceTableDistinctCount = 1;
+
+  for (let i =0; i< (filteredStatisticsCompared ? filteredStatisticsCompared?.length : 0); i++){
+    comparedTableDistinctCount *= Number(filteredStatisticsCompared?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result);
+    referenceTableDistinctCount *= Number(filteredStatisticsReference?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result)
+  }
+    return (comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']);
+  }
+
   useEffect(() => {
-    splitArrays()?.comparedArr.map((item, index) => (
+    splitArrays()?.comparedArr.forEach((item, index) => (
       checkIfDistinctCountIsBiggerThanLimit(item, index, false)
     ))
-    splitArrays()?.refArr.map((item, index) => (
+    splitArrays()?.refArr.forEach((item, index) => (
       checkIfDistinctCountIsBiggerThanLimit(item, index, true)
     ))
   },[statistics, referenceTableStatistics, profileSettings])
 
   useEffect(() => {
-    getReferenceTableStatistics()
-  },[refTable])
+    getReferenceTableStatistics();
+  }, [refTable])
 
+  useEffect(() => {
+    calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []);
+  }, [normalList, refList])
 
   return (
     <div className="w-full">
@@ -834,7 +858,7 @@ const getReferenceTableStatistics = async () => {
             </a>
           </div>
         )}
-          {listOfWarnings && listOfReferenceWarnings && splitArrays()?.refArr.length === splitArrays()?.comparedArr.length && (listOfWarnings.includes(true) || listOfReferenceWarnings.includes(true)) ? (
+          {calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []) ? (
         <div className='text-red-500 mb-5'>{warningMessage}</div>
         ) : null}
         {(isCreating || extendDg) && tableExist ? (
