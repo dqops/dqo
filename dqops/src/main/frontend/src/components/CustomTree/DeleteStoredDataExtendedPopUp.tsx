@@ -53,6 +53,10 @@ import Input from '../Input';
       deleteSensorReadouts: true,
       checkType: checkTypes
     });
+    const [filteredStatistics, setFilteredStatistics] = useState(false)
+    const [filteredChecks, setFilteredChecks] = useState(false)
+    const [filteredSensors, setFilteredSensors] = useState(false)
+    
     const { checksUI } = useSelector(
         getFirstLevelState(checkTypes)
       );
@@ -166,37 +170,41 @@ import Input from '../Input';
                 <div className='flex flex-col space-y-5 w-1/4'>
                 <Checkbox
                   checked={params.deleteStatistics}
-                  onChange={(deleteStatistics) =>
-                    onChangeParams({ deleteStatistics })
+                  onChange={(deleteStatistics) =>{
+                    onChangeParams({ deleteStatistics }),
+                    setFilteredStatistics(false)}
                 }
                 label="All basic statistics results"
                 checkClassName="bg-teal-500"
                 />
                 <Checkbox
-                  checked={params.deleteStatistics}
-                  onChange={(deleteStatistics) =>
-                    onChangeParams({ deleteStatistics })
-                }
+                  checked={filteredStatistics}
+                  onChange={() => {
+                    setFilteredStatistics(!filteredStatistics)
+                  }
+                  }
                 label="Filtered basic statistics results"
                 checkClassName="bg-teal-500"
                 />
-                <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})}/>
-                <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})}/>
-                <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/>
+                <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})} disabled={!filteredStatistics}/>
+                <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})} disabled={!filteredStatistics}/>
+                <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})} disabled={!filteredStatistics}/>
                 </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
-                        onChangeParams({ deleteCheckResults })
+                        { onChangeParams({ deleteCheckResults }),
+                        setFilteredChecks(false)
+                        }
                       }
                       label="All check results"
                       checkClassName="bg-teal-500"
                     />
                     <Checkbox
-                      checked={params.deleteCheckResults}
-                      onChange={(deleteCheckResults) =>
-                        onChangeParams({ deleteCheckResults })
+                      checked={filteredChecks}
+                      onChange={() =>
+                        setFilteredChecks(!filteredChecks)
                       }
                       label="Filtered check results"
                       checkClassName="bg-teal-500"
@@ -206,7 +214,9 @@ import Input from '../Input';
                     options={checksUI?.categories?.map((item: any ) => 
                     ({label: item.category, value: item.category}))} 
                     value={params.checkCategory} 
-                    onChange={(value) => onChangeParams({checkCategory: value})}/> 
+                    onChange={(value) => onChangeParams({checkCategory: value})}
+                    disabled={!filteredChecks}
+                    /> 
                     {/* <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
@@ -221,21 +231,24 @@ import Input from '../Input';
                    (item?.category === params.checkCategory))?.checks?.map((item : any) => 
                     ({label: item.check_name, value: item.check_name}))} 
                     value={params.checkName} 
-                    onChange={(value) => onChangeParams({checkName: value})}/> 
+                    onChange={(value) => onChangeParams({checkName: value})}
+                    disabled={!filteredChecks}
+                    /> 
                     </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
                       checked={params.deleteSensorReadouts}
-                      onChange={(deleteSensorReadouts) =>
-                        onChangeParams({ deleteSensorReadouts })
+                      onChange={(deleteSensorReadouts) =>{
+                        onChangeParams({ deleteSensorReadouts }),
+                        setFilteredSensors(false)}
                       }
                       label="All sensor readouts"
                       checkClassName="bg-teal-500"
                     />
                      <Checkbox
-                      checked={params.deleteCheckResults}
-                      onChange={(deleteCheckResults) =>
-                        onChangeParams({ deleteCheckResults })
+                      checked={filteredSensors}
+                      onChange={() =>
+                        setFilteredSensors(!filteredSensors)
                       }
                       label="Filtered sensor readout"
                       checkClassName="bg-teal-500"
@@ -246,7 +259,9 @@ import Input from '../Input';
                         label: x.full_sensor_name, value: x.full_sensor_name ?? ""
                     }))} 
                     value={params.sensorName} 
-                    onChange={(value) => onChangeParams({sensorName: value})}/> 
+                    onChange={(value) => onChangeParams({sensorName: value})}
+                    disabled={!filteredSensors}
+                    /> 
                     {/* <Input label='Time gradient of the sensor' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/> */}
 
                     </div>
