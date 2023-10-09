@@ -123,7 +123,9 @@ const EditReferenceTable = ({
 
   const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
 
-  const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(Array(8).fill(false))
+  const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
+  const [listOfReferenceWarnings, setListOfReferenceWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
+  const [referenceTableStatistics, setReferenceTableStatistics] = useState<TableColumnsStatisticsModel>()
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(refConnection, refSchema, refTable);
@@ -645,28 +647,55 @@ const EditReferenceTable = ({
          console.error(err)
      }
 };
+const getReferenceTableStatistics = async () => {
+  try{
+    if (refTable && refSchema && refConnection) {
+      await ColumnApiClient.getColumnsStatistics(
+        refConnection,
+        refSchema,
+        refTable)
+        .then((res) => 
+        setReferenceTableStatistics(res.data))
+      }
+     } catch (err) {
+       console.error(err)
+   }
+};
 
-  const checkIfDistinctCountIsBiggerThanLimit = (columnName: string, index: number) => {
-    const column = statistics?.column_statistics?.find((col) => col.column_name === columnName)
+  const checkIfDistinctCountIsBiggerThanLimit = (columnName: string, index: number, reference : boolean) => {
+
+    const stats = reference ? referenceTableStatistics : statistics 
+    
+    const column = stats?.column_statistics?.find((col) => col.column_name === columnName)
     const columnStatistics =  column?.statistics?.find((stat) => stat.collector === "distinct_count")
 
     if (columnStatistics?.result === undefined
       || profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']=== undefined
       || columnStatistics?.result > profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) {
-
-        const tnp = listOfWarnings
+        const tnp = reference ? listOfReferenceWarnings : listOfWarnings
         tnp[index] =columnName.length > 0 ?  true : false
-        setListOfWarnings(tnp)
+        reference ? setListOfReferenceWarnings(tnp) : setListOfWarnings(tnp)
+      } else {
+        const tnp =  reference ? listOfReferenceWarnings : listOfWarnings
+        tnp[index] = false
+        reference ? setListOfReferenceWarnings(tnp) : setListOfWarnings(tnp)
       }
   }
-console.log(splitArrays()?.comparedArr)
-console.log(listOfWarnings)
 
   useEffect(() => {
     splitArrays()?.comparedArr.map((item, index) => (
-      checkIfDistinctCountIsBiggerThanLimit(item, index)
+      checkIfDistinctCountIsBiggerThanLimit(item, index, false)
     ))
-  },[splitArrays()?.comparedArr])
+    splitArrays()?.refArr.map((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item, index, true)
+    ))
+  },[statistics, referenceTableStatistics, profileSettings])
+
+  useEffect(() => {
+    getReferenceTableStatistics()
+  },[refTable])
+
+  console.log(referenceTableStatistics)
 
   return (
     <div className="w-full">
@@ -862,6 +891,9 @@ console.log(listOfWarnings)
               onSetRefList={onSetRefList}
               object={refObj}
               responseList={splitArrays()?.refArr}
+              warningMessageList={listOfReferenceWarnings}
+              checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
+              dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
             />
           </div>
         ) : (

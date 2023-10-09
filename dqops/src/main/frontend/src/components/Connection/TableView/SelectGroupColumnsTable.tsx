@@ -24,7 +24,7 @@ type SelectDataGroupingForTableProps = {
 
   object?: { [key: number]: number };
   responseList?: Array<string>;
-  checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number) => void
+  checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number, reference : boolean) => void
   dqoLimit?: number
 };
 interface Option {
@@ -177,7 +177,7 @@ export const SelectGroupColumnsTable = ({
                   value={listOfColumns[index] ?? ""}
                   onChange={(value: string) =>{
                     handleColumnSelectChange(value, index),
-                    checkIfDistinctCountIsBiggerThanLimit && checkIfDistinctCountIsBiggerThanLimit(value, index)
+                    checkIfDistinctCountIsBiggerThanLimit && checkIfDistinctCountIsBiggerThanLimit(value, index, refTable ? true : false)
                   }}
                   placeholder={placeholder}
                   refConnection={refConnection}
