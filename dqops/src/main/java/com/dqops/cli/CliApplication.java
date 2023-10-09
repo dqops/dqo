@@ -149,9 +149,9 @@ public class CliApplication {
 		}
 	    catch (Throwable t) {
 			if (t instanceof IllegalStateException && t.getCause() instanceof org.jline.reader.EndOfFileException) {
-				System.err.println("DQO cannot open the terminal.");
-				System.err.println("If you have started DQO from docker and want to use the DQO shell, please run the container with docker's \"-it\" parameter.");
-				System.err.println("Alternatively, start DQO from docker in a server headless mode (without the DQO shell) using \"docker run dqops/dqo run\".");
+				System.err.println("DQOps cannot open the terminal.");
+				System.err.println("If you have started DQOps from docker and want to use the DQOps shell, please run the container with docker's \"-it\" parameter.");
+				System.err.println("Alternatively, start DQOps from docker in a server headless mode (without the DQOps shell) using \"docker run dqops/dqo run\".");
 				System.exit(-1);
 			}
 			LOG.error("Error at starting the application: " + t.getMessage(), t);
