@@ -43,7 +43,7 @@ public class ParquetFilesDocumentationGeneratorImpl implements ParquetFilesDocum
     public DocumentationFolder renderParquetDocumentation(Path projectRootPath) {
         DocumentationFolder parquetFilesFolder = new DocumentationFolder();
         parquetFilesFolder.setFolderName("reference/parquetfiles");
-        parquetFilesFolder.setLinkName("ParquetFiles");
+        parquetFilesFolder.setLinkName("Parquet data files");
         parquetFilesFolder.setDirectPath(projectRootPath.resolve("../docs/reference/parquetfiles").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("parquetfiles/parquetfiles_documentation");
