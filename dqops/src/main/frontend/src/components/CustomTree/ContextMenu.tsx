@@ -115,6 +115,7 @@ const ContextMenu = ({
     };
     return obj;
   };
+  console.log(node)
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -282,7 +283,7 @@ const ContextMenu = ({
                   setOpen(false);
                 }}
                 nodeLevel={node.level}
-                checkTypes={checkTypes}
+                nodeId={String(node.id)}
 
               />
             </>
@@ -313,7 +314,7 @@ const ContextMenu = ({
                 }}
                 nodeLevel={node.level}
                 nameOfCol={node.run_checks_job_template?.columnName}
-                checkTypes={checkTypes}
+                nodeId={String(node.id)}
               />
             </>
           )}

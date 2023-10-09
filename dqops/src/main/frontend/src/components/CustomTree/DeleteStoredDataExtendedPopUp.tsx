@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import SelectInput from '../SelectInput';
 import { DeleteStoredDataQueueJobParameters, SensorListModel } from '../../api';
 import { SensorsApi } from '../../services/apiClient';
+import Input from '../Input';
   
   type DeleteOnlyDataDialogProps = {
     open: boolean;
@@ -30,7 +31,7 @@ import { SensorsApi } from '../../services/apiClient';
     columnBool?: boolean;
     nameOfCol?: string;
     nodeLevel?: string;
-    checkTypes: CheckTypes
+    nodeId?: string
   };
   const DeleteStoredDataExtendedPopUp = ({
     open,
@@ -38,17 +39,19 @@ import { SensorsApi } from '../../services/apiClient';
     onDelete,
     nameOfCol,
     nodeLevel,
+    nodeId
   }: DeleteOnlyDataDialogProps) => {
     const { checkTypes }: { checkTypes: CheckTypes } = useParams();
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [mode, setMode] = useState('all');
     const [allSensors, setAllSensors] = useState<SensorListModel[]>([])
-    const [params, setParams] = useState<Partial<DeleteStoredDataQueueJobParameters>>({
+    const [params, setParams] = useState<DeleteStoredDataQueueJobParameters>({
       deleteErrors: true,
       deleteStatistics: true,
       deleteCheckResults: true,
-      deleteSensorReadouts: true
+      deleteSensorReadouts: true,
+      checkType: checkTypes
     });
     const { checksUI } = useSelector(
         getFirstLevelState(checkTypes)
@@ -77,7 +80,7 @@ import { SensorsApi } from '../../services/apiClient';
       }
     };
   
-    const onChangeParams = (obj: { [key: string]: boolean }) => {
+    const onChangeParams = (obj: Partial<DeleteStoredDataQueueJobParameters>) => {
       setParams({
         ...params,
         ...obj
@@ -87,20 +90,17 @@ import { SensorsApi } from '../../services/apiClient';
     const isDisabled = useMemo(() => mode === 'all', [mode]);
 
 
-    console.log(params)
-    console.log(allSensors)
-
     const getAllSensors = async () => {
         await SensorsApi.getAllSensors()
          .then((res) => setAllSensors(res.data))
          .catch((err) => console.error(err))
- 
     }
  
     useEffect(() => {
         getAllSensors()
-    }, [allSensors])
+    }, [])
 
+    const hierarchiArray = nodeId?.split(".")
   
     return (
       <Dialog open={open} handler={onClose} className="min-w-300 p-4">
@@ -109,6 +109,12 @@ import { SensorsApi } from '../../services/apiClient';
         </DialogHeader>
         <DialogBody>
           <div className="flex flex-col">
+            <div className='flex flex-col text-black font-semibold space-y-3'>
+              {hierarchiArray?.[0] && <div> {"Connection: " + hierarchiArray?.[0] } </div> }
+              {hierarchiArray?.[1] && <div> {"Schema: " + hierarchiArray?.[1] } </div>}
+              {hierarchiArray?.[2] && <div> {"Table: " + hierarchiArray?.[2] } </div>}
+              {hierarchiArray?.[4] && <div> {"Column: " + hierarchiArray?.[4] } </div>}
+            </div>
             <div>
               <Radio
                 id="all"
@@ -157,7 +163,7 @@ import { SensorsApi } from '../../services/apiClient';
             </div>
         </div>
               <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">
-                <div>
+                <div className='flex flex-col space-y-3'>
                 <Checkbox
                   checked={params.deleteStatistics}
                   onChange={(deleteStatistics) =>
@@ -166,6 +172,9 @@ import { SensorsApi } from '../../services/apiClient';
                 label="All basic statistics results"
                 checkClassName="bg-teal-500"
                 />
+                <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})}/>
+                <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})}/>
+                <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/>
                 </div>
                 <div className='flex flex-col space-y-3'>
                     <Checkbox
@@ -235,7 +244,6 @@ import { SensorsApi } from '../../services/apiClient';
                       checkClassName="bg-teal-500"
                     />
                 </div>
-            
           </div>
         </DialogBody>
         <DialogFooter className="flex gap-6 items-center mt-10">
