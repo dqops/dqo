@@ -834,7 +834,7 @@ const getReferenceTableStatistics = async () => {
             </a>
           </div>
         )}
-          {listOfWarnings && listOfWarnings.includes(true) ? (
+          {listOfWarnings && listOfReferenceWarnings && splitArrays()?.refArr.length === splitArrays()?.comparedArr.length && (listOfWarnings.includes(true) || listOfReferenceWarnings.includes(true)) ? (
         <div className='text-red-500 mb-5'>{warningMessage}</div>
         ) : null}
         {(isCreating || extendDg) && tableExist ? (
