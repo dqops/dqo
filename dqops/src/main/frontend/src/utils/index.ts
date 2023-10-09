@@ -34,3 +34,14 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
 
   return date.toLocaleString('en-US', options);
 };
+
+export const urlencodeDecoder = (url: string) =>{
+  return url.replace(/\s/g, '%20')
+}
+
+export const urlencodeEncoder = (url: string | undefined) =>{
+  return url && url.replace(/%20/g, ' ')
+}
+  console.log(urlencodeDecoder("13 123"))
+  console.log(urlencodeDecoder("123     456"))
+  console.log(urlencodeEncoder('column/profiling/accuracy/nowy%20check%20accuracy'))

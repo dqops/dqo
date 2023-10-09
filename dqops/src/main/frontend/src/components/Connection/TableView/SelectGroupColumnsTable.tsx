@@ -5,6 +5,7 @@ import { ColumnApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
+import { Tooltip } from '@material-tailwind/react';
 
 type SelectDataGroupingForTableProps = {
   title: string;
@@ -19,9 +20,12 @@ type SelectDataGroupingForTableProps = {
   onSetNormal?: (obj: { [key: number]: boolean }) => void;
   onSetRefList?: (obj: Array<string>) => void;
   onSetNormalList?: (obj: Array<string>) => void;
+  warningMessageList?: Array<boolean>;
 
   object?: { [key: number]: number };
   responseList?: Array<string>;
+  checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number, reference : boolean) => void
+  dqoLimit?: number
 };
 interface Option {
   label: string;
@@ -38,7 +42,10 @@ export const SelectGroupColumnsTable = ({
   onSetNormalList,
   onSetRefList,
   responseList,
-  object
+  object,
+  warningMessageList,
+  checkIfDistinctCountIsBiggerThanLimit,
+  dqoLimit
 }: SelectDataGroupingForTableProps) => {
   const [fetched, setFetched] = useState(false);
   const {
@@ -150,29 +157,39 @@ export const SelectGroupColumnsTable = ({
     fetchData();
   }, [connection, schema, table, refTable, ref]);
 
+  const message = `The last known distinct count statistics for this column detected more than ${dqoLimit} rows or the statistics were not collected for this table yet`
+
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
       <table className="w-full">
         <tbody>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
             return (
-              <tr key={index} className="my-1.5">
+              <tr key={index} className=''>
+              <td className="my-1.5 w-11/12">
                 <ColumnSelect
                   triggerClassName={clsx(
                     object && object[index] === 1
-                      ? 'my-0.5 border border-red-500'
-                      : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500"  
-                  )}
+                    ? 'my-0.5 border border-red-500'
+                      : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
+                     
+                      )}
                   value={listOfColumns[index] ?? ""}
-                  onChange={(value: string) =>
-                    handleColumnSelectChange(value, index)
-                  }
+                  onChange={(value: string) =>{
+                    handleColumnSelectChange(value, index),
+                    checkIfDistinctCountIsBiggerThanLimit && checkIfDistinctCountIsBiggerThanLimit(value, index, refTable ? true : false)
+                  }}
                   placeholder={placeholder}
                   refConnection={refConnection}
                   refSchema={refSchema}
                   refTable={refTable}
                   passedOptions={options}
                 />
+              </td>
+                {warningMessageList?.[index] === true ? 
+                <Tooltip content={message}>
+                  <td className='bg-red-500 block mx-5 mt-3' style={{height: "20px", width: "20px", borderRadius: "10px"}}> </td> 
+                  </Tooltip> : null }
               </tr>
             );
           })}

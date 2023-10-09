@@ -19,7 +19,6 @@ package com.dqops.utils.logging;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.joran.spi.ConsoleTarget;
-import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.event.KeyValuePair;
@@ -32,18 +31,22 @@ import java.util.Objects;
  * Special console appender for JSON logging that adds extra fields to every logged message.
  */
 public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
-    private boolean encodeDoubleQuotesInJson;
+    private boolean quoteMessage;
     private final DqoCloudApiKeyPayload apiKeyPayload;
+    private final Integer ignoredJsonMessageMaxLength;
 
     /**
      * Creates an augmenting console appender.
-     * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param quoteMessage  Encodes all double quotes and backslashes the message field again.
      * @param apiKeyPayload DQO Cloud api key.
+     * @param ignoredJsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
-    public AugmentingConsoleAppender(boolean encodeDoubleQuotesInJson,
-                                     DqoCloudApiKeyPayload apiKeyPayload) {
-        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+    public AugmentingConsoleAppender(boolean quoteMessage,
+                                     DqoCloudApiKeyPayload apiKeyPayload,
+                                     Integer ignoredJsonMessageMaxLength) {
+        this.quoteMessage = quoteMessage;
         this.apiKeyPayload = apiKeyPayload;
+        this.ignoredJsonMessageMaxLength = ignoredJsonMessageMaxLength;
     }
 
     /**
@@ -71,7 +74,7 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
         }
 
         EncodingLoggingEvent augmentedLoggingEvent = new EncodingLoggingEvent(
-                originalEvent, augmentedArgumentArray, this.encodeDoubleQuotesInJson, keyValuePairs);
+                originalEvent, augmentedArgumentArray, this.quoteMessage, keyValuePairs, this.ignoredJsonMessageMaxLength);
 
         super.append(augmentedLoggingEvent);
     }

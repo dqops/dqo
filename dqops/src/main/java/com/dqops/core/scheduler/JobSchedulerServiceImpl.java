@@ -142,13 +142,13 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.synchronizationMode = synchronizationMode;
         this.checkRunReportingMode = checkRunReportingMode;
 
+        if (this.started) {
+            return;
+        }
+
         if (log.isInfoEnabled()) {
             log.info(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s, using the time zone: %s",
                     synchronizationMode, checkRunReportingMode, this.defaultTimeZoneProvider.getDefaultTimeZoneId()));
-        }
-
-        if (this.started) {
-            return;
         }
 
         createAndStartScheduler();

@@ -22,13 +22,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for the dqo.logging.execution that configures how user errors of running checks are reported.
+ * Configuration POJO with the configuration for the dqo.logging.user-errors that configures how user errors of running checks or parsing YAML files are reported.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.logging.execution")
+@ConfigurationProperties(prefix = "dqo.logging.user-errors")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
+public class DqoLoggingUserErrorsConfigurationProperties implements Cloneable {
     /**
      * Log level for reporting issues captured by sensors.
      */
@@ -48,6 +48,11 @@ public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
      * Log level for reporting issues captured by statistics collection.
      */
     private Level statisticsLogLevel = Level.WARN;
+
+    /**
+     * Log level for reporting issues captured when parsing YAML files.
+     */
+    private Level yamlLogLevel = Level.WARN;
 
     /**
      * Comma separated list of key-value pairs added to log messages with issues from sensors.
@@ -70,13 +75,18 @@ public class DqoLoggingExecutionConfigurationProperties implements Cloneable {
     private String statisticsAdditionalKeyValuePairs;
 
     /**
+     * Comma separated list of key-value pairs added to log messages with issues from parsing invalid YAML files.
+     */
+    private String yamlAdditionalKeyValuePairs;
+
+    /**
      * Creates a clone of the object.
      * @return Cloned instance.
      */
     @Override
-    public DqoLoggingExecutionConfigurationProperties clone() {
+    public DqoLoggingUserErrorsConfigurationProperties clone() {
         try {
-            DqoLoggingExecutionConfigurationProperties cloned = (DqoLoggingExecutionConfigurationProperties) super.clone();
+            DqoLoggingUserErrorsConfigurationProperties cloned = (DqoLoggingUserErrorsConfigurationProperties) super.clone();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

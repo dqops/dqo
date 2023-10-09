@@ -58,7 +58,6 @@ export default function TableStatisticsView({
           tableName
         );
       setRowCount(res.data);
-      console.log(res.data)
     } catch (err) {
       console.error(err);
     }

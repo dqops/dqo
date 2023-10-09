@@ -29,13 +29,13 @@ public class FileNameSanitizerTests extends BaseTest {
     }
 
     @Test
-    void encodeForFileSystem_whenSpacePresent_thenIsEncoded() {
-        Assertions.assertEquals("a+b", FileNameSanitizer.encodeForFileSystem("a b"));
+    void encodeForFileSystem_whenSpacePresent_thenIsNotEncoded() {
+        Assertions.assertEquals("a b", FileNameSanitizer.encodeForFileSystem("a b"));
     }
 
     @Test
     void encodeForFileSystem_whenSpecialCharacterPresent_thenIsEncoded() {
-        Assertions.assertEquals("a%2B", FileNameSanitizer.encodeForFileSystem("a+"));
+        Assertions.assertEquals("a+", FileNameSanitizer.encodeForFileSystem("a+"));
         Assertions.assertEquals("a%2F", FileNameSanitizer.encodeForFileSystem("a/"));
         Assertions.assertEquals("a%5C", FileNameSanitizer.encodeForFileSystem("a\\"));
         Assertions.assertEquals("a%26", FileNameSanitizer.encodeForFileSystem("a&"));
