@@ -188,7 +188,7 @@ export const SelectGroupColumnsTable = ({
               </td>
                 {warningMessageList?.[index] === true ? 
                 <Tooltip content={message}>
-                  <td className='bg-red-500 block mx-5' style={{height: "20px", width: "20px", borderRadius: "10px"}}> </td> 
+                  <td className='bg-red-500 block mx-5 mt-3' style={{height: "20px", width: "20px", borderRadius: "10px"}}> </td> 
                   </Tooltip> : null }
               </tr>
             );

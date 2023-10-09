@@ -655,11 +655,18 @@ const EditReferenceTable = ({
       || columnStatistics?.result > profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) {
 
         const tnp = listOfWarnings
-        tnp[index] = true
+        tnp[index] =columnName.length > 0 ?  true : false
         setListOfWarnings(tnp)
       }
   }
+console.log(splitArrays()?.comparedArr)
 console.log(listOfWarnings)
+
+  useEffect(() => {
+    splitArrays()?.comparedArr.map((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item, index)
+    ))
+  },[splitArrays()?.comparedArr])
 
   return (
     <div className="w-full">
