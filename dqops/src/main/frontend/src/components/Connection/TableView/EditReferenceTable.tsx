@@ -695,7 +695,6 @@ const getReferenceTableStatistics = async () => {
     getReferenceTableStatistics()
   },[refTable])
 
-  console.log(referenceTableStatistics)
 
   return (
     <div className="w-full">
