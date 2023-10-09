@@ -109,13 +109,13 @@ import Input from '../Input';
         </DialogHeader>
         <DialogBody>
           <div className="flex flex-col">
-            <div className='flex flex-col text-black font-semibold space-y-3'>
+            <div className='flex justify-between border-b pb-4 border-gray-300 text-black font-semibold'>
               {hierarchiArray?.[0] && <div> {"Connection: " + hierarchiArray?.[0] } </div> }
               {hierarchiArray?.[1] && <div> {"Schema: " + hierarchiArray?.[1] } </div>}
               {hierarchiArray?.[2] && <div> {"Table: " + hierarchiArray?.[2] } </div>}
               {hierarchiArray?.[4] && <div> {"Column: " + hierarchiArray?.[4] } </div>}
             </div>
-            <div>
+            <div >
               <Radio
                 id="all"
                 name="delete_mode"
@@ -127,7 +127,7 @@ import Input from '../Input';
                 color="teal"
               />
             </div>
-            <div>
+            <div className=' border-b pb-4 border-gray-300'>
               <div className="flex items-start text-gray-700">
                 <Radio
                   id="part"
@@ -163,7 +163,7 @@ import Input from '../Input';
             </div>
         </div>
               <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">
-                <div className='flex flex-col space-y-3'>
+                <div className='flex flex-col space-y-5 w-1/4'>
                 <Checkbox
                   checked={params.deleteStatistics}
                   onChange={(deleteStatistics) =>
@@ -172,11 +172,19 @@ import Input from '../Input';
                 label="All basic statistics results"
                 checkClassName="bg-teal-500"
                 />
+                <Checkbox
+                  checked={params.deleteStatistics}
+                  onChange={(deleteStatistics) =>
+                    onChangeParams({ deleteStatistics })
+                }
+                label="Filtered basic statistics results"
+                checkClassName="bg-teal-500"
+                />
                 <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})}/>
                 <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})}/>
                 <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/>
                 </div>
-                <div className='flex flex-col space-y-3'>
+                <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
@@ -190,28 +198,32 @@ import Input from '../Input';
                       onChange={(deleteCheckResults) =>
                         onChangeParams({ deleteCheckResults })
                       }
-                      label="Check results from category"
+                      label="Filtered check results"
                       checkClassName="bg-teal-500"
                     />
-                    <SelectInput options={checksUI?.categories?.map((item: any ) => 
+                    <SelectInput 
+                    label='Check category'
+                    options={checksUI?.categories?.map((item: any ) => 
                     ({label: item.category, value: item.category}))} 
                     value={params.checkCategory} 
                     onChange={(value) => onChangeParams({checkCategory: value})}/> 
-                    <Checkbox
+                    {/* <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
                         onChangeParams({})
                       }
                       label="Single Check results from category"
                       checkClassName="bg-teal-500"
-                    />
-                   <SelectInput options={checksUI?.categories?.find((item: any ) => 
+                    /> */}
+                   <SelectInput 
+                   label='Check name'
+                   options={checksUI?.categories?.find((item: any ) => 
                    (item?.category === params.checkCategory))?.checks?.map((item : any) => 
                     ({label: item.check_name, value: item.check_name}))} 
                     value={params.checkName} 
                     onChange={(value) => onChangeParams({checkName: value})}/> 
                     </div>
-                <div className='flex flex-col space-y-3'>
+                <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
                       checked={params.deleteSensorReadouts}
                       onChange={(deleteSensorReadouts) =>
@@ -225,18 +237,20 @@ import Input from '../Input';
                       onChange={(deleteCheckResults) =>
                         onChangeParams({ deleteCheckResults })
                       }
-                      label="Single sensor readout"
+                      label="Filtered sensor readout"
                       checkClassName="bg-teal-500"
                     />
                     <SelectInput 
+                    label='Sensor name'
                     options={allSensors?.map((x: any) => ({
                         label: x.full_sensor_name, value: x.full_sensor_name ?? ""
                     }))} 
                     value={params.sensorName} 
                     onChange={(value) => onChangeParams({sensorName: value})}/> 
+                    {/* <Input label='Time gradient of the sensor' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/> */}
 
                     </div>
-                    <div>
+                    <div className='w-1/4'>
                     <Checkbox
                       checked={params.deleteErrors}
                       onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
