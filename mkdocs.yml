@@ -110,6 +110,30 @@ nav:
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - Python client:
+    - operations:
+      - checks: 'client/operations/checks.md'
+      - check_results: 'client/operations/check_results.md'
+      - check_results_overview: 'client/operations/check_results_overview.md'
+      - columns: 'client/operations/columns.md'
+      - connections: 'client/operations/connections.md'
+      - dashboards: 'client/operations/dashboards.md'
+      - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
+      - data_sources: 'client/operations/data_sources.md'
+      - defaults: 'client/operations/defaults.md'
+      - environment: 'client/operations/environment.md'
+      - errors: 'client/operations/errors.md'
+      - healthcheck: 'client/operations/healthcheck.md'
+      - incidents: 'client/operations/incidents.md'
+      - jobs: 'client/operations/jobs.md'
+      - log_shipping: 'client/operations/log_shipping.md'
+      - rules: 'client/operations/rules.md'
+      - schemas: 'client/operations/schemas.md'
+      - sensors: 'client/operations/sensors.md'
+      - sensor_readouts: 'client/operations/sensor_readouts.md'
+      - tables: 'client/operations/tables.md'
+      - table_comparisons: 'client/operations/table_comparisons.md'
+      - table_comparison_results: 'client/operations/table_comparison_results.md'
+      - timezones: 'client/operations/timezones.md'
     - models: 'client/models.md'
 ########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY

@@ -16,7 +16,12 @@
 package com.dqops.utils.docs.client.operations;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
+import com.dqops.utils.docs.client.apimodel.OperationModel;
+import com.dqops.utils.docs.client.models.ModelsDocumentationModel;
+import com.dqops.utils.docs.client.models.ModelsObjectDocumentationModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -24,44 +29,89 @@ import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import com.google.common.base.CaseFormat;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.parameters.PathParameter;
+import io.swagger.v3.oas.models.parameters.QueryParameter;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
+    private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
+        put("string", ParameterDataType.string_type);
+        put("integer", ParameterDataType.long_type);
+        put("number", ParameterDataType.double_type);
+        put("boolean", ParameterDataType.boolean_type);
+        put("array", ParameterDataType.string_list_type);
+    }};
 
     private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
     private static final CommentFormatter commentFormatter = new CommentFormatter();
+    private static final String clientApiSourceBaseUrl = "https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/";
 
     @Override
-    public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel) {
+    public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel,
+                                                                                             LinkageStore<String> linkageStore) {
         List<OperationsSuperiorObjectDocumentationModel> operationsDocumentation = new ArrayList<>();
 
-//        for (Map.Entry<String, Set<OperationModel>> operation : openAPIModel.getOperationsMethods().entrySet()) {
-//            String operationName = operation.getKey();
-//            Set<OperationModel> operationMethods = operation.getValue();
-//            OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel = new OperationsSuperiorObjectDocumentationModel();
-//            operationsSuperiorObjectDocumentationModel.setSuperiorClassFullName(operationName);
-//            operationsSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(getObjectSimpleName(operationName));
-//
-//            Map<Class<?>, OperationsObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
-//
-////            generateYamlObjectDocumentationModelRecursive(
-////                    yamlClass, yamlObjectDocumentationModels);
-////
-////            operationsSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
-//            operationsSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
-////
-////            for (Map.Entry<Class<?>, OperationsObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
-////                operationsSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
-////                linkageStore.put(yamlObject.getKey(), yamlObject.getValue().getObjectClassPath());
-////            }
-//
-//            operationsDocumentation.add(operationsSuperiorObjectDocumentationModel);
-//        }
+        for (Map.Entry<String, List<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
+            String controllerName = controller.getKey();
+            String controllerSimpleName = getObjectSimpleName(controllerName);
+            OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel = new OperationsSuperiorObjectDocumentationModel();
+            operationsSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
+            operationsSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(controllerSimpleName);
+            operationsSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
+
+            String controllerLinkageIndicator = "operations/" + controllerSimpleName;
+            List<ComponentModel> componentModels = openAPIModel.getModels().stream()
+                    .filter(componentModel -> componentModel.getDocsLink() == null || componentModel.getDocsLink().toUri().toString().contains(controllerLinkageIndicator))
+                    .collect(Collectors.toList());
+            List<ComponentModel> topLevelComponentModels = componentModels.stream()
+                    .filter(componentModel -> componentModel.getDocsLink() != null && componentModel.getDocsLink().toUri().toString().contains(controllerLinkageIndicator))
+                    .collect(Collectors.toList());
+
+            Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects = new HashMap<>();
+            for (ComponentModel componentModel : topLevelComponentModels) {
+                Class<?> componentClazz = componentModel.getReflectedClass();
+                List<OperationsObjectDocumentationModel> generatedComponentModels = generateOperationsObjectDocumentationModelRecursive(
+                        Path.of("/docs/client/", controllerLinkageIndicator),
+                        componentClazz,
+                        visitedObjects,
+                        linkageStore
+                );
+                operationsSuperiorObjectDocumentationModel.getClassObjects().addAll(generatedComponentModels);
+                for (OperationsObjectDocumentationModel generatedComponentModel : generatedComponentModels) {
+                    linkageStore.putIfAbsent(generatedComponentModel.getClassSimpleName(), generatedComponentModel.getObjectClassPath());
+                }
+            }
+
+            List<OperationModel> controllerMethods = controller.getValue();
+            operationsSuperiorObjectDocumentationModel.setOperationObjects(new ArrayList<>());
+
+            for (OperationModel operationModel : controllerMethods) {
+                OperationsOperationDocumentationModel operationsOperationDocumentationModel = generateOperationOperationDocumentationModel(operationModel,
+                        linkageStore);
+                operationsSuperiorObjectDocumentationModel.getOperationObjects().add(operationsOperationDocumentationModel);
+            }
+
+            operationsDocumentation.add(operationsSuperiorObjectDocumentationModel);
+        }
         return operationsDocumentation;
+    }
+
+    private String getOperationSourceUrl(String controllerName, OperationModel operationModel) {
+        return clientApiSourceBaseUrl +
+                getObjectSimpleName(controllerName) +
+                "/" +
+                getObjectSimpleName(operationModel.getOperation().getOperationId()) +
+                ".py";
     }
 
     private String getObjectSimpleName(String name) {
@@ -70,14 +120,134 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
     /**
      * Create a yaml documentation in recursive for given class and add them to map.
+     */
+    private OperationsOperationDocumentationModel generateOperationOperationDocumentationModel(
+            OperationModel operationModel,
+            LinkageStore<String> linkageStore) {
+        OperationsOperationDocumentationModel operationsOperationDocumentationModel = new OperationsOperationDocumentationModel();
+        operationsOperationDocumentationModel.setOperationJavaName(operationModel.getOperation().getOperationId());
+        operationsOperationDocumentationModel.setOperationPythonName(getObjectSimpleName(operationModel.getOperation().getOperationId()));
+        operationsOperationDocumentationModel.setOperationDescription(operationModel.getOperation().getDescription());
+        operationsOperationDocumentationModel.setClientSourceUrl(getOperationSourceUrl(
+                operationModel.getOperation().getTags().get(0),
+                operationModel));
+        operationsOperationDocumentationModel.setApiCallUrl(operationModel.getPath());
+        operationsOperationDocumentationModel.setApiCallMethod(operationModel.getHttpMethod());
+
+        List<OperationParameterDocumentationModel> operationParameterDocumentationModels = new ArrayList<>();
+        // Parameters (path and query)
+        List<Parameter> operationParameters = operationModel.getOperation().getParameters();
+        if (operationParameters != null) {
+            for (Parameter operationParameter: operationParameters) {
+                OperationParameterDocumentationModel parameterDocumentationModel = new OperationParameterDocumentationModel();
+                parameterDocumentationModel.setClassFieldName(operationParameter.getName());
+                parameterDocumentationModel.setYamlFieldName(getObjectSimpleName(operationParameter.getName()));
+                parameterDocumentationModel.setDisplayName(parameterDocumentationModel.getYamlFieldName());
+                parameterDocumentationModel.setHelpText(operationParameter.getDescription());
+                parameterDocumentationModel.setRequired(Objects.requireNonNullElse(operationParameter.getRequired(), true));
+
+                String parameterTypeString = operationParameter.getSchema().getType();
+                if (parameterTypeString == null) {
+                    parameterTypeString = getTypeFrom$ref(operationParameter.getSchema().get$ref());
+                }
+                ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterTypeString, ParameterDataType.object_type);
+                parameterDocumentationModel.setDataType(parameterDataType);
+
+                if (operationParameter instanceof PathParameter) {
+                    parameterDocumentationModel.setOperationParameterType(OperationParameterType.pathParameter);
+                } else if (operationParameter instanceof QueryParameter) {
+                    parameterDocumentationModel.setOperationParameterType(OperationParameterType.queryParameter);
+                }
+
+                Path linkagePath = linkageStore.get(parameterTypeString);
+                if (linkagePath != null) {
+                    parameterDocumentationModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+                }
+                operationParameterDocumentationModels.add(parameterDocumentationModel);
+            }
+        }
+
+        // Request body
+        RequestBody requestBody = operationModel.getOperation().getRequestBody();
+        if (requestBody != null) {
+            OperationParameterDocumentationModel parameterDocumentationModel = new OperationParameterDocumentationModel();
+            parameterDocumentationModel.setClassFieldName("body");
+            parameterDocumentationModel.setYamlFieldName("body");
+            parameterDocumentationModel.setDisplayName(parameterDocumentationModel.getYamlFieldName());
+            parameterDocumentationModel.setHelpText(requestBody.getDescription());
+            parameterDocumentationModel.setRequired(Objects.requireNonNullElse(requestBody.getRequired(), true));
+            parameterDocumentationModel.setOperationParameterType(OperationParameterType.requestBodyParameter);
+
+            String parameterTypeString = getTypeFrom$ref(requestBody.getContent().get("application/json").getSchema().get$ref());
+            ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterTypeString, ParameterDataType.object_type);
+            parameterDocumentationModel.setDataType(parameterDataType);
+
+            Path linkagePath = linkageStore.get(parameterTypeString);
+            if (linkagePath != null) {
+                parameterDocumentationModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+            }
+            operationsOperationDocumentationModel.setRequestBodyField(parameterDocumentationModel);
+        }
+        operationsOperationDocumentationModel.setParametersFields(operationParameterDocumentationModels);
+
+        // Return
+        ApiResponse returnResponse = operationModel.getOperation().getResponses().values().stream().findFirst().get();
+        MediaType returnMedia = returnResponse.getContent().get("application/json");
+
+        if (returnMedia != null) {
+            Schema returnSchema = returnMedia.getSchema();
+            if (returnSchema != null && returnSchema.get$ref() != null && !returnSchema.get$ref().contains("MonoObject")) {
+                String returnTypeString = getTypeFrom$ref(returnSchema.get$ref());
+
+                OperationsDocumentationModel returnParameterModel = new OperationsDocumentationModel();
+                returnParameterModel.setClassFieldName(returnTypeString);
+                returnParameterModel.setYamlFieldName(getObjectSimpleName(returnTypeString));
+                returnParameterModel.setDisplayName(returnParameterModel.getYamlFieldName());
+                returnParameterModel.setHelpText(returnSchema.getDescription());
+
+                ParameterDataType returnDataType = KNOWN_DATA_TYPES.getOrDefault(returnTypeString, ParameterDataType.object_type);
+                returnParameterModel.setDataType(returnDataType);
+
+                Path linkagePath = linkageStore.get(returnTypeString);
+                if (linkagePath != null) {
+                    returnParameterModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+                }
+                operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
+            }
+        }
+
+        return operationsOperationDocumentationModel;
+    }
+
+    private String getTypeFrom$ref(String $ref) {
+        if ($ref == null) {
+            return "";
+        }
+
+        String[] split$ref = $ref.split("/");
+        return split$ref[split$ref.length - 1];
+    }
+
+    /**
+     * Create a yaml documentation in recursive for given class and add them to map.
      *
      * @param targetClass    Class for which fields to generate documentation.
      * @param visitedObjects Data structure to add created model.
      */
-    private void generateYamlObjectDocumentationModelRecursive(Path superiorObjectFileName,
-                                                               Class<?> targetClass,
-                                                               Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects) {
-        if (!visitedObjects.containsKey(targetClass)) {
+    private List<OperationsObjectDocumentationModel> generateOperationsObjectDocumentationModelRecursive(Path baseModelPath,
+                                                                                                         Class<?> targetClass,
+                                                                                                         Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects,
+                                                                                                         LinkageStore<String> linkageStore) {
+        List<OperationsObjectDocumentationModel> result = new LinkedList<>();
+        if (targetClass == null) {
+            return result;
+        }
+
+        Path linkagePath = linkageStore.get(targetClass.getSimpleName());
+
+        if (!visitedObjects.containsKey(targetClass) && (
+                linkagePath == null || linkagePath.startsWith(baseModelPath)
+        )) {
             visitedObjects.put(targetClass, null);
 
             OperationsObjectDocumentationModel operationsObjectDocumentationModel = new OperationsObjectDocumentationModel();
@@ -95,7 +265,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
                 Class<?> superClass = targetClass.getSuperclass();
                 if (isGenericSuperclass(superClass)) {
                     Type genericSuperclass = targetClass.getGenericSuperclass();
-                    processGenericTypes(superiorObjectFileName, genericSuperclass, visitedObjects);
+                    result.addAll(processGenericTypes(baseModelPath, genericSuperclass, visitedObjects, linkageStore));
                 }
             }
 
@@ -106,27 +276,31 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             operationsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
             operationsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
             operationsObjectDocumentationModel.setObjectClassPath(
-                    Path.of("/").resolve(superiorObjectFileName).resolve("#" + classInfo.getReflectedClass().getSimpleName())
+                    baseModelPath.resolve("#" + classInfo.getReflectedClass().getSimpleName())
             );
 
             for (FieldInfo info : infoFields) {
+                if (info.getDataType() == null) {
+                    continue;
+                }
+
                 if (info.getDataType().equals(ParameterDataType.object_type)) {
                     if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
                         continue;
                     }
-                    generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects);
+                    result.addAll(generateOperationsObjectDocumentationModelRecursive(baseModelPath, info.getClazz(), visitedObjects, linkageStore));
                 }
 
                 OperationsDocumentationModel operationsDocumentationModel = new OperationsDocumentationModel();
                 operationsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
-//                if (linkageStore.containsKey(info.getClazz())) {
-//                    Path infoClassPath = linkageStore.get(info.getClazz());
-//                    operationsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
-//                } else {
-//                    operationsDocumentationModel.setClassUsedOnTheFieldPath(
-//                            "#" + operationsDocumentationModel.getClassNameUsedOnTheField());
-//                }
+                if (linkageStore.containsKey(info.getClazz().getSimpleName())) {
+                    Path infoClassPath = linkageStore.get(info.getClazz().getSimpleName());
+                    operationsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
+                } else {
+                    operationsDocumentationModel.setClassUsedOnTheFieldPath(
+                            "#" + operationsDocumentationModel.getClassNameUsedOnTheField());
+                }
 
                 operationsDocumentationModel.setClassFieldName(info.getClassFieldName());
                 operationsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
@@ -143,7 +317,9 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             }
             operationsObjectDocumentationModel.setObjectFields(operationsDocumentationModels);
             visitedObjects.put(targetClass, operationsObjectDocumentationModel);
+            result.add(operationsObjectDocumentationModel);
         }
+        return result;
     }
 
     /**
@@ -157,7 +333,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     /**
      * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
      */
-    private void processGenericTypes(Path superiorObjectFileName, Type type, Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects) {
+    private List<OperationsObjectDocumentationModel> processGenericTypes(Path baseModelPath, Type type, Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects, LinkageStore<String> linkageStore) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
@@ -165,11 +341,12 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
                 if (typeArgument instanceof Class) {
                     Class<?> genericClass = (Class<?>) typeArgument;
                     if (!isJavaClass(genericClass)) {
-                        generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericClass, visitedObjects);
+                        return generateOperationsObjectDocumentationModelRecursive(baseModelPath, genericClass, visitedObjects, linkageStore);
                     }
                 }
             }
         }
+        return new LinkedList<>();
     }
 
     /**

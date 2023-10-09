@@ -15,9 +15,9 @@
  */
 package com.dqops.utils.docs.client.operations;
 
+import io.swagger.v3.oas.models.PathItem.HttpMethod;
 import lombok.Data;
 
-import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -28,26 +28,41 @@ public class OperationsOperationDocumentationModel {
     /**
      * Object class full name.
      */
-    private String classFullName;
+    private String operationJavaName;
     /**
      * Object class simple name.
      */
-    private String classSimpleName;
+    private String operationPythonName;
     /**
      * Object class description.
      */
-    private String classDescription;
+    private String operationDescription;
+
     /**
-     * Object class.
+     * Source code
      */
-    private Class<?> reflectedClass;
+    private String clientSourceUrl;
+
     /**
-     * Object class path.
+     * REST api URL.
      */
-    private Path objectClassPath;
+    private String apiCallUrl;
     /**
-     * List of all object fields.
+     * HTTP Method
      */
-    private List<OperationsDocumentationModel> objectFields;
+    private HttpMethod apiCallMethod;
+
+    /**
+     * Return value parameter
+     */
+    private OperationsDocumentationModel returnValueField;
+    /**
+     * List of operation parameters fields.
+     */
+    private List<OperationParameterDocumentationModel> parametersFields;
+    /**
+     * Body parameter field.
+     */
+    private OperationParameterDocumentationModel requestBodyField;
 
 }

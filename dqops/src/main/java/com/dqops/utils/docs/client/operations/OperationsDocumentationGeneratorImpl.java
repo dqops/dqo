@@ -53,7 +53,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         Template template = HandlebarsDocumentationUtilities.compileTemplate("client/operations/operations_documentation");
 
         List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorObjectDocumentationModels =
-                operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel);
+                operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel, linkageStore);
 
         for (OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel : operationsSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = operationsFolder.addNestedFile(operationsSuperiorObjectDocumentationModel.getLocationFilePath());

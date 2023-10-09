@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.dqops.utils.docs.client.operations;
 
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+public enum OperationParameterType {
+    @JsonProperty("Path")
+    pathParameter,
 
-public interface OperationsDocumentationModelFactory {
-    List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel, LinkageStore<String> linkageStore);
+    @JsonProperty("Query")
+    queryParameter,
+
+    @JsonProperty("RequestBody")
+    requestBodyParameter
 }

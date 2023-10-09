@@ -38,7 +38,7 @@ public class OperationsObjectDocumentationModel {
      */
     private String classDescription;
     /**
-     * Object class.
+     * Reflected class.
      */
     private Class<?> reflectedClass;
     /**
