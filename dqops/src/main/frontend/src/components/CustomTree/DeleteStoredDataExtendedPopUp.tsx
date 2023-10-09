@@ -18,13 +18,14 @@ import { CheckTypes } from '../../shared/routes';
 import { getFirstLevelState } from '../../redux/selectors';
 import { useParams } from 'react-router-dom';
 import SelectInput from '../SelectInput';
+import { DeleteStoredDataQueueJobParameters, SensorListModel } from '../../api';
+import { SensorsApi } from '../../services/apiClient';
   
   type DeleteOnlyDataDialogProps = {
     open: boolean;
     onClose: VoidFunction;
     onDelete: (
-      params: { [key: string]: string | boolean },
-      myArr?: string[]
+      params: DeleteStoredDataQueueJobParameters
     ) => void;
     columnBool?: boolean;
     nameOfCol?: string;
@@ -42,9 +43,8 @@ import SelectInput from '../SelectInput';
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [mode, setMode] = useState('all');
-    const [selectedCategory, setSelectedCategory] = useState<string>()
-    const [selectedCheck, setSelectedCheck] = useState<string>()
-    const [params, setParams] = useState({
+    const [allSensors, setAllSensors] = useState<SensorListModel[]>([])
+    const [params, setParams] = useState<Partial<DeleteStoredDataQueueJobParameters>>({
       deleteErrors: true,
       deleteStatistics: true,
       deleteCheckResults: true,
@@ -86,7 +86,21 @@ import SelectInput from '../SelectInput';
   
     const isDisabled = useMemo(() => mode === 'all', [mode]);
 
-    console.log(checksUI)
+
+    console.log(params)
+    console.log(allSensors)
+
+    const getAllSensors = async () => {
+        await SensorsApi.getAllSensors()
+         .then((res) => setAllSensors(res.data))
+         .catch((err) => console.error(err))
+ 
+    }
+ 
+    useEffect(() => {
+        getAllSensors()
+    }, [allSensors])
+
   
     return (
       <Dialog open={open} handler={onClose} className="min-w-300 p-4">
@@ -153,7 +167,7 @@ import SelectInput from '../SelectInput';
                 checkClassName="bg-teal-500"
                 />
                 </div>
-                <div className='flex flex-col'>
+                <div className='flex flex-col space-y-3'>
                     <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
@@ -170,22 +184,25 @@ import SelectInput from '../SelectInput';
                       label="Check results from category"
                       checkClassName="bg-teal-500"
                     />
-                    <SelectInput options={checksUI?.categories?.map((item: any ) => ({label: item.category, value: item.category}))} value={selectedCategory} onChange={(value) => setSelectedCategory(value)}/> 
+                    <SelectInput options={checksUI?.categories?.map((item: any ) => 
+                    ({label: item.category, value: item.category}))} 
+                    value={params.checkCategory} 
+                    onChange={(value) => onChangeParams({checkCategory: value})}/> 
                     <Checkbox
                       checked={params.deleteCheckResults}
                       onChange={(deleteCheckResults) =>
-                        onChangeParams({ deleteCheckResults })
+                        onChangeParams({})
                       }
                       label="Single Check results from category"
                       checkClassName="bg-teal-500"
                     />
                    <SelectInput options={checksUI?.categories?.find((item: any ) => 
-                   (item?.category === selectedCategory))?.checks?.map((item : any) => 
+                   (item?.category === params.checkCategory))?.checks?.map((item : any) => 
                     ({label: item.check_name, value: item.check_name}))} 
-                    value={selectedCheck} 
-                    onChange={(value) => setSelectedCheck(value)}/> 
+                    value={params.checkName} 
+                    onChange={(value) => onChangeParams({checkName: value})}/> 
                     </div>
-                <div>
+                <div className='flex flex-col space-y-3'>
                     <Checkbox
                       checked={params.deleteSensorReadouts}
                       onChange={(deleteSensorReadouts) =>
@@ -194,6 +211,21 @@ import SelectInput from '../SelectInput';
                       label="All sensor readouts"
                       checkClassName="bg-teal-500"
                     />
+                     <Checkbox
+                      checked={params.deleteCheckResults}
+                      onChange={(deleteCheckResults) =>
+                        onChangeParams({ deleteCheckResults })
+                      }
+                      label="Single sensor readout"
+                      checkClassName="bg-teal-500"
+                    />
+                    <SelectInput 
+                    options={allSensors?.map((x: any) => ({
+                        label: x.full_sensor_name, value: x.full_sensor_name ?? ""
+                    }))} 
+                    value={params.sensorName} 
+                    onChange={(value) => onChangeParams({sensorName: value})}/> 
+
                     </div>
                     <div>
                     <Checkbox
