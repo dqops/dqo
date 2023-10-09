@@ -40,7 +40,7 @@ RUN rm -rf venv/ && rm lib/requirements_dev.txt
 ENV VIRTUAL_ENV=/dqo/home/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN cp lib/requirements.txt $VIRTUAL_ENV/home_requirements.txt
+COPY home/lib/requirements.txt /dqo/home/venv/home_requirements.txt
 RUN python3 -m pip install setuptools && python3 -m pip install -r $VIRTUAL_ENV/home_requirements.txt
 
 RUN python3 -m compileall ./
