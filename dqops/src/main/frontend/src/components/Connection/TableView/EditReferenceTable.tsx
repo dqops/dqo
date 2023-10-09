@@ -699,8 +699,15 @@ const getReferenceTableStatistics = async () => {
   for (let i =0; i< (filteredStatisticsCompared ? filteredStatisticsCompared?.length : 0); i++){
     comparedTableDistinctCount *= Number(filteredStatisticsCompared?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result);
     referenceTableDistinctCount *= Number(filteredStatisticsReference?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result)
+    if ((comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])) {
+      return true;
+    }
   }
-    return (comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']);
+    if(isNaN(comparedTableDistinctCount) || isNaN(referenceTableDistinctCount)) {
+      return true;
+    }
+
+    return false;
   }
 
   useEffect(() => {
@@ -717,7 +724,9 @@ const getReferenceTableStatistics = async () => {
   }, [refTable])
 
   useEffect(() => {
-    calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []);
+    if (normalList?.filter((x) => x.length !== 0).length === normalList?.filter((x) => x.length !== 0).length) {
+      calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []);
+    }
   }, [normalList, refList])
 
   return (
