@@ -2,8 +2,11 @@
 
 Run checks operators are used to execute sensors configured in the DQOps application. 
 
+The operator configuration provides parameters which allow setting the operator specifically. 
+It can run all sensors within a connection, particular table sensors, check types or a combination of them.
+
 Run checks operators are working synchronously, so airflow will wait for the end of execution. 
-To prevent endless execution, 
+To prevent endless execution, the operator supports a timeout parameter.
 
 There are 4 operators for running checks.
 
@@ -19,17 +22,17 @@ Typed operators:
 ## Operator parameters
 
 Operator parameters can be treated as filters that limit the scope of checks that will be run.
-When none of available operator parameters are set, possibly all sensors will be run.  
+When none of the available operator parameters are set, possibly all sensors will be run.  
 
 | Name              | Description                                                                                                                                                                                                                                                                                                                | Type      |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | url               | The base url to DQOps application. Default value is http://localhost:8888                                                                                                                                                                                                                                                  | str       |
 | api_key           | Api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                          | str       |
 | connection_name   | The connection name to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                          | str       |
-| schema_table_name | The name of table with the schema. When not set, checks form all tables will be run within the specified connection.                                                                                                                                                                                                       | str       |
-| check_type        | Only available for DqopsRunChecksOperator. When set, the operator will work as other run checks operators. The other operators have set this field to a constant values from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType |
+| schema_table_name | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                   | str       |
+| check_type        | Only available for DqopsRunChecksOperator. When set, the operator will work as other run checks operators. The other operators have set this field to a constant value from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType |
 | wait_timeout      | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the default DQO timeout value or DQO_PYTHON_PYTHON_SCRIPT_TIMEOUT_SECONDS environment variable.                                                         | int       |
-| fail_on_timeout   | Timeout is leading the task status to Failed default. It can be ommited marking the task as Success by setting the flag to True                                                                                                                                                                     |bool|
+| fail_on_timeout   | Timeout is leading the task status to Failed default. It can be omitted marking the task as Success by setting the flag to True                                                                                                                                                                                            |bool|
 
 
 ## Set up the run check operator
@@ -40,7 +43,7 @@ Entry requirements includes:
 
 **DAG example**
 
-The example sets task to execute all profiling sensors on "example_connection" connection every 12 hours. 
+The example sets a task to execute all profiling sensors on "example_connection" connection every 12 hours. 
 The operator connects to the locally started DQOps server.
 
 ```python
@@ -73,9 +76,9 @@ Airflow DAG provides logs to the executed tasks.
 [2023-10-09, 06:44:19 UTC] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=my_connection_dqops_run_profiling_checks, task_id=dqops_run_profiling_checks_operator_task, execution_date=20231009T064416, start_date=20231009T064418, end_date=20231009T064419
 ```
 
-Executed job adds an information to an airflow task logs. 
+Executed job adds information to an airflow task log. 
 The executed run checks operator returns the RunChecksQueueJobResult object with execution details.
-When the task execution succeeded or not, task instance is marked as Success or Failed accordingly.
+When the task execution succeeded or not, the task instance is marked as Success or Failed accordingly.
 
 RunChecksQueueJobResult includes:
 - **job_id (DqoQueueJobId)**: Identifies a single job that was pushed to the job queue.
@@ -125,4 +128,4 @@ Status field is the DqoJobStatus enum, which have one of values:
 
 **airflow.exceptions.AirflowException: DQOps checks failed!**
 
-This error simply informs you that your sensors are not pass the rule threshold(s) set in DQOps application.
+This error simply informs you that your sensors do not pass the rule threshold(s) set in the DQOps application.

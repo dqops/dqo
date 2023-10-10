@@ -1,6 +1,7 @@
 import logging
 import json
 
+from airflow.models.baseoperator import BaseOperator
 from dqops.airflow_operators.exceptions.DqopsChecksFailedException import DqopsChecksFailedException
 from dqops.airflow_operators.exceptions.DqopsJobFailedException import DqopsJobFailedException
 from dqops.airflow_operators.url_resolver import extract_base_url
@@ -72,11 +73,14 @@ class DqopsRunChecksOperator(BaseOperator):
                 raise DqopsChecksFailedException()
             
         except ReadTimeout as exception:
-            logging.info("The job has timed out.")
+            timeout_message: str = "The job has timed out!"
 
             if self.fail_on_timeout:
+                logging.error(timeout_message)
                 raise exception
+            else:
+                logging.info(timeout_message)
 
-            return None
+            return None # todo: return anything instead of None, a valid RunChecksQueueJobResult with empty result but with job id and "waiting" status ?
 
         return job_result.to_dict()

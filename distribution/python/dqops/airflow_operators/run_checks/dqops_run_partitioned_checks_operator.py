@@ -22,5 +22,5 @@ class DqopsRunPartitionedChecksOperator(DqopsRunChecksOperator):
             schema_table_name=schema_table_name,
             check_type=CheckType.PARTITIONED,
             wait_timeout=wait_timeout,
-            fail_on_timeout=fail_on_timeout
+            fail_on_timeout=fail_on_timeout,
             **kwargs)
