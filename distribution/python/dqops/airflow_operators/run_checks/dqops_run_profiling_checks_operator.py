@@ -9,7 +9,9 @@ class DqopsRunProfilingChecksOperator(DqopsRunChecksOperator):
         url: str = 'http://localhost:8888/',
         api_key: str = UNSET,
         connection_name: str = UNSET,
-        full_table_name: str = UNSET,
+        schema_table_name: str = UNSET,
+        wait_timeout: int = UNSET,
+        fail_on_timeout: bool = True,
         **kwargs
     ) -> None:
         
@@ -17,6 +19,8 @@ class DqopsRunProfilingChecksOperator(DqopsRunChecksOperator):
             url=url,
             api_key=api_key,
             connection_name=connection_name,
-            full_table_name=full_table_name,
+            schema_table_name=schema_table_name,
             check_type=CheckType.PROFILING,
+            wait_timeout=wait_timeout,
+            fail_on_timeout=fail_on_timeout
             **kwargs)
