@@ -13,7 +13,6 @@ import {
   import Checkbox from '../Checkbox';
   import { useSelector } from 'react-redux';
   import { IRootState } from '../../redux/reducers';
-import Select from '../Select';
 import { CheckTypes } from '../../shared/routes';
 import { getFirstLevelState } from '../../redux/selectors';
 import { useParams } from 'react-router-dom';
@@ -49,12 +48,13 @@ import Input from '../Input';
       deleteStatistics: true,
       deleteCheckResults: true,
       deleteSensorReadouts: true,
+      checkType: checkTypes === 'sources' ? 'profiling' : checkTypes
     });
     const [filteredStatistics, setFilteredStatistics] = useState<"all" | "part" | "">("all")
     const [filteredChecks, setFilteredChecks] = useState<"all" | "part" | "">("all")
     const [filteredSensors, setFilteredSensors] = useState<"all" | "part" | "">("all")
     const { checksUI } = useSelector(
-        getFirstLevelState(checkTypes)
+        getFirstLevelState(params.checkType as CheckTypes)
       );
     const { userProfile } = useSelector(
       (state: IRootState) => state.job || {}
@@ -102,8 +102,6 @@ import Input from '../Input';
 
     const hierarchiArray = nodeId?.split(".")
 
-    console.log(params)
-  
     return (
       <Dialog open={open} handler={onClose} className="min-w-300 p-4">
         <DialogHeader className="font-bold text-center justify-center">
@@ -192,9 +190,9 @@ import Input from '../Input';
                 label="Filtered basic statistics results"
                 checkClassName="bg-teal-500"
                 />
-                <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})} disabled={!filteredStatistics}/>
-                <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})} disabled={!filteredStatistics}/>
-                <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})} disabled={!filteredStatistics}/>
+                <Input label='Collector Category' value={params.collectorCategory} onChange={(e) => onChangeParams({collectorCategory: e.target.value})} disabled={filteredStatistics !== 'part'}/>
+                <Input label='Collector Name' value={params.collectorName} onChange={(e) => onChangeParams({collectorName: e.target.value})} disabled={filteredStatistics !== 'part'}/>
+                <Input label='Collector Target' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})} disabled={filteredStatistics !== 'part'}/>
                 </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
@@ -223,16 +221,8 @@ import Input from '../Input';
                     ({label: item.category, value: item.category}))} 
                     value={params.checkCategory} 
                     onChange={(value) => onChangeParams({checkCategory: value})}
-                    disabled={!filteredChecks}
+                    disabled={filteredChecks !== 'part'}
                     /> 
-                    {/* <Checkbox
-                      checked={params.deleteCheckResults}
-                      onChange={(deleteCheckResults) =>
-                        onChangeParams({})
-                      }
-                      label="Single Check results from category"
-                      checkClassName="bg-teal-500"
-                    /> */}
                    <SelectInput 
                    label='Check name'
                    options={checksUI?.categories?.find((item: any ) => 
@@ -240,7 +230,7 @@ import Input from '../Input';
                     ({label: item.check_name, value: item.check_name}))} 
                     value={params.checkName} 
                     onChange={(value) => onChangeParams({checkName: value})}
-                    disabled={!filteredChecks}
+                    disabled={filteredChecks !== 'part'}
                     /> 
                     </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
@@ -269,10 +259,8 @@ import Input from '../Input';
                     }))} 
                     value={params.sensorName} 
                     onChange={(value) => onChangeParams({sensorName: value})}
-                    disabled={!filteredSensors}
+                    disabled={filteredSensors !== 'part'}
                     /> 
-                    {/* <Input label='Time gradient of the sensor' value={params.collectorTarget} onChange={(e) => onChangeParams({collectorTarget: e.target.value})}/> */}
-
                     </div>
                     <div className='w-1/4'>
                     <Checkbox
