@@ -371,8 +371,6 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: monitoring
-      ds0.p_quality_dimension: all
-      ds0.p_check_category: all
 
     - folder_name: Volume
       dashboards:
@@ -615,9 +613,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-
     - folder_name: Partition volume statistics
       dashboards:
         - dashboard_name: Number of rows in partitions per day
@@ -646,9 +641,22 @@ spec:
         - dashboard_name: Maximum accepted nulls failed
           url: https://lookerstudio.google.com/embed/reporting/f593cfa7-4818-42a4-a5ea-3191bea54765/page/c5B8C
           width: 1400
-          height: 1300
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Maximum accepted count of null not met issues
+            url: https://lookerstudio.google.com/u/0/embed/reporting/181d7f96-f991-44a4-94d0-3880377333cf/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Maximum accepted percent of null not met issues
+            url: https://lookerstudio.google.com/u/0/embed/reporting/b03a8216-712a-491c-b46f-340290d46eed/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+
       #- dashboard_name: Most incomplete columns - percent completeness
       #  url: https://lookerstudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c
       #  width: 1400
