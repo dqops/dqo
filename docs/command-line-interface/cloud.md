@@ -15,7 +15,7 @@ Allow user to provide login credentials if the user already has an account.
 $ dqo [dqo options...] cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -48,7 +48,7 @@ Allows the user to change the password that is used to log in to DQO Cloud accou
 $ dqo [dqo options...] cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -82,7 +82,7 @@ $ dqo [dqo options...] cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<m
                  [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
@@ -120,7 +120,7 @@ $ dqo [dqo options...] cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=
                     [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
@@ -157,7 +157,7 @@ $ dqo [dqo options...] cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=
                     [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
@@ -194,7 +194,7 @@ $ dqo [dqo options...] cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<m
                   [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                   [-of=<outputFormat>]
@@ -231,7 +231,7 @@ $ dqo [dqo options...] cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<
                    [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                    [-of=<outputFormat>]
@@ -268,7 +268,7 @@ $ dqo [dqo options...] cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m
                      [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                      [-of=<outputFormat>]
@@ -305,7 +305,7 @@ $ dqo [dqo options...] cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] 
                         [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                         [-of=<outputFormat>]
@@ -342,7 +342,7 @@ $ dqo [dqo options...] cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mo
                 [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]

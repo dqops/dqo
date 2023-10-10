@@ -21,7 +21,7 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
              [-tg=<timeGradient>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
@@ -81,7 +81,7 @@ $ dqo [dqo options...] data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<
              [-of=<outputFormat>] [-t=<table>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
              [-of=<outputFormat>] [-t=<table>]
