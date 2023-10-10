@@ -103,7 +103,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--DQO_JAVA_OPTS"},
             description = "Configures additional JVM (Java Virtual Machine) options such as the memory limit. " +
-                    "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage=80.0 which sets the upper memory limit for 80% of the available RAM at the moment when the container starts. " +
+                    "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage=80.0 which sets the upper memory limit for 80%% of the available RAM at the moment when the container starts. " +
                     "This parameter is not supported as a command line parameter, it is only supported as an environment variable. " +
                     "Set (and export) the environment variable DQO_JAVA_OPTS before starting DQO.", defaultValue = "-XX:MaxRAMPercentage=80.0")
     private String DQO_JAVA_OPTS;
