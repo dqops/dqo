@@ -103,7 +103,8 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--DQO_JAVA_OPTS"},
             description = "Configures additional JVM (Java Virtual Machine) options such as the memory limit. " +
-                    "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage=80.0 which sets the upper memory limit for 80%% of the available RAM at the moment when the container starts. " +
+                    "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage=80.0 which " +
+                    "sets the upper memory limit for 80%% of the available RAM at the moment when the container starts. " +
                     "This parameter is not supported as a command line parameter, it is only supported as an environment variable. " +
                     "Set (and export) the environment variable DQO_JAVA_OPTS before starting DQO.", defaultValue = "-XX:MaxRAMPercentage=80.0")
     private String DQO_JAVA_OPTS;
@@ -164,12 +165,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoLoggingTotalSizeCap;
 
     @CommandLine.Option(names = {"--dqo.logging.user-errors.sensors-log-level"},
-            description = "The logging level at which any errors captured during the data quality sensor (query) execution are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+            description = "The logging level at which any errors captured during the data quality sensor (query) execution are reported. " +
+                    "The logging level for the whole application must be equal or higher to this level for effective logging. " +
                     "Sensor logs are logged under the com.dqops.user-errors.sensors log.", defaultValue = "WARN")
     private Level dqologgingUserErrorsSensorsLogLevel;
 
     @CommandLine.Option(names = {"--dqo.logging.user-errors.rules-log-level"},
-            description = "The logging level at which any errors captured during the data quality rule (python function) evaluation are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+            description = "The logging level at which any errors captured during the data quality rule (python function) evaluation are reported. " +
+                    "The logging level for the whole application must be equal or higher to this level for effective logging. " +
                     "Rule logs are logged under the com.dqops.user-errors.rules log.", defaultValue = "WARN")
     private Level dqologgingUserErrorsRulesLogLevel;
 
@@ -182,12 +185,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Level dqologgingUserErrorsChecksLogLevel;
 
     @CommandLine.Option(names = {"--dqo.logging.user-errors.statistics-log-level"},
-            description = "The logging level at which any errors captured during the statistics collection are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+            description = "The logging level at which any errors captured during the statistics collection are reported. " +
+                    "The logging level for the whole application must be equal or higher to this level for effective logging. " +
             "Statistics logs are logged under the com.dqops.user-errors.statistics log.", defaultValue = "WARN")
     private Level dqologgingUserErrorsStatisticsLogLevel;
 
     @CommandLine.Option(names = {"--dqo.logging.user-errors.yaml-log-level"},
-            description = "The logging level at which any errors captured during YAML file parsing are reported. The logging level for the whole application must be equal or higher to this level for effective logging. " +
+            description = "The logging level at which any errors captured during YAML file parsing are reported. " +
+                    "The logging level for the whole application must be equal or higher to this level for effective logging. " +
                     "Statistics logs are logged under the com.dqops.user-errors.yaml log.", defaultValue = "WARN")
     private Level dqologgingUserErrorsYamlLogLevel;
 
@@ -197,11 +202,13 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.python.interpreter-name"},
             description = "A list of python interpreter executable names, separated by a comma, containing possible python interpreter names such as 'python', 'python3', 'python3.exe' " +
-                    "or an absolute path to the python interpreter. DQO will try to find the first python interpreter executable in directories defined in the PATH when a list of python interpreter names (not an absolute path) is used.", defaultValue = "python3")
+                    "or an absolute path to the python interpreter. DQO will try to find the first python interpreter executable in directories " +
+                    "defined in the PATH when a list of python interpreter names (not an absolute path) is used.", defaultValue = "python3")
     private String dqoPythonInterpreter;
 
     @CommandLine.Option(names = {"--dqo.python.use-host-python"},
-            description = "Disable creating a python virtual environment by DQO on startup. Instead, use the system python interpreter. DQOps will not install any required python packages on startup and use packages from the user's python installation.", defaultValue = "false")
+            description = "Disable creating a python virtual environment by DQO on startup. Instead, use the system python interpreter. " +
+                    "DQOps will not install any required python packages on startup and use packages from the user's python installation.", defaultValue = "false")
     private String dqoPythonUseHostPython;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
@@ -270,7 +277,8 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoCloudStartWithoutApiKey;
 
     @CommandLine.Option(names = {"--dqo.cloud.authenticate-with-dqo-cloud"},
-            description = "Turns on user authentication by using DQOps Cloud credentials. Users will be redirected to the DQOps Cloud login screen to login and will be returned back to the local DQOps instance.", defaultValue = "false")
+            description = "Turns on user authentication by using DQOps Cloud credentials. Users will be redirected to the DQOps Cloud login screen " +
+                    "to login and will be returned back to the local DQOps instance.", defaultValue = "false")
     private Boolean dqoCloudAuthenticateWithDqoCloud;
 
     @CommandLine.Option(names = {"--dqo.instance.return-base-url"},
@@ -285,31 +293,38 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoInstanceSignatureKey;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
-            description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). The maximum number of threads is also limited by the DQOps license.")
+            description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). " +
+                    "The maximum number of threads is also limited by the DQOps license.")
     private Long dqoQueueMaxConcurrentJobs;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.run-checks"},
-            description = "Sets the default timeout (in seconds) for the \"run checks\" rest api operation called from the DQOps client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+            description = "Sets the default timeout (in seconds) for the \"run checks\" rest api operation called from the DQOps client when the \"wait\" parameter " +
+                    "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsRunChecks;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.collect-statistics"},
-            description = "Sets the default timeout (in seconds) for the \"collect statistics\" REST API operation called from the DQOps client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+            description = "Sets the default timeout (in seconds) for the \"collect statistics\" REST API operation called from the DQOps client when the \"wait\" parameter " +
+                    "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsCollectStatistics;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.import-tables"},
-            description = "Sets the default timeout (in seconds) for the \"import tables\" rest api operation called from the DQOps client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+            description = "Sets the default timeout (in seconds) for the \"import tables\" rest api operation called from the DQOps client when the \"wait\" parameter " +
+                    "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsImportTables;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.delete-stored-data"},
-            description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+            description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQO client when the \"wait\" parameter " +
+                    "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDeleteStoredData;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.synchronize-multiple-folders"},
-            description = "Sets the default timeout (in seconds) for the \"synchronize multiple folders\" rest api operation called from the DQOps client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+            description = "Sets the default timeout (in seconds) for the \"synchronize multiple folders\" rest api operation called from the DQOps client when the \"wait\" parameter " +
+                    "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsSynchronizeMultipleFolders;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.default-wait-timeout"},
-            description = "Sets the default wait timeout (in seconds) for waiting for a job when the \"waitTimeout\" parameter is not given to the call to the \"waitForJob\" operation from the DQOps client..", defaultValue = "120")
+            description = "Sets the default wait timeout (in seconds) for waiting for a job when the \"waitTimeout\" parameter is not given to the " +
+                    "call to the \"waitForJob\" operation from the DQOps client..", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDefaultWaitTimeout;
 
     @CommandLine.Option(names = {"--dqo.scheduler.start"},
@@ -344,31 +359,36 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.profiling"},
             description = "Sets the default schedule for running profiling checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
                     "The default schedule runs checks once a day at 12 PM (noon). " +
-                    "This parameter is used only once, during the first initialization of DQOps user home. The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "This parameter is used only once, during the first initialization of DQOps user home. " +
+                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesProfiling;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.monitoring-daily"},
             description = "Sets the default schedule for running daily monitoring checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
                     "The default schedule runs checks once a day at 12 PM (noon). " +
-                    "This parameter is used only once, during the first initialization of DQOps user home. The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "This parameter is used only once, during the first initialization of DQOps user home. " +
+                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesMonitoringDaily;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.monitoring-monthly"},
             description = "Sets the default schedule for running monthly monitoring checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
                     "The default schedule runs checks once a day at 12 PM (noon). " +
-                    "This parameter is used only once, during the first initialization of DQOps user home. The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "This parameter is used only once, during the first initialization of DQOps user home. " +
+                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesMonitoringMonthly;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.partitioned-daily"},
             description = "Sets the default schedule for running daily partitioned checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
                     "The default schedule runs checks once a day at 12 PM (noon). " +
-                    "This parameter is used only once, during the first initialization of DQOps user home. The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "This parameter is used only once, during the first initialization of DQOps user home. " +
+                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesDailyPartitioned;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.partitioned-monthly"},
             description = "Sets the default schedule for running monthly partitioned checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
                     "The default schedule runs checks once a day at 12 PM (noon). " +
-                    "This parameter is used only once, during the first initialization of DQOps user home. The value is copied to the .settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "This parameter is used only once, during the first initialization of DQOps user home. " +
+                    "The value is copied to the .settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
     private String dqoSchedulerDefaultSchedulesMonthlyPartitioned;
 
     @CommandLine.Option(names = {"--dqo.docker.user-home.allow-unmounted"},
@@ -441,7 +461,8 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.cache.watch-file-system-changes"},
             description = "Use a file watcher to detect file system changes and invalidate the in-memory file cache." +
-                    "When a file watches is enabled, all changes made to YAML files directly on the file system (i.e. by editing a file in Visual Studio Code) are instantly detected by DQOps.", defaultValue = "true")
+                    "When a file watches is enabled, all changes made to YAML files directly on the file system " +
+                    "(i.e. by editing a file in Visual Studio Code) are instantly detected by DQOps.", defaultValue = "true")
     private boolean dqoCacheWatchFileSystemChanges = true;
 
     /**
@@ -452,7 +473,8 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private long dqoCacheProcessFileChangesDelayMillis = 100;
 
     @CommandLine.Option(names = {"--spring.config.location"},
-            description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
+            description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or " +
+                    "directly to an application.properties or application.yml file. " +
                     "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")
     private String springConfigLocation;
 
