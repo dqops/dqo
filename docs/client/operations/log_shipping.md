@@ -1,0 +1,95 @@
+
+## log_debug  
+Logs an information message in the server&#x27;s logs as a debug severity log entry.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_debug.py)
+  
+
+**POST**
+```
+api/logs/debug  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Log entry|[ExternalLogEntry]()|false|
+
+
+___  
+
+## log_error  
+Logs an information message in the server&#x27;s logs as an error severity log entry.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_error.py)
+  
+
+**POST**
+```
+api/logs/error  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Log entry|[ExternalLogEntry]()|false|
+
+
+___  
+
+## log_info  
+Logs an information message in the server&#x27;s logs as an info severity log entry.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_info.py)
+  
+
+**POST**
+```
+api/logs/info  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Log entry|[ExternalLogEntry]()|false|
+
+
+___  
+
+## log_warn  
+Logs an information message in the server&#x27;s logs as a warn severity log entry.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_warn.py)
+  
+
+**POST**
+```
+api/logs/warn  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Log entry|[ExternalLogEntry]()|false|
+
+
+___  
+
+___  
+

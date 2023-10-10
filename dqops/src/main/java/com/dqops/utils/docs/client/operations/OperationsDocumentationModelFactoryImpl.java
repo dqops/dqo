@@ -170,15 +170,16 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         // Request body
         RequestBody requestBody = operationModel.getOperation().getRequestBody();
         if (requestBody != null) {
+            String parameterTypeString = getTypeFrom$ref(requestBody.getContent().get("application/json").getSchema().get$ref());
+
             OperationParameterDocumentationModel parameterDocumentationModel = new OperationParameterDocumentationModel();
-            parameterDocumentationModel.setClassFieldName("body");
+            parameterDocumentationModel.setClassFieldName(parameterTypeString);
             parameterDocumentationModel.setYamlFieldName("body");
             parameterDocumentationModel.setDisplayName(parameterDocumentationModel.getYamlFieldName());
             parameterDocumentationModel.setHelpText(requestBody.getDescription());
             parameterDocumentationModel.setRequired(Objects.requireNonNullElse(requestBody.getRequired(), true));
             parameterDocumentationModel.setOperationParameterType(OperationParameterType.requestBodyParameter);
 
-            String parameterTypeString = getTypeFrom$ref(requestBody.getContent().get("application/json").getSchema().get$ref());
             ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterTypeString, ParameterDataType.object_type);
             parameterDocumentationModel.setDataType(parameterDataType);
 
