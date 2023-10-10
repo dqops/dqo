@@ -27,7 +27,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
            [-l=<labels>]... [-tag=<tags>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
@@ -99,7 +99,7 @@ $ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<
               [-W=<String=String>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -153,7 +153,7 @@ $ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<
                [-t=<table>] [-ts=<timeScale>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                [-ch=<check>] [-col=<column>] [-ct=<checkType>]

@@ -15,7 +15,7 @@ Clear the terminal screen or console, removing all the previous commands and out
 $ dqo [dqo options...] cls
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> cls
 

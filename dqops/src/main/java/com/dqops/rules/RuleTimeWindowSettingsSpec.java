@@ -45,7 +45,7 @@ public class RuleTimeWindowSettingsSpec extends AbstractSpec {
     @JsonPropertyDescription("Minimum number of past time periods with a sensor readout that must be present in the data in order to call the rule. The rule is not called and the sensor readout is discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor readouts is not met. The default is 7.")
     private int minPeriodsWithReadouts = 7;
 
-    @JsonPropertyDescription("Time period grouping for collecting previous data quality sensor results for the data quality rules that use historic data for prediction. For example, when the default time period grouping 'day' is used, DQO will find the most recent data quality sensor readout for each day and pass an array of most recent days per day in an array of historic sensor readout data points to a data quality rule for prediction.")
+    @JsonPropertyDescription("Time period grouping for collecting previous data quality sensor results for the data quality rules that use historic data for prediction. For example, when the default time period grouping 'day' is used, DQOps will find the most recent data quality sensor readout for each day and pass an array of most recent days per day in an array of historic sensor readout data points to a data quality rule for prediction.")
     private HistoricDataPointsGrouping historicDataPointGrouping = HistoricDataPointsGrouping.day;
 
     // TODO: what to do with missing values? we can have a parameter that missing values are: skipped (array date density would be wrong), nulls or interpolated

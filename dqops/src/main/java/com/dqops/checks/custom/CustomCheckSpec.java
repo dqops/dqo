@@ -48,7 +48,7 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
         }
     };
 
-    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition.")
+    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user's home 'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name: table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition.")
     private String sensorName;
 
     @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule. When this value is set, it overrides the default rule definition defined for the named check definition.")

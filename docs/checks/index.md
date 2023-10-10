@@ -1,6 +1,6 @@
 # Checks
 
-**This is a list of the checks in DQO broken down by category and a brief description of what they do.**
+**This is a list of the checks in DQOps broken down by category and a brief description of what they do.**
 
 ## **Table checks**
 

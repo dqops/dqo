@@ -16,7 +16,7 @@ $ dqo [dqo options...] run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputForm
      [-s=<synchronizationMode>] [-t=<timeLimit>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
      [-s=<synchronizationMode>] [-t=<timeLimit>]
