@@ -30,7 +30,6 @@ import Input from '../Input';
     ) => void;
     columnBool?: boolean;
     nameOfCol?: string;
-    nodeLevel?: string;
     nodeId?: string
   };
   const DeleteStoredDataExtendedPopUp = ({
@@ -38,7 +37,6 @@ import Input from '../Input';
     onClose,
     onDelete,
     nameOfCol,
-    nodeLevel,
     nodeId
   }: DeleteOnlyDataDialogProps) => {
     const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -51,12 +49,10 @@ import Input from '../Input';
       deleteStatistics: true,
       deleteCheckResults: true,
       deleteSensorReadouts: true,
-      checkType: checkTypes
     });
     const [filteredStatistics, setFilteredStatistics] = useState<"all" | "part" | "">("all")
     const [filteredChecks, setFilteredChecks] = useState<"all" | "part" | "">("all")
     const [filteredSensors, setFilteredSensors] = useState<"all" | "part" | "">("all")
-    
     const { checksUI } = useSelector(
         getFirstLevelState(checkTypes)
       );
@@ -111,7 +107,7 @@ import Input from '../Input';
     return (
       <Dialog open={open} handler={onClose} className="min-w-300 p-4">
         <DialogHeader className="font-bold text-center justify-center">
-          Delete data {nodeLevel}
+          Delete data
         </DialogHeader>
         <DialogBody>
           <div className="flex flex-col">
@@ -166,6 +162,14 @@ import Input from '../Input';
                   </div>
                 </div>
               </div>
+            </div>
+            <div className='flex w-full gap-4 px-4 py-4 text-gray-700 pl-12 border-b border-gray-300'>
+            <SelectInput 
+            options={Object.values(CheckTypes).map((x) => ({label: x, value: x})).filter((_, index) => index !== 1)} label='CheckType (profiling, monitoring, partitioned)' className='w-1/3'
+            value={params.checkType} onChange={(e) => onChangeParams({checkType: e})}/>
+            <SelectInput label='Time gradient (daily/monthly)'  className='w-1/4'
+            options={[{label: "daily", value: "daily"}, {label: "monthly", value: "monthly"}]} 
+            value={params.timeGradient} onChange={(e) => onChangeParams({timeGradient: e})} disabled={!(params.checkType === 'partitioned' || params.checkType === 'monitoring')}/>
             </div>
         </div>
               <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">

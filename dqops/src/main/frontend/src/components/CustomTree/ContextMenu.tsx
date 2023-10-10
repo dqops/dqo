@@ -281,7 +281,6 @@ const ContextMenu = ({
                   deleteStoredData(node, params);
                   setOpen(false);
                 }}
-                nodeLevel={node.level}
                 nodeId={String(node.id)}
 
               />
@@ -311,7 +310,6 @@ const ContextMenu = ({
                   );
                   setOpen(false);
                 }}
-                nodeLevel={node.level}
                 nameOfCol={node.run_checks_job_template?.columnName}
                 nodeId={String(node.id)}
               />
