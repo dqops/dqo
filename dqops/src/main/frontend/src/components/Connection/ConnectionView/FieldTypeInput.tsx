@@ -79,7 +79,6 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   const inputType = maskingType === 'password' && type !== 'env'
   ? 'password'
   : 'text';
-console.log(data)
   return (
     <div className={clsx('', className)}>
       <div>{label}</div>
