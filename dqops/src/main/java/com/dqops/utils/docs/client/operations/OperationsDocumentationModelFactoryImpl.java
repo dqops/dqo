@@ -139,17 +139,18 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         List<Parameter> operationParameters = operationModel.getOperation().getParameters();
         if (operationParameters != null) {
             for (Parameter operationParameter: operationParameters) {
+                String parameterTypeString = operationParameter.getSchema().getType();
+                if (parameterTypeString == null) {
+                    parameterTypeString = getTypeFrom$ref(operationParameter.getSchema().get$ref());
+                }
+
                 OperationParameterDocumentationModel parameterDocumentationModel = new OperationParameterDocumentationModel();
-                parameterDocumentationModel.setClassFieldName(operationParameter.getName());
+                parameterDocumentationModel.setClassFieldName(parameterTypeString);
                 parameterDocumentationModel.setYamlFieldName(getObjectSimpleName(operationParameter.getName()));
                 parameterDocumentationModel.setDisplayName(parameterDocumentationModel.getYamlFieldName());
                 parameterDocumentationModel.setHelpText(operationParameter.getDescription());
                 parameterDocumentationModel.setRequired(Objects.requireNonNullElse(operationParameter.getRequired(), true));
 
-                String parameterTypeString = operationParameter.getSchema().getType();
-                if (parameterTypeString == null) {
-                    parameterTypeString = getTypeFrom$ref(operationParameter.getSchema().get$ref());
-                }
                 ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterTypeString, ParameterDataType.object_type);
                 parameterDocumentationModel.setDataType(parameterDataType);
 
@@ -303,7 +304,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
                             "#" + operationsDocumentationModel.getClassNameUsedOnTheField());
                 }
 
-                operationsDocumentationModel.setClassFieldName(info.getClassFieldName());
+                operationsDocumentationModel.setClassFieldName(info.getClazz().getSimpleName());
                 operationsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
                 operationsDocumentationModel.setDisplayName(info.getDisplayName());
                 operationsDocumentationModel.setHelpText(info.getHelpText());

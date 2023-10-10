@@ -118,7 +118,7 @@ public class GeneratePythonDocumentationPostProcessor {
             generateDocumentationForOperations(projectDir, openAPIModel);
 
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
-            modifiedClientFolder.setLinkName("Python client");
+            modifiedClientFolder.setLinkName("REST API Python client");
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
             MkDocsIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
                     renderedIndexYaml,
