@@ -53,9 +53,9 @@ import Input from '../Input';
       deleteSensorReadouts: true,
       checkType: checkTypes
     });
-    const [filteredStatistics, setFilteredStatistics] = useState(false)
-    const [filteredChecks, setFilteredChecks] = useState(false)
-    const [filteredSensors, setFilteredSensors] = useState(false)
+    const [filteredStatistics, setFilteredStatistics] = useState<"all" | "part" | "">("all")
+    const [filteredChecks, setFilteredChecks] = useState<"all" | "part" | "">("all")
+    const [filteredSensors, setFilteredSensors] = useState<"all" | "part" | "">("all")
     
     const { checksUI } = useSelector(
         getFirstLevelState(checkTypes)
@@ -105,6 +105,8 @@ import Input from '../Input';
     }, [])
 
     const hierarchiArray = nodeId?.split(".")
+
+    console.log(params)
   
     return (
       <Dialog open={open} handler={onClose} className="min-w-300 p-4">
@@ -169,19 +171,19 @@ import Input from '../Input';
               <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">
                 <div className='flex flex-col space-y-5 w-1/4'>
                 <Checkbox
-                  checked={params.deleteStatistics}
+                  checked={params.deleteStatistics && filteredStatistics === 'all'}
                   onChange={(deleteStatistics) =>{
                     onChangeParams({ deleteStatistics }),
-                    setFilteredStatistics(false)}
+                    setFilteredStatistics(filteredStatistics === 'all' ? '' : 'all')}
                 }
                 label="All basic statistics results"
                 checkClassName="bg-teal-500"
                 />
                 <Checkbox
-                  checked={filteredStatistics}
-                  onChange={() => {
-                    setFilteredStatistics(!filteredStatistics)
-                  }
+                  checked={params.deleteStatistics && filteredStatistics === 'part'}
+                  onChange={(deleteStatistics) =>{
+                    onChangeParams({ deleteStatistics }),
+                    setFilteredStatistics(filteredStatistics === 'part' ? '' : 'part')}
                   }
                 label="Filtered basic statistics results"
                 checkClassName="bg-teal-500"
@@ -192,19 +194,21 @@ import Input from '../Input';
                 </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
-                      checked={params.deleteCheckResults}
+                      checked={params.deleteCheckResults && filteredChecks === 'all'}
                       onChange={(deleteCheckResults) =>
                         { onChangeParams({ deleteCheckResults }),
-                        setFilteredChecks(false)
+                        setFilteredChecks(filteredChecks === 'all' ? '' : 'all')
                         }
                       }
                       label="All check results"
                       checkClassName="bg-teal-500"
                     />
                     <Checkbox
-                      checked={filteredChecks}
-                      onChange={() =>
-                        setFilteredChecks(!filteredChecks)
+                      checked={params.deleteCheckResults && filteredChecks === 'part'}
+                      onChange={(deleteCheckResults) =>
+                        { onChangeParams({ deleteCheckResults }),
+                        setFilteredChecks(filteredChecks === 'part' ? '' : 'part')
+                        }
                       }
                       label="Filtered check results"
                       checkClassName="bg-teal-500"
@@ -237,18 +241,19 @@ import Input from '../Input';
                     </div>
                 <div className='flex flex-col space-y-5 w-1/4'>
                     <Checkbox
-                      checked={params.deleteSensorReadouts}
+                      checked={params.deleteSensorReadouts && filteredSensors === 'all'}
                       onChange={(deleteSensorReadouts) =>{
                         onChangeParams({ deleteSensorReadouts }),
-                        setFilteredSensors(false)}
+                        setFilteredSensors(filteredSensors === 'all' ? '' : 'all')}
                       }
                       label="All sensor readouts"
                       checkClassName="bg-teal-500"
                     />
                      <Checkbox
-                      checked={filteredSensors}
-                      onChange={() =>
-                        setFilteredSensors(!filteredSensors)
+                      checked={params.deleteSensorReadouts && filteredSensors === 'part'}
+                      onChange={(deleteSensorReadouts) =>{
+                        onChangeParams({ deleteSensorReadouts }),
+                        setFilteredSensors(filteredSensors === 'part' ? '' : 'part')}
                       }
                       label="Filtered sensor readout"
                       checkClassName="bg-teal-500"

@@ -115,7 +115,6 @@ const ContextMenu = ({
     };
     return obj;
   };
-  console.log(node)
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
