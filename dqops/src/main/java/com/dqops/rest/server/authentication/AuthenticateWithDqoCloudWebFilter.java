@@ -215,7 +215,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
-        } else if (Objects.equals(requestPath, HEALTHCHECK_URL)) {
+        } else if (Objects.equals(requestPath, HEALTHCHECK_URL) || Objects.equals(requestPath, "/manifest.json")) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAnonymousToken();
 
             ServerWebExchange mutatedExchange = exchange.mutate()
