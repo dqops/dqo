@@ -122,7 +122,7 @@ export const IncidentsNotificationsView = () => {
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
             />
-            <span>days. After this time, the DQO creates a new incident.</span>
+            <span>days. After this time, the DQOps creates a new incident.</span>
           </div>
         </div>
         <div className="flex items-center mb-4 gap-2 text-sm">
@@ -132,7 +132,7 @@ export const IncidentsNotificationsView = () => {
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
             />
-            <span> days. If the incident is muted, DQO will not create a new one.</span>
+            <span> days. If the incident is muted, DQOps will not create a new one.</span>
           </div>
         </div>
 

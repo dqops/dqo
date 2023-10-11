@@ -631,7 +631,7 @@ const EditReferenceTable = ({
 
 
   const warningMessage = 
-  `Warning: DQO compares up to --dqo.sensors.limit.sensor-readout-limit data groups which is set to ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} rows.
+  `Warning: DQOps compares up to --dqo.sensors.limit.sensor-readout-limit data groups which is set to ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} rows.
   You have selected a column which has more distinct values or the distinct row count statistics is not captured. Also when multiple columns are selected,
   the number of groupings may exceed the ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} limit`
 
