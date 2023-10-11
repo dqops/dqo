@@ -48,9 +48,9 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
@@ -72,6 +72,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
     private DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
     private DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a statistics collectors execution service with given dependencies.
@@ -83,6 +84,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
      * @param dqoSensorLimitsConfigurationProperties DQO sensor limits configuration.
      * @param statisticsCollectorConfigurationProperties Statistics collector configuration properties.
+     * @param userErrorLogger Execution logger.
      */
     @Autowired
     public TableStatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -92,7 +94,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                          StatisticsResultsNormalizationService statisticsResultsNormalizationService,
                                                          StatisticsSnapshotFactory statisticsSnapshotFactory,
                                                          DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
-                                                         DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties) {
+                                                         DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties,
+                                                         UserErrorLogger userErrorLogger) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -101,6 +104,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
         this.statisticsCollectorConfigurationProperties = statisticsCollectorConfigurationProperties;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -259,8 +263,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
                 if (!sensorPrepareResult.isSuccess()) {
-                    log.atLevel(this.statisticsCollectorConfigurationProperties.getLogLevel())
-                            .log("Failed to prepare a sensor for statistics collector, error: " +
+                    this.userErrorLogger.logStatistics("Failed to prepare a sensor for statistics collector, error: " +
                                 ((sensorPrepareResult.getPrepareException() != null) ? sensorPrepareResult.getPrepareException().getMessage() : ""),
                                 sensorPrepareResult.getPrepareException());
 
@@ -330,8 +333,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                 sensorPrepareResult, progressListener, jobCancellationToken);
 
                         if (!sensorExecuteResult.isSuccess()) {
-                            log.atLevel(this.statisticsCollectorConfigurationProperties.getLogLevel())
-                                    .log("Failed to execute a sensor for statistics collector, error: " +
+                            this.userErrorLogger.logStatistics("Failed to execute a sensor for statistics collector, error: " +
                                                     ((sensorExecuteResult.getException() != null) ? sensorExecuteResult.getException().getMessage() : ""),
                                             sensorExecuteResult.getException());
 

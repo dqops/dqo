@@ -18,7 +18,6 @@ package com.dqops.execution.sqltemplates.rendering;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.execution.ExecutionContext;
@@ -31,6 +30,7 @@ import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.UserErrorLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -48,17 +48,21 @@ import java.time.Instant;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecutor {
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a sql template runner.
      * @param connectionProviderRegistry Connection provider registry.
      * @param defaultTimeZoneProvider Default time zone provider. Returns the default server time zone.
+     * @param userErrorLogger Check execution logger.
      */
     @Autowired
     public JinjaSqlTemplateSensorExecutor(ConnectionProviderRegistry connectionProviderRegistry,
-                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                          UserErrorLogger userErrorLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -104,9 +108,8 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
-            }
+            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }

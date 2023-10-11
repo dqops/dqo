@@ -82,7 +82,7 @@ const Dashboards = () => {
                 ) : (
                   <div>
                     {error[tab.value]
-                      ? 'DQO Cloud API Key expired, please run "cloud login" from the DQO shell to get a new key'
+                      ? 'DQO Cloud API Key is invalid. Your trial period has expired or a new DQO version was released. Please run "cloud login" from the DQO shell to get a new key'
                       : 'Choose a data quality dashboard from the tree'}
                   </div>
                 )}

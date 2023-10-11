@@ -19,6 +19,7 @@ package com.dqops.utils.logging;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.joran.spi.ConsoleTarget;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.event.KeyValuePair;
 
@@ -30,14 +31,22 @@ import java.util.Objects;
  * Special console appender for JSON logging that adds extra fields to every logged message.
  */
 public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
-    private boolean encodeDoubleQuotesInJson;
+    private boolean quoteMessage;
+    private final DqoCloudApiKeyPayload apiKeyPayload;
+    private final Integer ignoredJsonMessageMaxLength;
 
     /**
      * Creates an augmenting console appender.
-     * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param quoteMessage  Encodes all double quotes and backslashes the message field again.
+     * @param apiKeyPayload DQO Cloud api key.
+     * @param ignoredJsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
-    public AugmentingConsoleAppender(boolean encodeDoubleQuotesInJson) {
-        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+    public AugmentingConsoleAppender(boolean quoteMessage,
+                                     DqoCloudApiKeyPayload apiKeyPayload,
+                                     Integer ignoredJsonMessageMaxLength) {
+        this.quoteMessage = quoteMessage;
+        this.apiKeyPayload = apiKeyPayload;
+        this.ignoredJsonMessageMaxLength = ignoredJsonMessageMaxLength;
     }
 
     /**
@@ -56,8 +65,16 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
         List<KeyValuePair> keyValuePairs = originalEvent.getKeyValuePairs() != null
                 ? new ArrayList<>(originalEvent.getKeyValuePairs()) : new ArrayList<>();
         keyValuePairs.add(new KeyValuePair("stream", Objects.equals(this.getTarget(), ConsoleTarget.SystemErr.getName()) ? "stderr" : "stdout"));
+
+        if (apiKeyPayload != null) {
+            keyValuePairs.add(new KeyValuePair("tenantId", apiKeyPayload.getTenantId()));
+            if (apiKeyPayload.getAccountName() !=  null) {
+                keyValuePairs.add(new KeyValuePair("account", apiKeyPayload.getAccountName()));
+            }
+        }
+
         EncodingLoggingEvent augmentedLoggingEvent = new EncodingLoggingEvent(
-                originalEvent, augmentedArgumentArray, this.encodeDoubleQuotesInJson, keyValuePairs);
+                originalEvent, augmentedArgumentArray, this.quoteMessage, keyValuePairs, this.ignoredJsonMessageMaxLength);
 
         super.append(augmentedLoggingEvent);
     }

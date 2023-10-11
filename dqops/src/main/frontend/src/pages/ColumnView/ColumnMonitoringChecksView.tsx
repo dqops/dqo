@@ -185,7 +185,6 @@ const ColumnMonitoringChecksView = () => {
             onUpdate={onUpdate}
             checksUI={dailyMonitoring}
             onChange={onDailyMonitoringChange}
-            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}
@@ -196,7 +195,6 @@ const ColumnMonitoringChecksView = () => {
             onUpdate={onUpdate}
             checksUI={monthlyMonitoring}
             onChange={onMonthlyMonitoringChange}
-            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}

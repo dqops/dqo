@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.mono_object import MonoObject
+from ...models.mono_void import MonoVoid
 from ...models.sensor_model import SensorModel
 from ...types import Response
 
@@ -36,11 +36,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[MonoObject]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonoObject.from_dict(response.json())
+        response_200 = MonoVoid.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -49,9 +47,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[MonoObject]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,7 +61,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     json_body: SensorModel,
-) -> Response[MonoObject]:
+) -> Response[MonoVoid]:
     """updateSensor
 
      Updates an existing sensor, making a custom sensor definition if it is not present.
@@ -80,7 +76,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -102,7 +98,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     json_body: SensorModel,
-) -> Optional[MonoObject]:
+) -> Optional[MonoVoid]:
     """updateSensor
 
      Updates an existing sensor, making a custom sensor definition if it is not present.
@@ -117,7 +113,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return sync_detailed(
@@ -132,7 +128,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     json_body: SensorModel,
-) -> Response[MonoObject]:
+) -> Response[MonoVoid]:
     """updateSensor
 
      Updates an existing sensor, making a custom sensor definition if it is not present.
@@ -147,7 +143,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -167,7 +163,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     json_body: SensorModel,
-) -> Optional[MonoObject]:
+) -> Optional[MonoVoid]:
     """updateSensor
 
      Updates an existing sensor, making a custom sensor definition if it is not present.
@@ -182,7 +178,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return (

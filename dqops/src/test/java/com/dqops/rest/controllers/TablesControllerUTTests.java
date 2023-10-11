@@ -387,7 +387,7 @@ public class TablesControllerUTTests extends BaseTest {
         TableProfilingCheckCategoriesSpec sampleProfilingCheck = new TableProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setVolume(volumeChecksSpec);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableProfilingChecks(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableProfilingChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -418,7 +418,7 @@ public class TablesControllerUTTests extends BaseTest {
         TableMonitoringChecksSpec sampleMonitoring = new TableMonitoringChecksSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -451,7 +451,7 @@ public class TablesControllerUTTests extends BaseTest {
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),

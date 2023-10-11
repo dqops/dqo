@@ -33,8 +33,7 @@ import com.dqops.execution.sensors.runners.AbstractSensorRunner;
 import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
+import com.dqops.utils.logging.UserErrorLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -42,11 +41,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Sensor runner that reads the metadata of the table from the data source and calculates a hash of the detected data type (also including the length, scale and precision)
@@ -63,20 +59,24 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
     public static final String CLASS_NAME = ColumnColumnTypeHashSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
     private TableMetadataSensorExecutor tableMetadataSensorExecutor;
+    private UserErrorLogger userErrorLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
      * @param tableMetadataSensorExecutor Table metadata shared executor.
+     * @param userErrorLogger Check execution logger.
      */
     @Autowired
     public ColumnColumnTypeHashSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
                                             DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                            TableMetadataSensorExecutor tableMetadataSensorExecutor) {
+                                            TableMetadataSensorExecutor tableMetadataSensorExecutor,
+                                            UserErrorLogger userErrorLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -142,7 +142,7 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            this.userErrorLogger.logSensor("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }
@@ -215,9 +215,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
-            }
+            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

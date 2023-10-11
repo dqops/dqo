@@ -129,21 +129,21 @@ public class UsersController {
      * @param userModel User model to add.
      * @return Empty response.
      */
-    @PostMapping(value = "users", consumes = "application/json")
-    @ApiOperation(value = "createUser", notes = "Creates (adds) a new user to a multi-user account.",
+    @PostMapping(value = "users", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createUser", notes = "Creates (adds) a new user to a multi-user account.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New user successfully added"),
+            @ApiResponse(code = 201, message = "New user successfully added", response = Void.class),
             @ApiResponse(code = 400, message = "User limit exceeded"),
             @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<?>> createUser(
+    public ResponseEntity<Mono<Void>> createUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
         if (userModel == null || Strings.isNullOrEmpty(userModel.getEmail())) {
@@ -170,20 +170,20 @@ public class UsersController {
      * @param userModel User model to update.
      * @return Empty response.
      */
-    @PutMapping(value = "users/{email}", consumes = "application/json")
-    @ApiOperation(value = "updateUser", notes = "Updates a user in a multi-user account. The user's email cannot be changed.",
+    @PutMapping(value = "users/{email}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateUser", notes = "Updates a user in a multi-user account. The user's email cannot be changed.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "User successfully updated"),
+            @ApiResponse(code = 201, message = "User successfully updated", response = Void.class),
             @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the email does not match"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<?>> updateUser(
+    public ResponseEntity<Mono<Void>> updateUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
@@ -210,7 +210,7 @@ public class UsersController {
      * @param email User's email.
      * @return Empty model.
      */
-    @DeleteMapping(value = "users/{email}")
+    @DeleteMapping(value = "users/{email}", produces = "application/json")
     @ApiOperation(value = "deleteUser", notes = "Deletes a user from a multi-user account.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -224,7 +224,7 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<?>> deleteUser(
+    public ResponseEntity<Mono<Void>> deleteUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
 
@@ -251,20 +251,20 @@ public class UsersController {
      * @param password New password.
      * @return Empty response.
      */
-    @PutMapping(value = "users/{email}/password", consumes = "text/plain")
-    @ApiOperation(value = "changeUserPassword", notes = "Changes the password of a user identified by the email.",
+    @PutMapping(value = "users/{email}/password", consumes = "text/plain", produces = "application/json")
+    @ApiOperation(value = "changeUserPassword", notes = "Changes the password of a user identified by the email.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Password successfully updated"),
+            @ApiResponse(code = 201, message = "Password successfully updated", response = Void.class),
             @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the required fields are empty"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<?>> changeUserPassword(
+    public ResponseEntity<Mono<Void>> changeUserPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("New Password") @RequestBody String password) {
@@ -291,20 +291,21 @@ public class UsersController {
      * @param password New password.
      * @return Empty response.
      */
-    @PutMapping(value = "mypassword", consumes = "text/plain")
+    @PutMapping(value = "mypassword", consumes = "text/plain", produces = "application/json")
     @ApiOperation(value = "changeCallerPassword", notes = "Changes the password of the calling user. When the user is identified by the DQO local API key, it is the user whose email is stored in the DQO API Key.",
+            response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Password successfully updated"),
+            @ApiResponse(code = 201, message = "Password successfully updated", response = Void.class),
             @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the required fields are empty"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<?>> changeCallerPassword(
+    public ResponseEntity<Mono<Void>> changeCallerPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("New Password") @RequestBody String password) {
         try {

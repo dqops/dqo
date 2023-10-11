@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
+  ColumnApiClient,
   ConnectionApiClient,
+  EnviromentApiClient,
   JobApiClient,
   SchemaApiClient,
   TableApiClient,
@@ -9,6 +11,8 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
+  DqoSettingsModel,
+  TableColumnsStatisticsModel,
   TableComparisonConfigurationModelCheckTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TableComparisonModel
@@ -109,12 +113,19 @@ const EditReferenceTable = ({
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [popUp, setPopUp] = useState(false);
+  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>()
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const history = useHistory();
   const dispatch = useActionDispatch();
+
+  const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
+
+  const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
+  const [listOfReferenceWarnings, setListOfReferenceWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
+  const [referenceTableStatistics, setReferenceTableStatistics] = useState<TableColumnsStatisticsModel>()
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(refConnection, refSchema, refTable);
@@ -604,6 +615,119 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
+  const fetchProfileSettings = async () => {
+    try {
+      const res= await EnviromentApiClient.getDqoSettings();
+      setProfileSettings(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileSettings()
+    getColumnsStatistics()
+  }, [])
+
+
+  const warningMessage = 
+  `Warning: DQO compares up to --dqo.sensors.limit.sensor-readout-limit data groups which is set to ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} rows.
+  You have selected a column which has more distinct values or the distinct row count statistics is not captured. Also when multiple columns are selected,
+  the number of groupings may exceed the ${profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']} limit`
+
+  const getColumnsStatistics = async () => {
+    try{
+      await ColumnApiClient.getColumnsStatistics(
+        connection,
+        schema,
+        table)
+        .then((res) => 
+        setStatistics(res.data))
+       } catch (err) {
+         console.error(err)
+     }
+};
+const getReferenceTableStatistics = async () => {
+  try{
+    if (refTable && refSchema && refConnection) {
+      await ColumnApiClient.getColumnsStatistics(
+        refConnection,
+        refSchema,
+        refTable)
+        .then((res) => 
+        setReferenceTableStatistics(res.data))
+      }
+     } catch (err) {
+       console.error(err)
+   }
+};
+
+  const checkIfDistinctCountIsBiggerThanLimit = (columnName: string, index: number, reference : boolean) => {
+
+    const stats = reference ? referenceTableStatistics : statistics 
+    
+    const column = stats?.column_statistics?.find((col) => col.column_name === columnName)
+
+    const columnStatistics =  column?.statistics?.find((stat) => stat.collector === "distinct_count")
+
+    if (columnStatistics?.result === undefined
+      || profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']=== undefined
+      || columnStatistics?.result > profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']) {
+        const tnp = reference ? listOfReferenceWarnings : listOfWarnings
+        tnp[index] =columnName.length > 0 ?  true : false
+        reference ? setListOfReferenceWarnings(tnp) : setListOfWarnings(tnp)
+      } else {
+        const tnp =  reference ? listOfReferenceWarnings : listOfWarnings
+        tnp[index] = false
+        reference ? setListOfReferenceWarnings(tnp) : setListOfWarnings(tnp)
+      }
+  }
+
+  const calculateTableDistinctCount = (comparedArray : string[], referenceArray : string []) => {
+
+    const filteredStatisticsCompared = comparedArray.flatMap((column) => (
+      statistics?.column_statistics?.filter((x) => x.column_name === column)
+    )) || [];
+
+    const filteredStatisticsReference = referenceArray.flatMap((column) => (
+      referenceTableStatistics?.column_statistics?.filter((x) => x.column_name === column)
+    )) || []; 
+
+  let comparedTableDistinctCount = 1;
+  let referenceTableDistinctCount = 1;
+
+  for (let i =0; i< (filteredStatisticsCompared ? filteredStatisticsCompared?.length : 0); i++){
+    comparedTableDistinctCount *= Number(filteredStatisticsCompared?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result);
+    referenceTableDistinctCount *= Number(filteredStatisticsReference?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result)
+    if ((comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])) {
+      return true;
+    }
+  }
+    if(isNaN(comparedTableDistinctCount) || isNaN(referenceTableDistinctCount)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  useEffect(() => {
+    splitArrays()?.comparedArr.forEach((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item, index, false)
+    ))
+    splitArrays()?.refArr.forEach((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item, index, true)
+    ))
+  },[statistics, referenceTableStatistics, profileSettings])
+
+  useEffect(() => {
+    getReferenceTableStatistics();
+  }, [refTable])
+
+  useEffect(() => {
+    if (normalList?.filter((x) => x.length !== 0).length === normalList?.filter((x) => x.length !== 0).length) {
+      calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []);
+    }
+  }, [normalList, refList])
 
   return (
     <div className="w-full">
@@ -743,7 +867,9 @@ const EditReferenceTable = ({
             </a>
           </div>
         )}
-
+          {calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []) ? (
+        <div className='text-red-500 mb-5'>{warningMessage}</div>
+        ) : null}
         {(isCreating || extendDg) && tableExist ? (
           <div className="flex gap-4">
             <div className="mr-20 mt-0 relative">
@@ -781,6 +907,9 @@ const EditReferenceTable = ({
               onSetNormalList={onSetNormalList}
               object={normalObj}
               responseList={splitArrays()?.comparedArr}
+              warningMessageList={listOfWarnings}
+              checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
+              dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
             />
 
             <SelectGroupColumnsTable
@@ -794,6 +923,9 @@ const EditReferenceTable = ({
               onSetRefList={onSetRefList}
               object={refObj}
               responseList={splitArrays()?.refArr}
+              warningMessageList={listOfReferenceWarnings}
+              checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
+              dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
             />
           </div>
         ) : (

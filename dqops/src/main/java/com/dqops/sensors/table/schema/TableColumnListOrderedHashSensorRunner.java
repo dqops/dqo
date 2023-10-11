@@ -35,6 +35,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,6 @@ import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,20 +63,24 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
     public static final String CLASS_NAME = TableColumnListOrderedHashSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
     private TableMetadataSensorExecutor tableMetadataSensorExecutor;
+    private UserErrorLogger userErrorLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
      * @param tableMetadataSensorExecutor Table metadata shared executor.
+     * @param userErrorLogger Check execution logger.
      */
     @Autowired
     public TableColumnListOrderedHashSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
                                                   DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                                  TableMetadataSensorExecutor tableMetadataSensorExecutor) {
+                                                  TableMetadataSensorExecutor tableMetadataSensorExecutor,
+                                                  UserErrorLogger userErrorLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -135,7 +139,7 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            this.userErrorLogger.logSensor("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }
@@ -201,9 +205,8 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
-            }
+            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

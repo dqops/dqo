@@ -50,6 +50,7 @@ public class GeneratePythonClientPostProcessor {
         }
         catch (Exception ex) {
             System.err.println("Cannot convert Swagger 2 to Swagger 3, error: " + ex.getMessage());
+            ex.printStackTrace();
             return;
         }
 
@@ -99,6 +100,7 @@ public class GeneratePythonClientPostProcessor {
         }
         catch (Exception ex) {
             System.err.println("Cannot generate a DQO Python client, error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

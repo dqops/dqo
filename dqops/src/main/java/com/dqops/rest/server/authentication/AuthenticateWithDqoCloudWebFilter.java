@@ -95,7 +95,12 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             return null;
         }
 
-        return headerTokens[1];
+        String token = headerTokens[1];
+        if (token.length() > 3 && token.charAt(0) == '"' && token.charAt(token.length() - 1) == '"') {
+            token = token.substring(1, token.length() - 1);
+        }
+
+        return token;
     }
 
     /**

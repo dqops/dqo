@@ -41,7 +41,6 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
     );
   };
 
-console.log(sensor)
   return (
     <div className="p-4">
       <div className="mb-8">

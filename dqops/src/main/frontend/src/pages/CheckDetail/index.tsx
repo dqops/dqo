@@ -24,6 +24,7 @@ import { ROUTES } from '../../shared/routes';
 import { CheckDefinitionModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
+import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
 
 export const SensorDetail = () => {
   const { full_check_name, path, type, custom, copied } = useSelector(
@@ -105,19 +106,19 @@ export const SensorDetail = () => {
       if (copied === true) {
         await dispatch(
           createCheck(
-            String(full_check_name).replace(/\/[^/]*$/, '/') + checkName,
+            urlencodeDecoder(String(full_check_name).replace(/\/[^/]*$/, '/') + checkName),
             {
-              sensor_name: selectedSensor,
-              rule_name: selectedRule,
+              sensor_name: urlencodeDecoder(selectedSensor),
+              rule_name: urlencodeDecoder(selectedRule),
               help_text: helpText
             }
           )
         );
       } else {
         await dispatch(
-          createCheck(fullName, {
-            sensor_name: selectedSensor,
-            rule_name: selectedRule,
+          createCheck(urlencodeDecoder(fullName), {
+            sensor_name: urlencodeDecoder(selectedSensor),
+            rule_name: urlencodeDecoder(selectedRule),
             help_text: helpText
           })
         );
@@ -153,14 +154,14 @@ export const SensorDetail = () => {
     await dispatch(
       deleteCheck(
         full_check_name
-          ? full_check_name
-          : Array.from(path).join('/') + '/' + checkName
+          ? urlencodeDecoder(full_check_name)
+          : urlencodeDecoder(Array.from(path).join('/') + '/' + checkName)
       )
     );
     dispatch(
       closeFirstLevelTab(
         '/definitions/checks/' +
-          String(full_check_name).split('/')[
+        String(full_check_name).split('/')[
             String(full_check_name).split('/').length - 1
           ]
       )
@@ -295,8 +296,8 @@ export const SensorDetail = () => {
                 Check:{' '}
                 {full_check_name ||
                   (path !== undefined &&
-                    Array.from(path).join('/') + '/' + checkName) ||
-                  checkName}
+                    urlencodeEncoder(Array.from(path).join('/') + '/' + checkName)) ||
+                    urlencodeEncoder(checkName)}
               </div>
             </div>
           </div>
@@ -307,8 +308,8 @@ export const SensorDetail = () => {
               <div className="text-xl font-semibold truncate">
                 Check:{' '}
                 {path
-                  ? [...(path || []), ''].join('/')
-                  : String(full_check_name).replace(/\/[^/]*$/, '/')}
+                  ? urlencodeEncoder([...(path || []), ''].join('/'))
+                  : urlencodeEncoder(String(full_check_name).replace(/\/[^/]*$/, '/'))}
               </div>
               <Input
                 value={checkName}

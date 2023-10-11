@@ -50,7 +50,7 @@ public class HealthcheckController {
         this.parentJobQueue = parentJobQueue;
     }
 
-    @GetMapping(value = AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_URL, produces = "plain/text")
+    @GetMapping(value = AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_URL, produces = "application/json")
     @ApiOperation(value = "isHealthy", notes = "Checks if the DQO instance is healthy and operational. Returns a text \"OK\" and a HTTP status code 200 when the service is active and can accept jobs, " +
             " or returns a text \"UNAVAILABLE\" and a HTTP status code 503 when the service is still starting or is shutting down.", response = String.class)
     @ResponseStatus(HttpStatus.OK)

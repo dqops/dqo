@@ -19,6 +19,7 @@ import com.dqops.core.configuration.DqoStorageGcpConfigurationProperties;
 import com.dqops.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import com.dqops.core.filesystem.metadata.FileMetadata;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.synchronization.contract.*;
 import com.dqops.utils.exceptions.CloseableHelper;
 import com.dqops.utils.http.SharedHttpClientProvider;
@@ -32,6 +33,8 @@ import com.google.cloud.storage.Storage;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpStatusClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,7 @@ import java.util.concurrent.CompletableFuture;
  * Remote file system for the google storage buckets.
  */
 @Component
+@Slf4j
 public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemoteFileSystemSynchronizationOperations {
     private final DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
     private final SharedHttpClientProvider sharedHttpClientProvider;
@@ -106,18 +110,22 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Path pathToFileInsideBlob = fileSystemRoot.getRootPath() != null ?
                     fileSystemRoot.getRootPath().resolve(relativeFilePath) :
                     relativeFilePath;
+            String urlEncodedFilePathInBucket = FileNameSanitizer.convertEncodedPathToRawPath(pathToFileInsideBlob)
+                    .toString().replace('\\', '/');
 
-            String linuxStyleFilePath = pathToFileInsideBlob.toString().replace('\\', '/');
-            BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFilePath);
+            BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), urlEncodedFilePathInBucket);
             Blob blob = storage.get(blobId);
             String md5Base64 = blob.getMd5();
             long updatedAt = blob.getUpdateTime();
 
             long statusCheckedAt = Instant.now().toEpochMilli();
-            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, md5Base64, statusCheckedAt, blob.getSize());
+            Path dqoFileSystemEncodedPath = FileNameSanitizer.convertRawPathToEncodedPath(relativeFilePath);
+            FileMetadata fileMetadata = new FileMetadata(dqoFileSystemEncodedPath, updatedAt, md5Base64, statusCheckedAt, blob.getSize());
             return fileMetadata;
         }
         catch (Exception ex) {
+            log.error("Failed to read metadata of a file " + relativeFilePath.toString().replace('\\', '/') +
+                    " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex, ex);
             throw new FileMetadataReadException(relativeFilePath, ex.getMessage(), ex);
         }
     }
@@ -138,7 +146,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+        String urlEncodedFilePathInBucket = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket)
+                .toString().replace('\\', '/');
 
         Mono<FileMetadata> fileMetadataMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
@@ -146,19 +155,28 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
                 )
                 .head()
-                .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), urlEncodedFilePathInBucket))
                 .responseSingle((httpClientResponse, byteBufMono) -> {
                     try {
-                        HttpHeaders headers = httpClientResponse.responseHeaders();
-                        Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
-                        Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
-                        String md5Base64 = extractMd5Header(headers);
+                        if (httpClientResponse.status().codeClass() == HttpStatusClass.SUCCESS) {
+                            HttpHeaders headers = httpClientResponse.responseHeaders();
+                            Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
+                            Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
+                            String md5Base64 = extractMd5Header(headers);
 
-                        long statusCheckedAt = Instant.now().toEpochMilli();
-                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, md5Base64, statusCheckedAt, fileLength);
-                        return byteBufMono.then(Mono.just(fileMetadata));
+                            long statusCheckedAt = Instant.now().toEpochMilli();
+                            Path dqoFileSystemEncodedPath = FileNameSanitizer.convertRawPathToEncodedPath(relativeFilePath);
+                            FileMetadata fileMetadata = new FileMetadata(dqoFileSystemEncodedPath, lastModified, md5Base64, statusCheckedAt, fileLength);
+                            return byteBufMono.then(Mono.just(fileMetadata));
+                        }
+
+                        log.error("Failed to read metadata of a file " + relativeFilePath.toString().replace('\\', '/') +
+                                " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", error: " + httpClientResponse.status());
+                        return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath, "Failed to read the metadata, error: " + httpClientResponse.status())));
                     }
                     catch (Exception ex) {
+                        log.error("Failed to read metadata of a file " + relativeFilePath.toString().replace('\\', '/') +
+                                " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex.getMessage(), ex);
                         return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath, "Failed to read the metadata, error: " + ex.getMessage(), ex)));
                     }
                 });
@@ -206,8 +224,13 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Path fullPathToFolderInsideBucket = fileSystemRoot.getRootPath() != null ?
                     (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                     relativeFilePath;
-            String linuxStyleFullFolderInBucket = fullPathToFolderInsideBucket != null ?
-                    fullPathToFolderInsideBucket.toString().replace('\\', '/') : null;
+            String linuxStyleFullFolderInBucket;
+            if (fullPathToFolderInsideBucket != null) {
+                Path rawPath = FileNameSanitizer.convertEncodedPathToRawPath(fullPathToFolderInsideBucket);
+                linuxStyleFullFolderInBucket = rawPath.toString().replace('\\', '/');
+            } else {
+                linuxStyleFullFolderInBucket = null;
+            }
 
             Page<Blob> blogPage = null;
             if (linuxStyleFullFolderInBucket != null) {
@@ -224,7 +247,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
             for (Blob blob : blogPage.iterateAll()) {
                 String blobFileName = blob.getName();
-                Path fullBlobFilePathInsideBucket = Path.of(blobFileName);
+                Path fullBlobFilePathInsideBucket = FileNameSanitizer.convertRawPathToEncodedPath(blobFileName);
                 Map<String, String> metadata = blob.getMetadata();
                 if (metadata != null && Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
                     // ignoring because it is a special empty file to ensure that the schema of an external table could be detected from a parquet file
@@ -247,6 +270,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             return folderMetadata;
         }
         catch (Exception ex) {
+            log.error("Failed to list files in the folder " + (relativeFilePath != null ? relativeFilePath.toString().replace('\\', '/') : "") +
+                    " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/'), ex);
             throw new FileMetadataReadException(relativeFilePath, ex.getMessage(), ex);
         }
     }
@@ -266,7 +291,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                     (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                     relativeFilePath;
-            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+            Path rawFilePath = FileNameSanitizer.convertEncodedPathToRawPath(fullPathToFileInsideBucket);
+            String linuxStyleFullFileInBucket = rawFilePath.toString().replace('\\', '/');
 
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket);
             Blob blob = storage.get(blobId);
@@ -292,6 +318,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             return errorInjectionInputStream;
         }
         catch (Exception ex) {
+            log.error("Failed to download a file " + relativeFilePath.toString().replace('\\', '/') +
+                    " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex.getMessage(), ex);
             throw new FileSystemReadException(relativeFilePath, ex.getMessage(), ex);
         }
     }
@@ -315,7 +343,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                     (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                     relativeFilePath;
-            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+            Path rawFilePath = FileNameSanitizer.convertEncodedPathToRawPath(fullPathToFileInsideBucket);
+            String linuxStyleFullFileInBucket = rawFilePath.toString().replace('\\', '/');
 
             Path fileName = relativeFilePath.getFileName();
             String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
@@ -354,6 +383,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             }
         }
         catch (Exception ex) {
+            log.error("Failed to upload a file " + relativeFilePath.toString().replace('\\', '/') +
+                    " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex.getMessage(), ex);
             throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
         }
         finally {
@@ -375,12 +406,15 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                     (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                     relativeFilePath;
-            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+            Path rawFilePath = FileNameSanitizer.convertEncodedPathToRawPath(fullPathToFileInsideBucket);
+            String linuxStyleFullFileInBucket = rawFilePath.toString().replace('\\', '/');
 
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket);
             storage.delete(blobId);
         }
         catch (Exception ex) {
+            log.error("Failed to delete a file " + relativeFilePath.toString().replace('\\', '/') +
+                    " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex.getMessage(), ex);
             throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
         }
     }
@@ -397,7 +431,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+        String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
         Mono<FileMetadata> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
@@ -408,6 +443,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 .delete()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
                 .response()
+                .onErrorComplete()
                 .thenReturn(FileMetadata.createDeleted(relativeFilePath));
 
         return deleteFileMono;
@@ -475,7 +511,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+        String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
         Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
@@ -496,6 +533,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         return Mono.just(new DownloadFileResponse(currentFileMetadata, connection.inbound().receive()));
                     }
                     else {
+                        log.error("Failed to download a file " + relativeFilePath.toString().replace('\\', '/') +
+                                " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", response code: " + httpClientResponse.status());
                         return connection.inbound().receive().then(Mono.error(new FileSystemChangeException(relativeFilePath,
                                 "Cannot download file " + linuxStyleFullFileInBucket + ", error: " + httpClientResponse.status().code())));
                     }
@@ -522,18 +561,19 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                     ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
                     FileMetadata fileMetadata = downloadResponse.getMetadata();
                     try {
-                    GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
-                    Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
-                            (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
-                            relativeFilePath;
-                    String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+                        GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
+                        Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                                (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                                relativeFilePath;
+                        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+                        String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
-                    Path fileName = relativeFilePath.getFileName();
-                    String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
-                            fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
-                                    "application/octet-stream";
+                        Path fileName = relativeFilePath.getFileName();
+                        String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
+                                fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
+                                        "application/octet-stream";
 
-                    Mono<FileMetadata> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                        Mono<FileMetadata> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                             .headers(httpHeaders -> httpHeaders
                                     .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
                                             .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
@@ -554,17 +594,21 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                                     return Mono.just(fileMetadataAfterUpload);
                                 }
                                 else {
+                                    log.error("Failed to upload a file " + relativeFilePath.toString().replace('\\', '/') +
+                                            " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", response: " + httpClientResponse.status());
                                     return Mono.error(new FileSystemChangeException(relativeFilePath,
                                             "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
                                 }
                             });
 
-                    return uploadFileMono;
-                }
-                catch (Exception ex) {
-                    throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
-                }
-            });
+                        return uploadFileMono;
+                    }
+                    catch (Exception ex) {
+                        log.error("Failed to upload a file " + relativeFilePath.toString().replace('\\', '/') +
+                                " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", exception: " + ex.getMessage(), ex);
+                        throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
+                    }
+                });
 
         return uploadFinishMono;
     }

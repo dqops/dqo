@@ -47,11 +47,11 @@ import java.util.Random;
 @DisallowConcurrentExecution
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class SynchronizeMetadataSchedulerJob implements Job {
+public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     /**
      * The number of seconds to sleep before starting.
      */
-    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 5 * 60;
+    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 60;
 
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
@@ -60,6 +60,8 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     private static LocalDateTime lastExecutedAtHour;
     private static int jobRunCount;
     private static Random random = new Random();
+    private volatile boolean interrupted;
+    private volatile SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob;
 
     /**
      * Creates a schedule metadata job instance using dependencies.
@@ -109,11 +111,11 @@ public class SynchronizeMetadataSchedulerJob implements Job {
                 }
             }
 
-            if (jobRunCount > 0 && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+            if (jobRunCount > 0 && !interrupted && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
                 return;
             }
 
-            SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
+            this.synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
             SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
 
             if (this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
@@ -131,6 +133,7 @@ public class SynchronizeMetadataSchedulerJob implements Job {
 
             PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
             pushJobResult.getFinishedFuture().get();
+            this.synchronizeMultipleFoldersJob = null;
         }
         catch (Exception ex) {
             log.error("Failed to execute a metadata synchronization job", ex);
@@ -155,6 +158,10 @@ public class SynchronizeMetadataSchedulerJob implements Job {
         while (Instant.now().isBefore(expectedRunAt)) {
             Thread.sleep(100);
 
+            if (this.interrupted) {
+                return false;
+            }
+
             if (jobExecutionContext.getScheduler().isShutdown()) {
                 return false;
             }
@@ -165,5 +172,18 @@ public class SynchronizeMetadataSchedulerJob implements Job {
         }
 
         return true;
+    }
+
+    /**
+     * Called by the scheduler when the job is asked to exit.
+     * @throws UnableToInterruptJobException
+     */
+    @Override
+    public void interrupt() throws UnableToInterruptJobException {
+        this.interrupted = true;
+        SynchronizeMultipleFoldersDqoQueueJob job = this.synchronizeMultipleFoldersJob;
+        if (job != null) {
+            this.dqoJobQueue.cancelJob(job.getJobId());
+        }
     }
 }

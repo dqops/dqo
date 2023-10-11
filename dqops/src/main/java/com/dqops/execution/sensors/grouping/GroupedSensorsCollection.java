@@ -18,16 +18,18 @@ package com.dqops.execution.sensors.grouping;
 
 import com.dqops.execution.sensors.SensorPrepareResult;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Container of all grouped sensors that are grouped because they are similar and could be merged into bigger SQLs that
  * analyze multiple statistics or operate on different columns.
  */
 public class GroupedSensorsCollection {
-    private int standaloneQueryNextId = 0;
     private final LinkedHashMap<SensorGroupingKey, PreparedSensorsGroup> sensorGroups = new LinkedHashMap<>();
+    private final List<PreparedSensorsGroup> fullGroups = new ArrayList<>();
     private final int maxQueriesInGroup;
 
     /**
@@ -43,7 +45,14 @@ public class GroupedSensorsCollection {
      * @return Collection of prepared sensor groups.
      */
     public Collection<PreparedSensorsGroup> getPreparedSensorGroups() {
-        return this.sensorGroups.values();
+        if (this.fullGroups.size() == 0) {
+            return this.sensorGroups.values();
+        }
+
+        ArrayList<PreparedSensorsGroup> concatenatedGroups = new ArrayList<>(this.fullGroups);
+        concatenatedGroups.addAll(this.sensorGroups.values());
+
+        return concatenatedGroups;
     }
 
     /**
@@ -52,24 +61,27 @@ public class GroupedSensorsCollection {
      * @param sensorPrepareResult Prepared sensor result to be added to a matching group.
      */
     public void addPreparedSensor(SensorPrepareResult sensorPrepareResult) {
-        Integer queryGroupingId = sensorPrepareResult.isDisableMergingQueries() ? standaloneQueryNextId++ : null;
-        SensorGroupingKey sensorGroupingKey = new SensorGroupingKey(
-                sensorPrepareResult.getFragmentedSqlQuery(), sensorPrepareResult.getSensorExecutor(), queryGroupingId);
+        if (sensorPrepareResult.isDisableMergingQueries()) {
+            PreparedSensorsGroup singleSensorGroup = new PreparedSensorsGroup();
+            singleSensorGroup.add(sensorPrepareResult);
+            this.fullGroups.add(singleSensorGroup);
+        } else {
+            SensorGroupingKey sensorGroupingKey = new SensorGroupingKey(
+                    sensorPrepareResult.getFragmentedSqlQuery(), sensorPrepareResult.getSensorExecutor());
 
-        PreparedSensorsGroup preparedSensorsGroup = this.sensorGroups.get(sensorGroupingKey);
-        if (preparedSensorsGroup == null) {
-            preparedSensorsGroup = new PreparedSensorsGroup();
-            this.sensorGroups.put(sensorGroupingKey, preparedSensorsGroup);
+            PreparedSensorsGroup preparedSensorsGroup = this.sensorGroups.get(sensorGroupingKey);
+            if (preparedSensorsGroup == null) {
+                preparedSensorsGroup = new PreparedSensorsGroup();
+                this.sensorGroups.put(sensorGroupingKey, preparedSensorsGroup);
+            }
+
+            preparedSensorsGroup.add(sensorPrepareResult);
+
+            if (preparedSensorsGroup.size() >= this.maxQueriesInGroup) {
+                this.fullGroups.add(preparedSensorsGroup);
+                this.sensorGroups.remove(sensorGroupingKey);
+            }
         }
-
-        if (preparedSensorsGroup.size() >= this.maxQueriesInGroup) {
-            SensorGroupingKey sensorGroupingKeyForOldGroup = sensorGroupingKey.createWithNewGroupingId(standaloneQueryNextId++);
-            this.sensorGroups.put(sensorGroupingKeyForOldGroup, preparedSensorsGroup);
-            preparedSensorsGroup = new PreparedSensorsGroup(); // new empty group
-            this.sensorGroups.put(sensorGroupingKey, preparedSensorsGroup);
-        }
-
-        preparedSensorsGroup.add(sensorPrepareResult);
     }
 
     /**
@@ -81,7 +93,7 @@ public class GroupedSensorsCollection {
             this.addPreparedSensor(sensorPrepareResult);
         }
 
-        for (PreparedSensorsGroup preparedSensorsGroup : this.sensorGroups.values()) {
+        for (PreparedSensorsGroup preparedSensorsGroup : this.getPreparedSensorGroups()) {
             preparedSensorsGroup.mergeQueries();
         }
     }

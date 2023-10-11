@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.rule_basic_folder_model import RuleBasicFolderModel
+from ...models.rule_folder_model import RuleFolderModel
 from ...types import Response
 
 
@@ -30,9 +30,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[RuleBasicFolderModel]:
+) -> Optional[RuleFolderModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = RuleBasicFolderModel.from_dict(response.json())
+        response_200 = RuleFolderModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -43,7 +43,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[RuleBasicFolderModel]:
+) -> Response[RuleFolderModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,7 +55,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[RuleBasicFolderModel]:
+) -> Response[RuleFolderModel]:
     """getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
@@ -66,7 +66,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[RuleBasicFolderModel]
+        Response[RuleFolderModel]
     """
 
     kwargs = _get_kwargs(
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[RuleBasicFolderModel]:
+) -> Optional[RuleFolderModel]:
     """getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
@@ -95,7 +95,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        RuleBasicFolderModel
+        RuleFolderModel
     """
 
     return sync_detailed(
@@ -106,7 +106,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[RuleBasicFolderModel]:
+) -> Response[RuleFolderModel]:
     """getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
@@ -117,7 +117,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[RuleBasicFolderModel]
+        Response[RuleFolderModel]
     """
 
     kwargs = _get_kwargs(
@@ -133,7 +133,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[RuleBasicFolderModel]:
+) -> Optional[RuleFolderModel]:
     """getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
@@ -144,7 +144,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        RuleBasicFolderModel
+        RuleFolderModel
     """
 
     return (

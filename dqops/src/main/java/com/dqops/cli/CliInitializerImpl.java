@@ -120,7 +120,7 @@ public class CliInitializerImpl implements CliInitializer {
     }
 
     /**
-     * Attempts to log in to DQO Cloud. Retrieves the ApiKey for future use.
+     * Attempts to log in to DQOps Cloud. Retrieves the ApiKey for future use.
      * @param headless Is application running in headless mode.
      */
     protected void tryLoginToDqoCloud(boolean headless) {
@@ -142,7 +142,7 @@ public class CliInitializerImpl implements CliInitializer {
             return;
         }
 
-        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
+        if (!this.terminalReader.promptBoolean("Log in to DQOps Cloud?", true)) {
             return;
         }
 
@@ -156,8 +156,8 @@ public class CliInitializerImpl implements CliInitializer {
         String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
         String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
         this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
-        this.terminalWriter.writeUrl(dqoUiHome, "- DQO User Interface Console (" + dqoUiHome + ")\n");
-        this.terminalWriter.writeUrl(swaggerUi, "- DQO API Reference (" + swaggerUi + ")\n");
+        this.terminalWriter.writeUrl(dqoUiHome, "- DQOps User Interface Console (" + dqoUiHome + ")\n");
+        this.terminalWriter.writeUrl(swaggerUi, "- DQOps API Reference (" + swaggerUi + ")\n");
     }
 
     /**
@@ -174,7 +174,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.defaultTimeZoneProvider.invalidate();
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
-            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQO needs to initialize a Python virtual environment in DQO home directory.");
+            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQO home directory.");
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
             if (virtualEnv == null) {
                 throw new PythonExecutionException("Cannot find any python executable instance. Make sure that Python is installed and could be found on the path (defined in PATH) or the --dqo.python.interpreter parameter points to a python executable.");

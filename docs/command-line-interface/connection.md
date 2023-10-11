@@ -16,7 +16,7 @@ $ dqo [dqo options...] connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<output
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
@@ -86,7 +86,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [-R=<String=String>]... [-S=<String=String>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-authentication-mode=<authenticationMode>]
@@ -207,7 +207,7 @@ Removes the connection or connections that match the conditions specified in the
 $ dqo [dqo options...] connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
@@ -275,7 +275,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [-S=<String=String>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-authentication-mode=<authenticationMode>]
@@ -397,7 +397,7 @@ $ dqo [dqo options...] connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
@@ -436,7 +436,7 @@ $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] 
                        [-l=<labels>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
@@ -477,7 +477,7 @@ $ dqo [dqo options...] connection table show [-h] [-fw] [-hl] [-c=<connection>] 
                        [-t=<table>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
@@ -513,7 +513,7 @@ Edit the connection or connections that match the filter conditions specified in
 $ dqo [dqo options...] connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 

@@ -18,6 +18,7 @@ package com.dqops.metadata.storage.localfiles.checkdefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
@@ -80,7 +81,7 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
     public CheckDefinitionSpec getSpec() {
         CheckDefinitionSpec spec = super.getSpec();
         if (spec == null) {
-            String specFileName = this.checkFileNameBaseName + SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML;
+            String specFileName = FileNameSanitizer.encodeForFileSystem(this.checkFileNameBaseName) + SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML;
             FileTreeNode fileNode = this.customCheckFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -141,7 +142,7 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
         CheckDefinitionYaml checkDefinitionYaml = new CheckDefinitionYaml(this.getSpec());
         String specAsYaml = this.yamlSerializer.serialize(checkDefinitionYaml);
         FileContent newSpecFileContent = new FileContent(specAsYaml);
-        String specFileNameWithExt = this.checkFileNameBaseName + SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML;
+        String specFileNameWithExt = FileNameSanitizer.encodeForFileSystem(this.checkFileNameBaseName) + SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML;
 
         switch (this.getStatus()) {
             case ADDED:

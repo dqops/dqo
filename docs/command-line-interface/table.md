@@ -16,7 +16,7 @@ $ dqo [dqo options...] table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<out
               [-s=<schema>] [-t=<table>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
@@ -53,7 +53,7 @@ Edit the table or tables that match the filter conditions specified in the optio
 $ dqo [dqo options...] table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
@@ -89,7 +89,7 @@ $ dqo [dqo options...] table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<ou
            [-t=<fullTableName>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
@@ -126,7 +126,7 @@ $ dqo [dqo options...] table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=
               [-t=<fullTableName>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
@@ -163,7 +163,7 @@ $ dqo [dqo options...] table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
@@ -201,7 +201,7 @@ $ dqo [dqo options...] table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<o
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...

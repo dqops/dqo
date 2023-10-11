@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..models.check_model_configuration_requirements_errors_item import (
-    CheckModelConfigurationRequirementsErrorsItem,
-)
 from ..models.check_target_model import CheckTargetModel
 from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
@@ -69,8 +66,8 @@ class CheckModel:
         data_grouping_configuration (Union[Unset, str]): The name of a data grouping configuration defined at a table
             that should be used for this check.
         check_target (Union[Unset, CheckTargetModel]):
-        configuration_requirements_errors (Union[Unset, List[CheckModelConfigurationRequirementsErrorsItem]]): List of
-            configuration errors that must be fixed before the data quality check could be executed.
+        configuration_requirements_errors (Union[Unset, List[str]]): List of configuration errors that must be fixed
+            before the data quality check could be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
             other time scales.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
@@ -99,9 +96,7 @@ class CheckModel:
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
     check_target: Union[Unset, CheckTargetModel] = UNSET
-    configuration_requirements_errors: Union[
-        Unset, List[CheckModelConfigurationRequirementsErrorsItem]
-    ] = UNSET
+    configuration_requirements_errors: Union[Unset, List[str]] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
@@ -170,17 +165,7 @@ class CheckModel:
 
         configuration_requirements_errors: Union[Unset, List[str]] = UNSET
         if not isinstance(self.configuration_requirements_errors, Unset):
-            configuration_requirements_errors = []
-            for (
-                configuration_requirements_errors_item_data
-            ) in self.configuration_requirements_errors:
-                configuration_requirements_errors_item = (
-                    configuration_requirements_errors_item_data.value
-                )
-
-                configuration_requirements_errors.append(
-                    configuration_requirements_errors_item
-                )
+            configuration_requirements_errors = self.configuration_requirements_errors
 
         similar_checks: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.similar_checks, Unset):
@@ -371,22 +356,9 @@ class CheckModel:
         else:
             check_target = CheckTargetModel(_check_target)
 
-        configuration_requirements_errors = []
-        _configuration_requirements_errors = d.pop(
-            "configuration_requirements_errors", UNSET
+        configuration_requirements_errors = cast(
+            List[str], d.pop("configuration_requirements_errors", UNSET)
         )
-        for configuration_requirements_errors_item_data in (
-            _configuration_requirements_errors or []
-        ):
-            configuration_requirements_errors_item = (
-                CheckModelConfigurationRequirementsErrorsItem(
-                    configuration_requirements_errors_item_data
-                )
-            )
-
-            configuration_requirements_errors.append(
-                configuration_requirements_errors_item
-            )
 
         similar_checks = []
         _similar_checks = d.pop("similar_checks", UNSET)

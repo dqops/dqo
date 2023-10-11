@@ -18,7 +18,6 @@ package com.dqops.execution.sqltemplates.rendering;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
@@ -36,6 +35,7 @@ import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.dqops.utils.tables.TableColumnUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,22 +62,26 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     private final JinjaTemplateRenderService jinjaTemplateRenderService;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a sql template runner.
      * @param jinjaTemplateRenderService Jinja template rendering service.
      * @param connectionProviderRegistry Connection provider registry.
      * @param defaultTimeZoneProvider The default time zone provider.
+     * @param userErrorLogger Check execution logger.
      */
     @Autowired
     public JinjaSqlTemplateSensorRunner(JinjaTemplateRenderService jinjaTemplateRenderService,
                                         ConnectionProviderRegistry connectionProviderRegistry,
                                         DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                        JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor) {
+                                        JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor,
+                                        UserErrorLogger userErrorLogger) {
         super(defaultTimeZoneProvider);
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.jinjaSqlTemplateSensorExecutor = jinjaSqlTemplateSensorExecutor;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -106,7 +110,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                     this.jinjaSqlTemplateSensorExecutor, this, renderedSql, providerSensorDefinitionSpec.isDisableMergingQueries());
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to render an sql template :" + renderedSql, exception);
+            this.userErrorLogger.logSensor("Sensor failed to render an sql template :" + renderedSql, exception);
             return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinition, exception);
         }
     }
@@ -160,9 +164,8 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            if (log.isInfoEnabled()) {
-                log.info(sensorRunParameters.toString() + " failed to execute a query :" + renderedSensorSql, exception);
-            }
+            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

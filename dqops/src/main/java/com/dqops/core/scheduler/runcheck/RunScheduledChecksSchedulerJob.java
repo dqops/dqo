@@ -22,9 +22,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -36,11 +34,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class RunScheduledChecksSchedulerJob implements Job {
+public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private volatile RunScheduledChecksDqoJob runScheduledChecksJob;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
@@ -70,16 +69,29 @@ public class RunScheduledChecksSchedulerJob implements Job {
         final MonitoringScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
         try {
-            RunScheduledChecksDqoJob runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
-            runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
+            this.runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
+            this.runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
             DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
-            this.dqoJobQueue.pushJob(runScheduledChecksJob, principal);
+            this.dqoJobQueue.pushJob(this.runScheduledChecksJob, principal);
 
-            runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
+            this.runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
+            this.runScheduledChecksJob = null;
         }
         catch (Exception ex) {
             log.error("Failed to execute a job that runs the data quality checks on a job scheduler, error: " + ex.getMessage(), ex);
             throw new JobExecutionException(ex);
+        }
+    }
+
+    /**
+     * Called by Quartz when a job is cancelled.
+     * @throws UnableToInterruptJobException
+     */
+    @Override
+    public void interrupt() throws UnableToInterruptJobException {
+        RunScheduledChecksDqoJob waitingJob = this.runScheduledChecksJob;
+        if (waitingJob != null) {
+            this.dqoJobQueue.cancelJob(waitingJob.getJobId());
         }
     }
 }

@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.check_spec_model import CheckSpecModel
-from ...models.mono_object import MonoObject
+from ...models.check_definition_model import CheckDefinitionModel
+from ...models.mono_void import MonoVoid
 from ...types import Response
 
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: CheckSpecModel,
+    json_body: CheckDefinitionModel,
 ) -> Dict[str, Any]:
     url = "{}api/checks/{fullCheckName}".format(
         client.base_url, fullCheckName=full_check_name
@@ -36,11 +36,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[MonoObject]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonoObject.from_dict(response.json())
+        response_200 = MonoVoid.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -49,9 +47,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[MonoObject]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -64,22 +60,22 @@ def sync_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: CheckSpecModel,
-) -> Response[MonoObject]:
+    json_body: CheckDefinitionModel,
+) -> Response[MonoVoid]:
     """createCheck
 
      Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
 
     Args:
         full_check_name (str):
-        json_body (CheckSpecModel): Check spec model
+        json_body (CheckDefinitionModel): Data quality check definition model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -100,22 +96,22 @@ def sync(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: CheckSpecModel,
-) -> Optional[MonoObject]:
+    json_body: CheckDefinitionModel,
+) -> Optional[MonoVoid]:
     """createCheck
 
      Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
 
     Args:
         full_check_name (str):
-        json_body (CheckSpecModel): Check spec model
+        json_body (CheckDefinitionModel): Data quality check definition model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return sync_detailed(
@@ -129,22 +125,22 @@ async def asyncio_detailed(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: CheckSpecModel,
-) -> Response[MonoObject]:
+    json_body: CheckDefinitionModel,
+) -> Response[MonoVoid]:
     """createCheck
 
      Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
 
     Args:
         full_check_name (str):
-        json_body (CheckSpecModel): Check spec model
+        json_body (CheckDefinitionModel): Data quality check definition model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
@@ -163,22 +159,22 @@ async def asyncio(
     full_check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: CheckSpecModel,
-) -> Optional[MonoObject]:
+    json_body: CheckDefinitionModel,
+) -> Optional[MonoVoid]:
     """createCheck
 
      Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
 
     Args:
         full_check_name (str):
-        json_body (CheckSpecModel): Check spec model
+        json_body (CheckDefinitionModel): Data quality check definition model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return (

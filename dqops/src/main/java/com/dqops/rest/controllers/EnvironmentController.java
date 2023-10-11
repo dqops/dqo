@@ -153,7 +153,7 @@ public class EnvironmentController {
      * Issues a local API Key for the calling user.
      * @return The local API key issued for the calling user.
      */
-    @GetMapping(value = "/issueapikey", produces = "text/plain")
+    @GetMapping(value = "/issueapikey", produces = "application/json")
     @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQO Rest API client. " +
             "This API Key should be passed in the \"Authorization\" HTTP header in the format \"Authorization: Bearer <api_key>\".",
             response = String.class,

@@ -145,21 +145,21 @@ public class ChecksController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json")
-    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.",
+    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New custom check successfully created"),
+            @ApiResponse(code = 201, message = "New custom check successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Custom check with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> createCheck(
+    public ResponseEntity<Mono<Void>> createCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName,
             @ApiParam("Check model") @RequestBody CheckDefinitionModel checkDefinitionModel) {
@@ -195,21 +195,21 @@ public class ChecksController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json")
-    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present",
+    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Custom check successfully updated"),
+            @ApiResponse(code = 204, message = "Custom check successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Check not found"),
             @ApiResponse(code = 409, message = "Cannot change a check definition of a built-in check"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> updateCheck(
+    public ResponseEntity<Mono<Void>> updateCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("List of check definitions") @RequestBody CheckDefinitionModel checkDefinitionModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
@@ -264,18 +264,18 @@ public class ChecksController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
-    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition",
+    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom check definition successfully deleted"),
+            @ApiResponse(code = 200, message = "Custom check definition successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Custom check not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<?>> deleteCheck(
+    public ResponseEntity<Mono<Void>> deleteCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 

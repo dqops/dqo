@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.ruledefinitions;
 
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.definitions.rules.RuleDefinitionListImpl;
@@ -57,17 +58,18 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
     @Override
     protected void load() {
         // first: find the folders with .dqorule.yaml rule spec files (when a rule has a configuration file)
-        for(FolderTreeNode ruleSpecFolderNode : this.rulesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML, true)) {
+        for (FolderTreeNode ruleSpecFolderNode : this.rulesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML, true)) {
             String ruleFolderName = ruleSpecFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "rules" folder
 
-            for(FileTreeNode specFileNode : ruleSpecFolderNode.getFiles()) {
+            for (FileTreeNode specFileNode : ruleSpecFolderNode.getFiles()) {
                 String specFileName = specFileNode.getFilePath().getFileName();
                 if (!specFileName.endsWith(SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML)) {
                     // not a spec file, skipping
                     continue;
                 }
 
-                String ruleModuleName = specFileName.substring(0, specFileName.length() - SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML.length());
+                String decodedSpecFileName = FileNameSanitizer.decodeFileSystemName(specFileName);
+                String ruleModuleName = decodedSpecFileName.substring(0, decodedSpecFileName.length() - SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML.length());
                 String ruleName = (!ruleFolderName.equals("") ? (ruleFolderName + "/") : "") + ruleModuleName;
 
                 if (this.getByObjectName(ruleName, false) != null) {

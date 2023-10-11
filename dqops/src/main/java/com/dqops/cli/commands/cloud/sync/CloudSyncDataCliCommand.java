@@ -155,7 +155,7 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
                 TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                terminalWriter.writeLine(CloudSyncCliCommand.API_KEY_INVALID_MESSAGE);
                 return -1;
             }
 

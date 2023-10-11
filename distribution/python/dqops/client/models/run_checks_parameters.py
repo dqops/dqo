@@ -6,7 +6,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
-    from ..models.run_checks_job_result import RunChecksJobResult
+    from ..models.run_checks_result import RunChecksResult
     from ..models.time_window_filter_parameters import TimeWindowFilterParameters
 
 
@@ -25,14 +25,14 @@ class RunChecksParameters:
         dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
             dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
             be rendered.
-        run_checks_result (Union[Unset, RunChecksJobResult]): Returns the result (highest data quality check severity
-            and the finished checks count) for the checks that were recently executed.
+        run_checks_result (Union[Unset, RunChecksResult]): Returns the result (highest data quality check severity and
+            the finished checks count) for the checks that were recently executed.
     """
 
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
-    run_checks_result: Union[Unset, "RunChecksJobResult"] = UNSET
+    run_checks_result: Union[Unset, "RunChecksResult"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -53,31 +53,31 @@ class RunChecksParameters:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if check_search_filters is not UNSET:
-            field_dict["checkSearchFilters"] = check_search_filters
+            field_dict["check_search_filters"] = check_search_filters
         if time_window_filter is not UNSET:
-            field_dict["timeWindowFilter"] = time_window_filter
+            field_dict["time_window_filter"] = time_window_filter
         if dummy_execution is not UNSET:
-            field_dict["dummyExecution"] = dummy_execution
+            field_dict["dummy_execution"] = dummy_execution
         if run_checks_result is not UNSET:
-            field_dict["runChecksResult"] = run_checks_result
+            field_dict["run_checks_result"] = run_checks_result
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_search_filters import CheckSearchFilters
-        from ..models.run_checks_job_result import RunChecksJobResult
+        from ..models.run_checks_result import RunChecksResult
         from ..models.time_window_filter_parameters import TimeWindowFilterParameters
 
         d = src_dict.copy()
-        _check_search_filters = d.pop("checkSearchFilters", UNSET)
+        _check_search_filters = d.pop("check_search_filters", UNSET)
         check_search_filters: Union[Unset, CheckSearchFilters]
         if isinstance(_check_search_filters, Unset):
             check_search_filters = UNSET
         else:
             check_search_filters = CheckSearchFilters.from_dict(_check_search_filters)
 
-        _time_window_filter = d.pop("timeWindowFilter", UNSET)
+        _time_window_filter = d.pop("time_window_filter", UNSET)
         time_window_filter: Union[Unset, TimeWindowFilterParameters]
         if isinstance(_time_window_filter, Unset):
             time_window_filter = UNSET
@@ -86,14 +86,14 @@ class RunChecksParameters:
                 _time_window_filter
             )
 
-        dummy_execution = d.pop("dummyExecution", UNSET)
+        dummy_execution = d.pop("dummy_execution", UNSET)
 
-        _run_checks_result = d.pop("runChecksResult", UNSET)
-        run_checks_result: Union[Unset, RunChecksJobResult]
+        _run_checks_result = d.pop("run_checks_result", UNSET)
+        run_checks_result: Union[Unset, RunChecksResult]
         if isinstance(_run_checks_result, Unset):
             run_checks_result = UNSET
         else:
-            run_checks_result = RunChecksJobResult.from_dict(_run_checks_result)
+            run_checks_result = RunChecksResult.from_dict(_run_checks_result)
 
         run_checks_parameters = cls(
             check_search_filters=check_search_filters,
