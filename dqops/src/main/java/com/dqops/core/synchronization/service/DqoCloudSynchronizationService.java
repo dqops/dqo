@@ -20,11 +20,11 @@ import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 
 /**
- * File synchronization service. Performs a full synchronization of a given category of files to the DQO Cloud.
+ * File synchronization service. Performs a full synchronization of a given category of files to the DQOps Cloud.
  */
 public interface DqoCloudSynchronizationService {
     /**
-     * Performs synchronization of a given user home folder to the DQO Cloud.
+     * Performs synchronization of a given user home folder to the DQOps Cloud.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.

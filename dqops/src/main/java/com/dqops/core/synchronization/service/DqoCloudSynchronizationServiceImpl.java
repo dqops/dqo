@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * File synchronization service. Performs a full synchronization of a given category of files to the DQO Cloud.
+ * File synchronization service. Performs a full synchronization of a given category of files to the DQOps Cloud.
  */
 @Component
 @Slf4j
@@ -55,9 +55,9 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param userHomeContextFactory User home context factory. Provides access to the local user home context.
      * @param fileSystemSynchronizationService File system synchronization utility.
      * @param localSynchronizationFileSystemFactory User home file system factory.
-     * @param dqoCloudRemoteFileSystemServiceFactory DQO Cloud remote file system factory.
+     * @param dqoCloudRemoteFileSystemServiceFactory DQOps Cloud remote file system factory.
      * @param dqoCloudApiKeyProvider API key provider.
-     * @param dqoCloudWarehouseService DQO CLoud warehouse refresh service, used to refresh the native tables.
+     * @param dqoCloudWarehouseService DQOps Cloud warehouse refresh service, used to refresh the native tables.
      */
     @Autowired
     public DqoCloudSynchronizationServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -75,7 +75,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     }
 
     /**
-     * Performs synchronization of a given user home folder to the DQO Cloud.
+     * Performs synchronization of a given user home folder to the DQOps Cloud.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.

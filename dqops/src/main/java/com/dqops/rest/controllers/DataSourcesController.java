@@ -143,13 +143,13 @@ public class DataSourcesController {
     }
 
     /**
-     * Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.
+     * Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.
      * @param connectionName Connection name. Required import.
      * @param schemaName     Schema name.
      * @return List of tables inside a schema.
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
-    @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
+    @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.",
             response = RemoteTableListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

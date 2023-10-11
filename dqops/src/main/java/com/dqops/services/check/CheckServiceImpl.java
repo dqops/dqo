@@ -66,7 +66,7 @@ public class CheckServiceImpl implements CheckService {
      * @param allChecksModelFactory UI all checks patch factory for creating patches to be updated.
      * @param allChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
-     * @param parentDqoJobQueue DQO job queue to execute the operation.
+     * @param parentDqoJobQueue DQOps job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired

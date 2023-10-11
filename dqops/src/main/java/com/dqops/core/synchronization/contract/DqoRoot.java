@@ -22,7 +22,7 @@ import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import java.util.Objects;
 
 /**
- * DQO root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQO Cloud or any other cloud).
+ * DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud).
  * It is also used as a lock scope.
  */
 public enum DqoRoot {
@@ -72,12 +72,12 @@ public enum DqoRoot {
     checks,
 
     /**
-     * Settings in the settings/ folder that are synchronized to DQO Cloud.
+     * Settings in the settings/ folder that are synchronized to DQOps Cloud.
      */
     settings,
 
     /**
-     * Shared credentials in the .credentials/ folder that are synchronized to DQO Cloud.
+     * Shared credentials in the .credentials/ folder that are synchronized to DQOps Cloud.
      */
     credentials,
 
@@ -94,7 +94,7 @@ public enum DqoRoot {
     /**
      * Creates a dqo user home root from the folder path.
      * @param folderPath Folder path.
-     * @return DQO root folder or null when locking on the target folder is not supported.
+     * @return DQOps root folder or null when locking on the target folder is not supported.
      */
     public static DqoRoot fromHomeFolderPath(HomeFolderPath folderPath) {
         if (folderPath.isEmpty()) {

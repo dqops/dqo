@@ -168,15 +168,15 @@ public class StatisticsCollectionExecutionSummary {
     }
 
     /**
-     * Returns the count of columns for which DQO executed a collector and tried to read the statistics.
-     * @return The count of columns for which DQO executed a collector and tried to read the statistics.
+     * Returns the count of columns for which DQOps executed a collector and tried to read the statistics.
+     * @return The count of columns for which DQOps executed a collector and tried to read the statistics.
      */
     public int getColumnsAnalyzedCount() {
         return (int)this.collectorsColumnsColumn.sum();
     }
 
     /**
-     * Returns the number of columns for which DQO managed to obtain statistics.
+     * Returns the number of columns for which DQOps managed to obtain statistics.
      * @return Number of columns that were analyzed successfully.
      */
     public int getColumnsSuccessfullyAnalyzed() {

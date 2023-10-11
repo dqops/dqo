@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO queue job that runs synchronization with DQO Cloud in the background for one user home's root folder (sources, sensors, etc.).
+ * DQOps queue job that runs synchronization with DQOps Cloud in the background for one user home's root folder (sources, sensors, etc.).
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -38,7 +38,7 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
 
     /**
      * Creates a synchronization job.
-     * @param cloudSynchronizationService DQO Cloud synchronization service to use (provided as a dependency).
+     * @param cloudSynchronizationService DQOps Cloud synchronization service to use (provided as a dependency).
      */
     @Autowired
     public SynchronizeRootFolderDqoQueueJob(

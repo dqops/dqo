@@ -43,7 +43,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Service that will open a browser and log in to the DQO cloud.
+ * Service that will open a browser and log in to the DQOps cloud.
  */
 @Component
 @Slf4j
@@ -62,9 +62,9 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param openBrowserService Open browser service.
      * @param terminalFactory Terminal factory.
      * @param dqoCloudConfigurationProperties Configuration properties.
-     * @param dqoCloudApiClientFactory DQO Cloud API client factory.
-     * @param dqoCloudAccessTokenCache DQO Cloud access key cache which must be invalidated when the api key changes.
-     * @param dqoCloudApiKeyProvider DQO Cloud API key provider (cache) that must be invalidated.
+     * @param dqoCloudApiClientFactory DQOps Cloud API client factory.
+     * @param dqoCloudAccessTokenCache DQOps Cloud access key cache which must be invalidated when the api key changes.
+     * @param dqoCloudApiKeyProvider DQOps Cloud API key provider (cache) that must be invalidated.
      */
     @Autowired
     public CloudLoginServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -97,8 +97,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             String apiKeyRequestUrl = this.dqoCloudConfigurationProperties.getApiKeyRequestUrl() + apiKeyRequest;
 
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-            terminalWriter.writeLine("Opening the DQO Cloud API Key request, please log in or create your DQO Cloud account.");
-            terminalWriter.writeLine("DQO Cloud API Key request may be opened manually by navigating to: " + apiKeyRequestUrl);
+            terminalWriter.writeLine("Opening the DQOps Cloud API Key request, please log in or create your DQOps Cloud account.");
+            terminalWriter.writeLine("DQOps Cloud API Key request may be opened manually by navigating to: " + apiKeyRequestUrl);
             terminalWriter.writeLine("Please wait up to 30 seconds after signup/login or press any key to cancel");
 
             try {
@@ -122,7 +122,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
                     saveApiKeyInUserSettings(apiKey);
 
                     terminalWriter.writeLine("API Key: " + apiKey);
-                    terminalWriter.writeLine("DQO Cloud API Key was retrieved and stored in the settings.");
+                    terminalWriter.writeLine("DQOps Cloud API Key was retrieved and stored in the settings.");
                     waitForConsoleInputMono.cancel(true);
                     return true;
                 }

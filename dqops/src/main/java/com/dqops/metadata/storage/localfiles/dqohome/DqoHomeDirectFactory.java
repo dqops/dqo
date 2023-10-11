@@ -28,15 +28,15 @@ import com.dqops.utils.serialization.YamlSerializerImpl;
 import java.nio.file.Path;
 
 /**
- * Creates a DQO home instance directly without using Spring IoC.
- * WARNING: this class should be only used internally by DQO build tools (classes called by Maven during build).
+ * Creates a DQOps home instance directly without using Spring IoC.
+ * WARNING: this class should be only used internally by DQOps build tools (classes called by Maven during build).
  */
 public class DqoHomeDirectFactory {
     /**
-     * Creates an instance of DQO home given a path.
-     * WARNING: this method should be only used internally by DQO build tools (classes called by Maven during build).
-     * @param dqoHomePath Path to DQO home.
-     * @return DQO Home context.
+     * Creates an instance of DQOps home given a path.
+     * WARNING: this method should be only used internally by DQOps build tools (classes called by Maven during build).
+     * @param dqoHomePath Path to DQOps home.
+     * @return DQOps Home context.
      */
     public static DqoHomeContext openDqoHome(Path dqoHomePath) {
         DqoCacheConfigurationProperties dqoCacheConfigurationProperties = new DqoCacheConfigurationProperties();

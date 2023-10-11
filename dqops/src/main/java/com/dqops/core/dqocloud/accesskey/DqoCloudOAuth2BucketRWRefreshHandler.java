@@ -22,16 +22,16 @@ import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
 import java.io.IOException;
 
 /**
- * OAuth2 access token refresh handler that contacts the DQO Cloud to reissue an access token for R/W access to a storage bucket.
+ * OAuth2 access token refresh handler that contacts the DQOps Cloud to reissue an access token for R/W access to a storage bucket.
  */
 public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWithRefresh.OAuth2RefreshHandler {
     private DqoRoot rootType;
     private DqoCloudAccessTokenCache accessTokenCache;
 
     /**
-     * Creates an OAuth2 DQO Cloud access token refresh handler.
+     * Creates an OAuth2 DQOps Cloud access token refresh handler.
      * @param rootType Root type to identify the token to use.
-     * @param accessTokenCache DQO Cloud parent credentials provider - to get the access token.
+     * @param accessTokenCache DQOps Cloud parent credentials provider - to get the access token.
      */
     public DqoCloudOAuth2BucketRWRefreshHandler(DqoRoot rootType, DqoCloudAccessTokenCache accessTokenCache) {
         this.rootType = rootType;
@@ -62,7 +62,7 @@ public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWi
             return accessToken;
         }
         catch (Exception ex) {
-            throw new IOException("Refresh token for DQO Cloud bucket access " + this.rootType + " cannot be retrieved.", ex);
+            throw new IOException("Refresh token for DQOps Cloud bucket access " + this.rootType + " cannot be retrieved.", ex);
         }
     }
 }

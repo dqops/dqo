@@ -25,8 +25,8 @@ import java.nio.file.Path;
 public class LocalDqoUserHomePathProviderObjectMother {
     /**
      * Creates a local user home physical path provider that determines the home location from the configuration properties.
-     * @param dqoUserConfigurationProperties DQO user configuration properties.
-     * @return DQO Configuration properties.
+     * @param dqoUserConfigurationProperties DQOps user configuration properties.
+     * @return DQOps Configuration properties.
      */
     public static LocalDqoUserHomePathProvider createLocalUserHomeProviderStub(DqoUserConfigurationProperties dqoUserConfigurationProperties) {
         Path absolutePathToLocalUserHome = Path.of(dqoUserConfigurationProperties.getHome()).toAbsolutePath();

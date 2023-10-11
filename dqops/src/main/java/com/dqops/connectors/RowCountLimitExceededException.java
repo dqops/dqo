@@ -36,7 +36,7 @@ public class RowCountLimitExceededException extends ConnectionQueryException {
      * @param rowCountLimit Row count limit.
      */
     public RowCountLimitExceededException(int rowCountLimit) {
-        super("The sensor readout limit which is the maximum number of rows that DQO can retrieve and store from a data quality sensor was exceeded. " +
+        super("The sensor readout limit which is the maximum number of rows that DQOps can retrieve and store from a data quality sensor was exceeded. " +
                 "The current configuration is: --dqo.sensor.limit.sensor-readout-limit=" + rowCountLimit + ". " +
                 "Please update the configuration of data grouping and use columns with less number of unique values to meet within the limit. " +
                 "Alternatively update definition of the sensor's query, maybe it is a problem with the sensor's jinja2 template.");

@@ -40,7 +40,7 @@ public class SummaryFileSystemSynchronizationListener extends FileSystemSynchron
     /**
      * Called when the synchronization is about to begin. The synchronization is from the source to the target.
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
@@ -57,7 +57,7 @@ public class SummaryFileSystemSynchronizationListener extends FileSystemSynchron
     /**
      * Called when the synchronization has finished. The synchronization is from the source to the target.
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */

@@ -49,17 +49,17 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Default configuration of profiling checks that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of profiling checks that are enabled on tables and columns that are imported into DQOps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DefaultProfilingObservabilityCheckSettingsSpec profiling = new DefaultProfilingObservabilityCheckSettingsSpec();
 
-    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQOps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DefaultDailyMonitoringObservabilityCheckSettingsSpec monitoringDaily = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
 
-    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.")
+    @JsonPropertyDescription("Default configuration of daily monitoring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQOps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DefaultMonthlyMonitoringObservabilityCheckSettingsSpec monitoringMonthly = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();

@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * DQO parent queue job that will start multiple child jobs, each child job will synchronize all DQO User home folder.
+ * DQOps parent queue job that will start multiple child jobs, each child job will synchronize all DQOps User home folder.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

@@ -34,11 +34,12 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQO user home.
+ * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
+@CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;

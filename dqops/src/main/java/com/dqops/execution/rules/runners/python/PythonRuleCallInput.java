@@ -52,7 +52,7 @@ public class PythonRuleCallInput {
     }
 
     /**
-     * Returns the path to the home (user home or DQO system home) where the rule is defined.
+     * Returns the path to the home (user home or DQOps system home) where the rule is defined.
      * @return Home folder path.
      */
     public String getHomePath() {
@@ -60,7 +60,7 @@ public class PythonRuleCallInput {
     }
 
     /**
-     * Sets a path to the DQO home (user home or dqo system home) where the rule is defined.
+     * Sets a path to the DQOps home (user home or dqo system home) where the rule is defined.
      * @param homePath A full path to the correct home path.
      */
     public void setHomePath(String homePath) {

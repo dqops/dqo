@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
- * DQO Cloud access token cache that creates new GCP access tokens when they are about to expire.
+ * DQOps Cloud access token cache that creates new GCP access tokens when they are about to expire.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -50,8 +50,8 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
 
     /**
      * Returns a current GCP bucket access token used to perform read/write operations on a customer's storage bucket for a given root folder.
-     * @param dqoRoot DQO Root folder.
-     * @return Up to date access token.
+     * @param dqoRoot DQOps Root folder.
+     * @return Up-to-date access token.
      */
     @Override
     public DqoCloudCredentials getCredentials(DqoRoot dqoRoot) {

@@ -65,7 +65,7 @@ public class DashboardsController {
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
      * @param dashboardsProvider Dashboard tree provider.
      * @param userHomeContextFactory User home factory.
-     * @param dqoCloudApiKeyProvider Cloud DQO key provider.
+     * @param dqoCloudApiKeyProvider Cloud DQOps key provider.
      */
     @Autowired
     public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
@@ -118,7 +118,7 @@ public class DashboardsController {
 
     /**
      * Retrieves a custom user dashboard from the definition of custom dashboards.
-     * @param principal DQO user principal.
+     * @param principal DQOps user principal.
      * @param dashboardName Dashboard name.
      * @param folders Folders structure to traverse.
      * @return Custom dashboard specification or null, when the dashboard was not found.
@@ -155,7 +155,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
-            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 401, message = "Unauthorized, DQOps Cloud API key is outdated, please run \"cloud login\" from the DQOps shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -164,7 +164,7 @@ public class DashboardsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Root folder name") @PathVariable String folder,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
-            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder);
         if (dashboard == null) {
@@ -184,7 +184,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {
-            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            log.warn("DQOps Cloud API Key was invalid, please run \"cloud login\" again from the DQOps shell", invalidKeyException);
             return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
         }
     }
@@ -206,7 +206,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
-            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 401, message = "Unauthorized, DQOps Cloud API key is outdated, please run \"cloud login\" from the DQOps shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -216,7 +216,7 @@ public class DashboardsController {
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
-            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2);
         if (dashboard == null) {
@@ -237,7 +237,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {
-            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            log.warn("DQOps Cloud API Key was invalid, please run \"cloud login\" again from the DQOps shell", invalidKeyException);
             return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
         }
     }
@@ -260,7 +260,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
-            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 401, message = "Unauthorized, DQOps Cloud API key is outdated, please run \"cloud login\" from the DQOps shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -271,7 +271,7 @@ public class DashboardsController {
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
-            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3);
         if (dashboard == null) {
@@ -292,7 +292,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {
-            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            log.warn("DQOps Cloud API Key was invalid, please run \"cloud login\" again from the DQOps shell", invalidKeyException);
             return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
         }
     }
@@ -316,7 +316,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
-            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 401, message = "Unauthorized, DQOps Cloud API key is outdated, please run \"cloud login\" from the DQOps shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -328,7 +328,7 @@ public class DashboardsController {
             @ApiParam("Third level folder name") @PathVariable String folder3,
             @ApiParam("Fourth level folder name") @PathVariable String folder4,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
-            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4);
         if (dashboard == null) {
@@ -349,7 +349,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {
-            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            log.warn("DQOps Cloud API Key was invalid, please run \"cloud login\" again from the DQOps shell", invalidKeyException);
             return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
         }
     }
@@ -374,7 +374,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
-            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 401, message = "Unauthorized, DQOps Cloud API key is outdated, please run \"cloud login\" from the DQOps shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -387,7 +387,7 @@ public class DashboardsController {
             @ApiParam("Fourth level folder name") @PathVariable String folder4,
             @ApiParam("Fifth level folder name") @PathVariable String folder5,
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
-            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4, folder5);
         if (dashboard == null) {
@@ -408,7 +408,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {
-            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            log.warn("DQOps Cloud API Key was invalid, please run \"cloud login\" again from the DQOps shell", invalidKeyException);
             return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
         }
     }

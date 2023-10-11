@@ -64,7 +64,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param incidentsSnapshotFactory Incident snapshot factory.
      * @param checkResultsDataService Data quality check results data service, used to load results (matching issues).
      * @param userHomeContextFactory User home context factory, used to load a list of connections.
-     * @param dqoIncidentsConfigurationProperties DQO incidents configuration parameters.
+     * @param dqoIncidentsConfigurationProperties DQOps incidents configuration parameters.
      */
     @Autowired
     public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,

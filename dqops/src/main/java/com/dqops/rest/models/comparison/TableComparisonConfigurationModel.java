@@ -158,7 +158,7 @@ public class TableComparisonConfigurationModel {
         groupingColumnsSpecList.clear();
         for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
             if (groupingColumnsSpecList.size() >= 9) {
-                throw new DqoRuntimeException("Too many data grouping columns. DQO supports up to 9 columns.");
+                throw new DqoRuntimeException("Too many data grouping columns. DQOps supports up to 9 columns.");
             }
             TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
             groupingColumnsSpecList.add(groupingColumnsPairSpec);

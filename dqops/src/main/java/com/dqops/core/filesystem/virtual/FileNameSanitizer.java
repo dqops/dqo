@@ -171,8 +171,8 @@ public final class FileNameSanitizer {
     }
 
     /**
-     * Converts a path with DQO encoded names (spaces are not encoded) to a fully URL encoded name that is used for downloading or uploading a file from/to a bucket.
-     * @param path DQO encoded path (with not encoded spaces, but other components encoded).
+     * Converts a path with DQOps encoded names (spaces are not encoded) to a fully URL encoded name that is used for downloading or uploading a file from/to a bucket.
+     * @param path DQOps encoded path (with not encoded spaces, but other components encoded).
      * @return Encoded path.
      */
     public static Path convertEncodedPathToFullyUrlEncodedPath(Path path) {
@@ -195,8 +195,8 @@ public final class FileNameSanitizer {
     }
 
     /**
-     * Converts a path with DQO encoded names (spaces are not encoded) to an unencoded path.
-     * @param path DQO encoded path (with not encoded spaces, but other components encoded).
+     * Converts a path with DQOps encoded names (spaces are not encoded) to an unencoded path.
+     * @param path DQOps encoded path (with not encoded spaces, but other components encoded).
      * @return Unencoded path.
      */
     public static Path convertEncodedPathToRawPath(Path path) {

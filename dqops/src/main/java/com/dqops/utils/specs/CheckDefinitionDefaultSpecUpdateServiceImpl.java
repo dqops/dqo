@@ -33,7 +33,7 @@ import java.util.*;
 
 /**
  * Built-in check definition update service that updates the list of supported built-in checks as check specification files
- * stored in the DQO Home folder.
+ * stored in the DQOps Home folder.
  */
 @Component
 public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinitionDefaultSpecUpdateService {
@@ -45,8 +45,8 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
     }
 
     /**
-     * Updates the definitions of built-in checks in the DQO Home's checks folder.
-     * @param dqoHomeContext DQO Home context.
+     * Updates the definitions of built-in checks in the DQOps Home's checks folder.
+     * @param dqoHomeContext DQOps Home context.
      */
     @Override
     public void updateCheckSpecifications(DqoHomeContext dqoHomeContext) {

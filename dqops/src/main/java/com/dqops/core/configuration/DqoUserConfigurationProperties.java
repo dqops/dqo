@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO User Home. Properties are mapped to the "dqo.user." prefix.
+ * Configuration POJO with the configuration for DQOps User Home. Properties are mapped to the "dqo.user." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.user")

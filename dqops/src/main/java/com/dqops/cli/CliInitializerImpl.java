@@ -43,7 +43,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Initializes the local instance, configures a DQO user home, logs the user to the cloud dqo instance.
+ * Initializes the local instance, configures a DQOps user home, logs the user to the cloud dqo instance.
  * Component called by the CLI command runner just before the first command is executed.
  */
 @Component
@@ -72,12 +72,12 @@ public class CliInitializerImpl implements CliInitializer {
      * @param terminalReader Terminal reader - used to ask the user to log in.
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration parameters.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration parameters.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
-     * @param jobQueueMonitoringService DQO job queue monitoring service that tracks the statuses of jobs.
+     * @param jobQueueMonitoringService DQOps job queue monitoring service that tracks the statuses of jobs.
      * @param dqoJobQueue Job queue service, used to start the job queue when the application starts.
      * @param parentDqoJobQueue Job queue service that queues and executes only parent jobs, must be started when the application starts.
-     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service, compares the dates, sizes and existence of all files that could be synchronized to DQO Cloud with the index of previously synchronized files.
+     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service, compares the dates, sizes and existence of all files that could be synchronized to DQOps Cloud with the index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
@@ -174,7 +174,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.defaultTimeZoneProvider.invalidate();
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
-            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQO home directory.");
+            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
             if (virtualEnv == null) {
                 throw new PythonExecutionException("Cannot find any python executable instance. Make sure that Python is installed and could be found on the path (defined in PATH) or the --dqo.python.interpreter parameter points to a python executable.");

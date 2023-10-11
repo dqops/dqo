@@ -39,7 +39,7 @@ public class CopyVersionToFilesPostProcessor {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
-            System.out.println("DQO version configure utility");
+            System.out.println("DQOps version configure utility");
             System.out.println("Missing required parameter: <project root path>");
             return;
         }
@@ -75,7 +75,7 @@ public class CopyVersionToFilesPostProcessor {
      * @throws Exception
      */
     public static void updateVersionInPomXml(Path pathToPomXml, String version) throws Exception {
-        final String markerComment = "<!-- DQO Version, do not touch (changed automatically) -->";
+        final String markerComment = "<!-- DQOps Version, do not touch (changed automatically) -->";
 
         List<String> lines = Files.readAllLines(pathToPomXml, StandardCharsets.UTF_8);
         for (int i = 0; i < lines.size(); i++) {

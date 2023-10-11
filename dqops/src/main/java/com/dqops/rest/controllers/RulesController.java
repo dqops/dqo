@@ -72,7 +72,7 @@ public class RulesController {
      * @return List of all rules.
      */
     @GetMapping(value = "/rules", produces = "application/json")
-    @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
+    @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.",
             response = RuleListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -297,7 +297,7 @@ public class RulesController {
      * @return rule basic tree model.
      */
     @GetMapping(value = "/definitions/rules", produces = "application/json")
-    @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
+    @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.",
             response = RuleFolderModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

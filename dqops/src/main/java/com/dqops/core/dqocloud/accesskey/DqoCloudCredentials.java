@@ -21,7 +21,7 @@ import com.google.auth.oauth2.AccessToken;
 import java.time.Instant;
 
 /**
- * Model object that stores the credentials model returned from the DQO Cloud and a GCP API access token.
+ * Model object that stores the credentials model returned from the DQOps Cloud and a GCP API access token.
  */
 public class DqoCloudCredentials {
     private TenantAccessTokenModel tenantAccessTokenModel;

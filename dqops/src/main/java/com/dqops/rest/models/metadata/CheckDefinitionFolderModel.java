@@ -58,7 +58,7 @@ public class CheckDefinitionFolderModel {
      * Adds a check to this folder based on the given path.
      * @param fullCheckName the path of the check
      * @param isCustom The check has a custom definition.
-     * @param isBuiltIn The check is provided (built-in) with DQO.
+     * @param isBuiltIn The check is provided (built-in) with DQOps.
      * @param canEdit The current user can edit the check.
      */
     public void addCheck(String fullCheckName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {

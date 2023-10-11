@@ -104,7 +104,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
 
         for (CompletableFuture<Long> awaitingClientFuture :  awaitingClients) {
-            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQO job queue was stopped"));
+            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQOps job queue was stopped"));
         }
     }
 

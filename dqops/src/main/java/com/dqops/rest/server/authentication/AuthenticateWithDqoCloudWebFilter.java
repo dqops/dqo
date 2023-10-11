@@ -43,13 +43,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Web filter that redirects unauthenticated users to DQO Cloud login page.
+ * Web filter that redirects unauthenticated users to DQOps Cloud login page.
  */
 @Component
 @Slf4j
 public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     /**
-     * Special url that receives a post with the authentication token received from DQO Cloud.
+     * Special url that receives a post with the authentication token received from DQOps Cloud.
      */
     public static final String ISSUE_TOKEN_URL = "/tokenissuer";
 
@@ -163,7 +163,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
             if (log.isDebugEnabled()) {
-                log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQO Cloud Pairing Key for the user " +
+                log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQOps Cloud Pairing Api Key for the user " +
                         singleUserAuthenticationToken.getName());
             }
 
@@ -211,7 +211,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             exchange.getResponse().getHeaders().add("Location", returnUrl);
 
             if (log.isDebugEnabled()) {
-                log.debug("Processing the refresh token from Cloud DQO for the user " + signedAuthenticationToken.getTarget().getUser());
+                log.debug("Processing the refresh token from Cloud DQOps for the user " + signedAuthenticationToken.getTarget().getUser());
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
@@ -261,7 +261,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             if (this.dqoCloudApiKeyProvider.getApiKey() == null) {
-                log.warn("DQO Cloud pairing API Key missing, cannot use federated authentication");
+                log.warn("DQOps Cloud pairing API Key missing, cannot use federated authentication");
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
                 return exchange.getResponse().writeAndFlushWith(Mono.empty());
             }
@@ -271,7 +271,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLoginUrl(requestUrl);
 
                 if (log.isDebugEnabled()) {
-                    log.debug("Redirecting the user to authenticate with DQO Cloud federated authentication");
+                    log.debug("Redirecting the user to authenticate with DQOps Cloud federated authentication");
                 }
 
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
@@ -279,7 +279,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 return exchange.getResponse().writeAndFlushWith(Mono.empty());
             }
             catch (Exception ex) {
-                log.error("Cannot create a DQO Cloud login url: " + ex.getMessage(), ex);
+                log.error("Cannot create a DQOps Cloud login url: " + ex.getMessage(), ex);
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(500));
                 return exchange.getResponse().writeAndFlushWith(Mono.empty());
             }

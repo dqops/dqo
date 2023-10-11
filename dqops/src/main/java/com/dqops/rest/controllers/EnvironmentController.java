@@ -47,12 +47,13 @@ import java.util.Locale;
 import java.util.stream.StreamSupport;
 
 /**
- * REST API controller that returns information about the configuration of DQO and the profile of the current user.
+ * REST API controller that returns information about the configuration of DQOps and the profile of the current user.
  */
 @RestController
 @RequestMapping("/api/environment")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Environment", description = "DQO environment and configuration controller, provides access to the DQO configuration, current user's information and issue local API Keys for the calling user.")
+@Api(value = "Environment", description = "DQOps environment and configuration controller, provides access to the DQOps configuration, " +
+        "current user's information and issue local API Keys for the calling user.")
 @Slf4j
 public class EnvironmentController {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
@@ -61,7 +62,7 @@ public class EnvironmentController {
 
     /**
      * Dependency injection constructor of the environment controller.
-     * @param dqoCloudApiKeyProvider DQO API key provider.
+     * @param dqoCloudApiKeyProvider DQOps API key provider.
      * @param springEnvironment Spring Boot environment.
      * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      */
@@ -75,11 +76,11 @@ public class EnvironmentController {
     }
 
     /**
-     * Returns all effective DQO configuration settings.
+     * Returns all effective DQOps configuration settings.
      * @return Model with a summary of all effective configuration settings.
      */
     @GetMapping(value = "/settings", produces = "application/json")
-    @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQO configuration settings.",
+    @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQOps configuration settings.",
             response = DqoSettingsModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -134,7 +135,7 @@ public class EnvironmentController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoUserProfileModel.class),
-            @ApiResponse(code = 404, message = "Instance not authenticated to DQO Cloud, the DQO Cloud API key is missing.", response = Void.class),
+            @ApiResponse(code = 404, message = "Instance not authenticated to DQOps Cloud, the DQOps Cloud API key is missing.", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
@@ -154,7 +155,7 @@ public class EnvironmentController {
      * @return The local API key issued for the calling user.
      */
     @GetMapping(value = "/issueapikey", produces = "application/json")
-    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQO Rest API client. " +
+    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. " +
             "This API Key should be passed in the \"Authorization\" HTTP header in the format \"Authorization: Bearer <api_key>\".",
             response = String.class,
             authorizations = {

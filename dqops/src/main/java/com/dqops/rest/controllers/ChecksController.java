@@ -72,7 +72,7 @@ public class ChecksController {
      * @return List of all checks
      */
     @GetMapping(value = "/checks", produces = "application/json")
-    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
+    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.",
             response = CheckDefinitionListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -304,7 +304,7 @@ public class ChecksController {
      * @return check basic tree model.
      */
     @GetMapping(value = "/definitions/checks", produces = "application/json")
-    @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
+    @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.",
             response = CheckDefinitionFolderModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

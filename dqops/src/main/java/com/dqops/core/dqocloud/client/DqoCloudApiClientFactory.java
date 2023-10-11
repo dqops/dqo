@@ -18,17 +18,17 @@ package com.dqops.core.dqocloud.client;
 import com.dqops.cloud.rest.handler.ApiClient;
 
 /**
- * DQO Cloud API client factory.
+ * DQOps Cloud API client factory.
  */
 public interface DqoCloudApiClientFactory {
     /**
-     * Creates an unauthenticated API client for the DQO Cloud.
+     * Creates an unauthenticated API client for the DQOps Cloud.
      * @return Unauthenticated client.
      */
     ApiClient createUnauthenticatedClient();
 
     /**
-     * Creates an authenticated API client for the DQO Cloud. The authentication uses the API Key that must be obtained by running the "login" CLI command.
+     * Creates an authenticated API client for the DQOps Cloud. The authentication uses the API Key that must be obtained by running the "login" CLI command.
      * @return Authenticated client.
      */
     ApiClient createAuthenticatedClient();

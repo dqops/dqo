@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 
 /**
- * Base class for DQO jobs.
+ * Base class for DQOps jobs.
  */
 public abstract class DqoQueueJob<T> {
     private final CompletableFuture<T> finishedFuture = new CompletableFuture<T>();
@@ -168,7 +168,7 @@ public abstract class DqoQueueJob<T> {
     }
 
     /**
-     * Sets (assigns) a job ID. This method is called by a DQO job queue when the job is accepted on a queue and queued for execution.
+     * Sets (assigns) a job ID. This method is called by a DQOps job queue when the job is accepted on a queue and queued for execution.
      * @param jobId Job id.
      */
     public void setJobId(DqoQueueJobId jobId) {

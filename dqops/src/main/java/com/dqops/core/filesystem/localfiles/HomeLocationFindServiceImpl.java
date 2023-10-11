@@ -61,7 +61,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
             Path pathToDqoUserHomeMarker = subPath.resolve(DQO_USER_HOME_MARKER_NAME);
             if (Files.exists(pathToDqoUserHomeMarker)) {
-                return subPath; // DQO USER HOME found in a parent folder, the user started dqo.sh/dqo.cmd when the current working folder was a nested path
+                return subPath; // DQOPS USER HOME found in a parent folder, the user started dqo.sh/dqo.cmd when the current working folder was a nested path
             }
         }
 
@@ -96,7 +96,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
                     Files.createDirectories(pathToUserHome);
                 }
                 catch (IOException ex) {
-                    throw new LocalFileSystemException("Cannot create a DQO user home at " + pathToUserHome.toString(), ex);
+                    throw new LocalFileSystemException("Cannot create a DQOps user home at " + pathToUserHome.toString(), ex);
                 }
             }
 

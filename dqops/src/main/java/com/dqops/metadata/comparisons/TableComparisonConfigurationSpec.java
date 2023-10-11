@@ -49,14 +49,14 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("The name of the connection in DQO where the reference table (the source of truth) is configured. " +
-                             "When the connection name is not provided, DQO will find the reference table on the connection of the parent table.")
+    @JsonPropertyDescription("The name of the connection in DQOp where the reference table (the source of truth) is configured. " +
+                             "When the connection name is not provided, DQOps will find the reference table on the connection of the parent table.")
     private String referenceTableConnectionName;
 
-    @JsonPropertyDescription("The name of the schema where the reference table is imported into DQO. The reference table's metadata must be imported into DQO.")
+    @JsonPropertyDescription("The name of the schema where the reference table is imported into DQOps. The reference table's metadata must be imported into DQOps.")
     private String referenceTableSchemaName;
 
-    @JsonPropertyDescription("The name of the reference table that is imported into DQO. The reference table's metadata must be imported into DQO.")
+    @JsonPropertyDescription("The name of the reference table that is imported into DQOps. The reference table's metadata must be imported into DQOps.")
     private String referenceTableName;
 
     @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. " +
@@ -82,7 +82,7 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
 
 
     /**
-     * Returns the name of the connection (data source) in DQO where the reference table is imported.
+     * Returns the name of the connection (data source) in DQOps where the reference table is imported.
      * @return The name of the connection of the reference table.
      */
     public String getReferenceTableConnectionName() {

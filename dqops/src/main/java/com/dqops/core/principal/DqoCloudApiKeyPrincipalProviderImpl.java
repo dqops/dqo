@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Service that returns the user principal of the user identified by the DQO Cloud API Key.
- * This provider should be called by operations executed from the DQO command line to obtain the principal or when DQO is running in a single user mode.
+ * Service that returns the user principal of the user identified by the DQOps Cloud API Key.
+ * This provider should be called by operations executed from the DQOps command line to obtain the principal or when DQOps is running in a single user mode.
  */
 @Component
 public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrincipalProvider {
@@ -36,7 +36,7 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
 
     /**
      * Dependency injection constructor.
-     * @param dqoCloudApiKeyProvider DQO Cloud API Key provider service.
+     * @param dqoCloudApiKeyProvider DQOps Cloud API Key provider service.
      */
     @Autowired
     public DqoCloudApiKeyPrincipalProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
@@ -44,9 +44,9 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
     }
 
     /**
-     * Creates a DQO user principal for the user who has direct access to DQO instance, running operations from CLI
-     * or using the DQO shell directly.
-     * @return User principal that has full admin rights when the instance is not authenticated to DQO Cloud or limited to the role in the DQO Cloud Api key.
+     * Creates a DQOps user principal for the user who has direct access to DQOps instance, running operations from CLI
+     * or using the DQOps shell directly.
+     * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     @Override
     public DqoUserPrincipal createUserPrincipal() {
@@ -60,7 +60,7 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
 
         DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
         if (dqoCloudApiKey == null) {
-            // user not authenticated to DQO Cloud, so we use a default token
+            // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges);
             return dqoUserPrincipalLocal;

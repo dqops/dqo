@@ -28,12 +28,12 @@ public interface UserManagementService {
      * Retrieves a list of users for this instance.
      *
      * @param userPrincipal User principal.
-     * @return List of users for this DQO instance.
+     * @return List of users for this DQOps instance.
      */
     Collection<DqoCloudUserModel> listUsers(DqoUserPrincipal userPrincipal);
 
     /**
-     * Retrieves a user from the list of users known to DQO Cloud, given a user email.
+     * Retrieves a user from the list of users known to DQOps Cloud, given a user email.
      *
      * @param userPrincipal Caller principal, requires a VIEWER permission to run.
      * @param email         User's email.
@@ -42,7 +42,7 @@ public interface UserManagementService {
     DqoCloudUserModel getUserByEmail(DqoUserPrincipal userPrincipal, String email);
 
     /**
-     * Creates a user in DQO Cloud. An optional password may be passed.
+     * Creates a user in DQOps Cloud. An optional password may be passed.
      *
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
      * @param userModel     User model that is created.
@@ -52,7 +52,7 @@ public interface UserManagementService {
     void createUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel, String password);
 
     /**
-     * Update a user in DQO Cloud. Supports changing the role.
+     * Update a user in DQOps Cloud. Supports changing the role.
      *
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
      * @param userModel     User model that is updated.
@@ -60,7 +60,7 @@ public interface UserManagementService {
     void updateUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel);
 
     /**
-     * Deletes a user in DQO Cloud, given a user email.
+     * Deletes a user in DQOps Cloud, given a user email.
      *
      * @param userPrincipal Caller principal, requires an ADMIN permission to run.
      * @param email         User's email.

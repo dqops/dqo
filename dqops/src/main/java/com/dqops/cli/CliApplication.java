@@ -39,7 +39,7 @@ public class CliApplication {
 	private static boolean silentEnabledByArgument;
 
 	/**
-	 * Returns true if DQO was started in a mode to run one command and exit.
+	 * Returns true if DQOps was started in a mode to run one command and exit.
 	 * @return True - command was given in the argument list, it will execute and the application will exit.
 	 */
 	public static boolean isRunningOneShotMode() {
@@ -121,7 +121,7 @@ public class CliApplication {
 	}
 
 	/**
-	 * Main entry method for the DQO CLI application.
+	 * Main entry method for the DQOps CLI application.
 	 * @param args Arguments.
 	 */
 	public static void main(String[] args) {

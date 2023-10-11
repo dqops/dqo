@@ -20,7 +20,7 @@ import com.dqops.data.normalization.CommonColumnNames;
 /**
  * The basic profiling results (statistics) table that stores basic profiling statistical values.
  * The statistics are stored in the errors table is located in the $DQO_USER_HOME/.data/statistics folder that contains uncompressed parquet files.
- * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user's home folder).
+ * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user's home folder).
  *
  * The folder partitioning structure for this table is:
  * c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/, for example: c=myconnection/t=public.analyzedtable/m=2023-01-01/.

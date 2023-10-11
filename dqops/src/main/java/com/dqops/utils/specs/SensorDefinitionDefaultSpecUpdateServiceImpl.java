@@ -41,7 +41,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Service used during the build process (called from a maven profile) that updates the yaml definitions in the DQO Home sensor folder,
+ * Service used during the build process (called from a maven profile) that updates the yaml definitions in the DQOps Home sensor folder,
  * updating correct list of fields that were detected using reflection.
  */
 @Component
@@ -57,9 +57,9 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
     }
 
     /**
-     * Checks if all sensor definition yaml files in the DQO Home rule folder have a correct list of parameters, matching the fields used in the Java spec classes.
+     * Checks if all sensor definition yaml files in the DQOps Home rule folder have a correct list of parameters, matching the fields used in the Java spec classes.
      * @param projectRootPath Path to the dqops module folder (code folder).
-     * @param dqoHomeContext DQO Home context.
+     * @param dqoHomeContext DQOps Home context.
      */
     @Override
     public void updateSensorSpecifications(Path projectRootPath, DqoHomeContext dqoHomeContext) {

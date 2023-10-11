@@ -36,7 +36,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/logs")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "LogShipping", description = "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQO instance logs.")
+@Api(value = "LogShipping", description = "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.")
 @Slf4j
 public class LogShippingController {
     public LogShippingController() {

@@ -46,8 +46,8 @@ public class TriggerFactoryImpl implements TriggerFactory {
     private CronParser unixCronParser = new CronParser(unixCronDefinition);
 
     /**
-     * Creates a Quartz trigger factory that converts DQO schedules to Quartz cron triggers.
-     * @param jobDataMapAdapter DQO Job data adapter that stores and retrieves additional objects in jobs.
+     * Creates a Quartz trigger factory that converts DQOps schedules to Quartz cron triggers.
+     * @param jobDataMapAdapter DQOps Job data adapter that stores and retrieves additional objects in jobs.
      * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired

@@ -79,7 +79,7 @@ public class SensorsController {
      * @return List of all sensors.
      */
     @GetMapping(value = "/sensors", produces = "application/json")
-    @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
+    @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.",
             response = SensorListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -391,7 +391,7 @@ public class SensorsController {
      * @return sensor basic folder model.
      */
     @GetMapping(value = "/definitions/sensors", produces = "application/json")
-    @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
+    @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.",
             response = SensorFolderModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

@@ -17,7 +17,7 @@
 package com.dqops.utils.exceptions;
 
 /**
- * Interface for DQO exceptions with the ability to provide user-friendly messages.
+ * Interface for DQOps exceptions with the ability to provide user-friendly messages.
  */
 public interface DqoErrorUserMessage {
     /**

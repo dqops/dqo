@@ -23,7 +23,7 @@ import com.dqops.utils.BeanFactoryObjectMother;
 public final class DqoCoreConfigurationPropertiesObjectMother {
     /**
      * Creates a new dqo core configuration properties (cloned).
-     * @return DQO core configuration properties.
+     * @return DQOps core configuration properties.
      */
     public static DqoCoreConfigurationProperties getCoreConfigurationProperties() {
         DqoCoreConfigurationProperties configurationProperties = BeanFactoryObjectMother.getBeanFactory().getBean(DqoCoreConfigurationProperties.class).clone();
