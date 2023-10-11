@@ -353,6 +353,7 @@ const DataQualityChecks = ({
           )}
         </div>
         }
+        {isDefaultEditing !== true && 
         <div className="flex items-center justify-between">
           <span className='pr-2'>Schedule configuration: </span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
@@ -382,6 +383,7 @@ const DataQualityChecks = ({
             </div>
           )}
         </div>
+        }
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
