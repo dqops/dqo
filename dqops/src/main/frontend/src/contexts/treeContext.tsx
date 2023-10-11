@@ -1188,8 +1188,10 @@ function TreeProvider(props: any) {
         checkType === CheckTypes.PARTITIONED
       ) {
         tab = tab || 'daily';
-      } else {
+      } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
+      } else {
+        tab = tab || 'detail'
       }
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
