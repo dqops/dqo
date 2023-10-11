@@ -1,11 +1,16 @@
-import { CheckTypes } from './routes';
+
 import { TimeWindowFilterParameters } from '../api';
 
 export type PageTab = {
   label: string;
   value: string;
 };
-
+enum CheckTypes {
+  MONITORING = 'monitoring',
+  SOURCES = 'sources',
+  PROFILING = 'profiling',
+  PARTITIONED = 'partitioned',
+}
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
 } = {
