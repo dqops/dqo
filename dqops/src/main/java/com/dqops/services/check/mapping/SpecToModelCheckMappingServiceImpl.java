@@ -603,10 +603,13 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     executionContext, sensorDefinitionName, providerType);
 
             if (providerSensorDefinition == null) {
-                return null; // skip this check
+                return null; // skip this check, it is a misconfigured custom check that references a missing sensor, we don't know anything about it
             }
 
             sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
+            if (sensorDefinitionSpec == null) {
+                return null; // skip this check, it is a misconfigured custom check that references a missing sensor
+            }
 
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
             if (providerSensorDefinitionSpec == null) {
@@ -618,13 +621,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
-            if (checkType == CheckType.partitioned && Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
+            if (checkType == CheckType.partitioned && tableSpec != null && tableSpec.getTimestampColumns() != null &&
+                    Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
                 checkModel.pushError(CheckConfigurationRequirementsError.MISSING_PARTITION_BY_COLUMN);
             }
 
             checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
-            if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
+            if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresEventTimestamp() &&
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
                 if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
@@ -633,7 +637,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     checkModel.pushError(CheckConfigurationRequirementsError.MISSING_EVENT_TIMESTAMP_COLUMN);
                 }
             } else {
-                if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
+                if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
                     checkModel.pushError(CheckConfigurationRequirementsError.MISSING_INGESTION_TIMESTAMP_COLUMN);
                 }
@@ -696,11 +700,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
                         (CustomCheckSpec) checkSpec, customCheckDefinitionSpec, executionContext);
                 checkModel.setRule(ruleModel);
+            } else {
+                checkModel.setRule(new RuleThresholdsModel());
             }
         }
 
         if (executionContext != null && executionContext.getUserHomeContext() != null) {
-            String ruleName = checkModel.getRule().getWarning() != null ? checkModel.getRule().getWarning().getRuleName() : null;
+            String ruleName = checkModel.getRule() != null && checkModel.getRule().getWarning() != null ?
+                    checkModel.getRule().getWarning().getRuleName() : null;
 
             if (ruleName != null) {
                 RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
@@ -708,10 +715,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     RuleTimeWindowSettingsSpec ruleTimeWindow = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
                     if (ruleTimeWindow != null) {
                         if (checkType == CheckType.profiling) {
-                            if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
-                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
-                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
-                                checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
+                            if (tableSpec != null && tableSpec.getProfilingChecks() != null) {
+                                if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
+                                    checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
+                                }
                             }
                         } else if (ruleTimeWindow.getHistoricDataPointGrouping() != null && checkTimeScale != null) {
                             TimePeriodGradient ruleTimePeriodGradient =

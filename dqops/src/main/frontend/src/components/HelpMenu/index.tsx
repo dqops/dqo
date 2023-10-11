@@ -57,7 +57,7 @@ const HelpMenu = () => {
           <SettingsPopUp />
         </div>
         <div className="px-4 pt-3 border-t border-gray-300">
-          <h6 className="mb-3">Promote DQO on GitHub</h6>
+          <h6 className="mb-3">Promote DQOps on GitHub</h6>
           <div className="mb-2">
             <GitHubButton
               href="https://github.com/dqops/dqo"

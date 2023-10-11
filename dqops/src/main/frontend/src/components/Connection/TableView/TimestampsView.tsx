@@ -71,7 +71,7 @@ const TimestampsView = () => {
 
       <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Event timestamp column name for timeliness checks"
+          label="Event timestamp column name for timeliness freshness checks (most current data)"
           value={tablePartitioning?.timestamp_columns?.event_timestamp_column}
           onChange={(column) =>
             handleChangeTimestamps({
@@ -84,7 +84,7 @@ const TimestampsView = () => {
 
       <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Ingestion timestamp column name for timeliness checks"
+          label="Ingestion timestamp column name for timeliness staleness checks (last load timestamp)"
           value={tablePartitioning?.timestamp_columns?.ingestion_timestamp_column}
           onChange={(column) =>
             handleChangeTimestamps({
@@ -96,7 +96,7 @@ const TimestampsView = () => {
 
       <div className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Date or datetime column name for partition checks"
+          label="Date or datetime column name used for date/time partitioning used in partition checks"
           value={tablePartitioning?.timestamp_columns?.partition_by_column}
           onChange={(column) =>
             handleChangeTimestamps({
@@ -109,7 +109,7 @@ const TimestampsView = () => {
         />
       </div>
 
-      <SectionWrapper className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Incremental daily partitioned checks time window">
+      <SectionWrapper className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental daily partitioned partitioned checks">
         <div className="flex mb-4">
           <span className="w-80 text-sm">Recent days</span>
 
@@ -138,7 +138,7 @@ const TimestampsView = () => {
         </div>
       </SectionWrapper>
 
-      <SectionWrapper className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Incremental monthly partitioned checks time window">
+      <SectionWrapper className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental monthly partitioned partitioned checks">
         <div className="flex mb-4 text-sm">
           <span className="w-80">Recent months</span>
 
