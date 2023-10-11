@@ -111,6 +111,80 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+    - folder_name: Schema changes
+      dashboards:
+        - dashboard_name: Schema changes - tables
+          url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Schema changes - columns
+          url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Pii changes
+          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column count
+          url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column count changed
+          url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column list changed
+          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column list or order changed
+          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column types changed
+          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
 
 - folder_name: Monitoring
   folders:
@@ -306,6 +380,80 @@ spec:
           url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
           width: 1400
           height: 1600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+    - folder_name: Schema changes
+      dashboards:
+        - dashboard_name: Schema changes - tables
+          url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Schema changes - columns
+          url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Pii changes
+          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column count
+          url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column count changed
+          url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column list changed
+          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column list or order changed
+          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column types changed
+          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          width: 1400
+          height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
