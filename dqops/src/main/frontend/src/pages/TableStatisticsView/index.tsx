@@ -24,7 +24,8 @@ export default function TableStatisticsView({
   setLevelsData2,
   setNumberOfSelected2,
   statistics,
-  onChangeSelectedColumns
+  onChangeSelectedColumns,
+  checksUI
 }: {
   connectionName: string;
   schemaName: string;
@@ -33,7 +34,8 @@ export default function TableStatisticsView({
   setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
-  onChangeSelectedColumns?: (columns: string[]) => void
+  onChangeSelectedColumns?: (columns: string[]) => void;
+  checksUI?: any
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -101,7 +103,7 @@ export default function TableStatisticsView({
       </div>
     );
   }
-
+console.log(checksUI)
   return (
     <div>
       <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
@@ -116,6 +118,19 @@ export default function TableStatisticsView({
                 rowCount.statistics?.map((x, index) => (
                   <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
+                      ? formatNumber(Number(renderValue(x.result)))
+                      : ''}
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="flex gap-x-6 ml-3">
+            <div>Total Columns</div>
+            <div>
+              {rowCount &&
+                rowCount.statistics?.map((x, index) => (
+                  <div key={index} className="font-bold">
+                    {x.collector === 'column_count'
                       ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
