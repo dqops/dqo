@@ -180,12 +180,12 @@ export default function UserProfile({ name, email }: UserProfile) {
             href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
-            className="block text-teal-500 text-lg mb-3"
+            className="block text-teal-500 text-lg underline mb-3"
           >
             Manage account 
           </a> 
-          : <span className='text-teal-500'>Manage account</span> }
-          <div className='text-teal-500 mb-3 text-lg cursor-pointer' onClick={() => setOpen(true)}>Change password</div>
+          : <span className='text-teal-500 underline'>Manage account</span> }
+          <div className='text-teal-500 mb-3 text-lg cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
           <div className='text-green-500 pt-2 text-lg'>{passwordChangedMessage}</div>
         </div>
         <ChangePrincipalPasswordDialog open = {open} onClose={() => setOpen(false)} handleSubmit={changePrincipalPassword}/>
