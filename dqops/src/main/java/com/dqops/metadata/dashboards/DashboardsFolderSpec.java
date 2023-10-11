@@ -272,6 +272,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @param defaultParameters A list of default parameters (using just the first parameter value for all other parameters.
      */
     protected void addExpandedDashboards(DashboardsFolderSpec targetFolder, DashboardSpec templatedDashboardSpec, LinkedHashMap<String, String> defaultParameters) {
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
@@ -323,6 +327,11 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      */
     protected LinkedHashMap<String, String> createDefaultParameters(DashboardSpec templatedDashboardSpec) {
         LinkedHashMap<String, String> defaultParameters = new LinkedHashMap<>();
+
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return defaultParameters;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
