@@ -54,7 +54,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
     /**
      * Dependency injection constructor.
      * @param loggingConfigurationProperties Configuration parameters with the logging settings.
-     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
      */
     @Autowired
     public ConsoleLoggingConfiguratorInitializingBean(

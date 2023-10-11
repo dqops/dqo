@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * DQO login token payload returned by the DQO Cloud or issued locally.
+ * DQOps login token payload returned by the DQOp Cloud or issued locally.
  */
 @Data
 public class DqoUserTokenPayload implements Cloneable {
@@ -102,8 +102,8 @@ public class DqoUserTokenPayload implements Cloneable {
     }
 
     /**
-     * Create a user principal from the user token issued by DQO Cloud.
-     * @return User principal copied from the user token issued by DQO Cloud.
+     * Create a user principal from the user token issued by DQOps Cloud.
+     * @return User principal copied from the user token issued by DQOps Cloud.
      */
     public DqoUserPrincipal createUserPrincipal() {
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
@@ -112,7 +112,7 @@ public class DqoUserTokenPayload implements Cloneable {
     }
 
     /**
-     * Creates a local DQO instance authentication token from the DQO Cloud API Key that identifies the instance and the main user.
+     * Creates a local DQOps instance authentication token from the DQOps Cloud API Key that identifies the instance and the main user.
      * @param cloudApiKey Cloud API key.
      * @return User token payload for a local authentication.
      */

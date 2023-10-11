@@ -54,8 +54,8 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     /**
      * Dependency injection constructor that receives all required dependencies.
      * @param dqoCloudApiClientFactory Creates a rest api client for contacting the cloud.dqops.com using the API key.
-     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
      */
     @Autowired
     public LookerStudioUrlServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory,
@@ -67,7 +67,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     }
 
     /**
-     * Contacts the Cloud dqo server and issues a short-lived refresh token scoped to access data quality dashboards using Looker Studio.
+     * Contacts the DQOps Cloud server and issues a short-lived refresh token scoped to access data quality dashboards using Looker Studio.
      * @return API key scoped for accessing dashboards for the client's credentials.
      */
     @Override
@@ -93,10 +93,10 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
-            throw new DqoRuntimeException("Failed to receive a refresh token from DQO Cloud", httpClientErrorException);
+            throw new DqoRuntimeException("Failed to receive a refresh token from DQOps Cloud", httpClientErrorException);
         }
     }
 
@@ -137,17 +137,17 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
-            throw new DqoRuntimeException("Failed to receive an access token from DQO Cloud", httpClientErrorException);
+            throw new DqoRuntimeException("Failed to receive an access token from DQOps Cloud", httpClientErrorException);
         }
     }
 
     /**
      * Creates an authenticated URL for a looker studio dashboard.
      * @param dashboardSpec Dashboard specification.
-     * @param dqoWindowLocationOrigin URL to the DQO instance (the window.location.origin value).
+     * @param dqoWindowLocationOrigin URL to the DQOps instance (the window.location.origin value).
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
     @Override
@@ -175,7 +175,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
      * Generates the Looker Studio JSON parameter string.
      * @param parameters Optional dictionary of key/value parameter pairs.
      * @param refreshToken Refresh token.
-     * @param dqoWindowLocationOrigin URL to the DQO instance (the window.location.origin value).
+     * @param dqoWindowLocationOrigin URL to the DQOps instance (the window.location.origin value).
      * @return JSON string to be submitted as a parameter.
      */
     public String formatDashboardParameters(Map<String, String> parameters, String refreshToken, String dqoWindowLocationOrigin) {

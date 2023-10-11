@@ -24,7 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 
 /**
- * Container of singletons that stores Spring Security "Granted Authorities" privileges (permissions) supported by DQO.
+ * Container of singletons that stores Spring Security "Granted Authorities" privileges (permissions) supported by DQOps.
  */
 public final class DqoPermissionGrantedAuthorities {
     /**
@@ -64,7 +64,7 @@ public final class DqoPermissionGrantedAuthorities {
 
 
     /**
-     * Returns a list of granted authorities (permissions) for a given Cloud DQO role.
+     * Returns a list of granted authorities (permissions) for a given Cloud DQOps role.
      * @param role Assigned role.
      * @return List of all effective roles.
      */

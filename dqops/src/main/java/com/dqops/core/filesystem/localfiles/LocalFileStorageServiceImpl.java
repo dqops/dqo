@@ -50,7 +50,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     /**
      * Creates a local storage service that manages files in the given folder in the file system.
      * @param homeRootDirectory Path to the root file folder on the local machine that stores the files.
-     * @param homeType DQO Home type (dqo system home or user home).
+     * @param homeType DQOps Home type (dqo system home or user home).
      */
     public LocalFileStorageServiceImpl(String homeRootDirectory,
                                        HomeType homeType,

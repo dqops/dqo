@@ -119,7 +119,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param errorsSnapshotFactory Error snapshot factory, provides read and write support for errors stored in tabular format.
      * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
      * @param incidentImportQueueService New incident import queue service. Identifies new incidents and sends notifications.
-     * @param dqoSensorLimitsConfigurationProperties DQO sensor limit configuration parameters.
+     * @param dqoSensorLimitsConfigurationProperties DQOps sensor limit configuration parameters.
      * @param userErrorLogger Check execution logger.
      */
     @Autowired

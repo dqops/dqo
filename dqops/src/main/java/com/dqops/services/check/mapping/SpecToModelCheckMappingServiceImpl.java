@@ -129,7 +129,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
-     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
      * @param canManageChecks The user is an operator and can rul any operation.
      * @return Model of data quality checks' container.
@@ -382,7 +382,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleGroup           Scheduling group relevant to this check.
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param tableSpec               Table specification with the configuration of the parent table.
-     * @param executionContext        Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext        Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType            Provider type from the parent connection.
      * @param checkTarget             Check target.
      * @param checkType               Check type (profiling, monitoring, ...).
@@ -564,7 +564,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleGroup             Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @param tableSpec                 Table specification with the configuration of the parent table.
-     * @param executionContext          Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext          Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType              Provider type from the parent connection.
      * @param checkTarget               Check target.
      * @param checkType                 Check type (profiling, monitoring, ...).

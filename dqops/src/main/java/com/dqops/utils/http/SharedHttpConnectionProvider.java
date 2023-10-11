@@ -19,7 +19,7 @@ import reactor.netty.resources.ConnectionProvider;
 
 /**
  * Returns a shared, preconfigured HTTP Connection provider that maintains a pool of HTTP connections
- * used by a WebFlux web client in DQO.
+ * used by a WebFlux web client in DQOps.
  */
 public interface SharedHttpConnectionProvider {
     /**

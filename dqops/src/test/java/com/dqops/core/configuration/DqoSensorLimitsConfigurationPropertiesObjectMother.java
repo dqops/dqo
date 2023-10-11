@@ -24,7 +24,7 @@ import com.dqops.utils.BeanFactoryObjectMother;
 public class DqoSensorLimitsConfigurationPropertiesObjectMother {
     /**
      * Returns the default (but cloned) dqo sensor limit configuration.
-     * @return DQO sensor limit configuration.
+     * @return DQOps sensor limit configuration.
      */
     public static DqoSensorLimitsConfigurationProperties getDefault() {
         return BeanFactoryObjectMother.getBeanFactory().getBean(DqoSensorLimitsConfigurationProperties.class).clone();

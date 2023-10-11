@@ -46,15 +46,15 @@ public class CollectStatisticsResult {
     private int totalCollectorsExecuted;
 
     /**
-     * The count of columns for which DQO executed a collector and tried to read the statistics.
+     * The count of columns for which DQOps executed a collector and tried to read the statistics.
      */
-    @JsonPropertyDescription("The count of columns for which DQO executed a collector and tried to read the statistics.")
+    @JsonPropertyDescription("The count of columns for which DQOps executed a collector and tried to read the statistics.")
     private int columnsAnalyzed;
 
     /**
-     * The count of columns for which DQO managed to obtain statistics.
+     * The count of columns for which DQOps managed to obtain statistics.
      */
-    @JsonPropertyDescription("The count of columns for which DQO managed to obtain statistics.")
+    @JsonPropertyDescription("The count of columns for which DQOps managed to obtain statistics.")
     private int columnsSuccessfullyAnalyzed;
 
     /**

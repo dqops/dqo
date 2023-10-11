@@ -17,7 +17,7 @@
 package com.dqops.core.jobqueue;
 
 /**
- * Base class for DQO queue jobs that are parent jobs and will be executed on the {@link ParentDqoJobQueue} job queue for parent jobs.
+ * Base class for DQOps queue jobs that are parent jobs and will be executed on the {@link ParentDqoJobQueue} job queue for parent jobs.
  * @param <T> Job result type.
  */
 public abstract class ParentDqoQueueJob<T> extends DqoQueueJob<T> {

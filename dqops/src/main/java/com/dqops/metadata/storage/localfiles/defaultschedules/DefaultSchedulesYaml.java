@@ -6,7 +6,7 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
  * The configuration of default schedules for running data quality checks.
- * The default schedules are stored in the settings/defaultschedules.dqoschedules.yaml file in the DQO user's home folder.
+ * The default schedules are stored in the settings/defaultschedules.dqoschedules.yaml file in the DQOps user's home folder.
  */
 public class DefaultSchedulesYaml {
 

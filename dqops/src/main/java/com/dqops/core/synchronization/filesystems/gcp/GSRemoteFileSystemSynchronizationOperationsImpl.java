@@ -69,7 +69,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
      * Default injection constructor.
      * @param gcpConfigurationProperties Google Storage configuration properties.
      * @param sharedHttpClientProvider HTTP client provider that creates HTTP clients to be used to read and write files in a GCP storage bucket.
-     * @param dqoCloudAccessTokenCache DQO Cloud access key cache. Returns the most current access token to access the google storage.
+     * @param dqoCloudAccessTokenCache DQOps Cloud access token cache. Returns the most current access token to access the google storage.
      */
     @Autowired
     public GSRemoteFileSystemSynchronizationOperationsImpl(DqoStorageGcpConfigurationProperties gcpConfigurationProperties,
@@ -597,7 +597,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                                     log.error("Failed to upload a file " + relativeFilePath.toString().replace('\\', '/') +
                                             " in " + fileSystemRoot.getRootPath().toString().replace('\\', '/') + ", response: " + httpClientResponse.status());
                                     return Mono.error(new FileSystemChangeException(relativeFilePath,
-                                            "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
+                                            "Failed to upload a file to DQOps Cloud, http error code: " + httpClientResponse.status().code()));
                                 }
                             });
 

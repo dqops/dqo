@@ -47,7 +47,7 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
     }
 
     /**
-     * Registers static resources with the production build of the DQO UI.
+     * Registers static resources with the production build of the DQOps UI.
      * @param registry Resource handler registry.
      */
     @Override

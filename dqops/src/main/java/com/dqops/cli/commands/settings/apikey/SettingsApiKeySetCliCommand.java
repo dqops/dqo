@@ -55,7 +55,7 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 		this.apiKeyProvider = apiKeyProvider;
 	}
 
-	@CommandLine.Parameters(index = "0", description = "DQO Cloud Api key")
+	@CommandLine.Parameters(index = "0", description = "DQOps Cloud Api key")
 	private String key;
 
 	public String getKey() {
@@ -75,14 +75,14 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
 			throwRequiredParameterMissingIfHeadless("key");
-			this.key = this.terminalReader.prompt("Api key", null, false);
+			this.key = this.terminalReader.prompt("DQOps Cloud Api key", null, false);
 		}
 
 		try {
 			this.apiKeyProvider.decodeApiKey(this.key);
 		}
 		catch (Exception ex) {
-			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
+			this.terminalWriter.writeLine("Invalid DQOps Cloud API key: " + ex.getMessage());
 			return -1;
 		}
 

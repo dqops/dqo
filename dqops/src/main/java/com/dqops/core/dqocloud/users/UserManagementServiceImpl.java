@@ -44,7 +44,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     /**
      * Dependency injection constructor.
-     * @param dqoCloudApiClientFactory DQO Cloud client factory.
+     * @param dqoCloudApiClientFactory DQOps Cloud client factory.
      */
     @Autowired
     public UserManagementServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {
@@ -54,7 +54,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     /**
      * Retrieves a list of users for this instance.
      * @param userPrincipal User principal.
-     * @return List of users for this DQO instance.
+     * @return List of users for this DQOps instance.
      */
     @Override
     public Collection<DqoCloudUserModel> listUsers(DqoUserPrincipal userPrincipal) {
@@ -76,7 +76,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to retrieve a list of users, error: " + httpClientErrorException.getMessage(), httpClientErrorException);
@@ -84,7 +84,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     /**
-     * Retrieves a user from the list of users known to DQO Cloud, given a user email.
+     * Retrieves a user from the list of users known to DQOps Cloud, given a user email.
      * @param userPrincipal Caller principal, requires a VIEWER permission to run.
      * @param email User's email.
      * @return User's model or null when the user was not found.
@@ -111,7 +111,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to retrieve a user, error: " + httpClientErrorException.getMessage(), httpClientErrorException);
@@ -119,7 +119,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     /**
-     * Creates a user in DQO Cloud. An optional password may be passed.
+     * Creates a user in DQOps Cloud. An optional password may be passed.
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
      * @param userModel User model that is created.
      * @param password User's password, optional.
@@ -145,7 +145,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to create a user, error: " + httpClientErrorException.getMessage(), httpClientErrorException);
@@ -153,7 +153,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     /**
-     * Update a user in DQO Cloud. Supports changing the role.
+     * Update a user in DQOps Cloud. Supports changing the role.
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
      * @param userModel User model that is updated.
      */
@@ -177,7 +177,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to update a user, error: " + httpClientErrorException.getMessage(), httpClientErrorException);
@@ -185,7 +185,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     /**
-     * Deletes a user in DQO Cloud, given a user email.
+     * Deletes a user in DQOps Cloud, given a user email.
      * @param userPrincipal Caller principal, requires an ADMIN permission to run.
      * @param email User's email.
      */
@@ -204,7 +204,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to delete a user, error: " + httpClientErrorException.getMessage(), httpClientErrorException);
@@ -235,7 +235,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
             }
 
             throw new DqoCloudUserManagementException("Failed to change the user's password, error: " + httpClientErrorException.getMessage(), httpClientErrorException);

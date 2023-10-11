@@ -17,7 +17,7 @@
 package com.dqops.core.principal;
 
 /**
- * Constants with DQO privileges (permission) names.
+ * Constants with DQOps privileges (permission) names.
  */
 public final class DqoPermissionNames {
     /**

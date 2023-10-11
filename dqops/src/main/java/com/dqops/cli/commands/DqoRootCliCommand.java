@@ -106,7 +106,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "The default value for both the 'dqops' python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage=80.0 which " +
                     "sets the upper memory limit for 80%% of the available RAM at the moment when the container starts. " +
                     "This parameter is not supported as a command line parameter, it is only supported as an environment variable. " +
-                    "Set (and export) the environment variable DQO_JAVA_OPTS before starting DQO.", defaultValue = "-XX:MaxRAMPercentage=80.0")
+                    "Set (and export) the environment variable DQO_JAVA_OPTS before starting DQOps.", defaultValue = "-XX:MaxRAMPercentage=80.0")
     private String DQO_JAVA_OPTS;
 
     @CommandLine.Option(names = {"--silent"},
@@ -135,7 +135,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.logging.console"},
             description = "Enables logging to console, selecting the correct format. " +
-                    "The default configuration 'OFF' disables console logging, allowing to use the DQO shell without being distracted by log entries. " +
+                    "The default configuration 'OFF' disables console logging, allowing to use the DQOps shell without being distracted by log entries. " +
                     "Set the 'PATTERN' mode to send formatted entries to the console in a format similar to Apache logs. " +
                     "When running DQOps in as a docker container on a Kubernetes engine that is configured to capture DQOps container logs, use 'JSON' mode to publish " +
                     "structured Json log entries that could be parsed by fluentd or other similar log engines. JSON formatted messages use a Logstash compatible format.", defaultValue = "OFF")
@@ -144,7 +144,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.logging.console-immediate-flush"},
             description = "When the console logging is enabled with --dqo.logging.console=PATTERN or --dqo.logging.console=JSON, turns on (for 'true') or turns of (for 'false') " +
                           "immediate console flushing after each log entry was written. Immediate console flushing is desirable when DQOps is started as a docker container " +
-                          "and docker logs from DQO should be forwarded to Kubernetes for centralized logging.", defaultValue = "false")
+                          "and docker logs from DQOps should be forwarded to Kubernetes for centralized logging.", defaultValue = "false")
     private Boolean dqoLoggingConsoleImmediateFlush;
 
     @CommandLine.Option(names = {"--dqo.logging.pattern"},
@@ -202,17 +202,17 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.python.interpreter-name"},
             description = "A list of python interpreter executable names, separated by a comma, containing possible python interpreter names such as 'python', 'python3', 'python3.exe' " +
-                    "or an absolute path to the python interpreter. DQO will try to find the first python interpreter executable in directories " +
+                    "or an absolute path to the python interpreter. DQOps will try to find the first python interpreter executable in directories " +
                     "defined in the PATH when a list of python interpreter names (not an absolute path) is used.", defaultValue = "python3")
     private String dqoPythonInterpreter;
 
     @CommandLine.Option(names = {"--dqo.python.use-host-python"},
-            description = "Disable creating a python virtual environment by DQO on startup. Instead, use the system python interpreter. " +
+            description = "Disable creating a python virtual environment by DQOps on startup. Instead, use the system python interpreter. " +
                     "DQOps will not install any required python packages on startup and use packages from the user's python installation.", defaultValue = "false")
     private String dqoPythonUseHostPython;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
-            description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.).", defaultValue = ".")
+            description = "Overrides the path to the DQOps user home. The default user home is created in the current folder (.).", defaultValue = ".")
     private String dqoUserHome;
 
     @CommandLine.Option(names = {"--dqo.home"},
@@ -265,15 +265,15 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Long dqoCoreLockWaitTimeoutSeconds;
 
     @CommandLine.Option(names = {"--dqo.cloud.parallel-file-uploads"},
-            description = "The number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+            description = "The number of files that are uploaded to DQOps Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
     private Integer dqoCloudParallelFileUploads;
 
     @CommandLine.Option(names = {"--dqo.cloud.parallel-file-downloads"},
-            description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+            description = "The number of files that are downloaded from DQOps Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
     private Integer dqoCloudParallelFileDownloads;
 
     @CommandLine.Option(names = {"--dqo.cloud.start-without-api-key"},
-            description = "Allow starting DQOps without a DQOps Cloud API Key and without prompting to log in to DQO Cloud.", defaultValue = "false")
+            description = "Allow starting DQOps without a DQOps Cloud API Key and without prompting to log in to DQOps Cloud.", defaultValue = "false")
     private Boolean dqoCloudStartWithoutApiKey;
 
     @CommandLine.Option(names = {"--dqo.cloud.authenticate-with-dqo-cloud"},
@@ -284,12 +284,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.instance.return-base-url"},
             description = "Base url of this instance that is used as a return url when authentication with DQOps Cloud credentials is forwarded and " +
                     "the user must be forwarded back to the current instance from the https://cloud.dqops.com login screen. " +
-                    "When this parameter is not provided, DQO will use the url from the \"Host\" HTTP header.")
+                    "When this parameter is not provided, DQOps will use the url from the \"Host\" HTTP header.")
     private String dqoInstanceReturnBaseUrl;
 
     @CommandLine.Option(names = {"--dqo.instance.signature-key"},
             description = "DQOps local instance signature key that is used to issue and verify digital signatures on API keys. It is a base64 encoded byte array (32 bytes). " +
-                    "When not configured, DQO will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
+                    "When not configured, DQOps will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
     private String dqoInstanceSignatureKey;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
@@ -313,7 +313,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Long dqoQueueWaitTimeoutsImportTables;
 
     @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.delete-stored-data"},
-            description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQO client when the \"wait\" parameter " +
+            description = "Sets the default timeout (in seconds) for the \"delete stored data\" rest api operation called from the DQOps client when the \"wait\" parameter " +
                     "is true and the timeout is not provided by the client.", defaultValue = "120")
     private Long dqoQueueWaitTimeoutsDeleteStoredData;
 
@@ -336,9 +336,9 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoSchedulerEnableCloudSync;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronize-cron-schedule"},
-            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new cron schedules. " +
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQOps Cloud and detect new cron schedules. " +
                     "The default schedule will synchronize local files with DQOps Cloud and refresh the data quality data warehouse 5 minutes past each hour. " +
-                    "A DQO instance that uses a FREE or a trial PERSONAL license will ignore this setting and synchronize files once an hour, on a random time. " +
+                    "A DQOps instance that uses a FREE or a trial PERSONAL license will ignore this setting and synchronize files once an hour, on a random time. " +
                     "Synchronization with DQOps cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "5 * * * *")
     private String dqoSchedulerSynchronizeCronSchedule;
 
@@ -392,7 +392,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoSchedulerDefaultSchedulesMonthlyPartitioned;
 
     @CommandLine.Option(names = {"--dqo.docker.user-home.allow-unmounted"},
-            description = "When running DQOps in a docker container, allow DQO user home folder to be initialized inside the container's filesystem " +
+            description = "When running DQOps in a docker container, allow DQOps user home folder to be initialized inside the container's filesystem " +
                     "if the folder hasn't been mounted to an external volume.", defaultValue = "false")
     private Boolean dqoDockerUserHomeAllowUnmounted;
 

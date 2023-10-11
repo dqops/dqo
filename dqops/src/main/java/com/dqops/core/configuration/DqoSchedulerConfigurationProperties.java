@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO that configure the job scheduler. Properties are mapped to the "dqo.scheduler." prefix.
+ * Configuration POJO with the configuration for DQOps that configure the job scheduler. Properties are mapped to the "dqo.scheduler." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.scheduler")
@@ -53,7 +53,7 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the default cron expression used to scan the metadata for new schedules and to synchronize to DQO Cloud.
+     * Returns the default cron expression used to scan the metadata for new schedules and to synchronize to DQOps Cloud.
      * @return Cron expression used to scan the metadata.
      */
     public String getSynchronizeCronSchedule() {
@@ -61,8 +61,8 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets the cron schedule used to synchronize to DQO cloud and detect new schedules.
-     * @param synchronizeCronSchedule Cron schedule used to scan the metadata for new cron expressions and to synchronize to DQO Cloud.
+     * Sets the cron schedule used to synchronize to DQOps cloud and detect new schedules.
+     * @param synchronizeCronSchedule Cron schedule used to scan the metadata for new cron expressions and to synchronize to DQOps Cloud.
      */
     public void setSynchronizeCronSchedule(String synchronizeCronSchedule) {
         this.synchronizeCronSchedule = synchronizeCronSchedule;
@@ -93,7 +93,7 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets the folder selection mode for deciding which folders should be synchronized to the DQO Cloud during a scheduled synchronization.
+     * Sets the folder selection mode for deciding which folders should be synchronized to the DQOps Cloud during a scheduled synchronization.
      * @param synchronizedFolders The value that decides which folders are synchronized during a monitoring synchronization.
      */
     public void setSynchronizedFolders(ScheduledSynchronizationFolderSelectionMode synchronizedFolders) {

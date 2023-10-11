@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
- * Property source that reads secrets the DQO user home's .credentials folder.
+ * Property source that reads secrets the DQOps user home's .credentials folder.
  */
 @Component
 public class SharedCredentialSource {

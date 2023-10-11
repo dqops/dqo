@@ -178,7 +178,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -202,7 +202,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -366,7 +366,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
 
     /**
      * Merges the current folder with the <code>otherFolder</code>, adding or overriding dashboard configuration.
-     * @param otherFolder The other dashboard configuration, from the DQO user home, containing user overwritten dashboards.
+     * @param otherFolder The other dashboard configuration, from the DQOps user home, containing user overwritten dashboards.
      * @return Merged folder that includes current folders and dashboards, merged with the other dashboards.
      */
     public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {

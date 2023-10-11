@@ -34,11 +34,11 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync settings" to synchronize the "settings" folder in the DQO user home.
+ * 3st level CLI command "cloud sync settings" to synchronize the "settings" folder in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", header = "Synchronize local \"settings\" folder with DQO Cloud",
+@CommandLine.Command(name = "settings", header = "Synchronize local \"settings\" folder with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"settings\" folder.")
 public class CloudSyncSettingsCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;

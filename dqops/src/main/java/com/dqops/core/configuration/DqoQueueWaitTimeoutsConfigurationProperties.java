@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO. Properties are mapped to the "dqo.queue.wait-timeouts" prefix that are responsible for the configuration of
+ * Configuration POJO with the configuration for DQOps. Properties are mapped to the "dqo.queue.wait-timeouts" prefix that are responsible for the configuration of
  * the default rest api timeouts when a job is started using the rest api with the wait=true option and no timeout provided by the client.
  */
 @Configuration

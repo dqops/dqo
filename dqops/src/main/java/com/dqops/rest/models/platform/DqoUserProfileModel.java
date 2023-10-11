@@ -43,57 +43,57 @@ public class DqoUserProfileModel {
     private String user;
 
     /**
-     * The ID of the DQO Cloud account (tenant).
+     * The ID of the DQOps Cloud account (tenant).
      */
-    @JsonPropertyDescription("DQO Cloud tenant.")
+    @JsonPropertyDescription("DQOps Cloud tenant.")
     private String tenant;
 
     /**
-     * DQO Cloud license type.
+     * DQOps Cloud license type.
      */
-    @JsonPropertyDescription("DQO Cloud license type.")
+    @JsonPropertyDescription("DQOps Cloud license type.")
     private String licenseType;
 
     /**
-     * The date and time when the trial period of a PERSONAL DQO license expires and the account is downgraded to a FREE license.
+     * The date and time when the trial period of a PERSONAL DQOps license expires and the account is downgraded to a FREE license.
      */
-    @JsonPropertyDescription("The date and time when the trial period of a PERSONAL DQO license expires and the account is downgraded to a FREE license.")
+    @JsonPropertyDescription("The date and time when the trial period of a PERSONAL DQOps license expires and the account is downgraded to a FREE license.")
     private String trialPeriodExpiresAt;
 
     /**
-     * Limit of the number of connections that could be synchronized to the DQO Cloud data quality warehouse.
+     * Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of connections that could be synchronized to the DQO Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionsLimit;
 
     /**
-     * Limit of the number of users that could be added to a DQO environment.
+     * Limit of the number of users that could be added to a DQOps environment.
      */
-    @JsonPropertyDescription("Limit of the number of users that could be added to a DQO environment.")
+    @JsonPropertyDescription("Limit of the number of users that could be added to a DQOps environment.")
     private Integer usersLimit;
 
     /**
-     * Limit of the number of recent months (excluding the current month) that could be synchronized to the DQO Cloud data quality warehouse.
+     * Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that could be synchronized to the DQO Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer monthsLimit;
 
     /**
-     * Limit of the number of tables inside each connection that could be synchronized to the DQO Cloud data quality warehouse.
+     * Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of tables inside each connection that could be synchronized to the DQO Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionTablesLimit;
 
     /**
-     * Limit of the total number of tables that could be synchronized to the DQO Cloud data quality warehouse.
+     * Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the total number of tables that could be synchronized to the DQO Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer tablesLimit;
 
     /**
-     * Limit of the number of supported concurrent jobs that DQO can run in parallel on this instance.
+     * Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance.
      */
-    @JsonPropertyDescription("Limit of the number of supported concurrent jobs that DQO can run in parallel on this instance.")
+    @JsonPropertyDescription("Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance.")
     private Integer jobsLimit;
 
     /**
@@ -151,9 +151,9 @@ public class DqoUserProfileModel {
     private boolean canManageDataSources;
 
     /**
-     * User can trigger the synchronization with DQO Cloud.
+     * User can trigger the synchronization with DQOps Cloud.
      */
-    @JsonPropertyDescription("User can trigger the synchronization with DQO Cloud.")
+    @JsonPropertyDescription("User can trigger the synchronization with DQOps Cloud.")
     private boolean canSynchronize;
 
     /**
@@ -194,7 +194,7 @@ public class DqoUserProfileModel {
 
     /**
      * Creates a user profile model from the API key.
-     * @param dqoCloudApiKey DQO cloud api key.
+     * @param dqoCloudApiKey DQOps Cloud api key.
      * @return User profile.
      */
     public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {

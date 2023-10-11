@@ -27,7 +27,7 @@ public abstract class FileSystemSynchronizationListener {
 
     /**
      * Called when the synchronization is about to begin. The synchronization is from the source to the target.
-     * @param dqoRoot DQO User home folder that will be synchronized.
+     * @param dqoRoot DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
@@ -36,7 +36,7 @@ public abstract class FileSystemSynchronizationListener {
 
     /**
      * Called when the synchronization has finished. The synchronization is from the source to the target.
-     * @param dqoRoot DQO User home folder that will be synchronized.
+     * @param dqoRoot DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
@@ -45,7 +45,7 @@ public abstract class FileSystemSynchronizationListener {
 
     /**
      * Called when a local change (from the source) was applied on the target file system.
-     * @param dqoRoot DQO User home folder that will be synchronized.
+     * @param dqoRoot DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference Change in the source file system that was applied (uploaded, deleted, etc.)
@@ -58,7 +58,7 @@ public abstract class FileSystemSynchronizationListener {
 
     /**
      * Called when a remote change (from the target system) was applied on the source file system (downloaded).
-     * @param dqoRoot DQO User home folder that will be synchronized.
+     * @param dqoRoot DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference Change in the target (remote) file system that was applied (uploaded, deleted, etc.) on the source system (downloaded).

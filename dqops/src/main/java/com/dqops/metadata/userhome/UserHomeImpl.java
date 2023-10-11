@@ -65,7 +65,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private DashboardFolderListSpecWrapperImpl dashboards;
 
     /**
-     * Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.
+     * Configuration of the default schedules that are assigned to new connections to data sources that are imported.
+     * The settings that are configured take precedence over configuration from the DQOps command line parameters and environment variables.
      */
     private MonitoringSchedulesWrapperImpl defaultSchedules;
 

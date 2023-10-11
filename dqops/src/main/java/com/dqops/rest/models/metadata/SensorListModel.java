@@ -51,9 +51,9 @@ public class SensorListModel {
     private boolean custom;
 
     /**
-     * This sensor is provided with DQO as a built-in sensor. This is a read-only flag.
+     * This sensor is provided with DQOps as a built-in sensor. This is a read-only flag.
      */
-    @JsonPropertyDescription("This sensor is provided with DQO as a built-in sensor. This is a read-only flag.")
+    @JsonPropertyDescription("This sensor is provided with DQOps as a built-in sensor. This is a read-only flag.")
     private boolean builtIn;
 
     /**

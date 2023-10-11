@@ -56,7 +56,7 @@ public class RuleFolderModel {
      * Adds a rule to this folder based on the given path.
      * @param fullRuleName the path of the rule
      * @param isCustom The rule has a custom definition.
-     * @param isBuiltIn The rule is provided (built-in) with DQO.
+     * @param isBuiltIn The rule is provided (built-in) with DQOps.
      * @param canEdit The current user can edit the rule.
      */
     public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {

@@ -20,7 +20,7 @@ import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
- * File index definition file that defines a tree of files that were synchronized with the DQO Cloud.
+ * File index definition file that defines a tree of files that were synchronized with the DQOps Cloud.
  */
 public class FileIndexJson {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;

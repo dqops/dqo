@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
+ * DQOps job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
  */
 @Component
 public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
@@ -87,7 +87,7 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
-     * Creates a DQO Cloud synchronization job that will synchronize one folder in the user home.
+     * Creates a DQOps Cloud synchronization job that will synchronize one folder in the user home.
      *
      * @return Cloud synchronization job for one folder.
      */
@@ -97,7 +97,7 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
-     * Creates a DQO Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQO User home folders in parallel.
+     * Creates a DQOps Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQOps User home folders in parallel.
      *
      * @return Cloud synchronization job for multiple folders.
      */

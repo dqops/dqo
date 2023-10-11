@@ -23,8 +23,8 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public class DqoHomeContextFactoryObjectMother {
     /**
-     * Returns a real DQO home context factory.
-     * @return DQO Home context factory.
+     * Returns a real DQOps home context factory.
+     * @return DQOps Home context factory.
      */
     public static DqoHomeContextFactory getRealDqoHomeContextFactory() {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();

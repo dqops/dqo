@@ -38,7 +38,7 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
     /**
      * Creates an augmenting console appender.
      * @param quoteMessage  Encodes all double quotes and backslashes the message field again.
-     * @param apiKeyPayload DQO Cloud api key.
+     * @param apiKeyPayload DQOps Cloud api key.
      * @param ignoredJsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
     public AugmentingConsoleAppender(boolean quoteMessage,

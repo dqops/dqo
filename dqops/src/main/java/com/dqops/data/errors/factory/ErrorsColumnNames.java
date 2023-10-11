@@ -22,7 +22,7 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
  * The sensor execution errors are error messages received from the data source when the tested table does not exist or the sensor's SQL query is invalid.
  * The rule execution errors are exceptions raised during the Python rule evaluation.
  * The errors are stored in the errors table is located in the $DQO_USER_HOME/.data/errors folder that contains uncompressed parquet files.
- * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user's home folder).
+ * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user's home folder).
  *
  * The folder partitioning structure for this table is:
  * c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/, for example: c=myconnection/t=public.testedtable/m=2023-01-01/.

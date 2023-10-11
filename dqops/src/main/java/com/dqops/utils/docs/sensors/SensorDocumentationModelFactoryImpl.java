@@ -43,7 +43,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
 
     /**
      * Creates a sensor documentation model factory.
-     * @param dqoHomeContext DQO User home context.
+     * @param dqoHomeContext DQOps User home context.
      * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the sensor parameters.
      */
     public SensorDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
