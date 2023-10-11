@@ -45,10 +45,10 @@ spec:
 
     - folder_name: Data profiling issues count
       dashboards:
-        - dashboard_name: Profiling issues count summary
+        - dashboard_name: Profiling issues count summary per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -308,10 +308,10 @@ spec:
             ds0.p_check_category: all
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Data quality issues summary
+        - dashboard_name: Data quality issues summary per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -632,10 +632,10 @@ spec:
 
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Count summary
+        - dashboard_name: Count summary per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -956,10 +956,10 @@ spec:
           ds0.p_check_category: all
   - folder_name: Data quality issues count
     dashboards:
-      - dashboard_name: Count summary
+      - dashboard_name: Count summary per check
         url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
         width: 1400
-        height: 1600
+        height: 1870
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
