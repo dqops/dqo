@@ -3,7 +3,8 @@ import {
   ConnectionModel,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum,
-  ConnectionSpecProviderTypeEnum
+  ConnectionSpecProviderTypeEnum,
+  SharedCredentialListModel
 } from '../../../api';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
@@ -20,7 +21,7 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
-import { DataSourcesApi } from "../../../services/apiClient";
+import { DataSourcesApi, SharedCredentailsApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
@@ -52,6 +53,7 @@ const ConnectionDetail = () => {
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
+  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
 
   useEffect(() => {
     dispatch(getConnectionBasic(checkTypes, activeTab, connection));
@@ -118,6 +120,15 @@ const ConnectionDetail = () => {
     setShowError(true);
   };
 
+  const getSharedCredentials = async () => {
+    await SharedCredentailsApi.getAllSharedCredentials()
+      .then((res) => setSharedCredentials(res.data))
+  }
+
+  useEffect(() => {
+    getSharedCredentials()
+  },[])
+
   return (
     <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
@@ -144,6 +155,7 @@ const ConnectionDetail = () => {
           <BigqueryConnection
             bigquery={connectionBasic?.bigquery}
             onChange={(bigquery) => onChange({ bigquery })}
+            sharedCredentials = {sharedCredentials}
           />
         )}
         {connectionBasic?.provider_type ===
@@ -151,6 +163,7 @@ const ConnectionDetail = () => {
             <SnowflakeConnection
               snowflake={connectionBasic?.snowflake}
               onChange={(snowflake) => onChange({ snowflake })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -159,6 +172,7 @@ const ConnectionDetail = () => {
             <RedshiftConnection
               redshift={connectionBasic?.redshift}
               onChange={(redshift) => onChange({ redshift })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -167,6 +181,7 @@ const ConnectionDetail = () => {
             <SqlServerConnection
               sqlserver={connectionBasic?.sqlserver}
               onChange={(sqlserver) => onChange({ sqlserver })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -175,6 +190,7 @@ const ConnectionDetail = () => {
             <PostgreSQLConnection
               postgresql={connectionBasic?.postgresql}
               onChange={(postgresql) => onChange({ postgresql })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -183,6 +199,7 @@ const ConnectionDetail = () => {
             <MySQLConnection
               mysql={connectionBasic?.mysql}
               onChange={(mysql) => onChange({ mysql })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -191,6 +208,7 @@ const ConnectionDetail = () => {
             <OracleConnection
               oracle={connectionBasic?.oracle}
               onChange={(oracle) => onChange({ oracle })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }

@@ -1,19 +1,20 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { OracleParametersSpec } from "../../../../api";
+import { OracleParametersSpec, SharedCredentialListModel } from "../../../../api";
 import JdbcPropertiesView from "../JdbcProperties";
-import Checkbox from "../../../Checkbox";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 
 interface IOracleConnectionProps {
   oracle?: OracleParametersSpec;
   onChange?: (obj: OracleParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const OracleConnection = ({
   oracle,
-  onChange
+  onChange,
+  sharedCredentials
 }: IOracleConnectionProps) => {
 
   const handleChange = (obj: Partial<OracleParametersSpec>) => {
@@ -67,6 +68,7 @@ const OracleConnection = ({
       <JdbcPropertiesView
         properties={oracle?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );
