@@ -191,7 +191,7 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Column count
+        - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
           height: 1800
@@ -526,7 +526,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Column count
+        - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
           height: 1800
