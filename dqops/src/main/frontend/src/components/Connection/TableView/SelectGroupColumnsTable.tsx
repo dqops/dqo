@@ -1,8 +1,6 @@
+import React from 'react';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
-import React, { useEffect, useState } from 'react';
-import { ColumnApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-import { useParams } from 'react-router-dom';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 import { Tooltip } from '@material-tailwind/react';
 
@@ -20,11 +18,12 @@ type SelectDataGroupingForTableProps = {
   requiredColumnsIndexes: number[];
   responseList: Array<string>;
   checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number, reference : boolean) => void
-  dqoLimit?: number
+  dqoLimit?: number,
+  columnOptions: Option[]
 };
 interface Option {
-  label: string;
-  value: string;
+  label: string | number;
+  value?: string | number;
 }
 
 export const SelectGroupColumnsTable = ({
@@ -39,14 +38,9 @@ export const SelectGroupColumnsTable = ({
   requiredColumnsIndexes,
   warningMessageList,
   checkIfDistinctCountIsBiggerThanLimit,
-  dqoLimit
+  dqoLimit,
+  columnOptions
 }: SelectDataGroupingForTableProps) => {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useParams();
-
 
   const handleColumnSelectChange = (value: string, index: number) => {
     if (refTable) {
@@ -55,56 +49,6 @@ export const SelectGroupColumnsTable = ({
       onChangeDataGroupingArray(false, index, value);
     }
   };
-  const [options, setOptions] = useState<Option[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (refConnection && refSchema && refTable) {
-        try {
-          const response = await ColumnApiClient.getColumns(
-            refConnection,
-            refSchema,
-            refTable
-          );
-          setOptions([
-            { label: ' - ', value: '' },
-            ...response.data.map((item) => ({
-              label: item.column_name || '',
-              value: item.column_name || ''
-            }))
-          ]);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      } else {
-        if (
-          table &&
-          !refTable &&
-          !refConnection &&
-          !refSchema 
-        ) {
-          try {
-            const response = await ColumnApiClient.getColumns(
-              connection,
-              schema,
-              table
-            );
-            setOptions([
-              { label: ' - ', value: '' },
-              ...response.data.map((item) => ({
-                label: item.column_name || '',
-                value: item.column_name || ''
-              }))
-            ]);
-          } catch (error) {
-            console.error('Error:', error);
-          }
-        }
-      }
-    };
-
-    fetchData();
-  }, [connection, schema, table, refTable]);
 
   const message = `The last known distinct count statistics for this column detected more than ${dqoLimit} rows or the statistics were not collected for this table yet`
 
@@ -120,7 +64,7 @@ export const SelectGroupColumnsTable = ({
                   triggerClassName={clsx(
                     requiredColumnsIndexes.includes(index)
                     ? 'my-0.5 border border-red-500'
-                      : options.find((x) => x.label === responseList[index] || responseList[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
+                      : columnOptions.find((x) => x.label === responseList[index] || responseList[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
                      
                       )}
                   value={responseList[index] ?? ""}
@@ -132,7 +76,10 @@ export const SelectGroupColumnsTable = ({
                   refConnection={refConnection}
                   refSchema={refSchema}
                   refTable={refTable}
-                  passedOptions={options}
+                  passedOptions={columnOptions.map((option) => ({
+                    label: String(option.label),
+                    value: option.value ? String(option.value) : '',
+                  }))}
                 />
               </td>
                 {warningMessageList?.[index] === true ? 

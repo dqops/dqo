@@ -21,7 +21,7 @@ import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
-import Select, { Option } from '../../Select';
+import Select,  { Option } from '../../Select';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -54,7 +54,8 @@ type EditReferenceTableProps = {
   isDataDeleted: boolean;
   listOfExistingReferences: Array<string | undefined>;
   canUserCompareTables?: boolean;
-  onUpdateParent: () => void
+  onUpdateParent: () => void;
+  columnOptions : {comparedColumnsOptions : Option[], referencedColumnsOptions: Option[]}
 };
 
 const EditReferenceTable = ({
@@ -74,7 +75,8 @@ const EditReferenceTable = ({
   isDataDeleted,
   listOfExistingReferences,
   canUserCompareTables,
-  onUpdateParent
+  onUpdateParent,
+  columnOptions
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -410,7 +412,7 @@ const EditReferenceTable = ({
     const comparedGrouping = dataGrouping.map((x) => x?.compared_table_column_name)
 
     const maxLeghtToCheck = Math.max(referenceGrouping.length, comparedGrouping.length)
-    
+
     const referenceMissingIndexes = [];
     const comparedMissingIndexes = [];
 
@@ -791,13 +793,13 @@ const getReferenceTableStatistics = async () => {
               title="Data grouping on compared table"
               placeholder="Select column on compared table"
               onChangeDataGroupingArray={onChangeDataGroupingArray}
+              columnOptions={columnOptions.comparedColumnsOptions}
               requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).comparedMissingIndexes}      
               responseList={dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '')}
               warningMessageList={listOfWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
               dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
             />
-
             <SelectGroupColumnsTable
               className="flex-1"
               title="Data grouping on reference table"
@@ -805,6 +807,7 @@ const getReferenceTableStatistics = async () => {
               refConnection={refConnection}
               refSchema={refSchema}
               refTable={refTable}
+              columnOptions={columnOptions.referencedColumnsOptions}
               onChangeDataGroupingArray={onChangeDataGroupingArray}
               requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).referenceMissingIndexes}
               responseList={dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '')}
