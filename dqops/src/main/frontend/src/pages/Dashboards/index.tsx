@@ -57,7 +57,7 @@ const Dashboards = () => {
           {tabs.map((tab: ITab) => {
             const dashboard = openedDashboards?.find(
               (item: AuthenticatedDashboardModel) =>
-                (item.folder_path || '')
+                (item?.folder_path || '')
                   .split('/')
                   .concat(item.dashboard?.dashboard_name || '')
                   .join('-') === tab.value
