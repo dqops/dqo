@@ -40,7 +40,7 @@ const App = () => {
     dispatch(getAllJobs());
 
     window.onunhandledrejection = (event) => {
-      if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') < 0) {
+      if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') > 0) {
         LogErrorsApi.logError({
           window_location: window.location.href,
           message: event.reason?.toString()
