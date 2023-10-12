@@ -122,7 +122,7 @@ export const IncidentsNotificationsView = () => {
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
             />
-            <span>days. After this time, the DQOps creates a new incident.</span>
+            <span>days. After this time, DQOps creates a new incident.</span>
           </div>
         </div>
         <div className="flex items-center mb-4 gap-2 text-sm">
