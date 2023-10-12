@@ -9,6 +9,13 @@ Returns a complete view of the sensor readouts for recent column level monitorin
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
+
 
 
 
@@ -24,6 +31,13 @@ Returns a view of the sensor readouts for recent column level partitioned checks
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
 
 
 
@@ -41,6 +55,13 @@ Returns sensor results of the recent check executions for all column level data 
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
+
 
 
 
@@ -56,6 +77,13 @@ Returns the complete results of the most recent table level monitoring execution
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
 
 
 
@@ -73,6 +101,13 @@ Returns a complete view of sensor readouts for recent table level partitioned ch
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
+
 
 
 
@@ -88,6 +123,13 @@ Returns the complete results of the most recent check executions for all table l
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
+
 
 
 

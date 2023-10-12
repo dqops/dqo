@@ -39,7 +39,7 @@ api/sensors/{fullSensorName}
 ___  
 
 ## get_all_sensors  
-Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.  
+Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py)
   
 
@@ -47,6 +47,13 @@ Returns a flat list of all sensors available in DQO, both built-in sensors and u
 ```
 api/sensors  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[sensor_list_model]()||[SensorListModel]()|
+
 
 
 
@@ -78,7 +85,7 @@ api/sensors/{fullSensorName}
 ___  
 
 ## get_sensor_folder_tree  
-Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.  
+Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py)
   
 
@@ -91,7 +98,7 @@ api/definitions/sensors
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_basic_folder_model]()||[SensorBasicFolderModel]()|
+|[sensor_folder_model]()||[SensorFolderModel]()|
 
 
 
@@ -135,9 +142,9 @@ Sensor model returned from REST API.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |full_sensor_name|Full sensor name.|string| | | |
-|[sensor_definition_spec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)|Sensor definition specification.|[sensorDefinitionSpec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)| | | |
+|[sensor_definition_spec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)| | | |
 |custom|Whether the sensor is a User Home sensor|boolean| | | |
-|built_in|This is a DQO built-in sensor, whose parameters cannot be changed.|boolean| | | |
+|built_in|This is a DQOps built-in sensor, whose parameters cannot be changed.|boolean| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  

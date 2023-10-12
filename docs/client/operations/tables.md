@@ -82,7 +82,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_basic_model](\docs\client\operations\tables\#tablebasicmodel)||[TableBasicModel](\docs\client\operations\tables\#tablebasicmodel)|
+|[table_list_model](\docs\client\operations\tables\#tablelistmodel)||[TableListModel](\docs\client\operations\tables\#tablelistmodel)|
 
 
 
@@ -101,6 +101,13 @@ Return a UI friendly model of configurations for column-level data quality monit
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/monitoring/{timeScale}/model  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
+
+
 
 
 
@@ -116,6 +123,13 @@ Return a UI friendly model of configurations for column-level data quality parti
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/model  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
+
 
 
 
@@ -133,6 +147,13 @@ Return a UI friendly model of configurations for column-level data quality profi
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
+
+
 
 
 
@@ -148,6 +169,13 @@ Return the list of comments added to a table
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[comment_spec](\docs\client\models\#commentspec)||[CommentSpec](\docs\client\models\#commentspec)|
+
 
 
 
@@ -277,7 +305,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_basic_model](\docs\client\models\#checkcontainerbasicmodel)||[CheckContainerBasicModel](\docs\client\models\#checkcontainerbasicmodel)|
+|[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
 
@@ -365,6 +393,13 @@ Return available data quality checks on a requested table.
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/monitoring/{timeScale}  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
+
+
 
 
 
@@ -385,7 +420,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_basic_model](\docs\client\models\#checkcontainerbasicmodel)||[CheckContainerBasicModel](\docs\client\models\#checkcontainerbasicmodel)|
+|[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
 
@@ -473,6 +508,13 @@ Return available data quality checks on a requested table.
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
+
+
 
 
 
@@ -539,7 +581,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_basic_model](\docs\client\models\#checkcontainerbasicmodel)||[CheckContainerBasicModel](\docs\client\models\#checkcontainerbasicmodel)|
+|[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
 
@@ -604,6 +646,13 @@ Return available data quality checks on a requested table.
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
+
+
 
 
 
@@ -666,6 +715,13 @@ Returns a list of tables inside a connection/schema
 api/connections/{connectionName}/schemas/{schemaName}/tables  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[table_list_model](\docs\client\operations\tables\#tablelistmodel)||[TableListModel](\docs\client\operations\tables\#tablelistmodel)|
+
+
 
 
 
@@ -713,7 +769,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Table basic model with the updated settings|[TableBasicModel](\docs\client\operations\tables\#tablebasicmodel)|false|
+|Table basic model with the updated settings|[TableListModel](\docs\client\operations\tables\#tablelistmodel)|false|
 
 
 ___  
@@ -736,7 +792,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/comment
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table|[]()|false|
+|List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table|[CommentSpec](\docs\client\models\#commentspec)|false|
 
 
 ___  
@@ -1042,6 +1098,125 @@ ___
 
 ___  
 
+## TableListModel  
+Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|connection_name|Connection name.|string| | | |
+|table_hash|Table hash that identifies the table using a unique hash code.|long| | | |
+|[target](\docs\client\operations\jobs\#physicaltablename)|Physical table details (a physical schema name and a physical table name).|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|disabled|Disables all data quality checks on the table. Data quality checks will not be executed.|boolean| | | |
+|stage|Stage name.|string| | | |
+|filter|SQL WHERE clause added to the sensor queries.|string| | | |
+|priority|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|integer| | | |
+|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](\docs\reference\yaml\tableyaml\#tableownerspec)| | | |
+|profiling_checks_result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
+|has_any_configured_checks|True when the table has any checks configured.|boolean| | | |
+|has_any_configured_profiling_checks|True when the table has any profiling checks configured.|boolean| | | |
+|has_any_configured_monitoring_checks|True when the table has any monitoring checks configured.|boolean| | | |
+|has_any_configured_partition_checks|True when the table has any partition checks configured.|boolean| | | |
+|partitioning_configuration_missing|True when the table has missing configuration of the &quot;partition_by_column&quot; column, making any partition checks fail when executed.|boolean| | | |
+|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[run_profiling_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[run_monitoring_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[run_partition_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[collect_statistics_job_template](\docs\client\operations\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table.|[StatisticsCollectorSearchFilters](\docs\client\operations\jobs\#statisticscollectorsearchfilters)| | | |
+|[data_clean_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
+|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
+|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
+|can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |
+|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
+
+___  
+
+## TableComparisonMonthlyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the monthly partitioned comparison checks for each configured reference table.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+___  
+
+## CustomCheckSpecMap  
+Dictionary of custom checks indexed by a check name.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+___  
+
+## TableMonthlyPartitionedCheckCategoriesSpec  
+Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[volume](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|[TableVolumeMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)| | | |
+|[timeliness](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|[TableTimelinessMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)| | | |
+|[sql](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|[TableSqlMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)| | | |
+|[comparisons](#tablecomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyPartitionedChecksSpecMap](#tablecomparisonmonthlypartitionedchecksspecmap)| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
+
+___  
+
+## TableComparisonProfilingChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+___  
+
+## TableProfilingCheckCategoriesSpec  
+Container of table level checks that are activated on a table level.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
+|[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|Configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)| | | |
+|[timeliness](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[TableTimelinessProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)| | | |
+|[accuracy](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[TableAccuracyProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)| | | |
+|[sql](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[TableSqlProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)| | | |
+|[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|Configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)| | | |
+|[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|Configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)| | | |
+|[comparisons](#tablecomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](#tablecomparisonprofilingchecksspecmap)| | | |
+|[custom](\docs\client\operations\tables\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\client\operations\tables\#customcheckspecmap)| | | |
+
+___  
+
 ## DataGroupingConfigurationSpecMap  
 Dictionary of named data grouping configurations defined on a table level.  
   
@@ -1088,42 +1263,6 @@ Configuration of data quality incident grouping on a table level. Defines how si
 
 ___  
 
-## TableComparisonProfilingChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|access_order||boolean| | | |
-|size||integer| | | |
-|mod_count||integer| | | |
-|threshold||integer| | | |
-
-___  
-
-## TableProfilingCheckCategoriesSpec  
-Container of table level checks that are activated on a table level.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQO will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
-|[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|Configuration of volume data quality checks on a table level.|[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)| | | |
-|[timeliness](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[timeliness](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)| | | |
-|[accuracy](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[accuracy](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)| | | |
-|[sql](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[sql](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)| | | |
-|[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|Configuration of the table availability data quality checks on a table level.|[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)| | | |
-|[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|Configuration of schema (column count and schema) data quality checks on a table level.|[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)| | | |
-|[comparisons](#tablecomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[comparisons](#tablecomparisonprofilingchecksspecmap)| | | |
-|[custom](\docs\client\operations\columns\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[custom](\docs\client\operations\columns\#customcheckspecmap)| | | |
-
-___  
-
 ## TableComparisonDailyMonitoringChecksSpecMap  
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
@@ -1149,14 +1288,14 @@ Container of table level daily monitoring. Contains categories of daily monitori
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)|Daily monitoring volume data quality checks|[volume](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)| | | |
-|[timeliness](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tabletimelinessdailymonitoringchecksspec)|Daily monitoring timeliness checks|[timeliness](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tabletimelinessdailymonitoringchecksspec)| | | |
-|[accuracy](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableaccuracydailymonitoringchecksspec)|Daily monitoring accuracy checks|[accuracy](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableaccuracydailymonitoringchecksspec)| | | |
-|[sql](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)|Daily monitoring custom SQL checks|[sql](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)| | | |
-|[availability](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)|Daily monitoring table availability checks|[availability](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)| | | |
-|[schema](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)|Daily monitoring table schema checks|[schema](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)| | | |
-|[comparisons](#tablecomparisondailymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[comparisons](#tablecomparisondailymonitoringchecksspecmap)| | | |
-|[custom](\docs\client\operations\columns\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[custom](\docs\client\operations\columns\#customcheckspecmap)| | | |
+|[volume](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)|Daily monitoring volume data quality checks|[TableVolumeDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablevolumedailymonitoringchecksspec)| | | |
+|[timeliness](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tabletimelinessdailymonitoringchecksspec)|Daily monitoring timeliness checks|[TableTimelinessDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tabletimelinessdailymonitoringchecksspec)| | | |
+|[accuracy](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableaccuracydailymonitoringchecksspec)|Daily monitoring accuracy checks|[TableAccuracyDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableaccuracydailymonitoringchecksspec)| | | |
+|[sql](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)|Daily monitoring custom SQL checks|[TableSqlDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)| | | |
+|[availability](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)|Daily monitoring table availability checks|[TableAvailabilityDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)|Daily monitoring table schema checks|[TableSchemaDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)| | | |
+|[comparisons](#tablecomparisondailymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyMonitoringChecksSpecMap](#tablecomparisondailymonitoringchecksspecmap)| | | |
+|[custom](\docs\client\operations\tables\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\client\operations\tables\#customcheckspecmap)| | | |
 
 ___  
 
@@ -1185,14 +1324,14 @@ Container of table level monthly monitoring checks. Contains categories of month
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)|Monthly monitoring of volume data quality checks|[volume](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)| | | |
-|[timeliness](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tabletimelinessmonthlymonitoringchecksspec)|Monthly monitoring of timeliness checks|[timeliness](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tabletimelinessmonthlymonitoringchecksspec)| | | |
-|[accuracy](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableaccuracymonthlymonitoringchecksspec)|Monthly monitoring accuracy checks|[accuracy](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableaccuracymonthlymonitoringchecksspec)| | | |
-|[sql](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)|Monthly monitoring of custom SQL checks|[sql](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)| | | |
-|[availability](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)|Daily partitioned availability checks|[availability](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)| | | |
-|[schema](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)|Monthly monitoring table schema checks|[schema](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)| | | |
-|[comparisons](#tablecomparisonmonthlymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[comparisons](#tablecomparisonmonthlymonitoringchecksspecmap)| | | |
-|[custom](\docs\client\operations\columns\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[custom](\docs\client\operations\columns\#customcheckspecmap)| | | |
+|[volume](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)|Monthly monitoring of volume data quality checks|[TableVolumeMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablevolumemonthlymonitoringchecksspec)| | | |
+|[timeliness](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tabletimelinessmonthlymonitoringchecksspec)|Monthly monitoring of timeliness checks|[TableTimelinessMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tabletimelinessmonthlymonitoringchecksspec)| | | |
+|[accuracy](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableaccuracymonthlymonitoringchecksspec)|Monthly monitoring accuracy checks|[TableAccuracyMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableaccuracymonthlymonitoringchecksspec)| | | |
+|[sql](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)|Monthly monitoring of custom SQL checks|[TableSqlMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)| | | |
+|[availability](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)|Daily partitioned availability checks|[TableAvailabilityMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)| | | |
+|[schema](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)|Monthly monitoring table schema checks|[TableSchemaMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)| | | |
+|[comparisons](#tablecomparisonmonthlymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyMonitoringChecksSpecMap](#tablecomparisonmonthlymonitoringchecksspecmap)| | | |
+|[custom](\docs\client\operations\tables\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\client\operations\tables\#customcheckspecmap)| | | |
 
 ___  
 
@@ -1204,8 +1343,8 @@ Container of table level monitoring, divided by the time window (daily, monthly,
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](\docs\client\operations\tables\#tabledailymonitoringcheckcategoriesspec)|Configuration of daily monitoring evaluated at a table level.|[daily](\docs\client\operations\tables\#tabledailymonitoringcheckcategoriesspec)| | | |
-|[monthly](\docs\client\operations\tables\#tablemonthlymonitoringcheckcategoriesspec)|Configuration of monthly monitoring evaluated at a table level.|[monthly](\docs\client\operations\tables\#tablemonthlymonitoringcheckcategoriesspec)| | | |
+|[daily](\docs\client\operations\tables\#tabledailymonitoringcheckcategoriesspec)|Configuration of daily monitoring evaluated at a table level.|[TableDailyMonitoringCheckCategoriesSpec](\docs\client\operations\tables\#tabledailymonitoringcheckcategoriesspec)| | | |
+|[monthly](\docs\client\operations\tables\#tablemonthlymonitoringcheckcategoriesspec)|Configuration of monthly monitoring evaluated at a table level.|[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\operations\tables\#tablemonthlymonitoringcheckcategoriesspec)| | | |
 
 ___  
 
@@ -1234,44 +1373,11 @@ Container of table level daily partitioned checks. Contains categories of daily 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[volume](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)| | | |
-|[timeliness](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)|Daily partitioned timeliness checks|[timeliness](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)| | | |
-|[sql](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[sql](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)| | | |
-|[comparisons](#tablecomparisondailypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[comparisons](#tablecomparisondailypartitionedchecksspecmap)| | | |
-|[custom](\docs\client\operations\columns\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[custom](\docs\client\operations\columns\#customcheckspecmap)| | | |
-
-___  
-
-## TableComparisonMonthlyPartitionedChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the monthly partitioned comparison checks for each configured reference table.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|access_order||boolean| | | |
-|size||integer| | | |
-|mod_count||integer| | | |
-|threshold||integer| | | |
-
-___  
-
-## TableMonthlyPartitionedCheckCategoriesSpec  
-Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|[volume](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)| | | |
-|[timeliness](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|[timeliness](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)| | | |
-|[sql](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|[sql](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)| | | |
-|[comparisons](#tablecomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[comparisons](#tablecomparisonmonthlypartitionedchecksspecmap)| | | |
-|[custom](\docs\client\operations\columns\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[custom](\docs\client\operations\columns\#customcheckspecmap)| | | |
+|[volume](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)| | | |
+|[timeliness](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)| | | |
+|[sql](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableSqlDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)| | | |
+|[comparisons](#tablecomparisondailypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](#tablecomparisondailypartitionedchecksspecmap)| | | |
+|[custom](\docs\client\operations\tables\#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](\docs\client\operations\tables\#customcheckspecmap)| | | |
 
 ___  
 
@@ -1283,8 +1389,8 @@ Container of table level partitioned checks, divided by the time window (daily, 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](\docs\client\operations\tables\#tabledailypartitionedcheckcategoriesspec)|Configuration of day partitioned data quality checks evaluated at a table level.|[daily](\docs\client\operations\tables\#tabledailypartitionedcheckcategoriesspec)| | | |
-|[monthly](\docs\client\operations\tables\#tablemonthlypartitionedcheckcategoriesspec)|Configuration of monthly partitioned data quality checks evaluated at a table level..|[monthly](\docs\client\operations\tables\#tablemonthlypartitionedcheckcategoriesspec)| | | |
+|[daily](\docs\client\operations\tables\#tabledailypartitionedcheckcategoriesspec)|Configuration of day partitioned data quality checks evaluated at a table level.|[TableDailyPartitionedCheckCategoriesSpec](\docs\client\operations\tables\#tabledailypartitionedcheckcategoriesspec)| | | |
+|[monthly](\docs\client\operations\tables\#tablemonthlypartitionedcheckcategoriesspec)|Configuration of monthly partitioned data quality checks evaluated at a table level..|[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\operations\tables\#tablemonthlypartitionedcheckcategoriesspec)| | | |
 
 ___  
 
@@ -1315,88 +1421,21 @@ Table specification that defines data quality tests that are enabled on a table 
 |stage|Stage name.|string| | | |
 |priority|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|integer| | | |
 |filter|SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.|string| | | |
-|[timestamp_columns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[timestampColumns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)| | | |
-|[incremental_time_window](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|[incrementalTimeWindow](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)| | | |
+|[timestamp_columns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[TimestampColumnsSpec](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)| | | |
+|[incremental_time_window](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|[PartitionIncrementalTimeWindowSpec](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)| | | |
 |default_grouping_name|The name of the default data grouping configuration that is applied on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined in the &#x27;groupings&#x27; dictionary (indexed by the data grouping name).|string| | | |
-|[groupings](#datagroupingconfigurationspecmap)|Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).|[groupings](#datagroupingconfigurationspecmap)| | | |
-|[table_comparisons](#tablecomparisonconfigurationspecmap)|Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[tableComparisons](#tablecomparisonconfigurationspecmap)| | | |
-|[incident_grouping](\docs\client\operations\tables\#tableincidentgroupingspec)|Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.|[incidentGrouping](\docs\client\operations\tables\#tableincidentgroupingspec)| | | |
-|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)| | | |
-|[profiling_checks](\docs\client\operations\tables\#tableprofilingcheckcategoriesspec)|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|[profilingChecks](\docs\client\operations\tables\#tableprofilingcheckcategoriesspec)| | | |
-|[monitoring_checks](#tablemonitoringchecksspec)|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|[monitoringChecks](#tablemonitoringchecksspec)| | | |
-|[partitioned_checks](#tablepartitionedchecksrootspec)|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|[partitionedChecks](#tablepartitionedchecksrootspec)| | | |
-|[statistics](\docs\reference\yaml\tableyaml\#tablestatisticscollectorsrootcategoriesspec)|Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.|[statistics](\docs\reference\yaml\tableyaml\#tablestatisticscollectorsrootcategoriesspec)| | | |
-|[schedules_override](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[schedulesOverride](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)| | | |
-|[columns](#columnspecmap)|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|[columns](#columnspecmap)| | | |
-|[labels](\docs\client\operations\connections\#labelsetspec)|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|[labels](\docs\client\operations\connections\#labelsetspec)| | | |
-|[comments](\docs\client\operations\connections\#commentslistspec)|Comments used for change tracking and documenting changes directly in the table data quality specification file.|[comments](\docs\client\operations\connections\#commentslistspec)| | | |
-
-___  
-
-## TableStatisticsModel  
-Model that returns a summary of the table level statistics (the basic profiling results).  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|[table](\docs\client\operations\columns\#physicaltablename)|Physical table name including the schema and table names.|[table](\docs\client\operations\columns\#physicaltablename)| | | |
-|[collect_table_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, limited only to the table level statistics (row count, etc).|[collectTableStatisticsJobTemplate](\docs\client\models\#statisticscollectorsearchfilters)| | | |
-|[collect_table_and_column_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.|[collectTableAndColumnStatisticsJobTemplate](\docs\client\models\#statisticscollectorsearchfilters)| | | |
-|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
-
-___  
-
-## TableBasicModel  
-Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|table_hash|Table hash that identifies the table using a unique hash code.|long| | | |
-|[target](\docs\client\operations\columns\#physicaltablename)|Physical table details (a physical schema name and a physical table name).|[target](\docs\client\operations\columns\#physicaltablename)| | | |
-|disabled|Disables all data quality checks on the table. Data quality checks will not be executed.|boolean| | | |
-|stage|Stage name.|string| | | |
-|filter|SQL WHERE clause added to the sensor queries.|string| | | |
-|priority|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|integer| | | |
-|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)| | | |
-|profiling_checks_result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQO will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
-|has_any_configured_checks|True when the table has any checks configured.|boolean| | | |
-|has_any_configured_profiling_checks|True when the table has any profiling checks configured.|boolean| | | |
-|has_any_configured_monitoring_checks|True when the table has any monitoring checks configured.|boolean| | | |
-|has_any_configured_partition_checks|True when the table has any partition checks configured.|boolean| | | |
-|partitioning_configuration_missing|True when the table has missing configuration of the &quot;partition_by_column&quot; column, making any partition checks fail when executed.|boolean| | | |
-|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[runChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[run_profiling_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[runProfilingChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[run_monitoring_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[runMonitoringChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[run_partition_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[runPartitionChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[collect_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table.|[collectStatisticsJobTemplate](\docs\client\models\#statisticscollectorsearchfilters)| | | |
-|[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|[dataCleanJobTemplate](\docs\client\models\#deletestoreddataqueuejobparameters)| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
-|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
-|can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |
-|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
-
-___  
-
-## TablePartitioningModel  
-Rest model that returns the configuration of table partitioning information.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|[target](\docs\client\operations\columns\#physicaltablename)|Physical table details (a physical schema name and a physical table name)|[target](\docs\client\operations\columns\#physicaltablename)| | | |
-|[timestamp_columns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[timestampColumns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)| | | |
-|[incremental_time_window](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.|[incrementalTimeWindow](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
+|[groupings](#datagroupingconfigurationspecmap)|Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).|[DataGroupingConfigurationSpecMap](#datagroupingconfigurationspecmap)| | | |
+|[table_comparisons](#tablecomparisonconfigurationspecmap)|Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQOps, but the reference table could be located on a different data source. DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQOps will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[TableComparisonConfigurationSpecMap](#tablecomparisonconfigurationspecmap)| | | |
+|[incident_grouping](\docs\client\operations\tables\#tableincidentgroupingspec)|Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.|[TableIncidentGroupingSpec](\docs\client\operations\tables\#tableincidentgroupingspec)| | | |
+|[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](\docs\reference\yaml\tableyaml\#tableownerspec)| | | |
+|[profiling_checks](\docs\client\operations\tables\#tableprofilingcheckcategoriesspec)|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|[TableProfilingCheckCategoriesSpec](\docs\client\operations\tables\#tableprofilingcheckcategoriesspec)| | | |
+|[monitoring_checks](#tablemonitoringchecksspec)|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|[TableMonitoringChecksSpec](#tablemonitoringchecksspec)| | | |
+|[partitioned_checks](#tablepartitionedchecksrootspec)|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|[TablePartitionedChecksRootSpec](#tablepartitionedchecksrootspec)| | | |
+|[statistics](\docs\reference\yaml\tableyaml\#tablestatisticscollectorsrootcategoriesspec)|Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.|[TableStatisticsCollectorsRootCategoriesSpec](\docs\reference\yaml\tableyaml\#tablestatisticscollectorsrootcategoriesspec)| | | |
+|[schedules_override](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[MonitoringSchedulesSpec](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)| | | |
+|[columns](#columnspecmap)|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|[ColumnSpecMap](#columnspecmap)| | | |
+|[labels](\docs\client\operations\connections\#labelsetspec)|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](\docs\client\operations\connections\#labelsetspec)| | | |
+|[comments](\docs\client\operations\connections\#commentslistspec)|Comments used for change tracking and documenting changes directly in the table data quality specification file.|[CommentsListSpec](\docs\client\operations\connections\#commentslistspec)| | | |
 
 ___  
 
@@ -1410,7 +1449,39 @@ Full table model that returns the specification of a single table in the REST Ap
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |connection_name|Connection name.|string| | | |
 |table_hash|Table hash that identifies the table using a unique hash code.|long| | | |
-|[spec](\docs\client\operations\tables\#tablespec)|Full table specification including all nested information, the table name is inside the &#x27;target&#x27; property.|[spec](\docs\client\operations\tables\#tablespec)| | | |
+|[spec](\docs\client\operations\tables\#tablespec)|Full table specification including all nested information, the table name is inside the &#x27;target&#x27; property.|[TableSpec](\docs\client\operations\tables\#tablespec)| | | |
+|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
+
+___  
+
+## TableStatisticsModel  
+Model that returns a summary of the table level statistics (the basic profiling results).  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|connection_name|Connection name.|string| | | |
+|[table](\docs\client\operations\jobs\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|[collect_table_statistics_job_template](\docs\client\operations\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, limited only to the table level statistics (row count, etc).|[StatisticsCollectorSearchFilters](\docs\client\operations\jobs\#statisticscollectorsearchfilters)| | | |
+|[collect_table_and_column_statistics_job_template](\docs\client\operations\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.|[StatisticsCollectorSearchFilters](\docs\client\operations\jobs\#statisticscollectorsearchfilters)| | | |
+|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
+
+___  
+
+## TablePartitioningModel  
+Rest model that returns the configuration of table partitioning information.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|connection_name|Connection name.|string| | | |
+|[target](\docs\client\operations\jobs\#physicaltablename)|Physical table details (a physical schema name and a physical table name)|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|[timestamp_columns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[TimestampColumnsSpec](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)| | | |
+|[incremental_time_window](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.|[PartitionIncrementalTimeWindowSpec](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  

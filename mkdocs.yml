@@ -109,7 +109,7 @@ nav:
     - rule: 'command-line-interface/rule.md'
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
-  - Python client:
+  - REST API Python client:
     - operations:
       - checks: 'client/operations/checks.md'
       - check_results: 'client/operations/check_results.md'
@@ -130,10 +130,12 @@ nav:
       - schemas: 'client/operations/schemas.md'
       - sensors: 'client/operations/sensors.md'
       - sensor_readouts: 'client/operations/sensor_readouts.md'
+      - shared_credentials: 'client/operations/shared_credentials.md'
       - tables: 'client/operations/tables.md'
       - table_comparisons: 'client/operations/table_comparisons.md'
       - table_comparison_results: 'client/operations/table_comparison_results.md'
       - timezones: 'client/operations/timezones.md'
+      - users: 'client/operations/users.md'
     - models: 'client/models.md'
 ########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY

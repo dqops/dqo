@@ -137,6 +137,52 @@ api/defaults/defaultchecks/profiling/table
 
 ___  
 
+## get_default_schedule  
+Returns spec to show and edit the default configuration of schedules.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_schedule.py)
+  
+
+**GET**
+```
+api/defaults/defaultschedule/{schedulingGroup}  
+```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[monitoring_schedule_spec](\docs\client\models\#monitoringschedulespec)||[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|
+
+
+
+
+
+
+___  
+
+## get_default_webhooks  
+Returns spec to show and edit the default configuration of webhooks.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_webhooks.py)
+  
+
+**GET**
+```
+api/defaults/defaultwebhooks  
+```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[incident_webhook_notifications_spec](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)|
+
+
+
+
+
+
+___  
+
 ## update_default_data_observability_daily_monitoring_column_checks  
 New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_column_checks.py)
@@ -271,6 +317,52 @@ api/defaults/defaultchecks/profiling/table
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
 |Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
+
+
+___  
+
+## update_default_schedules  
+New configuration of the default schedules.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_schedules.py)
+  
+
+**PUT**
+```
+api/defaults/defaultschedule/{schedulingGroup}  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|false|
+
+
+___  
+
+## update_default_webhooks  
+New configuration of the default webhooks.  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_webhooks.py)
+  
+
+**PUT**
+```
+api/defaults/defaultwebhooks  
+```
+
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|----------|
+|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)|false|
 
 
 ___  

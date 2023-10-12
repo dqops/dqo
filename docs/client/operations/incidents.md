@@ -9,6 +9,13 @@ Returns a list of connection names with incident statistics - the count of recen
 api/incidentstat  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[incidents_per_connection_model]()||[IncidentsPerConnectionModel]()|
+
+
 
 
 
@@ -24,6 +31,13 @@ Returns a list of recent data quality incidents.
 ```
 api/incidents/{connectionName}  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[incident_model](\docs\client\operations\incidents\#incidentmodel)||[IncidentModel](\docs\client\operations\incidents\#incidentmodel)|
+
 
 
 
@@ -87,6 +101,13 @@ Return a paged list of failed data quality check results that are related to an 
 api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_result_entry_model](\docs\client\operations\incidents\#checkresultentrymodel)||[CheckResultEntryModel](\docs\client\operations\incidents\#checkresultentrymodel)|
+
+
 
 
 
@@ -127,8 +148,20 @@ ___
 
 ___  
 
-## IncidentStatus  
-Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.  
+## IncidentIssueHistogramModel  
+Model that returns histograms of the data quality issue occurrences related to a data quality incident.
+ The dates in the daily histogram are using the default timezone of the DQOps server.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+
+___  
+
+## CheckResultSortOrder  
+Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.  
   
 
 **The structure of this object is described below**  
@@ -137,18 +170,6 @@ Enumeration of the statuses used in the &quot;status&quot; field of the &quot;in
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |name||string| | | |
 |ordinal||integer| | | |
-
-___  
-
-## IncidentIssueHistogramModel  
-Model that returns histograms of the data quality issue occurrences related to a data quality incident.
- The dates in the daily histogram are using the default timezone of the DQO server.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
 
 ___  
 
@@ -188,16 +209,32 @@ Detailed results for a single check. Represent one row in the check results tabl
 
 ___  
 
-## CheckResultSortOrder  
-Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.  
+## IncidentModel  
+Data quality incident model shown on an incident details screen.  
   
 
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
+|incident_id|Incident ID - the primary key that identifies each data quality incident.|string| | | |
+|connection|Connection name affected by a data quality incident.|string| | | |
+|year|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
+|month|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
+|schema|Schema name affected by a data quality incident.|string| | | |
+|table|Table name affected by a data quality incident.|string| | | |
+|table_priority|Table priority of the table that was affected by a data quality incident.|integer| | | |
+|incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long| | | |
+|data_group|The data group that was affected by a data quality incident.|string| | | |
+|quality_dimension|The data quality dimension that was affected by a data quality incident.|string| | | |
+|check_category|The data quality check category that was affected by a data quality incident.|string| | | |
+|check_type|The data quality check type that was affected by a data quality incident.|string| | | |
+|check_name|The data quality check name that was affected by a data quality incident.|string| | | |
+|highest_severity|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
+|minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
+|failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
+|issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
+|status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
 
 ___  
 
@@ -227,32 +264,16 @@ Incident sort order columns.
 
 ___  
 
-## IncidentModel  
-Data quality incident model shown on an incident details screen.  
+## IncidentStatus  
+Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.  
   
 
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|incident_id|Incident ID - the primary key that identifies each data quality incident.|string| | | |
-|connection|Connection name affected by a data quality incident.|string| | | |
-|year|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
-|month|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
-|schema|Schema name affected by a data quality incident.|string| | | |
-|table|Table name affected by a data quality incident.|string| | | |
-|table_priority|Table priority of the table that was affected by a data quality incident.|integer| | | |
-|incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long| | | |
-|data_group|The data group that was affected by a data quality incident.|string| | | |
-|quality_dimension|The data quality dimension that was affected by a data quality incident.|string| | | |
-|check_category|The data quality check category that was affected by a data quality incident.|string| | | |
-|check_type|The data quality check type that was affected by a data quality incident.|string| | | |
-|check_name|The data quality check name that was affected by a data quality incident.|string| | | |
-|highest_severity|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
-|minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
-|failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
-|issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
-|status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
+|name||string| | | |
+|ordinal||integer| | | |
 
 ___  
 

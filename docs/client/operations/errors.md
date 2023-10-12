@@ -9,6 +9,13 @@ Returns errors related to the recent column level monitoring executions for the 
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
+
 
 
 
@@ -24,6 +31,13 @@ Returns the errors related to the recent column level partitioned checks executi
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
 
 
 
@@ -41,6 +55,13 @@ Returns the errors related to the recent check executions for all column level d
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
+
 
 
 
@@ -56,6 +77,13 @@ Returns the errors related to the most recent table level monitoring executions 
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
 
 
 
@@ -73,6 +101,13 @@ Returns errors related to the recent table level partitioned checks executions f
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
+
 
 
 
@@ -88,6 +123,13 @@ Returns the errors related to the most recent check executions for all table lev
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
+
 
 
 

@@ -71,6 +71,13 @@ Returns the list of data grouping configurations on a table
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[data_grouping_configuration_list_model](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationlistmodel)||[DataGroupingConfigurationListModel](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationlistmodel)|
+
+
 
 
 
@@ -118,7 +125,21 @@ ___
 
 ___  
 
-## DataGroupingConfigurationBasicModel  
+## DataGroupingConfigurationTrimmedModel  
+Data grouping on a table model with trimmed access path.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|data_grouping_configuration_name|Data grouping configuration name.|string| | | |
+|[spec](\docs\client\models\#datagroupingconfigurationspec)|Data grouping configuration specification.|[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)| | | |
+|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
+
+___  
+
+## DataGroupingConfigurationListModel  
 Basic model for data grouping configuration on a table, returned by the rest api.  
   
 
@@ -135,20 +156,6 @@ Basic model for data grouping configuration on a table, returned by the rest api
 
 ___  
 
-## DataGroupingConfigurationTrimmedModel  
-Data grouping on a table model with trimmed access path.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|data_grouping_configuration_name|Data grouping configuration name.|string| | | |
-|[spec](\docs\client\models\#datagroupingconfigurationspec)|Data grouping configuration specification.|[spec](\docs\client\models\#datagroupingconfigurationspec)| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
-
-___  
-
 ## DataGroupingConfigurationModel  
 Model of data grouping configuration on a table returned by the rest api, including all configuration information.  
   
@@ -161,7 +168,7 @@ Model of data grouping configuration on a table returned by the rest api, includ
 |schema_name|Schema name.|string| | | |
 |table_name|Table name.|string| | | |
 |data_grouping_configuration_name|Data grouping configuration name.|string| | | |
-|[spec](\docs\client\models\#datagroupingconfigurationspec)|Data stream specification.|[spec](\docs\client\models\#datagroupingconfigurationspec)| | | |
+|[spec](\docs\client\models\#datagroupingconfigurationspec)|Data stream specification.|[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  

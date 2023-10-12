@@ -41,6 +41,8 @@ import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
@@ -179,14 +181,14 @@ public class GeneratePythonDocumentationPostProcessor {
         // Parameters (path and query)
         Set<String> variables$refs = operationParameters.stream()
                 .map(Parameter::getSchema)
-                .map(GeneratePythonDocumentationPostProcessor::getEffective$refFromSchema)
+                .map(OpenApiUtils::getEffective$refFromSchema)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
         // Request body
         RequestBody requestBody = operation.getRequestBody();
         if (requestBody != null) {
-            String requestBody$ref = getEffective$refFromSchema(requestBody.getContent().get("application/json").getSchema());
+            String requestBody$ref = OpenApiUtils.getEffective$refFromContent(requestBody.getContent());
             if (requestBody$ref != null) {
                 variables$refs.add(requestBody$ref);
             }
@@ -194,8 +196,7 @@ public class GeneratePythonDocumentationPostProcessor {
 
         // Return
         ApiResponse returnResponse = operation.getResponses().values().stream().findFirst().get();
-        String return$ref = getEffective$refFromSchema(returnResponse.getContent().get("application/json").getSchema());
-
+        String return$ref = OpenApiUtils.getEffective$refFromContent(returnResponse.getContent());
         if (return$ref != null) {
             variables$refs.add(return$ref);
         }
@@ -213,14 +214,6 @@ public class GeneratePythonDocumentationPostProcessor {
                 modelMethodMapping.get(typeRef).add(controller);
             }
         }
-    }
-
-    protected static String getEffective$refFromSchema(Schema<?> schema) {
-        String $ref = schema.get$ref();
-        if ($ref == null && schema.getItems() != null){
-            return getEffective$refFromSchema(schema.getItems());
-        }
-        return $ref;
     }
 
     protected static void generateDocumentationForModels(DocumentationFolder projectFolder,

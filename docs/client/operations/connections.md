@@ -86,7 +86,7 @@ api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Basic connection model|[ConnectionBasicModel](\docs\client\models\#connectionbasicmodel)|false|
+|Basic connection model|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
 
 ___  
@@ -124,6 +124,13 @@ Returns a list of connections (data sources)
 api/connections  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[connection_model](\docs\client\models\#connectionmodel)||[ConnectionModel](\docs\client\models\#connectionmodel)|
+
+
 
 
 
@@ -144,7 +151,7 @@ api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_model](\docs\client\operations\connections\#connectionmodel)||[ConnectionModel](\docs\client\operations\connections\#connectionmodel)|
+|[connection_specification_model](\docs\client\operations\connections\#connectionspecificationmodel)||[ConnectionSpecificationModel](\docs\client\operations\connections\#connectionspecificationmodel)|
 
 
 
@@ -167,7 +174,7 @@ api/connections/{connectionName}/basic
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_basic_model](\docs\client\models\#connectionbasicmodel)||[ConnectionBasicModel](\docs\client\models\#connectionbasicmodel)|
+|[connection_model](\docs\client\models\#connectionmodel)||[ConnectionModel](\docs\client\models\#connectionmodel)|
 
 
 
@@ -186,6 +193,13 @@ Return the comments for a connection
 api/connections/{connectionName}/comments  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[comment_spec](\docs\client\models\#commentspec)||[CommentSpec](\docs\client\models\#commentspec)|
+
+
 
 
 
@@ -201,6 +215,13 @@ Finds common column names that are used on one or more tables. The list of colum
 ```
 api/connections/{connectionName}/commoncolumns  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[common_column_model](\docs\client\operations\connections\#commoncolumnmodel)||[CommonColumnModel](\docs\client\operations\connections\#commoncolumnmodel)|
+
 
 
 
@@ -334,7 +355,7 @@ api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Connection basic details|[ConnectionBasicModel](\docs\client\models\#connectionbasicmodel)|false|
+|Connection basic details|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
 
 ___  
@@ -357,7 +378,7 @@ api/connections/{connectionName}/comments
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of comments|[]()|false|
+|List of comments|[CommentSpec](\docs\client\models\#commentspec)|false|
 
 
 ___  
@@ -456,6 +477,18 @@ ___
 
 ___  
 
+## BulkCheckDisableParameters  
+  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+
+___  
+
 ## ConnectionIncidentGroupingSpec  
 Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.  
   
@@ -470,7 +503,7 @@ Configuration of data quality incident grouping on a connection level. Defines h
 |max_incident_length_days|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|integer| | | |
 |mute_for_days|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|integer| | | |
 |disabled|Disables data quality incident creation for failed data quality checks on the data source.|boolean| | | |
-|[webhooks](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)|Configuration of Webhook URLs for new or updated incident notifications.|[webhooks](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)| | | |
+|[webhooks](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)|Configuration of Webhook URLs for new or updated incident notifications.|[IncidentWebhookNotificationsSpec](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)| | | |
 
 ___  
 
@@ -506,23 +539,23 @@ Data source (connection) specification.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |provider_type|Database provider type (required).|enum|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>bigquery<br/>| | |
-|[bigquery](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[bigquery](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)| | | |
-|[snowflake](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|[snowflake](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)| | | |
-|[postgresql](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|[postgresql](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)| | | |
-|[redshift](\docs\reference\yaml\connectionyaml\#redshiftparametersspec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).|[redshift](\docs\reference\yaml\connectionyaml\#redshiftparametersspec)| | | |
-|[sqlserver](\docs\reference\yaml\connectionyaml\#sqlserverparametersspec)|SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).|[sqlserver](\docs\reference\yaml\connectionyaml\#sqlserverparametersspec)| | | |
-|[mysql](\docs\reference\yaml\connectionyaml\#mysqlparametersspec)|MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).|[mysql](\docs\reference\yaml\connectionyaml\#mysqlparametersspec)| | | |
-|[oracle](\docs\reference\yaml\connectionyaml\#oracleparametersspec)|Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).|[oracle](\docs\reference\yaml\connectionyaml\#oracleparametersspec)| | | |
+|[bigquery](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)| | | |
+|[snowflake](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|[SnowflakeParametersSpec](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)| | | |
+|[postgresql](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|[PostgresqlParametersSpec](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)| | | |
+|[redshift](\docs\reference\yaml\connectionyaml\#redshiftparametersspec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).|[RedshiftParametersSpec](\docs\reference\yaml\connectionyaml\#redshiftparametersspec)| | | |
+|[sqlserver](\docs\reference\yaml\connectionyaml\#sqlserverparametersspec)|SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).|[SqlServerParametersSpec](\docs\reference\yaml\connectionyaml\#sqlserverparametersspec)| | | |
+|[mysql](\docs\reference\yaml\connectionyaml\#mysqlparametersspec)|MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).|[MysqlParametersSpec](\docs\reference\yaml\connectionyaml\#mysqlparametersspec)| | | |
+|[oracle](\docs\reference\yaml\connectionyaml\#oracleparametersspec)|Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).|[OracleParametersSpec](\docs\reference\yaml\connectionyaml\#oracleparametersspec)| | | |
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer| | | |
-|[default_grouping_configuration](\docs\client\models\#datagroupingconfigurationspec)|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[defaultGroupingConfiguration](\docs\client\models\#datagroupingconfigurationspec)| | | |
-|[schedules](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[schedules](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)| | | |
-|[incident_grouping](\docs\client\operations\connections\#connectionincidentgroupingspec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[incidentGrouping](\docs\client\operations\connections\#connectionincidentgroupingspec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[comments](#commentslistspec)| | | |
-|[labels](#labelsetspec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[labels](#labelsetspec)| | | |
+|[default_grouping_configuration](\docs\client\models\#datagroupingconfigurationspec)|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)| | | |
+|[schedules](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[MonitoringSchedulesSpec](\docs\reference\yaml\connectionyaml\#monitoringschedulesspec)| | | |
+|[incident_grouping](\docs\client\operations\connections\#connectionincidentgroupingspec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[ConnectionIncidentGroupingSpec](\docs\client\operations\connections\#connectionincidentgroupingspec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|[labels](#labelsetspec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](#labelsetspec)| | | |
 
 ___  
 
-## ConnectionModel  
+## ConnectionSpecificationModel  
 Connection model returned by the rest api.  
   
 
@@ -532,7 +565,7 @@ Connection model returned by the rest api.
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |connection_name|Connection name.|string| | | |
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long| | | |
-|[spec](\docs\client\operations\connections\#connectionspec)|Full connection specification, including all nested objects (but not a list of tables).|[spec](\docs\client\operations\connections\#connectionspec)| | | |
+|[spec](\docs\client\operations\connections\#connectionspec)|Full connection specification, including all nested objects (but not a list of tables).|[ConnectionSpec](\docs\client\operations\connections\#connectionspec)| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  
@@ -545,9 +578,9 @@ Model that returns the form definition and the form data to edit a single rule w
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[error](\docs\client\models\#ruleparametersmodel)|Rule parameters for the error severity rule.|[error](\docs\client\models\#ruleparametersmodel)| | | |
-|[warning](\docs\client\models\#ruleparametersmodel)|Rule parameters for the warning severity rule.|[warning](\docs\client\models\#ruleparametersmodel)| | | |
-|[fatal](\docs\client\models\#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[fatal](\docs\client\models\#ruleparametersmodel)| | | |
+|[error](\docs\client\models\#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](\docs\client\models\#ruleparametersmodel)| | | |
+|[warning](\docs\client\models\#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](\docs\client\models\#ruleparametersmodel)| | | |
+|[fatal](\docs\client\models\#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](\docs\client\models\#ruleparametersmodel)| | | |
 
 ___  
 
@@ -563,22 +596,23 @@ Model that returns the form definition and the form data to edit a single data q
 |help_text|Help text that describes the data quality check.|string| | | |
 |sensor_name|Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.|string| | | |
 |quality_dimension|Data quality dimension used for tagging the results of this data quality checks.|string| | | |
-|[rule](#rulethresholdsmodel)|Threshold (alerting) rules defined for a check.|[rule](#rulethresholdsmodel)| | | |
+|[rule](#rulethresholdsmodel)|Threshold (alerting) rules defined for a check.|[RuleThresholdsModel](#rulethresholdsmodel)| | | |
 |supports_grouping|The data quality check supports a custom data grouping configuration.|boolean| | | |
-|[data_grouping_override](\docs\client\models\#datagroupingconfigurationspec)|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[dataGroupingOverride](\docs\client\models\#datagroupingconfigurationspec)| | | |
-|[schedule_override](\docs\client\models\#monitoringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[scheduleOverride](\docs\client\models\#monitoringschedulespec)| | | |
-|[effective_schedule](\docs\client\models\#effectiveschedulemodel)|Model of configured schedule enabled on the check level.|[effectiveSchedule](\docs\client\models\#effectiveschedulemodel)| | | |
+|[data_grouping_override](\docs\client\models\#datagroupingconfigurationspec)|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)| | | |
+|[schedule_override](\docs\client\models\#monitoringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)| | | |
+|[effective_schedule](\docs\client\models\#effectiveschedulemodel)|Model of configured schedule enabled on the check level.|[EffectiveScheduleModel](\docs\client\models\#effectiveschedulemodel)| | | |
 |schedule_enabled_status|State of the scheduling override for this check.|enum|not_configured<br/>disabled<br/>overridden_by_checks<br/>enabled<br/>| | |
-|[comments](\docs\client\operations\connections\#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[comments](\docs\client\operations\connections\#commentslistspec)| | | |
+|[comments](\docs\client\operations\connections\#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](\docs\client\operations\connections\#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |configured|True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.|boolean| | | |
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
-|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[runChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[dataCleanJobTemplate](\docs\client\models\#deletestoreddataqueuejobparameters)| | | |
+|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[data_clean_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
 |data_grouping_configuration|The name of a data grouping configuration defined at a table that should be used for this check.|string| | | |
 |check_target|Type of the check&#x27;s target (column, table).|enum|column<br/>table<br/>| | |
+|configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|string_list| | | |
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean| | | |
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
@@ -593,8 +627,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[checkSearchFilters](\docs\client\models\#checksearchfilters)| | | |
-|[check_model_patch](#checkmodel)|Sample configured check model which will pasted onto selected checks.|[checkModelPatch](#checkmodel)| | | |
+|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[check_model_patch](#checkmodel)|Sample configured check model which will pasted onto selected checks.|[CheckModel](#checkmodel)| | | |
 |override_conflicts|Override existing configurations if they&#x27;re present. If false, apply updates only to the fields for which no configuration exists.|boolean| | | |
 
 ___  
@@ -610,18 +644,6 @@ Dictionary model used for combo boxes to select a column. Returns a column name 
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |column_name|Column name.|string| | | |
 |tables_count|Count of tables that are have a column with this name.|integer| | | |
-
-___  
-
-## BulkCheckDisableParameters  
-  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[checkSearchFilters](\docs\client\models\#checksearchfilters)| | | |
 
 ___  
 

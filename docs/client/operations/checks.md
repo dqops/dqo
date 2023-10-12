@@ -17,7 +17,7 @@ api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Check model|[CheckSpecModel](\docs\client\operations\checks\#checkspecmodel)|false|
+|Check model|[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|false|
 
 
 ___  
@@ -32,13 +32,6 @@ Deletes a custom check definition
 api/checks/{fullCheckName}  
 ```
 
-**Return value**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](\docs\client\models\#dqoqueuejobid)||[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-
-
 
 
 
@@ -46,7 +39,7 @@ api/checks/{fullCheckName}
 ___  
 
 ## get_all_checks  
-Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.  
+Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_all_checks.py)
   
 
@@ -54,6 +47,13 @@ Returns a flat list of all checks available in DQO, both built-in checks and use
 ```
 api/checks  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_definition_list_model]()||[CheckDefinitionListModel]()|
+
 
 
 
@@ -75,7 +75,7 @@ api/checks/{fullCheckName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_spec_model](\docs\client\operations\checks\#checkspecmodel)||[CheckSpecModel](\docs\client\operations\checks\#checkspecmodel)|
+|[check_definition_model](\docs\client\operations\checks\#checkdefinitionmodel)||[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|
 
 
 
@@ -85,7 +85,7 @@ api/checks/{fullCheckName}
 ___  
 
 ## get_check_folder_tree  
-Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.  
+Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check_folder_tree.py)
   
 
@@ -98,7 +98,7 @@ api/definitions/checks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_spec_folder_basic_model]()||[CheckSpecFolderBasicModel]()|
+|[check_definition_folder_model]()||[CheckDefinitionFolderModel]()|
 
 
 
@@ -125,15 +125,15 @@ api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of check definitions|[CheckSpecModel](\docs\client\operations\checks\#checkspecmodel)|false|
+|List of check definitions|[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|false|
 
 
 ___  
 
 ___  
 
-## CheckSpecModel  
-CheckSpec model that is returned by the REST API. Describes a single unique data quality check.  
+## CheckDefinitionModel  
+Check model that is returned by the REST API. Describes a single unique data quality check.  
   
 
 **The structure of this object is described below**  
@@ -145,7 +145,7 @@ CheckSpec model that is returned by the REST API. Describes a single unique data
 |rule_name|Rule name|string| | | |
 |help_text|Help text that is shown in the check editor that describes the purpose and usage of the check|string| | | |
 |custom|This check has is a custom check or was customized by the user.|boolean| | | |
-|built_in|This check is provided with DQO as a built-in check.|boolean| | | |
+|built_in|This check is provided with DQOps as a built-in check.|boolean| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  

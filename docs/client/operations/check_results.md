@@ -9,6 +9,13 @@ Returns a complete view of the recent column level monitoring executions for the
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
+
 
 
 
@@ -25,6 +32,13 @@ Returns an overview of the most recent column level partitioned checks execution
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
+
 
 
 
@@ -40,6 +54,13 @@ Returns an overview of the most recent check executions for all column level dat
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
 
 
 
@@ -80,6 +101,13 @@ Returns the complete results of the most recent table level monitoring execution
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
+
 
 
 
@@ -96,6 +124,13 @@ Returns a complete view of the recent table level partitioned checks executions 
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
+
 
 
 
@@ -111,6 +146,13 @@ Returns the complete results of the most recent check executions for all table l
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
+
 
 
 
@@ -146,7 +188,7 @@ The table validity status. It is a summary of the results of the most recently e
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|The connection name in DQO.|string| | | |
+|connection_name|The connection name in DQOps.|string| | | |
 |schema_name|The schema name.|string| | | |
 |table_name|The table name.|string| | | |
 |highest_severity_issue|The severity of the highest identified data quality issue (1 &#x3D; warning, 2 &#x3D; error, 3 &#x3D; fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.|integer| | | |
@@ -155,7 +197,7 @@ The table validity status. It is a summary of the results of the most recently e
 |warnings|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|integer| | | |
 |errors|The number of most recent data quality checks that failed by raising an error severity data quality issue.|integer| | | |
 |fatals|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|integer| | | |
-|execution_errors|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQO, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.|integer| | | |
+|execution_errors|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.|integer| | | |
 
 ___  
 

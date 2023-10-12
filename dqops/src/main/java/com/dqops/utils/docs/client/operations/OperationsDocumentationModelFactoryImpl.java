@@ -17,6 +17,7 @@ package com.dqops.utils.docs.client.operations;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.OpenApiUtils;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
@@ -171,7 +172,8 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         // Request body
         RequestBody requestBody = operationModel.getOperation().getRequestBody();
         if (requestBody != null) {
-            String parameterTypeString = getTypeFrom$ref(requestBody.getContent().get("application/json").getSchema().get$ref());
+            String requestBody$ref = OpenApiUtils.getEffective$refFromContent(requestBody.getContent());
+            String parameterTypeString = getTypeFrom$ref(requestBody$ref);
 
             OperationParameterDocumentationModel parameterDocumentationModel = new OperationParameterDocumentationModel();
             parameterDocumentationModel.setClassFieldName(parameterTypeString);
@@ -194,28 +196,25 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
         // Return
         ApiResponse returnResponse = operationModel.getOperation().getResponses().values().stream().findFirst().get();
-        MediaType returnMedia = returnResponse.getContent().get("application/json");
+        Schema<?> returnSchema = OpenApiUtils.getEffectiveSchemaFromContent(returnResponse.getContent());
+        String return$ref = OpenApiUtils.getEffective$refFromSchema(returnSchema);
+        if (return$ref != null && !return$ref.contains("MonoObject") && !return$ref.contains("MonoVoid")) {
+            String returnTypeString = getTypeFrom$ref(return$ref);
 
-        if (returnMedia != null) {
-            Schema returnSchema = returnMedia.getSchema();
-            if (returnSchema != null && returnSchema.get$ref() != null && !returnSchema.get$ref().contains("MonoObject")) {
-                String returnTypeString = getTypeFrom$ref(returnSchema.get$ref());
+            OperationsDocumentationModel returnParameterModel = new OperationsDocumentationModel();
+            returnParameterModel.setClassFieldName(returnTypeString);
+            returnParameterModel.setYamlFieldName(getObjectSimpleName(returnTypeString));
+            returnParameterModel.setDisplayName(returnParameterModel.getYamlFieldName());
+            returnParameterModel.setHelpText(returnSchema.getDescription());
 
-                OperationsDocumentationModel returnParameterModel = new OperationsDocumentationModel();
-                returnParameterModel.setClassFieldName(returnTypeString);
-                returnParameterModel.setYamlFieldName(getObjectSimpleName(returnTypeString));
-                returnParameterModel.setDisplayName(returnParameterModel.getYamlFieldName());
-                returnParameterModel.setHelpText(returnSchema.getDescription());
+            ParameterDataType returnDataType = KNOWN_DATA_TYPES.getOrDefault(returnTypeString, ParameterDataType.object_type);
+            returnParameterModel.setDataType(returnDataType);
 
-                ParameterDataType returnDataType = KNOWN_DATA_TYPES.getOrDefault(returnTypeString, ParameterDataType.object_type);
-                returnParameterModel.setDataType(returnDataType);
-
-                Path linkagePath = linkageStore.get(returnTypeString);
-                if (linkagePath != null) {
-                    returnParameterModel.setClassUsedOnTheFieldPath(linkagePath.toString());
-                }
-                operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
+            Path linkagePath = linkageStore.get(returnTypeString);
+            if (linkagePath != null) {
+                returnParameterModel.setClassUsedOnTheFieldPath(linkagePath.toString());
             }
+            operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
         }
 
         return operationsOperationDocumentationModel;

@@ -9,6 +9,13 @@ Returns an overview of the most recent column level monitoring executions for th
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
+
 
 
 
@@ -24,6 +31,13 @@ Returns an overview of the most recent column level partitioned checks execution
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
 
 
 
@@ -41,6 +55,13 @@ Returns an overview of the most recent check executions for all column level dat
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
+
 
 
 
@@ -56,6 +77,13 @@ Returns an overview of the most recent table level monitoring executions for the
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
 
 
 
@@ -73,6 +101,13 @@ Returns an overview of the most recent table level partitioned checks executions
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
+
 
 
 
@@ -88,6 +123,13 @@ Returns an overview of the most recent check executions for all table level data
 ```
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
+
 
 
 

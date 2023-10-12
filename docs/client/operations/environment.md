@@ -1,6 +1,6 @@
 
 ## get_dqo_settings  
-Returns all effective DQO configuration settings.  
+Returns all effective DQOps configuration settings.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/environment/get_dqo_settings.py)
   
 
@@ -46,7 +46,7 @@ api/environment/profile
 ___  
 
 ## issue_api_key  
-Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQO Rest API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.  
+Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/environment/issue_api_key.py)
   
 

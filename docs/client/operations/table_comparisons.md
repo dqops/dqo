@@ -186,6 +186,13 @@ Returns the list of table comparison configurations on a compared table
 api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|[table_comparison_configuration_model](\docs\client\operations\table_comparisons\#tablecomparisonconfigurationmodel)||[TableComparisonConfigurationModel](\docs\client\operations\table_comparisons\#tablecomparisonconfigurationmodel)|
+
+
 
 
 
@@ -447,6 +454,27 @@ ___
 
 ___  
 
+## TableComparisonConfigurationModel  
+Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.  
+  
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|table_comparison_configuration_name|The name of the table comparison configuration that is defined in the &#x27;table_comparisons&#x27; node on the table specification.|string| | | |
+|compared_connection|Compared connection name - the connection name to the data source that is compared (verified).|string| | | |
+|[compared_table](\docs\client\operations\jobs\#physicaltablename)|The schema and table name of the compared table that is verified.|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|reference_connection|Reference connection name - the connection name to the data source that has the reference data to compare to.|string| | | |
+|[reference_table](\docs\client\operations\jobs\#physicaltablename)|The schema and table name of the reference table that has the expected data.|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|check_type|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|enum|profiling<br/>partitioned<br/>monitoring<br/>| | |
+|time_scale|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|enum|daily<br/>monthly<br/>| | |
+|can_edit|Boolean flag that decides if the current user can update or delete the table comparison.|boolean| | | |
+|can_run_compare_checks|Boolean flag that decides if the current user can run comparison checks.|boolean| | | |
+|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
+
+___  
+
 ## CompareThresholdsModel  
 Model with the custom compare threshold levels for raising data quality issues at different severity levels
  when the difference between the compared (tested) table and the reference table (the source of truth) exceed given
@@ -473,36 +501,15 @@ Model that contains the all editable information about a table-to-table comparis
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |table_comparison_configuration_name|The name of the table comparison configuration that is defined in the &#x27;table_comparisons&#x27; node on the table specification.|string| | | |
 |compared_connection|Compared connection name - the connection name to the data source that is compared (verified).|string| | | |
-|[compared_table](\docs\client\operations\columns\#physicaltablename)|The schema and table name of the compared table that is verified.|[comparedTable](\docs\client\operations\columns\#physicaltablename)| | | |
+|[compared_table](\docs\client\operations\jobs\#physicaltablename)|The schema and table name of the compared table that is verified.|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
 |reference_connection|Reference connection name - the connection name to the data source that has the reference data to compare to.|string| | | |
-|[reference_table](\docs\client\operations\columns\#physicaltablename)|The schema and table name of the reference table that has the expected data.|[referenceTable](\docs\client\operations\columns\#physicaltablename)| | | |
-|[default_compare_thresholds](#comparethresholdsmodel)|The template of the compare thresholds that should be applied to all comparisons when the comparison is enabled.|[defaultCompareThresholds](#comparethresholdsmodel)| | | |
-|[compare_row_count](#comparethresholdsmodel)|The row count comparison configuration.|[compareRowCount](#comparethresholdsmodel)| | | |
-|[compare_column_count](#comparethresholdsmodel)|The column count comparison configuration.|[compareColumnCount](#comparethresholdsmodel)| | | |
+|[reference_table](\docs\client\operations\jobs\#physicaltablename)|The schema and table name of the reference table that has the expected data.|[PhysicalTableName](\docs\client\operations\jobs\#physicaltablename)| | | |
+|[default_compare_thresholds](#comparethresholdsmodel)|The template of the compare thresholds that should be applied to all comparisons when the comparison is enabled.|[CompareThresholdsModel](#comparethresholdsmodel)| | | |
+|[compare_row_count](#comparethresholdsmodel)|The row count comparison configuration.|[CompareThresholdsModel](#comparethresholdsmodel)| | | |
+|[compare_column_count](#comparethresholdsmodel)|The column count comparison configuration.|[CompareThresholdsModel](#comparethresholdsmodel)| | | |
 |supports_compare_column_count|Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.|boolean| | | |
-|[compare_table_run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run the table comparison checks for this table, using checks selected in this model.|[compareTableRunChecksJobTemplate](\docs\client\models\#checksearchfilters)| | | |
-|[compare_table_clean_data_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored check results for this table comparison.|[compareTableCleanDataJobTemplate](\docs\client\models\#deletestoreddataqueuejobparameters)| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete the table comparison.|boolean| | | |
-|can_run_compare_checks|Boolean flag that decides if the current user can run comparison checks.|boolean| | | |
-|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
-
-___  
-
-## TableComparisonConfigurationModel  
-Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|table_comparison_configuration_name|The name of the table comparison configuration that is defined in the &#x27;table_comparisons&#x27; node on the table specification.|string| | | |
-|compared_connection|Compared connection name - the connection name to the data source that is compared (verified).|string| | | |
-|[compared_table](\docs\client\operations\columns\#physicaltablename)|The schema and table name of the compared table that is verified.|[comparedTable](\docs\client\operations\columns\#physicaltablename)| | | |
-|reference_connection|Reference connection name - the connection name to the data source that has the reference data to compare to.|string| | | |
-|[reference_table](\docs\client\operations\columns\#physicaltablename)|The schema and table name of the reference table that has the expected data.|[referenceTable](\docs\client\operations\columns\#physicaltablename)| | | |
-|check_type|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|enum|profiling<br/>partitioned<br/>monitoring<br/>| | |
-|time_scale|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|enum|daily<br/>monthly<br/>| | |
+|[compare_table_run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run the table comparison checks for this table, using checks selected in this model.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
+|[compare_table_clean_data_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored check results for this table comparison.|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete the table comparison.|boolean| | | |
 |can_run_compare_checks|Boolean flag that decides if the current user can run comparison checks.|boolean| | | |
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
