@@ -25,7 +25,7 @@ export default function TableStatisticsView({
   setNumberOfSelected2,
   statistics,
   onChangeSelectedColumns,
-  checksUI
+
 }: {
   connectionName: string;
   schemaName: string;
@@ -35,7 +35,7 @@ export default function TableStatisticsView({
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
   onChangeSelectedColumns?: (columns: string[]) => void;
-  checksUI?: any
+
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -103,7 +103,7 @@ export default function TableStatisticsView({
       </div>
     );
   }
-console.log(checksUI)
+
   return (
     <div>
       <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
