@@ -1,4 +1,7 @@
+Manages columns inside a table  
 
+
+___  
 ## create_column  
 Creates a new column (adds a column metadata to the table)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/create_column.py)
@@ -30,8 +33,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Column specification|[ColumnSpec](\docs\client\models\columns\#columnspec)|false|
 
 
-___  
 
+___  
 ## delete_column  
 Deletes a column from the table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/delete_column.py)
@@ -63,8 +66,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column  
 Returns the full column specification  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column.py)
@@ -96,8 +99,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_basic  
 Returns the column specification  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_basic.py)
@@ -129,8 +132,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_comments  
 Return the list of comments assigned to a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_comments.py)
@@ -162,8 +165,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_labels  
 Return the list of labels assigned to a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_labels.py)
@@ -195,8 +198,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_monitoring_checks_basic_model  
 Return a simplistic UI friendly model of column level data quality monitoring on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_basic_model.py)
@@ -229,8 +232,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_monitoring_checks_daily  
 Return the configuration of daily column level data quality monitoring on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_daily.py)
@@ -262,8 +265,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_monitoring_checks_model  
 Return a UI friendly model of column level data quality monitoring on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model.py)
@@ -296,8 +299,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_monitoring_checks_model_filter  
 Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model_filter.py)
@@ -332,8 +335,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_monitoring_checks_monthly  
 Return the configuration of monthly column level data quality monitoring on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_monthly.py)
@@ -365,8 +368,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_basic_model  
 Return a simplistic UI friendly model of column level data quality partitioned checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_basic_model.py)
@@ -399,8 +402,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_daily  
 Return the configuration of daily column level data quality partitioned checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_daily.py)
@@ -432,8 +435,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_model  
 Return a UI friendly model of column level data quality partitioned checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model.py)
@@ -466,8 +469,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_model_filter  
 Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model_filter.py)
@@ -502,8 +505,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_monthly  
 Return the configuration of monthly column level data quality partitioned checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_monthly.py)
@@ -535,8 +538,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_checks  
 Return the configuration of column level data quality profiling checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks.py)
@@ -568,8 +571,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_checks_basic_model  
 Return a simplistic UI friendly model of column level data quality profiling checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_basic_model.py)
@@ -601,8 +604,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_checks_model  
 Return a UI friendly model of data quality profiling checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model.py)
@@ -634,8 +637,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_checks_model_filter  
 Return a UI friendly model of data quality profiling checks on a column filtered by category and check name  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model_filter.py)
@@ -669,8 +672,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_statistics  
 Returns the column specification with the metrics captured by the most recent statistics collection.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_statistics.py)
@@ -702,8 +705,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_columns  
 Returns a list of columns inside a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns.py)
@@ -734,8 +737,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_columns_statistics  
 Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns_statistics.py)
@@ -766,8 +769,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## update_column  
 Updates an existing column specification, changing all the fields (even the column level data quality checks).  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column.py)
@@ -799,8 +802,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Column specification|[ColumnSpec](\docs\client\models\columns\#columnspec)|false|
 
 
-___  
 
+___  
 ## update_column_basic  
 Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_basic.py)
@@ -832,8 +835,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Basic column information to store|[ColumnListModel](\docs\client\models\columns\#columnlistmodel)|false|
 
 
-___  
 
+___  
 ## update_column_comments  
 Updates the list of comments assigned to a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_comments.py)
@@ -865,8 +868,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|[CommentSpec](\docs\client\models\#commentspec)|false|
 
 
-___  
 
+___  
 ## update_column_labels  
 Updates the list of labels assigned to a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_labels.py)
@@ -898,8 +901,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column|string|false|
 
 
-___  
 
+___  
 ## update_column_monitoring_checks_daily  
 Updates configuration of daily column level data quality monitoring on a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_daily.py)
@@ -931,8 +934,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column|[ColumnDailyMonitoringCheckCategoriesSpec](\docs\client\models\columns\#columndailymonitoringcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_column_monitoring_checks_model  
 Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_model.py)
@@ -965,8 +968,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 
+___  
 ## update_column_monitoring_checks_monthly  
 Updates configuration of monthly column level data quality monitoring checks on a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_monthly.py)
@@ -998,8 +1001,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column|[ColumnMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\columns\#columnmonthlymonitoringcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_column_partitioned_checks_daily  
 Updates configuration of daily column level data quality partitioned checks on a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_daily.py)
@@ -1031,8 +1034,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnDailyPartitionedCheckCategoriesSpec](\docs\client\models\columns\#columndailypartitionedcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_column_partitioned_checks_model  
 Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_model.py)
@@ -1065,8 +1068,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 
+___  
 ## update_column_partitioned_checks_monthly  
 Updates configuration of monthly column level data quality partitioned checks on a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_monthly.py)
@@ -1098,8 +1101,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\columns\#columnmonthlypartitionedcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_column_profiling_checks  
 Updates configuration of column level data quality profiling checks on a column.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks.py)
@@ -1131,8 +1134,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column|[ColumnProfilingCheckCategoriesSpec](\docs\client\models\columns\#columnprofilingcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_column_profiling_checks_model  
 Updates configuration of column level data quality profiling checks on a column from a UI friendly model.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks_model.py)
@@ -1164,5 +1167,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 

@@ -1,4 +1,7 @@
+Manages the configuration of table comparisons between tables on the same or different data sources  
 
+
+___  
 ## create_table_comparison_configuration  
 Creates a new table comparison configuration added to the compared table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_configuration.py)
@@ -29,8 +32,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model|[TableComparisonConfigurationModel](\docs\client\models\table_comparisons\#tablecomparisonconfigurationmodel)|false|
 
 
-___  
 
+___  
 ## create_table_comparison_monitoring_daily  
 Creates a table comparison configuration using daily monitoring checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_daily.py)
@@ -61,8 +64,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## create_table_comparison_monitoring_monthly  
 Creates a table comparison configuration using monthly monitoring checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_monthly.py)
@@ -93,8 +96,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## create_table_comparison_partitioned_daily  
 Creates a table comparison configuration using daily partitioned checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_daily.py)
@@ -125,8 +128,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## create_table_comparison_partitioned_monthly  
 Creates a table comparison configuration using monthly partitioned checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_monthly.py)
@@ -157,8 +160,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## create_table_comparison_profiling  
 Creates a table comparison configuration using profiling checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_profiling.py)
@@ -189,8 +192,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## delete_table_comparison_configuration  
 Deletes a table comparison configuration from a compared table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/delete_table_comparison_configuration.py)
@@ -215,8 +218,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_configuration  
 Returns a model of the table comparison configuration  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configuration.py)
@@ -248,8 +251,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_configurations  
 Returns the list of table comparison configurations on a compared table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configurations.py)
@@ -282,8 +285,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_monitoring_daily  
 Returns a model of the table comparison using daily monitoring checks (comparison once a day)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_daily.py)
@@ -315,8 +318,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_monitoring_monthly  
 Returns a model of the table comparison using monthly monitoring checks (comparison once a month)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_monthly.py)
@@ -348,8 +351,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_partitioned_daily  
 Returns a model of the table comparison using daily partition checks (comparing day to day)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_daily.py)
@@ -381,8 +384,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_partitioned_monthly  
 Returns a model of the table comparison using monthly partition checks (comparing month to month)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_monthly.py)
@@ -414,8 +417,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_profiling  
 Returns a model of the table comparison using profiling checks (comparison at any time)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_profiling.py)
@@ -447,8 +450,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## update_table_comparison_configuration  
 Updates a table configuration configuration  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_configuration.py)
@@ -480,8 +483,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison model with the configuration of the tables to compare|[TableComparisonConfigurationModel](\docs\client\models\table_comparisons\#tablecomparisonconfigurationmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comparison_monitoring_daily  
 Updates a table comparison checks monitoring daily  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_daily.py)
@@ -513,8 +516,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comparison_monitoring_monthly  
 Updates a table comparison checks monitoring monthly  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_monthly.py)
@@ -546,8 +549,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comparison_partitioned_daily  
 Updates a table comparison checks partitioned daily (comparing day to day)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_daily.py)
@@ -579,8 +582,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comparison_partitioned_monthly  
 Updates a table comparison checks partitioned monthly (comparing month to month)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_monthly.py)
@@ -612,8 +615,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comparison_profiling  
 Updates a table comparison profiling checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_profiling.py)
@@ -645,5 +648,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](\docs\client\models\table_comparisons\#tablecomparisonmodel)|false|
 
 
-___  
 

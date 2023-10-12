@@ -1,4 +1,7 @@
+Data quality incidents controller that supports loading incidents and changing the status of an incident.  
 
+
+___  
 ## find_connection_incident_stats  
 Returns a list of connection names with incident statistics - the count of recent open incidents.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_connection_incident_stats.py)
@@ -20,8 +23,8 @@ http://localhost:8888/api/incidentstat
 
 
 
-___  
 
+___  
 ## find_recent_incidents_on_connection  
 Returns a list of recent data quality incidents.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_recent_incidents_on_connection.py)
@@ -60,8 +63,8 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 
-___  
 
+___  
 ## get_incident  
 Return a single data quality incident&#x27;s details.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident.py)
@@ -93,8 +96,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
 
+___  
 ## get_incident_histogram  
 Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_histogram.py)
@@ -131,8 +134,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
 
+___  
 ## get_incident_issues  
 Return a paged list of failed data quality check results that are related to an incident.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_issues.py)
@@ -173,8 +176,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
 
+___  
 ## set_incident_issue_url  
 Changes the incident&#x27;s issueUrl to a new status.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_issue_url.py)
@@ -200,8 +203,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
 
+___  
 ## set_incident_status  
 Changes the incident&#x27;s status to a new status.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_status.py)
@@ -227,5 +230,4 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
 

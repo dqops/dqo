@@ -1,4 +1,7 @@
+Returns the errors related to check executions on tables and columns.  
 
+
+___  
 ## get_column_monitoring_errors  
 Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_monitoring_errors.py)
@@ -38,8 +41,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_errors  
 Returns the errors related to the recent column level partitioned checks executions for a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_partitioned_errors.py)
@@ -79,8 +82,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_errors  
 Returns the errors related to the recent check executions for all column level data quality profiling checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_profiling_errors.py)
@@ -119,8 +122,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_errors  
 Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_monitoring_errors.py)
@@ -159,8 +162,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_errors  
 Returns errors related to the recent table level partitioned checks executions for a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_partitioned_errors.py)
@@ -199,8 +202,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_errors  
 Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_profiling_errors.py)
@@ -238,5 +241,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 

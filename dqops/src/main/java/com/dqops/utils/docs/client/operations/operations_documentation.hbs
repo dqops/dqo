@@ -1,4 +1,7 @@
+{{superiorDescription}}{{#with "  "}}{{.}}{{/with}}
+
 {{#each operationObjects}}
+___{{#with "  "}}{{.}}{{/with}}
 ## {{operationPythonName}}{{#with "  "}}{{.}}{{/with}}
 {{operationDescription}}{{#with "  "}}{{.}}{{/with}}
 [Source code]({{clientSourceUrl}})
@@ -34,5 +37,4 @@
 {{#with requestBodyField}}|{{helpText}}|{{#if (eq (lower dataType) "object_type")}}[{{classFieldName}}]({{lower classUsedOnTheFieldPath}}){{else}}{{replace dataType "_type" ""}}{{/if}}|{{required}}|
 {{/with}}
 {{/if}}
-___{{#with "  "}}{{.}}{{/with}}
 {{/each}}

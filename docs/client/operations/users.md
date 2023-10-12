@@ -1,4 +1,7 @@
+User management service  
 
+
+___  
 ## change_caller_password  
 Changes the password of the calling user. When the user is identified by the DQOps local API key, it is the user whose email is stored in the DQOps API Key.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_caller_password.py)
@@ -20,8 +23,8 @@ http://localhost:8888/api/mypassword
 |New Password|string|false|
 
 
-___  
 
+___  
 ## change_user_password  
 Changes the password of a user identified by the email.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_user_password.py)
@@ -50,8 +53,8 @@ http://localhost:8888/api/users/{email}/password
 |New Password|string|false|
 
 
-___  
 
+___  
 ## create_user  
 Creates (adds) a new user to a multi-user account.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/create_user.py)
@@ -73,8 +76,8 @@ http://localhost:8888/api/users
 |User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
 
-___  
 
+___  
 ## delete_user  
 Deletes a user from a multi-user account.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/delete_user.py)
@@ -96,8 +99,8 @@ http://localhost:8888/api/users/{email}
 
 
 
-___  
 
+___  
 ## get_all_users  
 Returns a list of all users.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_all_users.py)
@@ -119,8 +122,8 @@ http://localhost:8888/api/users
 
 
 
-___  
 
+___  
 ## get_user  
 Returns the user model that describes the role of a user identified by an email  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_user.py)
@@ -149,8 +152,8 @@ http://localhost:8888/api/users/{email}
 
 
 
-___  
 
+___  
 ## update_user  
 Updates a user in a multi-user account. The user&#x27;s email cannot be changed.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/update_user.py)
@@ -179,5 +182,4 @@ http://localhost:8888/api/users/{email}
 |User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
 
-___  
 

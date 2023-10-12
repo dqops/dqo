@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Data
 public class OpenAPIModel {
     private OpenAPI sourceModel;
-    private final Map<String, List<OperationModel>> controllersMethods = new HashMap<>();
+    private final Set<ControllerModel> controllers = new HashSet<>();
     private final Set<ComponentModel> models = new HashSet<>();
 
     public static OpenAPIModel fromOpenAPI(OpenAPI openAPI,
@@ -43,8 +43,12 @@ public class OpenAPIModel {
         OpenAPIModel model = new OpenAPIModel();
         model.sourceModel = openAPI;
 
+        Map<String, ControllerModel> controllerModelMap = new HashMap<>();
+
         for (Tag tag : openAPI.getTags()) {
-            model.controllersMethods.put(tag.getName(), new ArrayList<>());
+            ControllerModel controllerModel = ControllerModel.fromTag(tag, componentReflectionService);
+            model.controllers.add(controllerModel);
+            controllerModelMap.put(tag.getName(), controllerModel);
         }
 
         for (Map.Entry<String, PathItem> pathItemEntry: openAPI.getPaths().entrySet()) {
@@ -58,13 +62,13 @@ public class OpenAPIModel {
                 OperationModel operationModel = new OperationModel(operation, httpMethod, path);
 
                 for (String tagName : operation.getTags()) {
-                    model.controllersMethods.get(tagName).add(operationModel);
+                    controllerModelMap.get(tagName).getOperations().add(operationModel);
                 }
             }
         }
 
-        model.controllersMethods.values().forEach(
-                operationModels -> operationModels.sort(Comparator.comparing(o -> o.getOperation().getOperationId()))
+        model.controllers.forEach(
+                controllerModel -> controllerModel.getOperations().sort(Comparator.comparing(o -> o.getOperation().getOperationId()))
         );
 
         Collection<ComponentModel> componentModels = openAPI.getComponents().getSchemas().entrySet().stream()

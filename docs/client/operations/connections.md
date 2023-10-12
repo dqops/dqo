@@ -1,4 +1,7 @@
+Manages connections to monitored data sources  
 
+
+___  
 ## bulk_disable_connection_checks  
 Disables a named check on this connection in the locations specified by filter  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_disable_connection_checks.py)
@@ -28,8 +31,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdi
 |Check search filters and table/column selectors.|[BulkCheckDisableParameters](\docs\client\models\connections\#bulkcheckdisableparameters)|false|
 
 
-___  
 
+___  
 ## bulk_enable_connection_checks  
 Enables a named check on this connection in the locations specified by filter  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_enable_connection_checks.py)
@@ -59,8 +62,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
 |Check search filters and rules configuration|[AllChecksPatchParameters](\docs\client\models\connections\#allcheckspatchparameters)|false|
 
 
-___  
 
+___  
 ## create_connection  
 Creates a new connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection.py)
@@ -89,8 +92,8 @@ http://localhost:8888/api/connections/{connectionName}
 |Connection specification|[ConnectionSpec](\docs\client\models\connections\#connectionspec)|false|
 
 
-___  
 
+___  
 ## create_connection_basic  
 Creates a new connection given the basic information.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection_basic.py)
@@ -119,8 +122,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 |Basic connection model|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
 
-___  
 
+___  
 ## delete_connection  
 Deletes a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/delete_connection.py)
@@ -149,8 +152,8 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-___  
 
+___  
 ## get_all_connections  
 Returns a list of connections (data sources)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_all_connections.py)
@@ -172,8 +175,8 @@ http://localhost:8888/api/connections
 
 
 
-___  
 
+___  
 ## get_connection  
 Return the full details of a connection given the connection name  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection.py)
@@ -202,8 +205,8 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-___  
 
+___  
 ## get_connection_basic  
 Return the basic details of a connection given the connection name  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_basic.py)
@@ -232,8 +235,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-___  
 
+___  
 ## get_connection_comments  
 Return the comments for a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_comments.py)
@@ -262,8 +265,8 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-___  
 
+___  
 ## get_connection_common_columns  
 Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_common_columns.py)
@@ -292,8 +295,8 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 
 
-___  
 
+___  
 ## get_connection_default_grouping_configuration  
 Return the default data grouping configuration for a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_default_grouping_configuration.py)
@@ -322,8 +325,8 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-___  
 
+___  
 ## get_connection_incident_grouping  
 Retrieves the configuration of data quality incident grouping and incident notifications  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_incident_grouping.py)
@@ -352,8 +355,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-___  
 
+___  
 ## get_connection_labels  
 Return the labels for a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_labels.py)
@@ -382,8 +385,8 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-___  
 
+___  
 ## get_connection_scheduling_group  
 Return the schedule for a connection for a scheduling group  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_scheduling_group.py)
@@ -413,8 +416,8 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 
 
-___  
 
+___  
 ## update_connection  
 Updates an existing connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection.py)
@@ -443,8 +446,8 @@ http://localhost:8888/api/connections/{connectionName}
 |Connection specification|[ConnectionSpec](\docs\client\models\connections\#connectionspec)|false|
 
 
-___  
 
+___  
 ## update_connection_basic  
 Updates the basic information of a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_basic.py)
@@ -473,8 +476,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 |Connection basic details|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
 
-___  
 
+___  
 ## update_connection_comments  
 Updates (replaces) the list of comments of a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_comments.py)
@@ -503,8 +506,8 @@ http://localhost:8888/api/connections/{connectionName}/comments
 |List of comments|[CommentSpec](\docs\client\models\#commentspec)|false|
 
 
-___  
 
+___  
 ## update_connection_default_grouping_configuration  
 Updates the default data grouping connection of a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_default_grouping_configuration.py)
@@ -533,8 +536,8 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 |Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)|false|
 
 
-___  
 
+___  
 ## update_connection_incident_grouping  
 Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_incident_grouping.py)
@@ -563,8 +566,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 |Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](\docs\client\models\connections\#connectionincidentgroupingspec)|false|
 
 
-___  
 
+___  
 ## update_connection_labels  
 Updates the list of labels of a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_labels.py)
@@ -593,8 +596,8 @@ http://localhost:8888/api/connections/{connectionName}/labels
 |List of labels|string|false|
 
 
-___  
 
+___  
 ## update_connection_scheduling_group  
 Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_scheduling_group.py)
@@ -624,5 +627,4 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |Monitoring schedule definition to store|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|false|
 
 
-___  
 

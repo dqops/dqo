@@ -1,4 +1,7 @@
+Sensors definition management  
 
+
+___  
 ## create_sensor  
 Creates (adds) a new sensor given sensor information.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/create_sensor.py)
@@ -27,8 +30,8 @@ http://localhost:8888/api/sensors/{fullSensorName}
 |Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
 
-___  
 
+___  
 ## delete_sensor  
 Deletes a custom sensor definition  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/delete_sensor.py)
@@ -50,8 +53,8 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-___  
 
+___  
 ## get_all_sensors  
 Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py)
@@ -73,8 +76,8 @@ http://localhost:8888/api/sensors
 
 
 
-___  
 
+___  
 ## get_sensor  
 Returns a sensor model  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor.py)
@@ -103,8 +106,8 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-___  
 
+___  
 ## get_sensor_folder_tree  
 Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py)
@@ -126,8 +129,8 @@ http://localhost:8888/api/definitions/sensors
 
 
 
-___  
 
+___  
 ## update_sensor  
 Updates an existing sensor, making a custom sensor definition if it is not present. 
 Removes sensor if custom definition is same as Dqo Home sensor  
@@ -157,5 +160,4 @@ http://localhost:8888/api/sensors/{fullSensorName}
 |Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
 
-___  
 

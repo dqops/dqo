@@ -1,4 +1,7 @@
+Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).  
 
+
+___  
 ## get_table_comparison_monitoring_results  
 Retrieves the results of the most table comparison performed using the monitoring comparison checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_monitoring_results.py)
@@ -31,8 +34,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_partitioned_results  
 Retrieves the results of the most table comparison performed using the partitioned comparison checks, comparing days or months of data.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_partitioned_results.py)
@@ -65,8 +68,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comparison_profiling_results  
 Retrieves the results of the most table comparison performed using the profiling checks comparison checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_profiling_results.py)
@@ -98,5 +101,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 

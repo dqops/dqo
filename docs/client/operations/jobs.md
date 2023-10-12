@@ -1,4 +1,7 @@
+Jobs management controller that supports starting new jobs, such as running selected data quality checks  
 
+
+___  
 ## cancel_job  
 Cancels a running job  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/cancel_job.py)
@@ -20,8 +23,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 
-___  
 
+___  
 ## collect_statistics_on_data_groups  
 Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_data_groups.py)
@@ -58,8 +61,8 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 |Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|false|
 
 
-___  
 
+___  
 ## collect_statistics_on_table  
 Starts a new background job that will run selected data statistics collectors on a whole table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_table.py)
@@ -96,8 +99,8 @@ http://localhost:8888/api/jobs/collectstatistics/table
 |Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|false|
 
 
-___  
 
+___  
 ## delete_stored_data  
 Starts a new background job that will delete stored data about check results, sensor readouts etc.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/delete_stored_data.py)
@@ -134,8 +137,8 @@ http://localhost:8888/api/jobs/deletestoreddata
 |Delete stored data job parameters|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|false|
 
 
-___  
 
+___  
 ## get_all_jobs  
 Retrieves a list of all queued and recently finished jobs.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_all_jobs.py)
@@ -157,8 +160,8 @@ http://localhost:8888/api/jobs/jobs
 
 
 
-___  
 
+___  
 ## get_job  
 Retrieves the current status of a single job, identified by a job id.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job.py)
@@ -187,8 +190,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 
-___  
 
+___  
 ## get_job_changes_since  
 Retrieves an incremental list of job changes (new jobs or job status changes)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job_changes_since.py)
@@ -217,8 +220,8 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 
-___  
 
+___  
 ## import_tables  
 Starts a new background job that will import selected tables.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/import_tables.py)
@@ -255,8 +258,8 @@ http://localhost:8888/api/jobs/importtables
 |Import tables job parameters|[ImportTablesQueueJobParameters](\docs\client\models\jobs\#importtablesqueuejobparameters)|false|
 
 
-___  
 
+___  
 ## is_cron_scheduler_running  
 Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/is_cron_scheduler_running.py)
@@ -271,8 +274,8 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 
-___  
 
+___  
 ## run_checks  
 Starts a new background job that will run selected data quality checks  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/run_checks.py)
@@ -309,8 +312,8 @@ http://localhost:8888/api/jobs/runchecks
 |Data quality check run configuration (target checks and an optional time range)|[RunChecksParameters](\docs\client\models\jobs\#runchecksparameters)|false|
 
 
-___  
 
+___  
 ## start_cron_scheduler  
 Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/start_cron_scheduler.py)
@@ -325,8 +328,8 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 
-___  
 
+___  
 ## stop_cron_scheduler  
 Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/stop_cron_scheduler.py)
@@ -341,8 +344,8 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 
-___  
 
+___  
 ## synchronize_folders  
 Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/synchronize_folders.py)
@@ -379,8 +382,8 @@ http://localhost:8888/api/jobs/synchronize
 |Selection of folders that should be synchronized to the DQOps Cloud|[SynchronizeMultipleFoldersDqoQueueJobParameters](\docs\client\models\jobs\#synchronizemultiplefoldersdqoqueuejobparameters)|false|
 
 
-___  
 
+___  
 ## wait_for_job  
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_job.py)
@@ -410,8 +413,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 
-___  
 
+___  
 ## wait_for_run_checks_job  
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_run_checks_job.py)
@@ -441,5 +444,4 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 
-___  
 

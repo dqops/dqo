@@ -1,4 +1,7 @@
+Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).  
 
+
+___  
 ## get_remote_data_source_schemas  
 Introspects a list of schemas inside a remote data source, identified by an already imported connection.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_schemas.py)
@@ -27,8 +30,8 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 
-___  
 
+___  
 ## get_remote_data_source_tables  
 Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_tables.py)
@@ -58,8 +61,8 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 
-___  
 
+___  
 ## test_connection  
 Checks if the given remote connection could be opened and the credentials are valid  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/test_connection.py)
@@ -95,5 +98,4 @@ http://localhost:8888/api/datasource/testconnection
 |Basic connection model|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
 
-___  
 

@@ -18,6 +18,7 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.OpenApiUtils;
+import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.google.common.base.CaseFormat;
@@ -47,14 +48,15 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
                                                                                              LinkageStore<String> linkageStore) {
         List<OperationsSuperiorObjectDocumentationModel> operationsDocumentation = new ArrayList<>();
 
-        for (Map.Entry<String, List<OperationModel>> controller : openAPIModel.getControllersMethods().entrySet()) {
-            String controllerName = controller.getKey();
+        for (ControllerModel controller : openAPIModel.getControllers()) {
+            String controllerName = controller.getControllerName();
             String controllerSimpleName = getObjectSimpleName(controllerName);
             OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel = new OperationsSuperiorObjectDocumentationModel();
             operationsSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
             operationsSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(controllerSimpleName);
+            operationsSuperiorObjectDocumentationModel.setSuperiorDescription(controller.getDescription());
 
-            List<OperationModel> controllerMethods = controller.getValue();
+            List<OperationModel> controllerMethods = controller.getOperations();
             operationsSuperiorObjectDocumentationModel.setOperationObjects(new ArrayList<>());
 
             for (OperationModel operationModel : controllerMethods) {

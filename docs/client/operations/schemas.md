@@ -1,4 +1,7 @@
+Schema management  
 
+
+___  
 ## get_schema_monitoring_checks_model  
 Return a UI friendly model of configurations for data quality monitoring checks on a schema  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_model.py)
@@ -37,8 +40,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 
-___  
 
+___  
 ## get_schema_monitoring_checks_templates  
 Return available data quality checks on a requested schema.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_templates.py)
@@ -72,8 +75,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-___  
 
+___  
 ## get_schema_partitioned_checks_model  
 Return a UI friendly model of configurations for data quality partitioned checks on a schema  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_model.py)
@@ -112,8 +115,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 
-___  
 
+___  
 ## get_schema_partitioned_checks_templates  
 Return available data quality checks on a requested schema.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_templates.py)
@@ -147,8 +150,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-___  
 
+___  
 ## get_schema_profiling_checks_model  
 Return a flat list of configurations for profiling checks on a schema  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_model.py)
@@ -186,8 +189,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 
-___  
 
+___  
 ## get_schema_profiling_checks_templates  
 Return available data quality checks on a requested schema.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_templates.py)
@@ -220,8 +223,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-___  
 
+___  
 ## get_schemas  
 Returns a list of schemas inside a connection  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schemas.py)
@@ -250,5 +253,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 
-___  
 

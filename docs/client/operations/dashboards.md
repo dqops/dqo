@@ -1,4 +1,7 @@
+Provides access to data quality dashboards  
 
+
+___  
 ## get_all_dashboards  
 Returns a list of root folders with dashboards  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_all_dashboards.py)
@@ -20,8 +23,8 @@ http://localhost:8888/api/dashboards
 
 
 
-___  
 
+___  
 ## get_dashboard_level1  
 Returns a single dashboard in the tree of folder with a temporary authenticated url  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level1.py)
@@ -52,8 +55,8 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
-___  
 
+___  
 ## get_dashboard_level2  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level2.py)
@@ -85,8 +88,8 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
-___  
 
+___  
 ## get_dashboard_level3  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level3.py)
@@ -119,8 +122,8 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
-___  
 
+___  
 ## get_dashboard_level4  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level4.py)
@@ -154,8 +157,8 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
-___  
 
+___  
 ## get_dashboard_level5  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level5.py)
@@ -190,5 +193,4 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
-___  
 

@@ -1,4 +1,7 @@
+Manages tables inside a connection/schema  
 
+
+___  
 ## create_table  
 Creates a new table (adds a table metadata)  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/create_table.py)
@@ -29,8 +32,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table specification|[TableSpec](\docs\client\models\tables\#tablespec)|false|
 
 
-___  
 
+___  
 ## delete_table  
 Deletes a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/delete_table.py)
@@ -61,8 +64,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table  
 Return the table specification  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table.py)
@@ -93,8 +96,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_basic  
 Return the basic table information  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_basic.py)
@@ -125,8 +128,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_columns_monitoring_checks_model  
 Return a UI friendly model of configurations for column-level data quality monitoring checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_monitoring_checks_model.py)
@@ -164,8 +167,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_columns_partitioned_checks_model  
 Return a UI friendly model of configurations for column-level data quality partitioned checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_partitioned_checks_model.py)
@@ -203,8 +206,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_columns_profiling_checks_model  
 Return a UI friendly model of configurations for column-level data quality profiling checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_profiling_checks_model.py)
@@ -241,8 +244,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_comments  
 Return the list of comments added to a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_comments.py)
@@ -273,8 +276,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_daily_monitoring_checks  
 Return the configuration of daily table level data quality monitoring on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_monitoring_checks.py)
@@ -305,8 +308,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_daily_partitioned_checks  
 Return the configuration of daily table level data quality partitioned checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_partitioned_checks.py)
@@ -337,8 +340,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_default_grouping_configuration  
 Return the default data grouping configuration for a table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_default_grouping_configuration.py)
@@ -369,8 +372,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_incident_grouping  
 Return the configuration of incident grouping on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_incident_grouping.py)
@@ -401,8 +404,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_labels  
 Return the list of labels assigned to a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_labels.py)
@@ -433,8 +436,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_basic_model  
 Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_basic_model.py)
@@ -466,8 +469,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_model  
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model.py)
@@ -499,8 +502,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_model_filter  
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model_filter.py)
@@ -534,8 +537,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_monthly  
 Return the configuration of monthly table level data quality monitoring on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_monthly.py)
@@ -566,8 +569,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_templates  
 Return available data quality checks on a requested table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_templates.py)
@@ -601,8 +604,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_basic_model  
 Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_basic_model.py)
@@ -634,8 +637,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_model  
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model.py)
@@ -667,8 +670,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_model_filter  
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model_filter.py)
@@ -702,8 +705,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_monthly  
 Return the configuration of monthly table level data quality partitioned checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_monthly.py)
@@ -734,8 +737,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_templates  
 Return available data quality checks on a requested table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_templates.py)
@@ -769,8 +772,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioning  
 Return the table partitioning information  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioning.py)
@@ -801,8 +804,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks  
 Return the configuration of table level data quality checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks.py)
@@ -833,8 +836,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks_basic_model  
 Return a simplistic UI friendly model of all table level data quality profiling checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_basic_model.py)
@@ -865,8 +868,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks_model  
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model.py)
@@ -897,8 +900,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks_model_filter  
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model_filter.py)
@@ -931,8 +934,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks_templates  
 Return available data quality checks on a requested table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_templates.py)
@@ -965,8 +968,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_scheduling_group_override  
 Return the schedule override configuration for a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_scheduling_group_override.py)
@@ -998,8 +1001,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_statistics  
 Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_statistics.py)
@@ -1030,8 +1033,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_tables  
 Returns a list of tables inside a connection/schema  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_tables.py)
@@ -1061,8 +1064,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## update_table  
 Updates an existing table specification, changing all the fields  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table.py)
@@ -1093,8 +1096,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Full table specification|[TableSpec](\docs\client\models\tables\#tablespec)|false|
 
 
-___  
 
+___  
 ## update_table_basic  
 Updates the basic field of an existing table, changing only the most important fields.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_basic.py)
@@ -1125,8 +1128,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table basic model with the updated settings|[TableListModel](\docs\client\models\tables\#tablelistmodel)|false|
 
 
-___  
 
+___  
 ## update_table_comments  
 Updates the list of comments on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_comments.py)
@@ -1157,8 +1160,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table|[CommentSpec](\docs\client\models\#commentspec)|false|
 
 
-___  
 
+___  
 ## update_table_daily_monitoring_checks  
 Updates the list of daily table level data quality monitoring on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_daily_monitoring_checks.py)
@@ -1189,8 +1192,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableDailyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tabledailymonitoringcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_table_default_grouping_configuration  
 Updates the default data grouping configuration at a table level.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_default_grouping_configuration.py)
@@ -1221,8 +1224,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level|[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)|false|
 
 
-___  
 
+___  
 ## update_table_incident_grouping  
 Updates the configuration of incident grouping on a table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_incident_grouping.py)
@@ -1253,8 +1256,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |New configuration of the table&#x27;s incident grouping|[TableIncidentGroupingSpec](\docs\client\models\tables\#tableincidentgroupingspec)|false|
 
 
-___  
 
+___  
 ## update_table_labels  
 Updates the list of assigned labels of an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_labels.py)
@@ -1285,8 +1288,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |List of labels to attach (replace) on a table or an empty object to clear the list of labels on a table|string|false|
 
 
-___  
 
+___  
 ## update_table_monitoring_checks_model  
 Updates the data quality monitoring from a model that contains a patch with changes.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_model.py)
@@ -1318,8 +1321,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality monitoring configuration.|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 
+___  
 ## update_table_monitoring_checks_monthly  
 Updates the list of monthly table level data quality monitoring on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_monthly.py)
@@ -1350,8 +1353,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlymonitoringcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_table_partitioned_checks_daily  
 Updates the list of daily table level data quality partitioned checks on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_daily.py)
@@ -1382,8 +1385,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableDailyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tabledailypartitionedcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_table_partitioned_checks_model  
 Updates the data quality partitioned checks from a model that contains a patch with changes.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_model.py)
@@ -1415,8 +1418,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality partitioned checks configuration.|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 
+___  
 ## update_table_partitioned_checks_monthly  
 Updates the list of monthly table level data quality partitioned checks on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_monthly.py)
@@ -1447,8 +1450,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlypartitionedcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_table_partitioning  
 Updates the table partitioning configuration of an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioning.py)
@@ -1479,8 +1482,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table partitioning model with the updated settings|[TablePartitioningModel](\docs\client\models\tables\#tablepartitioningmodel)|false|
 
 
-___  
 
+___  
 ## update_table_profiling_checks  
 Updates the list of table level data quality profiling checks on an existing table.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks.py)
@@ -1511,8 +1514,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).|[TableProfilingCheckCategoriesSpec](\docs\client\models\tables\#tableprofilingcheckcategoriesspec)|false|
 
 
-___  
 
+___  
 ## update_table_profiling_checks_model  
 Updates the data quality profiling checks from a model that contains a patch with changes.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks_model.py)
@@ -1543,8 +1546,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Model with the changes to be applied to the data quality profiling checks configuration.|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
 
-___  
 
+___  
 ## update_table_scheduling_group_override  
 Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_scheduling_group_override.py)
@@ -1576,5 +1579,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|false|
 
 
-___  
 

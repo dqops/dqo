@@ -32,6 +32,7 @@ public class OperationsSuperiorObjectDocumentationModel {
      * Superior class simple name.
      */
     private String superiorClassSimpleName;
+    private String superiorDescription;
 
     /**
      * List of particular operations fields.

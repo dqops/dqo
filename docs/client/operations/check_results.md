@@ -1,4 +1,7 @@
+Returns the complete results of executed checks on tables and columns.  
 
+
+___  
 ## get_column_monitoring_checks_results  
 Returns a complete view of the recent column level monitoring executions for the monitoring at a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_monitoring_checks_results.py)
@@ -38,8 +41,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_partitioned_checks_results  
 Returns an overview of the most recent column level partitioned checks executions for a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_partitioned_checks_results.py)
@@ -79,8 +82,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_column_profiling_checks_results  
 Returns an overview of the most recent check executions for all column level data quality profiling checks on a column  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_profiling_checks_results.py)
@@ -119,8 +122,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_data_quality_status  
 Read the most recent results of executed data quality checks on the table and return the current table&#x27;s data quality status - the number of failed data quality checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_data_quality_status.py)
@@ -154,8 +157,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_monitoring_checks_results  
 Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_monitoring_checks_results.py)
@@ -194,8 +197,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_partitioned_checks_results  
 Returns a complete view of the recent table level partitioned checks executions for a requested time scale  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_partitioned_checks_results.py)
@@ -234,8 +237,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 
+___  
 ## get_table_profiling_checks_results  
 Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_profiling_checks_results.py)
@@ -273,5 +276,4 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
 

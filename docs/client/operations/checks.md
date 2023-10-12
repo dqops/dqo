@@ -1,4 +1,7 @@
+Data quality check definition management  
 
+
+___  
 ## create_check  
 Creates (adds) a new custom check that is a pair of a sensor name and a rule name.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/create_check.py)
@@ -27,8 +30,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 |Check model|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|false|
 
 
-___  
 
+___  
 ## delete_check  
 Deletes a custom check definition  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/delete_check.py)
@@ -50,8 +53,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-___  
 
+___  
 ## get_all_checks  
 Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_all_checks.py)
@@ -73,8 +76,8 @@ http://localhost:8888/api/checks
 
 
 
-___  
 
+___  
 ## get_check  
 Returns a check definition  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check.py)
@@ -103,8 +106,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-___  
 
+___  
 ## get_check_folder_tree  
 Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check_folder_tree.py)
@@ -126,8 +129,8 @@ http://localhost:8888/api/definitions/checks
 
 
 
-___  
 
+___  
 ## update_check  
 Updates an existing check, making a custom check definition if it is not present  
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/update_check.py)
@@ -156,5 +159,4 @@ http://localhost:8888/api/checks/{fullCheckName}
 |List of check definitions|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|false|
 
 
-___  
 
