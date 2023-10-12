@@ -807,7 +807,7 @@ spec:
         - dashboard_name: Null checks - summary
           url: https://lookerstudio.google.com/embed/reporting/ba36e1a3-11a4-442b-841c-9a5d54b6f211/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Maximum accepted nulls failed
