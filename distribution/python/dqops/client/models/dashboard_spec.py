@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DashboardSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DashboardSpec:
     """
     Attributes:
@@ -32,7 +33,7 @@ class DashboardSpec:
     height: Union[Unset, int] = UNSET
     disable_thumbnail: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "DashboardSpecParameters"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         dashboard_name = self.dashboard_name

@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_target import CheckTarget
 from ..models.check_time_scale import CheckTimeScale
@@ -10,7 +11,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="SimilarCheckModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SimilarCheckModel:
     """Model that identifies a similar check in another category or another type of check (monitoring, partition).
 
@@ -27,7 +28,7 @@ class SimilarCheckModel:
     time_scale: Union[Unset, CheckTimeScale] = UNSET
     category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_target: Union[Unset, str] = UNSET

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SensorListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SensorListModel:
     """Sensor list model
 
@@ -21,7 +22,8 @@ class SensorListModel:
             where the sensor definitions are stored. This is the unique identifier of the sensor.
         custom (Union[Unset, bool]): This sensor has is a custom sensor or was customized by the user. This is a read-
             only flag.
-        built_in (Union[Unset, bool]): This sensor is provided with DQO as a built-in sensor. This is a read-only flag.
+        built_in (Union[Unset, bool]): This sensor is provided with DQOps as a built-in sensor. This is a read-only
+            flag.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
         provider_sensors (Union[Unset, List['ProviderSensorListModel']]): List of provider (database) specific models.
     """
@@ -32,7 +34,7 @@ class SensorListModel:
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     provider_sensors: Union[Unset, List["ProviderSensorListModel"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         sensor_name = self.sensor_name

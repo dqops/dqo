@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -8,26 +8,18 @@ from ...client import AuthenticatedClient, Client
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: AuthenticatedClient,
-) -> Dict[str, Any]:
-    url = "{}api/environment/issueapikey".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+def _get_kwargs() -> Dict[str, Any]:
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/environment/issueapikey",
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[str]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[str]:
     if response.status_code == HTTPStatus.OK:
         response_200 = cast(str, response.json())
         return response_200
@@ -37,7 +29,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[str
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[str]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[str]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -53,7 +47,7 @@ def sync_detailed(
     r"""issueApiKey
 
      Issues a local API Key for the calling user. This API Key could be used to authenticate using the
-    DQO Rest API client. This API Key should be passed in the \"Authorization\" HTTP header in the
+    DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
     Raises:
@@ -64,12 +58,9 @@ def sync_detailed(
         Response[str]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -83,7 +74,7 @@ def sync(
     r"""issueApiKey
 
      Issues a local API Key for the calling user. This API Key could be used to authenticate using the
-    DQO Rest API client. This API Key should be passed in the \"Authorization\" HTTP header in the
+    DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
     Raises:
@@ -106,7 +97,7 @@ async def asyncio_detailed(
     r"""issueApiKey
 
      Issues a local API Key for the calling user. This API Key could be used to authenticate using the
-    DQO Rest API client. This API Key should be passed in the \"Authorization\" HTTP header in the
+    DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
     Raises:
@@ -117,12 +108,9 @@ async def asyncio_detailed(
         Response[str]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -134,7 +122,7 @@ async def asyncio(
     r"""issueApiKey
 
      Issues a local API Key for the calling user. This API Key could be used to authenticate using the
-    DQO Rest API client. This API Key should be passed in the \"Authorization\" HTTP header in the
+    DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
     Raises:

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ErrorsListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ErrorsListModel:
     """
     Attributes:
@@ -33,7 +34,7 @@ class ErrorsListModel:
     data_groups_names: Union[Unset, List[str]] = UNSET
     data_group: Union[Unset, str] = UNSET
     error_entries: Union[Unset, List["ErrorEntryModel"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name

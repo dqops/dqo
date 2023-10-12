@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="AuthenticatedDashboardModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class AuthenticatedDashboardModel:
     """Describes a single authenticated dashboard.
 
@@ -24,7 +25,7 @@ class AuthenticatedDashboardModel:
     folder_path: Union[Unset, str] = UNSET
     dashboard: Union[Unset, "DashboardSpec"] = UNSET
     authenticated_dashboard_url: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         folder_path = self.folder_path

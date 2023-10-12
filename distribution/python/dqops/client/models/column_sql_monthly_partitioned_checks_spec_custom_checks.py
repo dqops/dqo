@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.custom_check_spec import CustomCheckSpec
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnSqlMonthlyPartitionedChecksSpecCustomChecks")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnSqlMonthlyPartitionedChecksSpecCustomChecks:
     """Dictionary of additional custom checks within this category. The keys are check names defined in the definition
     section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom
@@ -17,7 +18,7 @@ class ColumnSqlMonthlyPartitionedChecksSpecCustomChecks:
 
     """
 
-    additional_properties: Dict[str, "CustomCheckSpec"] = attr.ib(
+    additional_properties: Dict[str, "CustomCheckSpec"] = _attrs_field(
         init=False, factory=dict
     )
 

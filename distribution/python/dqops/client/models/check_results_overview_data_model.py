@@ -1,7 +1,8 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.check_results_overview_data_model_statuses_item import (
@@ -12,7 +13,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="CheckResultsOverviewDataModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckResultsOverviewDataModel:
     """
     Attributes:
@@ -44,7 +45,7 @@ class CheckResultsOverviewDataModel:
     statuses: Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]] = UNSET
     data_groups: Union[Unset, List[str]] = UNSET
     results: Union[Unset, List[float]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_hash = self.check_hash

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.incident_grouping_level import IncidentGroupingLevel
 from ..models.minimum_grouping_severity_level import MinimumGroupingSeverityLevel
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ConnectionIncidentGroupingSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ConnectionIncidentGroupingSpec:
     """
     Attributes:
@@ -42,7 +43,7 @@ class ConnectionIncidentGroupingSpec:
     mute_for_days: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
     webhooks: Union[Unset, "IncidentWebhookNotificationsSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         grouping_level: Union[Unset, str] = UNSET

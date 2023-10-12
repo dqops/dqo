@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ProviderSensorListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ProviderSensorListModel:
     """Provider sensor list model
 
@@ -16,7 +17,7 @@ class ProviderSensorListModel:
         provider_type (Union[Unset, ProviderType]):
         custom (Union[Unset, bool]): This connection specific template is a custom sensor template or was customized by
             the user.
-        built_in (Union[Unset, bool]): This connection specific template is provided with DQO as a built-in sensor.
+        built_in (Union[Unset, bool]): This connection specific template is provided with DQOps as a built-in sensor.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
@@ -24,7 +25,7 @@ class ProviderSensorListModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         provider_type: Union[Unset, str] = UNSET

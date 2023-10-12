@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckContainerModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckContainerModel:
     """Model that returns the form definition and the form data to edit all data quality checks divided by categories.
 
@@ -47,7 +48,7 @@ class CheckContainerModel:
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         categories: Union[Unset, List[Dict[str, Any]]] = UNSET

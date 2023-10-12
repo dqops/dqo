@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
@@ -12,16 +13,16 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ProviderSensorModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ProviderSensorModel:
     """Provider sensor model
 
     Attributes:
         provider_type (Union[Unset, ProviderType]):
         provider_sensor_definition_spec (Union[Unset, ProviderSensorDefinitionSpec]):
-        sql_template (Union[Unset, str]): Provider Sql template
+        sql_template (Union[Unset, str]): Provider specific Jinja2 SQL template
         custom (Union[Unset, bool]): Whether the provider sensor is a User Home provider sensor
-        built_in (Union[Unset, bool]): This is a DQO built-in provider sensor, whose parameters cannot be changed.
+        built_in (Union[Unset, bool]): This is a DQOps built-in provider sensor, whose parameters cannot be changed.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
@@ -33,7 +34,7 @@ class ProviderSensorModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         provider_type: Union[Unset, str] = UNSET

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.sensor_folder_model import SensorFolderModel
@@ -9,11 +10,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SensorFolderModelFolders")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SensorFolderModelFolders:
     """A dictionary of nested folders with sensors, the keys are the folder names."""
 
-    additional_properties: Dict[str, "SensorFolderModel"] = attr.ib(
+    additional_properties: Dict[str, "SensorFolderModel"] = _attrs_field(
         init=False, factory=dict
     )
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SensorModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SensorModel:
     """Sensor model.
 
@@ -22,7 +23,7 @@ class SensorModel:
         provider_sensor_list (Union[Unset, List['ProviderSensorModel']]): Provider sensors list with provider specific
             sensor definitions.
         custom (Union[Unset, bool]): Whether the sensor is a User Home sensor
-        built_in (Union[Unset, bool]): This is a DQO built-in sensor, whose parameters cannot be changed.
+        built_in (Union[Unset, bool]): This is a DQOps built-in sensor, whose parameters cannot be changed.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
@@ -32,7 +33,7 @@ class SensorModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         full_sensor_name = self.full_sensor_name

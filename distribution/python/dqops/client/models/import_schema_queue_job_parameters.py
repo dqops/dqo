@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ImportSchemaQueueJobParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ImportSchemaQueueJobParameters:
     """
     Attributes:
@@ -19,7 +20,7 @@ class ImportSchemaQueueJobParameters:
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name_pattern: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

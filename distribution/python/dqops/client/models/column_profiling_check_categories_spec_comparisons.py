@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.column_comparison_profiling_checks_spec import (
@@ -11,16 +12,16 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnProfilingCheckCategoriesSpecComparisons")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnProfilingCheckCategoriesSpecComparisons:
     """Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each
     comparison must match the name of a data comparison that is configured on the parent table.
 
     """
 
-    additional_properties: Dict[str, "ColumnComparisonProfilingChecksSpec"] = attr.ib(
-        init=False, factory=dict
-    )
+    additional_properties: Dict[
+        str, "ColumnComparisonProfilingChecksSpec"
+    ] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         pass

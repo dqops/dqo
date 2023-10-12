@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnComparisonModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnComparisonModel:
     """The column to column comparison model used to select which measures (min, max, sum, mean, null count, not nul count)
     are compared for this column between the compared (tested) column and the reference column from the reference table.
@@ -56,7 +57,7 @@ class ColumnComparisonModel:
     compare_mean: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_null_count: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_not_null_count: Union[Unset, "CompareThresholdsModel"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         compared_column_name = self.compared_column_name

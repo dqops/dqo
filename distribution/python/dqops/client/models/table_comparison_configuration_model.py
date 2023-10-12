@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_time_scale import CheckTimeScale
 from ..models.check_type import CheckType
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonConfigurationModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonConfigurationModel:
     """Model that contains the basic information about a table comparison configuration that specifies how the current
     table could be compared to another table that is a source of truth for comparison.
@@ -57,7 +58,7 @@ class TableComparisonConfigurationModel:
     can_edit: Union[Unset, bool] = UNSET
     can_run_compare_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         table_comparison_configuration_name = self.table_comparison_configuration_name
