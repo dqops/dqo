@@ -194,7 +194,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     public void initializeDqoUserHome(String userHomePathString) {
         try {
             Path userHomePath = Path.of(userHomePathString);
-            log.info("Initializing DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            if (log.isDebugEnabled()) {
+                log.debug("Initializing DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
 
             initializeEmptyFolder(userHomePath);
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
@@ -306,7 +308,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         Path userHomePath = Paths.get(userHomePathString);
         if (this.isDefaultDqoUserHomeInitialized()) {
-            log.info("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            if (log.isDebugEnabled()) {
+                log.debug("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
             activateFileLoggingInUserHome();
             applyDefaultConfigurationWhenMissing();
             return;
