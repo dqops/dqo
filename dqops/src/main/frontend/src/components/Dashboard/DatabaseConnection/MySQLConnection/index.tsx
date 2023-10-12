@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MysqlParametersSpec, MysqlParametersSpecSslmodeEnum } from "../../../../api";
+import { MysqlParametersSpec, MysqlParametersSpecSslmodeEnum, SharedCredentialListModel } from "../../../../api";
 import JdbcPropertiesView from "../JdbcProperties";
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
@@ -9,6 +9,7 @@ import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
   onChange?: (obj: MysqlParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const sslModes = [
@@ -39,7 +40,8 @@ const sslModes = [
 
 const MySQLConnection = ({
   mysql,
-  onChange
+  onChange,
+  sharedCredentials
 }: IMySQLConnectionProps) => {
 
   const handleChange = (obj: Partial<MysqlParametersSpec>) => {
@@ -96,6 +98,7 @@ const MySQLConnection = ({
       <JdbcPropertiesView
         properties={mysql?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );

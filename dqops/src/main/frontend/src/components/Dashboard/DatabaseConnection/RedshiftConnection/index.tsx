@@ -1,19 +1,19 @@
 import React from 'react';
-
 import SectionWrapper from '../../SectionWrapper';
-import { RedshiftParametersSpec } from '../../../../api';
+import { RedshiftParametersSpec, SharedCredentialListModel } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
-import Checkbox from '../../../Checkbox';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface IRedshiftConnectionProps {
   redshift?: RedshiftParametersSpec;
   onChange?: (obj: RedshiftParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const RedshiftConnection = ({
   redshift,
-  onChange
+  onChange,
+  sharedCredentials
 }: IRedshiftConnectionProps) => {
   const handleChange = (obj: Partial<RedshiftParametersSpec>) => {
     if (!onChange) return;
@@ -61,6 +61,7 @@ const RedshiftConnection = ({
       <JdbcPropertiesView
         properties={redshift?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );
