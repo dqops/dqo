@@ -567,6 +567,8 @@ export const EditProfilingReferenceTable = ({
   const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("row_count_match"));
 
+  console.log(reference)
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">

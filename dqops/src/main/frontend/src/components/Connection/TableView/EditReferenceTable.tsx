@@ -97,12 +97,7 @@ const EditReferenceTable = ({
   const [isUpdated, setIsUpdated] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
   const [refObj, setRefObj] = useState<{ [key: number]: number }>();
-  const [normalList, setNormalList] = useState<Array<string>>();
-  const [refList, setRefList] = useState<Array<string>>();
-  const [doubleArray, setDoubleArray] =
-    useState<Array<TableComparisonGroupingColumnPairModel>>();
-  const [trueArray, setTrueArray] =
-    useState<Array<TableComparisonGroupingColumnPairModel>>();
+  const [dataGroupingArray, setDataGroupingArray] = useState<TableComparisonGroupingColumnPairModel[]>([])
   const [extendRefnames, setExtendRefnames] = useState(false);
   const [extendDg, setExtendDg] = useState(false);
   const [deletingData, setDeletingData] = useState(false);
@@ -129,12 +124,26 @@ const EditReferenceTable = ({
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(refConnection, refSchema, refTable);
-  const onSetNormalList = (obj: Array<string>): void => {
-    setNormalList(obj);
-  };
-  const onSetRefList = (obj: Array<string>): void => {
-    setRefList(obj);
-  };
+
+ const onChangeDataGroupingArray = (reference : boolean, index: number, columnName: string) => {
+  const data = [...dataGroupingArray];
+  if (reference === true) {
+    if (data[index]) {
+      data[index].reference_table_column_name = columnName;
+    } else {
+      data[index] = { reference_table_column_name: columnName };
+    }
+  } else {
+    if (data[index]) {
+      data[index].compared_table_column_name = columnName;
+    } else {
+      data[index] = { compared_table_column_name: columnName };
+    }
+  }
+  onChange({ grouping_columns: data });
+  setDataGroupingArray(data)
+    setIsUpdated(true)
+  }
 
   useEffect(() => {
     ConnectionApiClient.getAllConnections().then((res) => {
@@ -160,7 +169,7 @@ const EditReferenceTable = ({
           setRefConnection(res.data?.reference_connection ?? '');
           setRefSchema(res.data?.reference_table?.schema_name ?? '');
           setRefTable(res.data?.reference_table?.table_name ?? '');
-          setTrueArray(res.data.grouping_columns ?? []);
+          setDataGroupingArray(res.data.grouping_columns ?? []);
         }
       });
     }
@@ -226,7 +235,7 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          grouping_columns: doubleArray ?? [],
+          grouping_columns: dataGroupingArray,
           check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
           time_scale: timePartitioned
         }
@@ -259,7 +268,7 @@ const EditReferenceTable = ({
                 schema_name: refSchema,
                 table_name: refTable
               },
-              grouping_columns: doubleArray ?? []
+              grouping_columns: dataGroupingArray ?? []
             }
           )
             .then(() => {
@@ -285,7 +294,7 @@ const EditReferenceTable = ({
                 schema_name: refSchema,
                 table_name: refTable
               },
-              grouping_columns: doubleArray ?? []
+              grouping_columns: dataGroupingArray ?? []
             }
           )
             .then(() => {
@@ -311,7 +320,7 @@ const EditReferenceTable = ({
                 schema_name: refSchema,
                 table_name: refTable
               },
-              grouping_columns: doubleArray ?? []
+              grouping_columns: dataGroupingArray ?? []
             }
           )
             .then(() => {
@@ -337,7 +346,7 @@ const EditReferenceTable = ({
                 schema_name: refSchema,
                 table_name: refTable
               },
-              grouping_columns: doubleArray ?? []
+              grouping_columns: dataGroupingArray ?? []
             }
           )
             .then(() => {
@@ -363,7 +372,7 @@ const EditReferenceTable = ({
                 schema_name: refSchema,
                 table_name: refTable
               },
-              grouping_columns: doubleArray ?? []
+              grouping_columns: dataGroupingArray ?? []
             }
           )
             .then(() => {
@@ -465,56 +474,43 @@ const EditReferenceTable = ({
     setRefObj(refList);
     setNormalObj(normalList);
   };
-  
-  const combinedArray = () => {
-    if (refList && normalList) {
-      const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
-        normalList &&
-        refList &&
-        normalList.map((item, index) => ({
-          compared_table_column_name: item,
-          reference_table_column_name: refList[index]
-        }));
-      const trim = combinedArray.filter(
-        (item) =>
-          item.compared_table_column_name !== '' ||
-          item.reference_table_column_name !== ''
-      );
 
-      setDoubleArray(trim);
-      return trim;
-    }
-    return [];
-  };
+  // const combinedArray = () => {
+  //   if (refList && normalList) {
+  //     const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
+  //       normalList &&
+  //       refList &&
+  //       normalList.map((item, index) => ({
+  //         compared_table_column_name: item,
+  //         reference_table_column_name: refList[index]
+  //       }));
+  //     const trim = combinedArray.filter(
+  //       (item) =>
+  //         item.compared_table_column_name !== '' ||
+  //         item.reference_table_column_name !== ''
+  //     );
 
-  const splitArrays = () => {
-    if (trueArray) {
-      const comparedArr = trueArray.map((x) =>
-        typeof x.compared_table_column_name === 'string'
-          ? x.compared_table_column_name
-          : ''
-      );
-      const refArr = trueArray.map((x) =>
-        typeof x.reference_table_column_name === 'string'
-          ? x.reference_table_column_name
-          : ''
-      );
-      return { comparedArr, refArr };
-    }
-  };
+  //     setDoubleArray(trim);
+  //     return trim;
+  //   }
+  //   return [];
+  // };
 
-  useEffect(() => {
-    if (
-      normalList &&
-      refList &&
-      normalList.length !== 0 &&
-      refList.length !== 0
-    ) {
-      getRequiredColumns(processColumns(normalList ?? []), processColumns(refList ?? []));
-      splitArrays();
-      onChange({ grouping_columns: combinedArray() });
-    }
-  }, [normalList, refList]);
+  // const splitArrays = () => {
+  //   if (trueArray) {
+  //     const comparedArr = trueArray.map((x) =>
+  //       typeof x.compared_table_column_name === 'string'
+  //         ? x.compared_table_column_name
+  //         : ''
+  //     );
+  //     const refArr = trueArray.map((x) =>
+  //       typeof x.reference_table_column_name === 'string'
+  //         ? x.reference_table_column_name
+  //         : ''
+  //     );
+  //     return { comparedArr, refArr };
+  //   }
+  // };
 
   const saveRun = () => {
     onUpdate();
@@ -532,11 +528,11 @@ const EditReferenceTable = ({
         refConnection.length !== 0 &&
         refSchema.length !== 0 &&
         refTable.length !== 0 &&
-        refList?.filter((c) =>c.length!==0 ).length === normalList?.filter((c) =>c.length!==0 ).length &&
+        // refList?.filter((c) =>c.length!==0 ).length === normalList?.filter((c) =>c.length!==0 ).length &&
           (isUpdated ||
         isUpdatedParent)
     ));
-  }, [normalList, refList, isUpdated, isUpdatedParent]);
+  }, [ isUpdated, isUpdatedParent]);
 
 
   const deleteDataFunct = async (params: {
@@ -675,11 +671,11 @@ const getReferenceTableStatistics = async () => {
   }
 
   useEffect(() => {
-    splitArrays()?.comparedArr.forEach((item, index) => (
-      checkIfDistinctCountIsBiggerThanLimit(item, index, false)
+    dataGroupingArray?.forEach((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item.compared_table_column_name ?? '', index, false)
     ))
-    splitArrays()?.refArr.forEach((item, index) => (
-      checkIfDistinctCountIsBiggerThanLimit(item, index, true)
+    dataGroupingArray?.forEach((item, index) => (
+      checkIfDistinctCountIsBiggerThanLimit(item.reference_table_column_name ?? '', index, true)
     ))
   },[statistics, referenceTableStatistics, profileSettings])
 
@@ -687,11 +683,12 @@ const getReferenceTableStatistics = async () => {
     getReferenceTableStatistics();
   }, [refTable])
 
+  console.log(dataGroupingArray)
+
   useEffect(() => {
-    if (normalList?.filter((x) => x.length !== 0).length === normalList?.filter((x) => x.length !== 0).length) {
-      calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []);
-    }
-  }, [normalList, refList])
+      calculateTableDistinctCount(dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '') ?? [], 
+      dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '') ?? []);
+  }, [dataGroupingArray])
 
   return (
     <div className="w-full">
@@ -831,7 +828,8 @@ const getReferenceTableStatistics = async () => {
             </a>
           </div>
         )}
-          {calculateTableDistinctCount(normalList?.filter((x) => x.length !== 0) ?? [], refList?.filter((x) => x.length !== 0) ?? []) ? (
+          {calculateTableDistinctCount(dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '') ?? [], 
+      dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '') ?? []) ? (
         <div className='text-red-500 mb-5'>{warningMessage}</div>
         ) : null}
         {(isCreating || extendDg) && tableExist ? (
@@ -867,9 +865,9 @@ const getReferenceTableStatistics = async () => {
               className="flex-1"
               title="Data grouping on compared table"
               placeholder="Select column on compared table"
-              onSetNormalList={onSetNormalList}
+              onChangeDataGroupingArray={onChangeDataGroupingArray}
               object={normalObj}
-              responseList={splitArrays()?.comparedArr}
+              responseList={dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '')}
               warningMessageList={listOfWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
               dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
@@ -882,9 +880,9 @@ const getReferenceTableStatistics = async () => {
               refConnection={refConnection}
               refSchema={refSchema}
               refTable={refTable}
-              onSetRefList={onSetRefList}
+              onChangeDataGroupingArray={onChangeDataGroupingArray}
               object={refObj}
-              responseList={splitArrays()?.refArr}
+              responseList={dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '')}
               warningMessageList={listOfReferenceWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
               dqoLimit = {Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])}
@@ -899,16 +897,16 @@ const getReferenceTableStatistics = async () => {
             />
             <div className="px-4">
               Data grouping on compared table:{' '}
-              {splitArrays()?.comparedArr.map((x, index) =>
-                index !== (splitArrays()?.comparedArr.length ?? 9) - 1
+              {dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '').map((x, index) =>
+                index !== (dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '').length ?? 9) - 1
                   ? x + ','
                   : x
               )}
             </div>
             <div className="pl-8">
               Data grouping on reference table:{' '}
-              {splitArrays()?.refArr.map((x, index) =>
-                index !== (splitArrays()?.refArr.length ?? 9) - 1 ? x + ',' : x
+              {dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '').map((x, index) =>
+                index !== (dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '').length ?? 9) - 1 ? x + ',' : x
               )}
             </div>
           </div>

@@ -15,12 +15,11 @@ type SelectDataGroupingForTableProps = {
   refTable?: string;
   onSetRef?: (obj: { [key: number]: boolean }) => void;
   onSetNormal?: (obj: { [key: number]: boolean }) => void;
-  onSetRefList?: (obj: Array<string>) => void;
-  onSetNormalList?: (obj: Array<string>) => void;
+  onChangeDataGroupingArray: (reference: boolean, index: number, columnName: string) => void
   warningMessageList?: Array<boolean>;
 
   object?: { [key: number]: number };
-  responseList?: Array<string>;
+  responseList: Array<string>;
   checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number, reference : boolean) => void
   dqoLimit?: number
 };
@@ -36,8 +35,7 @@ export const SelectGroupColumnsTable = ({
   refConnection,
   refSchema,
   refTable,
-  onSetNormalList,
-  onSetRefList,
+  onChangeDataGroupingArray,
   responseList,
   object,
   warningMessageList,
@@ -82,19 +80,13 @@ export const SelectGroupColumnsTable = ({
     refTable
   ]);
 
-  useEffect(() => {
-    if (onSetNormalList) {
-      onSetNormalList(listOfColumns);
-    }
-    if (onSetRefList) {
-      onSetRefList(listOfColumns);
-    }
-  }, [listOfColumns]);
 
   const handleColumnSelectChange = (value: string, index: number) => {
-    const updatedList = [...listOfColumns];
-    updatedList[index] = value;
-    setListOfColumns(updatedList);
+    if (refTable) {
+      onChangeDataGroupingArray(true, index, value)
+    } else {
+      onChangeDataGroupingArray(false, index, value);
+    }
   };
   const [options, setOptions] = useState<Option[]>([]);
 
@@ -171,7 +163,7 @@ export const SelectGroupColumnsTable = ({
                       : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
                      
                       )}
-                  value={listOfColumns[index] ?? ""}
+                  value={responseList[index] ?? ""}
                   onChange={(value: string) =>{
                     handleColumnSelectChange(value, index),
                     checkIfDistinctCountIsBiggerThanLimit && checkIfDistinctCountIsBiggerThanLimit(value, index, refTable ? true : false)
