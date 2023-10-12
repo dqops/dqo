@@ -48,6 +48,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private PipedInputStream readFromProcessStream;
     private PipedOutputStream readFromProcessStreamProcessSide;
     private InputStreamReader readFromProcessStreamReader;
+    private PumpStreamHandler streamHandler;
     private ByteArrayOutputStream errorStream;
     private DefaultExecutor executor;
     private CompletableFuture<Object> processFinishedErrorFuture;
@@ -119,7 +120,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 
             while (true) {
                 try {
-                    PythonRequestReplyMessage requestReplyMessage = requestReplyMessages.take();
+                    PythonRequestReplyMessage requestReplyMessage = this.requestReplyMessages.take();
                     if (requestReplyMessage.isEmpty()) {
                         return;
                     }
@@ -262,7 +263,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                         }
                     });
 
-            PumpStreamHandler streamHandler = new FlushingPumpStreamHandler(
+            this.streamHandler = new FlushingPumpStreamHandler(
                     new FlushingOutputStream(this.readFromProcessStreamProcessSide),
                     errorOutputStream, // we can use the System.stderr instead to push the errors directly to our error stream
                     //System.err,
@@ -307,6 +308,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     @Override
     public void onProcessComplete(int i) {
 		this.processFinishedSuccessFuture.complete(i);
+        this.streamHandler = null;
         this.close();
     }
 
@@ -318,6 +320,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     public void onProcessFailed(ExecuteException e) {
         log.error("Python process failed, error: " + e.getMessage(), e);
 		this.processFinishedErrorFuture.complete(e);
+        this.streamHandler = null;
         this.close();
     }
 
@@ -340,6 +343,17 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             this.requestReplyMessages.put(PythonRequestReplyMessage.createEmpty()); // poison pill message
         }
         catch (InterruptedException ex) {
+        }
+
+        if (this.streamHandler != null) {
+            try {
+                this.streamHandler.stop();
+            }
+            catch (IOException ioe) {
+            }
+            finally {
+                this.streamHandler = null;
+            }
         }
 
         try {
