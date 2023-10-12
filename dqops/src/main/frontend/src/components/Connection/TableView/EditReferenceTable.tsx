@@ -441,7 +441,7 @@ const EditReferenceTable = ({
     return initialObject;
   };
 
-  // const getRequiredColumns = (
+  // const getRequiredColumnsIndexes = (
   //   normalListF: { [key: number]: number },
   //   refListF: { [key: number]: number }
   // ) => {
@@ -475,7 +475,7 @@ const EditReferenceTable = ({
   //   setNormalObj(normalList);
   // };
 
-  const getRequiredColumns = (dataGrouping : TableComparisonGroupingColumnPairModel[]) => {
+  const getRequiredColumnsIndexes = (dataGrouping : TableComparisonGroupingColumnPairModel[]) => {
     const referenceGrouping = dataGrouping.map((x) => x?.reference_table_column_name)
     const comparedGrouping = dataGrouping.map((x) => x?.compared_table_column_name)
 
@@ -524,12 +524,12 @@ const EditReferenceTable = ({
         refConnection.length !== 0 &&
         refSchema.length !== 0 &&
         refTable.length !== 0 &&
-        // refList?.filter((c) =>c.length!==0 ).length === normalList?.filter((c) =>c.length!==0 ).length &&
+        getRequiredColumnsIndexes(dataGroupingArray).comparedMissingIndexes.length === 0 &&
+        getRequiredColumnsIndexes(dataGroupingArray).referenceMissingIndexes.length === 0 &&
           (isUpdated ||
         isUpdatedParent)
     ));
-  }, [ isUpdated, isUpdatedParent]);
-  console.log(getRequiredColumns(dataGroupingArray))
+  }, [isUpdated, isUpdatedParent, dataGroupingArray]);
 
 
   const deleteDataFunct = async (params: {
@@ -863,7 +863,7 @@ const getReferenceTableStatistics = async () => {
               title="Data grouping on compared table"
               placeholder="Select column on compared table"
               onChangeDataGroupingArray={onChangeDataGroupingArray}
-              missingGroupingColumnsArray={getRequiredColumns(dataGroupingArray).comparedMissingIndexes}      
+              requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).comparedMissingIndexes}      
               responseList={dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '')}
               warningMessageList={listOfWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
@@ -878,7 +878,7 @@ const getReferenceTableStatistics = async () => {
               refSchema={refSchema}
               refTable={refTable}
               onChangeDataGroupingArray={onChangeDataGroupingArray}
-              missingGroupingColumnsArray={getRequiredColumns(dataGroupingArray).referenceMissingIndexes}
+              requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).referenceMissingIndexes}
               responseList={dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '')}
               warningMessageList={listOfReferenceWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}

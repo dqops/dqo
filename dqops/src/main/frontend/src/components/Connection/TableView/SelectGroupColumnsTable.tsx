@@ -17,7 +17,7 @@ type SelectDataGroupingForTableProps = {
   onSetNormal?: (obj: { [key: number]: boolean }) => void;
   onChangeDataGroupingArray: (reference: boolean, index: number, columnName: string) => void
   warningMessageList?: Array<boolean>;
-  missingGroupingColumnsArray: number[];
+  requiredColumnsIndexes: number[];
   responseList: Array<string>;
   checkIfDistinctCountIsBiggerThanLimit?: (columnName: string, index: number, reference : boolean) => void
   dqoLimit?: number
@@ -36,7 +36,7 @@ export const SelectGroupColumnsTable = ({
   refTable,
   onChangeDataGroupingArray,
   responseList,
-  missingGroupingColumnsArray,
+  requiredColumnsIndexes,
   warningMessageList,
   checkIfDistinctCountIsBiggerThanLimit,
   dqoLimit
@@ -157,7 +157,7 @@ export const SelectGroupColumnsTable = ({
               <td className="my-1.5 w-11/12">
                 <ColumnSelect
                   triggerClassName={clsx(
-                    missingGroupingColumnsArray.includes(index)
+                    requiredColumnsIndexes.includes(index)
                     ? 'my-0.5 border border-red-500'
                       : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
                      
