@@ -95,33 +95,26 @@ const EditReferenceTable = ({
     table: string;
   } = useParams();
   const [isUpdated, setIsUpdated] = useState(false);
-  const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
-  const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [dataGroupingArray, setDataGroupingArray] = useState<TableComparisonGroupingColumnPairModel[]>([])
   const [extendRefnames, setExtendRefnames] = useState(false);
   const [extendDg, setExtendDg] = useState(false);
   const [deletingData, setDeletingData] = useState(false);
-  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
-    false
-  );
-  const { job_dictionary_state } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(false);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [popUp, setPopUp] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>()
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [jobId, setJobId] = useState<number>();
-  const job = jobId ? job_dictionary_state[jobId] : undefined;
-
-  const dispatch = useActionDispatch();
-
   const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
-
   const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
   const [listOfReferenceWarnings, setListOfReferenceWarnings] = useState<Array<boolean>>(Array(8).fill(false)) 
   const [referenceTableStatistics, setReferenceTableStatistics] = useState<TableColumnsStatisticsModel>()
-
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const dispatch = useActionDispatch();
+  
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(refConnection, refSchema, refTable);
 
@@ -141,8 +134,8 @@ const EditReferenceTable = ({
     }
   }
   onChange({ grouping_columns: data });
-  setDataGroupingArray(data)
-    setIsUpdated(true)
+    setDataGroupingArray(data)
+      setIsUpdated(true)
   }
 
   useEffect(() => {
@@ -401,10 +394,6 @@ const EditReferenceTable = ({
         reference_connection: refConnection,
         reference_table: { schema_name: refSchema, table_name: value }
       });
-      // if(value !== refTable){
-      //   setDeleteDataDialogOpened(true)
-      //   onChangeRefTableChanged(!refTableChanged)
-      //  }
     }
   };
   const changePropsSchema = (value: string) => {
@@ -416,71 +405,12 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
-  const processColumns = (
-    listOfColumns: Array<string>
-  ): { [key: number]: number } => {
-    const initialObject: { [key: number]: number } = {};
-    let check = false;
-    if (listOfColumns && listOfColumns.length) {
-      for (let i = listOfColumns.length - 1; i >= 0; i--) {
-        if (listOfColumns[i]?.length === 0 && !check) {
-          initialObject[i] = 2;
-        } else if (listOfColumns[i]?.length !== 0 && !check) {
-          check = true;
-          initialObject[i] = 2;
-        } else if (check && listOfColumns[i]?.length === 0) {
-          initialObject[i] = 1;
-        } else if (check && listOfColumns[i]?.length !== 0) {
-          initialObject[i] = 2;
-        }
-        if (listOfColumns[i]?.length !== 0) {
-          initialObject[i] = 3;
-        }
-      }
-    }
-    return initialObject;
-  };
-
-  // const getRequiredColumnsIndexes = (
-  //   normalListF: { [key: number]: number },
-  //   refListF: { [key: number]: number }
-  // ) => {
-  //   const normalList = normalListF;
-  //   const refList = refListF;
-
-  //   let checkNormal = false;
-  //   let checkRef = false;
-
-  //   for (let i = 8; i >= 0; i--) {
-  //     if (normalList[i] === 2 && refList[i] === 3) {
-  //       normalList[i] = 1;
-  //     } else if (normalList[i] === 3 && refList[i] === 2) {
-  //       refList[i] = 1;
-  //     }
-
-  //     if (normalList[i] === 1) {
-  //       checkNormal = true;
-  //     }
-  //     if (checkNormal === true && normalList[i] === 2) {
-  //       normalList[i] = 1;
-  //     }
-
-  //     if (refList[i] === 1) {
-  //       checkRef = true;
-  //     } else if (checkRef === true && refList[i] === 2) {
-  //       refList[i] = 1;
-  //     }
-  //   }
-  //   setRefObj(refList);
-  //   setNormalObj(normalList);
-  // };
-
   const getRequiredColumnsIndexes = (dataGrouping : TableComparisonGroupingColumnPairModel[]) => {
     const referenceGrouping = dataGrouping.map((x) => x?.reference_table_column_name)
     const comparedGrouping = dataGrouping.map((x) => x?.compared_table_column_name)
 
     const maxLeghtToCheck = Math.max(referenceGrouping.length, comparedGrouping.length)
-
+    
     const referenceMissingIndexes = [];
     const comparedMissingIndexes = [];
 
@@ -489,18 +419,18 @@ const EditReferenceTable = ({
       if (check === false) { 
         if (referenceGrouping?.[i] && comparedGrouping?.[i]) {
           check = true;
-        } else if (referenceGrouping?.[i] && comparedGrouping?.[i] === undefined) {
+        } else if (referenceGrouping?.[i] && (comparedGrouping?.[i] === undefined || comparedGrouping?.[i]?.length === 0)) {
           check = true;
           comparedMissingIndexes.push(i)
-        } else if (comparedGrouping?.[i] && referenceGrouping?.[i] === undefined) {
+        } else if (comparedGrouping?.[i] && (referenceGrouping?.[i] === undefined || referenceGrouping?.[i]?.length === 0)) {
           check = true;
           referenceMissingIndexes.push(i)
         }
       } else {
-        if (comparedGrouping?.[i] === undefined) {
+        if (comparedGrouping?.[i] === undefined || comparedGrouping?.[i]?.length === 0) {
           comparedMissingIndexes.push(i)
         }
-        if (referenceGrouping?.[i] === undefined) {
+        if (referenceGrouping?.[i] === undefined || referenceGrouping?.[i]?.length === 0) {
           referenceMissingIndexes.push(i)
         }
       }
@@ -679,8 +609,6 @@ const getReferenceTableStatistics = async () => {
   useEffect(() => {
     getReferenceTableStatistics();
   }, [refTable])
-
-  console.log(dataGroupingArray)
 
   useEffect(() => {
       calculateTableDistinctCount(dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '') ?? [], 

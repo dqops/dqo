@@ -493,7 +493,7 @@ export const EditProfilingReferenceTable = ({
     }
   }, [job?.status]);
 
-  const prepareData = (
+  const getComparisonResults = (
     nameOfColumn: string
   ): { [key: string]: ComparisonCheckResultModel } => {
     const columnComparisonResults =
@@ -522,7 +522,7 @@ export const EditProfilingReferenceTable = ({
       newNameOfCheck = nameOfCheck;
     }
 
-    let colorVar = prepareData(nameOfCol)[newNameOfCheck];
+    let colorVar = getComparisonResults(nameOfCol)[newNameOfCheck];
     if (
       bool &&
       tableComparisonResults?.table_comparison_results &&
@@ -566,8 +566,6 @@ export const EditProfilingReferenceTable = ({
 
   const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("row_count_match"));
-
-  console.log(reference)
 
   return (
     <div className="text-sm">
@@ -980,7 +978,7 @@ export const EditProfilingReferenceTable = ({
                       </tr>
                       {isElemExtended.at(index) && (
                         <ResultPanel
-                          obj={prepareData(item.compared_column_name ?? '')}
+                          obj={getComparisonResults(item.compared_column_name ?? '')}
                           onChange={onChange}
                           bools={[
                             !!item.compare_min,
