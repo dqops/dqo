@@ -441,76 +441,72 @@ const EditReferenceTable = ({
     return initialObject;
   };
 
-  const getRequiredColumns = (
-    normalListF: { [key: number]: number },
-    refListF: { [key: number]: number }
-  ) => {
-    const normalList = normalListF;
-    const refList = refListF;
+  // const getRequiredColumns = (
+  //   normalListF: { [key: number]: number },
+  //   refListF: { [key: number]: number }
+  // ) => {
+  //   const normalList = normalListF;
+  //   const refList = refListF;
 
-    let checkNormal = false;
-    let checkRef = false;
+  //   let checkNormal = false;
+  //   let checkRef = false;
 
-    for (let i = 8; i >= 0; i--) {
-      if (normalList[i] === 2 && refList[i] === 3) {
-        normalList[i] = 1;
-      } else if (normalList[i] === 3 && refList[i] === 2) {
-        refList[i] = 1;
-      }
+  //   for (let i = 8; i >= 0; i--) {
+  //     if (normalList[i] === 2 && refList[i] === 3) {
+  //       normalList[i] = 1;
+  //     } else if (normalList[i] === 3 && refList[i] === 2) {
+  //       refList[i] = 1;
+  //     }
 
-      if (normalList[i] === 1) {
-        checkNormal = true;
-      }
-      if (checkNormal === true && normalList[i] === 2) {
-        normalList[i] = 1;
-      }
+  //     if (normalList[i] === 1) {
+  //       checkNormal = true;
+  //     }
+  //     if (checkNormal === true && normalList[i] === 2) {
+  //       normalList[i] = 1;
+  //     }
 
-      if (refList[i] === 1) {
-        checkRef = true;
-      } else if (checkRef === true && refList[i] === 2) {
-        refList[i] = 1;
+  //     if (refList[i] === 1) {
+  //       checkRef = true;
+  //     } else if (checkRef === true && refList[i] === 2) {
+  //       refList[i] = 1;
+  //     }
+  //   }
+  //   setRefObj(refList);
+  //   setNormalObj(normalList);
+  // };
+
+  const getRequiredColumns = (dataGrouping : TableComparisonGroupingColumnPairModel[]) => {
+    const referenceGrouping = dataGrouping.map((x) => x?.reference_table_column_name)
+    const comparedGrouping = dataGrouping.map((x) => x?.compared_table_column_name)
+
+    const maxLeghtToCheck = Math.max(referenceGrouping.length, comparedGrouping.length)
+
+    const referenceMissingIndexes = [];
+    const comparedMissingIndexes = [];
+
+    let check = false;
+    for (let i = maxLeghtToCheck - 1; i>=0; i--) {
+      if (check === false) { 
+        if (referenceGrouping?.[i] && comparedGrouping?.[i]) {
+          check = true;
+        } else if (referenceGrouping?.[i] && comparedGrouping?.[i] === undefined) {
+          check = true;
+          comparedMissingIndexes.push(i)
+        } else if (comparedGrouping?.[i] && referenceGrouping?.[i] === undefined) {
+          check = true;
+          referenceMissingIndexes.push(i)
+        }
+      } else {
+        if (comparedGrouping?.[i] === undefined) {
+          comparedMissingIndexes.push(i)
+        }
+        if (referenceGrouping?.[i] === undefined) {
+          referenceMissingIndexes.push(i)
+        }
       }
     }
-    setRefObj(refList);
-    setNormalObj(normalList);
-  };
-
-  // const combinedArray = () => {
-  //   if (refList && normalList) {
-  //     const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
-  //       normalList &&
-  //       refList &&
-  //       normalList.map((item, index) => ({
-  //         compared_table_column_name: item,
-  //         reference_table_column_name: refList[index]
-  //       }));
-  //     const trim = combinedArray.filter(
-  //       (item) =>
-  //         item.compared_table_column_name !== '' ||
-  //         item.reference_table_column_name !== ''
-  //     );
-
-  //     setDoubleArray(trim);
-  //     return trim;
-  //   }
-  //   return [];
-  // };
-
-  // const splitArrays = () => {
-  //   if (trueArray) {
-  //     const comparedArr = trueArray.map((x) =>
-  //       typeof x.compared_table_column_name === 'string'
-  //         ? x.compared_table_column_name
-  //         : ''
-  //     );
-  //     const refArr = trueArray.map((x) =>
-  //       typeof x.reference_table_column_name === 'string'
-  //         ? x.reference_table_column_name
-  //         : ''
-  //     );
-  //     return { comparedArr, refArr };
-  //   }
-  // };
+    return { referenceMissingIndexes, comparedMissingIndexes }
+  }
 
   const saveRun = () => {
     onUpdate();
@@ -533,6 +529,7 @@ const EditReferenceTable = ({
         isUpdatedParent)
     ));
   }, [ isUpdated, isUpdatedParent]);
+  console.log(getRequiredColumns(dataGroupingArray))
 
 
   const deleteDataFunct = async (params: {
@@ -866,7 +863,7 @@ const getReferenceTableStatistics = async () => {
               title="Data grouping on compared table"
               placeholder="Select column on compared table"
               onChangeDataGroupingArray={onChangeDataGroupingArray}
-              object={normalObj}
+              missingGroupingColumnsArray={getRequiredColumns(dataGroupingArray).comparedMissingIndexes}      
               responseList={dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '')}
               warningMessageList={listOfWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
@@ -881,7 +878,7 @@ const getReferenceTableStatistics = async () => {
               refSchema={refSchema}
               refTable={refTable}
               onChangeDataGroupingArray={onChangeDataGroupingArray}
-              object={refObj}
+              missingGroupingColumnsArray={getRequiredColumns(dataGroupingArray).referenceMissingIndexes}
               responseList={dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '')}
               warningMessageList={listOfReferenceWarnings}
               checkIfDistinctCountIsBiggerThanLimit={checkIfDistinctCountIsBiggerThanLimit}
