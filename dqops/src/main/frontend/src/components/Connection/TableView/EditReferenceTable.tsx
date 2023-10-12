@@ -536,6 +536,7 @@ const EditReferenceTable = ({
         isUpdatedParent)
     ));
   }, [normalList, refList, isUpdated, isUpdatedParent]);
+  console.log(isButtonEnabled)
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;

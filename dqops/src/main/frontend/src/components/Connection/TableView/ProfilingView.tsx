@@ -296,7 +296,6 @@ const ProfilingView = () => {
           setNumberOfSelected2={setNumberOfSelected2}
           statistics={statistics}
           onChangeSelectedColumns= {onChangeSelectedColumns}
-          checksUI = {checksUI}
         />
       )}
       {activeTab === 'preview' && <TablePreview statistics={statistics ?? {}}/>}
