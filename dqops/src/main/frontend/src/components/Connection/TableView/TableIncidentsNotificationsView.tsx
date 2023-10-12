@@ -105,7 +105,7 @@ export const TableIncidentsNotificationsView = () => {
               onChange={(value) => onChange({ max_incident_length_days: value })}
               disabled={userProfile.can_manage_data_sources !== true}
             />
-            <span>days. After this time, the DQOps creates a new incident.</span>
+            <span>days. After this time, DQOps creates a new incident.</span>
           </div>
         </div>
         <div className="flex items-center mb-4 gap-2 text-sm">
