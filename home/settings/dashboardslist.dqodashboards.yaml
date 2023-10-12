@@ -82,14 +82,14 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: Issue details dashboard
-            url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-            width: 1600
-            height: 2100
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: profiling
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2100
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
 
     - folder_name: Profiling data quality KPIs
       dashboards:
@@ -360,17 +360,15 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
+        - dashboard_name: Issue details dashboard
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2100
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Issue details dashboard
-            url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-            width: 1600
-            height: 2100
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: monitoring
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
 
     - folder_name: Data quality KPIs
       dashboards:
@@ -688,14 +686,14 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: Issue details dashboard
-            url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-            width: 1600
-            height: 2100
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: partitioned
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2100
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: partitioned
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
 
     - folder_name: Data quality KPIs
       dashboards:
