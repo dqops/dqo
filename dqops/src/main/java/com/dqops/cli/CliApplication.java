@@ -15,6 +15,7 @@
  */
 package com.dqops.cli;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -31,9 +32,8 @@ import java.util.stream.Collectors;
  * CLI entry point class.
  */
 @SpringBootApplication(scanBasePackages = "com.dqops")
+@Slf4j
 public class CliApplication {
-	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
-
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
 	private static boolean silentEnabledByArgument;
@@ -141,6 +141,7 @@ public class CliApplication {
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setLogStartupInfo(false);
 			springApplication.setBannerMode(silentEnabledByArgument ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
@@ -154,7 +155,7 @@ public class CliApplication {
 				System.err.println("Alternatively, start DQOps from docker in a server headless mode (without the DQOps shell) using \"docker run dqops/dqo run\".");
 				System.exit(-1);
 			}
-			LOG.error("Error at starting the application: " + t.getMessage(), t);
+			log.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}
