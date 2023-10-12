@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.big_query_authentication_mode import BigQueryAuthenticationMode
 from ..models.big_query_jobs_create_project import BigQueryJobsCreateProject
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="BigQueryParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class BigQueryParametersSpec:
     """
     Attributes:
@@ -33,7 +34,7 @@ class BigQueryParametersSpec:
     json_key_content: Union[Unset, str] = UNSET
     json_key_path: Union[Unset, str] = UNSET
     quota_project_id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         source_project_id = self.source_project_id

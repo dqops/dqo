@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.credential_type import CredentialType
 from ..types import UNSET, Unset
@@ -8,13 +9,13 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="SharedCredentialListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SharedCredentialListModel:
     """Shared credentials list model with the basic information about the credential.
 
     Attributes:
         credential_name (Union[Unset, str]): Credential name. It is the name of a file in the .credentials/ folder
-            inside the DQO user's home folder.
+            inside the DQOps user's home folder.
         type (Union[Unset, CredentialType]):
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete the shared
             credential file.
@@ -26,7 +27,7 @@ class SharedCredentialListModel:
     type: Union[Unset, CredentialType] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     can_access_credential: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         credential_name = self.credential_name

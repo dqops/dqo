@@ -16,7 +16,6 @@ def _get_kwargs(
     schema_name: str,
     time_scale: CheckTimeScale,
     *,
-    client: AuthenticatedClient,
     table_name_pattern: Union[Unset, None, str] = UNSET,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
@@ -26,15 +25,7 @@ def _get_kwargs(
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        timeScale=time_scale,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["tableNamePattern"] = table_name_pattern
@@ -61,17 +52,17 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            timeScale=time_scale,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["CheckConfigurationModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -91,7 +82,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["CheckConfigurationModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -145,7 +136,6 @@ def sync_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         time_scale=time_scale,
-        client=client,
         table_name_pattern=table_name_pattern,
         column_name_pattern=column_name_pattern,
         column_data_type=column_data_type,
@@ -156,8 +146,7 @@ def sync_detailed(
         check_configured=check_configured,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -264,7 +253,6 @@ async def asyncio_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         time_scale=time_scale,
-        client=client,
         table_name_pattern=table_name_pattern,
         column_name_pattern=column_name_pattern,
         column_data_type=column_data_type,
@@ -275,8 +263,7 @@ async def asyncio_detailed(
         check_configured=check_configured,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_root import DqoRoot
 from ..models.file_synchronization_direction import FileSynchronizationDirection
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="SynchronizeRootFolderParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SynchronizeRootFolderParameters:
     """
     Attributes:
@@ -21,7 +22,7 @@ class SynchronizeRootFolderParameters:
     folder: Union[Unset, DqoRoot] = UNSET
     direction: Union[Unset, FileSynchronizationDirection] = UNSET
     force_refresh_native_table: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         folder: Union[Unset, str] = UNSET

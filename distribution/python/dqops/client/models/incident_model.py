@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.incident_status import IncidentStatus
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="IncidentModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class IncidentModel:
     """
     Attributes:
@@ -66,7 +67,7 @@ class IncidentModel:
     failed_checks_count: Union[Unset, int] = UNSET
     issue_url: Union[Unset, str] = UNSET
     status: Union[Unset, IncidentStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         incident_id = self.incident_id

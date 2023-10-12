@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
@@ -16,33 +16,23 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
     time_scale: CheckTimeScale,
-    *,
-    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-        columnName=column_name,
-        timeScale=time_scale,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+            columnName=column_name,
+            timeScale=time_scale,
+        ),
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -62,7 +52,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -107,11 +97,9 @@ def sync_detailed(
         table_name=table_name,
         column_name=column_name,
         time_scale=time_scale,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -192,11 +180,9 @@ async def asyncio_detailed(
         table_name=table_name,
         column_name=column_name,
         time_scale=time_scale,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

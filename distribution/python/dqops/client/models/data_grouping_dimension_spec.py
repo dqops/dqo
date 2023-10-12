@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.data_grouping_dimension_source import DataGroupingDimensionSource
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="DataGroupingDimensionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DataGroupingDimensionSpec:
     """
     Attributes:
@@ -28,7 +29,7 @@ class DataGroupingDimensionSpec:
     tag: Union[Unset, str] = UNSET
     column: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         source: Union[Unset, str] = UNSET

@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.credential_type import CredentialType
 from ..types import UNSET, Unset
@@ -8,14 +9,14 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="SharedCredentialModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SharedCredentialModel:
     """Shared credentials full model used to create and update the credential. Contains one of two forms of the
     credential's value: a text or a base64 binary value.
 
         Attributes:
             credential_name (Union[Unset, str]): Credential name. It is the name of a file in the .credentials/ folder
-                inside the DQO user's home folder.
+                inside the DQOps user's home folder.
             type (Union[Unset, CredentialType]):
             text_value (Union[Unset, str]): Credential's value as a text. Only one value (the text_value or binary_value)
                 should be not empty.
@@ -27,7 +28,7 @@ class SharedCredentialModel:
     type: Union[Unset, CredentialType] = UNSET
     text_value: Union[Unset, str] = UNSET
     binary_value: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         credential_name = self.credential_name

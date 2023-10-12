@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="IncidentWebhookNotificationsSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class IncidentWebhookNotificationsSpec:
     """
     Attributes:
@@ -29,7 +30,7 @@ class IncidentWebhookNotificationsSpec:
     incident_acknowledged_webhook_url: Union[Unset, str] = UNSET
     incident_resolved_webhook_url: Union[Unset, str] = UNSET
     incident_muted_webhook_url: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         incident_opened_webhook_url = self.incident_opened_webhook_url

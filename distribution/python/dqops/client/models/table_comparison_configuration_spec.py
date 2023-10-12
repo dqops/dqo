@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_time_scale import CheckTimeScale
 from ..models.check_type import CheckType
@@ -15,17 +16,17 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonConfigurationSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonConfigurationSpec:
     """
     Attributes:
-        reference_table_connection_name (Union[Unset, str]): The name of the connection in DQO where the reference table
-            (the source of truth) is configured. When the connection name is not provided, DQO will find the reference table
-            on the connection of the parent table.
+        reference_table_connection_name (Union[Unset, str]): The name of the connection in DQOp where the reference
+            table (the source of truth) is configured. When the connection name is not provided, DQOps will find the
+            reference table on the connection of the parent table.
         reference_table_schema_name (Union[Unset, str]): The name of the schema where the reference table is imported
-            into DQO. The reference table's metadata must be imported into DQO.
-        reference_table_name (Union[Unset, str]): The name of the reference table that is imported into DQO. The
-            reference table's metadata must be imported into DQO.
+            into DQOps. The reference table's metadata must be imported into DQOps.
+        reference_table_name (Union[Unset, str]): The name of the reference table that is imported into DQOps. The
+            reference table's metadata must be imported into DQOps.
         compared_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
             that retrieves the data from the compared table. This expression must be a SQL expression that will be added to
             the WHERE clause when querying the compared table.
@@ -51,7 +52,7 @@ class TableComparisonConfigurationSpec:
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnsPairSpec"]
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         reference_table_connection_name = self.reference_table_connection_name

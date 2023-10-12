@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_user_role import DqoUserRole
 from ..types import UNSET, Unset
@@ -8,27 +9,27 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="DqoUserProfileModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoUserProfileModel:
     """The model that describes the current user and his access rights.
 
     Attributes:
         user (Union[Unset, str]): User email.
-        tenant (Union[Unset, str]): DQO Cloud tenant.
-        license_type (Union[Unset, str]): DQO Cloud license type.
-        trial_period_expires_at (Union[Unset, str]): The date and time when the trial period of a PERSONAL DQO license
+        tenant (Union[Unset, str]): DQOps Cloud tenant.
+        license_type (Union[Unset, str]): DQOps Cloud license type.
+        trial_period_expires_at (Union[Unset, str]): The date and time when the trial period of a PERSONAL DQOps license
             expires and the account is downgraded to a FREE license.
-        connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the DQO
-            Cloud data quality warehouse.
-        users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQO environment.
+        connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the
+            DQOps Cloud data quality warehouse.
+        users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQOps environment.
         months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that could
-            be synchronized to the DQO Cloud data quality warehouse.
+            be synchronized to the DQOps Cloud data quality warehouse.
         connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that could be
-            synchronized to the DQO Cloud data quality warehouse.
-        tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQO
+            synchronized to the DQOps Cloud data quality warehouse.
+        tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQOps
             Cloud data quality warehouse.
-        jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQO can run in parallel on
-            this instance.
+        jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQOps can run in parallel
+            on this instance.
         account_role (Union[Unset, DqoUserRole]):
         can_manage_account (Union[Unset, bool]): User is the administrator of the account and can perform security
             related actions, such as managing users.
@@ -40,7 +41,7 @@ class DqoUserProfileModel:
         can_collect_statistics (Union[Unset, bool]): User can collect statistics.
         can_manage_data_sources (Union[Unset, bool]): User can manage data sources: create connections, import tables,
             change the configuration of connections, tables, columns. Change any settings in the Data Sources section.
-        can_synchronize (Union[Unset, bool]): User can trigger the synchronization with DQO Cloud.
+        can_synchronize (Union[Unset, bool]): User can trigger the synchronization with DQOps Cloud.
         can_edit_comments (Union[Unset, bool]): User can edit comments on connections, tables, columns.
         can_edit_labels (Union[Unset, bool]): User can edit labels on connections, tables, columns.
         can_manage_definitions (Union[Unset, bool]): User can manage definitions of sensors, rules, checks and the
@@ -78,7 +79,7 @@ class DqoUserProfileModel:
     can_compare_tables: Union[Unset, bool] = UNSET
     can_manage_users: Union[Unset, bool] = UNSET
     can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         user = self.user

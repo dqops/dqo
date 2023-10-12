@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_user_role import DqoUserRole
 from ..types import UNSET, Unset
@@ -8,9 +9,9 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="DqoCloudUserModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoCloudUserModel:
-    """DQO Cloud user model - identifies a user in a multi-user DQO deployment.
+    """DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.
 
     Attributes:
         email (Union[Unset, str]): User's email that identifies the user.
@@ -19,7 +20,7 @@ class DqoCloudUserModel:
 
     email: Union[Unset, str] = UNSET
     account_role: Union[Unset, DqoUserRole] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         email = self.email

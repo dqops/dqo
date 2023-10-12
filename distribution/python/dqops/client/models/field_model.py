@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="FieldModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class FieldModel:
     """Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the
     field and the current value.
@@ -50,7 +51,7 @@ class FieldModel:
     string_list_value: Union[Unset, List[str]] = UNSET
     integer_list_value: Union[Unset, List[int]] = UNSET
     date_value: Union[Unset, datetime.date] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         definition: Union[Unset, Dict[str, Any]] = UNSET

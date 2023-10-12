@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.comparison_check_result_model import ComparisonCheckResultModel
@@ -11,11 +12,11 @@ T = TypeVar(
 )
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonResultsModelColumnComparisonResultsAdditionalProperty:
     """ """
 
-    additional_properties: Dict[str, "ComparisonCheckResultModel"] = attr.ib(
+    additional_properties: Dict[str, "ComparisonCheckResultModel"] = _attrs_field(
         init=False, factory=dict
     )
 

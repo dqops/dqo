@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.data_delete_result_partition import DataDeleteResultPartition
@@ -9,11 +10,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DeleteStoredDataResultPartitionResults")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DeleteStoredDataResultPartitionResults:
     """Dictionary of partitions that where deleted or updated when the rows were deleted."""
 
-    additional_properties: Dict[str, "DataDeleteResultPartition"] = attr.ib(
+    additional_properties: Dict[str, "DataDeleteResultPartition"] = _attrs_field(
         init=False, factory=dict
     )
 

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
@@ -9,27 +9,17 @@ from ...models.shared_credential_list_model import SharedCredentialListModel
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: AuthenticatedClient,
-) -> Dict[str, Any]:
-    url = "{}api/credentials".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+def _get_kwargs() -> Dict[str, Any]:
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/credentials",
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["SharedCredentialListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -49,7 +39,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["SharedCredentialListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -65,7 +55,7 @@ def sync_detailed(
 ) -> Response[List["SharedCredentialListModel"]]:
     """getAllSharedCredentials
 
-     Returns a list of all shared credentials that are present in the DQO user's home .credentials/
+     Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
     folder..
 
     Raises:
@@ -76,12 +66,9 @@ def sync_detailed(
         Response[List['SharedCredentialListModel']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -94,7 +81,7 @@ def sync(
 ) -> Optional[List["SharedCredentialListModel"]]:
     """getAllSharedCredentials
 
-     Returns a list of all shared credentials that are present in the DQO user's home .credentials/
+     Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
     folder..
 
     Raises:
@@ -116,7 +103,7 @@ async def asyncio_detailed(
 ) -> Response[List["SharedCredentialListModel"]]:
     """getAllSharedCredentials
 
-     Returns a list of all shared credentials that are present in the DQO user's home .credentials/
+     Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
     folder..
 
     Raises:
@@ -127,12 +114,9 @@ async def asyncio_detailed(
         Response[List['SharedCredentialListModel']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -143,7 +127,7 @@ async def asyncio(
 ) -> Optional[List["SharedCredentialListModel"]]:
     """getAllSharedCredentials
 
-     Returns a list of all shared credentials that are present in the DQO user's home .credentials/
+     Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
     folder..
 
     Raises:

@@ -1,22 +1,23 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CollectStatisticsResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CollectStatisticsResult:
     """Returns the result with the summary of the statistics collected.
 
     Attributes:
         executed_statistics_collectors (Union[Unset, int]): The total count of all executed statistics collectors.
         total_collectors_executed (Union[Unset, int]): The count of executed statistics collectors.
-        columns_analyzed (Union[Unset, int]): The count of columns for which DQO executed a collector and tried to read
-            the statistics.
-        columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQO managed to obtain
+        columns_analyzed (Union[Unset, int]): The count of columns for which DQOps executed a collector and tried to
+            read the statistics.
+        columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQOps managed to obtain
             statistics.
         total_collectors_failed (Union[Unset, int]): The count of statistics collectors that failed to execute.
         total_collected_results (Union[Unset, int]): The total number of results that were collected.
@@ -28,7 +29,7 @@ class CollectStatisticsResult:
     columns_successfully_analyzed: Union[Unset, int] = UNSET
     total_collectors_failed: Union[Unset, int] = UNSET
     total_collected_results: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         executed_statistics_collectors = self.executed_statistics_collectors

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
@@ -16,19 +16,9 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: AuthenticatedClient,
     status: IncidentStatus,
 ) -> Dict[str, Any]:
-    url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/status".format(
-        client.base_url,
-        connectionName=connection_name,
-        year=year,
-        month=month,
-        incidentId=incident_id,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     json_status = status.value
@@ -39,16 +29,19 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/incidents/{connectionName}/{year}/{month}/{incidentId}/status".format(
+            connectionName=connection_name,
+            year=year,
+            month=month,
+            incidentId=incident_id,
+        ),
         "params": params,
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
         response_200 = MonoVoid.from_dict(response.json())
 
@@ -59,7 +52,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Mon
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -101,12 +96,10 @@ def sync_detailed(
         year=year,
         month=month,
         incident_id=incident_id,
-        client=client,
         status=status,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -184,12 +177,10 @@ async def asyncio_detailed(
         year=year,
         month=month,
         incident_id=incident_id,
-        client=client,
         status=status,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
