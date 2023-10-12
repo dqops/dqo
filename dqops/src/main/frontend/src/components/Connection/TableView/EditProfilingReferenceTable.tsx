@@ -271,7 +271,8 @@ export const EditProfilingReferenceTable = ({
         }
       });
     }
-  }, [selectedReference, tableExist, schemaExist, connectionExist]);
+  }, [selectedReference, tableExist, schemaExist, connectionExist,
+     reference?.reference_connection, reference?.reference_table]);
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -567,6 +568,9 @@ export const EditProfilingReferenceTable = ({
   const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("row_count_match"));
 
+  const comparedColumnOptions : Option[] =reference?.columns ? 
+  reference?.columns.map((x) => ({label: x.compared_column_name ?? '', value: x.compared_column_name ?? ''}))  : []
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -590,6 +594,7 @@ export const EditProfilingReferenceTable = ({
           isDataDeleted={isDataDeleted}
           listOfExistingReferences={listOfExistingReferences}
           canUserCompareTables={canUserCompareTables}
+          columnOptions = {{comparedColumnsOptions: comparedColumnOptions ?? [], referencedColumnsOptions: columnOptions }}
         />
       </div>
       {reference &&
