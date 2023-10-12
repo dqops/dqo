@@ -91,33 +91,6 @@ export const TableReferenceComparisons = ({
     setIsCreting(false);
   };
 
-  const onEditReference = (reference: TableComparisonConfigurationModel) => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      connection,
-      schema,
-      table,
-      'table-comparisons'
-    )}?isEditing=true&reference=${
-      reference.table_comparison_configuration_name
-    }`;
-
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table
-        ),
-        state: {},
-        label: table
-      })
-    );
-
-    history.push(url);
-  };
 
   const onChangeEditing = (value: boolean, reference?: string) => {
     setIsEditing(value);
@@ -141,8 +114,9 @@ export const TableReferenceComparisons = ({
     if (stayOnSamePage === false) {
       setIsEditing(true);
     } else {
+      let url = '';
       if (checkTypes === CheckTypes.PROFILING) {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+         url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -162,12 +136,8 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          getNewTableComparison();
-        }
-        history.push(url);
       } else if (timePartitioned === 'daily') {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+         url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -187,12 +157,8 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          getNewTableComparison();
-        }
-        history.push(url);
       } else if (timePartitioned === 'monthly') {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -212,11 +178,11 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          getNewTableComparison();
-        }
-        history.push(url);
       }
+      if (isCreating === true) {
+        getNewTableComparison();
+      }
+      history.push(url);
       setIsCreting(false);
     }
   };
@@ -262,7 +228,6 @@ export const TableReferenceComparisons = ({
           references={references}
           onCreate={onCreate}
           selectReference={onEditProfilingReference}
-          onEdit={onEditReference}
           canUserCreateTableComparison={userProfile.can_manage_data_sources}
           deleteComparison = {deleteComparison}
         />

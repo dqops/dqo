@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PostgresqlParametersSpec, PostgresqlParametersSpecSslmodeEnum } from '../../../../api';
+import { PostgresqlParametersSpec, PostgresqlParametersSpecSslmodeEnum, SharedCredentialListModel } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
@@ -9,6 +9,7 @@ import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
   onChange?: (obj: PostgresqlParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const sslModes = [
@@ -43,7 +44,8 @@ const sslModes = [
 
 const PostgreSQLConnection = ({
   postgresql,
-  onChange
+  onChange,
+  sharedCredentials
 }: IPostgreSQLConnectionProps) => {
   const handleChange = (obj: Partial<PostgresqlParametersSpec>) => {
     if (!onChange) return;
@@ -99,6 +101,7 @@ const PostgreSQLConnection = ({
       <JdbcPropertiesView
         properties={postgresql?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );
