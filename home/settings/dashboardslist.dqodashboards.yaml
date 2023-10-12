@@ -73,7 +73,7 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: Null count
-          url: https://lookerstudio.google.com/embed/u/0/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C/edit
+          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -131,7 +131,7 @@ spec:
     - folder_name: Volume
       dashboards:
         - dashboard_name: Largest tables by number of rows
-          url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/58ba619a-5c39-43f2-996b-a22a60e25137/page/c5B8C
           width: 1400
           height: 1700
           parameters:
