@@ -407,7 +407,7 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
-  const workOnMyObj = (
+  const processColumns = (
     listOfColumns: Array<string>
   ): { [key: number]: number } => {
     const initialObject: { [key: number]: number } = {};
@@ -432,7 +432,7 @@ const EditReferenceTable = ({
     return initialObject;
   };
 
-  const algorith = (
+  const getRequiredColumns = (
     normalListF: { [key: number]: number },
     refListF: { [key: number]: number }
   ) => {
@@ -465,6 +465,7 @@ const EditReferenceTable = ({
     setRefObj(refList);
     setNormalObj(normalList);
   };
+  
   const combinedArray = () => {
     if (refList && normalList) {
       const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
@@ -509,7 +510,7 @@ const EditReferenceTable = ({
       normalList.length !== 0 &&
       refList.length !== 0
     ) {
-      algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+      getRequiredColumns(processColumns(normalList ?? []), processColumns(refList ?? []));
       splitArrays();
       onChange({ grouping_columns: combinedArray() });
     }
@@ -536,7 +537,7 @@ const EditReferenceTable = ({
         isUpdatedParent)
     ));
   }, [normalList, refList, isUpdated, isUpdatedParent]);
-  console.log(isButtonEnabled)
+
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;
