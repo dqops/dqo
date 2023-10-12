@@ -180,8 +180,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
           width: 1400
@@ -189,8 +187,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
@@ -198,8 +194,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column count changed
           url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
           width: 1400
@@ -207,35 +201,41 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list changed
-          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/1832ea5b-21ff-44d4-9c41-06c763ab3c02/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list or order changed
-          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/e7ee914a-b497-4af0-85f6-841c05fc8d0e/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column types changed
-          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/7fdf18bc-b98f-4374-bcc1-83d84091e98c/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
+        - dashboard_name: Column exists
+          url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+        - dashboard_name: Column type changed
+          url: https://lookerstudio.google.com/embed/reporting/80f8376f-459b-4e2b-a029-1b37d867c386/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
     - folder_name: Timeliness
       dashboards:
         - dashboard_name: Table freshness - tables with the most current data
@@ -567,8 +567,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
           width: 1400
@@ -576,8 +574,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
@@ -585,8 +581,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column count changed
           url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
           width: 1400
@@ -594,35 +588,41 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list changed
-          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/1832ea5b-21ff-44d4-9c41-06c763ab3c02/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list or order changed
-          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/e7ee914a-b497-4af0-85f6-841c05fc8d0e/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column types changed
-          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/7fdf18bc-b98f-4374-bcc1-83d84091e98c/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
+        - dashboard_name: Column exists
+          url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+        - dashboard_name: Column type changed
+          url: https://lookerstudio.google.com/embed/reporting/80f8376f-459b-4e2b-a029-1b37d867c386/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
     - folder_name: Timeliness
       dashboards:
         - dashboard_name: Table freshness - tables with the most current data
