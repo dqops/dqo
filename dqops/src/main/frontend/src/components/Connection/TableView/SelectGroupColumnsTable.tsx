@@ -41,43 +41,11 @@ export const SelectGroupColumnsTable = ({
   checkIfDistinctCountIsBiggerThanLimit,
   dqoLimit
 }: SelectDataGroupingForTableProps) => {
-  const [fetched, setFetched] = useState(false);
   const {
     connection,
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-
-  const [listOfColumns, setListOfColumns] = useState<Array<string>>([]);
-
-  const fillArray = (length: number) => {
-    const emptyStrings = Array.from({ length: length }, () => '');
-    if (responseList === undefined || responseList.length === 0) {
-      setListOfColumns(emptyStrings);
-    } else {
-      const emptyStringsArray = Array.from(
-        { length: 9 - responseList.length },
-        () => ''
-      );
-      const combinedArrayVar = responseList.concat(emptyStringsArray);
-
-      setListOfColumns(combinedArrayVar);
-      setFetched(true);
-    }
-  };
-
-  useEffect(() => {
-    if (fetched === false && responseList?.length !== 0) {
-      fillArray(9);
-    }
-  }, [
-    connection,
-    schema,
-    table,
-    refConnection,
-    refSchema,
-    refTable
-  ]);
 
 
   const handleColumnSelectChange = (value: string, index: number) => {
@@ -88,9 +56,6 @@ export const SelectGroupColumnsTable = ({
     }
   };
   const [options, setOptions] = useState<Option[]>([]);
-
-  const [ref, setRef] = useState(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,8 +73,6 @@ export const SelectGroupColumnsTable = ({
               value: item.column_name || ''
             }))
           ]);
-
-          setRef(true);
         } catch (error) {
           console.error('Error:', error);
         }
@@ -118,8 +81,7 @@ export const SelectGroupColumnsTable = ({
           table &&
           !refTable &&
           !refConnection &&
-          !refSchema &&
-          ref === false
+          !refSchema 
         ) {
           try {
             const response = await ColumnApiClient.getColumns(
@@ -134,7 +96,6 @@ export const SelectGroupColumnsTable = ({
                 value: item.column_name || ''
               }))
             ]);
-            setRef(true);
           } catch (error) {
             console.error('Error:', error);
           }
@@ -143,7 +104,7 @@ export const SelectGroupColumnsTable = ({
     };
 
     fetchData();
-  }, [connection, schema, table, refTable, ref]);
+  }, [connection, schema, table, refTable]);
 
   const message = `The last known distinct count statistics for this column detected more than ${dqoLimit} rows or the statistics were not collected for this table yet`
 
@@ -159,7 +120,7 @@ export const SelectGroupColumnsTable = ({
                   triggerClassName={clsx(
                     requiredColumnsIndexes.includes(index)
                     ? 'my-0.5 border border-red-500'
-                      : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
+                      : options.find((x) => x.label === responseList[index] || responseList[index]?.length === 0) ?'my-0.5' :  "my-0.5 text-red-500",
                      
                       )}
                   value={responseList[index] ?? ""}
