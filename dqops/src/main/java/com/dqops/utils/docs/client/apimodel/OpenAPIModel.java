@@ -39,6 +39,7 @@ public class OpenAPIModel {
                                            LinkageStore<String> linkageStore,
                                            DocsModelLinkageService docsModelLinkageService,
                                            ComponentReflectionService componentReflectionService) {
+        String serverPath = openAPI.getServers().get(0).getUrl();
         OpenAPIModel model = new OpenAPIModel();
         model.sourceModel = openAPI;
 
@@ -47,7 +48,7 @@ public class OpenAPIModel {
         }
 
         for (Map.Entry<String, PathItem> pathItemEntry: openAPI.getPaths().entrySet()) {
-            String path = pathItemEntry.getKey();
+            String path = serverPath + pathItemEntry.getKey();
             PathItem pathItem = pathItemEntry.getValue();
 
             for (Map.Entry<PathItem.HttpMethod, Operation> methodOperationEntry : pathItem.readOperationsMap().entrySet()) {

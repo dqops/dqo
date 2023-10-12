@@ -6,7 +6,7 @@ Returns an overview of the most recent column level monitoring executions for th
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview  
 ```
 
 **Return value**  
@@ -16,6 +16,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -29,7 +40,7 @@ Returns an overview of the most recent column level partitioned checks execution
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview  
 ```
 
 **Return value**  
@@ -39,6 +50,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -52,7 +74,7 @@ Returns an overview of the most recent check executions for all column level dat
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview  
 ```
 
 **Return value**  
@@ -62,6 +84,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -75,7 +107,7 @@ Returns an overview of the most recent table level monitoring executions for the
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview  
 ```
 
 **Return value**  
@@ -85,6 +117,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -98,7 +140,7 @@ Returns an overview of the most recent table level partitioned checks executions
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview  
 ```
 
 **Return value**  
@@ -108,6 +150,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -121,7 +173,7 @@ Returns an overview of the most recent check executions for all table level data
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview  
 ```
 
 **Return value**  
@@ -131,6 +183,15 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
 |[check_results_overview_data_model](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\operations\check_results_overview\#checkresultsoverviewdatamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
 
 
 

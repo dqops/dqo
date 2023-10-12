@@ -6,9 +6,17 @@ Disables a named check on this connection in the locations specified by filter
 
 **PUT**
 ```
-api/connections/{connectionName}/checks/{checkName}/bulkdisable  
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdisable  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|check_name|Check name|string|true|
 
 
 
@@ -29,9 +37,17 @@ Enables a named check on this connection in the locations specified by filter
 
 **PUT**
 ```
-api/connections/{connectionName}/checks/{checkName}/bulkenable  
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkenable  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|check_name|Check name|string|true|
 
 
 
@@ -52,9 +68,16 @@ Creates a new connection
 
 **POST**
 ```
-api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -75,9 +98,16 @@ Creates a new connection given the basic information.
 
 **POST**
 ```
-api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -98,7 +128,7 @@ Deletes a connection
 
 **DELETE**
 ```
-api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}  
 ```
 
 **Return value**  
@@ -108,6 +138,13 @@ api/connections/{connectionName}
 |[dqo_queue_job_id](\docs\client\models\#dqoqueuejobid)||[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -121,7 +158,7 @@ Returns a list of connections (data sources)
 
 **GET**
 ```
-api/connections  
+http://localhost:8888/api/connections  
 ```
 
 **Return value**  
@@ -144,7 +181,7 @@ Return the full details of a connection given the connection name
 
 **GET**
 ```
-api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}  
 ```
 
 **Return value**  
@@ -154,6 +191,13 @@ api/connections/{connectionName}
 |[connection_specification_model](\docs\client\operations\connections\#connectionspecificationmodel)||[ConnectionSpecificationModel](\docs\client\operations\connections\#connectionspecificationmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -167,7 +211,7 @@ Return the basic details of a connection given the connection name
 
 **GET**
 ```
-api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic  
 ```
 
 **Return value**  
@@ -177,6 +221,13 @@ api/connections/{connectionName}/basic
 |[connection_model](\docs\client\models\#connectionmodel)||[ConnectionModel](\docs\client\models\#connectionmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -190,7 +241,7 @@ Return the comments for a connection
 
 **GET**
 ```
-api/connections/{connectionName}/comments  
+http://localhost:8888/api/connections/{connectionName}/comments  
 ```
 
 **Return value**  
@@ -200,6 +251,13 @@ api/connections/{connectionName}/comments
 |[comment_spec](\docs\client\models\#commentspec)||[CommentSpec](\docs\client\models\#commentspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -213,7 +271,7 @@ Finds common column names that are used on one or more tables. The list of colum
 
 **GET**
 ```
-api/connections/{connectionName}/commoncolumns  
+http://localhost:8888/api/connections/{connectionName}/commoncolumns  
 ```
 
 **Return value**  
@@ -223,6 +281,13 @@ api/connections/{connectionName}/commoncolumns
 |[common_column_model](\docs\client\operations\connections\#commoncolumnmodel)||[CommonColumnModel](\docs\client\operations\connections\#commoncolumnmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -236,7 +301,7 @@ Return the default data grouping configuration for a connection
 
 **GET**
 ```
-api/connections/{connectionName}/defaultgroupingconfiguration  
+http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration  
 ```
 
 **Return value**  
@@ -246,6 +311,13 @@ api/connections/{connectionName}/defaultgroupingconfiguration
 |[data_grouping_configuration_spec](\docs\client\models\#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -259,7 +331,7 @@ Retrieves the configuration of data quality incident grouping and incident notif
 
 **GET**
 ```
-api/connections/{connectionName}/incidentgrouping  
+http://localhost:8888/api/connections/{connectionName}/incidentgrouping  
 ```
 
 **Return value**  
@@ -269,6 +341,13 @@ api/connections/{connectionName}/incidentgrouping
 |[connection_incident_grouping_spec](\docs\client\operations\connections\#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](\docs\client\operations\connections\#connectionincidentgroupingspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -282,9 +361,23 @@ Return the labels for a connection
 
 **GET**
 ```
-api/connections/{connectionName}/labels  
+http://localhost:8888/api/connections/{connectionName}/labels  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|string||string|
+
+
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -298,7 +391,7 @@ Return the schedule for a connection for a scheduling group
 
 **GET**
 ```
-api/connections/{connectionName}/schedules/{schedulingGroup}  
+http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}  
 ```
 
 **Return value**  
@@ -308,6 +401,14 @@ api/connections/{connectionName}/schedules/{schedulingGroup}
 |[monitoring_schedule_spec](\docs\client\models\#monitoringschedulespec)||[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|[scheduling_group](\docs\client\models\#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|true|
 
 
 
@@ -321,9 +422,16 @@ Updates an existing connection
 
 **PUT**
 ```
-api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -344,9 +452,16 @@ Updates the basic information of a connection
 
 **PUT**
 ```
-api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -367,9 +482,16 @@ Updates (replaces) the list of comments of a connection
 
 **PUT**
 ```
-api/connections/{connectionName}/comments  
+http://localhost:8888/api/connections/{connectionName}/comments  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -390,9 +512,16 @@ Updates the default data grouping connection of a connection
 
 **PUT**
 ```
-api/connections/{connectionName}/defaultgroupingconfiguration  
+http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -413,9 +542,16 @@ Updates (replaces) configuration of incident grouping and notifications on a con
 
 **PUT**
 ```
-api/connections/{connectionName}/incidentgrouping  
+http://localhost:8888/api/connections/{connectionName}/incidentgrouping  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -436,9 +572,16 @@ Updates the list of labels of a connection
 
 **PUT**
 ```
-api/connections/{connectionName}/labels  
+http://localhost:8888/api/connections/{connectionName}/labels  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -447,7 +590,7 @@ api/connections/{connectionName}/labels
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of labels|[]()|false|
+|List of labels|string|false|
 
 
 ___  
@@ -459,9 +602,17 @@ Updates the schedule of a connection for a scheduling group (named schedule for 
 
 **PUT**
 ```
-api/connections/{connectionName}/schedules/{schedulingGroup}  
+http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|[scheduling_group](\docs\client\models\#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|true|
 
 
 

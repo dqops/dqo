@@ -6,9 +6,16 @@ Creates (adds) a new custom check that is a pair of a sensor name and a rule nam
 
 **POST**
 ```
-api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_check_name|Full check name|string|true|
 
 
 
@@ -29,9 +36,16 @@ Deletes a custom check definition
 
 **DELETE**
 ```
-api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_check_name|Full check name|string|true|
 
 
 
@@ -45,7 +59,7 @@ Returns a flat list of all checks available in DQOps, both built-in checks and u
 
 **GET**
 ```
-api/checks  
+http://localhost:8888/api/checks  
 ```
 
 **Return value**  
@@ -68,7 +82,7 @@ Returns a check definition
 
 **GET**
 ```
-api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}  
 ```
 
 **Return value**  
@@ -78,6 +92,13 @@ api/checks/{fullCheckName}
 |[check_definition_model](\docs\client\operations\checks\#checkdefinitionmodel)||[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_check_name|Full check name|string|true|
 
 
 
@@ -91,7 +112,7 @@ Returns a tree of all checks available in DQOps, both built-in checks and user d
 
 **GET**
 ```
-api/definitions/checks  
+http://localhost:8888/api/definitions/checks  
 ```
 
 **Return value**  
@@ -114,9 +135,16 @@ Updates an existing check, making a custom check definition if it is not present
 
 **PUT**
 ```
-api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_check_name|Full check name|string|true|
 
 
 

@@ -6,7 +6,7 @@ Creates (adds) a new shared credential, which creates a file in the DQOps user&#
 
 **POST**
 ```
-api/credentials  
+http://localhost:8888/api/credentials  
 ```
 
 
@@ -29,9 +29,16 @@ Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ f
 
 **DELETE**
 ```
-api/credentials/{credentialName}  
+http://localhost:8888/api/credentials/{credentialName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|credential_name|Full shared credential name|string|true|
 
 
 
@@ -45,9 +52,16 @@ Downloads a shared credential&#x27;s file
 
 **GET**
 ```
-api/credentials/{credentialName}/download  
+http://localhost:8888/api/credentials/{credentialName}/download  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|credential_name|Shared credential file name|string|true|
 
 
 
@@ -61,7 +75,7 @@ Returns a list of all shared credentials that are present in the DQOps user&#x27
 
 **GET**
 ```
-api/credentials  
+http://localhost:8888/api/credentials  
 ```
 
 **Return value**  
@@ -84,7 +98,7 @@ Returns a shared credential content
 
 **GET**
 ```
-api/credentials/{credentialName}  
+http://localhost:8888/api/credentials/{credentialName}  
 ```
 
 **Return value**  
@@ -94,6 +108,13 @@ api/credentials/{credentialName}
 |[shared_credential_model](\docs\client\operations\shared_credentials\#sharedcredentialmodel)||[SharedCredentialModel](\docs\client\operations\shared_credentials\#sharedcredentialmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|credential_name|Shared credential file name|string|true|
 
 
 
@@ -107,9 +128,16 @@ Updates an existing shared credential, replacing the credential&#x27;s file cont
 
 **PUT**
 ```
-api/credential/{credentialName}  
+http://localhost:8888/api/credential/{credentialName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|credential_name|Credential file name that will be updated|string|true|
 
 
 

@@ -6,7 +6,7 @@ Changes the password of the calling user. When the user is identified by the DQO
 
 **PUT**
 ```
-api/mypassword  
+http://localhost:8888/api/mypassword  
 ```
 
 
@@ -17,7 +17,7 @@ api/mypassword
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|New Password|[]()|false|
+|New Password|string|false|
 
 
 ___  
@@ -29,9 +29,16 @@ Changes the password of a user identified by the email.
 
 **PUT**
 ```
-api/users/{email}/password  
+http://localhost:8888/api/users/{email}/password  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|email|User&#x27;s email|string|true|
 
 
 
@@ -40,7 +47,7 @@ api/users/{email}/password
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|New Password|[]()|false|
+|New Password|string|false|
 
 
 ___  
@@ -52,7 +59,7 @@ Creates (adds) a new user to a multi-user account.
 
 **POST**
 ```
-api/users  
+http://localhost:8888/api/users  
 ```
 
 
@@ -75,9 +82,16 @@ Deletes a user from a multi-user account.
 
 **DELETE**
 ```
-api/users/{email}  
+http://localhost:8888/api/users/{email}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|email|User&#x27;s email|string|true|
 
 
 
@@ -91,7 +105,7 @@ Returns a list of all users.
 
 **GET**
 ```
-api/users  
+http://localhost:8888/api/users  
 ```
 
 **Return value**  
@@ -114,7 +128,7 @@ Returns the user model that describes the role of a user identified by an email
 
 **GET**
 ```
-api/users/{email}  
+http://localhost:8888/api/users/{email}  
 ```
 
 **Return value**  
@@ -124,6 +138,13 @@ api/users/{email}
 |[dqo_cloud_user_model](\docs\client\operations\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\operations\users\#dqocloudusermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|email|User&#x27;s email|string|true|
 
 
 
@@ -137,9 +158,16 @@ Updates a user in a multi-user account. The user&#x27;s email cannot be changed.
 
 **PUT**
 ```
-api/users/{email}  
+http://localhost:8888/api/users/{email}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|email|User&#x27;s email|string|true|
 
 
 

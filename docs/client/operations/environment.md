@@ -6,7 +6,7 @@ Returns all effective DQOps configuration settings.
 
 **GET**
 ```
-api/environment/settings  
+http://localhost:8888/api/environment/settings  
 ```
 
 **Return value**  
@@ -29,7 +29,7 @@ Returns the profile of the current user.
 
 **GET**
 ```
-api/environment/profile  
+http://localhost:8888/api/environment/profile  
 ```
 
 **Return value**  
@@ -52,8 +52,15 @@ Issues a local API Key for the calling user. This API Key could be used to authe
 
 **GET**
 ```
-api/environment/issueapikey  
+http://localhost:8888/api/environment/issueapikey  
 ```
+
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|string||string|
+
 
 
 

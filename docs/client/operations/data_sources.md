@@ -6,7 +6,7 @@ Introspects a list of schemas inside a remote data source, identified by an alre
 
 **GET**
 ```
-api/datasource/connections/{connectionName}/schemas  
+http://localhost:8888/api/datasource/connections/{connectionName}/schemas  
 ```
 
 **Return value**  
@@ -16,6 +16,13 @@ api/datasource/connections/{connectionName}/schemas
 |[schema_remote_model](\docs\client\operations\data_sources\#schemaremotemodel)||[SchemaRemoteModel](\docs\client\operations\data_sources\#schemaremotemodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 
@@ -29,7 +36,7 @@ Introspects the list of columns inside a schema on a remote data source that is 
 
 **GET**
 ```
-api/datasource/connections/{connectionName}/schemas/{schemaName}/tables  
+http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schemaName}/tables  
 ```
 
 **Return value**  
@@ -39,6 +46,14 @@ api/datasource/connections/{connectionName}/schemas/{schemaName}/tables
 |[remote_table_list_model](\docs\client\operations\data_sources\#remotetablelistmodel)||[RemoteTableListModel](\docs\client\operations\data_sources\#remotetablelistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
 
 
 
@@ -52,7 +67,7 @@ Checks if the given remote connection could be opened and the credentials are va
 
 **POST**
 ```
-api/datasource/testconnection  
+http://localhost:8888/api/datasource/testconnection  
 ```
 
 **Return value**  
@@ -62,6 +77,13 @@ api/datasource/testconnection
 |[connection_test_model](\docs\client\operations\data_sources\#connectiontestmodel)||[ConnectionTestModel](\docs\client\operations\data_sources\#connectiontestmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|verify_name_uniqueness|Verify if the connection name is unique, the default value is true|boolean|false|
 
 
 

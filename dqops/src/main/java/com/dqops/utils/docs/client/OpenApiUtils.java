@@ -19,8 +19,12 @@ package com.dqops.utils.docs.client;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
 
 public class OpenApiUtils {
+    private static String applicationJson = "application/json";
+    private static String textPlain = "text/plain";
+
     public static String getEffective$refFromContent(Content content) {
         Schema<?> schema = getEffectiveSchemaFromContent(content);
         return getEffective$refFromSchema(schema);
@@ -31,9 +35,10 @@ public class OpenApiUtils {
         }
 
         Schema<?> returnSchema = null;
-        MediaType mediaType = content.get("application/json");
-        if (mediaType != null) {
-            returnSchema = mediaType.getSchema();
+        if (content.containsKey(applicationJson)) {
+            returnSchema = content.get(applicationJson).getSchema();
+        } else if (content.containsKey(textPlain)) {
+            returnSchema = content.get(textPlain).getSchema();
         }
         return returnSchema;
     }
@@ -41,6 +46,10 @@ public class OpenApiUtils {
     public static String getEffective$refFromSchema(Schema<?> schema) {
         if (schema == null) {
             return null;
+        }
+
+        if (schema instanceof StringSchema) {
+            return "string";
         }
 
         String $ref = schema.get$ref();

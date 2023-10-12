@@ -6,7 +6,7 @@ Returns a complete view of the sensor readouts for recent column level monitorin
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts  
 ```
 
 **Return value**  
@@ -16,6 +16,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -29,7 +47,7 @@ Returns a view of the sensor readouts for recent column level partitioned checks
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts  
 ```
 
 **Return value**  
@@ -39,6 +57,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -52,7 +88,7 @@ Returns sensor results of the recent check executions for all column level data 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts  
 ```
 
 **Return value**  
@@ -62,6 +98,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -75,7 +128,7 @@ Returns the complete results of the most recent table level monitoring execution
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts  
 ```
 
 **Return value**  
@@ -85,6 +138,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -98,7 +168,7 @@ Returns a complete view of sensor readouts for recent table level partitioned ch
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts  
 ```
 
 **Return value**  
@@ -108,6 +178,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -121,7 +208,7 @@ Returns the complete results of the most recent check executions for all table l
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts  
 ```
 
 **Return value**  
@@ -131,6 +218,22 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
 |[sensor_readouts_list_model](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\operations\sensor_readouts\#sensorreadoutslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 

@@ -6,7 +6,7 @@ Returns UI model to show and edit the default configuration of the daily monitor
 
 **GET**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
 ```
 
 **Return value**  
@@ -29,7 +29,7 @@ Returns UI model to show and edit the default configuration of the daily monitor
 
 **GET**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
 ```
 
 **Return value**  
@@ -52,7 +52,7 @@ Returns UI model to show and edit the default configuration of the monthly monit
 
 **GET**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
 ```
 
 **Return value**  
@@ -75,7 +75,7 @@ Returns UI model to show and edit the default configuration of the monthly monit
 
 **GET**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
 ```
 
 **Return value**  
@@ -98,7 +98,7 @@ Returns UI model to show and edit the default configuration of the profiling che
 
 **GET**
 ```
-api/defaults/defaultchecks/profiling/column  
+http://localhost:8888/api/defaults/defaultchecks/profiling/column  
 ```
 
 **Return value**  
@@ -121,7 +121,7 @@ Returns UI model to show and edit the default configuration of the profiling che
 
 **GET**
 ```
-api/defaults/defaultchecks/profiling/table  
+http://localhost:8888/api/defaults/defaultchecks/profiling/table  
 ```
 
 **Return value**  
@@ -144,7 +144,7 @@ Returns spec to show and edit the default configuration of schedules.
 
 **GET**
 ```
-api/defaults/defaultschedule/{schedulingGroup}  
+http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}  
 ```
 
 **Return value**  
@@ -154,6 +154,13 @@ api/defaults/defaultschedule/{schedulingGroup}
 |[monitoring_schedule_spec](\docs\client\models\#monitoringschedulespec)||[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|[scheduling_group](\docs\client\models\#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|true|
 
 
 
@@ -167,7 +174,7 @@ Returns spec to show and edit the default configuration of webhooks.
 
 **GET**
 ```
-api/defaults/defaultwebhooks  
+http://localhost:8888/api/defaults/defaultwebhooks  
 ```
 
 **Return value**  
@@ -190,7 +197,7 @@ New configuration of the default daily monitoring (data observability) checks on
 
 **PUT**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
 ```
 
 
@@ -213,7 +220,7 @@ New configuration of the default daily monitoring (data observability) checks on
 
 **PUT**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
 ```
 
 
@@ -236,7 +243,7 @@ New configuration of the default monthly monitoring checkpoints on a column leve
 
 **PUT**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
 ```
 
 
@@ -259,7 +266,7 @@ New configuration of the default monthly monitoring checkpoints on a table level
 
 **PUT**
 ```
-api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
 ```
 
 
@@ -282,7 +289,7 @@ New configuration of the default profiling checks on a column level. These check
 
 **PUT**
 ```
-api/defaults/defaultchecks/profiling/column  
+http://localhost:8888/api/defaults/defaultchecks/profiling/column  
 ```
 
 
@@ -305,7 +312,7 @@ New configuration of the default profiling checks on a table level. These checks
 
 **PUT**
 ```
-api/defaults/defaultchecks/profiling/table  
+http://localhost:8888/api/defaults/defaultchecks/profiling/table  
 ```
 
 
@@ -328,9 +335,16 @@ New configuration of the default schedules.
 
 **PUT**
 ```
-api/defaults/defaultschedule/{schedulingGroup}  
+http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|[scheduling_group](\docs\client\models\#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|true|
 
 
 
@@ -351,7 +365,7 @@ New configuration of the default webhooks.
 
 **PUT**
 ```
-api/defaults/defaultwebhooks  
+http://localhost:8888/api/defaults/defaultwebhooks  
 ```
 
 

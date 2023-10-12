@@ -6,9 +6,16 @@ Creates (adds) a new custom rule given the rule definition.
 
 **POST**
 ```
-api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_rule_name|Full rule name|string|true|
 
 
 
@@ -29,9 +36,16 @@ Deletes a custom rule definition
 
 **DELETE**
 ```
-api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_rule_name|Full rule name|string|true|
 
 
 
@@ -45,7 +59,7 @@ Returns a flat list of all rules available in DQOps, both built-in rules and use
 
 **GET**
 ```
-api/rules  
+http://localhost:8888/api/rules  
 ```
 
 **Return value**  
@@ -68,7 +82,7 @@ Returns a rule definition
 
 **GET**
 ```
-api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}  
 ```
 
 **Return value**  
@@ -78,6 +92,13 @@ api/rules/{fullRuleName}
 |[rule_model](\docs\client\operations\rules\#rulemodel)||[RuleModel](\docs\client\operations\rules\#rulemodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_rule_name|Full rule name|string|true|
 
 
 
@@ -91,7 +112,7 @@ Returns a tree of all rules available in DQOps, both built-in rules and user def
 
 **GET**
 ```
-api/definitions/rules  
+http://localhost:8888/api/definitions/rules  
 ```
 
 **Return value**  
@@ -114,9 +135,16 @@ Updates an existing rule, making a custom rule definition if it is not present
 
 **PUT**
 ```
-api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_rule_name|Full rule name|string|true|
 
 
 

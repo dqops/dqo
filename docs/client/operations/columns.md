@@ -6,9 +6,19 @@ Creates a new column (adds a column metadata to the table)
 
 **POST**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -29,7 +39,7 @@ Deletes a column from the table
 
 **DELETE**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
 ```
 
 **Return value**  
@@ -39,6 +49,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[dqo_queue_job_id](\docs\client\models\#dqoqueuejobid)||[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -52,7 +72,7 @@ Returns the full column specification
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
 ```
 
 **Return value**  
@@ -62,6 +82,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_model](\docs\client\operations\columns\#columnmodel)||[ColumnModel](\docs\client\operations\columns\#columnmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -75,7 +105,7 @@ Returns the column specification
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic  
 ```
 
 **Return value**  
@@ -85,6 +115,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_list_model](\docs\client\operations\columns\#columnlistmodel)||[ColumnListModel](\docs\client\operations\columns\#columnlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -98,7 +138,7 @@ Return the list of comments assigned to a column
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments  
 ```
 
 **Return value**  
@@ -108,6 +148,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[comment_spec](\docs\client\models\#commentspec)||[CommentSpec](\docs\client\models\#commentspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -121,9 +171,26 @@ Return the list of labels assigned to a column
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels  
 ```
 
+**Return value**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|string||string|
+
+
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -137,7 +204,7 @@ Return a simplistic UI friendly model of column level data quality monitoring on
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/basic  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/basic  
 ```
 
 **Return value**  
@@ -147,6 +214,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -160,7 +238,7 @@ Return the configuration of daily column level data quality monitoring on a colu
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily  
 ```
 
 **Return value**  
@@ -170,6 +248,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_daily_monitoring_check_categories_spec](\docs\client\operations\columns\#columndailymonitoringcheckcategoriesspec)||[ColumnDailyMonitoringCheckCategoriesSpec](\docs\client\operations\columns\#columndailymonitoringcheckcategoriesspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -183,7 +271,7 @@ Return a UI friendly model of column level data quality monitoring on a column
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model  
 ```
 
 **Return value**  
@@ -193,6 +281,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -206,7 +305,7 @@ Return a UI friendly model of column level data quality monitoring on a column f
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}  
 ```
 
 **Return value**  
@@ -216,6 +315,19 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|check_category|Check category|string|true|
+|check_name|Check name|string|true|
 
 
 
@@ -229,7 +341,7 @@ Return the configuration of monthly column level data quality monitoring on a co
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly  
 ```
 
 **Return value**  
@@ -239,6 +351,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_monthly_monitoring_check_categories_spec](\docs\client\operations\columns\#columnmonthlymonitoringcheckcategoriesspec)||[ColumnMonthlyMonitoringCheckCategoriesSpec](\docs\client\operations\columns\#columnmonthlymonitoringcheckcategoriesspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -252,7 +374,7 @@ Return a simplistic UI friendly model of column level data quality partitioned c
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/basic  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/basic  
 ```
 
 **Return value**  
@@ -262,6 +384,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -275,7 +408,7 @@ Return the configuration of daily column level data quality partitioned checks o
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily  
 ```
 
 **Return value**  
@@ -285,6 +418,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_daily_partitioned_check_categories_spec](\docs\client\operations\columns\#columndailypartitionedcheckcategoriesspec)||[ColumnDailyPartitionedCheckCategoriesSpec](\docs\client\operations\columns\#columndailypartitionedcheckcategoriesspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -298,7 +441,7 @@ Return a UI friendly model of column level data quality partitioned checks on a 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model  
 ```
 
 **Return value**  
@@ -308,6 +451,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -321,7 +475,7 @@ Return a UI friendly model of column level data quality partitioned checks on a 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}  
 ```
 
 **Return value**  
@@ -331,6 +485,19 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|check_category|Check category|string|true|
+|check_name|Check name|string|true|
 
 
 
@@ -344,7 +511,7 @@ Return the configuration of monthly column level data quality partitioned checks
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly  
 ```
 
 **Return value**  
@@ -354,6 +521,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_monthly_partitioned_check_categories_spec](\docs\client\operations\columns\#columnmonthlypartitionedcheckcategoriesspec)||[ColumnMonthlyPartitionedCheckCategoriesSpec](\docs\client\operations\columns\#columnmonthlypartitionedcheckcategoriesspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -367,7 +544,7 @@ Return the configuration of column level data quality profiling checks on a colu
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling  
 ```
 
 **Return value**  
@@ -377,6 +554,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_profiling_check_categories_spec](\docs\client\operations\columns\#columnprofilingcheckcategoriesspec)||[ColumnProfilingCheckCategoriesSpec](\docs\client\operations\columns\#columnprofilingcheckcategoriesspec)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -390,7 +577,7 @@ Return a simplistic UI friendly model of column level data quality profiling che
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/basic  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/basic  
 ```
 
 **Return value**  
@@ -400,6 +587,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_list_model](\docs\client\models\#checkcontainerlistmodel)||[CheckContainerListModel](\docs\client\models\#checkcontainerlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -413,7 +610,7 @@ Return a UI friendly model of data quality profiling checks on a column
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model  
 ```
 
 **Return value**  
@@ -423,6 +620,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -436,7 +643,7 @@ Return a UI friendly model of data quality profiling checks on a column filtered
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/filter/{checkCategory}/{checkName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/filter/{checkCategory}/{checkName}  
 ```
 
 **Return value**  
@@ -446,6 +653,18 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_container_model](\docs\client\models\#checkcontainermodel)||[CheckContainerModel](\docs\client\models\#checkcontainermodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|check_category|Check category|string|true|
+|check_name|Check name|string|true|
 
 
 
@@ -459,7 +678,7 @@ Returns the column specification with the metrics captured by the most recent st
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics  
 ```
 
 **Return value**  
@@ -469,6 +688,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_statistics_model](\docs\client\operations\columns\#columnstatisticsmodel)||[ColumnStatisticsModel](\docs\client\operations\columns\#columnstatisticsmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -482,7 +711,7 @@ Returns a list of columns inside a table
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns  
 ```
 
 **Return value**  
@@ -492,6 +721,15 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[column_list_model](\docs\client\operations\columns\#columnlistmodel)||[ColumnListModel](\docs\client\operations\columns\#columnlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
 
 
 
@@ -505,7 +743,7 @@ Returns a list of columns inside a table with the metrics captured by the most r
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics  
 ```
 
 **Return value**  
@@ -515,6 +753,15 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[table_columns_statistics_model](\docs\client\operations\columns\#tablecolumnsstatisticsmodel)||[TableColumnsStatisticsModel](\docs\client\operations\columns\#tablecolumnsstatisticsmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
 
 
 
@@ -528,9 +775,19 @@ Updates an existing column specification, changing all the fields (even the colu
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -551,9 +808,19 @@ Updates an existing column, changing only the basic information like the expecte
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -574,9 +841,19 @@ Updates the list of comments assigned to a column.
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -597,9 +874,19 @@ Updates the list of labels assigned to a column.
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -608,7 +895,7 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column|[]()|false|
+|List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column|string|false|
 
 
 ___  
@@ -620,9 +907,19 @@ Updates configuration of daily column level data quality monitoring on a column.
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -643,9 +940,20 @@ Updates configuration of column level data quality monitoring on a column, for a
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -666,9 +974,19 @@ Updates configuration of monthly column level data quality monitoring checks on 
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -689,9 +1007,19 @@ Updates configuration of daily column level data quality partitioned checks on a
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -712,9 +1040,20 @@ Updates configuration of column level data quality partitioned checks on a colum
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
 
 
 
@@ -735,9 +1074,19 @@ Updates configuration of monthly column level data quality partitioned checks on
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -758,9 +1107,19 @@ Updates configuration of column level data quality profiling checks on a column.
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 
@@ -781,9 +1140,19 @@ Updates configuration of column level data quality profiling checks on a column 
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
 
 
 

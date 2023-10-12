@@ -6,9 +6,16 @@ Creates (adds) a new sensor given sensor information.
 
 **POST**
 ```
-api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_sensor_name|Full sensor name|string|true|
 
 
 
@@ -29,9 +36,16 @@ Deletes a custom sensor definition
 
 **DELETE**
 ```
-api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_sensor_name|Full sensor name|string|true|
 
 
 
@@ -45,7 +59,7 @@ Returns a flat list of all sensors available in DQOps, both built-in sensors and
 
 **GET**
 ```
-api/sensors  
+http://localhost:8888/api/sensors  
 ```
 
 **Return value**  
@@ -68,7 +82,7 @@ Returns a sensor model
 
 **GET**
 ```
-api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}  
 ```
 
 **Return value**  
@@ -78,6 +92,13 @@ api/sensors/{fullSensorName}
 |[sensor_model](\docs\client\operations\sensors\#sensormodel)||[SensorModel](\docs\client\operations\sensors\#sensormodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_sensor_name|Full sensor name|string|true|
 
 
 
@@ -91,7 +112,7 @@ Returns a tree of all sensors available in DQOps, both built-in sensors and user
 
 **GET**
 ```
-api/definitions/sensors  
+http://localhost:8888/api/definitions/sensors  
 ```
 
 **Return value**  
@@ -115,9 +136,16 @@ Removes sensor if custom definition is same as Dqo Home sensor
 
 **PUT**
 ```
-api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|full_sensor_name|Full sensor name|string|true|
 
 
 

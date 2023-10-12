@@ -6,7 +6,7 @@ Logs an information message in the server&#x27;s logs as a debug severity log en
 
 **POST**
 ```
-api/logs/debug  
+http://localhost:8888/api/logs/debug  
 ```
 
 
@@ -29,7 +29,7 @@ Logs an information message in the server&#x27;s logs as an error severity log e
 
 **POST**
 ```
-api/logs/error  
+http://localhost:8888/api/logs/error  
 ```
 
 
@@ -52,7 +52,7 @@ Logs an information message in the server&#x27;s logs as an info severity log en
 
 **POST**
 ```
-api/logs/info  
+http://localhost:8888/api/logs/info  
 ```
 
 
@@ -75,7 +75,7 @@ Logs an information message in the server&#x27;s logs as a warn severity log ent
 
 **POST**
 ```
-api/logs/warn  
+http://localhost:8888/api/logs/warn  
 ```
 
 

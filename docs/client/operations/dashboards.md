@@ -6,7 +6,7 @@ Returns a list of root folders with dashboards
 
 **GET**
 ```
-api/dashboards  
+http://localhost:8888/api/dashboards  
 ```
 
 **Return value**  
@@ -29,7 +29,7 @@ Returns a single dashboard in the tree of folder with a temporary authenticated 
 
 **GET**
 ```
-api/dashboards/{folder}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder}/{dashboardName}  
 ```
 
 **Return value**  
@@ -39,6 +39,15 @@ api/dashboards/{folder}/{dashboardName}
 |[authenticated_dashboard_model](\docs\client\operations\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\operations\dashboards\#authenticateddashboardmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|folder|Root folder name|string|true|
+|dashboard_name|Dashboard name|string|true|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
 
 
 
@@ -52,7 +61,7 @@ Returns a single dashboard in the tree of folders with a temporary authenticated
 
 **GET**
 ```
-api/dashboards/{folder1}/{folder2}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}  
 ```
 
 **Return value**  
@@ -62,6 +71,16 @@ api/dashboards/{folder1}/{folder2}/{dashboardName}
 |[authenticated_dashboard_model](\docs\client\operations\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\operations\dashboards\#authenticateddashboardmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|folder1|Root folder name|string|true|
+|folder2|Second level folder name|string|true|
+|dashboard_name|Dashboard name|string|true|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
 
 
 
@@ -75,7 +94,7 @@ Returns a single dashboard in the tree of folders with a temporary authenticated
 
 **GET**
 ```
-api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardName}  
 ```
 
 **Return value**  
@@ -85,6 +104,17 @@ api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardName}
 |[authenticated_dashboard_model](\docs\client\operations\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\operations\dashboards\#authenticateddashboardmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|folder1|Root folder name|string|true|
+|folder2|Second level folder name|string|true|
+|folder3|Third level folder name|string|true|
+|dashboard_name|Dashboard name|string|true|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
 
 
 
@@ -98,7 +128,7 @@ Returns a single dashboard in the tree of folders with a temporary authenticated
 
 **GET**
 ```
-api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}  
 ```
 
 **Return value**  
@@ -108,6 +138,18 @@ api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}
 |[authenticated_dashboard_model](\docs\client\operations\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\operations\dashboards\#authenticateddashboardmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|folder1|Root folder name|string|true|
+|folder2|Second level folder name|string|true|
+|folder3|Third level folder name|string|true|
+|folder4|Fourth level folder name|string|true|
+|dashboard_name|Dashboard name|string|true|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
 
 
 
@@ -121,7 +163,7 @@ Returns a single dashboard in the tree of folders with a temporary authenticated
 
 **GET**
 ```
-api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}  
 ```
 
 **Return value**  
@@ -131,6 +173,19 @@ api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}
 |[authenticated_dashboard_model](\docs\client\operations\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\operations\dashboards\#authenticateddashboardmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|folder1|Root folder name|string|true|
+|folder2|Second level folder name|string|true|
+|folder3|Third level folder name|string|true|
+|folder4|Fourth level folder name|string|true|
+|folder5|Fifth level folder name|string|true|
+|dashboard_name|Dashboard name|string|true|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
 
 
 

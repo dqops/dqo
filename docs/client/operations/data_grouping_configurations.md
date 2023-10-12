@@ -6,9 +6,18 @@ Creates a new data grouping configuration on a table level
 
 **POST**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
 
 
 
@@ -29,9 +38,19 @@ Deletes a data grouping configuration from a table
 
 **DELETE**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_grouping_configuration_name|Data grouping configuration name|string|true|
 
 
 
@@ -45,7 +64,7 @@ Returns a model of the data grouping configuration
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}  
 ```
 
 **Return value**  
@@ -55,6 +74,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupin
 |[data_grouping_configuration_model](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationmodel)||[DataGroupingConfigurationModel](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|grouping_configuration_name|Data grouping configuration name|string|true|
 
 
 
@@ -68,7 +97,7 @@ Returns the list of data grouping configurations on a table
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
 ```
 
 **Return value**  
@@ -78,6 +107,15 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupin
 |[data_grouping_configuration_list_model](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationlistmodel)||[DataGroupingConfigurationListModel](\docs\client\operations\data_grouping_configurations\#datagroupingconfigurationlistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
 
 
 
@@ -91,9 +129,19 @@ Sets a table&#x27;s grouping configuration as the default or disables data group
 
 **PATCH**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_grouping_configuration_name|Data grouping configuration name or empty to disable data grouping|string|true|
 
 
 
@@ -107,9 +155,19 @@ Updates a data grouping configuration according to the provided model
 
 **PUT**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_grouping_configuration_name|Data grouping configuration name|string|true|
 
 
 

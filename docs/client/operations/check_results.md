@@ -6,7 +6,7 @@ Returns a complete view of the recent column level monitoring executions for the
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results  
 ```
 
 **Return value**  
@@ -16,6 +16,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -29,7 +47,7 @@ Returns an overview of the most recent column level partitioned checks execution
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results  
 ```
 
 **Return value**  
@@ -39,6 +57,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -52,7 +88,7 @@ Returns an overview of the most recent check executions for all column level dat
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results  
 ```
 
 **Return value**  
@@ -62,6 +98,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -75,7 +128,7 @@ Read the most recent results of executed data quality checks on the table and re
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status  
 ```
 
 **Return value**  
@@ -85,6 +138,18 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status
 |[table_data_quality_status_model](\docs\client\operations\check_results\#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](\docs\client\operations\check_results\#tabledataqualitystatusmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long|false|
+|[check_type](\docs\client\models\#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|false|
+|[check_time_scale](\docs\client\models\#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](\docs\client\models\#checktimescale)|false|
 
 
 
@@ -98,7 +163,7 @@ Returns the complete results of the most recent table level monitoring execution
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results  
 ```
 
 **Return value**  
@@ -108,6 +173,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -121,7 +203,7 @@ Returns a complete view of the recent table level partitioned checks executions 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results  
 ```
 
 **Return value**  
@@ -131,6 +213,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -144,7 +243,7 @@ Returns the complete results of the most recent check executions for all table l
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results  
 ```
 
 **Return value**  
@@ -154,6 +253,22 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
 |[check_results_list_model](\docs\client\operations\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\operations\check_results\#checkresultslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 

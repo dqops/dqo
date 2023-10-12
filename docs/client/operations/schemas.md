@@ -6,7 +6,7 @@ Return a UI friendly model of configurations for data quality monitoring checks 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model  
 ```
 
 **Return value**  
@@ -16,6 +16,23 @@ api/connections/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/mod
 |[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Check time-scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|table_name_pattern|Table name pattern|string|false|
+|column_name_pattern|Column name pattern|string|false|
+|column_data_type|Column data-type|string|false|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
+|check_enabled|Check enabled|boolean|false|
+|check_configured|Check configured|boolean|false|
 
 
 
@@ -29,7 +46,7 @@ Return available data quality checks on a requested schema.
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/bulkenable/monitoring/{timeScale}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulkenable/monitoring/{timeScale}  
 ```
 
 **Return value**  
@@ -39,6 +56,18 @@ api/connections/{connectionName}/schemas/{schemaName}/bulkenable/monitoring/{tim
 |[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
 
 
 
@@ -52,7 +81,7 @@ Return a UI friendly model of configurations for data quality partitioned checks
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model  
 ```
 
 **Return value**  
@@ -62,6 +91,23 @@ api/connections/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/mo
 |[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Check time-scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|table_name_pattern|Table name pattern|string|false|
+|column_name_pattern|Column name pattern|string|false|
+|column_data_type|Column data-type|string|false|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
+|check_enabled|Check enabled|boolean|false|
+|check_configured|Check configured|boolean|false|
 
 
 
@@ -75,7 +121,7 @@ Return available data quality checks on a requested schema.
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}  
 ```
 
 **Return value**  
@@ -85,6 +131,18 @@ api/connections/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{ti
 |[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
 
 
 
@@ -98,7 +156,7 @@ Return a flat list of configurations for profiling checks on a schema
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/profiling/model  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/profiling/model  
 ```
 
 **Return value**  
@@ -108,6 +166,22 @@ api/connections/{connectionName}/schemas/{schemaName}/profiling/model
 |[check_configuration_model](\docs\client\models\#checkconfigurationmodel)||[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name_pattern|Table name pattern|string|false|
+|column_name_pattern|Column name pattern|string|false|
+|column_data_type|Column data-type|string|false|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
+|check_enabled|Check enabled|boolean|false|
+|check_configured|Check configured|boolean|false|
 
 
 
@@ -121,7 +195,7 @@ Return available data quality checks on a requested schema.
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling  
 ```
 
 **Return value**  
@@ -131,6 +205,17 @@ api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling
 |[check_template](\docs\client\models\#checktemplate)||[CheckTemplate](\docs\client\models\#checktemplate)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|check_category|Check category|string|false|
+|check_name|Check name|string|false|
 
 
 
@@ -144,7 +229,7 @@ Returns a list of schemas inside a connection
 
 **GET**
 ```
-api/connections/{connectionName}/schemas  
+http://localhost:8888/api/connections/{connectionName}/schemas  
 ```
 
 **Return value**  
@@ -154,6 +239,13 @@ api/connections/{connectionName}/schemas
 |[schema_model](\docs\client\operations\schemas\#schemamodel)||[SchemaModel](\docs\client\operations\schemas\#schemamodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
 
 
 

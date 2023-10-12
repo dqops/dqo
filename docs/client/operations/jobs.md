@@ -6,9 +6,16 @@ Cancels a running job
 
 **DELETE**
 ```
-api/jobs/jobs/{jobId}  
+http://localhost:8888/api/jobs/jobs/{jobId}  
 ```
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|job_id|Job id|long|true|
 
 
 
@@ -22,7 +29,7 @@ Starts a new background job that will run selected data statistics collectors on
 
 **POST**
 ```
-api/jobs/collectstatistics/withgrouping  
+http://localhost:8888/api/jobs/collectstatistics/withgrouping  
 ```
 
 **Return value**  
@@ -32,6 +39,14 @@ api/jobs/collectstatistics/withgrouping
 |[collect_statistics_queue_job_result](\docs\client\operations\jobs\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\operations\jobs\#collectstatisticsqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -52,7 +67,7 @@ Starts a new background job that will run selected data statistics collectors on
 
 **POST**
 ```
-api/jobs/collectstatistics/table  
+http://localhost:8888/api/jobs/collectstatistics/table  
 ```
 
 **Return value**  
@@ -62,6 +77,14 @@ api/jobs/collectstatistics/table
 |[collect_statistics_queue_job_result](\docs\client\operations\jobs\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\operations\jobs\#collectstatisticsqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -82,7 +105,7 @@ Starts a new background job that will delete stored data about check results, se
 
 **POST**
 ```
-api/jobs/deletestoreddata  
+http://localhost:8888/api/jobs/deletestoreddata  
 ```
 
 **Return value**  
@@ -92,6 +115,14 @@ api/jobs/deletestoreddata
 |[delete_stored_data_queue_job_result](\docs\client\operations\jobs\#deletestoreddataqueuejobresult)||[DeleteStoredDataQueueJobResult](\docs\client\operations\jobs\#deletestoreddataqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -112,7 +143,7 @@ Retrieves a list of all queued and recently finished jobs.
 
 **GET**
 ```
-api/jobs/jobs  
+http://localhost:8888/api/jobs/jobs  
 ```
 
 **Return value**  
@@ -135,7 +166,7 @@ Retrieves the current status of a single job, identified by a job id.
 
 **GET**
 ```
-api/jobs/jobs/{jobId}  
+http://localhost:8888/api/jobs/jobs/{jobId}  
 ```
 
 **Return value**  
@@ -145,6 +176,13 @@ api/jobs/jobs/{jobId}
 |[dqo_job_history_entry_model](\docs\client\operations\jobs\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\operations\jobs\#dqojobhistoryentrymodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|job_id|Job id|long|true|
 
 
 
@@ -158,7 +196,7 @@ Retrieves an incremental list of job changes (new jobs or job status changes)
 
 **GET**
 ```
-api/jobs/jobchangessince/{sequenceNumber}  
+http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}  
 ```
 
 **Return value**  
@@ -168,6 +206,13 @@ api/jobs/jobchangessince/{sequenceNumber}
 |[dqo_job_queue_incremental_snapshot_model](\docs\client\operations\jobs\#dqojobqueueincrementalsnapshotmodel)||[DqoJobQueueIncrementalSnapshotModel](\docs\client\operations\jobs\#dqojobqueueincrementalsnapshotmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|sequence_number|Change sequence number to get job changes after that sequence|long|true|
 
 
 
@@ -181,7 +226,7 @@ Starts a new background job that will import selected tables.
 
 **POST**
 ```
-api/jobs/importtables  
+http://localhost:8888/api/jobs/importtables  
 ```
 
 **Return value**  
@@ -191,6 +236,14 @@ api/jobs/importtables
 |[import_tables_queue_job_result](\docs\client\operations\jobs\#importtablesqueuejobresult)||[ImportTablesQueueJobResult](\docs\client\operations\jobs\#importtablesqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -211,7 +264,7 @@ Checks if the DQOps internal CRON scheduler is running and processing jobs sched
 
 **GET**
 ```
-api/jobs/scheduler/isrunning  
+http://localhost:8888/api/jobs/scheduler/isrunning  
 ```
 
 
@@ -227,7 +280,7 @@ Starts a new background job that will run selected data quality checks
 
 **POST**
 ```
-api/jobs/runchecks  
+http://localhost:8888/api/jobs/runchecks  
 ```
 
 **Return value**  
@@ -237,6 +290,14 @@ api/jobs/runchecks
 |[run_checks_queue_job_result](\docs\client\operations\jobs\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\operations\jobs\#runchecksqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the checks finish to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -257,7 +318,7 @@ Starts the job scheduler that runs monitoring jobs that are scheduled by assigni
 
 **POST**
 ```
-api/jobs/scheduler/status/start  
+http://localhost:8888/api/jobs/scheduler/status/start  
 ```
 
 
@@ -273,7 +334,7 @@ Stops the job scheduler that runs monitoring jobs that are scheduled by assignin
 
 **POST**
 ```
-api/jobs/scheduler/status/stop  
+http://localhost:8888/api/jobs/scheduler/status/stop  
 ```
 
 
@@ -289,7 +350,7 @@ Starts multiple file synchronization jobs that will synchronize files from selec
 
 **POST**
 ```
-api/jobs/synchronize  
+http://localhost:8888/api/jobs/synchronize  
 ```
 
 **Return value**  
@@ -299,6 +360,14 @@ api/jobs/synchronize
 |[synchronize_multiple_folders_queue_job_result](\docs\client\operations\jobs\#synchronizemultiplefoldersqueuejobresult)||[SynchronizeMultipleFoldersQueueJobResult](\docs\client\operations\jobs\#synchronizemultiplefoldersqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|wait|Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)|boolean|false|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -319,7 +388,7 @@ Waits for a job to finish. Returns the status of a finished job or a current sta
 
 **GET**
 ```
-api/jobs/jobs/{jobId}/wait  
+http://localhost:8888/api/jobs/jobs/{jobId}/wait  
 ```
 
 **Return value**  
@@ -329,6 +398,14 @@ api/jobs/jobs/{jobId}/wait
 |[dqo_job_history_entry_model](\docs\client\operations\jobs\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\operations\jobs\#dqojobhistoryentrymodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|job_id|Job id|long|true|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 
@@ -342,7 +419,7 @@ Waits for a job to finish. Returns the status of a finished job or a current sta
 
 **GET**
 ```
-api/jobs/runchecks/{jobId}/wait  
+http://localhost:8888/api/jobs/runchecks/{jobId}/wait  
 ```
 
 **Return value**  
@@ -352,6 +429,14 @@ api/jobs/runchecks/{jobId}/wait
 |[run_checks_queue_job_result](\docs\client\operations\jobs\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\operations\jobs\#runchecksqueuejobresult)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|job_id|Job id|long|true|
+|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long|false|
 
 
 

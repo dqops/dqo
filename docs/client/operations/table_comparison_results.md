@@ -6,7 +6,7 @@ Retrieves the results of the most table comparison performed using the monitorin
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results  
 ```
 
 **Return value**  
@@ -16,6 +16,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
 |[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|table_comparison_configuration_name|Table comparison configuration name|string|true|
 
 
 
@@ -29,7 +40,7 @@ Retrieves the results of the most table comparison performed using the partition
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results  
 ```
 
 **Return value**  
@@ -39,6 +50,17 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
 |[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|table_comparison_configuration_name|Table comparison configuration name|string|true|
 
 
 
@@ -52,7 +74,7 @@ Retrieves the results of the most table comparison performed using the profiling
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/comparisons/{tableComparisonConfigurationName}/results  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/comparisons/{tableComparisonConfigurationName}/results  
 ```
 
 **Return value**  
@@ -62,6 +84,16 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
 |[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|table_comparison_configuration_name|Table comparison configuration name|string|true|
 
 
 

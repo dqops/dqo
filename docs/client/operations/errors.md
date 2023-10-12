@@ -6,7 +6,7 @@ Returns errors related to the recent column level monitoring executions for the 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errors  
 ```
 
 **Return value**  
@@ -16,6 +16,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -29,7 +47,7 @@ Returns the errors related to the recent column level partitioned checks executi
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors  
 ```
 
 **Return value**  
@@ -39,6 +57,24 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -52,7 +88,7 @@ Returns the errors related to the recent check executions for all column level d
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors  
 ```
 
 **Return value**  
@@ -62,6 +98,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|column_name|Column name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -75,7 +128,7 @@ Returns the errors related to the most recent table level monitoring executions 
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errors  
 ```
 
 **Return value**  
@@ -85,6 +138,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitor
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -98,7 +168,7 @@ Returns errors related to the recent table level partitioned checks executions f
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors  
 ```
 
 **Return value**  
@@ -108,6 +178,23 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partiti
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
@@ -121,7 +208,7 @@ Returns the errors related to the most recent check executions for all table lev
 
 **GET**
 ```
-api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors  
 ```
 
 **Return value**  
@@ -131,6 +218,22 @@ api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profili
 |[errors_list_model](\docs\client\operations\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\operations\errors\#errorslistmodel)|
 
 
+
+
+**The structure of this method is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|----------|
+|connection_name|Connection name|string|true|
+|schema_name|Schema name|string|true|
+|table_name|Table name|string|true|
+|data_group|Data group|string|false|
+|month_start|Month start boundary|string|false|
+|month_end|Month end boundary|string|false|
+|check_name|Check name|string|false|
+|category|Check category name|string|false|
+|table_comparison|Table comparison name|string|false|
+|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
 
 
 
