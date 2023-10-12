@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Select from "../../Select";
 import Input from "../../Input";
 import clsx from "clsx";
@@ -59,8 +59,6 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   const encodeValue = (text: string, textType: string) => {
     if (textType === 'env') {
       return '${' + text + '}';
-    }else if (textType === 'credential') {
-      return '${credential' + text + '}';
     }
     return text;
   };
