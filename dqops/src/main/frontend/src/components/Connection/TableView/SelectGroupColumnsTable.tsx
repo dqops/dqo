@@ -1,6 +1,5 @@
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import React, { useEffect, useState } from 'react';
-import { DataGroupingConfigurationSpec } from '../../../api';
 import { ColumnApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
@@ -10,8 +9,6 @@ import { Tooltip } from '@material-tailwind/react';
 type SelectDataGroupingForTableProps = {
   title: string;
   className?: string;
-  goToCreateNew?: () => void;
-  dataGroupingConfigurationSpec?: DataGroupingConfigurationSpec;
   placeholder?: string;
   refConnection?: string;
   refSchema?: string;

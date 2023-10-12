@@ -559,12 +559,6 @@ export const EditProfilingReferenceTable = ({
   };
 
   useEffect(() => {
-    if (isCreating === false) {
-      onUpdate();
-    }
-  }, [reference, table, schema, connection]);
-
-  useEffect(() => {
     getResultsData();
   }, [isDataDeleted]);
   
@@ -578,6 +572,7 @@ export const EditProfilingReferenceTable = ({
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
+          onUpdateParent = {onUpdate}
           onBack={onBack}
           onChange={onChange}
           selectedReference={selectedReference}

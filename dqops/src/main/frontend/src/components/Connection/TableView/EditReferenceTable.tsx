@@ -22,11 +22,10 @@ import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Select, { Option } from '../../Select';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  addFirstLevelTab,
   setCurrentJobId
 } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
@@ -55,6 +54,7 @@ type EditReferenceTableProps = {
   isDataDeleted: boolean;
   listOfExistingReferences: Array<string | undefined>;
   canUserCompareTables?: boolean;
+  onUpdateParent: () => void
 };
 
 const EditReferenceTable = ({
@@ -73,7 +73,8 @@ const EditReferenceTable = ({
   onChange,
   isDataDeleted,
   listOfExistingReferences,
-  canUserCompareTables
+  canUserCompareTables,
+  onUpdateParent
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -118,7 +119,6 @@ const EditReferenceTable = ({
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
-  const history = useHistory();
   const dispatch = useActionDispatch();
 
   const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
@@ -207,45 +207,6 @@ const EditReferenceTable = ({
     }
   }, [refConnection, refSchema, connectionExist, schemaExist]);
 
-  const goToCreateNew = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      connection,
-      schema,
-      table,
-      'data-groupings'
-    );
-
-    history.push(`${url}?isEditing=true`);
-  };
-
-  const goToRefCreateNew = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      refConnection,
-      refSchema,
-      refTable,
-      'data-groupings'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      checkTypes,
-      refConnection,
-      refSchema,
-      refTable
-    );
-
-    dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
-        value,
-        label: refTable,
-        state: {}
-      })
-    );
-
-    history.push(`${url}?isEditing=true`);
-  };
-
   const onUpdate = async () => {
     if (selectedReference) {
       await TableComparisonsApi.updateTableComparisonConfiguration(
@@ -276,6 +237,7 @@ const EditReferenceTable = ({
         .catch((err) => {
           console.log('err', err);
         })
+        onUpdateParent();
     } else {
       if (listOfExistingReferences.includes(name.toString())) {
         setPopUp(true);
@@ -693,21 +655,21 @@ const getReferenceTableStatistics = async () => {
       referenceTableStatistics?.column_statistics?.filter((x) => x.column_name === column)
     )) || []; 
 
-  let comparedTableDistinctCount = 1;
-  let referenceTableDistinctCount = 1;
+    let comparedTableDistinctCount = 1;
+    let referenceTableDistinctCount = 1;
 
-  for (let i =0; i< (filteredStatisticsCompared ? filteredStatisticsCompared?.length : 0); i++){
-    comparedTableDistinctCount *= Number(filteredStatisticsCompared?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result);
-    referenceTableDistinctCount *= Number(filteredStatisticsReference?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result)
-    if ((comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])) {
-      return true;
+    for (let i =0; i< (filteredStatisticsCompared ? filteredStatisticsCompared?.length : 0); i++){
+      comparedTableDistinctCount *= Number(filteredStatisticsCompared?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result);
+      referenceTableDistinctCount *= Number(filteredStatisticsReference?.[i]?.statistics?.find((stat) => stat.collector === "distinct_count")?.result)
+      if ((comparedTableDistinctCount || referenceTableDistinctCount) > Number(profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit'])) {
+        return true;
+      }
     }
-  }
-    if(isNaN(comparedTableDistinctCount) || isNaN(referenceTableDistinctCount)) {
-      return true;
-    }
+      if(isNaN(comparedTableDistinctCount) || isNaN(referenceTableDistinctCount)) {
+        return true;
+      }
 
-    return false;
+      return false;
   }
 
   useEffect(() => {
@@ -902,7 +864,6 @@ const getReferenceTableStatistics = async () => {
             <SelectGroupColumnsTable
               className="flex-1"
               title="Data grouping on compared table"
-              goToCreateNew={goToCreateNew}
               placeholder="Select column on compared table"
               onSetNormalList={onSetNormalList}
               object={normalObj}
@@ -915,7 +876,6 @@ const getReferenceTableStatistics = async () => {
             <SelectGroupColumnsTable
               className="flex-1"
               title="Data grouping on reference table"
-              goToCreateNew={goToRefCreateNew}
               placeholder='"Select column on reference table"'
               refConnection={refConnection}
               refSchema={refSchema}
