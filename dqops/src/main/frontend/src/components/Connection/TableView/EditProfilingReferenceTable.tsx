@@ -244,7 +244,6 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (
       reference !== undefined &&
-      Object.keys(reference).length > 0 &&
       isCreating === false &&
       connectionExist === true &&
       schemaExist === true &&
@@ -272,7 +271,7 @@ export const EditProfilingReferenceTable = ({
         }
       });
     }
-  }, [reference, selectedReference, tableExist, schemaExist, connectionExist]);
+  }, [selectedReference, tableExist, schemaExist, connectionExist]);
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
