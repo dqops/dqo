@@ -160,6 +160,17 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_name: profile_table_availability
+    - folder_name: PII
+      dashboards:
+        - dashboard_name: PII detected
+          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
     - folder_name: Schema changes
       dashboards:
         - dashboard_name: Schema changes - tables
@@ -173,15 +184,6 @@ spec:
             ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: PII detected
-          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -493,6 +495,17 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_name: daily_table_availability
+    - folder_name: PII
+      dashboards:
+        - dashboard_name: PII detected
+          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
     - folder_name: Schema changes
       dashboards:
         - dashboard_name: Schema changes - tables
@@ -506,15 +519,6 @@ spec:
             ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: PII detected
-          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -882,7 +886,7 @@ spec:
           height: 1400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-- folder_name: DQO usage
+- folder_name: DQOps usage
   folders:
     - folder_name: Statistics of executed checks
       dashboards:
