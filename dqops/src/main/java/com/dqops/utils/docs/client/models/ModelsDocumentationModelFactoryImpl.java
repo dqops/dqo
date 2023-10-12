@@ -41,11 +41,72 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     @Override
-    public List<ModelsObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels,
-                                                                             LinkageStore<String> linkageStore) {
+    public ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels,
+                                                                                     LinkageStore<String> linkageStore) {
+        List<ComponentModel> sharedModels = componentModels.stream()
+                .filter(componentModel -> componentModel.getDocsLink() == null
+                        || componentModel.getDocsLink().toUri().getPath().contains("models/#"))
+                .sorted(Comparator.comparing(ComponentModel::getClassName))
+                .collect(Collectors.toList());
+        return generateModelsSuperiorObjectDocumentationModel("index.md", sharedModels, linkageStore);
+    }
+
+    @Override
+    public List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels,
+                                                                                     LinkageStore<String> linkageStore) {
+        List<ComponentModel> subModels = componentModels.stream()
+                .filter(componentModel -> componentModel.getDocsLink() == null)
+                .collect(Collectors.toList());
+        List<ComponentModel> exclusiveModels = componentModels.stream()
+                .filter(this::isComponentModelExclusive)
+                .collect(Collectors.toList());
+
+        Map<String, List<ComponentModel>> modelsForController = new HashMap<>();
+        for (ComponentModel model : exclusiveModels) {
+            String controllerName = getControllerNameFromDocsLink(model.getDocsLink());
+            if (!modelsForController.containsKey(controllerName)) {
+                modelsForController.put(controllerName, new ArrayList<>());
+            }
+            modelsForController.get(controllerName).add(model);
+        }
+
+        List<ModelsSuperiorObjectDocumentationModel> documentationModels = new ArrayList<>();
+        for (Map.Entry<String, List<ComponentModel>> controllerModelsEntry : modelsForController.entrySet()) {
+            String controllerName = controllerModelsEntry.getKey();
+            List<ComponentModel> controllerModels = controllerModelsEntry.getValue();
+            controllerModels.sort(Comparator.comparing(ComponentModel::getClassName));
+            controllerModels.addAll(subModels);
+
+            ModelsSuperiorObjectDocumentationModel controllerDocumentation = generateModelsSuperiorObjectDocumentationModel(
+                    controllerName + ".md", controllerModels, linkageStore);
+            documentationModels.add(controllerDocumentation);
+        }
+        return documentationModels;
+    }
+
+    private boolean isComponentModelExclusive(ComponentModel componentModel) {
+        String docsLink = componentModel.getDocsLink() != null
+                ? componentModel.getDocsLink().toUri().getPath()
+                : null;
+        return docsLink != null
+                && docsLink.contains("client/")
+                && !docsLink.contains("models/#");
+    }
+
+    private String getControllerNameFromDocsLink(Path docsLink) {
+        String[] docsLinkSplit = docsLink.toUri().getPath().split("/");
+        if (docsLinkSplit.length < 2) {
+            return null;
+        }
+        return docsLinkSplit[docsLinkSplit.length - 2];
+    }
+
+    private ModelsSuperiorObjectDocumentationModel generateModelsSuperiorObjectDocumentationModel(String destinationPath,
+                                                                                                  Collection<ComponentModel> componentModels,
+                                                                                                  LinkageStore<String> linkageStore) {
         Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
         List<ComponentModel> topLevelModels = componentModels.stream()
-                .filter(componentModel -> componentModel.getDocsLink() != null && componentModel.getDocsLink().toString().contains("models"))
+                .filter(componentModel -> componentModel.getDocsLink() != null)
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
 
@@ -72,7 +133,10 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             }
         }
 
-        return renderedObjectsList;
+        ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel = new ModelsSuperiorObjectDocumentationModel();
+        modelsSuperiorObjectDocumentationModel.setClassObjects(renderedObjectsList);
+        modelsSuperiorObjectDocumentationModel.setLocationFilePath(destinationPath);
+        return modelsSuperiorObjectDocumentationModel;
     }
 
     private String getObjectSimpleName(String name) {

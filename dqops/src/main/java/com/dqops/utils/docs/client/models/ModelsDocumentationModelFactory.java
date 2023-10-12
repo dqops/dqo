@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ModelsDocumentationModelFactory {
-    List<ModelsObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels,
-                                                                      LinkageStore<String> linkageStore);
+    List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels,
+                                                                              LinkageStore<String> linkageStore);
+
+    ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels, LinkageStore<String> linkageStore);
 }

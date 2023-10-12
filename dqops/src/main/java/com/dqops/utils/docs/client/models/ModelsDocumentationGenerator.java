@@ -28,7 +28,7 @@ import java.util.Collection;
  */
 public interface ModelsDocumentationGenerator {
     // TODO: add javadocs
-    DocumentationMarkdownFile renderModelsDocumentation(Path projectRootPath,
-                                                        Collection<ComponentModel> componentModels,
-                                                        LinkageStore<String> linkageStore);
+    DocumentationFolder renderModelsDocumentation(Path projectRootPath,
+                                                  Collection<ComponentModel> componentModels,
+                                                  LinkageStore<String> linkageStore);
 }

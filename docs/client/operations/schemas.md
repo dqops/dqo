@@ -28,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -65,7 +65,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -103,7 +103,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -140,7 +140,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -177,7 +177,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -213,7 +213,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |---------------|---------------------------------|-----------|----------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
-|[check_target](\docs\client\operations\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\operations\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -236,7 +236,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schema_model](\docs\client\operations\schemas\#schemamodel)||[SchemaModel](\docs\client\operations\schemas\#schemamodel)|
+|[schema_model](\docs\client\models\schemas\#schemamodel)||[SchemaModel](\docs\client\models\schemas\#schemamodel)|
 
 
 
@@ -249,45 +249,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 
-
-___  
-
-___  
-
-## CheckTarget  
-Enumeration of targets where the check is applied. It is one of &quot;table&quot; or &quot;column&quot;.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
-
-___  
-
-## SchemaModel  
-Schema model that is returned by the REST API. Describes a single unique schema name.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|schema_name|Schema name.|string| | | |
-|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this schema.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
-|[run_profiling_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this schema.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
-|[run_monitoring_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this schema.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
-|[run_partition_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this schema.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)| | | |
-|[collect_statistics_job_template](\docs\client\operations\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this schema.|[StatisticsCollectorSearchFilters](\docs\client\operations\jobs\#statisticscollectorsearchfilters)| | | |
-|[import_table_job_parameters](\docs\client\operations\jobs\#importtablesqueuejobparameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](\docs\client\operations\jobs\#importtablesqueuejobparameters)| | | |
-|[data_clean_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this schema.|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete the schema.|boolean| | | |
-|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
-|can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |
-|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
 
 ___  
 

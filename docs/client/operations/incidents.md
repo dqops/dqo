@@ -36,7 +36,7 @@ http://localhost:8888/api/incidents/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](\docs\client\operations\incidents\#incidentmodel)||[IncidentModel](\docs\client\operations\incidents\#incidentmodel)|
+|[incident_model](\docs\client\models\incidents\#incidentmodel)||[IncidentModel](\docs\client\models\incidents\#incidentmodel)|
 
 
 
@@ -54,8 +54,8 @@ http://localhost:8888/api/incidents/{connectionName}
 |page|Page number, the first page is 1|long|false|
 |limit|Page size, the default is 50 rows|long|false|
 |filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string|false|
-|[order](\docs\client\operations\incidents\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\operations\incidents\#incidentsortorder)|false|
-|[direction](\docs\client\operations\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\operations\incidents\#sortdirection)|false|
+|[order](\docs\client\models\incidents\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\models\incidents\#incidentsortorder)|false|
+|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
 
 
 
@@ -76,7 +76,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](\docs\client\operations\incidents\#incidentmodel)||[IncidentModel](\docs\client\operations\incidents\#incidentmodel)|
+|[incident_model](\docs\client\models\incidents\#incidentmodel)||[IncidentModel](\docs\client\models\incidents\#incidentmodel)|
 
 
 
@@ -109,7 +109,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_issue_histogram_model](\docs\client\operations\incidents\#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](\docs\client\operations\incidents\#incidentissuehistogrammodel)|
+|[incident_issue_histogram_model](\docs\client\models\incidents\#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](\docs\client\models\incidents\#incidentissuehistogrammodel)|
 
 
 
@@ -147,7 +147,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_result_entry_model](\docs\client\operations\incidents\#checkresultentrymodel)||[CheckResultEntryModel](\docs\client\operations\incidents\#checkresultentrymodel)|
+|[check_result_entry_model](\docs\client\models\incidents\#checkresultentrymodel)||[CheckResultEntryModel](\docs\client\models\incidents\#checkresultentrymodel)|
 
 
 
@@ -167,8 +167,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string|false|
 |column|Optional column name filter|string|false|
 |check|Optional check name filter|string|false|
-|[order](\docs\client\operations\incidents\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\operations\incidents\#checkresultsortorder)|false|
-|[direction](\docs\client\operations\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\operations\incidents\#sortdirection)|false|
+|[order](\docs\client\models\incidents\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\models\incidents\#checkresultsortorder)|false|
+|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
 
 
 
@@ -222,141 +222,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |year|Year when the incident was first seen|long|true|
 |month|Month when the incident was first seen|long|true|
 |incident_id|Incident id|string|true|
-|[status](\docs\client\operations\incidents\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\operations\incidents\#incidentstatus)|true|
+|[status](\docs\client\models\incidents\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|true|
 
 
 
-
-___  
-
-___  
-
-## IncidentIssueHistogramModel  
-Model that returns histograms of the data quality issue occurrences related to a data quality incident.
- The dates in the daily histogram are using the default timezone of the DQOps server.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-
-___  
-
-## CheckResultSortOrder  
-Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
-
-___  
-
-## CheckResultEntryModel  
-Detailed results for a single check. Represent one row in the check results table.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|id|Check result ID.|string| | | |
-|check_hash|Check hash.|long| | | |
-|check_category|Check category name.|string| | | |
-|check_name|Check name.|string| | | |
-|check_display_name|Check display name.|string| | | |
-|check_type|Check type.|string| | | |
-|actual_value|Actual value.|double| | | |
-|expected_value|Expected value.|double| | | |
-|warning_lower_bound|Warning lower bound.|double| | | |
-|warning_upper_bound|Warning upper bound.|double| | | |
-|error_lower_bound|Error lower bound.|double| | | |
-|error_upper_bound|Error upper bound.|double| | | |
-|fatal_lower_bound|Fatal lower bound.|double| | | |
-|fatal_upper_bound|Fatal upper bound.|double| | | |
-|severity|Severity.|integer| | | |
-|column_name|Column name.|string| | | |
-|data_group|Data group.|string| | | |
-|duration_ms|Duration (ms).|integer| | | |
-|time_gradient|Time gradient.|string| | | |
-|time_period|Time period.|datetime| | | |
-|include_in_kpi|Include in KPI.|boolean| | | |
-|include_in_sla|Include in SLA.|boolean| | | |
-|provider|Provider.|string| | | |
-|quality_dimension|Quality dimension.|string| | | |
-|sensor_name|Sensor name.|string| | | |
-
-___  
-
-## IncidentModel  
-Data quality incident model shown on an incident details screen.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|incident_id|Incident ID - the primary key that identifies each data quality incident.|string| | | |
-|connection|Connection name affected by a data quality incident.|string| | | |
-|year|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
-|month|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer| | | |
-|schema|Schema name affected by a data quality incident.|string| | | |
-|table|Table name affected by a data quality incident.|string| | | |
-|table_priority|Table priority of the table that was affected by a data quality incident.|integer| | | |
-|incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long| | | |
-|data_group|The data group that was affected by a data quality incident.|string| | | |
-|quality_dimension|The data quality dimension that was affected by a data quality incident.|string| | | |
-|check_category|The data quality check category that was affected by a data quality incident.|string| | | |
-|check_type|The data quality check type that was affected by a data quality incident.|string| | | |
-|check_name|The data quality check name that was affected by a data quality incident.|string| | | |
-|highest_severity|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
-|minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
-|failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
-|issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
-|status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
-
-___  
-
-## SortDirection  
-REST api model sort direction.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
-
-___  
-
-## IncidentSortOrder  
-Incident sort order columns.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
-
-___  
-
-## IncidentStatus  
-Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|name||string| | | |
-|ordinal||integer| | | |
 
 ___  
 

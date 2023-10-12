@@ -24,7 +24,7 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Check model|[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|false|
+|Check model|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|false|
 
 
 ___  
@@ -89,7 +89,7 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_model](\docs\client\operations\checks\#checkdefinitionmodel)||[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|
+|[check_definition_model](\docs\client\models\checks\#checkdefinitionmodel)||[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|
 
 
 
@@ -153,28 +153,8 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of check definitions|[CheckDefinitionModel](\docs\client\operations\checks\#checkdefinitionmodel)|false|
+|List of check definitions|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|false|
 
-
-___  
-
-___  
-
-## CheckDefinitionModel  
-Check model that is returned by the REST API. Describes a single unique data quality check.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|check_name|Check name|string| | | |
-|sensor_name|Sensor name|string| | | |
-|rule_name|Rule name|string| | | |
-|help_text|Help text that is shown in the check editor that describes the purpose and usage of the check|string| | | |
-|custom|This check has is a custom check or was customized by the user.|boolean| | | |
-|built_in|This check is provided with DQOps as a built-in check.|boolean| | | |
-|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean| | | |
 
 ___  
 

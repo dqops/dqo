@@ -18,6 +18,8 @@ package com.dqops.utils.docs.client.models;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
+import com.dqops.utils.docs.client.operations.OperationsSuperiorObjectDocumentationModel;
+import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.github.jknack.handlebars.Template;
 
@@ -36,22 +38,37 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
     }
 
     @Override
-    public DocumentationMarkdownFile renderModelsDocumentation(Path projectRootPath,
+    public DocumentationFolder renderModelsDocumentation(Path projectRootPath,
                                                          Collection<ComponentModel> componentModels,
                                                          LinkageStore<String> linkageStore) {
+        DocumentationFolder modelsFolder = new DocumentationFolder();
+        modelsFolder.setFolderName("client/models");
+        modelsFolder.setLinkName("Models");
+        modelsFolder.setDirectPath(projectRootPath.resolve("../docs/client/models").toAbsolutePath().normalize());
+
         Template template = HandlebarsDocumentationUtilities.compileTemplate("client/models/models_documentation");
 
-        List<ModelsObjectDocumentationModel> modelsObjectDocumentationModels =
+        ModelsSuperiorObjectDocumentationModel sharedModelsDocumentationModel =
+                modelsDocumentationModelFactory.createDocumentationForSharedModels(componentModels, linkageStore);
+        if (sharedModelsDocumentationModel != null) {
+            Template sharedTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/models/shared_models_documentation");
+            DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile("index.md");
+            documentationMarkdownFile.setRenderContext(sharedModelsDocumentationModel);
+
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(sharedTemplate, sharedModelsDocumentationModel);
+            documentationMarkdownFile.setFileContent(renderedDocument);
+        }
+
+        List<ModelsSuperiorObjectDocumentationModel> modelsSuperiorObjectDocumentationModels =
                 modelsDocumentationModelFactory.createDocumentationForModels(componentModels, linkageStore);
-        ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel = new ModelsSuperiorObjectDocumentationModel();
-        modelsSuperiorObjectDocumentationModel.setClassObjects(modelsObjectDocumentationModels);
+        for (ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel
+                : modelsSuperiorObjectDocumentationModels) {
+            DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile(modelsSuperiorObjectDocumentationModel.getLocationFilePath());
+            documentationMarkdownFile.setRenderContext(modelsSuperiorObjectDocumentationModel);
 
-        DocumentationMarkdownFile documentationMarkdownFile = new DocumentationMarkdownFile();
-        documentationMarkdownFile.setFileName("models.md");
-        documentationMarkdownFile.setRenderContext(modelsSuperiorObjectDocumentationModel);
-
-        String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, modelsSuperiorObjectDocumentationModel);
-        documentationMarkdownFile.setFileContent(renderedDocument);
-        return documentationMarkdownFile;
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, modelsSuperiorObjectDocumentationModel);
+            documentationMarkdownFile.setFileContent(renderedDocument);
+        }
+        return modelsFolder;
     }
 }

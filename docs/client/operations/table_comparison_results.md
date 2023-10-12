@@ -13,7 +13,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 
@@ -47,7 +47,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 
@@ -81,7 +81,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\operations\table_comparison_results\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 
@@ -97,19 +97,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-
-___  
-
-___  
-
-## TableComparisonResultsModel  
-The table comparison result model with the summary information about the most recent table comparison that was performed.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
 
 ___  
 

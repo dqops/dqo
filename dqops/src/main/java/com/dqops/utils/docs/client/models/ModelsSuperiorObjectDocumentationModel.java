@@ -28,9 +28,8 @@ public class ModelsSuperiorObjectDocumentationModel {
      * List of all superior class fields.
      */
     private List<ModelsObjectDocumentationModel> classObjects;
-
-    public String getLocationFilePath() {
-        return  "models.md";
-    }
-
+    /**
+     * Location of the file relative to "docs/client/models" directory.
+     */
+    private String locationFilePath;
 }

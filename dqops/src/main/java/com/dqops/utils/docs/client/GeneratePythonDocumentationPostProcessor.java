@@ -105,20 +105,13 @@ public class GeneratePythonDocumentationPostProcessor {
 
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, linkageStore, docsModelLinkageService, componentReflectionService);
 
+            generateDocumentationForModels(projectDir, openAPIModel);
+            generateDocumentationForOperations(projectDir, openAPIModel);
+
             Path clientDocPath = projectDir
                     .resolve("..")
                     .resolve(baseClientDocsPath)
                     .toAbsolutePath().normalize();
-            DocumentationFolder currentClientDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
-            DocumentationFolder clientFolder = new DocumentationFolder();
-            clientFolder.setFolderName("client");
-            clientFolder.setDirectPath(projectDir.resolve("../docs/client").toAbsolutePath().normalize());
-
-            generateDocumentationForModels(clientFolder, openAPIModel);
-            clientFolder.writeModifiedFiles(currentClientDocFiles);
-
-            generateDocumentationForOperations(projectDir, openAPIModel);
-
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             modifiedClientFolder.setLinkName("REST API Python client");
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
@@ -142,26 +135,23 @@ public class GeneratePythonDocumentationPostProcessor {
         for (Map.Entry<String, Set<String>> modelOccurrenceEntry : modelToOccurrence.entrySet()) {
             String modelName = modelOccurrenceEntry.getKey();
             Set<String> modelOccurrences = modelOccurrenceEntry.getValue();
+
+            Path baseModelDestination = Path.of("/")
+                    .resolve(baseClientDocsPath)
+                    .resolve(Path.of("models"));
+            Path modelDestination = null;
             if (modelOccurrences.size() == 1) {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
-
-                linkageStore.put(modelName, Path.of("/")
-                        .resolve(baseClientDocsPath)
-                        .resolve(Path.of("operations",
-                                CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence),
-                                "#" + modelName
-                        )
-                ));
+                modelDestination = baseModelDestination
+                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence))
+                        .resolve("#" + modelName);
             } else {
                 // Model is used in several places.
-                linkageStore.put(modelName, Path.of("/")
-                        .resolve(baseClientDocsPath)
-                        .resolve(Path.of("models",
-                                "#" + modelName
-                        )
-                ));
+                modelDestination = baseModelDestination.resolve("#" + modelName);
             }
+
+            linkageStore.put(modelName, modelDestination);
         }
 
         return linkageStore;
@@ -216,16 +206,18 @@ public class GeneratePythonDocumentationPostProcessor {
         }
     }
 
-    protected static void generateDocumentationForModels(DocumentationFolder projectFolder,
+    protected static void generateDocumentationForModels(Path projectRoot,
                                                          OpenAPIModel openAPIModel) {
+        Path modelsDocPath = projectRoot
+                .resolve("..")
+                .resolve(baseClientDocsPath)
+                .resolve("models")
+                .toAbsolutePath().normalize();
+        DocumentationFolder currentModelsDocFiles = DocumentationFolderFactory.loadCurrentFiles(modelsDocPath);
         ModelsDocumentationGenerator modelsDocumentationGenerator = new ModelsDocumentationGeneratorImpl(new ModelsDocumentationModelFactoryImpl());
 
-        DocumentationMarkdownFile renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(
-                projectFolder.getDirectPath(),
-                openAPIModel.getModels(),
-                linkageStore
-        );
-        projectFolder.addNestedFile(renderedDocumentation);
+        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectRoot, openAPIModel.getModels(), linkageStore);
+        renderedDocumentation.writeModifiedFiles(currentModelsDocFiles);
     }
 
     protected static void generateDocumentationForOperations(Path projectRoot,

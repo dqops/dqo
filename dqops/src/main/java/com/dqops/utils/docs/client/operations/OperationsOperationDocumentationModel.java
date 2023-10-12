@@ -64,5 +64,4 @@ public class OperationsOperationDocumentationModel {
      * Body parameter field.
      */
     private OperationParameterDocumentationModel requestBodyField;
-
 }

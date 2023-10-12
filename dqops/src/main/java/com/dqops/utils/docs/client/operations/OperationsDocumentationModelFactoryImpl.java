@@ -18,19 +18,9 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.OpenApiUtils;
-import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
-import com.dqops.utils.docs.client.models.ModelsDocumentationModel;
-import com.dqops.utils.docs.client.models.ModelsObjectDocumentationModel;
-import com.dqops.utils.reflection.ClassInfo;
-import com.dqops.utils.reflection.FieldInfo;
-import com.dqops.utils.reflection.ReflectionServiceImpl;
-import com.github.therapi.runtimejavadoc.ClassJavadoc;
-import com.github.therapi.runtimejavadoc.CommentFormatter;
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import com.google.common.base.CaseFormat;
-import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.PathParameter;
@@ -38,11 +28,8 @@ import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
     private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
@@ -53,8 +40,6 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         put("array", ParameterDataType.string_list_type);
     }};
 
-    private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-    private static final CommentFormatter commentFormatter = new CommentFormatter();
     private static final String clientApiSourceBaseUrl = "https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/";
 
     @Override
@@ -68,37 +53,13 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel = new OperationsSuperiorObjectDocumentationModel();
             operationsSuperiorObjectDocumentationModel.setSuperiorClassFullName(controllerName);
             operationsSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(controllerSimpleName);
-            operationsSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
-
-            String controllerLinkageIndicator = "operations/" + controllerSimpleName;
-            List<ComponentModel> componentModels = openAPIModel.getModels().stream()
-                    .filter(componentModel -> componentModel.getDocsLink() == null || componentModel.getDocsLink().toUri().toString().contains(controllerLinkageIndicator))
-                    .collect(Collectors.toList());
-            List<ComponentModel> topLevelComponentModels = componentModels.stream()
-                    .filter(componentModel -> componentModel.getDocsLink() != null && componentModel.getDocsLink().toUri().toString().contains(controllerLinkageIndicator))
-                    .collect(Collectors.toList());
-
-            Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects = new HashMap<>();
-            for (ComponentModel componentModel : topLevelComponentModels) {
-                Class<?> componentClazz = componentModel.getReflectedClass();
-                List<OperationsObjectDocumentationModel> generatedComponentModels = generateOperationsObjectDocumentationModelRecursive(
-                        Path.of("/docs/client/", controllerLinkageIndicator),
-                        componentClazz,
-                        visitedObjects,
-                        linkageStore
-                );
-                operationsSuperiorObjectDocumentationModel.getClassObjects().addAll(generatedComponentModels);
-                for (OperationsObjectDocumentationModel generatedComponentModel : generatedComponentModels) {
-                    linkageStore.putIfAbsent(generatedComponentModel.getClassSimpleName(), generatedComponentModel.getObjectClassPath());
-                }
-            }
 
             List<OperationModel> controllerMethods = controller.getValue();
             operationsSuperiorObjectDocumentationModel.setOperationObjects(new ArrayList<>());
 
             for (OperationModel operationModel : controllerMethods) {
-                OperationsOperationDocumentationModel operationsOperationDocumentationModel = generateOperationOperationDocumentationModel(operationModel,
-                        linkageStore);
+                OperationsOperationDocumentationModel operationsOperationDocumentationModel =
+                        generateOperationOperationDocumentationModel(operationModel, linkageStore);
                 operationsSuperiorObjectDocumentationModel.getOperationObjects().add(operationsOperationDocumentationModel);
             }
 
@@ -227,134 +188,6 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
         String[] split$ref = $ref.split("/");
         return split$ref[split$ref.length - 1];
-    }
-
-    /**
-     * Create a yaml documentation in recursive for given class and add them to map.
-     *
-     * @param targetClass    Class for which fields to generate documentation.
-     * @param visitedObjects Data structure to add created model.
-     */
-    private List<OperationsObjectDocumentationModel> generateOperationsObjectDocumentationModelRecursive(Path baseModelPath,
-                                                                                                         Class<?> targetClass,
-                                                                                                         Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects,
-                                                                                                         LinkageStore<String> linkageStore) {
-        List<OperationsObjectDocumentationModel> result = new LinkedList<>();
-        if (targetClass == null) {
-            return result;
-        }
-
-        Path linkagePath = linkageStore.get(targetClass.getSimpleName());
-
-        if (!visitedObjects.containsKey(targetClass) && (
-                linkagePath == null || linkagePath.startsWith(baseModelPath)
-        )) {
-            visitedObjects.put(targetClass, null);
-
-            OperationsObjectDocumentationModel operationsObjectDocumentationModel = new OperationsObjectDocumentationModel();
-            List<OperationsDocumentationModel> operationsDocumentationModels = new ArrayList<>();
-
-            ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(targetClass);
-            if (classJavadoc != null) {
-                if (classJavadoc.getComment() != null) {
-                    String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
-                    operationsObjectDocumentationModel.setClassDescription(formattedClassComment);
-                }
-            }
-
-            if (targetClass.getSuperclass() != null) {
-                Class<?> superClass = targetClass.getSuperclass();
-                if (isGenericSuperclass(superClass)) {
-                    Type genericSuperclass = targetClass.getGenericSuperclass();
-                    result.addAll(processGenericTypes(baseModelPath, genericSuperclass, visitedObjects, linkageStore));
-                }
-            }
-
-            ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
-            List<FieldInfo> infoFields = classInfo.getFields();
-
-            operationsObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
-            operationsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
-            operationsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
-            operationsObjectDocumentationModel.setObjectClassPath(
-                    baseModelPath.resolve("#" + classInfo.getReflectedClass().getSimpleName())
-            );
-
-            for (FieldInfo info : infoFields) {
-                if (info.getDataType() == null) {
-                    continue;
-                }
-
-                if (info.getDataType().equals(ParameterDataType.object_type)) {
-                    if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
-                        continue;
-                    }
-                    result.addAll(generateOperationsObjectDocumentationModelRecursive(baseModelPath, info.getClazz(), visitedObjects, linkageStore));
-                }
-
-                OperationsDocumentationModel operationsDocumentationModel = new OperationsDocumentationModel();
-                operationsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
-
-                if (linkageStore.containsKey(info.getClazz().getSimpleName())) {
-                    Path infoClassPath = linkageStore.get(info.getClazz().getSimpleName());
-                    operationsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
-                } else {
-                    operationsDocumentationModel.setClassUsedOnTheFieldPath(
-                            "#" + operationsDocumentationModel.getClassNameUsedOnTheField());
-                }
-
-                operationsDocumentationModel.setClassFieldName(info.getClazz().getSimpleName());
-                operationsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
-                operationsDocumentationModel.setDisplayName(info.getDisplayName());
-                operationsDocumentationModel.setHelpText(info.getHelpText());
-                operationsDocumentationModel.setClazz(info.getClazz());
-                operationsDocumentationModel.setDataType(info.getDataType());
-                operationsDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
-                operationsDocumentationModel.setDefaultValue(info.getDefaultValue());
-                operationsDocumentationModel.setSampleValues(info.getSampleValues());
-
-                operationsDocumentationModels.add(operationsDocumentationModel);
-
-            }
-            operationsObjectDocumentationModel.setObjectFields(operationsDocumentationModels);
-            visitedObjects.put(targetClass, operationsObjectDocumentationModel);
-            result.add(operationsObjectDocumentationModel);
-        }
-        return result;
-    }
-
-    /**
-     * Checks if the specified class is a generic superclass.
-     */
-    private boolean isGenericSuperclass(Class<?> clazz) {
-        Type genericSuperclass = clazz.getGenericSuperclass();
-        return genericSuperclass instanceof ParameterizedType;
-    }
-
-    /**
-     * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
-     */
-    private List<OperationsObjectDocumentationModel> processGenericTypes(Path baseModelPath, Type type, Map<Class<?>, OperationsObjectDocumentationModel> visitedObjects, LinkageStore<String> linkageStore) {
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            Type[] typeArguments = parameterizedType.getActualTypeArguments();
-            for (Type typeArgument : typeArguments) {
-                if (typeArgument instanceof Class) {
-                    Class<?> genericClass = (Class<?>) typeArgument;
-                    if (!isJavaClass(genericClass)) {
-                        return generateOperationsObjectDocumentationModelRecursive(baseModelPath, genericClass, visitedObjects, linkageStore);
-                    }
-                }
-            }
-        }
-        return new LinkedList<>();
-    }
-
-    /**
-     * Checks if the specified class is a java inbuilt class
-     */
-    private boolean isJavaClass(Class<?> clazz) {
-        return clazz.getClassLoader() == null;
     }
 }
 

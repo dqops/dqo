@@ -1,3 +1,4 @@
+# models
 
 ## RuleParametersModel  
 Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).  
@@ -137,7 +138,7 @@ Model that returns the form definition and the form data to edit all data qualit
 |effective_schedule_enabled_status|State of the effective scheduling on the check container.|enum|not_configured<br/>disabled<br/>overridden_by_checks<br/>enabled<br/>| | |
 |partition_by_column|The name of the column that partitioned checks will use for the time period partitioning. Important only for partitioned checks.|string| | | |
 |[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#checksearchfilters)| | | |
-|[data_clean_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
+|[data_clean_job_template](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)| | | |
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean| | | |
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean| | | |
@@ -393,8 +394,8 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |[run_profiling_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this connection.|[CheckSearchFilters](#checksearchfilters)| | | |
 |[run_monitoring_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this connection.|[CheckSearchFilters](#checksearchfilters)| | | |
 |[run_partition_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this connection.|[CheckSearchFilters](#checksearchfilters)| | | |
-|[collect_statistics_job_template](\docs\client\operations\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this connection.|[StatisticsCollectorSearchFilters](\docs\client\operations\jobs\#statisticscollectorsearchfilters)| | | |
-|[data_clean_job_template](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.|[DeleteStoredDataQueueJobParameters](\docs\client\operations\jobs\#deletestoreddataqueuejobparameters)| | | |
+|[collect_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this connection.|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)| | | |
+|[data_clean_job_template](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)| | | |
 |can_edit|Boolean flag that decides if the current user can update or delete the connection to the data source.|boolean| | | |
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean| | | |
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean| | | |

@@ -37,10 +37,6 @@ public class OperationsSuperiorObjectDocumentationModel {
      * List of particular operations fields.
      */
     private List<OperationsOperationDocumentationModel> operationObjects;
-    /**
-     * List of models class fields.
-     */
-    private List<OperationsObjectDocumentationModel> classObjects;
 
     public String getLocationFilePath() {
         if (this.superiorClassSimpleName == null) {

@@ -70,7 +70,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|User model|[DqoCloudUserModel](\docs\client\operations\users\#dqocloudusermodel)|false|
+|User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
 
 ___  
@@ -112,7 +112,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](\docs\client\operations\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\operations\users\#dqocloudusermodel)|
+|[dqo_cloud_user_model](\docs\client\models\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|
 
 
 
@@ -135,7 +135,7 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](\docs\client\operations\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\operations\users\#dqocloudusermodel)|
+|[dqo_cloud_user_model](\docs\client\models\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|
 
 
 
@@ -176,23 +176,8 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|User model|[DqoCloudUserModel](\docs\client\operations\users\#dqocloudusermodel)|false|
+|User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
-
-___  
-
-___  
-
-## DqoCloudUserModel  
-DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|email|User&#x27;s email that identifies the user.|string| | | |
-|account_role|Account role.|enum|editor<br/>operator<br/>viewer<br/>admin<br/>none<br/>| | |
 
 ___  
 

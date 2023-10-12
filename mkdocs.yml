@@ -110,6 +110,28 @@ nav:
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:
+    - models:
+      - checks: 'client/models/checks.md'
+      - check_results: 'client/models/check_results.md'
+      - check_results_overview: 'client/models/check_results_overview.md'
+      - columns: 'client/models/columns.md'
+      - connections: 'client/models/connections.md'
+      - dashboards: 'client/models/dashboards.md'
+      - data_grouping_configurations: 'client/models/data_grouping_configurations.md'
+      - data_sources: 'client/models/data_sources.md'
+      - errors: 'client/models/errors.md'
+      - incidents: 'client/models/incidents.md'
+      - index: 'client/models/index.md'
+      - jobs: 'client/models/jobs.md'
+      - rules: 'client/models/rules.md'
+      - schemas: 'client/models/schemas.md'
+      - sensors: 'client/models/sensors.md'
+      - sensor_readouts: 'client/models/sensor_readouts.md'
+      - shared_credentials: 'client/models/shared_credentials.md'
+      - tables: 'client/models/tables.md'
+      - table_comparisons: 'client/models/table_comparisons.md'
+      - table_comparison_results: 'client/models/table_comparison_results.md'
+      - users: 'client/models/users.md'
     - operations:
       - checks: 'client/operations/checks.md'
       - check_results: 'client/operations/check_results.md'
@@ -136,7 +158,6 @@ nav:
       - table_comparison_results: 'client/operations/table_comparison_results.md'
       - timezones: 'client/operations/timezones.md'
       - users: 'client/operations/users.md'
-    - models: 'client/models.md'
 ########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:

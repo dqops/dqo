@@ -22,5 +22,3 @@ http://localhost:8888/api/ishealthy
 
 ___  
 
-___  
-

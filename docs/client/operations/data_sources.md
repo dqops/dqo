@@ -13,7 +13,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schema_remote_model](\docs\client\operations\data_sources\#schemaremotemodel)||[SchemaRemoteModel](\docs\client\operations\data_sources\#schemaremotemodel)|
+|[schema_remote_model](\docs\client\models\data_sources\#schemaremotemodel)||[SchemaRemoteModel](\docs\client\models\data_sources\#schemaremotemodel)|
 
 
 
@@ -43,7 +43,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[remote_table_list_model](\docs\client\operations\data_sources\#remotetablelistmodel)||[RemoteTableListModel](\docs\client\operations\data_sources\#remotetablelistmodel)|
+|[remote_table_list_model](\docs\client\models\data_sources\#remotetablelistmodel)||[RemoteTableListModel](\docs\client\models\data_sources\#remotetablelistmodel)|
 
 
 
@@ -74,7 +74,7 @@ http://localhost:8888/api/datasource/testconnection
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_model](\docs\client\operations\data_sources\#connectiontestmodel)||[ConnectionTestModel](\docs\client\operations\data_sources\#connectiontestmodel)|
+|[connection_test_model](\docs\client\models\data_sources\#connectiontestmodel)||[ConnectionTestModel](\docs\client\models\data_sources\#connectiontestmodel)|
 
 
 
@@ -94,52 +94,6 @@ http://localhost:8888/api/datasource/testconnection
 |---------------------------------|-----------|----------|
 |Basic connection model|[ConnectionModel](\docs\client\models\#connectionmodel)|false|
 
-
-___  
-
-___  
-
-## RemoteTableListModel  
-Remote table list model that is returned when a data source is introspected to retrieve the list of tables available in a data source.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|schema_name|Schema name.|string| | | |
-|table_name|Table name.|string| | | |
-|already_imported|A flag that tells if the table been already imported.|boolean| | | |
-
-___  
-
-## ConnectionTestModel  
-Connection test status result model returned from REST API. Describes the status of testing a connection
- (opening a connection to verify if it usable, credentials are approved and the access was granted by the tested data source).  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_test_result|Connection test result|enum|SUCCESS<br/>CONNECTION_ALREADY_EXISTS<br/>FAILURE<br/>| | |
-|error_message|Optional error message when the status is not &quot;SUCCESS&quot;|string| | | |
-
-___  
-
-## SchemaRemoteModel  
-Schema model returned from REST API. Describes a schema on the source database with established connection.  
-  
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|connection_name|Connection name.|string| | | |
-|schema_name|Schema name.|string| | | |
-|already_imported|Has the schema been imported.|boolean| | | |
-|[import_table_job_parameters](\docs\client\operations\jobs\#importtablesqueuejobparameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](\docs\client\operations\jobs\#importtablesqueuejobparameters)| | | |
 
 ___  
 
