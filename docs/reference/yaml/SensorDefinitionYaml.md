@@ -1,4 +1,33 @@
 
+## SensorDefinitionYaml  
+Data quality sensor definition YAML schema for a data quality sensor specification.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
+|[spec](#sensordefinitionspec)||[SensorDefinitionSpec](#sensordefinitionspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## SensorDefinitionSpec  
 Data Quality sensor definition specification. Provides the configuration for a data quality sensor definition, sensor&#x27;s parameters, etc.  
   
@@ -18,35 +47,6 @@ Data Quality sensor definition specification. Provides the configuration for a d
 |requires_event_timestamp|The data quality sensor depends on the configuration of the event timestamp column name on the analyzed table. When true, the name of the column that stores the event (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the table.|boolean| | | |
 |requires_ingestion_timestamp|The data quality sensor depends on the configuration of the ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the ingestion (created_at, loaded_at, etc.) timestamp must be specified in the timestamp_columns.ingestion_timestamp_column field on the table.|boolean| | | |
 |default_value|Default value that is used when the sensor returns no rows. A row count sensor may return no rows when a GROUP BY condition is added to capture the database server&#x27;s local time zone. In order to always return a value, a sensor may have a default value configured.|double| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## SensorDefinitionYaml  
-Data quality sensor definition YAML schema for a data quality sensor specification.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
-|[spec](#sensordefinitionspec)||[SensorDefinitionSpec](#sensordefinitionspec)| | | |
 
 
 

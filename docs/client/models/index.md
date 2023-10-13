@@ -194,7 +194,7 @@ Parameters for the {@link DeleteStoredDataQueueJob DeleteStoredDataQueueJob} job
 |---------------|---------------------------------|-----------|
 |connection_name||string|
 |schema_table_name||string|
-|date_start||date|
+|date_start|Data start data|date|
 |date_end||date|
 |delete_errors||boolean|
 |delete_statistics||boolean|

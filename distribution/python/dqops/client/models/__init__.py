@@ -1373,6 +1373,11 @@ from .mono_void import MonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
+from .optional import Optional
+from .optional_incident_webhook_notifications_spec import (
+    OptionalIncidentWebhookNotificationsSpec,
+)
+from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
@@ -2404,6 +2409,9 @@ __all__ = (
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
+    "Optional",
+    "OptionalIncidentWebhookNotificationsSpec",
+    "OptionalMonitoringScheduleSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDataType",
