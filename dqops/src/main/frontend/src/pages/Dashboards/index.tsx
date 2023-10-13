@@ -101,7 +101,7 @@ const Dashboards = () => {
                 alt=""
                 src={`${dashboardTooltipState.url}/thumbnail`}
                 style={{ display: "block"}}
-                className='pt-2'
+                className='pt-2 max-h-100 max-w-100'
                 loading='eager'
                 />
               </div> 
