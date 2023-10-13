@@ -511,13 +511,13 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <div className='flex justify-center items-center mt-4'>
+        <div className='flex justify-center items-center mt-6'>
         {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
           <Tooltip
                 content={check.configuration_requirements_errors?.map((x) => x)}
-                className='pr-5 max-w-80 py-4 px-4 bg-gray-800'>
+                className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
                 <div>
-                  <SvgIcon name='warning' className='w-8 h-8'/>
+                  <SvgIcon name='warning' className='w-5 h-5'/>
                 </div>
           </Tooltip>
         : null }

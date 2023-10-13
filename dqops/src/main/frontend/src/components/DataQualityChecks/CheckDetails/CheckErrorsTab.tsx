@@ -62,7 +62,6 @@ const CheckErrorsTab = ({
         }))
     ];
   }, []);
-  console.log(errors)
 
   return (
     <div
@@ -101,7 +100,7 @@ const CheckErrorsTab = ({
             data={(result.errorEntries || []).map((item) => ({
               ...item,
               checkName: result.checkName,
-              executedAt: getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
             }))}
             emptyMessage="No Data"
           />
