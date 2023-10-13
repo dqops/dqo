@@ -46,6 +46,10 @@ public class ModelsObjectDocumentationModel {
      */
     private Path objectClassPath;
     /**
+     * Enum values for enum typed objects.
+     */
+    private List<String> enumValues;
+    /**
      * List of all object fields.
      */
     private List<ModelsDocumentationModel> objectFields;

@@ -18,6 +18,7 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.OpenApiUtils;
+import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
@@ -31,6 +32,8 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
     private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
@@ -44,9 +47,9 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     private static final String clientApiSourceBaseUrl = "https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/";
 
     @Override
-    public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel,
-                                                                                             LinkageStore<String> linkageStore) {
+    public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel) {
         List<OperationsSuperiorObjectDocumentationModel> operationsDocumentation = new ArrayList<>();
+        Map<String, ComponentModel> componentModelMap = openAPIModel.getModels().stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
 
         for (ControllerModel controller : openAPIModel.getControllers()) {
             String controllerName = controller.getControllerName();
@@ -61,7 +64,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
             for (OperationModel operationModel : controllerMethods) {
                 OperationsOperationDocumentationModel operationsOperationDocumentationModel =
-                        generateOperationOperationDocumentationModel(operationModel, linkageStore);
+                        generateOperationOperationDocumentationModel(operationModel, componentModelMap);
                 operationsSuperiorObjectDocumentationModel.getOperationObjects().add(operationsOperationDocumentationModel);
             }
 
@@ -87,7 +90,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
      */
     private OperationsOperationDocumentationModel generateOperationOperationDocumentationModel(
             OperationModel operationModel,
-            LinkageStore<String> linkageStore) {
+            Map<String, ComponentModel> componentModelMap) {
         OperationsOperationDocumentationModel operationsOperationDocumentationModel = new OperationsOperationDocumentationModel();
         operationsOperationDocumentationModel.setOperationJavaName(operationModel.getOperation().getOperationId());
         operationsOperationDocumentationModel.setOperationPythonName(getObjectSimpleName(operationModel.getOperation().getOperationId()));
@@ -124,9 +127,10 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
                     parameterDocumentationModel.setOperationParameterType(OperationParameterType.queryParameter);
                 }
 
-                Path linkagePath = linkageStore.get(parameterTypeString);
-                if (linkagePath != null) {
-                    parameterDocumentationModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+                ComponentModel linkageComponent = componentModelMap.get(parameterTypeString);
+                if (linkageComponent != null) {
+                    String docsLinkString = linkageComponent.getDocsLink() != null ? linkageComponent.getDocsLink().toString() : null;
+                    parameterDocumentationModel.setClassUsedOnTheFieldPath(docsLinkString);
                 }
                 operationParameterDocumentationModels.add(parameterDocumentationModel);
             }
@@ -149,9 +153,10 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterTypeString, ParameterDataType.object_type);
             parameterDocumentationModel.setDataType(parameterDataType);
 
-            Path linkagePath = linkageStore.get(parameterTypeString);
-            if (linkagePath != null) {
-                parameterDocumentationModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+            ComponentModel linkageComponent = componentModelMap.get(parameterTypeString);
+            if (linkageComponent != null) {
+                String docsLinkString = linkageComponent.getDocsLink() != null ? linkageComponent.getDocsLink().toString() : null;
+                parameterDocumentationModel.setClassUsedOnTheFieldPath(docsLinkString);
             }
             operationsOperationDocumentationModel.setRequestBodyField(parameterDocumentationModel);
         }
@@ -173,9 +178,10 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             ParameterDataType returnDataType = KNOWN_DATA_TYPES.getOrDefault(returnTypeString, ParameterDataType.object_type);
             returnParameterModel.setDataType(returnDataType);
 
-            Path linkagePath = linkageStore.get(returnTypeString);
-            if (linkagePath != null) {
-                returnParameterModel.setClassUsedOnTheFieldPath(linkagePath.toString());
+            ComponentModel linkageComponent = componentModelMap.get(returnTypeString);
+            if (linkageComponent != null) {
+                String docsLinkString = linkageComponent.getDocsLink() != null ? linkageComponent.getDocsLink().toString() : null;
+                returnParameterModel.setClassUsedOnTheFieldPath(docsLinkString);
             }
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
         }

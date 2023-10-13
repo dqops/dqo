@@ -21,5 +21,5 @@ import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import java.util.List;
 
 public interface OperationsDocumentationModelFactory {
-    List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel, LinkageStore<String> linkageStore);
+    List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel);
 }

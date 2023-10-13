@@ -6,9 +6,15 @@
 
 **The structure of this object is described below**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-{{#each objectFields}}|{{#if (eq (lower dataType) "object_type")}}[{{yamlFieldName}}]({{lower classUsedOnTheFieldPath}}){{else}}{{yamlFieldName}}{{/if}}|{{helpText}}|{{#if (eq (lower dataType) "object_type")}}[{{classNameUsedOnTheField}}]({{lower classUsedOnTheFieldPath}}){{else}}{{replace dataType "_type" ""}}{{/if}}|{{#if enumValuesByName}}{{#each enumValuesByName}}{{this.yamlName}}<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
+{{#if enumValues}}
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|{{#each enumValues}}{{this}}<br/>{{/each}}|
+{{else}}
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+{{#each objectFields}}|{{#if (eq (lower dataType) "object_type")}}[{{yamlFieldName}}]({{lower classUsedOnTheFieldPath}}){{else}}{{yamlFieldName}}{{/if}}|{{helpText}}|{{#if (eq (lower dataType) "object_type")}}[{{classNameUsedOnTheField}}]({{lower classUsedOnTheFieldPath}}){{else}}{{replace dataType "_type" ""}}{{/if}}|
 {{/each}}
+{{/if}}
 ___{{#with "  "}}{{.}}{{/with}}
 {{/each}}

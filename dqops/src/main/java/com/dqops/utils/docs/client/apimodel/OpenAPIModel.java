@@ -36,6 +36,7 @@ public class OpenAPIModel {
     private final Set<ComponentModel> models = new HashSet<>();
 
     public static OpenAPIModel fromOpenAPI(OpenAPI openAPI,
+                                           LinkageStore<String> targetLinkage,
                                            LinkageStore<String> linkageStore,
                                            DocsModelLinkageService docsModelLinkageService,
                                            ComponentReflectionService componentReflectionService) {
@@ -76,15 +77,19 @@ public class OpenAPIModel {
                 .collect(Collectors.toList());
 
         for (ComponentModel component : componentModels) {
+            Path docsLink = null;
+
             String componentClassName = component.getClassName();
-            if (!linkageStore.containsKey(componentClassName)) {
-                Path linkage = docsModelLinkageService.findDocsLinkage(componentClassName);
-                if (linkage != null) {
-                    linkageStore.put(componentClassName, linkage);
-                }
+            Path linkage = docsModelLinkageService.findDocsLinkage(componentClassName);
+            if (linkage != null) {
+                linkageStore.put(componentClassName, linkage);
+                docsLink = linkage;
+            }
+            else if (targetLinkage.containsKey(componentClassName)) {
+                docsLink = targetLinkage.get(componentClassName);
             }
 
-            component.setDocsLink(linkageStore.get(componentClassName));
+            component.setDocsLink(docsLink);
         }
 
         model.models.addAll(componentModels);

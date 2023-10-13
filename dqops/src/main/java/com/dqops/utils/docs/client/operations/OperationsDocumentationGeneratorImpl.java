@@ -40,11 +40,10 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param openAPIModel
-     * @param linkageStore
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel, LinkageStore<String> linkageStore) {
+    public DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel) {
         DocumentationFolder operationsFolder = new DocumentationFolder();
         operationsFolder.setFolderName("client/operations");
         operationsFolder.setLinkName("Operations");
@@ -53,7 +52,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         Template template = HandlebarsDocumentationUtilities.compileTemplate("client/operations/operations_documentation");
 
         List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorObjectDocumentationModels =
-                operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel, linkageStore);
+                operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel);
 
         for (OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel : operationsSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = operationsFolder.addNestedFile(operationsSuperiorObjectDocumentationModel.getLocationFilePath());

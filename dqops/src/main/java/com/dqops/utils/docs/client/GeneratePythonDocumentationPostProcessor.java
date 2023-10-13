@@ -85,7 +85,11 @@ public class GeneratePythonDocumentationPostProcessor {
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
             OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
-            linkageStore = getPopulatedLinkageStore(openAPI);
+//            List schemas = openAPI.getComponents().getSchemas().entrySet().stream().filter(e->e.getKey().toLowerCase().contains("sslmode")).map(Map.Entry::getValue).collect(Collectors.toList());
+            List schemas = openAPI.getPaths().entrySet().stream()
+                    .filter(e->e.getKey().toLowerCase().contains("api/connections/{connectionName}/basic".toLowerCase())).map(Map.Entry::getValue).collect(Collectors.toList());
+            linkageStore = new LinkageStore<>();
+            LinkageStore<String> targetLinkage = getPopulatedLinkageStore(openAPI);
 
             SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                     new ReflectionServiceImpl(),
@@ -103,7 +107,8 @@ public class GeneratePythonDocumentationPostProcessor {
 
             ComponentReflectionService componentReflectionService = new ComponentReflectionServiceImpl(projectDir);
 
-            OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, linkageStore, docsModelLinkageService, componentReflectionService);
+            OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
+            List sschemas = openAPIModel.getModels().stream().filter(e->e.getClassName().toLowerCase().contains("postgres")).collect(Collectors.toList());
 
             generateDocumentationForModels(projectDir, openAPIModel);
             generateDocumentationForOperations(projectDir, openAPIModel);
@@ -216,7 +221,7 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder currentModelsDocFiles = DocumentationFolderFactory.loadCurrentFiles(modelsDocPath);
         ModelsDocumentationGenerator modelsDocumentationGenerator = new ModelsDocumentationGeneratorImpl(new ModelsDocumentationModelFactoryImpl());
 
-        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectRoot, openAPIModel.getModels(), linkageStore);
+        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectRoot, openAPIModel.getModels());
         renderedDocumentation.writeModifiedFiles(currentModelsDocFiles);
     }
 
@@ -230,7 +235,7 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
         OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(new OperationsDocumentationModelFactoryImpl());
 
-        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel, linkageStore);
+        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
     }
 

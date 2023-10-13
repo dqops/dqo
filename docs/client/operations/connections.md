@@ -89,7 +89,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Connection specification|[ConnectionSpec](\docs\client\models\connections\#connectionspec)|false|
+|Connection specification|[ConnectionSpec](\docs\reference\yaml\connectionyaml\#connectionspec)|false|
 
 
 
@@ -311,7 +311,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_spec](\docs\client\models\#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)|
+|[data_grouping_configuration_spec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|
 
 
 
@@ -341,7 +341,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_incident_grouping_spec](\docs\client\models\connections\#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](\docs\client\models\connections\#connectionincidentgroupingspec)|
+|[connection_incident_grouping_spec](\docs\reference\yaml\connectionyaml\#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](\docs\reference\yaml\connectionyaml\#connectionincidentgroupingspec)|
 
 
 
@@ -443,7 +443,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Connection specification|[ConnectionSpec](\docs\client\models\connections\#connectionspec)|false|
+|Connection specification|[ConnectionSpec](\docs\reference\yaml\connectionyaml\#connectionspec)|false|
 
 
 
@@ -533,7 +533,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](\docs\client\models\#datagroupingconfigurationspec)|false|
+|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|false|
 
 
 
@@ -563,7 +563,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](\docs\client\models\connections\#connectionincidentgroupingspec)|false|
+|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](\docs\reference\yaml\connectionyaml\#connectionincidentgroupingspec)|false|
 
 
 

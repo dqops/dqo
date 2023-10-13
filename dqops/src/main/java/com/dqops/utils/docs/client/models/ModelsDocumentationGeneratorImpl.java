@@ -39,8 +39,7 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
 
     @Override
     public DocumentationFolder renderModelsDocumentation(Path projectRootPath,
-                                                         Collection<ComponentModel> componentModels,
-                                                         LinkageStore<String> linkageStore) {
+                                                         Collection<ComponentModel> componentModels) {
         DocumentationFolder modelsFolder = new DocumentationFolder();
         modelsFolder.setFolderName("client/models");
         modelsFolder.setLinkName("Models");
@@ -49,7 +48,7 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
         Template template = HandlebarsDocumentationUtilities.compileTemplate("client/models/models_documentation");
 
         ModelsSuperiorObjectDocumentationModel sharedModelsDocumentationModel =
-                modelsDocumentationModelFactory.createDocumentationForSharedModels(componentModels, linkageStore);
+                modelsDocumentationModelFactory.createDocumentationForSharedModels(componentModels);
         if (sharedModelsDocumentationModel != null) {
             Template sharedTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/models/shared_models_documentation");
             DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile("index.md");
@@ -60,7 +59,7 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
         }
 
         List<ModelsSuperiorObjectDocumentationModel> modelsSuperiorObjectDocumentationModels =
-                modelsDocumentationModelFactory.createDocumentationForModels(componentModels, linkageStore);
+                modelsDocumentationModelFactory.createDocumentationForModels(componentModels);
         for (ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel
                 : modelsSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile(modelsSuperiorObjectDocumentationModel.getLocationFilePath());

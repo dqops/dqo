@@ -41,19 +41,26 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     @Override
-    public ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels,
-                                                                                     LinkageStore<String> linkageStore) {
+    public ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels) {
         List<ComponentModel> sharedModels = componentModels.stream()
                 .filter(componentModel -> componentModel.getDocsLink() == null
                         || componentModel.getDocsLink().toUri().getPath().contains("models/#"))
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
-        return generateModelsSuperiorObjectDocumentationModel("index.md", sharedModels, linkageStore);
+
+        List<ComponentModel> componentModels1 = sharedModels.stream().filter(c->c.getClassName().toLowerCase().contains("postgres")).collect(Collectors.toList());
+
+        Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
+
+        List<Map.Entry<String, ComponentModel>> componennnnn = componentModelMap.entrySet().stream().filter(c->c.getKey().toLowerCase().contains("postgres")).collect(Collectors.toList());
+
+        return generateModelsSuperiorObjectDocumentationModel("index.md", sharedModels, componentModelMap);
     }
 
     @Override
-    public List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels,
-                                                                                     LinkageStore<String> linkageStore) {
+    public List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels) {
+        Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
+
         List<ComponentModel> subModels = componentModels.stream()
                 .filter(componentModel -> componentModel.getDocsLink() == null)
                 .collect(Collectors.toList());
@@ -76,9 +83,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             List<ComponentModel> controllerModels = controllerModelsEntry.getValue();
             controllerModels.sort(Comparator.comparing(ComponentModel::getClassName));
             controllerModels.addAll(subModels);
-
             ModelsSuperiorObjectDocumentationModel controllerDocumentation = generateModelsSuperiorObjectDocumentationModel(
-                    controllerName + ".md", controllerModels, linkageStore);
+                    controllerName + ".md", controllerModels, componentModelMap);
             documentationModels.add(controllerDocumentation);
         }
         return documentationModels;
@@ -93,6 +99,38 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 && !docsLink.contains("models/#");
     }
 
+    private String absoluteFilePathToRef(String absoluteFilePath) {
+        String md = ".md";
+        String index = "index";
+
+        String ref = absoluteFilePath;
+        if (ref.endsWith(md)) {
+            ref = ref.substring(0, ref.length() - md.length());
+        }
+        if (ref.endsWith(index)) {
+            ref = ref.substring(0, ref.length() - index.length());
+        }
+
+        return ref;
+    }
+
+    private boolean isComponentReferencedExternally(String destinationPath, Class<?> targetClass, Map<String, ComponentModel> componentModelMap) {
+        String absoluteFilePath = "/docs/client/models/" + destinationPath;
+
+        String absolutePath = absoluteFilePathToRef(absoluteFilePath);
+        if (targetClass == null || !componentModelMap.containsKey(targetClass.getSimpleName())) {
+            return false;
+        }
+
+        Path docsLink = componentModelMap.get(targetClass.getSimpleName()).getDocsLink();
+        if (docsLink == null) {
+            return false;
+        }
+        String docsPath = docsLink.toUri().getPath();
+
+        return !docsPath.contains(absolutePath);
+    }
+
     private String getControllerNameFromDocsLink(Path docsLink) {
         String[] docsLinkSplit = docsLink.toUri().getPath().split("/");
         if (docsLinkSplit.length < 2) {
@@ -103,8 +141,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
     private ModelsSuperiorObjectDocumentationModel generateModelsSuperiorObjectDocumentationModel(String destinationPath,
                                                                                                   Collection<ComponentModel> componentModels,
-                                                                                                  LinkageStore<String> linkageStore) {
-        Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
+                                                                                                  Map<String, ComponentModel> componentModelMap) {
         List<ComponentModel> topLevelModels = componentModels.stream()
                 .filter(componentModel -> componentModel.getDocsLink() != null)
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
@@ -114,23 +151,12 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
         List<ModelsObjectDocumentationModel> renderedObjectsList = new LinkedList<>();
 
         for (ComponentModel model : topLevelModels) {
-            String modelName = model.getClassName();
-            ModelsObjectDocumentationModel modelsObjectDocumentationModel = new ModelsObjectDocumentationModel();
-            modelsObjectDocumentationModel.setClassFullName(modelName);
-            modelsObjectDocumentationModel.setClassSimpleName(getObjectSimpleName(modelName));
-
-            List<ModelsObjectDocumentationModel> generatedModels = generateModelObjectDocumentationModelRecursive(model.getReflectedClass(), renderedModelObjects, linkageStore);
-            renderedObjectsList.addAll(generatedModels);
-        }
-
-        for (ModelsObjectDocumentationModel renderedObject : renderedObjectsList) {
-            ComponentModel correspondingComponent = componentModelMap.get(renderedObject.getClassSimpleName());
-            if (correspondingComponent != null) {
-                linkageStore.putIfAbsent(
-                        renderedObject.getClassSimpleName(),
-                        renderedObject.getObjectClassPath()
-                );
+            if (renderedModelObjects.containsKey(model.getReflectedClass()) || isComponentReferencedExternally(destinationPath, model.getReflectedClass(), componentModelMap)) {
+                continue;
             }
+            List<ModelsObjectDocumentationModel> generatedModels =
+                    generateModelObjectDocumentationModelRecursive(destinationPath, model.getReflectedClass(), renderedModelObjects, componentModelMap);
+            renderedObjectsList.addAll(generatedModels);
         }
 
         ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel = new ModelsSuperiorObjectDocumentationModel();
@@ -149,11 +175,13 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
      * @param targetClass    Class for which fields to generate documentation.
      * @param visitedObjects Data structure to add created model.
      */
-    private List<ModelsObjectDocumentationModel> generateModelObjectDocumentationModelRecursive(Class<?> targetClass,
+    private List<ModelsObjectDocumentationModel> generateModelObjectDocumentationModelRecursive(String destinationPath,
+                                                                                                Class<?> targetClass,
                                                                                                 Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects,
-                                                                                                LinkageStore<String> linkageStore) {
+                                                                                                Map<String, ComponentModel> componentModelMap) {
         List<ModelsObjectDocumentationModel> result = new LinkedList<>();
-        if (targetClass != null && !visitedObjects.containsKey(targetClass)) {
+        if (targetClass != null && !visitedObjects.containsKey(targetClass)
+                && !isComponentReferencedExternally(destinationPath, targetClass, componentModelMap)) {
             visitedObjects.put(targetClass, null);
 
             ModelsObjectDocumentationModel modelsObjectDocumentationModel = new ModelsObjectDocumentationModel();
@@ -171,7 +199,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 Class<?> superClass = targetClass.getSuperclass();
                 if (isGenericSuperclass(superClass)) {
                     Type genericSuperclass = targetClass.getGenericSuperclass();
-                    result.addAll(processGenericTypes(genericSuperclass, visitedObjects, linkageStore));
+                    result.addAll(processGenericTypes(destinationPath, genericSuperclass, visitedObjects, componentModelMap));
                 }
             }
 
@@ -190,20 +218,22 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                     continue;
                 }
 
-                if (info.getDataType().equals(ParameterDataType.object_type)) {
+                if (info.getDataType().equals(ParameterDataType.object_type) || (info.getDataType().equals(ParameterDataType.enum_type) && info.getClazz() != null)) {
                     if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
                         continue;
                     }
-                    result.addAll(generateModelObjectDocumentationModelRecursive(info.getClazz(), visitedObjects, linkageStore));
+                    result.addAll(generateModelObjectDocumentationModelRecursive(destinationPath, info.getClazz(), visitedObjects, componentModelMap));
                 }
 
                 ModelsDocumentationModel modelsDocumentationModel = new ModelsDocumentationModel();
                 modelsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
-                if (linkageStore.containsKey(info.getClazz().getSimpleName())) {
-                    Path infoClassPath = linkageStore.get(info.getClazz().getSimpleName());
-                    modelsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
+                ComponentModel componentModel = componentModelMap.get(info.getClazz().getSimpleName());
+                if (componentModel != null && componentModel.getDocsLink() != null) {
+                    modelsDocumentationModel.setClassUsedOnTheFieldPath(componentModel.getDocsLink().toString());
+                    modelsDocumentationModel.setDataType(ParameterDataType.object_type);
                 } else {
+                    modelsDocumentationModel.setDataType(info.getDataType());
                     modelsDocumentationModel.setClassUsedOnTheFieldPath(
                             "#" + modelsDocumentationModel.getClassNameUsedOnTheField());
                 }
@@ -213,15 +243,23 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 modelsDocumentationModel.setDisplayName(info.getDisplayName());
                 modelsDocumentationModel.setHelpText(info.getHelpText());
                 modelsDocumentationModel.setClazz(info.getClazz());
-                modelsDocumentationModel.setDataType(info.getDataType());
                 modelsDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
                 modelsDocumentationModel.setDefaultValue(info.getDefaultValue());
                 modelsDocumentationModel.setSampleValues(info.getSampleValues());
 
                 modelsDocumentationModels.add(modelsDocumentationModel);
-
             }
+
             modelsObjectDocumentationModel.setObjectFields(modelsDocumentationModels);
+
+            ComponentModel objectComponentModel = componentModelMap.get(targetClass.getSimpleName());
+            if (objectComponentModel != null && objectComponentModel.getObjectSchema().getEnum() != null) {
+                List<String> enumValues = objectComponentModel.getObjectSchema().getEnum().stream()
+                        .map(v -> (String)v)
+                        .collect(Collectors.toList());
+                modelsObjectDocumentationModel.setEnumValues(enumValues);
+            }
+
             visitedObjects.put(targetClass, modelsObjectDocumentationModel);
             result.add(modelsObjectDocumentationModel);
         }
@@ -239,7 +277,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     /**
      * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
      */
-    private List<ModelsObjectDocumentationModel> processGenericTypes(Type type, Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects, LinkageStore<String> linkageStore) {
+    private List<ModelsObjectDocumentationModel> processGenericTypes(String destinationPath, Type type, Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects, Map<String, ComponentModel> componentModelMap) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
@@ -247,7 +285,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 if (typeArgument instanceof Class) {
                     Class<?> genericClass = (Class<?>) typeArgument;
                     if (!isJavaClass(genericClass)) {
-                        return generateModelObjectDocumentationModelRecursive(genericClass, visitedObjects, linkageStore);
+                        return generateModelObjectDocumentationModelRecursive(destinationPath, genericClass, visitedObjects, componentModelMap);
                     }
                 }
             }

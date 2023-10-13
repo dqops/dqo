@@ -33,5 +33,5 @@ public interface OperationsDocumentationGenerator {
      * @param linkageStore
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel, LinkageStore<String> linkageStore);
+    DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel);
 }
