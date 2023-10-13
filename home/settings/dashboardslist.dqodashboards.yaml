@@ -72,13 +72,6 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Null count
-          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
         - dashboard_name: Issue details dashboard
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
           width: 1600
@@ -127,6 +120,16 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+
+    - folder_name: Completeness
+        dashboards:
+        - dashboard_name: Number of null values in the columns
+          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
 
     - folder_name: Volume
       dashboards:
@@ -405,8 +408,8 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Null count
-          url: https://lookerstudio.google.com/embed/reporting/c70617fd-41be-4aa6-996c-e307a2a90fa1/page/c5B8C
+        - dashboard_name:
+          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -507,8 +510,8 @@ spec:
             ds0.p_check_category: all
     - folder_name: Completeness
       dashboards:
-      - dashboard_name: Nulls count
-        url: https://lookerstudio.google.com/embed/reporting/c70617fd-41be-4aa6-996c-e307a2a90fa1/page/c5B8C
+      - dashboard_name: Number of null values in the columns
+        url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
         width: 1400
         height: 1800
         parameters:
@@ -885,13 +888,14 @@ spec:
             ds0.p_check_category: all
     - folder_name: Completeness
       dashboards:
-        - dashboard_name: Nulls count
+        - dashboard_name: Number of null values in the columns
           url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
+
     - folder_name: Partition volume statistics
       dashboards:
         - dashboard_name: Number of rows in partitions per day
