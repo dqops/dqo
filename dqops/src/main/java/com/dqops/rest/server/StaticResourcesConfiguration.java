@@ -68,10 +68,18 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
                 .setOptimizeLocations(true);
 
         if (this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() != null) {
-            Duration maxAge = Duration.ofSeconds(this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge());
-            allOtherDynamicBookmarkedFiles
-                    .setCacheControl(CacheControl.maxAge(maxAge).cachePublic().mustRevalidate())
-                    .resourceChain(false);
+            if (this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() != null &&
+                this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() > 0) {
+                Duration maxAge = Duration.ofSeconds(this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge());
+
+                allOtherDynamicBookmarkedFiles
+                        .setCacheControl(CacheControl.maxAge(maxAge).cachePrivate().mustRevalidate())
+                        .resourceChain(false);
+            } else {
+                allOtherDynamicBookmarkedFiles
+                        .setCacheControl(CacheControl.noCache())
+                        .resourceChain(false);
+            }
         } else {
             allOtherDynamicBookmarkedFiles.resourceChain(false);
         }
