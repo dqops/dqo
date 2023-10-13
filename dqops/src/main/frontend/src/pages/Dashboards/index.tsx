@@ -90,6 +90,15 @@ const Dashboards = () => {
             );
           })}
         </div>
+        <div className={clsx("py-2 px-2 bg-gray-800 w-100 h-100 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}>
+                {"Xyz"}
+                <img
+                alt=""
+                style={{ display: "block"}}
+                className='pt-2'
+                loading='eager'
+                />
+              </div>
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"

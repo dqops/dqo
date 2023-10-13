@@ -10,7 +10,8 @@ import { IRootState } from '../../../redux/reducers';
 import SvgIcon from '../../SvgIcon';
 import { useDashboard } from '../../../contexts/dashboardContext';
 import { DashboardsFolderSpec } from '../../../api';
-import clsx from 'clsx';
+import { getDashboardTooltipState } from '../../../redux/actions/dashboard.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -21,11 +22,11 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { dashboardFolders } = useSelector(
+  const { dashboardFolders, dashboardTooltipState } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
-
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -70,34 +71,34 @@ const LeftView = () => {
       [folder, parents]
     );
 
-    const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    let timeout: NodeJS.Timeout | null = null;
-    
-    const handleMouseEnter = (index: number) => {
-      timeout = setTimeout(() => {
-        setActiveTooltip(index);
-      }, 300);
-    };
-
-    const handleMouseLeave = () => {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-      setActiveTooltip(null);
-    };
-
-    const handleImageLoad = () => {
-      setIsImageLoaded(true);
-    };
-
     useEffect(() => {
       if(selected !== activeTab){
         setSelected(activeTab)
       }
     },[activeTab])
 
+    let mouseEnterTimeout: NodeJS.Timeout | undefined; // Deklarujemy zmienną do przechowywania identyfikatora timeoutu
+    
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
+
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
+      }
+      mouseEnterTimeout = setTimeout(() => {
+        const width = e.clientX;
+        const height = e.clientY;
+        dispatch(getDashboardTooltipState({width, height, label, url}))
+      }, 500); 
+    };
+    const handleMouseLeave = () => {
+
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
+      }
+    };
+    
+
+  console.log(dashboardTooltipState)
     return (
       <div>
         <div
@@ -150,24 +151,8 @@ const LeftView = () => {
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
-                      onMouseEnter={() => handleMouseEnter(jIndex)}
+                      onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
                       onMouseLeave={handleMouseLeave}>
-                   {activeTooltip === jIndex && (
-              <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal", dashboard.dashboard_name?.includes("profiling status") ? "top-5" : "bottom-5")} style={{ left: "0" }}>
-                {dashboard.dashboard_name}
-                {dashboard.disable_thumbnail !== true &&
-                <img
-                src={`${dashboard.url}/thumbnail`}
-                alt=""
-                style={{ display: isImageLoaded ? "block" : "none" }}
-                onLoad={handleImageLoad}
-                className='pt-2'
-                loading='eager'
-                />
-              }
-              {!isImageLoaded && dashboard.disable_thumbnail !== true && <p className='pt-5'>Loading...</p>}
-            </div>
-            )}
                   {dashboard.dashboard_name}
                 </div>
               </div>
