@@ -20,7 +20,6 @@ import {
 import { DASHBOARD_ACTION } from '../types';
 
 export type TDashboardTootlipProps = {
-  width?: number;
   height?: number;
   label?: string;
   url?: string; 

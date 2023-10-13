@@ -77,7 +77,7 @@ const LeftView = () => {
       }
     },[activeTab])
 
-    let mouseEnterTimeout: NodeJS.Timeout | undefined; // Deklarujemy zmienną do przechowywania identyfikatora timeoutu
+    let mouseEnterTimeout: NodeJS.Timeout | undefined; 
     
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
 
@@ -85,16 +85,16 @@ const LeftView = () => {
         clearTimeout(mouseEnterTimeout);
       }
       mouseEnterTimeout = setTimeout(() => {
-        const width = e.clientX;
         const height = e.clientY;
-        dispatch(getDashboardTooltipState({width, height, label, url}))
-      }, 500); 
+        dispatch(getDashboardTooltipState({height, label, url}))
+      }, 100); 
     };
     const handleMouseLeave = () => {
 
       if (mouseEnterTimeout) {
         clearTimeout(mouseEnterTimeout);
       }
+      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}))
     };
     
 

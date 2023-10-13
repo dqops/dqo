@@ -15,6 +15,9 @@ import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
+  const { dashboardTooltipState } = useSelector(
+    (state: IRootState) => state.dashboard
+  );
 
   const [objectNotFound, setObjectNotFound] = React.useState(false)
  
@@ -27,7 +30,7 @@ const Dashboards = () => {
     return Promise.reject(error);
   });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error } =
+  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
     useDashboard();
 
   useEffect(() => {
@@ -90,15 +93,20 @@ const Dashboards = () => {
             );
           })}
         </div>
-        <div className={clsx("py-2 px-2 bg-gray-800 w-100 h-100 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}>
-                {"Xyz"}
+        {dashboardTooltipState.height ? 
+        <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
+          style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
+              {dashboardTooltipState.label}
                 <img
                 alt=""
+                src={`${dashboardTooltipState.url}/thumbnail`}
                 style={{ display: "block"}}
                 className='pt-2'
                 loading='eager'
                 />
-              </div>
+              </div> 
+        : null 
+        }
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"
