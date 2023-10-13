@@ -35,16 +35,16 @@ try:
         ).read()
     )
 except IOError:
-    print("Failed to load DQO version file.", file=sys.stderr)
+    print("Failed to load DQOps version file.", file=sys.stderr)
     sys.exit(-1)
 
 
 def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     """
-    Downloads and installs DQO agent locally.
+    Downloads and installs DQOps distribution locally.
     :param dest: Destination folder to download and extract the zip package.
     :param dqo_tag: GitHub release tag.
-    :param dqo_version:  Dqo version.
+    :param dqo_version:  DQOps version.
     """
 
     github_url = (
@@ -54,7 +54,7 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     distribution_local_name = os.path.join(
         dest, "dqo-distribution-%s-bin.zip" % dqo_version
     )
-    print("Trying to download DQO version %s from %s" % (dqo_version, github_url))
+    print("Trying to download DQOps version %s from %s" % (dqo_version, github_url))
 
     os.makedirs(dest, exist_ok=True)
 
