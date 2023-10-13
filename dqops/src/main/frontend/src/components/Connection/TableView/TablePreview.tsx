@@ -109,11 +109,11 @@ export default function TablePreview({statistics} : tablePreviewProps) {
     <table className='w-full'>
       <thead className='border-b border-b-gray-400'>
         <tr>
-          <th className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all' >
+          <th className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal' >
             Column name
           </th>
           {statistics.column_statistics?.map((x, index) => (
-            <th key={index} className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all'>
+            <th key={index} className='px-6 py-4 text-left border border-gray-300 bg-gray-300 max-w-60 whitespace-normal'>
               {x.column_name}
             </th>
           ))}
@@ -122,13 +122,13 @@ export default function TablePreview({statistics} : tablePreviewProps) {
       <tbody>
         {firstColumnObjects.map((x, index) => (
           <tr key={index}>
-            <td className='px-6 py-2 text-left border border-gray-300 font-semibold bg-gray-50 max-w-60 whitespace-normal break-all' >
+            <td className='px-6 py-2 text-left border border-gray-300 font-semibold bg-gray-50 min-w-50 max-w-60 whitespace-normal break-all' >
               {x.label}
             </td>
             {dataArray.map((y, jIndex) => (
               <td
                 key={jIndex}
-                className='px-6 py-2 text-left border border-gray-300 bg-gray-50 max-w-60 whitespace-normal break-all'
+                className='px-6 py-2 text-left border border-gray-300 bg-gray-50 min-w-30 max-w-60 whitespace-normal break-all'
                 
               >
                 {renderValue(y[x.value as keyof MyData])} {(x.label.includes("percent") && y[x.value as keyof MyData]) ? "%" : ""}
