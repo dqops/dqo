@@ -69,9 +69,8 @@ export default function SharedCredentailsDetail() {
     getSharedCredentailList()
   }, [reshreshIndicator])
 
-  console.log(sharedCredentialList)
 
-  if(loading){
+  if (loading) {
     return(
     <DefinitionLayout>
         <div className='w-full h-screen flex items-center justify-center'>
@@ -85,9 +84,9 @@ export default function SharedCredentailsDetail() {
     <DefinitionLayout>
       {userProfile.can_manage_and_view_shared_credentials === true ? 
           <table className='w-full '>
-            <thead className='border-b w-full border-b-gray-400 relative'>
-                <th className="px-6 py-4 text-left">Credential name</th>
-                <th className="px-6 py-4 text-left">Credential type</th>
+            <thead className='border-b w-full border-b-gray-400 relative flex items-center'>
+                <th className="px-6 py-4 text-left block w-100">Credential name</th>
+                <th className="px-6 py-4 text-left block w-100">Credential type</th>
                 <Button label='Add credential'
                  color='primary'
                  variant='contained'
@@ -97,19 +96,19 @@ export default function SharedCredentailsDetail() {
             </thead>
             <tbody>
                 {sharedCredentialList?.map((credential, index) => 
-                <tr key={index}>
-                    <td className='px-6 py-2 text-left'>{credential.credential_name}</td>
-                    <td className='px-6 py-2 text-left'>{credential.type}</td>
-                    <td className='px-6 py-2 text-left'>
+                <tr key={index} className='flex items-center'>
+                    <td className='px-6 py-2 text-left block w-100'>{credential.credential_name}</td>
+                    <td className='px-6 py-2 text-left block w-100'>{credential.type}</td>
+                    <td className='px-6 py-2 text-left block max-w-100'>
                         <Button label='edit' variant='text' color='primary' 
                         onClick={() => updateSharedCredential(credential.credential_name ?? "")}
                         />
                     </td>
-                    <td className="px-6 py-2 text-left">
+                    <td className="px-6 py-2 text-left block max-w-100">
                         <Button label='delete' variant='text' color='primary' 
                         onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name ?? "")}/>
                     </td>
-                    <td className="px-6 py-2 text-left">
+                    <td className="px-6 py-2 text-left block max-w-100">
                         {/* <Button label='downland' variant='text' color='primary' 
                         onClick={() => downlandSharedCredentail(credential.credential_name ?? "")} /> */}
                         <a href={`/api/credentials/${credential.credential_name}/download`} rel="noreferrer" target="_blank" className='text-teal-500'>downland</a>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { SqlServerParametersSpec } from "../../../../api";
+import { SharedCredentialListModel, SqlServerParametersSpec } from "../../../../api";
 import JdbcPropertiesView from "../JdbcProperties";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import Checkbox from "../../../Checkbox";
@@ -9,11 +9,13 @@ import Checkbox from "../../../Checkbox";
 interface ISqlServerConnectionProps {
   sqlserver?: SqlServerParametersSpec;
   onChange?: (obj: SqlServerParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const SqlServerConnection = ({
   sqlserver,
-  onChange
+  onChange,
+  sharedCredentials
 }: ISqlServerConnectionProps) => {
 
   const handleChange = (obj: Partial<SqlServerParametersSpec>) => {
@@ -67,6 +69,7 @@ const SqlServerConnection = ({
       <JdbcPropertiesView
         properties={sqlserver?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );

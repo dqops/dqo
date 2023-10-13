@@ -3,6 +3,6 @@
     "type": "apiKey",
     "name": "Authorization",
     "in": "header",
-    "description": "API Key passed as \"Bearer <api_key>\". Two types of API Keys are supported. The first type is an API Key issued by DQO Cloud for single user instances. The second type is a locally issued API Key that is signed by this DQO instance. Issue the API Key from the user's profile screen."
+    "description": "API Key passed as \"Bearer <api_key>\". Two types of API Keys are supported. The first type is an API Key issued by DQOps Cloud for single user instances. The second type is a locally issued API Key that is signed by this DQOps instance. Issue the API Key from the user's profile screen."
   }
 }

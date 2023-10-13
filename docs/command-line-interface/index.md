@@ -1,6 +1,6 @@
 # Command-line interface
 ___
-**This is a list of the CLI commands in DQO broken down by category and a brief description of what they do.**
+**This is a list of the CLI commands in DQOps broken down by category and a brief description of what they do.**
 
 ## dqo
 | Command&nbsp;name | Description |

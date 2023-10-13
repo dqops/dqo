@@ -32,7 +32,7 @@ public class ScheduledJobListener implements JobListener {
 
     @Override
     public String getName() {
-        return "DQO Job Listener";
+        return "DQOps Job Listener";
     }
 
     @Override

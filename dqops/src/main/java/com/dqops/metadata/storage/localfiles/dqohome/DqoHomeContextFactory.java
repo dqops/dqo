@@ -20,7 +20,7 @@ package com.dqops.metadata.storage.localfiles.dqohome;
  */
 public interface DqoHomeContextFactory {
     /**
-     * Opens and returns a shared DQO user home.
+     * Opens and returns a shared DQOps user home.
      * @return Dqo home context with an active dqo home model that is backed by the local home file system.
      */
     DqoHomeContext openLocalDqoHome();

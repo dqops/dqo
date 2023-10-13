@@ -17,11 +17,11 @@
 package com.dqops.core.scheduler.synchronize;
 
 /**
- * Enumeration of synchronization modes (selection of folders that are synchronized to the DQO Cloud) during a scheduled synchronization.
+ * Enumeration of synchronization modes (selection of folders that are synchronized to the DQOps Cloud) during a scheduled synchronization.
  */
 public enum ScheduledSynchronizationFolderSelectionMode {
     /**
-     * Always synchronizes all folders, possibly downloading remote changes from the DQO Cloud.
+     * Always synchronizes all folders, possibly downloading remote changes from the DQOps Cloud.
      */
     all,
 

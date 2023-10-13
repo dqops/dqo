@@ -17,7 +17,7 @@
 package com.dqops.core.dqocloud.users;
 
 /**
- * Exception thrown when a user was not found in DQO cloud.
+ * Exception thrown when a user was not found in DQOps cloud.
  */
 public class DqoUserNotFoundException extends DqoCloudUserManagementException {
     /**

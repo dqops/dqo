@@ -20,7 +20,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO shared credential property source.
+ * DQOps shared credential property source.
  */
 @Component
 public class SharedCredentialPropertySource extends PropertySource<SharedCredentialSource> {

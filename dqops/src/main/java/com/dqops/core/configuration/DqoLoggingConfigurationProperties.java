@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for the dqo.logging that configures how file logging works inside the DQO user home .log folder.
+ * Configuration POJO with the configuration for the dqo.logging that configures how file logging works inside the DQOps user home .log folder.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.logging")
@@ -284,7 +284,7 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
 
     /**
      * Applies additional quoting of double quote " and backslashes \\ when logging to console in JSON format is enabled.
-     * This option is enabled by default, to enable proper logging of message when DQO runs inside a docker container.
+     * This option is enabled by default, to enable proper logging of message when DQOps runs inside a docker container.
      * @return Encode double quotes in JSON log entries.
      */
     public boolean isEncodeMessage() {

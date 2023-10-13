@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.incident_grouping_level import IncidentGroupingLevel
 from ..models.minimum_grouping_severity_level import MinimumGroupingSeverityLevel
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="TableIncidentGroupingSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableIncidentGroupingSpec:
     """
     Attributes:
@@ -26,7 +27,7 @@ class TableIncidentGroupingSpec:
     minimum_severity: Union[Unset, MinimumGroupingSeverityLevel] = UNSET
     divide_by_data_group: Union[Unset, bool] = UNSET
     disabled: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         grouping_level: Union[Unset, str] = UNSET

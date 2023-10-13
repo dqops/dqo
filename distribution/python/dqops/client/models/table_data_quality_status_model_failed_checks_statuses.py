@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.table_data_quality_status_model_failed_checks_statuses_additional_property import (
     TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
@@ -9,7 +10,7 @@ from ..models.table_data_quality_status_model_failed_checks_statuses_additional_
 T = TypeVar("T", bound="TableDataQualityStatusModelFailedChecksStatuses")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableDataQualityStatusModelFailedChecksStatuses:
     """The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected.
     Table-level checks are identified by the check name. Column-level checks are identified as a
@@ -19,7 +20,7 @@ class TableDataQualityStatusModelFailedChecksStatuses:
 
     additional_properties: Dict[
         str, TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty
-    ] = attr.ib(init=False, factory=dict)
+    ] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         field_dict: Dict[str, Any] = {}

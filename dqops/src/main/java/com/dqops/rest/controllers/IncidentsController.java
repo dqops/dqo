@@ -152,7 +152,7 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<String> filter,
             @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
             @RequestParam(required = false) Optional<Integer> days,
-            @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
+            @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.", required = false)
             @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "column", value = "Optional column name filter", required = false)
             @RequestParam(required = false) Optional<String> column,

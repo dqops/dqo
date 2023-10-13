@@ -18,14 +18,14 @@ package com.dqops.core.dqocloud.accesskey;
 import com.dqops.core.synchronization.contract.DqoRoot;
 
 /**
- * DQO Cloud access token cache that creates new GCP access tokens when they are about to expire.
+ * DQOps Cloud access token cache that creates new GCP access tokens when they are about to expire.
  */
 public interface DqoCloudAccessTokenCache {
     /**
      * Returns a current GCP bucket access token used to perform read/write operations on a customer's storage bucket for a given root folder.
      *
-     * @param dqoRoot DQO Root folder.
-     * @return Up to date access token.
+     * @param dqoRoot DQOps Root folder.
+     * @return Up-to-date access token.
      */
     DqoCloudCredentials getCredentials(DqoRoot dqoRoot);
 

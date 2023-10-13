@@ -31,7 +31,7 @@ public class DqoIncidentsConfigurationProperties implements Cloneable {
     private int checkHistogramSize = 10;
 
     /**
-     * Returns the number of days back that DQO counts open incidents per day.
+     * Returns the number of days back that DQOps counts open incidents per day.
      * @return Number of days back to count open incidents.
      */
     public int getCountOpenIncidentsDays() {

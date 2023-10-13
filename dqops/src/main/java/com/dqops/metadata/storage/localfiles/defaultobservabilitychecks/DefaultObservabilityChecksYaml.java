@@ -6,7 +6,7 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
  * The configuration of default data quality checks that are activated for all imported tables and columns.
- * The default observability checks are stored in the settings/defaultchecks.dqochecks.yaml file in the DQO user's home folder.
+ * The default observability checks are stored in the settings/defaultchecks.dqochecks.yaml file in the DQOps user's home folder.
  */
 public class DefaultObservabilityChecksYaml {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;

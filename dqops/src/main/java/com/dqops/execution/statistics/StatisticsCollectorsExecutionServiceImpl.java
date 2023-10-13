@@ -48,8 +48,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
     /**
      * Creates a statistics collectors execution service with given dependencies.
      * @param hierarchyNodeTreeSearcher Target node search service.
-     * @param dqoQueueJobFactory DQO job factory to create a child job.
-     * @param dqoJobQueue DQO job queue where the child job is started.
+     * @param dqoQueueJobFactory DQOps job factory to create a child job.
+     * @param dqoJobQueue DQOps job queue where the child job is started.
      * @param tableStatisticsCollectorsExecutionService Statistics collector execution service that collects statistics on a single table.
      */
     @Autowired

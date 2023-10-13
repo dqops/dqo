@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_job_status import DqoJobStatus
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DeleteStoredDataQueueJobResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DeleteStoredDataQueueJobResult:
     """Object returned from the operation that queues a "delete stored data" job. The result contains the job id that was
     started and optionally can also contain a dictionary of partitions that were cleared or deleted if the operation was
@@ -28,7 +29,7 @@ class DeleteStoredDataQueueJobResult:
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
     result: Union[Unset, "DeleteStoredDataResult"] = UNSET
     status: Union[Unset, DqoJobStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         job_id: Union[Unset, Dict[str, Any]] = UNSET

@@ -39,9 +39,9 @@ import java.util.Map;
 @Data
 public class TableDataQualityStatusModel {
     /**
-     * The connection name in DQO.
+     * The connection name in DQOps.
      */
-    @JsonPropertyDescription("The connection name in DQO.")
+    @JsonPropertyDescription("The connection name in DQOps.")
     private String connectionName;
 
     /**
@@ -99,11 +99,12 @@ public class TableDataQualityStatusModel {
     private int fatals;
 
     /**
-     * The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQO, invalid queries in data quality sensors or invalid python rules.
+     * The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps,
+     * invalid queries in data quality sensors or invalid python rules.
      * When an execution error is reported, the configuration of a data quality check on a table must be updated.
      */
     @JsonPropertyDescription("The number of data quality check execution errors that were reported due to access issues to the data source, " +
-            "invalid mapping in DQO, invalid queries in data quality sensors or invalid python rules. " +
+            "invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. " +
             "When an execution error is reported, the configuration of a data quality check on a table must be updated.")
     private int executionErrors;
 

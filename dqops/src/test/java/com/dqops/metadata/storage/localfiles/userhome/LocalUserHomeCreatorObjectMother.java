@@ -62,7 +62,7 @@ public class LocalUserHomeCreatorObjectMother {
     }
 
     /**
-     * Initialized a DQO User home at a given location.
+     * Initialized a DQOps User home at a given location.
      * @param pathToUserHome Path to a dqo user home to initialize.
      */
     public static void initializeDqoUserHomeAt(String pathToUserHome) {

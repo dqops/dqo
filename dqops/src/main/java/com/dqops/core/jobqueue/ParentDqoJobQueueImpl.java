@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * The implementation of the parent DQO job queue that runs only {@link ParentDqoQueueJob} parent jobs. All other jobs will be rejected.
+ * The implementation of the parent DQOps job queue that runs only {@link ParentDqoQueueJob} parent jobs. All other jobs will be rejected.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)

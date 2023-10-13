@@ -30,7 +30,7 @@ public class LocalDqoUserHomePathProviderStub implements LocalDqoUserHomePathPro
     /**
      * Returns the absolute path to the DQO_USER_HOME folder.
      *
-     * @return Absolute path to the DQO user home folder.
+     * @return Absolute path to the DQOps user home folder.
      */
     @Override
     public Path getLocalUserHomePath() {

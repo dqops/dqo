@@ -12,14 +12,10 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: AuthenticatedClient,
     json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/datasource/testconnection".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["verifyNameUniqueness"] = verify_name_uniqueness
@@ -30,18 +26,14 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/datasource/testconnection",
         "json": json_json_body,
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[ConnectionTestModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ConnectionTestModel.from_dict(response.json())
@@ -54,7 +46,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[ConnectionTestModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -88,13 +80,11 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
         verify_name_uniqueness=verify_name_uniqueness,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -155,13 +145,11 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
         verify_name_uniqueness=verify_name_uniqueness,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

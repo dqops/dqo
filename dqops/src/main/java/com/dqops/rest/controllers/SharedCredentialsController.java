@@ -47,18 +47,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Shared credentials controller for managing credentials that are stored in the shared .credentials folder in the DQO user's home folder.
+ * Shared credentials controller for managing credentials that are stored in the shared .credentials folder in the DQOps user's home folder.
  */
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SharedCredentials", description = "Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQO user's home folder.")
+@Api(value = "SharedCredentials", description = "Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user's home folder.")
 public class SharedCredentialsController {
     private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Dependency injection controller.
-     * @param userHomeContextFactory Factory of the DQO user home context.
+     * @param userHomeContextFactory Factory of the DQOps user home context.
      */
     @Autowired
     public SharedCredentialsController(UserHomeContextFactory userHomeContextFactory) {
@@ -70,7 +70,7 @@ public class SharedCredentialsController {
      * @return List of all shared credentials.
      */
     @GetMapping(value = "/credentials", produces = "application/json")
-    @ApiOperation(value = "getAllSharedCredentials", notes = "Returns a list of all shared credentials that are present in the DQO user's home .credentials/ folder..",
+    @ApiOperation(value = "getAllSharedCredentials", notes = "Returns a list of all shared credentials that are present in the DQOps user's home .credentials/ folder..",
             response = SharedCredentialListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -199,13 +199,13 @@ public class SharedCredentialsController {
     }
 
     /**
-     * Creates (adds) a new shared credential, which creates a file in the DQO user's home .credentials/ folder named as the credential and with the content that is provided in this call
+     * Creates (adds) a new shared credential, which creates a file in the DQOps user's home .credentials/ folder named as the credential and with the content that is provided in this call
      * @param sharedCredentialModel Check model to save.
      * @return Empty response.
      */
     @PostMapping(value = "/credentials", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createSharedCredential",
-            notes = "Creates (adds) a new shared credential, which creates a file in the DQO user's home .credentials/ folder named as the credential " +
+            notes = "Creates (adds) a new shared credential, which creates a file in the DQOps user's home .credentials/ folder named as the credential " +
                     "and with the content that is provided in this call.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -341,7 +341,7 @@ public class SharedCredentialsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/credentials/{credentialName}", produces = "application/json")
-    @ApiOperation(value = "deleteSharedCredential", notes = "Deletes a shared credential file from the DQO user's home .credentials/ folder.", response = Void.class,
+    @ApiOperation(value = "deleteSharedCredential", notes = "Deletes a shared credential file from the DQOps user's home .credentials/ folder.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })

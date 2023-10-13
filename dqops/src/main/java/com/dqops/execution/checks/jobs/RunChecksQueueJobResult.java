@@ -35,16 +35,19 @@ import lombok.EqualsAndHashCode;
 @Data
 public class RunChecksQueueJobResult {
     /**
-     * Job id that identifies a job that was started on the DQO job queue.
+     * Job id that identifies a job that was started on the DQOps job queue.
      */
-    @JsonPropertyDescription("Job id that identifies a job that was started on the DQO job queue.")
+    @JsonPropertyDescription("Job id that identifies a job that was started on the DQOps job queue.")
     private DqoQueueJobId jobId;
 
     /**
-     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
+     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished.
+     * Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
      * The calling code (the data pipeline) can decide if further processing should be continued.
      */
-    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.")
+    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. " +
+            "Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. " +
+            "The calling code (the data pipeline) can decide if further processing should be continued.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private RunChecksResult result;
 

@@ -252,8 +252,8 @@ const JobItem = ({
               <td>{job?.status}</td>
               {hasInvalidApiKeyError && (
                     <span className="px-2 text-red-500">
-                      (Cloud DQO Api Key is invalid. Your trial period has expired or a new version of DQO was released.{' '}
-                      Please run {"'"}cloud login{"'"} from DQO shell)
+                      (DQOps Cloud Api Key is invalid. Your trial period has expired or a new version of DQOps was released.{' '}
+                      Please run {"'"}cloud login{"'"} from DQOps shell)
                     </span>
                   )}
             </tr>

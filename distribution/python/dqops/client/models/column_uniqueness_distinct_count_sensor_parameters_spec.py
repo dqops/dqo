@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ColumnUniquenessDistinctCountSensorParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnUniquenessDistinctCountSensorParametersSpec:
     """
     Attributes:
@@ -16,7 +17,7 @@ class ColumnUniquenessDistinctCountSensorParametersSpec:
     """
 
     filter_: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_

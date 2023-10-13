@@ -44,8 +44,8 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
      * @param jobDataMapAdapter Quartz job data adapter that extracts the original schedule definition from the job data.
-     * @param dqoQueueJobFactory DQO job factory.
-     * @param dqoJobQueue DQO job runner where the actual operation is executed.
+     * @param dqoQueueJobFactory DQOps job factory.
+     * @param dqoJobQueue DQOps job runner where the actual operation is executed.
      * @param principalProvider User principal provider that returns the system principal.
      */
     @Autowired

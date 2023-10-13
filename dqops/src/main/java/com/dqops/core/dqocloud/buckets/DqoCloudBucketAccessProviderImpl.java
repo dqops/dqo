@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO Cloud bucket credentials provider. Creates a Google storage client to access the bucket with the tenant's data.
+ * DQOps Cloud bucket credentials provider. Creates a Google storage client to access the bucket with the tenant's data.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -38,7 +38,7 @@ public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessPro
 
     /**
      * Default injection constructor.
-     * @param accessTokenCache DQO Cloud credentials provider (access token provider).
+     * @param accessTokenCache DQOps Cloud credentials provider (access token provider).
      */
     @Autowired
     public DqoCloudBucketAccessProviderImpl(DqoCloudAccessTokenCache accessTokenCache) {
@@ -46,7 +46,7 @@ public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessPro
     }
 
     /**
-     * Creates a configured Google storage client to access a tenant' folder in a DQO Cloud bucket.
+     * Creates a configured Google storage client to access a tenant' folder in a DQOps Cloud bucket.
      * @param rootType Bucket type (sensor readouts, rule results, etc.)
      * @return Configured bucket access with a {@link Storage} client to access the data with downscoped credentials.
      */

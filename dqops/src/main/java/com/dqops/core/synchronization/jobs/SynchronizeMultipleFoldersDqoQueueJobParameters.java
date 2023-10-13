@@ -37,7 +37,7 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     /**
      * File synchronization direction.
      */
-    @JsonPropertyDescription("File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQO Cloud).")
+    @JsonPropertyDescription("File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).")
     private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
 
     /**
@@ -119,9 +119,11 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     private boolean dataIncidents;
 
     /**
-     * Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQO will decide which folders need synchronization (to be pushed to the cloud).
+     * Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQOps
+     * will decide which folders need synchronization (to be pushed to the cloud).
      */
-    @JsonPropertyDescription("Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQO will decide which folders need synchronization (to be pushed to the cloud).")
+    @JsonPropertyDescription("Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders " +
+            "because DQOps will decide which folders need synchronization (to be pushed to the cloud).")
     private boolean synchronizeFolderWithLocalChanges;
 
 

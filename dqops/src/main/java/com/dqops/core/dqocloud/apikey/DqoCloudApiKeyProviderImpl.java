@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Service that retrieves the active DQO Cloud API key for the current user.
+ * Service that retrieves the active DQOps Cloud API key for the current user.
  * The api key could be enforced by setting an environment variable DQO_CLOUD_APIKEY or is stored in the settings
  * after the user executed the "login" CLI command.
  */
@@ -51,7 +51,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
 
     /**
      * Default injection constructor.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
      * @param userHomeContextFactory User home context factory - required to load the user settings.
      * @param secretValueProvider Secret value provider - used to resolve expressions in the settings.
      * @param jsonSerializer Json serializer - used to decode the API key.
@@ -68,8 +68,8 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     }
 
     /**
-     * Returns the api key for the DQO Cloud.
-     * @return DQO Cloud api key or null when the key was not yet configured.
+     * Returns the api key for the DQOps Cloud.
+     * @return DQOps Cloud api key or null when the key was not yet configured.
      */
     @Override
     public DqoCloudApiKey getApiKey() {
@@ -138,7 +138,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             return dqoCloudApiKey;
         }
         catch (DecoderException ex) {
-            throw new DqoCloudInvalidKeyException("Failed to decode a DQO Cloud API Key, error: " + ex.getMessage(), ex);
+            throw new DqoCloudInvalidKeyException("Failed to decode a DQOps Cloud API Key, error: " + ex.getMessage(), ex);
         }
     }
 }

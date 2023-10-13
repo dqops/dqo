@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CustomCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CustomCheckSpec:
     """
     Attributes:
@@ -40,7 +41,7 @@ class CustomCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         sensor_name (Union[Unset, str]): Optional custom sensor name. It is a folder name inside the user's home
-            'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name:
+            'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name:
             table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named
             check definition.
         rule_name (Union[Unset, str]): Optional custom rule name. It is a path to a custom rule python module that
@@ -67,7 +68,7 @@ class CustomCheckSpec:
     warning: Union[Unset, "CustomRuleParametersSpec"] = UNSET
     error: Union[Unset, "CustomRuleParametersSpec"] = UNSET
     fatal: Union[Unset, "CustomRuleParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET

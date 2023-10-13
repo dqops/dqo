@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO storage on DQO Cloud (SaaS) provided GCP storage buckets. Properties are mapped to the "dqo.storage.gcp." prefix
+ * Configuration POJO with the configuration for DQOps storage on DQOps Cloud (SaaS) provided GCP storage buckets. Properties are mapped to the "dqo.storage.gcp." prefix
  * that are responsible the configuration of a Google Storage file system.
  */
 @Configuration
@@ -65,7 +65,7 @@ public class DqoStorageGcpConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the maximum number of concurrent HTTP/2 streams used to concurrently upload or download files to the data quality data warehouse stored in the DQO cloud.
+     * Returns the maximum number of concurrent HTTP/2 streams used to concurrently upload or download files to the data quality data warehouse stored in the DQOps Cloud.
      * @return The number of concurrent http/2 streams.
      */
     public Integer getHttp2MaxConcurrentStreams() {

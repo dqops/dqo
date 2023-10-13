@@ -1,6 +1,6 @@
 # Configuring Slack notifications
 
-DQO supports integration with Slack webhooks which are used to set up in-app Slack notifications. 
+DQOps supports integration with Slack webhooks which are used to set up in-app Slack notifications. 
 
 Slack integration allows you to receive notifications whenever an issue is detected in your data and a new incident is created or modified.
 
@@ -34,7 +34,7 @@ Slack integration allows you to receive notifications whenever an issue is detec
     ![activate-incoming-webhook](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/activate-incoming-webhook.png)
 
 
-3. Create a new webhook URL or copy an existing one that you will paste into the DQO at the later steps.
+3. Create a new webhook URL or copy an existing one that you will paste into the DQOps at the later steps.
     You can find Webhooks at the bottom of the same page.
 
     We suggest testing if the set Webhooks configuration is correct by running a sample curl command in the command line.
@@ -52,7 +52,7 @@ Slack integration allows you to receive notifications whenever an issue is detec
 
 To add a Webhook URL to DQO:
 
-1. Open the DQO application and go to the **Data Sources** section.
+1. Open the DQOps application and go to the **Data Sources** section.
 
     ![dqo-incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/dqo-incidents.png)
 
@@ -60,7 +60,7 @@ To add a Webhook URL to DQO:
 
     The url path part can be also used : /sources/connection/**[connection_name]**/incidents
 
-    Remember to replace [connection_name] with your connection name, created in DQO application.
+    Remember to replace [connection_name] with your connection name, created in DQOps application.
 
 3. In the **Webhooks for notifications of an incident state change** section, paste the Webhook URL that you get in the Slack app into the  “A new incident was opened (detected)” field. 
 

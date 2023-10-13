@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_target import CheckTarget
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckTemplate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckTemplate:
     """Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy
     tree.
@@ -40,7 +41,7 @@ class CheckTemplate:
     sensor_name: Union[Unset, str] = UNSET
     sensor_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     rule_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_target: Union[Unset, str] = UNSET

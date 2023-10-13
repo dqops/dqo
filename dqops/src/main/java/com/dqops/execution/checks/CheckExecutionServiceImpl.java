@@ -51,8 +51,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     /**
      * Creates a data quality check execution service.
      * @param hierarchyNodeTreeSearcher Hierarchy node searcher.
-     * @param dqoQueueJobFactory DQO job factory, used to create child jobs that will run checks per table.
-     * @param dqoJobQueue DQO job queue where child jobs (that run checks per table) are scheduled.
+     * @param dqoQueueJobFactory DQOps job factory, used to create child jobs that will run checks per table.
+     * @param dqoJobQueue DQOps job queue where child jobs (that run checks per table) are scheduled.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      * @param tableCheckExecutionService Check execution service that executes checks on a single table.
      */

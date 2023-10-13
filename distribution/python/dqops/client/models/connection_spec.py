@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
@@ -24,7 +25,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ConnectionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ConnectionSpec:
     """
     Attributes:
@@ -64,7 +65,7 @@ class ConnectionSpec:
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         provider_type: Union[Unset, str] = UNSET

@@ -41,7 +41,7 @@ public class DqoServerSecurityContextRepositoryImpl implements DqoServerSecurity
     }
 
     /**
-     * Stores the principal for later use. Not used by DQO.
+     * Stores the principal for later use. Not used by DQOps.
      * @param exchange Server exchange.
      * @param context Security context to store.
      * @return Mono.

@@ -34,11 +34,11 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync credentials" to synchronize the ".credentials" folder in the DQO user home.
+ * 3st level CLI command "cloud sync credentials" to synchronize the ".credentials" folder in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "credentials", header = "Synchronize local \".credentials\" folder that stores shared credentials with DQO Cloud",
+@CommandLine.Command(name = "credentials", header = "Synchronize local \".credentials\" folder that stores shared credentials with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \".credentials\" folder.")
 public class CloudSyncCredentialsCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_job_status import DqoJobStatus
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ImportTablesQueueJobResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ImportTablesQueueJobResult:
     """Object returned from the operation that queues a "import tables" job. The result contains the job id that was
     started and optionally can also contain the result of importing the tables if the operation was started with
@@ -29,7 +30,7 @@ class ImportTablesQueueJobResult:
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
     result: Union[Unset, "ImportTablesResult"] = UNSET
     status: Union[Unset, DqoJobStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         job_id: Union[Unset, Dict[str, Any]] = UNSET

@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.check_run_schedule_group import CheckRunScheduleGroup
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="EffectiveScheduleModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class EffectiveScheduleModel:
     """Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON
     expression and the time of the upcoming execution, as well as the duration until this time.
@@ -36,7 +37,7 @@ class EffectiveScheduleModel:
     time_of_execution: Union[Unset, datetime.datetime] = UNSET
     time_until_execution: Union[Unset, "Duration"] = UNSET
     disabled: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_group: Union[Unset, str] = UNSET

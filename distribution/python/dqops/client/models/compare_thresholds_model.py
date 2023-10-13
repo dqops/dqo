@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CompareThresholdsModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CompareThresholdsModel:
     """Model with the compare threshold levels for raising data quality issues at different severity levels when the
     difference between the compared (tested) table and the reference table (the source of truth) exceed given thresholds
@@ -28,7 +29,7 @@ class CompareThresholdsModel:
     warning_difference_percent: Union[Unset, float] = UNSET
     error_difference_percent: Union[Unset, float] = UNSET
     fatal_difference_percent: Union[Unset, float] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         warning_difference_percent = self.warning_difference_percent

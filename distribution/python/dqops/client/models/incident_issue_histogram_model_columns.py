@@ -1,18 +1,19 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 T = TypeVar("T", bound="IncidentIssueHistogramModelColumns")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class IncidentIssueHistogramModelColumns:
     """A map of column names with the most data quality issues related to the incident. The map returns the count of issues
     as the value.
 
     """
 
-    additional_properties: Dict[str, int] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, int] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         field_dict: Dict[str, Any] = {}

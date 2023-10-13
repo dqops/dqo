@@ -22,9 +22,9 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * DQO Cloud user model - identifies a user in a multi-user DQO deployment.
+ * DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.
  */
-@ApiModel(value = "DqoCloudUserModel", description = "DQO Cloud user model - identifies a user in a multi-user DQO deployment.")
+@ApiModel(value = "DqoCloudUserModel", description = "DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.")
 @Data
 public class DqoCloudUserModel {
     /**

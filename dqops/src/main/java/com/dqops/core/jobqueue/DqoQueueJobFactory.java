@@ -28,7 +28,7 @@ import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJob;
 
 /**
- * DQO job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
+ * DQOps job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
  */
 public interface DqoQueueJobFactory {
     /**
@@ -57,13 +57,13 @@ public interface DqoQueueJobFactory {
     CollectStatisticsOnTableQueueJob creteCollectStatisticsOnTableJob();
 
     /**
-     * Creates a DQO Cloud synchronization job that will synchronize one folder in the user home.
+     * Creates a DQOps Cloud synchronization job that will synchronize one folder in the user home.
      * @return Cloud synchronization job for one folder.
      */
     SynchronizeRootFolderDqoQueueJob createSynchronizeRootFolderJob();
 
     /**
-     * Creates a DQO Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQO User home folders in parallel.
+     * Creates a DQOps Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQOps User home folders in parallel.
      *
      * @return Cloud synchronization job for multiple folders.
      */

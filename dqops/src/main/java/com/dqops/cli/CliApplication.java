@@ -15,6 +15,7 @@
  */
 package com.dqops.cli;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -31,15 +32,14 @@ import java.util.stream.Collectors;
  * CLI entry point class.
  */
 @SpringBootApplication(scanBasePackages = "com.dqops")
+@Slf4j
 public class CliApplication {
-	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
-
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
 	private static boolean silentEnabledByArgument;
 
 	/**
-	 * Returns true if DQO was started in a mode to run one command and exit.
+	 * Returns true if DQOps was started in a mode to run one command and exit.
 	 * @return True - command was given in the argument list, it will execute and the application will exit.
 	 */
 	public static boolean isRunningOneShotMode() {
@@ -121,7 +121,7 @@ public class CliApplication {
 	}
 
 	/**
-	 * Main entry method for the DQO CLI application.
+	 * Main entry method for the DQOps CLI application.
 	 * @param args Arguments.
 	 */
 	public static void main(String[] args) {
@@ -141,6 +141,7 @@ public class CliApplication {
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setLogStartupInfo(false);
 			springApplication.setBannerMode(silentEnabledByArgument ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
@@ -149,12 +150,12 @@ public class CliApplication {
 		}
 	    catch (Throwable t) {
 			if (t instanceof IllegalStateException && t.getCause() instanceof org.jline.reader.EndOfFileException) {
-				System.err.println("DQO cannot open the terminal.");
-				System.err.println("If you have started DQO from docker and want to use the DQO shell, please run the container with docker's \"-it\" parameter.");
-				System.err.println("Alternatively, start DQO from docker in a server headless mode (without the DQO shell) using \"docker run dqops/dqo run\".");
+				System.err.println("DQOps cannot open the terminal.");
+				System.err.println("If you have started DQOps from docker and want to use the DQOps shell, please run the container with docker's \"-it\" parameter.");
+				System.err.println("Alternatively, start DQOps from docker in a server headless mode (without the DQOps shell) using \"docker run dqops/dqo run\".");
 				System.exit(-1);
 			}
-			LOG.error("Error at starting the application: " + t.getMessage(), t);
+			log.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}

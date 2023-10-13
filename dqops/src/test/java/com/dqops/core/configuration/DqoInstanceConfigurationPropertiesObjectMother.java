@@ -3,7 +3,7 @@ package com.dqops.core.configuration;
 import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
- * Object mother for a DQO instance configuration properties.
+ * Object mother for a DQOps instance configuration properties.
  */
 public class DqoInstanceConfigurationPropertiesObjectMother {
     /**

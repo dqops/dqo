@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.dqo_job_status import DqoJobStatus
 from ..models.dqo_job_type import DqoJobType
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DqoJobHistoryEntryModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoJobHistoryEntryModel:
     """
     Attributes:
@@ -32,7 +33,7 @@ class DqoJobHistoryEntryModel:
     status: Union[Unset, DqoJobStatus] = UNSET
     error_message: Union[Unset, str] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         job_id: Union[Unset, Dict[str, Any]] = UNSET

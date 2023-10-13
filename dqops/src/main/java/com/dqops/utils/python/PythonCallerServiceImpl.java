@@ -52,8 +52,8 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
 
     /**
      * Default injection constructor.
-     * @param configurationProperties Configuration properties with the DQO Home path.
-     * @param pythonConfigurationProperties DQO python configuration properties.
+     * @param configurationProperties Configuration properties with the DQOps Home path.
+     * @param pythonConfigurationProperties DQOps python configuration properties.
      * @param jsonSerializer Json serializer.
      * @param pythonVirtualEnvService Python virtual environment management service.
      */
@@ -209,7 +209,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
     }
 
     /**
-     * Called when DQO stops. Stops all python processes.
+     * Called when DQOps stops. Stops all python processes.
      * @throws Exception Exception thrown when any process failed to stop.
      */
     @Override

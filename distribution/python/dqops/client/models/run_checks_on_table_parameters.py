@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RunChecksOnTableParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RunChecksOnTableParameters:
     """Run checks configuration for a job that will run checks on a single table, specifies the target table and the target
     checks that should be executed and an optional time window.
@@ -42,7 +43,7 @@ class RunChecksOnTableParameters:
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
     run_checks_result: Union[Unset, "RunChecksResult"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection = self.connection

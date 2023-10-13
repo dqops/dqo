@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * Container of child DQO job queue jobs that should be started together.
+ * Container of child DQOps job queue jobs that should be started together.
  * Tracks the progress of running these jobs.
  */
 public class ChildDqoQueueJobsContainer<T> {

@@ -16,7 +16,7 @@ $ dqo [dqo options...] settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-
                      [-p=<editorPath>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
                      [-p=<editorPath>]
@@ -52,7 +52,7 @@ Remove the editor settings from your configuration. This will revert the editor 
 $ dqo [dqo options...] settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -85,7 +85,7 @@ Display the current editor settings.
 $ dqo [dqo options...] settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -118,7 +118,7 @@ Settings file in your UserHome directory. This file stores configuration options
 $ dqo [dqo options...] settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -151,7 +151,7 @@ Removes the settings file from your UserHome directory.
 $ dqo [dqo options...] settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -184,7 +184,7 @@ Set the API key used for accessing external services. This key is used to authen
 $ dqo [dqo options...] settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
@@ -217,7 +217,7 @@ Remove the API key used for accessing external services.
 $ dqo [dqo options...] settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -250,7 +250,7 @@ Display the current API key used for accessing external services.
 $ dqo [dqo options...] settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -283,7 +283,7 @@ Set the default time zone used by the DQO.
 $ dqo [dqo options...] settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
@@ -316,7 +316,7 @@ Remove the custom time zone from your settings. Once removed, the time zone for 
 $ dqo [dqo options...] settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -349,7 +349,7 @@ Displays the default time zone that is currently set in your settings. This time
 $ dqo [dqo options...] settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
