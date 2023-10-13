@@ -27,7 +27,7 @@ Model that describes a single authenticated dashboard.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |folder_path|Folder path|string|
-|[dashboard](#dashboardspec)|Dashboard model with an unauthenticated url|[DashboardSpec](#dashboardspec)|
+|[dashboard](\docs\client\models\#dashboardspec)|Dashboard model with an unauthenticated url|[DashboardSpec](\docs\client\models\#dashboardspec)|
 |authenticated_dashboard_url|Dashboard authenticated url with a short lived refresh token|string|
 
 

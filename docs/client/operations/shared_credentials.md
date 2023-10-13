@@ -20,7 +20,7 @@ http://localhost:8888/api/credentials
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Shared credential model|[SharedCredentialModel](\docs\client\models\shared_credentials\#sharedcredentialmodel)|false|
+|Shared credential model|[SharedCredentialModel](\docs\client\models\#sharedcredentialmodel)|false|
 
 
 
@@ -108,7 +108,7 @@ http://localhost:8888/api/credentials/{credentialName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[shared_credential_model](\docs\client\models\shared_credentials\#sharedcredentialmodel)||[SharedCredentialModel](\docs\client\models\shared_credentials\#sharedcredentialmodel)|
+|[shared_credential_model](\docs\client\models\#sharedcredentialmodel)||[SharedCredentialModel](\docs\client\models\#sharedcredentialmodel)|
 
 
 
@@ -149,7 +149,7 @@ http://localhost:8888/api/credential/{credentialName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Shared credential model|[SharedCredentialModel](\docs\client\models\shared_credentials\#sharedcredentialmodel)|false|
+|Shared credential model|[SharedCredentialModel](\docs\client\models\#sharedcredentialmodel)|false|
 
 
 

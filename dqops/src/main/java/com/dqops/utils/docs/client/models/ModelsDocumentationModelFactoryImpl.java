@@ -253,11 +253,14 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             modelsObjectDocumentationModel.setObjectFields(modelsDocumentationModels);
 
             ComponentModel objectComponentModel = componentModelMap.get(targetClass.getSimpleName());
-            if (objectComponentModel != null && objectComponentModel.getObjectSchema().getEnum() != null) {
-                List<String> enumValues = objectComponentModel.getObjectSchema().getEnum().stream()
-                        .map(v -> (String)v)
-                        .collect(Collectors.toList());
-                modelsObjectDocumentationModel.setEnumValues(enumValues);
+            if (objectComponentModel != null) {
+                if (objectComponentModel.getObjectSchema().getEnum() != null) {
+                    List<String> enumValues = objectComponentModel.getObjectSchema().getEnum().stream()
+                            .map(v -> (String)v)
+                            .collect(Collectors.toList());
+                    modelsObjectDocumentationModel.setEnumValues(enumValues);
+                }
+                objectComponentModel.setDocsLink(modelsObjectDocumentationModel.getObjectClassPath());
             }
 
             visitedObjects.put(targetClass, modelsObjectDocumentationModel);

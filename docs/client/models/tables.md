@@ -93,21 +93,6 @@ Container of table level daily partitioned checks. Contains categories of daily 
 
 ___  
 
-## PhysicalTableName  
-Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|schema_name|Schema name|string|
-|table_name|Table name|string|
-
-
-___  
-
 ## ProfilingTimePeriod  
 The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
  The default profiling check stores one value per month. When profiling checks is re-executed during the month,
@@ -123,33 +108,6 @@ The time period for profiling checks (millisecond, daily, monthly, weekly, hourl
 
 ___  
 
-## CheckSearchFilters  
-Hierarchy node search filters.  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|column_name||string|
-|column_data_type||string|
-|column_nullable||boolean|
-|[check_target](\docs\client\models\schemas\#checktarget)||[CheckTarget](\docs\client\models\schemas\#checktarget)|
-|[check_type](\docs\client\models\#checktype)||[CheckType](\docs\client\models\#checktype)|
-|[time_scale](\docs\client\models\#checktimescale)||[CheckTimeScale](\docs\client\models\#checktimescale)|
-|check_category||string|
-|table_comparison_name||string|
-|check_name||string|
-|sensor_name||string|
-|check_configured||boolean|
-|connection_name||string|
-|schema_table_name||string|
-|enabled||boolean|
-
-
-___  
-
 ## TableListModel  
 Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.  
   
@@ -161,24 +119,24 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
 |table_hash|Table hash that identifies the table using a unique hash code.|long|
-|[target](#physicaltablename)|Physical table details (a physical schema name and a physical table name).|[PhysicalTableName](#physicaltablename)|
+|[target](\docs\client\models\#physicaltablename)|Physical table details (a physical schema name and a physical table name).|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |disabled|Disables all data quality checks on the table. Data quality checks will not be executed.|boolean|
 |stage|Stage name.|string|
 |filter|SQL WHERE clause added to the sensor queries.|string|
 |priority|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|integer|
 |[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](\docs\reference\yaml\tableyaml\#tableownerspec)|
-|profiling_checks_result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|
+|[profiling_checks_result_truncation](\docs\client\models\#profilingtimeperiod)|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](\docs\client\models\#profilingtimeperiod)|
 |has_any_configured_checks|True when the table has any checks configured.|boolean|
 |has_any_configured_profiling_checks|True when the table has any profiling checks configured.|boolean|
 |has_any_configured_monitoring_checks|True when the table has any monitoring checks configured.|boolean|
 |has_any_configured_partition_checks|True when the table has any partition checks configured.|boolean|
 |partitioning_configuration_missing|True when the table has missing configuration of the &quot;partition_by_column&quot; column, making any partition checks fail when executed.|boolean|
-|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[CheckSearchFilters](#checksearchfilters)|
-|[run_profiling_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[CheckSearchFilters](#checksearchfilters)|
-|[run_monitoring_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[CheckSearchFilters](#checksearchfilters)|
-|[run_partition_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[CheckSearchFilters](#checksearchfilters)|
-|[collect_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table.|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
-|[data_clean_job_template](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|
+|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_profiling_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_monitoring_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_partition_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[collect_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
+|[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
@@ -291,7 +249,7 @@ Rest model that returns the configuration of table partitioning information.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[target](#physicaltablename)|Physical table details (a physical schema name and a physical table name)|[PhysicalTableName](#physicaltablename)|
+|[target](\docs\client\models\#physicaltablename)|Physical table details (a physical schema name and a physical table name)|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |[timestamp_columns](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[TimestampColumnsSpec](\docs\reference\yaml\tableyaml\#timestampcolumnsspec)|
 |[incremental_time_window](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.|[PartitionIncrementalTimeWindowSpec](\docs\reference\yaml\tableyaml\#partitionincrementaltimewindowspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
@@ -326,7 +284,7 @@ Container of table level checks that are activated on a table level.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|
+|[result_truncation](\docs\client\models\#profilingtimeperiod)|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](\docs\client\models\#profilingtimeperiod)|
 |[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|Configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|
 |[timeliness](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[TableTimelinessProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|
 |[accuracy](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[TableAccuracyProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|
@@ -349,9 +307,9 @@ Model that returns a summary of the table level statistics (the basic profiling 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
-|[collect_table_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, limited only to the table level statistics (row count, etc).|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
-|[collect_table_and_column_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
+|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[collect_table_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, limited only to the table level statistics (row count, etc).|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
+|[collect_table_and_column_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 
 

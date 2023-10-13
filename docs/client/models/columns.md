@@ -109,48 +109,6 @@ Container of data quality partitioned checks on a column level that are checking
 
 ___  
 
-## PhysicalTableName  
-Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|schema_name|Schema name|string|
-|table_name|Table name|string|
-
-
-___  
-
-## CheckSearchFilters  
-Hierarchy node search filters.  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|column_name||string|
-|column_data_type||string|
-|column_nullable||boolean|
-|[check_target](\docs\client\models\schemas\#checktarget)||[CheckTarget](\docs\client\models\schemas\#checktarget)|
-|[check_type](\docs\client\models\#checktype)||[CheckType](\docs\client\models\#checktype)|
-|[time_scale](\docs\client\models\#checktimescale)||[CheckTimeScale](\docs\client\models\#checktimescale)|
-|check_category||string|
-|table_comparison_name||string|
-|check_name||string|
-|sensor_name||string|
-|check_configured||boolean|
-|connection_name||string|
-|schema_table_name||string|
-|enabled||boolean|
-
-
-___  
-
 ## ColumnListModel  
 Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.  
   
@@ -161,7 +119,7 @@ Column list model that returns the basic fields from a column specification, exc
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
+|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |column_name|Column names.|string|
 |sql_expression|SQL expression.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
@@ -171,12 +129,12 @@ Column list model that returns the basic fields from a column specification, exc
 |has_any_configured_monitoring_checks|True when the column has any monitoring checks configured.|boolean|
 |has_any_configured_partition_checks|True when the column has any partition checks configured.|boolean|
 |[type_snapshot](\docs\reference\yaml\tableyaml\#columntypesnapshotspec)|Column data type that was retrieved when the table metadata was imported.|[ColumnTypeSnapshotSpec](\docs\reference\yaml\tableyaml\#columntypesnapshotspec)|
-|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this column.|[CheckSearchFilters](#checksearchfilters)|
-|[run_profiling_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this column.|[CheckSearchFilters](#checksearchfilters)|
-|[run_monitoring_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this column.|[CheckSearchFilters](#checksearchfilters)|
-|[run_partition_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this column.|[CheckSearchFilters](#checksearchfilters)|
-|[collect_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collector within this column.|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
-|[data_clean_job_template](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|
+|[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this column.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_profiling_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this column.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_monitoring_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this column.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[run_partition_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this column.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[collect_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collector within this column.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
+|[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
 |can_edit|Boolean flag that decides if the current user can update or delete the column.|boolean|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
@@ -195,7 +153,7 @@ Table model that returns the specification of a single column in the REST Api.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
+|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |column_name|Column name.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
 |[spec](\docs\reference\yaml\tableyaml\#columnspec)|Full column specification.|[ColumnSpec](\docs\reference\yaml\tableyaml\#columnspec)|
@@ -354,13 +312,13 @@ Column model that returns the basic fields from a column specification and a sum
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
+|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |column_name|Column name.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
 |disabled|Disables all data quality checks on the column. Data quality checks will not be executed.|boolean|
 |has_any_configured_checks|True when the column has any checks configured.|boolean|
 |[type_snapshot](\docs\reference\yaml\tableyaml\#columntypesnapshotspec)|Column data type that was retrieved when the table metadata was imported.|[ColumnTypeSnapshotSpec](\docs\reference\yaml\tableyaml\#columntypesnapshotspec)|
-|[collect_column_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors for this column|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
+|[collect_column_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors for this column|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 
 
@@ -376,8 +334,8 @@ Model that returns a summary of the column statistics (the basic profiling resul
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
-|[collect_column_statistics_job_template](\docs\client\models\jobs\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors for all columns on this table.|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|
+|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[collect_column_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors for all columns on this table.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 
 

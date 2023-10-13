@@ -39,7 +39,7 @@ http://localhost:8888/api/incidents/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](\docs\client\models\incidents\#incidentmodel)||[IncidentModel](\docs\client\models\incidents\#incidentmodel)|
+|[incident_model](\docs\client\models\#incidentmodel)||[IncidentModel](\docs\client\models\#incidentmodel)|
 
 
 
@@ -57,8 +57,8 @@ http://localhost:8888/api/incidents/{connectionName}
 |page|Page number, the first page is 1|long|false|
 |limit|Page size, the default is 50 rows|long|false|
 |filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string|false|
-|[order](\docs\client\models\incidents\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\models\incidents\#incidentsortorder)|false|
-|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
+|[order](\docs\client\models\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\models\#incidentsortorder)|false|
+|[direction](\docs\client\models\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\#sortdirection)|false|
 
 
 
@@ -79,7 +79,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](\docs\client\models\incidents\#incidentmodel)||[IncidentModel](\docs\client\models\incidents\#incidentmodel)|
+|[incident_model](\docs\client\models\#incidentmodel)||[IncidentModel](\docs\client\models\#incidentmodel)|
 
 
 
@@ -112,7 +112,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_issue_histogram_model](\docs\client\models\incidents\#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](\docs\client\models\incidents\#incidentissuehistogrammodel)|
+|[incident_issue_histogram_model](\docs\client\models\#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](\docs\client\models\#incidentissuehistogrammodel)|
 
 
 
@@ -150,7 +150,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_result_entry_model](\docs\client\models\incidents\#checkresultentrymodel)||[CheckResultEntryModel](\docs\client\models\incidents\#checkresultentrymodel)|
+|[check_result_entry_model](\docs\client\models\#checkresultentrymodel)||[CheckResultEntryModel](\docs\client\models\#checkresultentrymodel)|
 
 
 
@@ -170,8 +170,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string|false|
 |column|Optional column name filter|string|false|
 |check|Optional check name filter|string|false|
-|[order](\docs\client\models\incidents\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\models\incidents\#checkresultsortorder)|false|
-|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
+|[order](\docs\client\models\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\models\#checkresultsortorder)|false|
+|[direction](\docs\client\models\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\#sortdirection)|false|
 
 
 
@@ -225,7 +225,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |year|Year when the incident was first seen|long|true|
 |month|Month when the incident was first seen|long|true|
 |incident_id|Incident id|string|true|
-|[status](\docs\client\models\incidents\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|true|
+|[status](\docs\client\models\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\models\#incidentstatus)|true|
 
 
 

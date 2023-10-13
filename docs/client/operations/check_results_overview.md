@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 
@@ -84,7 +84,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 
@@ -117,7 +117,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 
@@ -150,7 +150,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 
@@ -183,7 +183,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|[check_results_overview_data_model](\docs\client\models\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\#checkresultsoverviewdatamodel)|
 
 
 

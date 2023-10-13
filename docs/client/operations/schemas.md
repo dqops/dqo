@@ -31,7 +31,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -68,7 +68,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -106,7 +106,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -143,7 +143,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -180,7 +180,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 |table_name_pattern|Table name pattern|string|false|
 |column_name_pattern|Column name pattern|string|false|
 |column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 |check_enabled|Check enabled|boolean|false|
@@ -216,7 +216,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |---------------|---------------------------------|-----------|----------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
-|[check_target](\docs\client\models\schemas\#checktarget)|Check target|[CheckTarget](\docs\client\models\schemas\#checktarget)|false|
+|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
 |check_category|Check category|string|false|
 |check_name|Check name|string|false|
 
@@ -239,7 +239,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schema_model](\docs\client\models\schemas\#schemamodel)||[SchemaModel](\docs\client\models\schemas\#schemamodel)|
+|[schema_model](\docs\client\models\#schemamodel)||[SchemaModel](\docs\client\models\#schemamodel)|
 
 
 

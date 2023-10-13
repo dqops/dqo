@@ -39,7 +39,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[collect_statistics_queue_job_result](\docs\client\models\jobs\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\models\jobs\#collectstatisticsqueuejobresult)|
+|[collect_statistics_queue_job_result](\docs\client\models\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\models\#collectstatisticsqueuejobresult)|
 
 
 
@@ -58,7 +58,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|false|
+|Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|false|
 
 
 
@@ -77,7 +77,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[collect_statistics_queue_job_result](\docs\client\models\jobs\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\models\jobs\#collectstatisticsqueuejobresult)|
+|[collect_statistics_queue_job_result](\docs\client\models\#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](\docs\client\models\#collectstatisticsqueuejobresult)|
 
 
 
@@ -96,7 +96,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\jobs\#statisticscollectorsearchfilters)|false|
+|Data statistics collectors filter|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|false|
 
 
 
@@ -115,7 +115,7 @@ http://localhost:8888/api/jobs/deletestoreddata
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[delete_stored_data_queue_job_result](\docs\client\models\jobs\#deletestoreddataqueuejobresult)||[DeleteStoredDataQueueJobResult](\docs\client\models\jobs\#deletestoreddataqueuejobresult)|
+|[delete_stored_data_queue_job_result](\docs\client\models\#deletestoreddataqueuejobresult)||[DeleteStoredDataQueueJobResult](\docs\client\models\#deletestoreddataqueuejobresult)|
 
 
 
@@ -134,7 +134,7 @@ http://localhost:8888/api/jobs/deletestoreddata
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Delete stored data job parameters|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|false|
+|Delete stored data job parameters|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|false|
 
 
 
@@ -176,7 +176,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_history_entry_model](\docs\client\models\jobs\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\models\jobs\#dqojobhistoryentrymodel)|
+|[dqo_job_history_entry_model](\docs\client\models\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\models\#dqojobhistoryentrymodel)|
 
 
 
@@ -206,7 +206,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_queue_incremental_snapshot_model](\docs\client\models\jobs\#dqojobqueueincrementalsnapshotmodel)||[DqoJobQueueIncrementalSnapshotModel](\docs\client\models\jobs\#dqojobqueueincrementalsnapshotmodel)|
+|[dqo_job_queue_incremental_snapshot_model](\docs\client\models\#dqojobqueueincrementalsnapshotmodel)||[DqoJobQueueIncrementalSnapshotModel](\docs\client\models\#dqojobqueueincrementalsnapshotmodel)|
 
 
 
@@ -236,7 +236,7 @@ http://localhost:8888/api/jobs/importtables
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[import_tables_queue_job_result](\docs\client\models\jobs\#importtablesqueuejobresult)||[ImportTablesQueueJobResult](\docs\client\models\jobs\#importtablesqueuejobresult)|
+|[import_tables_queue_job_result](\docs\client\models\#importtablesqueuejobresult)||[ImportTablesQueueJobResult](\docs\client\models\#importtablesqueuejobresult)|
 
 
 
@@ -255,7 +255,7 @@ http://localhost:8888/api/jobs/importtables
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Import tables job parameters|[ImportTablesQueueJobParameters](\docs\client\models\jobs\#importtablesqueuejobparameters)|false|
+|Import tables job parameters|[ImportTablesQueueJobParameters](\docs\client\models\#importtablesqueuejobparameters)|false|
 
 
 
@@ -290,7 +290,7 @@ http://localhost:8888/api/jobs/runchecks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[run_checks_queue_job_result](\docs\client\models\jobs\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\models\jobs\#runchecksqueuejobresult)|
+|[run_checks_queue_job_result](\docs\client\models\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\models\#runchecksqueuejobresult)|
 
 
 
@@ -309,7 +309,7 @@ http://localhost:8888/api/jobs/runchecks
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Data quality check run configuration (target checks and an optional time range)|[RunChecksParameters](\docs\client\models\jobs\#runchecksparameters)|false|
+|Data quality check run configuration (target checks and an optional time range)|[RunChecksParameters](\docs\client\models\#runchecksparameters)|false|
 
 
 
@@ -360,7 +360,7 @@ http://localhost:8888/api/jobs/synchronize
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronize_multiple_folders_queue_job_result](\docs\client\models\jobs\#synchronizemultiplefoldersqueuejobresult)||[SynchronizeMultipleFoldersQueueJobResult](\docs\client\models\jobs\#synchronizemultiplefoldersqueuejobresult)|
+|[synchronize_multiple_folders_queue_job_result](\docs\client\models\#synchronizemultiplefoldersqueuejobresult)||[SynchronizeMultipleFoldersQueueJobResult](\docs\client\models\#synchronizemultiplefoldersqueuejobresult)|
 
 
 
@@ -379,7 +379,7 @@ http://localhost:8888/api/jobs/synchronize
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Selection of folders that should be synchronized to the DQOps Cloud|[SynchronizeMultipleFoldersDqoQueueJobParameters](\docs\client\models\jobs\#synchronizemultiplefoldersdqoqueuejobparameters)|false|
+|Selection of folders that should be synchronized to the DQOps Cloud|[SynchronizeMultipleFoldersDqoQueueJobParameters](\docs\client\models\#synchronizemultiplefoldersdqoqueuejobparameters)|false|
 
 
 
@@ -398,7 +398,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_history_entry_model](\docs\client\models\jobs\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\models\jobs\#dqojobhistoryentrymodel)|
+|[dqo_job_history_entry_model](\docs\client\models\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\models\#dqojobhistoryentrymodel)|
 
 
 
@@ -429,7 +429,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[run_checks_queue_job_result](\docs\client\models\jobs\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\models\jobs\#runchecksqueuejobresult)|
+|[run_checks_queue_job_result](\docs\client\models\#runchecksqueuejobresult)||[RunChecksQueueJobResult](\docs\client\models\#runchecksqueuejobresult)|
 
 
 

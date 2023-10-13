@@ -28,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdi
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Check search filters and table/column selectors.|[BulkCheckDisableParameters](\docs\client\models\connections\#bulkcheckdisableparameters)|false|
+|Check search filters and table/column selectors.|[BulkCheckDisableParameters](\docs\client\models\#bulkcheckdisableparameters)|false|
 
 
 
@@ -59,7 +59,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Check search filters and rules configuration|[AllChecksPatchParameters](\docs\client\models\connections\#allcheckspatchparameters)|false|
+|Check search filters and rules configuration|[AllChecksPatchParameters](\docs\client\models\#allcheckspatchparameters)|false|
 
 
 
@@ -191,7 +191,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_specification_model](\docs\client\models\connections\#connectionspecificationmodel)||[ConnectionSpecificationModel](\docs\client\models\connections\#connectionspecificationmodel)|
+|[connection_specification_model](\docs\client\models\#connectionspecificationmodel)||[ConnectionSpecificationModel](\docs\client\models\#connectionspecificationmodel)|
 
 
 
@@ -281,7 +281,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[common_column_model](\docs\client\models\connections\#commoncolumnmodel)||[CommonColumnModel](\docs\client\models\connections\#commoncolumnmodel)|
+|[common_column_model](\docs\client\models\#commoncolumnmodel)||[CommonColumnModel](\docs\client\models\#commoncolumnmodel)|
 
 
 
