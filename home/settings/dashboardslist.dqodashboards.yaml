@@ -122,7 +122,7 @@ spec:
             ds0.p_check_category: all
 
     - folder_name: Completeness
-        dashboards:
+      dashboards:
         - dashboard_name: Number of null values in the columns
           url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
