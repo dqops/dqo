@@ -49,7 +49,6 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
         this.sensorFolderNode = sensorFolderNode;
         this.yamlSerializer = yamlSerializer;
 		this.setProviderSensors(new FileProviderSensorDefinitionListImpl(sensorFolderNode, yamlSerializer));
-		this.setStatus(InstanceStatus.UNCHANGED);
     }
 
     /**
