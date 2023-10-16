@@ -188,6 +188,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
       <AdvisorConfirmDialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
+        onConfirm = {onClose}
       />
     </div>
   );
