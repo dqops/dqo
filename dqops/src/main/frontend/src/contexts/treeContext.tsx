@@ -94,6 +94,7 @@ function TreeProvider(props: any) {
   const activeTab = activeTabMaps[checkTypes];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [sidebarScrollHeight, setSidebarScrollHeight] = useState(0)
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -1812,6 +1813,8 @@ function TreeProvider(props: any) {
         changeActiveTab,
         sidebarWidth,
         setSidebarWidth,
+        sidebarScrollHeight,
+        setSidebarScrollHeight,
         removeTreeNode,
         removeNode,
         refreshNode,
