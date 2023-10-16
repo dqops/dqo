@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.custom_check_spec import CustomCheckSpec
@@ -9,11 +10,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableDailyPartitionedCheckCategoriesSpecCustom")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableDailyPartitionedCheckCategoriesSpecCustom:
     """Dictionary of custom checks. The keys are check names within this category."""
 
-    additional_properties: Dict[str, "CustomCheckSpec"] = attr.ib(
+    additional_properties: Dict[str, "CustomCheckSpec"] = _attrs_field(
         init=False, factory=dict
     )
 

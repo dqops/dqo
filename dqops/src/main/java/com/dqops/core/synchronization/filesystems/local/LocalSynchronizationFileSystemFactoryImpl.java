@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 
 /**
- * DQO file system that accesses local files (selected folders) in the DQO_USER_HOME.
+ * DQOps file system that accesses local files (selected folders) in the DQO_USER_HOME.
  */
 @Component
 public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchronizationFileSystemFactory {
@@ -35,7 +35,7 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     /**
      * Default injection constructor.
      * @param localFileSystemService Local file system service.
-     * @param localDqoUserHomePathProvider Local DQO User Home path provider.
+     * @param localDqoUserHomePathProvider Local DQOps User Home path provider.
      */
     @Autowired
     public LocalSynchronizationFileSystemFactoryImpl(LocalFileSystemSynchronizationOperations localFileSystemService,
@@ -45,9 +45,9 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     }
 
     /**
-     * Creates a DQO file system that accesses physical files on the local file system.
+     * Creates a DQOps file system that accesses physical files on the local file system.
      * @param rootType Root type (folder type).
-     * @return DQO file system that can manage local files in a selected folder.
+     * @return DQOps file system that can manage local files in a selected folder.
      */
     public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType) {
         Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType);

@@ -18,7 +18,7 @@ package com.dqops.core.jobqueue;
 import com.dqops.core.principal.DqoUserPrincipal;
 
 /**
- * DQO job queue for parent jobs - manages a pool of threads that are executing operations.
+ * DQOps job queue for parent jobs - manages a pool of threads that are executing operations.
  * This version of the job queue is a separate job queue that only accepts parent jobs.
  */
 public interface ParentDqoJobQueue {

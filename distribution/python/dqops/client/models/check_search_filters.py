@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_target import CheckTarget
 from ..models.check_time_scale import CheckTimeScale
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckSearchFilters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckSearchFilters:
     """Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
@@ -55,7 +56,7 @@ class CheckSearchFilters:
     sensor_name: Union[Unset, str] = UNSET
     check_configured: Union[Unset, bool] = UNSET
     check_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

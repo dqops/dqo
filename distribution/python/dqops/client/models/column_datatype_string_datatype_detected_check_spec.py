@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -18,7 +19,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnDatatypeStringDatatypeDetectedCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnDatatypeStringDatatypeDetectedCheckSpec:
     """
     Attributes:
@@ -63,7 +64,7 @@ class ColumnDatatypeStringDatatypeDetectedCheckSpec:
     warning: Union[Unset, "DatatypeEqualsRuleParametersSpec"] = UNSET
     error: Union[Unset, "DatatypeEqualsRuleParametersSpec"] = UNSET
     fatal: Union[Unset, "DatatypeEqualsRuleParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET

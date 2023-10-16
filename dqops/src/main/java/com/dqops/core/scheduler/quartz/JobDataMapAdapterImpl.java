@@ -35,8 +35,8 @@ public class JobDataMapAdapterImpl implements JobDataMapAdapter {
     private JsonSerializer jsonSerializer;
 
     /**
-     * Creates a job data map adapter using a DQO JSON serializer.
-     * @param jsonSerializer DQO JSON serializer.
+     * Creates a job data map adapter using a DQOps JSON serializer.
+     * @param jsonSerializer DQOps JSON serializer.
      */
     @Autowired
     public JobDataMapAdapterImpl(JsonSerializer jsonSerializer) {

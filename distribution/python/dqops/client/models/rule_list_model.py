@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="RuleListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RuleListModel:
     """Rule list model
 
@@ -16,7 +17,7 @@ class RuleListModel:
         full_rule_name (Union[Unset, str]): Full rule name, including the folder within the "rules" rule folder.
         custom (Union[Unset, bool]): This rule has is a custom rule or was customized by the user. This is a read-only
             value.
-        built_in (Union[Unset, bool]): This rule is provided with DQO as a built-in rule. This is a read-only value.
+        built_in (Union[Unset, bool]): This rule is provided with DQOps as a built-in rule. This is a read-only value.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
@@ -25,7 +26,7 @@ class RuleListModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         rule_name = self.rule_name

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,12 +15,12 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SensorDefinitionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SensorDefinitionSpec:
     """
     Attributes:
         fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom sensor.
-            Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
+            Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls
             for all required fields.
         requires_event_timestamp (Union[Unset, bool]): The data quality sensor depends on the configuration of the event
             timestamp column name on the analyzed table. When true, the name of the column that stores the event
@@ -40,7 +41,7 @@ class SensorDefinitionSpec:
     requires_ingestion_timestamp: Union[Unset, bool] = UNSET
     default_value: Union[Unset, float] = UNSET
     parameters: Union[Unset, "SensorDefinitionSpecParameters"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         fields: Union[Unset, List[Dict[str, Any]]] = UNSET

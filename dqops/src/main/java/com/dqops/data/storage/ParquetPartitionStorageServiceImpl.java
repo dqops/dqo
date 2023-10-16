@@ -85,7 +85,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     /**
      * Dependency injection constructor.
      * @param parquetPartitionMetadataService Metadata service for READ info about the state in the storage.
-     * @param localDqoUserHomePathProvider DQO User home finder.
+     * @param localDqoUserHomePathProvider DQOps User home finder.
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.

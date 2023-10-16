@@ -49,9 +49,9 @@ public class RuleListModel {
     private boolean custom;
 
     /**
-     * This rule is provided with DQO as a built-in rule. This is a read-only value.
+     * This rule is provided with DQOps as a built-in rule. This is a read-only value.
      */
-    @JsonPropertyDescription("This rule is provided with DQO as a built-in rule. This is a read-only value.")
+    @JsonPropertyDescription("This rule is provided with DQOps as a built-in rule. This is a read-only value.")
     private boolean builtIn;
 
     /**

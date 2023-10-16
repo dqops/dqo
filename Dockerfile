@@ -28,7 +28,7 @@ RUN ./mvnw.sh install -DskipTests -pl !distribution
 RUN mkdir -p dqops/target/dependency && (cd dqops/target/dependency; jar -xf ../*.jar)
 RUN mv lib/target/output/dqo-lib-$(cat /workspace/app/VERSION) lib/target/output/dqo-lib
 
-FROM python:3.11.5-slim-bookworm AS dqo-home
+FROM python:3.12.0-slim-bookworm AS dqo-home
 WORKDIR /dqo
 
 # copy dqo home
@@ -40,12 +40,12 @@ RUN rm -rf venv/ && rm lib/requirements_dev.txt
 ENV VIRTUAL_ENV=/dqo/home/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN cp lib/requirements.txt $VIRTUAL_ENV/home_requirements.txt
-RUN pip3 install -r $VIRTUAL_ENV/home_requirements.txt
+COPY home/lib/requirements.txt /dqo/home/venv/home_requirements.txt
+RUN python3 -m pip install setuptools && python3 -m pip install -r $VIRTUAL_ENV/home_requirements.txt
 
 RUN python3 -m compileall ./
 
-FROM python:3.11.5-slim-bookworm AS dqo-main
+FROM python:3.12.0-slim-bookworm AS dqo-main
 EXPOSE 8888
 WORKDIR /dqo
 

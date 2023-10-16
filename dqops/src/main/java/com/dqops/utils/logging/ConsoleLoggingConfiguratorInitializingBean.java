@@ -30,8 +30,6 @@ import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import net.logstash.logback.composite.JsonProvider;
-import net.logstash.logback.composite.loggingevent.MessageJsonProvider;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.fieldnames.LogstashFieldNames;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
@@ -43,8 +41,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Bootstrap component that configures console logging during boot.
@@ -58,7 +54,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
     /**
      * Dependency injection constructor.
      * @param loggingConfigurationProperties Configuration parameters with the logging settings.
-     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
      */
     @Autowired
     public ConsoleLoggingConfiguratorInitializingBean(
@@ -141,7 +137,9 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
 
         ConsoleAppender<ILoggingEvent> consoleAppender =
                 this.loggingConfigurationProperties.getConsole() == DqoConsoleLoggingMode.JSON
-                        ? new AugmentingConsoleAppender(this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson(), apiKeyPayload) : new ConsoleAppender<>();
+                        ? new AugmentingConsoleAppender(this.loggingConfigurationProperties.isEncodeMessage(), apiKeyPayload,
+                                                        this.loggingConfigurationProperties.getJsonMessageMaxLength()) :
+                        new ConsoleAppender<>();
         return consoleAppender;
     }
 
@@ -173,7 +171,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
         jsonEncoder.setTimestampPattern(timestampPattern);
 
         ShortenedThrowableConverter throwableConverter =
-                this.loggingConfigurationProperties.isEncodeDoubleQuotesInJson() ?
+                this.loggingConfigurationProperties.isEncodeMessage() ?
                 new EncodingShortenedThrowableConverter() : new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         jsonEncoder.setThrowableConverter(throwableConverter);

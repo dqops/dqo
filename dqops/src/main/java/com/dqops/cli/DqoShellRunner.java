@@ -20,7 +20,7 @@ import org.springframework.shell.ShellApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO shell runner that captures the cli commands passed over to the CLI, because DQO does not use the Spring Boot Shell.
+ * DQOps shell runner that captures the cli commands passed over to the CLI, because DQOps does not use the Spring Boot Shell.
  */
 @Component
 public class DqoShellRunner implements ShellApplicationRunner {

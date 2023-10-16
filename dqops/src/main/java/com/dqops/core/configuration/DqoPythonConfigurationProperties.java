@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO Python. Properties are mapped to the "dqo.python." prefix.
+ * Configuration POJO with the configuration for DQOps Python. Properties are mapped to the "dqo.python." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.python")
@@ -118,7 +118,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns a path to the development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQO.
+     * Returns a path to the development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQOps.
      * @return Path to development requirements.
      */
     public String getDqoHomeRequirementsDev() {
@@ -126,7 +126,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets a path to development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQO.
+     * Sets a path to development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQOps.
      * @param dqoHomeRequirementsDev Path to development requirements.
      */
     public void setDqoHomeRequirementsDev(String dqoHomeRequirementsDev) {
@@ -134,7 +134,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     }
 
     /**
-     * When true, does not initialize a python virtual environment in DQO home. Instead, uses the hosts python.
+     * When true, does not initialize a python virtual environment in DQOps home. Instead, uses the hosts python.
      * @return True when using the host python.
      */
     public boolean isUseHostPython() {
@@ -142,7 +142,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets the flag to use the host's python (the default python installation on the machine, not a DQO private virtual environment).
+     * Sets the flag to use the host's python (the default python installation on the machine, not a DQOps private virtual environment).
      * @param useHostPython Use host python.
      */
     public void setUseHostPython(boolean useHostPython) {

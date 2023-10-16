@@ -14,7 +14,6 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: AuthenticatedClient,
     column_name_pattern: Union[Unset, None, str] = UNSET,
     column_data_type: Union[Unset, None, str] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
@@ -22,15 +21,7 @@ def _get_kwargs(
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["columnNamePattern"] = column_name_pattern
@@ -49,17 +40,17 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["CheckConfigurationModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -79,7 +70,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["CheckConfigurationModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -130,7 +121,6 @@ def sync_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         column_name_pattern=column_name_pattern,
         column_data_type=column_data_type,
         check_category=check_category,
@@ -139,8 +129,7 @@ def sync_detailed(
         check_configured=check_configured,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -239,7 +228,6 @@ async def asyncio_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         column_name_pattern=column_name_pattern,
         column_data_type=column_data_type,
         check_category=check_category,
@@ -248,8 +236,7 @@ async def asyncio_detailed(
         check_configured=check_configured,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

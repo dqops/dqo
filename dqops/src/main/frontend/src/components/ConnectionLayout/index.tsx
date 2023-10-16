@@ -95,7 +95,7 @@ axios.interceptors.response.use(undefined, function (error) {
       onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQO user home, closing the tab'/>
+      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
     </MainLayout>
     
   );

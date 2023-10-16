@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckListModel:
     """Simplistic model that returns a single data quality check, it's name and "configured" flag
 
@@ -23,7 +24,7 @@ class CheckListModel:
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
     configured: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_category = self.check_category

@@ -41,7 +41,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * REST API controller for managing users in a multi-user DQO installations.
+ * REST API controller for managing users in a multi-user DQOps installations.
  */
 @RestController
 @RequestMapping("/api/")
@@ -68,7 +68,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel[].class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
@@ -98,7 +98,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel.class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -138,7 +138,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New user successfully added", response = Void.class),
             @ApiResponse(code = 400, message = "User limit exceeded"),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -178,7 +178,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User successfully updated", response = Void.class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the email does not match"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -218,7 +218,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User deleted", response = Void.class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 406, message = "User's email is not provided"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -259,7 +259,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Password successfully updated", response = Void.class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the required fields are empty"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -292,7 +292,8 @@ public class UsersController {
      * @return Empty response.
      */
     @PutMapping(value = "mypassword", consumes = "text/plain", produces = "application/json")
-    @ApiOperation(value = "changeCallerPassword", notes = "Changes the password of the calling user. When the user is identified by the DQO local API key, it is the user whose email is stored in the DQO API Key.",
+    @ApiOperation(value = "changeCallerPassword", notes = "Changes the password of the calling user. When the user is identified by the DQOps local API key, " +
+            "it is the user whose email is stored in the DQOps API Key.",
             response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -300,7 +301,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Password successfully updated", response = Void.class),
-            @ApiResponse(code = 403, message = "DQO instance is not authenticated to DQO Cloud"),
+            @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields or the required fields are empty"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })

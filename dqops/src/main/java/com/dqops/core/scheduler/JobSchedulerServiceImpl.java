@@ -81,7 +81,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param dqoJobQueue Standard job queue, used to ensure that the job queue starts before the job scheduler.
      * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
      * @param defaultTimeZoneProvider Default time zone provider.
-     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,

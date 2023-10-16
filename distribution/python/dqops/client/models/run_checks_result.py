@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.rule_severity_level import RuleSeverityLevel
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="RunChecksResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RunChecksResult:
     """Returns the result (highest data quality check severity and the finished checks count) for the checks that were
     recently executed.
@@ -34,7 +35,7 @@ class RunChecksResult:
     errors: Union[Unset, int] = UNSET
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         highest_severity: Union[Unset, str] = UNSET

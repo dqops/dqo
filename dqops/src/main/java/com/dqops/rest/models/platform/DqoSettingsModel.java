@@ -25,16 +25,16 @@ import lombok.Data;
 import java.util.LinkedHashMap;
 
 /**
- * REST API model that returns a key/value list of all DQO configuration properties.
+ * REST API model that returns a key/value list of all DQOps configuration properties.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DqoSettingsModel", description = "DQO system settings")
+@ApiModel(value = "DqoSettingsModel", description = "DQOps system settings")
 public class DqoSettingsModel {
     /**
-     * Dictionary of all effective DQO system properties, retrieved from the default configuration files, user configuration files, environment variables and 'dqo' command arguments.
+     * Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and 'dqo' command arguments.
      */
-    @JsonPropertyDescription("Dictionary of all effective DQO system properties, retrieved from the default configuration files, user configuration files, environment variables and 'dqo' command arguments.")
+    @JsonPropertyDescription("Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and 'dqo' command arguments.")
     private LinkedHashMap<String, Object> properties = new LinkedHashMap<>();
 }

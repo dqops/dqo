@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * DQO user principal that identifies the user.
+ * DQOps user principal that identifies the user.
  */
 public class DqoUserPrincipal {
     /**
@@ -63,7 +63,7 @@ public class DqoUserPrincipal {
      * @param name Principal name (login).
      * @param accountRole Account level role.
      * @param privileges Collection of privileges (permissions) granted to the principal.
-     * @param apiKeyPayload Source DQO Cloud Api key payload.
+     * @param apiKeyPayload Source DQOps Cloud Api key payload.
      */
     public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoCloudApiKeyPayload apiKeyPayload) {
         this(name, accountRole, privileges);
@@ -71,11 +71,11 @@ public class DqoUserPrincipal {
     }
 
     /**
-     * Creates a principal from a user's identity token issued by DQO Cloud for multi-user environments.
+     * Creates a principal from a user's identity token issued by DQOps Cloud for multi-user environments.
      * @param name Principal name (login).
      * @param accountRole Account level role.
      * @param privileges Collection of privileges (permissions) granted to the principal.
-     * @param userTokenPayload Source DQO Cloud user's identity token payload.
+     * @param userTokenPayload Source DQOps Cloud user's identity token payload.
      */
     public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoUserTokenPayload userTokenPayload) {
         this(name, accountRole, privileges);
@@ -83,7 +83,7 @@ public class DqoUserPrincipal {
     }
 
     /**
-     * Returns the email that identifies the user. It is the email used to log in to DQO cloud.
+     * Returns the email that identifies the user. It is the email used to log in to DQOps cloud.
      * @return User email.
      */
     public String getName() {
@@ -107,7 +107,7 @@ public class DqoUserPrincipal {
     }
 
     /**
-     * Returns the DQO Cloud Api key for which the principal was issued.
+     * Returns the DQOps Cloud Api key for which the principal was issued.
      * @return The API Key payload or null when the principal was not issued from an API Key.
      */
     public DqoCloudApiKeyPayload getApiKeyPayload() {
@@ -115,8 +115,8 @@ public class DqoUserPrincipal {
     }
 
     /**
-     * Returns the DQO Cloud user token from which the principal is issued. DQO Cloud user tokens are used to authenticate users in a multi-user environment.
-     * @return DQO Cloud user token from which the principal was issued or null, when the principal was not issued from an identity token.
+     * Returns the DQOps Cloud user token from which the principal is issued. DQOps Cloud user tokens are used to authenticate users in a multi-user environment.
+     * @return DQOps Cloud user token from which the principal was issued or null, when the principal was not issued from an identity token.
      */
     public DqoUserTokenPayload getUserTokenPayload() {
         return userTokenPayload;

@@ -88,7 +88,7 @@ nav:
           - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
       - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
-      - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating_custom_dashboard.md"
+      - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - index: 'command-line-interface/index.md'
@@ -353,7 +353,7 @@ nav:
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
-    - ParquetFiles:
+    - Parquet data files:
       - check_results: 'reference/parquetfiles/check_results.md'
       - errors: 'reference/parquetfiles/errors.md'
       - incidents: 'reference/parquetfiles/incidents.md'

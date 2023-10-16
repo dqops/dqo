@@ -38,7 +38,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Collection;
 
 /**
- * Service that is called on startup, detects if there are any unsynchronized chages in any DQO User Home folder that should be synchronized to the DQO Cloud.
+ * Service that is called on startup, detects if there are any unsynchronized changes in any DQOps User Home folder that should be synchronized to the DQOps Cloud.
  */
 @Component
 @Slf4j
@@ -68,7 +68,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     }
 
     /**
-     * Detects if there are any not synchronized changes in a given DQO User home folder.
+     * Detects if there are any not synchronized changes in a given DQOps User home folder.
      * @param dqoRoot User home folder to be analyzed.
      * @return True when there are local not synchronized changes, false otherwise.
      */
@@ -122,7 +122,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     }
 
     /**
-     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQO Cloud.
+     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQOps Cloud.
      */
     @Override
     public void detectNotSynchronizedChangesInBackground() {

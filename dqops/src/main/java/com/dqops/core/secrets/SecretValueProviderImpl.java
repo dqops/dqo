@@ -59,7 +59,7 @@ public class SecretValueProviderImpl implements SecretValueProvider {
      * @param environment Spring environment.
      * @param beanFactory Spring bean factory.
      * @param gcpSecretManagerPropertySource GCP Secret Manager custom property source.
-     * @param sharedCredentialPropertySource DQO shared credential custom property source.
+     * @param sharedCredentialPropertySource DQOps shared credential custom property source.
      */
     @Autowired
     public SecretValueProviderImpl(BeanFactory beanFactory,

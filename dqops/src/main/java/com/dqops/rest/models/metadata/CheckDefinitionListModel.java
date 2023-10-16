@@ -49,9 +49,9 @@ public class CheckDefinitionListModel {
     private boolean custom;
 
     /**
-     * True when this check is provided with DQO as a built-in check.
+     * True when this check is provided with DQOps as a built-in check.
      */
-    @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
+    @JsonPropertyDescription("This check is provided with DQOps as a built-in check.")
     private boolean builtIn;
 
     /**

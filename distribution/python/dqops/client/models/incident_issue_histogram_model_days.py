@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.incident_daily_issues_count import IncidentDailyIssuesCount
@@ -9,11 +10,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="IncidentIssueHistogramModelDays")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class IncidentIssueHistogramModelDays:
-    """A map of the numbers of data quality issues per day, the day uses the DQO server timezone."""
+    """A map of the numbers of data quality issues per day, the day uses the DQOps server timezone."""
 
-    additional_properties: Dict[str, "IncidentDailyIssuesCount"] = attr.ib(
+    additional_properties: Dict[str, "IncidentDailyIssuesCount"] = _attrs_field(
         init=False, factory=dict
     )
 

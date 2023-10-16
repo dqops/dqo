@@ -16,14 +16,14 @@
 package com.dqops.core.synchronization.contract;
 
 /**
- * DQO file system: a reference to the file system root and a file system service that can manage files in that root.
+ * DQOps file system: a reference to the file system root and a file system service that can manage files in that root.
  */
 public class SynchronizationRoot {
     private FileSystemSynchronizationRoot fileSystemRoot;
     private FileSystemSynchronizationOperations fileSystemSynchronizationOperations;
 
     /**
-     * Creates a DQO file system.
+     * Creates a DQOps file system.
      * @param fileSystemRoot File system root.
      * @param fileSystemSynchronizationOperations File system management service that operates on the root.
      */

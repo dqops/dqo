@@ -31,13 +31,22 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ProviderSensorListModel", description = "Provider sensor list model")
 public class ProviderSensorListModel {
+    /**
+     * Provider type.
+     */
     @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;
 
+    /**
+     * This connection specific template is a custom sensor template or was customized by the user.
+     */
     @JsonPropertyDescription("This connection specific template is a custom sensor template or was customized by the user.")
     private boolean custom;
 
-    @JsonPropertyDescription("This connection specific template is provided with DQO as a built-in sensor.")
+    /**
+     * This connection specific template is provided with DQOps as a built-in sensor.
+     */
+    @JsonPropertyDescription("This connection specific template is provided with DQOps as a built-in sensor.")
     private boolean builtIn;
 
     /**

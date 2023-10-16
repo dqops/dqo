@@ -15,6 +15,9 @@ import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
+  const { dashboardTooltipState } = useSelector(
+    (state: IRootState) => state.dashboard
+  );
 
   const [objectNotFound, setObjectNotFound] = React.useState(false)
  
@@ -27,7 +30,7 @@ const Dashboards = () => {
     return Promise.reject(error);
   });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error } =
+  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
     useDashboard();
 
   useEffect(() => {
@@ -57,7 +60,7 @@ const Dashboards = () => {
           {tabs.map((tab: ITab) => {
             const dashboard = openedDashboards?.find(
               (item: AuthenticatedDashboardModel) =>
-                (item.folder_path || '')
+                (item?.folder_path || '')
                   .split('/')
                   .concat(item.dashboard?.dashboard_name || '')
                   .join('-') === tab.value
@@ -82,7 +85,7 @@ const Dashboards = () => {
                 ) : (
                   <div>
                     {error[tab.value]
-                      ? 'DQO Cloud API Key is invalid. Your trial period has expired or a new DQO version was released. Please run "cloud login" from the DQO shell to get a new key'
+                      ? 'DQOps Cloud API Key is invalid. Your trial period has expired or a new DQOps version was released. Please run "cloud login" from the DQOps shell to get a new key'
                       : 'Choose a data quality dashboard from the tree'}
                   </div>
                 )}
@@ -90,15 +93,29 @@ const Dashboards = () => {
             );
           })}
         </div>
+        {dashboardTooltipState.height ? 
+        <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
+          style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
+              {dashboardTooltipState.label}
+                <img
+                alt=""
+                src={`${dashboardTooltipState.url}/thumbnail`}
+                style={{ display: "block"}}
+                className='pt-2 max-h-100 max-w-100'
+                loading='eager'
+                />
+              </div> 
+        : null 
+        }
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"
             style={{ position: 'fixed', top: '94%', right: '2%' }}
           >
-            This DQO instance is not licensed. You are using a complimentary
+            This DQOps instance is not licensed. You are using a complimentary
             data quality warehousing service that is limited <br />
             to showing the results of 5 tables from the first connected data
-            source. Please contact DQO sales for an upgrade.
+            source. Please contact DQOps sales for an upgrade.
           </div>
         )}
       </div>
@@ -107,7 +124,7 @@ const Dashboards = () => {
       onConfirm={() => new Promise(() => {closeTab(activeTab), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {closeTab(activeTab), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQO user home, closing the tab'/>
+      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
     </DashboardLayout>
   );
 };

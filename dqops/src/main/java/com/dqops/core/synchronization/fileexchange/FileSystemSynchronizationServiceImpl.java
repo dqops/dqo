@@ -66,7 +66,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
     /**
      * Synchronizes changes between two file systems.
-     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
+     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQOps Cloud or similar).
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
@@ -202,11 +202,11 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     }
 
     /**
-     * Uploads local changes to DQO Cloud (remote file system).
-     * @param dqoRoot DQO root type.
+     * Uploads local changes to DQOps Cloud (remote file system).
+     * @param dqoRoot DQOps root type.
      * @param synchronizationListener Synchronization listener notified about the progress.
      * @param localFileSystem Source file system (local).
-     * @param remoteFileSystem Target file system (remote, DQO Cloud).
+     * @param remoteFileSystem Target file system (remote, DQOps Cloud).
      * @param remoteFileSystemSynchronizationOperations Target file system service.
      * @param remoteFileSystemRoot Target file system root.
      * @param newRemoteFolderIndex New target index updated with uploaded files.

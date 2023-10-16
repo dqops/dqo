@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.checkdefinitions;
 
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
@@ -67,7 +68,8 @@ public class FileCheckDefinitionListImpl extends CheckDefinitionListImpl {
                     continue;
                 }
 
-                String checkModuleName = specFileName.substring(0, specFileName.length() - SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML.length());
+                String decodedSpecFileName = FileNameSanitizer.decodeFileSystemName(specFileName);
+                String checkModuleName = decodedSpecFileName.substring(0, decodedSpecFileName.length() - SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML.length());
                 String checkName = (!checksFolderName.equals("") ? (checksFolderName + "/") : "") + checkModuleName;
 
                 if (this.getByObjectName(checkName, false) != null) {

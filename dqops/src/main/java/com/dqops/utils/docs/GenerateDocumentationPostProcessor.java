@@ -134,7 +134,7 @@ public class GenerateDocumentationPostProcessor {
      *
      * @param projectRoot    Path to the project root.
      * @param linkageStore
-     * @param dqoHomeContext DQO home instance with access to the sensor references and SQLs.
+     * @param dqoHomeContext DQOps home instance with access to the sensor references and SQLs.
      */
     public static void generateDocumentationForSensors(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path sensorsDocPath = projectRoot.resolve("../docs/reference/sensors").toAbsolutePath().normalize();
@@ -154,7 +154,7 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Create a sensor documentation model factory.
-     * @param dqoHomeContext DQO home.
+     * @param dqoHomeContext DQOps home.
      * @return Sensor documentation model factory.
      */
     private static SensorDocumentationModelFactory createSensorDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
@@ -169,7 +169,7 @@ public class GenerateDocumentationPostProcessor {
      *
      * @param projectRoot    Path to the project root.
      * @param linkageStore
-     * @param dqoHomeContext DQO home instance with access to the rule references.
+     * @param dqoHomeContext DQOps home instance with access to the rule references.
      */
     public static void generateDocumentationForRules(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path rulesDocPath = projectRoot.resolve("../docs/reference/rules").toAbsolutePath().normalize();
@@ -189,7 +189,7 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Create a rule documentation model factory.
-     * @param dqoHomeContext DQO home.
+     * @param dqoHomeContext DQOps home.
      * @return Rule documentation model factory.
      */
     private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
@@ -242,7 +242,7 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Creates a python caller service.
-     * @param projectRoot Path to the project root folder, required to find the DQO home.
+     * @param projectRoot Path to the project root folder, required to find the DQOps home.
      * @return Python caller service. Must be disposed on exit.
      */
     protected static PythonCallerServiceImpl createPythonCaller(Path projectRoot) {
@@ -276,7 +276,7 @@ public class GenerateDocumentationPostProcessor {
      *
      * @param projectRoot    Project root path.
      * @param linkageStore
-     * @param dqoHomeContext DQO Home context.
+     * @param dqoHomeContext DQOps Home context.
      * @param pythonCallerService Python caller service.
      * @return Check documentation model factory.
      */

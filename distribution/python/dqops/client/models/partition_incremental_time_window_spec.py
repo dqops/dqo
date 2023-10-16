@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="PartitionIncrementalTimeWindowSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class PartitionIncrementalTimeWindowSpec:
     """
     Attributes:
@@ -32,7 +33,7 @@ class PartitionIncrementalTimeWindowSpec:
     daily_partitioning_include_today: Union[Unset, bool] = UNSET
     monthly_partitioning_recent_months: Union[Unset, int] = UNSET
     monthly_partitioning_include_current_month: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         daily_partitioning_recent_days = self.daily_partitioning_recent_days

@@ -20,8 +20,8 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import java.util.Collection;
 
 /**
- * DQO job queue - manages a pool of threads that are executing operations.
- * This is the entry point to manage the main DQO job queue that runs independent and child jobs, but not parent jobs.
+ * DQOps job queue - manages a pool of threads that are executing operations.
+ * This is the entry point to manage the main DQOps job queue that runs independent and child jobs, but not parent jobs.
  */
 public interface DqoJobQueue {
     /**

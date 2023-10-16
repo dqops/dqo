@@ -37,7 +37,7 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
     /**
      * Command error handler.
      * @param terminalFactory Terminal writer factory.
-     * @param coreConfigurationProperties DQO Core configuration properties.
+     * @param coreConfigurationProperties DQOps Core configuration properties.
      */
     @Autowired
     public CommandExecutionErrorHandler(TerminalFactory terminalFactory, DqoCoreConfigurationProperties coreConfigurationProperties) {

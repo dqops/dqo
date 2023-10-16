@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.table_comparison_results_model_column_comparison_results_additional_property import (
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonResultsModelColumnComparisonResults")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonResultsModelColumnComparisonResults:
     """The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are
     the column names. The values are dictionaries of the data quality check names and their results.
@@ -20,7 +21,7 @@ class TableComparisonResultsModelColumnComparisonResults:
 
     additional_properties: Dict[
         str, "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty"
-    ] = attr.ib(init=False, factory=dict)
+    ] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         pass

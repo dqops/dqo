@@ -25,11 +25,11 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 2st level CLI command "cloud login" to log in to the DQO Cloud.
+ * 2st level CLI command "cloud login" to log in to the DQOps Cloud.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "login", header = "Log in or register an account at the DQO Cloud", description = "Allow user to provide login credentials if the user already has an account.")
+@CommandLine.Command(name = "login", header = "Log in or register an account at the DQOps Cloud", description = "Allow user to provide login credentials if the user already has an account.")
 public class CloudLoginCliCommand extends BaseCommand implements ICommand {
     private CloudLoginService cloudLoginService;
 

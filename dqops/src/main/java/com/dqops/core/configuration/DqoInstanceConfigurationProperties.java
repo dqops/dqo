@@ -48,9 +48,9 @@ public class DqoInstanceConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the return base url for this DQO instance. It is the base url where the /login page on the DQO Cloud will return after authenticating.
+     * Returns the return base url for this DQOps instance. It is the base url where the /login page on the DQOps Cloud will return after authenticating.
      * This parameter could be modified if Spring Boot does not manage host name, port or protocol because an additional reverse proxy or a load balancer is working as a proxy.
-     * @return Base url for the return address, the default value that DQO uses internally is "http://localhost:8888/"
+     * @return Base url for the return address, the default value that DQOps uses internally is "http://localhost:8888/"
      */
     public String getReturnBaseUrl() {
         return returnBaseUrl;

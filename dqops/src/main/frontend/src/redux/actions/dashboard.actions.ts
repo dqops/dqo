@@ -20,6 +20,7 @@ import { DashboardsApi } from '../../services/apiClient';
 import { DASHBOARD_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import { DashboardsFolderSpec } from "../../api";
+import { TDashboardTootlipProps } from '../reducers/dashboard.reducer';
 
 export const getDashboardsRequest = () => ({
   type: DASHBOARD_ACTION.GET_DASHBOARDS
@@ -45,4 +46,9 @@ export const getAllDashboards = () => async (dispatch: Dispatch) => {
     dispatch(getDashboardsFailed(err));
   }
 };
+
+export const getDashboardTooltipState = (dashboardTooltipState: TDashboardTootlipProps) => ({
+  type: DASHBOARD_ACTION.TOGGLE_DASHBOARD_TOOLTIP,
+  dashboardTooltipState
+})
 

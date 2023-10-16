@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnStatisticsModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnStatisticsModel:
     """Column model that returns the basic fields from a column specification with the additional data statistics.
 
@@ -47,7 +48,7 @@ class ColumnStatisticsModel:
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
     can_collect_statistics: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

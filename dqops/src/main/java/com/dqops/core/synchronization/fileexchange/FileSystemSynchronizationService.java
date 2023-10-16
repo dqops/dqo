@@ -26,7 +26,7 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListene
 public interface FileSystemSynchronizationService {
     /**
      * Synchronizes changes between two file systems.
-     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
+     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQOps Cloud or similar).
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).

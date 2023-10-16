@@ -38,7 +38,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Healthcheck", description = "Health check service for checking if the DQO service is up and operational.")
+@Api(value = "Healthcheck", description = "Health check service for checking if the DQOps service is up and operational.")
 public class HealthcheckController {
     private DqoJobQueue jobQueue;
     private ParentDqoJobQueue parentJobQueue;
@@ -51,13 +51,13 @@ public class HealthcheckController {
     }
 
     @GetMapping(value = AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_URL, produces = "application/json")
-    @ApiOperation(value = "isHealthy", notes = "Checks if the DQO instance is healthy and operational. Returns a text \"OK\" and a HTTP status code 200 when the service is active and can accept jobs, " +
+    @ApiOperation(value = "isHealthy", notes = "Checks if the DQOps instance is healthy and operational. Returns a text \"OK\" and a HTTP status code 200 when the service is active and can accept jobs, " +
             " or returns a text \"UNAVAILABLE\" and a HTTP status code 503 when the service is still starting or is shutting down.", response = String.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class),
-            @ApiResponse(code = 503, message = "DQO instance is not healthy or is still starting", response = String.class)
+            @ApiResponse(code = 503, message = "DQOps instance is not healthy or is still starting", response = String.class)
     })
     public ResponseEntity<Mono<String>> isHealthy() {
         boolean isHealthy = this.jobQueue.isStarted() && this.parentJobQueue.isStarted();

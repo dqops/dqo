@@ -65,9 +65,9 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
 
     /**
      * Creates a schedule metadata job instance using dependencies.
-     * @param dqoQueueJobFactory DQO job queue factory.
-     * @param dqoJobQueue DQO job queue to push the actual job to execute.
-     * @param dqoSchedulerConfigurationProperties DQO cron scheduler configuration properties.
+     * @param dqoQueueJobFactory DQOps job queue factory.
+     * @param dqoJobQueue DQOps job queue to push the actual job to execute.
+     * @param dqoSchedulerConfigurationProperties DQOps cron scheduler configuration properties.
      * @param principalProvider Principal provider for the local instance.
      */
     @Autowired

@@ -159,7 +159,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
     }
 
     /**
-     * Returns the DQO queue job entry, that could be used to wait for the job.
+     * Returns the DQOps queue job entry, that could be used to wait for the job.
      * @return Job queue entry.
      */
     public DqoJobQueueEntry getJobQueueEntry() {

@@ -16,6 +16,7 @@
 package com.dqops.metadata.storage.localfiles.credentials;
 
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
@@ -52,7 +53,8 @@ public class FileSharedCredentialListImpl extends SharedCredentialListImpl {
     protected void load() {
         for (FileTreeNode fileTreeNode : this.credentialsFolderNode.getFiles()) {
             String baseFileName = fileTreeNode.getFilePath().getFileName();
-            this.addWithoutFullLoad(new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, baseFileName));
+            String decodedFileName = FileNameSanitizer.decodeFileSystemName(baseFileName);
+            this.addWithoutFullLoad(new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, decodedFileName));
         }
     }
 

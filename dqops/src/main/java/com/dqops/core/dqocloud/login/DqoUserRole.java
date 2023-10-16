@@ -20,7 +20,7 @@ import com.dqops.cloud.rest.model.DqoUserModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * DQO user role within a data domain or a whole account level.
+ * DQOps user role within a data domain or a whole account level.
  */
 public enum DqoUserRole {
     /**
@@ -54,9 +54,9 @@ public enum DqoUserRole {
     NONE;
 
     /**
-     * Converts an account role from a client generated from DQO Cloud Swagger.
+     * Converts an account role from a client generated from DQOps Cloud Swagger.
      * @param accountRole Account role enum from the code generated from swagger.
-     * @return DQO account role.
+     * @return DQOps account role.
      */
     public static DqoUserRole convertFromApiEnum(DqoUserModel.AccountRoleEnum accountRole) {
         if (accountRole == null) {
@@ -85,8 +85,8 @@ public enum DqoUserRole {
     }
 
     /**
-     * Converts the account role to a role defined in the DQO Cloud api.
-     * @return DQO Cloud API role.
+     * Converts the account role to a role defined in the DQOps Cloud api.
+     * @return DQOps Cloud API role.
      */
     public DqoUserModel.AccountRoleEnum convertToApiEnum() {
         switch (this) {

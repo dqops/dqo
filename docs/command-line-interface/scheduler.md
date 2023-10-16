@@ -16,7 +16,7 @@ $ dqo [dqo options...] scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-
                  [-sm=<synchronizationMode>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
@@ -52,7 +52,7 @@ This operation should be called only from the shell mode after the scheduler was
 $ dqo [dqo options...] scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 

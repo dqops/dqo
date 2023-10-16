@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO. Properties are mapped to the "dqo.queue." prefix that are responsible for the configuration of the job queue.
+ * Configuration POJO with the configuration for DQOps. Properties are mapped to the "dqo.queue." prefix that are responsible for the configuration of the job queue.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.queue")
@@ -34,7 +34,7 @@ public class DqoQueueConfigurationProperties implements Cloneable {
     private Integer maxConcurrentJobs;
 
     /**
-     * Maximum queue capacity before pushing new jobs will become a blocing operation.
+     * Maximum queue capacity before pushing new jobs will become a blocking operation.
      * @return Max non-blocking queue capacity.
      */
     public Integer getMaxNonBlockingCapacity() {
@@ -117,15 +117,15 @@ public class DqoQueueConfigurationProperties implements Cloneable {
 
     /**
      * Returns an additional, user provided limit for the number of concurrent threads that are running checks.
-     * @return The number of threads or null when the limit is controlled only by the DQO Cloud license.
+     * @return The number of threads or null when the limit is controlled only by the DQOps Cloud license.
      */
     public Integer getMaxConcurrentJobs() {
         return maxConcurrentJobs;
     }
 
     /**
-     * Sets a user provided limit for the number of concurrent threads (jobs) that are executed by DQO.
-     * @param maxConcurrentJobs New number of concurent jobs.
+     * Sets a user provided limit for the number of concurrent threads (jobs) that are executed by DQOps.
+     * @param maxConcurrentJobs New number of concurrent jobs.
      */
     public void setMaxConcurrentJobs(Integer maxConcurrentJobs) {
         this.maxConcurrentJobs = maxConcurrentJobs;

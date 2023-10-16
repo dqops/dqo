@@ -34,3 +34,11 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
 
   return date.toLocaleString('en-US', options);
 };
+
+export const urlencodeDecoder = (url: string) =>{
+  return url.replace(/\s/g, '%20') ?? url
+}
+
+export const urlencodeEncoder = (url: string | undefined) =>{
+  return url && url.replace(/%20/g, ' ')
+}

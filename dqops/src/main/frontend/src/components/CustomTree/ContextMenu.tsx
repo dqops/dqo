@@ -11,7 +11,7 @@ import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
-import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
+import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import {
   TimeWindowFilterParameters,
@@ -273,7 +273,7 @@ const ContextMenu = ({
               >
                 Delete data
               </div>
-              <DeleteOnlyDataDialog
+              <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
                 onClose={() => setDeleteDataDialogOpened(false)}
                 onDelete={(params) => {
@@ -281,6 +281,8 @@ const ContextMenu = ({
                   deleteStoredData(node, params);
                   setOpen(false);
                 }}
+                nodeId={String(node.id)}
+
               />
             </>
           )}
@@ -293,7 +295,7 @@ const ContextMenu = ({
               >
                 Delete data
               </div>
-              <DeleteOnlyDataDialog
+              <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
                 onClose={() => setDeleteDataDialogOpened(false)}
                 onDelete={(params) => {
@@ -309,6 +311,7 @@ const ContextMenu = ({
                   setOpen(false);
                 }}
                 nameOfCol={node.run_checks_job_template?.columnName}
+                nodeId={String(node.id)}
               />
             </>
           )}

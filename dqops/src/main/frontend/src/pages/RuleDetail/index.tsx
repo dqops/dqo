@@ -21,6 +21,7 @@ import { ROUTES } from '../../shared/routes';
 import { RulesApi } from '../../services/apiClient';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
+import { urlencodeDecoder } from '../../utils';
 
 const tabs = [
   {
@@ -53,7 +54,7 @@ export const RuleDetail = () => {
 
   useEffect(() => {
     if (!ruleDetail && (type !== 'create' || copied === true)) {
-      dispatch(getRule(full_rule_name));
+      dispatch(getRule(urlencodeDecoder(String(full_rule_name))));
     }
   }, [full_rule_name, ruleDetail, type]);
 
@@ -73,10 +74,10 @@ export const RuleDetail = () => {
     const fullName = [...(path || []), ruleName].join('/');
     if (type === 'create' && copied !== true) {
       await dispatch(
-        createRule(fullName, {
+        createRule(urlencodeDecoder(fullName), {
           ...ruleDetail,
-          full_rule_name: fullName,
-          rule_name: ruleName,
+          full_rule_name: urlencodeDecoder(fullName),
+          rule_name: urlencodeDecoder(ruleName),
           custom: true,
           can_edit: true,
           built_in: false
@@ -84,37 +85,38 @@ export const RuleDetail = () => {
       );
     } else if (copied === true) {
       await dispatch(
-        createRule(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName, {
+        createRule(urlencodeDecoder(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName), {
           ...ruleDetail,
-          rule_name: ruleName,
+          rule_name: urlencodeDecoder(ruleName),
           full_rule_name:
-            String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+          urlencodeDecoder(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName),
           custom: true,
           built_in: false
         })
       );
+    }
       closeRuleFirstLevelTab();
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.RULE_DETAIL(
-            String(full_rule_name).split('/')[
-              String(full_rule_name).split('/').length - 1
+            String(full_rule_name ?? fullName).split('/')[
+              String(full_rule_name ?? fullName).split('/').length - 1
             ] ?? ''
           ),
           value: ROUTES.RULE_DETAIL_VALUE(
-            String(full_rule_name).split('/')[
-              String(full_rule_name).split('/').length - 1
+            String(full_rule_name ?? fullName).split('/')[
+              String(full_rule_name ?? fullName).split('/').length - 1
             ] ?? ''
           ),
           state: {
             full_rule_name:
-              String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+              full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
             path: path,
             ruleDetail: {
               ...ruleDetail,
               rule_name: ruleName,
               full_rule_name:
-                String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
+               full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
               custom: true,
               built_in: false
             }
@@ -122,14 +124,14 @@ export const RuleDetail = () => {
           label: ruleName
         })
       );
-    }
   };
 
   const closeRuleFirstLevelTab = () => {
+    dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
     dispatch(
       closeFirstLevelTab(
         '/definitions/rules/' +
-          String(full_rule_name).split('/')[
+        String(full_rule_name).split('/')[
             String(full_rule_name).split('/').length - 1
           ]
       )
@@ -192,10 +194,8 @@ export const RuleDetail = () => {
   };
 
   const onDelete = async () => {
-    RulesApi.deleteRule(full_rule_name).then(async () =>
-      closeRuleFirstLevelTab(),
-      dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
-
+    RulesApi.deleteRule(urlencodeDecoder(full_rule_name)).then(async () =>
+      closeRuleFirstLevelTab()
     );
   };
 

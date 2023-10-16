@@ -18,11 +18,11 @@ package com.dqops.core.synchronization.status;
 import com.dqops.core.synchronization.contract.DqoRoot;
 
 /**
- * Service that is called on startup, detects if there are any unsynchronized chages in any DQO User Home folder that should be synchronized to the DQO Cloud.
+ * Service that is called on startup, detects if there are any unsynchronized chages in any DQOps User Home folder that should be synchronized to the DQOps Cloud.
  */
 public interface FileSynchronizationChangeDetectionService {
     /**
-     * Detects if there are any unsynchronized changes in a given DQO User home folder.
+     * Detects if there are any unsynchronized changes in a given DQOps User home folder.
      *
      * @param dqoRoot User home folder to be analyzed.
      * @return True when there are local unsynchronized changes, false otherwise.
@@ -37,7 +37,7 @@ public interface FileSynchronizationChangeDetectionService {
     void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot);
 
     /**
-     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQO Cloud.
+     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQOps Cloud.
      */
     void detectNotSynchronizedChangesInBackground();
 }

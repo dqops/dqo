@@ -50,7 +50,7 @@ public class SensorModel {
     @JsonPropertyDescription("Whether the sensor is a User Home sensor")
     private boolean custom;
 
-    @JsonPropertyDescription("This is a DQO built-in sensor, whose parameters cannot be changed.")
+    @JsonPropertyDescription("This is a DQOps built-in sensor, whose parameters cannot be changed.")
     private boolean builtIn;
 
     /**

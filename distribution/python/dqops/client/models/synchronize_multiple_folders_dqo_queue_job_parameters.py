@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.file_synchronization_direction import FileSynchronizationDirection
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="SynchronizeMultipleFoldersDqoQueueJobParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SynchronizeMultipleFoldersDqoQueueJobParameters:
     """
     Attributes:
@@ -30,7 +31,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         data_errors (Union[Unset, bool]): Synchronize the ".data/errors" folder.
         data_incidents (Union[Unset, bool]): Synchronize the ".data/incidents" folder.
         synchronize_folder_with_local_changes (Union[Unset, bool]): Synchronize all folders that have local changes.
-            When this field is set to true, there is no need to enable synchronization of single folders because DQO will
+            When this field is set to true, there is no need to enable synchronization of single folders because DQOps will
             decide which folders need synchronization (to be pushed to the cloud).
     """
 
@@ -49,7 +50,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
     data_errors: Union[Unset, bool] = UNSET
     data_incidents: Union[Unset, bool] = UNSET
     synchronize_folder_with_local_changes: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         direction: Union[Unset, str] = UNSET

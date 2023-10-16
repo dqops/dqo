@@ -42,9 +42,9 @@ public class ComparisonCheckResultModel {
     public static final int NOT_MATCHING_DATA_GROUPS_LIMIT = 10;
 
     /**
-     * DQO data quality check name.
+     * DQOps data quality check name.
      */
-    @JsonPropertyDescription("DQO data quality check name.")
+    @JsonPropertyDescription("DQOps data quality check name.")
     private String checkName;
 
     /**

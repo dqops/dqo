@@ -20,7 +20,7 @@ import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import org.springframework.security.core.Authentication;
 
 /**
- * DQO authentication token factory that creates Spring Security {@link org.springframework.security.core.Authentication} token
+ * DQOps authentication token factory that creates Spring Security {@link org.springframework.security.core.Authentication} token
  * with a user principal.
  */
 public interface DqoAuthenticationTokenFactory {
@@ -32,16 +32,16 @@ public interface DqoAuthenticationTokenFactory {
     Authentication createAnonymousToken();
 
     /**
-     * Creates an authenticated DQO user principal that is identified by the DQO Cloud API key stored in the local DQO instance.
-     * This type of authentication is used when authentication via DQO Cloud is not used and a single user is accessing a local DQO instance, having
-     * full (ADMIN) access rights when the DQO Cloud API key is not present (not working with a DQO Cloud connection) or limited the role in the DQO Cloud API Key.
+     * Creates an authenticated DQOps user principal that is identified by the DQOps Cloud API key stored in the local DQOps instance.
+     * This type of authentication is used when authentication via DQOps Cloud is not used and a single user is accessing a local DQOps instance, having
+     * full (ADMIN) access rights when the DQOps Cloud API key is not present (not working with a DQOps Cloud connection) or limited the role in the DQOps Cloud API Key.
      *
-     * @return Authenticated user principal, based on the identity stored in the DQO Cloud API Key.
+     * @return Authenticated user principal, based on the identity stored in the DQOps Cloud API Key.
      */
     Authentication createAuthenticatedWithDefaultDqoCloudApiKey();
 
     /**
-     * Creates an authentication principal from a DQO Cloud issued user token. User tokens are issued for multi-user accounts.
+     * Creates an authentication principal from a DQOps Cloud issued user token. User tokens are issued for multi-user accounts.
      * @param userTokenPayload User token payload.
      * @return Authenticated user principal, based on the user token.
      */

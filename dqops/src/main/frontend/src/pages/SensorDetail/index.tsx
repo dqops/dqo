@@ -25,6 +25,7 @@ import { ROUTES } from '../../shared/routes';
 import { SensorsApi } from '../../services/apiClient';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
+import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
 
 const tabs = [
   {
@@ -97,13 +98,14 @@ export const SensorDetail = () => {
   }, [type, copied]);
 
   const closeSensorFirstLevelTab = () => {
+    dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     dispatch(
       closeFirstLevelTab(
         '/definitions/sensors/' +
-          String(full_sensor_name).split('/')[
+        urlencodeDecoder(String(full_sensor_name).split('/')[
             String(full_sensor_name).split('/').length - 1
           ]
-      )
+      ))
     );
   };
 
@@ -140,48 +142,50 @@ export const SensorDetail = () => {
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
     if (type === 'create' && copied !== true) {
-      await dispatch(createSensor(fullName, sensorDetail));
+      await dispatch(createSensor(urlencodeDecoder(fullName), 
+      {...sensorDetail, full_sensor_name:  urlencodeDecoder(fullName), custom: true, built_in: false, can_edit: true, sensor_definition_spec : sensorDetail.sensor_definition_spec ?? {}}));
     } else if (copied === true) {
       await dispatch(
         createSensor(
-          String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+          urlencodeDecoder(String(urlencodeDecoder(full_sensor_name)).replace(/\/[^/]*$/, '/') + sensorName),
           {
             ...sensorDetail,
-            full_sensor_name: full_sensor_name,
+            full_sensor_name: urlencodeDecoder(full_sensor_name),
             custom: true,
             built_in: false
           }
         )
       );
+    }
       closeSensorFirstLevelTab();
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.SENSOR_DETAIL(
-            String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
+            urlencodeDecoder(String(full_sensor_name ??  fullName).split('/')[
+              String(full_sensor_name ?? fullName).split('/').length - 1
             ] ?? ''
-          ),
+          )),
           value: ROUTES.SENSOR_DETAIL_VALUE(
-            String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
-            ] ?? ''
+            urlencodeDecoder(String(full_sensor_name ?? fullName).split('/')[
+              String(full_sensor_name ?? fullName).split('/').length - 1
+            ]) ?? ''
           ),
           state: {
             full_sensor_name:
-              String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+             full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
             path: path,
             sensorDetail: {
               ...sensorDetail,
               full_sensor_name:
-                String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
+               full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
               custom: true,
               built_in: false
             }
           },
-          label: sensorName
+          label: urlencodeEncoder(sensorName)
         })
       );
-    }
+    
   };
 
   const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -240,9 +244,9 @@ export const SensorDetail = () => {
   };
 
   const onDelete = async () => {
-    SensorsApi.deleteSensor(full_sensor_name).then(async () =>
+    SensorsApi.deleteSensor(urlencodeDecoder(full_sensor_name)).then(async () =>
       closeSensorFirstLevelTab(),
-      dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
+     
     );
   };
 

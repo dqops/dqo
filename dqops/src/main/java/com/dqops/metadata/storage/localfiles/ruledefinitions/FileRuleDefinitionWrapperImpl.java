@@ -18,6 +18,7 @@ package com.dqops.metadata.storage.localfiles.ruledefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
@@ -80,7 +81,7 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
     public RuleDefinitionSpec getSpec() {
         RuleDefinitionSpec spec = super.getSpec();
         if (spec == null) {
-            String specFileName = this.ruleFileNameBaseName + SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML;
+            String specFileName = FileNameSanitizer.encodeForFileSystem(this.ruleFileNameBaseName) + SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML;
             FileTreeNode fileNode = this.customRuleFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -128,7 +129,7 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
     public FileContent getRulePythonModuleContent() {
         FileContent rulePythonModule = super.getRulePythonModuleContent();
         if (rulePythonModule == null) {
-            String pythonModuleFileName = this.ruleFileNameBaseName + SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY;
+            String pythonModuleFileName = FileNameSanitizer.encodeForFileSystem(this.ruleFileNameBaseName) + SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY;
             FileTreeNode fileNode = this.customRuleFolderNode.getChildFileByFileName(pythonModuleFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -168,8 +169,9 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
         RuleDefinitionYaml ruleDefinitionYaml = new RuleDefinitionYaml(this.getSpec());
         String specAsYaml = this.yamlSerializer.serialize(ruleDefinitionYaml);
         FileContent newSpecFileContent = new FileContent(specAsYaml);
-        String specFileNameWithExt = this.ruleFileNameBaseName + SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML;
-        String pythonModuleFileNameWithExt = this.ruleFileNameBaseName + SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY;
+        String encodedRuleName = FileNameSanitizer.encodeForFileSystem(this.ruleFileNameBaseName);
+        String specFileNameWithExt = encodedRuleName + SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML;
+        String pythonModuleFileNameWithExt = encodedRuleName + SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY;
 
         switch (this.getStatus()) {
             case ADDED:

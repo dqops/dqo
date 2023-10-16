@@ -47,9 +47,9 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
 
     /**
      * Default injection constructor.
-     * @param userHomeContextFactory DQO local home context factory - used to load the local user home.
+     * @param userHomeContextFactory DQOps local home context factory - used to load the local user home.
      * @param secretValueProvider Secret value provider, used to decode secrets.
-     * @param dqoInstanceConfigurationProperties DQO instance (dqo.instance.*) configuration parameters.
+     * @param dqoInstanceConfigurationProperties DQOps instance (dqo.instance.*) configuration parameters.
      */
     @Autowired
     public InstanceSignatureKeyProviderImpl(UserHomeContextFactory userHomeContextFactory,

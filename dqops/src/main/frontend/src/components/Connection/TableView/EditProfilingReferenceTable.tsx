@@ -244,7 +244,6 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (
       reference !== undefined &&
-      Object.keys(reference).length > 0 &&
       isCreating === false &&
       connectionExist === true &&
       schemaExist === true &&
@@ -272,7 +271,8 @@ export const EditProfilingReferenceTable = ({
         }
       });
     }
-  }, [reference, selectedReference, tableExist, schemaExist, connectionExist]);
+  }, [selectedReference, tableExist, schemaExist, connectionExist,
+     reference?.reference_connection, reference?.reference_table]);
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -494,7 +494,7 @@ export const EditProfilingReferenceTable = ({
     }
   }, [job?.status]);
 
-  const prepareData = (
+  const getComparisonResults = (
     nameOfColumn: string
   ): { [key: string]: ComparisonCheckResultModel } => {
     const columnComparisonResults =
@@ -523,7 +523,7 @@ export const EditProfilingReferenceTable = ({
       newNameOfCheck = nameOfCheck;
     }
 
-    let colorVar = prepareData(nameOfCol)[newNameOfCheck];
+    let colorVar = getComparisonResults(nameOfCol)[newNameOfCheck];
     if (
       bool &&
       tableComparisonResults?.table_comparison_results &&
@@ -559,12 +559,6 @@ export const EditProfilingReferenceTable = ({
   };
 
   useEffect(() => {
-    if (isCreating === false) {
-      onUpdate();
-    }
-  }, [reference, table, schema, connection]);
-
-  useEffect(() => {
     getResultsData();
   }, [isDataDeleted]);
   
@@ -574,10 +568,14 @@ export const EditProfilingReferenceTable = ({
   const rowKey = Object.keys(tableComparisonResults?.table_comparison_results ??  [])
   .find((key) => key.includes("row_count_match"));
 
+  const comparedColumnOptions : Option[] =reference?.columns ? 
+  reference?.columns.map((x) => ({label: x.compared_column_name ?? '', value: x.compared_column_name ?? ''}))  : []
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
+          onUpdateParent = {onUpdate}
           onBack={onBack}
           onChange={onChange}
           selectedReference={selectedReference}
@@ -596,6 +594,7 @@ export const EditProfilingReferenceTable = ({
           isDataDeleted={isDataDeleted}
           listOfExistingReferences={listOfExistingReferences}
           canUserCompareTables={canUserCompareTables}
+          columnOptions = {{comparedColumnsOptions: comparedColumnOptions ?? [], referencedColumnsOptions: columnOptions }}
         />
       </div>
       {reference &&
@@ -984,7 +983,7 @@ export const EditProfilingReferenceTable = ({
                       </tr>
                       {isElemExtended.at(index) && (
                         <ResultPanel
-                          obj={prepareData(item.compared_column_name ?? '')}
+                          obj={getComparisonResults(item.compared_column_name ?? '')}
                           onChange={onChange}
                           bools={[
                             !!item.compare_min,

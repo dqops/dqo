@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Service that asks the DQO Cloud to refresh the data quality data warehouse after uploading new parquet files.
+ * Service that asks the DQOps Cloud to refresh the data quality data warehouse after uploading new parquet files.
  */
 @Component
 public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
@@ -45,7 +45,7 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
 
     /**
      * Creates a new instance of a warehouse client, accepting required dependencies.
-     * @param dqoCloudApiClientFactory DQO Cloud client factory.
+     * @param dqoCloudApiClientFactory DQOps Cloud client factory.
      */
     @Autowired
     public DqoCloudWarehouseServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {

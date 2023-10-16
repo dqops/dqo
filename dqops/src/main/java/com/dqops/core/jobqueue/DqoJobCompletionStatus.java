@@ -17,7 +17,7 @@
 package com.dqops.core.jobqueue;
 
 /**
- * DQO job completion status, which says how a job has finished: the job was finished, the job failed with an exception, the job was cancelled.
+ * DQOps job completion status, which says how a job has finished: the job was finished, the job failed with an exception, the job was cancelled.
  */
 public enum DqoJobCompletionStatus {
     /**

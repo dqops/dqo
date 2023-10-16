@@ -44,7 +44,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param linkageStore
-     * @param dqoHome         DQO home.
+     * @param dqoHome         DQOps home.
      * @return Folder structure with rendered markdown files.
      */
     @Override

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.rule_runner_type import RuleRunnerType
 from ..models.rule_time_window_mode import RuleTimeWindowMode
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RuleModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RuleModel:
     """Rule model
 
@@ -28,7 +29,7 @@ class RuleModel:
         mode (Union[Unset, RuleTimeWindowMode]):
         time_window (Union[Unset, RuleTimeWindowSettingsSpec]):
         fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom rule.
-            Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
+            Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls
             for all required fields.
         parameters (Union[Unset, RuleModelParameters]): Additional rule parameters
         custom (Union[Unset, bool]): This rule has a custom (user level) definition.
@@ -47,7 +48,7 @@ class RuleModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         rule_name = self.rule_name

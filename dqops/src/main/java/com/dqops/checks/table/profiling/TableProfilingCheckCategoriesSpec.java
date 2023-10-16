@@ -52,7 +52,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         }
     };
 
-    @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
+    @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent " +
          "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProfilingTimePeriod resultTruncation;

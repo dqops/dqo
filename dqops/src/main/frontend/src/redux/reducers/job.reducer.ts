@@ -122,21 +122,37 @@ const schemaReducer = (state = initialState, action: any) => {
         const filteredObject: Record<string, DqoJobHistoryEntryModel> =
           Object.assign({}, obj);
           const nowDate = moment();
-        for (const key in obj) {
-          if (
-            nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
-            obj[key].status !== 'running' &&
-            obj[key].status !== 'queued' &&
-            obj[key].status !== 'waiting'
-          ) {
-            delete filteredObject[key];
-          } else {
-            break;
+
+          const typeOccurrences: Record<string, number> = {};
+          const reversedKeys = Object.keys(filteredObject).reverse();
+          
+          for (const key of reversedKeys) {
+            if (filteredObject[key]?.jobType === "synchronize multiple folders") {
+              typeOccurrences["synchronize multiple folders"] = (typeOccurrences["synchronize multiple folders"] || 0) + 1;
+              if (typeOccurrences["synchronize multiple folders"] > 1) {
+                delete filteredObject[key];
+              }
+            }
           }
-        }
+          let shouldBreak = false;
+          for (const key in obj) {
+            if (
+              (nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
+              obj[key].status !== 'running' &&
+              obj[key].status !== 'queued' &&
+              obj[key].status !== 'waiting') 
+            ) {
+              delete filteredObject[key];
+            } else {
+              shouldBreak = true;
+            }
+            if (shouldBreak) {
+              break;
+            }
+          }
         return filteredObject;
       };
-
+      
       jobChanges.forEach((jobChange) => {
         if (!jobChange.jobId?.jobId) return;
         if (not_filtered_job_dictionary_state[jobChange.jobId?.jobId]) {

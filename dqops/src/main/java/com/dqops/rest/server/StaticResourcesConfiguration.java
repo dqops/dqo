@@ -47,7 +47,7 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
     }
 
     /**
-     * Registers static resources with the production build of the DQO UI.
+     * Registers static resources with the production build of the DQOps UI.
      * @param registry Resource handler registry.
      */
     @Override
@@ -67,13 +67,17 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
                 .setUseLastModified(true)
                 .setOptimizeLocations(true);
 
-        if (this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() != null) {
+        if (this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() != null &&
+            this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge() > 0) {
             Duration maxAge = Duration.ofSeconds(this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge());
+
             allOtherDynamicBookmarkedFiles
-                    .setCacheControl(CacheControl.maxAge(maxAge).cachePublic().mustRevalidate())
+                    .setCacheControl(CacheControl.maxAge(maxAge).cachePrivate().mustRevalidate())
                     .resourceChain(false);
         } else {
-            allOtherDynamicBookmarkedFiles.resourceChain(false);
+            allOtherDynamicBookmarkedFiles
+                    .setCacheControl(CacheControl.noCache())
+                    .resourceChain(false);
         }
     }
 

@@ -37,6 +37,10 @@ public class EncodingShortenedThrowableConverter extends ShortenedThrowableConve
             return null;
         }
 
+        if (convertedMessage.indexOf('\\') >= 0) {
+            convertedMessage = convertedMessage.replace("\\", "\\\\");
+        }
+        
         if (convertedMessage.indexOf('"') >= 0) {
             convertedMessage = convertedMessage.replace("\"", "\\\"");
         }

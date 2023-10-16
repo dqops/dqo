@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO. Properties are mapped to the "dqo.secrets." prefix.
+ * Configuration POJO with the configuration for DQOps. Properties are mapped to the "dqo.secrets." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.secrets")

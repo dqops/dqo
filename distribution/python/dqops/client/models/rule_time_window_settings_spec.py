@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.historic_data_points_grouping import HistoricDataPointsGrouping
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="RuleTimeWindowSettingsSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RuleTimeWindowSettingsSpec:
     """
     Attributes:
@@ -27,7 +28,7 @@ class RuleTimeWindowSettingsSpec:
     prediction_time_window: Union[Unset, int] = UNSET
     min_periods_with_readouts: Union[Unset, int] = UNSET
     historic_data_point_grouping: Union[Unset, HistoricDataPointsGrouping] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         prediction_time_window = self.prediction_time_window

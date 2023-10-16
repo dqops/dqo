@@ -41,7 +41,7 @@ public class FileSystemChangeSet {
     }
 
     /**
-     * Returns the DQO file system reference.
+     * Returns the DQOps file system reference.
      * @return File system reference.
      */
     public SynchronizationRoot getFileSystem() {

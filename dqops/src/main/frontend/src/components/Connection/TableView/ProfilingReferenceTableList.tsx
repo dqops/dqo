@@ -9,7 +9,6 @@ type ProfilingReferenceTableListProps = {
   references: TableComparisonModel[];
   onCreate: () => void;
   selectReference: (reference: TableComparisonModel) => void;
-  onEdit: (reference: TableComparisonModel) => void;
   canUserCreateTableComparison?: boolean;
   deleteComparison: (tableComparisonConfigurationName: string) => Promise<void>
 };
@@ -27,6 +26,7 @@ export const ProfilingReferenceTableList = ({
     <div className="px-8 py-4 text-sm">
       <table className="mb-4 w-full">
         <thead>
+          {references.length !== 0 ?
           <tr>
             <th className="text-left py-2">
               Table comparison configuration name
@@ -34,9 +34,8 @@ export const ProfilingReferenceTableList = ({
             <th className="text-left px-2 py-2">Connection</th>
             <th className="text-left px-2 py-2">Schema</th>
             <th className="text-left px-2 py-2">Reference table name</th>
-            <th className="text-left px-2 py-2" />
-            <th className="text-left px-2 py-2" />
           </tr>
+          : null }
         </thead>
         <tbody>
           {references &&

@@ -20,6 +20,7 @@ import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -30,12 +31,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
- * DQO Cloud access token cache that creates new GCP access tokens when they are about to expire.
+ * DQOps Cloud access token cache that creates new GCP access tokens when they are about to expire.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Slf4j
 public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
-    public static final int REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS = 300; // refresh the access token if it is about to expire in 300 seconds
+    public static final int REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS = 900; // refresh the access token if it is about to expire in 900 seconds
 
     private DqoCloudCredentialsProvider dqoCloudCredentialsProvider;
     private final HashMap<DqoRoot, Supplier<DqoCloudCredentials>> rootCredentialSuppliers = new LinkedHashMap<>();
@@ -48,8 +50,8 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
 
     /**
      * Returns a current GCP bucket access token used to perform read/write operations on a customer's storage bucket for a given root folder.
-     * @param dqoRoot DQO Root folder.
-     * @return Up to date access token.
+     * @param dqoRoot DQOps Root folder.
+     * @return Up-to-date access token.
      */
     @Override
     public DqoCloudCredentials getCredentials(DqoRoot dqoRoot) {
@@ -58,14 +60,26 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             credentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == null) {
+                final Object supplierLock = new Object();
+
                 credentialsSupplier = Suppliers.memoize(() -> {
-                    TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
-                    if (tenantAccessTokenModel != null) {
-                        AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
-                        return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Requesting a new access token for " + dqoRoot);
                     }
 
-                    return null;
+                    synchronized (supplierLock) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Requesting new tenant access token to access the folder " + dqoRoot);
+                        }
+
+                        TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
+                        if (tenantAccessTokenModel != null) {
+                            AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                            return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                        }
+
+                        return null;
+                    }
                 });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
@@ -86,10 +100,22 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             Supplier<DqoCloudCredentials> currentCredentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == currentCredentialsSupplier) {
+                final Object supplierLock = new Object();
+
                 credentialsSupplier = Suppliers.memoize(() -> {
-                    TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
-                    AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
-                    return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Requesting a new access token for " + dqoRoot);
+                    }
+
+                    synchronized (supplierLock) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Requesting new tenant access token to access the folder " + dqoRoot +
+                                    ", because the the current access token will expire at " + dqoCloudCredentials.getAccessToken().getExpirationTime());
+                        }
+                        TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
+                        AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                        return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                    }
                 });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);

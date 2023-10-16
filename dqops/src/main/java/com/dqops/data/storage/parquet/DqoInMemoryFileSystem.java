@@ -318,7 +318,7 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
         }
 
         /**
-         * DQO specific method - retrieves the byte array that was written.
+         * DQOps specific method - retrieves the byte array that was written.
          * @param f File path.
          * @return Byte array of the file content.
          * @throws IOException When file was not found
@@ -498,7 +498,7 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
     }
 
     /**
-     * DQO specific method - retrieves the byte array that was written.
+     * DQOps specific method - retrieves the byte array that was written.
      * @param f File path.
      * @return Byte array of the file content.
      */

@@ -16,20 +16,11 @@ def _get_kwargs(
     schema_name: str,
     time_scale: CheckTimeScale,
     *,
-    client: AuthenticatedClient,
     check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        timeScale=time_scale,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     json_check_target: Union[Unset, None, str] = UNSET
@@ -46,17 +37,17 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            timeScale=time_scale,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["CheckTemplate"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -74,7 +65,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["CheckTemplate"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -118,14 +109,12 @@ def sync_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         time_scale=time_scale,
-        client=client,
         check_target=check_target,
         check_category=check_category,
         check_name=check_name,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -207,14 +196,12 @@ async def asyncio_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         time_scale=time_scale,
-        client=client,
         check_target=check_target,
         check_category=check_category,
         check_name=check_name,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

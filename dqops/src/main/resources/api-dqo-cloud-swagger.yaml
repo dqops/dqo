@@ -1,18 +1,18 @@
 ---
 swagger: "2.0"
 info:
-  description: "DQO Cloud API"
+  description: "DQOps Cloud API"
   version: "v1"
-  title: "DQO Cloud"
+  title: "DQOps Cloud"
   termsOfService: "https://dqops.com/terms-of-service"
   contact:
-    name: "DQO Cloud Support"
+    name: "DQOps Cloud Support"
     url: "https://dqops.com/"
     email: "support@dqops.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "api.dqo.ai"
+host: "api.dqops.com"
 basePath: "/"
 tags:
 - name: "AccessTokenIssue"
@@ -582,8 +582,28 @@ definitions:
         items:
           type: "string"
           format: "date"
+      partitions:
+        type: "array"
+        description: "Optional list of partitions that should be loaded from parquet\
+          \ files to the native tables in the data warehouse."
+        items:
+          $ref: "#/definitions/RefreshedPartitionModel"
     description: "Request object for refreshing a native table in the data quality\
       \ data warehouse."
+  RefreshedPartitionModel:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "Connection name that should be refreshed."
+      schemaTableName:
+        type: "string"
+        description: "Full table name (schema.table) that should be refreshed."
+      month:
+        type: "string"
+        format: "date"
+        description: "The date of the first day of the month that should be refreshed. "
+    description: "Identifies a partition that should be refreshed."
   TenantAccessTokenModel:
     type: "object"
     properties:

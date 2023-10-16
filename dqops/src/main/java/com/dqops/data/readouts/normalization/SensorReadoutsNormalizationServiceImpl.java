@@ -378,7 +378,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * The values in the time period column are converted to a date time column (without a time zone). Instant columns (based on an UTC timezone) are converted to the timezone of question.
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
-     * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
+     * @param defaultTimeZone Default DQOps time zone, used to create a time period value if the time period was not received from a sensor result.
      * @param timePeriodGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
@@ -527,7 +527,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Makes a normalized time_period_utc column. Converts non Instant (UTC date) to UTC date. Tries to convert the time period column.
      * @param resultsTable Result table to find the column.
      * @param timePeriodColumn Time period column used to convert the dates.
-     * @param defaultTimeZone Default DQO time zone.
+     * @param defaultTimeZone Default DQOps time zone.
      * @return Instant column with the time_period_utc time periods.
      */
     public InstantColumn makeNormalizedTimePeriodUtcColumn(Table resultsTable, DateTimeColumn timePeriodColumn, ZoneId defaultTimeZone) {
@@ -535,7 +535,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         if (currentColumn == null || !(currentColumn instanceof InstantColumn)) {
             InstantColumn newTimePeriodUtcColumn = InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, resultsTable.rowCount());
 
-            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQO server time zone
+            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQOps server time zone
             for (int i = 0; i < timePeriodColumn.size(); i++) {
                 LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
                 Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));

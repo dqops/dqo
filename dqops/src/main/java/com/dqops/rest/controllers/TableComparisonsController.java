@@ -807,7 +807,7 @@ public class TableComparisonsController {
 
     /**
      * Updates a table comparison configuration and configures checks.
-     * @poram principal DQO User principal.
+     * @poram principal DQOps User principal.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.

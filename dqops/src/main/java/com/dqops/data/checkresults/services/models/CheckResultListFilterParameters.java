@@ -45,9 +45,9 @@ public class CheckResultListFilterParameters {
     private Integer days;
 
     /**
-     * Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.
+     * Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQOps server.
      */
-    @JsonPropertyDescription("Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.")
+    @JsonPropertyDescription("Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQOps server.")
     private LocalDate date;
 
     /**

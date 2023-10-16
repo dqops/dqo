@@ -284,7 +284,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		String apiKeyString = settings.getApiKey();
 		if (Strings.isNullOrEmpty(apiKeyString)) {
-			cliOperationStatus.setFailedMessage(String.format("Api key is not set"));
+			cliOperationStatus.setFailedMessage(String.format("DQOps Cloud API Key is not set"));
 			return cliOperationStatus;
 		}
 
@@ -292,7 +292,7 @@ public class SettingsServiceImpl implements SettingsService {
 		DqoCloudApiKeyPayload apiKeyPayload = cloudApiKey.getApiKeyPayload();
 
 		StringBuilder textBuilder = new StringBuilder();
-		textBuilder.append(String.format("DQO Cloud API key is: %s\n", apiKeyString));
+		textBuilder.append(String.format("DQOps Cloud API key is: %s\n", apiKeyString));
 		textBuilder.append(String.format("Tenant id: %s/%d\n", apiKeyPayload.getTenantId(), apiKeyPayload.getTenantGroup()));
 		textBuilder.append(String.format("License type: %s\n", apiKeyPayload.getLicenseType()));
 
@@ -303,7 +303,7 @@ public class SettingsServiceImpl implements SettingsService {
 					limitEntryName = "Maximum number of synchronized connections";
 					break;
 				case USERS_LIMIT:
-					limitEntryName = "Maximum number of DQO Cloud users";
+					limitEntryName = "Maximum number of DQOps Cloud users";
 					break;
 				case TABLES_LIMIT:
 					limitEntryName = "Maximum number of synchronized tables";

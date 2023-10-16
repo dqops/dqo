@@ -50,10 +50,11 @@ public class SettingsSpec extends AbstractSpec {
 	@JsonPropertyDescription("Api key")
 	private String apiKey;
 
-	@JsonPropertyDescription("DQO instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.")
+	@JsonPropertyDescription("DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.")
 	private String instanceSignatureKey;
 
-	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.")
+	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned " +
+			"from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.")
 	private String timeZone;
 
 	/**
@@ -121,7 +122,7 @@ public class SettingsSpec extends AbstractSpec {
 	}
 
 	/**
-	 * Returns the DQO instance signature key as Base64 encoded byte array.
+	 * Returns the DQOps instance signature key as Base64 encoded byte array.
 	 * @return Instance signature key, base64.
 	 */
 	public String getInstanceSignatureKey() {

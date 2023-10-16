@@ -131,16 +131,19 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
 
-    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). " +
-                             "The reference table's metadata must be imported into DQO, but the reference table could be located on a different data source. " +
-                             "DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
+    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to " +
+                             "compare this table (called the compared table) with other reference tables (the source of truth). " +
+                             "The reference table's metadata must be imported into DQOps, but the reference table could be located on a different data source. " +
+                             "DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
                              "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
-                             "DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.")
+                             "DQOps will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), " +
+                             "comparing the measures (sensor readouts) captured from both the tables.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonConfigurationSpecMap tableComparisons = new TableComparisonConfigurationSpecMap();
 
-    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
+    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will " +
+            "override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableIncidentGroupingSpec incidentGrouping;

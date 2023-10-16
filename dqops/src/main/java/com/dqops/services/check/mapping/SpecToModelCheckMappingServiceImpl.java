@@ -129,7 +129,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
-     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
      * @param canManageChecks The user is an operator and can rul any operation.
      * @return Model of data quality checks' container.
@@ -382,7 +382,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleGroup           Scheduling group relevant to this check.
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param tableSpec               Table specification with the configuration of the parent table.
-     * @param executionContext        Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext        Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType            Provider type from the parent connection.
      * @param checkTarget             Check target.
      * @param checkType               Check type (profiling, monitoring, ...).
@@ -564,7 +564,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleGroup             Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @param tableSpec                 Table specification with the configuration of the parent table.
-     * @param executionContext          Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param executionContext          Execution context with a reference to both the DQOps Home (with default sensor implementation) and DQOps User (with user specific sensors).
      * @param providerType              Provider type from the parent connection.
      * @param checkTarget               Check target.
      * @param checkType                 Check type (profiling, monitoring, ...).
@@ -603,10 +603,13 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     executionContext, sensorDefinitionName, providerType);
 
             if (providerSensorDefinition == null) {
-                return null; // skip this check
+                return null; // skip this check, it is a misconfigured custom check that references a missing sensor, we don't know anything about it
             }
 
             sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
+            if (sensorDefinitionSpec == null) {
+                return null; // skip this check, it is a misconfigured custom check that references a missing sensor
+            }
 
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
             if (providerSensorDefinitionSpec == null) {
@@ -618,13 +621,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
-            if (checkType == CheckType.partitioned && Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
+            if (checkType == CheckType.partitioned && tableSpec != null && tableSpec.getTimestampColumns() != null &&
+                    Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
                 checkModel.pushError(CheckConfigurationRequirementsError.MISSING_PARTITION_BY_COLUMN);
             }
 
             checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
-            if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
+            if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresEventTimestamp() &&
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
                 if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
@@ -633,7 +637,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     checkModel.pushError(CheckConfigurationRequirementsError.MISSING_EVENT_TIMESTAMP_COLUMN);
                 }
             } else {
-                if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
+                if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
                         Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
                     checkModel.pushError(CheckConfigurationRequirementsError.MISSING_INGESTION_TIMESTAMP_COLUMN);
                 }
@@ -696,11 +700,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
                         (CustomCheckSpec) checkSpec, customCheckDefinitionSpec, executionContext);
                 checkModel.setRule(ruleModel);
+            } else {
+                checkModel.setRule(new RuleThresholdsModel());
             }
         }
 
         if (executionContext != null && executionContext.getUserHomeContext() != null) {
-            String ruleName = checkModel.getRule().getWarning() != null ? checkModel.getRule().getWarning().getRuleName() : null;
+            String ruleName = checkModel.getRule() != null && checkModel.getRule().getWarning() != null ?
+                    checkModel.getRule().getWarning().getRuleName() : null;
 
             if (ruleName != null) {
                 RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
@@ -708,10 +715,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     RuleTimeWindowSettingsSpec ruleTimeWindow = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
                     if (ruleTimeWindow != null) {
                         if (checkType == CheckType.profiling) {
-                            if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
-                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
-                                    tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
-                                checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
+                            if (tableSpec != null && tableSpec.getProfilingChecks() != null) {
+                                if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
+                                    checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
+                                }
                             }
                         } else if (ruleTimeWindow.getHistoricDataPointGrouping() != null && checkTimeScale != null) {
                             TimePeriodGradient ruleTimePeriodGradient =
