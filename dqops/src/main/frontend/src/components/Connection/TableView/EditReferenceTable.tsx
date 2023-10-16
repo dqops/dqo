@@ -37,6 +37,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
 
+type TParameters = {refConnection?: string, refSchema?: string, refTable?: string}
+
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
@@ -56,6 +58,7 @@ type EditReferenceTableProps = {
   canUserCompareTables?: boolean;
   onUpdateParent: () => void;
   columnOptions : {comparedColumnsOptions : Option[], referencedColumnsOptions: Option[]}
+  onChangeParameters : (obj: Partial<TParameters>) => void
 };
 
 const EditReferenceTable = ({
@@ -76,7 +79,8 @@ const EditReferenceTable = ({
   listOfExistingReferences,
   canUserCompareTables,
   onUpdateParent,
-  columnOptions
+  columnOptions,
+  onChangeParameters
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -460,7 +464,9 @@ const EditReferenceTable = ({
         getRequiredColumnsIndexes(dataGroupingArray).referenceMissingIndexes.length === 0 &&
           (isUpdated ||
         isUpdatedParent)
-    ));
+    ) || (isCreating === true && refConnection.length !== 0 &&
+      refSchema.length !== 0 &&
+      refTable.length !== 0 && name.length !== 0));
   }, [isUpdated, isUpdatedParent, dataGroupingArray]);
 
 
@@ -616,6 +622,18 @@ const getReferenceTableStatistics = async () => {
       calculateTableDistinctCount(dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '') ?? [], 
       dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '') ?? []);
   }, [dataGroupingArray])
+
+  useEffect(() => {
+    onChangeParameters({refConnection: refConnection})
+  }, [refConnection])
+
+  useEffect(() => {
+    onChangeParameters({refSchema: refSchema})
+  }, [refSchema])
+
+  useEffect(() => {
+    onChangeParameters({refTable: refTable})
+  }, [refTable])
 
   return (
     <div className="w-full">
