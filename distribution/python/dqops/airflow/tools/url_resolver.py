@@ -19,4 +19,4 @@ def extract_base_url(url: str) -> str:
 
     base_url: str = re.search("(^.+?[^\/:](?=[?\/]|$))", url).group()
 
-    return base_url + '/'
+    return base_url + "/"

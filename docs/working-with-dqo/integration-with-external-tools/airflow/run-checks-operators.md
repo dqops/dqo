@@ -29,7 +29,7 @@ When none of the available operator parameters are set, possibly all sensors wil
 
 | Name              | Description                                                                                                                                                                                                                                                                                                                                                         | Type      |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| url               | The base url to DQOps application. Default value is http://localhost:8888.                                                                                                                                                                                                                                                                                          | str       |
+| base_url          | The base url to DQOps application. Default value is http://localhost:8888.                                                                                                                                                                                                                                                                                          | str       |
 | api_key           | Api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                                                                   | str       |
 | connection_name   | The connection name to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                                                                   | str       |
 | schema_table_name | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                                                            | str       |
@@ -127,6 +127,16 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **waiting**: The job is parked until the concurrency constraints are met.
 
 
+todo
+import tables, tam patrzeć tylko na status, ale też mozna sprawdzić czy coś się zaimportowało
+(można by wykrywać że żadnej tabeli nie ma)
+
+todo
+w examples dać integrations/airflow
+i tam wrzucać example
+
+todo
+plus readme jakie są rzeczy konieczne do uruchomienia
 
 
 **airflow.exceptions.AirflowException: DQOps checks failed!**

@@ -1,4 +1,3 @@
-import logging
 from airflow.exceptions import AirflowException
 
 class DqopsTimeoutException(AirflowException):

@@ -1,7 +1,7 @@
 import datetime
 import pendulum
 from airflow import DAG
-from dqops.airflow_operators.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
+from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.client.models.check_type import CheckType
 
 with DAG(
@@ -13,8 +13,7 @@ with DAG(
     run_checks_task = DqopsRunChecksOperator(
         task_id="dqops_run_checks_operator_task",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
-        url='http://host.docker.internal:8888',
+        base_url='http://host.docker.internal:8888',
         connection_name="example_connection",
-        check_type=CheckType.PROFILING,
-        wait_timeout=2
+        check_type=CheckType.MONITORING
     )
