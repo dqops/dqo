@@ -1,9 +1,12 @@
 # Run checks operators
 
-Run checks operators are used to execute sensors configured in the DQOps application. 
+Run checks airflow operators are used to execute sensors configured in the DQOps application. 
 
-The operator configuration provides parameters which allow setting the operator specifically. 
-It can run all sensors within a connection, particular table sensors, check types or a combination of them.
+The operator provides parameters which allow setting it specifically:
+- within a connection, 
+- particular table sensors, 
+- check types 
+- or a combination of them.
 
 Run checks operators are working synchronously, so airflow will wait for the end of execution. 
 To prevent endless execution, the operator supports a timeout parameter.
@@ -24,15 +27,15 @@ Typed operators:
 Operator parameters can be treated as filters that limit the scope of checks that will be run.
 When none of the available operator parameters are set, possibly all sensors will be run.  
 
-| Name              | Description                                                                                                                                                                                                                                                                                                                | Type      |
-|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| url               | The base url to DQOps application. Default value is http://localhost:8888                                                                                                                                                                                                                                                  | str       |
-| api_key           | Api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                          | str       |
-| connection_name   | The connection name to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                          | str       |
-| schema_table_name | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                   | str       |
-| check_type        | Only available for DqopsRunChecksOperator. When set, the operator will work as other run checks operators. The other operators have set this field to a constant value from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType |
-| wait_timeout      | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the default DQO timeout value or DQO_PYTHON_PYTHON_SCRIPT_TIMEOUT_SECONDS environment variable.                                                         | int       |
-| fail_on_timeout   | Timeout is leading the task status to Failed default. It can be omitted marking the task as Success by setting the flag to True                                                                                                                                                                                            |bool|
+| Name              | Description                                                                                                                                                                                                                                                                                                                                                         | Type      |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| url               | The base url to DQOps application. Default value is http://localhost:8888.                                                                                                                                                                                                                                                                                          | str       |
+| api_key           | Api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                                                                   | str       |
+| connection_name   | The connection name to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                                                                   | str       |
+| schema_table_name | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                                                            | str       |
+| check_type        | Only available for DqopsRunChecksOperator. Specifies type of checks to be executed. When set, the operator will work as other run checks operators. The other operators have set this field to a constant value from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType |
+| wait_timeout      | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.                                                                                                                                                 | int       |
+| fail_on_timeout   | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                                                                 | bool      |
 
 
 ## Set up the run check operator
@@ -101,15 +104,15 @@ Job id has a type of DqoQueueJobId which includes job tracking details:
 
 Job result has a type of RunChecksResult with the overall summary of checks execution: 
 
-| name             | description                                                                                                                                                                                                        | type              |
-|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| highest_severity | The highest severity returned from executed checks (in order from highest): fatal, error, warning, valid. <br/>Here you can learn about [Severity levels](../../../dqo-concepts/data-quality-kpis/data-quality-kpis.md) | RuleSeverityLevel |
-| executed_checks  | The total count of all executed checks.                                                                                                                                                                            | int               |
-| valid_results    | The total count of all checks that finished successfully (with no data quality issues).                                                                                                                            | int               |
-| warnings         | The total count of all invalid data quality checks that finished raising a warning.                                                                                                                                | int               |
-| errors           | The total count of all invalid data quality checks that finished raising an error.                                                                                                                                 | int               |
-| fatals           | The total count of all invalid data quality checks that finished raising a fatal error.                                                                                                                            | int               |
-| execution_errors | The total number of checks that failed to execute due to some execution errors.                                                                                                                                    | int               |
+| name             | description                                                                                                                                                                                                               | type                |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| highest_severity | The highest severity returned from executed checks (in order from highest): fatal, error, warning, valid. <br/>Here you can learn about [Severity levels](../../../dqo-concepts/data-quality-kpis/data-quality-kpis.md)   | RuleSeverityLevel   |
+| executed_checks  | The total count of all executed checks.                                                                                                                                                                                   | int                 |
+| valid_results    | The total count of all checks that finished successfully (with no data quality issues).                                                                                                                                   | int                 |
+| warnings         | The total count of all invalid data quality checks that finished raising a warning.                                                                                                                                       | int                 |
+| errors           | The total count of all invalid data quality checks that finished raising an error.                                                                                                                                        | int                 |
+| fatals           | The total count of all invalid data quality checks that finished raising a fatal error.                                                                                                                                   | int                 |
+| execution_errors | The total number of checks that failed to execute due to some execution errors.                                                                                                                                           | int                 |
 
 
 ## Status
