@@ -60,6 +60,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.source_project_id}
         onChange={(value) => handleChange({ source_project_id: value })}
         disabled={userProfile.can_manage_data_sources!== true}
+        data={sharedCredentials}
       />
         <Select
           label="Authentication mode to the Google Cloud"
@@ -71,6 +72,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
           }
           onChange={(value) => handleChange({ authentication_mode: value })}
           disabled={userProfile.can_manage_data_sources!== true}
+          
         />
         <Select
          label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
@@ -90,6 +92,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.billing_project_id}
         onChange={(value) => handleChange({ billing_project_id: value })}
         disabled={(bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id || userProfile.can_manage_data_sources!== true) ? false: true}
+        data={sharedCredentials}
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
@@ -110,6 +113,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
           value={bigquery?.json_key_path}
           onChange={(value) => handleChange({ json_key_path: value })}
           disabled={userProfile.can_manage_data_sources!== true}
+          data={sharedCredentials}
         />
       )}
       <FieldTypeInput
@@ -119,7 +123,6 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         onChange={(value) => handleChange({ quota_project_id: value })}
         disabled={userProfile.can_manage_data_sources!== true}
         data={sharedCredentials}
-        credential={true}
       />
     </SectionWrapper>
   );

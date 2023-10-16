@@ -29,31 +29,35 @@ const SqlServerConnection = ({
 
   return (
     <SectionWrapper title="Microsoft SQL Server/SQL Server connection parameters" className="mb-4">
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Host"
         className="mb-4"
         value={sqlserver?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  data = {sharedCredentials}
         label="Port"
         className="mb-4"
         value={(sqlserver?.port || 1433).toString()}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Database"
         className="mb-4"
         value={sqlserver?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput 
+        data = {sharedCredentials}
         label="User name"
         className="mb-4"
         value={sqlserver?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"

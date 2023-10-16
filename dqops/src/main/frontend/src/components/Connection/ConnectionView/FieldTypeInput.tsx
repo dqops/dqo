@@ -96,10 +96,10 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
           </div>
           {(type === 'env' || type === 'credential') && <div>{'}'}</div>}
         </div>
-        <Select options={credential ? [...options, { 
+        <Select options={[...options, { 
         label: '${credential: CREDENTIAL}',
         value: 'credential'
-        }] : options}
+        }]}
       value={type} onChange={onChangeType} disabled={disabled} placeholder=""/>
       </div>
     </div>
