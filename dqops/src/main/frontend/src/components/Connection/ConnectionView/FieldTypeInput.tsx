@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Select from "../../Select";
 import Input from "../../Input";
 import clsx from "clsx";
@@ -63,16 +63,10 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
     return text;
   };
 
-  // useEffect(() => {
-  //   if (!value) return;
-
-  //   if (value.startsWith('${') && value.endsWith('}')) {
-  //     setText(value.substr(2, value.length - 3));
-  //   } else {
-  //     setText(value);
-  //     setType('text');
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (!value) return;
+      setText(value);
+  }, [value]);
 
   const inputType = maskingType === 'password' && type !== 'env'
   ? 'password'

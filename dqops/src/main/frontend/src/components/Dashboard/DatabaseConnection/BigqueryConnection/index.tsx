@@ -51,6 +51,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       ...obj
     });
   };
+  console.log(bigquery)
   return (
     <SectionWrapper title="BigQuery connection parameters" className="mb-4">
       <FieldTypeInput
