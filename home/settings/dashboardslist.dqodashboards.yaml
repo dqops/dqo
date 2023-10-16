@@ -72,13 +72,6 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Null count
-          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
         - dashboard_name: Issue details dashboard
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
           width: 1600
@@ -128,22 +121,32 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
 
+    - folder_name: Completeness
+      dashboards:
+        - dashboard_name: Number of null values in the columns
+          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+
     - folder_name: Volume
       dashboards:
         - dashboard_name: Largest tables by number of rows
           url: https://lookerstudio.google.com/embed/reporting/58ba619a-5c39-43f2-996b-a22a60e25137/page/c5B8C
           width: 1400
-          height: 1700
+          height: 1200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: profile_row_count
+            ds0.p_check_type: profiling
         - dashboard_name: Empty or too small tables
           url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: profile_row_count
+            ds0.p_check_type: profiling
     - folder_name: Availability
       dashboards:
         - dashboard_name: Table availability
@@ -152,14 +155,14 @@ spec:
           height: 1820
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: profile_table_availability
+            ds0.p_check_type: profiling
         - dashboard_name: History of table availability issues
           url: https://lookerstudio.google.com/embed/reporting/85f323d9-422a-4b23-9f2c-b158502ddc7e
           width: 1400
           height: 1900
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: profile_table_availability
+            ds0.p_check_type: profiling
     - folder_name: PII
       dashboards:
         - dashboard_name: PII detected
@@ -180,8 +183,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
           width: 1400
@@ -189,8 +190,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
@@ -198,8 +197,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column count changed
           url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
           width: 1400
@@ -207,35 +204,41 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list changed
-          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/1832ea5b-21ff-44d4-9c41-06c763ab3c02/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list or order changed
-          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/e7ee914a-b497-4af0-85f6-841c05fc8d0e/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column types changed
-          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/7fdf18bc-b98f-4374-bcc1-83d84091e98c/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
+        - dashboard_name: Column exists
+          url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+        - dashboard_name: Column type changed
+          url: https://lookerstudio.google.com/embed/reporting/80f8376f-459b-4e2b-a029-1b37d867c386/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
     - folder_name: Timeliness
       dashboards:
         - dashboard_name: Table freshness - tables with the most current data
@@ -405,8 +408,8 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Null count
-          url: https://lookerstudio.google.com/embed/reporting/c70617fd-41be-4aa6-996c-e307a2a90fa1/page/c5B8C
+        - dashboard_name:
+          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -507,8 +510,8 @@ spec:
             ds0.p_check_category: all
     - folder_name: Completeness
       dashboards:
-      - dashboard_name: Nulls count
-        url: https://lookerstudio.google.com/embed/reporting/c70617fd-41be-4aa6-996c-e307a2a90fa1/page/c5B8C
+      - dashboard_name: Number of null values in the columns
+        url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
         width: 1400
         height: 1800
         parameters:
@@ -523,14 +526,14 @@ spec:
           height: 1700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: daily_row_count
+            ds0.p_check_type: monitoring
         - dashboard_name: Empty or too small tables
           url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: daily_row_count
+            ds0.p_check_type: monitoring
     - folder_name: Availability
       dashboards:
         - dashboard_name: Table availability
@@ -539,14 +542,14 @@ spec:
           height: 1820
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: daily_table_availability
+            ds0.p_check_type: monitoring
         - dashboard_name: History of table availability issues
           url: https://lookerstudio.google.com/embed/reporting/85f323d9-422a-4b23-9f2c-b158502ddc7e
           width: 1400
           height: 1900
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_name: daily_table_availability
+            ds0.p_check_type: monitoring
     - folder_name: PII
       dashboards:
         - dashboard_name: PII detected
@@ -567,8 +570,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Schema changes - columns
           url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
           width: 1400
@@ -576,8 +577,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Wrong column count
           url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
           width: 1400
@@ -585,8 +584,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column count changed
           url: https://lookerstudio.google.com/embed/reporting/934afc90-83a3-4be7-a375-009b502a5642/page/c5B8C
           width: 1400
@@ -594,35 +591,41 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list changed
-          url: https://lookerstudio.google.com/embed/reporting/f8b63c5a-b163-4f6e-bb81-f84d52dd87c4/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/1832ea5b-21ff-44d4-9c41-06c763ab3c02/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column list or order changed
-          url: https://lookerstudio.google.com/embed/reporting/21938bd2-c4e5-4ab6-b125-e62f8cf22ac9/page/p_9xvdtzxu0c
+          url: https://lookerstudio.google.com/embed/reporting/e7ee914a-b497-4af0-85f6-841c05fc8d0e/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Column types changed
-          url: https://lookerstudio.google.com/embed/reporting/fe8ad129-2039-4a53-98f3-b6c767172736/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/7fdf18bc-b98f-4374-bcc1-83d84091e98c/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
+        - dashboard_name: Column exists
+          url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+        - dashboard_name: Column type changed
+          url: https://lookerstudio.google.com/embed/reporting/80f8376f-459b-4e2b-a029-1b37d867c386/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
     - folder_name: Timeliness
       dashboards:
         - dashboard_name: Table freshness - tables with the most current data
@@ -885,13 +888,14 @@ spec:
             ds0.p_check_category: all
     - folder_name: Completeness
       dashboards:
-        - dashboard_name: Nulls count
+        - dashboard_name: Number of null values in the columns
           url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
+
     - folder_name: Partition volume statistics
       dashboards:
         - dashboard_name: Number of rows in partitions per day

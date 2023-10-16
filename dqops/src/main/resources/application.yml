@@ -177,7 +177,7 @@ dqo:
       partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
   webserver:
     static-files-cache-control-max-age: 604800
-    dynamic-files-cache-control-max-age: 86400
+    dynamic-files-cache-control-max-age: 0
   cli:
     oneshot:
       terminal-width: 150

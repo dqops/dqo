@@ -98,6 +98,7 @@ export const SensorDetail = () => {
   }, [type, copied]);
 
   const closeSensorFirstLevelTab = () => {
+    dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     dispatch(
       closeFirstLevelTab(
         '/definitions/sensors/' +
@@ -245,7 +246,7 @@ export const SensorDetail = () => {
   const onDelete = async () => {
     SensorsApi.deleteSensor(urlencodeDecoder(full_sensor_name)).then(async () =>
       closeSensorFirstLevelTab(),
-      dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
+     
     );
   };
 
