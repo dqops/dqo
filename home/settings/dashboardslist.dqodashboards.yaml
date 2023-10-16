@@ -134,7 +134,7 @@ spec:
     - folder_name: Volume
       dashboards:
         - dashboard_name: Largest tables by number of rows
-          url: https://lookerstudio.google.com/embed/reporting/58ba619a-5c39-43f2-996b-a22a60e25137/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/776b972d-3504-479a-98ed-2b8cb703279d/page/c5B8C
           width: 1400
           height: 1200
           parameters:
