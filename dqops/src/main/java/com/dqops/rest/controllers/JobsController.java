@@ -26,10 +26,7 @@ import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesResult;
-import com.dqops.core.jobqueue.monitoring.DqoJobHistoryEntryModel;
-import com.dqops.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
-import com.dqops.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
-import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.jobqueue.monitoring.*;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.jobs.*;
@@ -173,8 +170,10 @@ public class JobsController {
             Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(summary -> {
                         RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
+                        DqoJobCompletionStatus jobCompletionStatus = runChecksJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
-                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -283,8 +282,10 @@ public class JobsController {
             Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(summary -> {
                         CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
+                        DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
-                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -341,8 +342,10 @@ public class JobsController {
             Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(summary -> {
                         CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
+                        DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
-                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -547,8 +550,10 @@ public class JobsController {
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(importTablesResult -> {
+                        DqoJobCompletionStatus jobCompletionStatus = importTablesJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId());
-                        return new ImportTablesQueueJobResult(pushJobResult.getJobId(), importTablesResult, jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new ImportTablesQueueJobResult(pushJobResult.getJobId(), importTablesResult, dqoJobStatus);
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -595,8 +600,10 @@ public class JobsController {
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(deleteStoredDataResult -> {
+                        DqoJobCompletionStatus jobCompletionStatus = deleteStoredDataJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId());
-                        return new DeleteStoredDataQueueJobResult(pushJobResult.getJobId(), deleteStoredDataResult, jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new DeleteStoredDataQueueJobResult(pushJobResult.getJobId(), deleteStoredDataResult, dqoJobStatus);
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
@@ -644,8 +651,10 @@ public class JobsController {
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
             Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .then(Mono.fromCallable(() -> {
+                        DqoJobCompletionStatus jobCompletionStatus = synchronizeMultipleFoldersJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
-                        return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), jobHistoryEntryModel.getStatus());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), dqoJobStatus);
                     }));
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
