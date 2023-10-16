@@ -166,6 +166,7 @@ const DatabaseConnection = ({
       <BigqueryConnection
         bigquery={database.bigquery}
         onChange={(bigquery) => onChange({ ...database, bigquery })}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.snowflake]: (

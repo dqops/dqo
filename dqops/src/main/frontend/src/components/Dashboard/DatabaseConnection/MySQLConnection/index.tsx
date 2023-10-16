@@ -55,32 +55,37 @@ const MySQLConnection = ({
 
   return (
     <SectionWrapper title="MySQL connection parameters" className="mb-4">
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Host"
         className="mb-4"
         value={mysql?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Port"
         className="mb-4"
         value={(mysql?.port || 3306).toString()}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="User name"
         className="mb-4"
         value={mysql?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Database"
         className="mb-4"
         value={mysql?.database}
