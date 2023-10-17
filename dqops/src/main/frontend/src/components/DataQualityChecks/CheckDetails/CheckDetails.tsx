@@ -43,6 +43,9 @@ const tabs = [
     value: 'execution_errors'
   }
 ];
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 
 interface CheckDetailsProps {
   checkTypes: CheckTypes;
@@ -59,6 +62,7 @@ interface CheckDetailsProps {
   defaultFilters?: any;
   category?: string;
   comparisonName?: string;
+  onChangeRefreshCheckObject?: (obj: IRefetchResultsProps) => void
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -74,7 +78,8 @@ const CheckDetails = ({
   onClose,
   defaultFilters,
   category,
-  comparisonName
+  comparisonName,
+  onChangeRefreshCheckObject
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -273,6 +278,12 @@ const CheckDetails = ({
     fetchCheckResults(month, name);
     fetchCheckReadouts(month, name);
   };
+
+  useEffect(() => {
+    if(onChangeRefreshCheckObject) {
+      onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.onChangeDataGroup)})
+    }
+  }, [])
 
   return (
     <div
