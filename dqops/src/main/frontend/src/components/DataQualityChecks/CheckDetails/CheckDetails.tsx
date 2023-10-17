@@ -281,9 +281,20 @@ const CheckDetails = ({
 
   useEffect(() => {
     if(onChangeRefreshCheckObject) {
-      onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.onChangeDataGroup)})
+      onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.dataGroup)})
     }
   }, [fetchCheckResults])
+
+  useEffect(() => {
+    if(activeTab === 'check_results') {
+      fetchCheckResults(filters.month, filters.dataGroup)
+    } else if(activeTab === 'sensor_readouts') {
+      fetchCheckResults(filters.month, filters.dataGroup)
+    } else if(activeTab === 'execution_errors') {
+      fetchCheckResults(filters.month, filters.dataGroup)
+    }
+
+  }, [activeTab])
 
   return (
     <div
