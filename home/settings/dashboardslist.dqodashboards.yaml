@@ -102,6 +102,15 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
 
     - folder_name: Completeness
       dashboards:
@@ -472,6 +481,16 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+
     - folder_name: Completeness
       dashboards:
       - dashboard_name: Number of null values in the columns
@@ -832,6 +851,17 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: partitioned
+
     - folder_name: Completeness
       dashboards:
         - dashboard_name: Number of null values in the columns
