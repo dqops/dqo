@@ -26,31 +26,36 @@ const RedshiftConnection = ({
 
   return (
     <SectionWrapper title="Redshift connection parameters" className="mb-4">
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Host"
         className="mb-4"
         value={redshift?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Port"
         className="mb-4"
         value={(redshift?.port || 5439).toString()}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Database"
         className="mb-4"
         value={redshift?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="User name"
         className="mb-4"
         value={redshift?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Password"
         maskingType="password"
         className="mb-4"

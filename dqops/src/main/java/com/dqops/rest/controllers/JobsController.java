@@ -62,6 +62,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -165,9 +166,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
-            CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = new CompletableFuture<CheckExecutionSummary>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<CheckExecutionSummary> timeoutOrFinishedFuture =
+                    (CompletableFuture<CheckExecutionSummary>)(CompletableFuture<?>)
+                    CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(summary -> {
                         RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
                         DqoJobCompletionStatus jobCompletionStatus = runChecksJob.getCompletionStatus();
@@ -212,24 +217,31 @@ public class JobsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CompletableFuture<?> jobFinishedFuture = jobHistoryEntryModel.getJobQueueEntry().getJob().getFinishedFuture();
+        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
         long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
 
         long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
-        CompletableFuture<?> timeoutLimitedFuture = jobFinishedFuture
+        CompletableFuture<RunChecksQueueJobResult> timeoutLimitedFuture = new CompletableFuture<RunChecksQueueJobResult>()
                 .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+        CompletableFuture<RunChecksQueueJobResult> timeoutOrFinishedFuture =
+                (CompletableFuture<RunChecksQueueJobResult>)(CompletableFuture<?>)
+                CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
 
-        Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+        Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                 .map(_none -> {
                     DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
                     if (mostRecentJobModel == null) {
                         return null;
                     }
 
+                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+
                     RunChecksQueueJobResult jobResult = new RunChecksQueueJobResult(
                             mostRecentJobModel.getJobId(),
                             mostRecentJobModel.getParameters().getRunChecksParameters().getRunChecksResult(),
-                            mostRecentJobModel.getStatus());
+                            dqoJobStatus);
                     return jobResult;
                 });
 
@@ -277,9 +289,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
+                    (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(summary -> {
                         CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
                         DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
@@ -337,9 +353,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getCollectStatistics();
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
+                    (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(summary -> {
                         CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
                         DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
@@ -437,17 +457,31 @@ public class JobsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CompletableFuture<?> jobFinishedFuture = jobHistoryEntryModel.getJobQueueEntry().getJob().getFinishedFuture();
+        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
         long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getWaitTimeForJobType(jobHistoryEntryModel.getJobType());
 
         long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
-        CompletableFuture<?> timeoutLimitedFuture = jobFinishedFuture
+        CompletableFuture<?> timeoutLimitedFuture = new CompletableFuture<Void>()
                 .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+        CompletableFuture<?> timeoutOrFinishedFuture = CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
 
-        Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+        Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                 .map(_none -> {
                     DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
-                    return mostRecentJobModel;
+                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+
+                    DqoJobHistoryEntryModel mostRecentStatusModel = mostRecentJobModel.clone();
+                    if (mostRecentStatusModel.getStatus() != dqoJobStatus) {
+                        mostRecentStatusModel.setStatus(dqoJobStatus);
+                        mostRecentStatusModel.setStatusChangedAt(Instant.now());
+                        if (dqoJobStatus == DqoJobStatus.failed && job.getJobExecutionException() != null) {
+                            mostRecentStatusModel.setErrorMessage(job.getJobExecutionException().getMessage());
+                        }
+                    }
+
+                    return mostRecentStatusModel;
                 });
 
         return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
@@ -546,9 +580,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getImportTables();
-            CompletableFuture<ImportTablesResult> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<ImportTablesResult> timeoutLimitedFuture = new CompletableFuture<ImportTablesResult>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<ImportTablesResult> timeoutOrFinishedFuture =
+                    (CompletableFuture<ImportTablesResult>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(importTablesResult -> {
                         DqoJobCompletionStatus jobCompletionStatus = importTablesJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId());
@@ -596,9 +634,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getDeleteStoredData();
-            CompletableFuture<DeleteStoredDataResult> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<DeleteStoredDataResult> timeoutLimitedFuture = new CompletableFuture<DeleteStoredDataResult>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<DeleteStoredDataResult> timeoutOrFinishedFuture =
+                    (CompletableFuture<DeleteStoredDataResult>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(deleteStoredDataResult -> {
                         DqoJobCompletionStatus jobCompletionStatus = deleteStoredDataJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId());
@@ -647,9 +689,13 @@ public class JobsController {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getSynchronizeMultipleFolders();
-            CompletableFuture<Void> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+            CompletableFuture<Void> timeoutLimitedFuture = new CompletableFuture<Void>()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            CompletableFuture<Void> timeoutOrFinishedFuture =
+                    (CompletableFuture<Void>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .then(Mono.fromCallable(() -> {
                         DqoJobCompletionStatus jobCompletionStatus = synchronizeMultipleFoldersJob.getCompletionStatus();
                         DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
