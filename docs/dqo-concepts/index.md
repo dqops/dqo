@@ -1,6 +1,6 @@
 # Key concepts overview
 
-These topics introduce the basic concepts of DQO.
+These topics introduce the basic concepts of DQOps.
 
  - **[Checks](./checks/index.md)**
 
@@ -15,6 +15,10 @@ These topics introduce the basic concepts of DQO.
  - **[Rules](./rules/rules.md)**
 
     Description of the rules. A set of conditions against which sensor readouts are verified, described by a list of thresholds.
+
+ - **[Deployment architecture](./architecture/deployment-architecture.md)**
+
+    DQOps architecture, components and deployment options.
 
 
  - **[Data quality KPIs](./data-quality-kpis/data-quality-kpis.md)**
@@ -39,16 +43,16 @@ These topics introduce the basic concepts of DQO.
 
 - **[Data storage](./data-storage/data-storage.md)**
 
-    Description how data is stored in DQO.
+    Description how data is stored in DQOps.
 
 
 - **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
 
-    Introduction to working with YAML configuration files in DQO.
+    Introduction to working with YAML configuration files in DQOps.
 
 
 - **[Working with CLI](./working-with-cli/working-with-cli.md)**
 
-    Introduction to working with DQO Command-Line Interface.
+    Introduction to working with DQOps Command-Line Interface.
 
  
