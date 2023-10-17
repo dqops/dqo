@@ -1,7 +1,6 @@
 import json
 import logging
 import httpx
-
 from airflow.exceptions import AirflowException
 from airflow.models.baseoperator import BaseOperator
 from dqops.airflow.exceptions.dqops_checks_failed_exception import (
@@ -21,13 +20,13 @@ from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.models.run_checks_parameters import RunChecksParameters
 from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
 from dqops.client.types import UNSET, Response
-
 from httpx import ReadTimeout
-from typing import Optional
+from typing import Any, Dict, Optional, Union
+
 
 class DqopsRunChecksOperator(BaseOperator):
     """
-    Airflow run checks operator for execution the DQOps sensors.
+    Airflow run checks operator for execution of the DQOps sensors.
 
     """
 
@@ -42,12 +41,12 @@ class DqopsRunChecksOperator(BaseOperator):
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
         **kwargs
-    ) -> None:
+    ) -> Union[Dict[str, Any], None]:
         """
         Parameters
         ----------
         base_url : str
-            The base url to DQOps application. Default value is http://localhost:8888
+            The base url to DQOps application. Default value is http://localhost:8888/
         api_key : str
             Api key to DQOps application. Not set as default.
         connection_name : str
@@ -95,15 +94,10 @@ class DqopsRunChecksOperator(BaseOperator):
                 client=client,
                 json_body=params,
                 wait=True,
-                wait_timeout=self.wait_timeout
+                wait_timeout=self.wait_timeout,
             )
         except ReadTimeout as exception:
-            timeout_message: str = "Python client has timed out!"
-            if self.fail_on_timeout:
-                logging.error(timeout_message)
-                raise exception
-            else:
-                logging.info(timeout_message)
+            self._handle_python_timeout(exception)
             return None
 
         # When timeout is too short, returned object is empty
@@ -120,9 +114,10 @@ class DqopsRunChecksOperator(BaseOperator):
 
         # dqo times out with RunChecksQueueJobResult object details
         if job_result.status == DqoJobStatus.RUNNING:
-            self._handle_timeout()
+            self._handle_dqo_timeout()
 
-        if (job_result.result.highest_severity is not None
+        if (
+            job_result.result.highest_severity is not None
             and job_result.result.highest_severity != RuleSeverityLevel.VALID
             and job_result.status != DqoJobStatus.CANCELLED
         ):
@@ -130,11 +125,19 @@ class DqopsRunChecksOperator(BaseOperator):
 
         return job_result.to_dict()
 
-    def _handle_timeout(self):
+    def _handle_dqo_timeout(self):
         timeout_message: str = "DQOps' job has timed out!"
 
         if self.fail_on_timeout:
             logging.error(timeout_message)
             raise AirflowException(timeout_message)
+        else:
+            logging.info(timeout_message)
+
+    def _handle_python_timeout(self, exception):
+        timeout_message: str = "Python client has timed out!"
+        if self.fail_on_timeout:
+            logging.error(timeout_message)
+            raise exception
         else:
             logging.info(timeout_message)
