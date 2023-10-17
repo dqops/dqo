@@ -223,24 +223,6 @@ const CheckDetails = ({
   );
 
   useEffect(() => {
-    if (!sensorErrors?.length) {
-      fetchCheckErrors(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sensorReadouts?.length) {
-      fetchCheckReadouts(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!checkResults?.length) {
-      fetchCheckResults(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
     if (
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
@@ -289,9 +271,9 @@ const CheckDetails = ({
     if(activeTab === 'check_results') {
       fetchCheckResults(filters.month, filters.dataGroup)
     } else if(activeTab === 'sensor_readouts') {
-      fetchCheckResults(filters.month, filters.dataGroup)
+      fetchCheckReadouts(filters.month, filters.dataGroup)
     } else if(activeTab === 'execution_errors') {
-      fetchCheckResults(filters.month, filters.dataGroup)
+      fetchCheckErrors(filters.month, filters.dataGroup)
     }
 
   }, [activeTab])
