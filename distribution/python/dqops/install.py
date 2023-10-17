@@ -92,7 +92,7 @@ def download_to_file(response, path, chunk_size=1024 * 1024):
 
 def install_dqo_home_if_missing(dqo_home):
     if os.path.exists(dqo_home) and os.path.exists(
-        os.path.join(dqo_home, "README.TXT")
+        os.path.join(dqo_home, "README.md")
     ):
         return
 
