@@ -283,7 +283,7 @@ const CheckDetails = ({
     if(onChangeRefreshCheckObject) {
       onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.onChangeDataGroup)})
     }
-  }, [])
+  }, [fetchCheckResults])
 
   return (
     <div
