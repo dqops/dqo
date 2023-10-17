@@ -844,7 +844,7 @@ spec:
 
     - folder_name: Partition volume statistics
       dashboards:
-        - dashboard_name: Number of rows in partitions per day
+        - dashboard_name: Daily partitions row count
           url: https://lookerstudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
           width: 1400
           height: 2000
