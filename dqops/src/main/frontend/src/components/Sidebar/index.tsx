@@ -13,8 +13,9 @@ import { IRootState } from '../../redux/reducers';
 const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
+ 
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth, treeData } = useTree();
+  const { sidebarWidth, setSidebarWidth, treeData, sidebarScrollHeight, setSidebarScrollHeight } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
@@ -41,6 +42,12 @@ const Sidebar = () => {
     [isResizing]
   );
 
+  const handleScroll = () => {
+    if (sidebarRef.current) {
+      setSidebarScrollHeight(sidebarRef.current.scrollTop);
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResizing);
@@ -49,10 +56,18 @@ const Sidebar = () => {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
+
+  useEffect(() => {
+    if (sidebarRef.current) {
+      sidebarRef.current.scrollTop = sidebarScrollHeight;
+    }
+  }, [sidebarScrollHeight])
+
   return (
     <div
       className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
       ref={sidebarRef}
+      onScroll={handleScroll}
       // onMouseDown={(e) => e.preventDefault()}
       style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
