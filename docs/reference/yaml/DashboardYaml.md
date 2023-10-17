@@ -1,4 +1,15 @@
 
+## DashboardsFolderListSpec  
+List of dashboard folders.  
+  
+
+
+
+
+
+
+___  
+
 ## DashboardSpec  
 Description of a single dashboard that is available in the platform.  
   
@@ -22,17 +33,6 @@ Description of a single dashboard that is available in the platform.
 
 
 
-
-
-
-
-
-
-___  
-
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
 
 
 

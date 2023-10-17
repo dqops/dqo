@@ -1,8 +1,12 @@
 import json
 import logging
+from typing import Any, Dict, Optional, Union
+
 import httpx
-from airflow.exceptions import AirflowException
 from airflow.models.baseoperator import BaseOperator
+from httpx import ReadTimeout
+
+from airflow.exceptions import AirflowException
 from dqops.airflow.exceptions.dqops_checks_failed_exception import (
     DqopsChecksFailedException,
 )
@@ -20,8 +24,6 @@ from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.models.run_checks_parameters import RunChecksParameters
 from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
 from dqops.client.types import UNSET, Response
-from httpx import ReadTimeout
-from typing import Any, Dict, Optional, Union
 
 
 class DqopsRunChecksOperator(BaseOperator):

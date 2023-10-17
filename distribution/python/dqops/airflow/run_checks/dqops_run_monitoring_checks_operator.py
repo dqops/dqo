@@ -1,7 +1,9 @@
+from typing import Any, Dict, Union
+
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.client.models.check_type import CheckType
 from dqops.client.types import UNSET
-from typing import Any, Dict, Union
+
 
 class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
     """
