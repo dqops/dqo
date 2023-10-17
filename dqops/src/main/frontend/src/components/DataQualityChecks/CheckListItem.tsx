@@ -51,6 +51,9 @@ interface ICheckListItemProps {
   canUserRunChecks?: boolean;
 }
 
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 const CheckListItem = ({
   mode,
   check,
@@ -94,6 +97,11 @@ const CheckListItem = ({
     'error' | 'warning' | 'fatal' | ''
   >('');
 
+  const [refreshCheckObject, setRefreshCheckObject] = useState<IRefetchResultsProps | undefined>()
+
+  const onChangeRefrshCheckObject = (obj: IRefetchResultsProps) => {
+    setRefreshCheckObject(obj)
+  }
   useEffect(() => {
     const localState = localStorage.getItem(
       `${checkTypes}_${check.check_name}`
@@ -261,6 +269,9 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}_details`,
       newValue.toString()
     );
+    if(refreshCheckObject) {
+      refreshCheckObject.fetchCheckResults()
+    }
     setShowDetails(newValue);
   };
 
@@ -624,6 +635,7 @@ const CheckListItem = ({
               category={category}
               comparisonName={comparisonName}
               data_clean_job_template={check.data_clean_job_template}
+              onChangeRefreshCheckObject={onChangeRefrshCheckObject}
             />
           </td>
         </tr>

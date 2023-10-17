@@ -25,7 +25,6 @@ import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -97,6 +96,8 @@ public class GeneratePythonClientPostProcessor {
             if (!isSuccess || pipProcess.exitValue() != 0) {
                 throw new PythonExecutionException("Failed to start " + String.join(" ", commandLine) + ", error code: " + pipProcess.exitValue());
             }
+
+            GeneratedPythonClientModifier.modifyClient(projectRoot);
         }
         catch (Exception ex) {
             System.err.println("Cannot generate a DQOps Python client, error: " + ex.getMessage());
