@@ -27,7 +27,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const location = useLocation();
   const match = useRouteMatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [objectNotFound, setObjectNotFound] = useState(false)
+  const [objectNotFound, setObjectNotFound] = useState<boolean | undefined>()
 
   const handleChange = (tab: TabOption) => {
     console.log("here")
@@ -61,15 +61,29 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
     }
   }, [activeTab]);
 
-axios.interceptors.response.use(undefined, function (error) {
-  const statusCode = error.response ? error.response.status : null;
-  if (statusCode === 404 ) {
-    console.log(error)
-    setObjectNotFound(true)
+  const onChangeObjectNotFount = (param : boolean) => {
+    setObjectNotFound(param)
   }
-  return Promise.reject(error);
-});
 
+  const catchError = () => {
+  axios.interceptors.response.use(undefined, async function (error) {
+    console.log('inside')
+    const statusCode = error.response ? error.response.status : null;
+    console.log(statusCode)
+    if (statusCode === 404 ) {
+      console.log('inside if')
+      onChangeObjectNotFount(true)
+      console.log(error)
+    }
+      return Promise.reject(error);
+  });
+}
+
+useEffect(() => {
+  catchError()
+}, [activeTab])
+
+console.log(objectNotFound)
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
@@ -91,7 +105,7 @@ axios.interceptors.response.use(undefined, function (error) {
         </div>
       </div>
       <ConfirmDialog
-      open={objectNotFound}
+      open={objectNotFound ?? false}
       onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
