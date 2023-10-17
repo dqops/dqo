@@ -102,24 +102,6 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Profiling KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: Profiling KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
 
     - folder_name: Completeness
       dashboards:
@@ -440,24 +422,6 @@ spec:
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
           height: 2210
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -818,24 +782,6 @@ spec:
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
           height: 2150
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
