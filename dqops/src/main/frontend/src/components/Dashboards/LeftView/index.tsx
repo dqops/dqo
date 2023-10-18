@@ -75,9 +75,9 @@ const LeftView = () => {
 
     useEffect(() => {
       if(selected !== activeTab){
-        setSelected(activeTab)
+        setSelected(activeTab);
       }
-    },[activeTab])
+    },[activeTab]);
 
     let mouseEnterTimeout: NodeJS.Timeout | undefined; 
     
