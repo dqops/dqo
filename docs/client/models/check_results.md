@@ -15,6 +15,7 @@ Check detailed results. Returned in the context of a single data group, with a s
 |check_type|Check type.|string|
 |data_groups|Data groups list.|string_list|
 |data_group|Selected data group.|string|
+|check_result_entries|Single check results|List&lt;[CheckResultEntryModel](\docs\client\models\incidents\#checkresultentrymodel)&gt;|
 
 
 ___  
@@ -38,6 +39,7 @@ The table validity status. It is a summary of the results of the most recently e
 |errors|The number of most recent data quality checks that failed by raising an error severity data quality issue.|integer|
 |fatals|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|integer|
 |execution_errors|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.|integer|
+|failed_checks_statuses|The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].|Map&lt;string, [CheckResultStatus](#null)&gt;|
 
 
 ___  

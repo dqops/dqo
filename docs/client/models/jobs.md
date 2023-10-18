@@ -41,8 +41,54 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-|[result](\docs\client\models\#collectstatisticsresult)|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |[CollectStatisticsResult](\docs\client\models\#collectstatisticsresult)|
-|[status](\docs\client\models\#dqojobstatus)|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|[result](#null)|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |[CollectStatisticsResult](#null)|
+|status|Job status|[DqoJobStatus](#null)|
+
+
+___  
+
+## DqoRoot  
+DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud).
+ It is also used as a lock scope.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|settings<br/>_indexes<br/>data_errors<br/>sources<br/>data_incidents<br/>credentials<br/>rules<br/>data_sensor_readouts<br/>data_statistics<br/>sensors<br/>checks<br/>data_check_results<br/>_local_settings<br/>|
+
+___  
+
+## ParquetPartitionId  
+Identifies a single partition for hive partitioned tables stored as parquet files.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|table_type|Table type.|[DqoRoot](#null)|
+|connection_name|Connection name.|string|
+|[table_name](\docs\client\models\#physicaltablename)|Table name (schema.table).|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|month|The date of teh first day of the month that identifies a monthly partition.|date|
+
+
+___  
+
+## DataDeleteResultPartition  
+Results of the &quot;data delete&quot; job for the monthly partition.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|rows_affected_count|The number of rows that were deleted from the partition.|integer|
+|partition_deleted|True if a whole partition (a parquet file) was deleted instead of removing only selected rows.|boolean|
 
 
 ___  
@@ -56,6 +102,7 @@ Compiled results of the &quot;data delete&quot;.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|partition_results|Dictionary of partitions that where deleted or updated when the rows were deleted.|Map&lt;[ParquetPartitionId](#null), [DataDeleteResultPartition](#null)&gt;|
 
 
 ___  
@@ -71,8 +118,8 @@ Object returned from the operation that queues a &quot;delete stored data&quot; 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-|[result](\docs\client\models\#deletestoreddataresult)|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|[DeleteStoredDataResult](\docs\client\models\#deletestoreddataresult)|
-|[status](\docs\client\models\#dqojobstatus)|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|[result](#null)|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|[DeleteStoredDataResult](#null)|
+|status|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
 
 
 ___  
@@ -87,20 +134,6 @@ Job type that identifies a job by type.
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|COLLECT_STATISTICS<br/>IMPORT_SCHEMA<br/>QUEUE_THREAD_SHUTDOWN<br/>REPAIR_STORED_DATA<br/>RUN_CHECKS<br/>IMPORT_TABLES<br/>RUN_CHECKS_ON_TABLE<br/>COLLECT_STATISTICS_ON_TABLE<br/>RUN_SCHEDULED_CHECKS_CRON<br/>SYNCHRONIZE_FOLDER<br/>SYNCHRONIZE_MULTIPLE_FOLDERS<br/>DELETE_STORED_DATA<br/>|
-
-___  
-
-## DqoRoot  
-DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud).
- It is also used as a lock scope.  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|settings<br/>_indexes<br/>data_errors<br/>sources<br/>data_incidents<br/>credentials<br/>rules<br/>data_sensor_readouts<br/>data_statistics<br/>sensors<br/>checks<br/>data_check_results<br/>_local_settings<br/>|
 
 ___  
 
@@ -126,8 +159,8 @@ Parameter object for starting a file synchronization job. Identifies the folder 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[folder](\docs\client\models\#dqoroot)||[DqoRoot](\docs\client\models\#dqoroot)|
-|[direction](\docs\client\models\#filesynchronizationdirection)||[FileSynchronizationDirection](\docs\client\models\#filesynchronizationdirection)|
+|folder||[DqoRoot](\docs\client\models\#dqoroot)|
+|direction||[FileSynchronizationDirection](#null)|
 |force_refresh_native_table||boolean|
 
 
@@ -142,7 +175,7 @@ Parameters object for a job that synchronizes one folder with DQOps Cloud.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronization_parameter](\docs\client\models\#synchronizerootfolderparameters)||[SynchronizeRootFolderParameters](\docs\client\models\#synchronizerootfolderparameters)|
+|[synchronization_parameter](#null)||[SynchronizeRootFolderParameters](#null)|
 
 
 ___  
@@ -156,7 +189,7 @@ Simple object for starting multiple folder synchronization jobs with the same co
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[direction](\docs\client\models\#filesynchronizationdirection)|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](\docs\client\models\#filesynchronizationdirection)|
+|direction|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](\docs\client\models\#filesynchronizationdirection)|
 |force_refresh_native_tables|Force full refresh of native tables in the data quality data warehouse. The default synchronization mode is to refresh only modified data.|boolean|
 |detect_cron_schedules|Scans the yaml files (with the configuration for connections and tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job scheduler.|boolean|
 |sources|Synchronize the &quot;sources&quot; folder.|boolean|
@@ -218,7 +251,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[highest_severity](\docs\client\models\#ruleseveritylevel)|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](\docs\client\models\#ruleseveritylevel)|
+|highest_severity|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](#null)|
 |executed_checks|The total count of all executed checks.|integer|
 |valid_results|The total count of all checks that finished successfully (with no data quality issues).|integer|
 |warnings|The total count of all invalid data quality checks that finished raising a warning.|integer|
@@ -239,9 +272,9 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[check_search_filters](\docs\client\models\#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
-|[time_window_filter](\docs\client\models\#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](\docs\client\models\#timewindowfilterparameters)|
+|[time_window_filter](#null)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#null)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
-|[run_checks_result](\docs\client\models\#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](\docs\client\models\#runchecksresult)|
+|[run_checks_result](#null)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#null)|
 
 
 ___  
@@ -289,7 +322,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[statistics_collector_search_filters](\docs\client\models\#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
-|[data_scope](\docs\client\models\#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](\docs\client\models\#statisticsdatascope)|
+|data_scope|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](#null)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
 |[collect_statistics_result](\docs\client\models\#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](\docs\client\models\#collectstatisticsresult)|
 
@@ -309,7 +342,7 @@ ___
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
 |[table](\docs\client\models\#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
 |[statistics_collector_search_filters](\docs\client\models\#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
-|[data_scope](\docs\client\models\#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](\docs\client\models\#statisticsdatascope)|
+|data_scope|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](\docs\client\models\#statisticsdatascope)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
 |[collect_statistics_result](\docs\client\models\#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](\docs\client\models\#collectstatisticsresult)|
 
@@ -376,17 +409,17 @@ Model object returned to UI that has typed fields for each supported job paramet
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronize_root_folder_parameters](\docs\client\models\#synchronizerootfolderdqoqueuejobparameters)||[SynchronizeRootFolderDqoQueueJobParameters](\docs\client\models\#synchronizerootfolderdqoqueuejobparameters)|
-|[synchronize_multiple_folders_parameters](\docs\client\models\#synchronizemultiplefoldersdqoqueuejobparameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](\docs\client\models\#synchronizemultiplefoldersdqoqueuejobparameters)|
+|[synchronize_root_folder_parameters](#null)||[SynchronizeRootFolderDqoQueueJobParameters](#null)|
+|[synchronize_multiple_folders_parameters](\docs\client\models\jobs\#synchronizemultiplefoldersdqoqueuejobparameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](\docs\client\models\jobs\#synchronizemultiplefoldersdqoqueuejobparameters)|
 |[run_scheduled_checks_parameters](\docs\client\models\#monitoringschedulespec)||[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|
-|[run_checks_parameters](\docs\client\models\#runchecksparameters)||[RunChecksParameters](\docs\client\models\#runchecksparameters)|
-|[run_checks_on_table_parameters](\docs\client\models\#runchecksontableparameters)||[RunChecksOnTableParameters](\docs\client\models\#runchecksontableparameters)|
-|[collect_statistics_parameters](\docs\client\models\#collectstatisticsqueuejobparameters)||[CollectStatisticsQueueJobParameters](\docs\client\models\#collectstatisticsqueuejobparameters)|
-|[collect_statistics_on_table_parameters](\docs\client\models\#collectstatisticsontablequeuejobparameters)||[CollectStatisticsOnTableQueueJobParameters](\docs\client\models\#collectstatisticsontablequeuejobparameters)|
-|[import_schema_parameters](\docs\client\models\#importschemaqueuejobparameters)||[ImportSchemaQueueJobParameters](\docs\client\models\#importschemaqueuejobparameters)|
-|[import_table_parameters](\docs\client\models\#importtablesqueuejobparameters)||[ImportTablesQueueJobParameters](\docs\client\models\#importtablesqueuejobparameters)|
+|[run_checks_parameters](\docs\client\models\jobs\#runchecksparameters)||[RunChecksParameters](\docs\client\models\jobs\#runchecksparameters)|
+|[run_checks_on_table_parameters](#null)||[RunChecksOnTableParameters](#null)|
+|[collect_statistics_parameters](#null)||[CollectStatisticsQueueJobParameters](#null)|
+|[collect_statistics_on_table_parameters](#null)||[CollectStatisticsOnTableQueueJobParameters](#null)|
+|[import_schema_parameters](#null)||[ImportSchemaQueueJobParameters](#null)|
+|[import_table_parameters](\docs\client\models\jobs\#importtablesqueuejobparameters)||[ImportTablesQueueJobParameters](\docs\client\models\jobs\#importtablesqueuejobparameters)|
 |[delete_stored_data_parameters](\docs\client\models\#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
-|[repair_stored_data_parameters](\docs\client\models\#repairstoreddataqueuejobparameters)||[RepairStoredDataQueueJobParameters](\docs\client\models\#repairstoreddataqueuejobparameters)|
+|[repair_stored_data_parameters](#null)||[RepairStoredDataQueueJobParameters](#null)|
 
 
 ___  
@@ -401,10 +434,27 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)||[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-|[job_type](\docs\client\models\#dqojobtype)||[DqoJobType](\docs\client\models\#dqojobtype)|
-|[parameters](\docs\client\models\#dqojobentryparametersmodel)||[DqoJobEntryParametersModel](\docs\client\models\#dqojobentryparametersmodel)|
-|[status](\docs\client\models\#dqojobstatus)||[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|job_type||[DqoJobType](#null)|
+|[parameters](#null)||[DqoJobEntryParametersModel](#null)|
+|status||[DqoJobStatus](\docs\client\models\#dqojobstatus)|
 |error_message||string|
+
+
+___  
+
+## DqoJobChangeModel  
+Describes a change to the job status or the job queue (such as a new job was added).  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|status||[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|[job_id](\docs\client\models\#dqoqueuejobid)||[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
+|change_sequence||long|
+|[updated_model](\docs\client\models\#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](\docs\client\models\#dqojobhistoryentrymodel)|
 
 
 ___  
@@ -431,17 +481,17 @@ Model that describes the current synchronization status for each folder.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sources](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;sources&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[sensors](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[rules](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[checks](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[settings](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[credentials](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[data_sensor_readouts](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[data_check_results](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[data_statistics](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[data_errors](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
-|[data_incidents](\docs\client\models\#foldersynchronizationstatus)|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|sources|The synchronization status of the &quot;sources&quot; folder.|[FolderSynchronizationStatus](#null)|
+|sensors|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|rules|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|checks|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|settings|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|credentials|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|data_sensor_readouts|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|data_check_results|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|data_statistics|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|data_errors|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
+|data_incidents|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](\docs\client\models\#foldersynchronizationstatus)|
 
 
 ___  
@@ -455,7 +505,8 @@ Job history snapshot model that returns only changes after a given change sequen
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[folder_synchronization_status](\docs\client\models\#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](\docs\client\models\#cloudsynchronizationfoldersstatusmodel)|
+|job_changes||List&lt;[DqoJobChangeModel](#null)&gt;|
+|[folder_synchronization_status](#null)||[CloudSynchronizationFoldersStatusModel](#null)|
 |last_sequence_number||long|
 
 
@@ -470,6 +521,7 @@ Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table i
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|source_table_specs|Table schemas (including column schemas) of imported tables.|List&lt;[TableSpec](\docs\reference\yaml\tableyaml\#tablespec)&gt;|
 
 
 ___  
@@ -485,8 +537,8 @@ Object returned from the operation that queues a &quot;import tables&quot; job. 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-|[result](\docs\client\models\#importtablesresult)|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |[ImportTablesResult](\docs\client\models\#importtablesresult)|
-|[status](\docs\client\models\#dqojobstatus)|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|[result](#null)|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |[ImportTablesResult](#null)|
+|status|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
 
 
 ___  
@@ -502,7 +554,7 @@ ___
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
 |[result](\docs\client\models\#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](\docs\client\models\#runchecksresult)|
-|[status](\docs\client\models\#dqojobstatus)|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|status|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
 
 
 ___  
@@ -518,7 +570,7 @@ Object returned from the operation that queues a &quot;synchronize multiple fold
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[job_id](\docs\client\models\#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
-|[status](\docs\client\models\#dqojobstatus)|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
+|status|Job status|[DqoJobStatus](\docs\client\models\#dqojobstatus)|
 
 
 ___  

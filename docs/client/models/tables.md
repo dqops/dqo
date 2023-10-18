@@ -50,8 +50,8 @@ Container of table level daily monitoring. Contains categories of daily monitori
 |[sql](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)|Daily monitoring custom SQL checks|[TableSqlDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tablesqldailymonitoringchecksspec)|
 |[availability](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)|Daily monitoring table availability checks|[TableAvailabilityDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableavailabilitydailymonitoringchecksspec)|
 |[schema](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)|Daily monitoring table schema checks|[TableSchemaDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-daily-monitoring-checks\#tableschemadailymonitoringchecksspec)|
-|[comparisons](#tablecomparisondailymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyMonitoringChecksSpecMap](#tablecomparisondailymonitoringchecksspecmap)|
-|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+|[comparisons](#null)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyMonitoringChecksSpecMap](#null)|
+|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
 
 
 ___  
@@ -87,8 +87,8 @@ Container of table level daily partitioned checks. Contains categories of daily 
 |[volume](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablevolumedailypartitionedchecksspec)|
 |[timeliness](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tabletimelinessdailypartitionedchecksspec)|
 |[sql](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableSqlDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-daily-partitioned-checks\#tablesqldailypartitionedchecksspec)|
-|[comparisons](#tablecomparisondailypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](#tablecomparisondailypartitionedchecksspecmap)|
-|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+|[comparisons](#null)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](#null)|
+|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
 
 
 ___  
@@ -125,7 +125,7 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |filter|SQL WHERE clause added to the sensor queries.|string|
 |priority|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|integer|
 |[owner](\docs\reference\yaml\tableyaml\#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](\docs\reference\yaml\tableyaml\#tableownerspec)|
-|[profiling_checks_result_truncation](\docs\client\models\#profilingtimeperiod)|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](\docs\client\models\#profilingtimeperiod)|
+|profiling_checks_result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](#null)|
 |has_any_configured_checks|True when the table has any checks configured.|boolean|
 |has_any_configured_profiling_checks|True when the table has any profiling checks configured.|boolean|
 |has_any_configured_monitoring_checks|True when the table has any monitoring checks configured.|boolean|
@@ -196,8 +196,8 @@ Container of table level monthly monitoring checks. Contains categories of month
 |[sql](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)|Monthly monitoring of custom SQL checks|[TableSqlMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tablesqlmonthlymonitoringchecksspec)|
 |[availability](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)|Daily partitioned availability checks|[TableAvailabilityMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableavailabilitymonthlymonitoringchecksspec)|
 |[schema](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)|Monthly monitoring table schema checks|[TableSchemaMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\table-monthly-monitoring-checks\#tableschemamonthlymonitoringchecksspec)|
-|[comparisons](#tablecomparisonmonthlymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyMonitoringChecksSpecMap](#tablecomparisonmonthlymonitoringchecksspecmap)|
-|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+|[comparisons](#null)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyMonitoringChecksSpecMap](#null)|
+|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
 
 
 ___  
@@ -233,8 +233,8 @@ Container of table level monthly partitioned checks. Contains categories of mont
 |[volume](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|[TableVolumeMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablevolumemonthlypartitionedchecksspec)|
 |[timeliness](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|[TableTimelinessMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tabletimelinessmonthlypartitionedchecksspec)|
 |[sql](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|[TableSqlMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\table-monthly-partitioned-checks\#tablesqlmonthlypartitionedchecksspec)|
-|[comparisons](#tablecomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyPartitionedChecksSpecMap](#tablecomparisonmonthlypartitionedchecksspecmap)|
-|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+|[comparisons](#null)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyPartitionedChecksSpecMap](#null)|
+|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
 
 
 ___  
@@ -284,15 +284,15 @@ Container of table level checks that are activated on a table level.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[result_truncation](\docs\client\models\#profilingtimeperiod)|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](\docs\client\models\#profilingtimeperiod)|
+|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|[ProfilingTimePeriod](\docs\client\models\#profilingtimeperiod)|
 |[volume](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|Configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablevolumeprofilingchecksspec)|
 |[timeliness](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[TableTimelinessProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tabletimelinessprofilingchecksspec)|
 |[accuracy](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[TableAccuracyProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableaccuracyprofilingchecksspec)|
 |[sql](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[TableSqlProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tablesqlprofilingchecksspec)|
 |[availability](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|Configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableavailabilityprofilingchecksspec)|
 |[schema](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|Configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\table-profiling-checks\#tableschemaprofilingchecksspec)|
-|[comparisons](#tablecomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](#tablecomparisonprofilingchecksspecmap)|
-|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+|[comparisons](#null)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](#null)|
+|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
 
 
 ___  

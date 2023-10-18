@@ -34,8 +34,8 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     private String connectionName;
     private String schemaTableName;
-    @JsonPropertyDescription("Data start data")
-    NA DAILY POWIEDZIEC O TYM
+    // TODO: Add proper descriptions using this annotation.
+    // @JsonPropertyDescription("Data start data")
     private LocalDate dateStart;
     private LocalDate dateEnd;
 

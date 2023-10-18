@@ -16,7 +16,7 @@ class DeleteStoredDataQueueJobParameters:
     Attributes:
         connection_name (Union[Unset, str]):
         schema_table_name (Union[Unset, str]):
-        date_start (Union[Unset, datetime.date]): Data start data
+        date_start (Union[Unset, datetime.date]):
         date_end (Union[Unset, datetime.date]):
         delete_errors (Union[Unset, bool]):
         delete_statistics (Union[Unset, bool]):

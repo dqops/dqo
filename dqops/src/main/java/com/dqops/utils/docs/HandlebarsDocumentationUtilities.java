@@ -15,15 +15,17 @@
  */
 package com.dqops.utils.docs;
 
-import com.github.jknack.handlebars.Context;
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
+import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.reflection.ObjectDataType;
+import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Handlebars template helper used to render documentation markdown files using Handlebars.
@@ -40,6 +42,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars = new Handlebars(new FileTemplateLoader(templateDir));
         handlebars.registerHelpers(StringHelpers.class);
         handlebars.registerHelpers(ConditionalHelpers.class);
+        handlebars.registerHelper("render-type", renderTypeHelper);
     }
 
     /**
@@ -49,8 +52,7 @@ public class HandlebarsDocumentationUtilities {
      */
     public static Template compileTemplate(String templateFile) {
         try {
-            Template template = handlebars.compile(templateFile);
-            return template;
+            return handlebars.compile(templateFile);
         }
         catch (Exception ex) {
             throw new RuntimeException("Template " + templateFile + " cannot be compiled, error: " + ex.getMessage(), ex);
@@ -72,4 +74,44 @@ public class HandlebarsDocumentationUtilities {
             throw new RuntimeException("Cannot render template " + template.filename() + ", error: " + ex.getMessage(), ex);
         }
     }
+
+    private static final Helper<TypeModel> renderTypeHelper = new Helper<>() {
+        @Override
+        public CharSequence apply(TypeModel typeModel, Options options) {
+            if (typeModel == null) {
+                return "";
+            }
+
+            String displayText = options.param(0, null);
+            if (displayText != null) {
+                // Only simple objects get complete linkage
+                String templateToReturn = null;
+                if (typeModel.getObjectDataType() == ObjectDataType.object_type) {
+                    templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+                } else {
+                    templateToReturn = "%s";
+                }
+                return templateToReturn.formatted(displayText);
+            }
+
+            if (typeModel.getDataType() != ParameterDataType.object_type &&
+                    !(typeModel.getDataType() == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {
+                // Simple types
+                String dataTypeString = typeModel.getDataType().toString();
+                return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
+            }
+
+            ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
+            switch (objectDataType) {
+                case list_type:
+                    return "List<%s>".formatted(apply(typeModel.getGenericKeyType(), options));
+                case map_type:
+                    return "Map<%s, %s>".formatted(apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
+                case object_type:
+                default:
+                    return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
+                            "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+            }
+        }
+    };
 }

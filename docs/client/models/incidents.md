@@ -103,7 +103,7 @@ Data quality incident model shown on an incident details screen.
 |minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer|
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string|
-|[status](\docs\client\models\#incidentstatus)|Incident status.|[IncidentStatus](\docs\client\models\#incidentstatus)|
+|status|Incident status.|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|
 
 
 ___  

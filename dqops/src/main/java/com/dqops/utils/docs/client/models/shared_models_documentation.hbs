@@ -13,7 +13,7 @@
 {{else}}
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-{{#each objectFields}}|{{#if (eq (lower dataType) "object_type")}}[{{yamlFieldName}}]({{lower classUsedOnTheFieldPath}}){{else}}{{yamlFieldName}}{{/if}}|{{helpText}}|{{#if (eq (lower dataType) "object_type")}}[{{classNameUsedOnTheField}}]({{lower classUsedOnTheFieldPath}}){{else}}{{replace dataType "_type" ""}}{{/if}}|
+{{#each objectFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
 {{/each}}
 {{/if}}
 ___{{#with "  "}}{{.}}{{/with}}

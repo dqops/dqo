@@ -16,12 +16,11 @@
 package com.dqops.utils.docs.client.models;
 
 import com.dqops.metadata.fields.ParameterDataType;
-import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.TypeModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
-import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
-import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
+import com.dqops.utils.reflection.ObjectDataType;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
@@ -48,11 +47,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
 
-        List<ComponentModel> componentModels1 = sharedModels.stream().filter(c->c.getClassName().toLowerCase().contains("postgres")).collect(Collectors.toList());
-
         Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
-
-        List<Map.Entry<String, ComponentModel>> componennnnn = componentModelMap.entrySet().stream().filter(c->c.getKey().toLowerCase().contains("postgres")).collect(Collectors.toList());
 
         return generateModelsSuperiorObjectDocumentationModel("index.md", sharedModels, componentModelMap);
     }
@@ -218,31 +213,38 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                     continue;
                 }
 
+                ModelsDocumentationModel modelsDocumentationModel = new ModelsDocumentationModel();
+                Type infoType = Objects.requireNonNullElse(info.getGenericDataType(), info.getClazz());
+                TypeModel infoTypeModel = getObjectsTypeModel(infoType, componentModelMap);
+                modelsDocumentationModel.setTypeModel(infoTypeModel);
+
                 if (info.getDataType().equals(ParameterDataType.object_type) || (info.getDataType().equals(ParameterDataType.enum_type) && info.getClazz() != null)) {
-                    if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
+                    if (info.getClazz().getName().contains("float")) {
+                        // Float values
+                        continue;
+                    } else if (!info.getClazz().getName().contains("java.")) {
+                        // Custom objects
+                        result.addAll(generateModelObjectDocumentationModelRecursive(destinationPath, info.getClazz(), visitedObjects, componentModelMap));
+                    } else if (info.getObjectDataType() == ObjectDataType.list_type) {
+                        // Objects that can be rendered as lists
+                        TypeModel genericType = infoTypeModel.getGenericKeyType();
+                        result.addAll(generateModelObjectDocumentationGeneralized(destinationPath, genericType, visitedObjects, componentModelMap));
+                    } else if (info.getObjectDataType() == ObjectDataType.map_type) {
+                        // Objects that can be rendered as maps
+                        TypeModel genericTypeK = infoTypeModel.getGenericKeyType();
+                        TypeModel genericTypeV = infoTypeModel.getGenericValueType();
+                        result.addAll(generateModelObjectDocumentationGeneralized(destinationPath, genericTypeK, visitedObjects, componentModelMap));
+                        result.addAll(generateModelObjectDocumentationGeneralized(destinationPath, genericTypeV, visitedObjects, componentModelMap));
+                    } else {
+                        // Java std objects that cannot be rendered as maps
                         continue;
                     }
-                    result.addAll(generateModelObjectDocumentationModelRecursive(destinationPath, info.getClazz(), visitedObjects, componentModelMap));
-                }
-
-                ModelsDocumentationModel modelsDocumentationModel = new ModelsDocumentationModel();
-                modelsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
-
-                ComponentModel componentModel = componentModelMap.get(info.getClazz().getSimpleName());
-                if (componentModel != null && componentModel.getDocsLink() != null) {
-                    modelsDocumentationModel.setClassUsedOnTheFieldPath(componentModel.getDocsLink().toString());
-                    modelsDocumentationModel.setDataType(ParameterDataType.object_type);
-                } else {
-                    modelsDocumentationModel.setDataType(info.getDataType());
-                    modelsDocumentationModel.setClassUsedOnTheFieldPath(
-                            "#" + modelsDocumentationModel.getClassNameUsedOnTheField());
                 }
 
                 modelsDocumentationModel.setClassFieldName(info.getClassFieldName());
                 modelsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
                 modelsDocumentationModel.setDisplayName(info.getDisplayName());
                 modelsDocumentationModel.setHelpText(info.getHelpText());
-                modelsDocumentationModel.setClazz(info.getClazz());
                 modelsDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
                 modelsDocumentationModel.setDefaultValue(info.getDefaultValue());
                 modelsDocumentationModel.setSampleValues(info.getSampleValues());
@@ -267,6 +269,79 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             result.add(modelsObjectDocumentationModel);
         }
         return result;
+    }
+
+    private List<ModelsObjectDocumentationModel> generateModelObjectDocumentationGeneralized(String destinationPath,
+                                                                                             TypeModel typeModel,
+                                                                                             Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects,
+                                                                                             Map<String, ComponentModel> componentModelMap) {
+        if (typeModel.getObjectDataType() == ObjectDataType.object_type) {
+            return generateModelObjectDocumentationModelRecursive(destinationPath, typeModel.getClazz(), visitedObjects, componentModelMap);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private TypeModel getObjectsTypeModel(Type type, Map<String, ComponentModel> componentModelMap) {
+        TypeModel typeModel = new TypeModel();
+
+        Class<?> clazz;
+        ParameterizedType genericType;
+        FieldInfo fieldInfoContainer = new FieldInfo();
+
+        if (type instanceof ParameterizedType) {
+            genericType = (ParameterizedType) type;
+            clazz = (Class<?>) genericType.getRawType();
+        } else {
+            clazz = (Class<?>) type;
+            genericType = null;
+
+            ComponentModel componentModel = componentModelMap.get(clazz.getSimpleName());
+            if (componentModel != null && componentModel.getDocsLink() != null) {
+                typeModel.setClassUsedOnTheFieldPath(componentModel.getDocsLink().toString());
+            } else {
+                typeModel.setClassUsedOnTheFieldPath("#" + typeModel.getClassNameUsedOnTheField());
+            }
+        }
+
+        ParameterDataType parameterDataType = reflectionService.determineParameterDataType(clazz, genericType, fieldInfoContainer);
+
+        typeModel.setClazz(clazz);
+        typeModel.setDataType(parameterDataType);
+        typeModel.setObjectDataType(fieldInfoContainer.getObjectDataType());
+        String classSimpleName = clazz.getSimpleName();
+        typeModel.setClassNameUsedOnTheField(classSimpleName);
+
+        if (parameterDataType == ParameterDataType.object_type ||
+                (parameterDataType == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {
+            ParameterizedType parameterizedType = fieldInfoContainer.getGenericDataType();
+            ObjectDataType objectDataType = Objects.requireNonNullElse(fieldInfoContainer.getObjectDataType(), ObjectDataType.object_type);
+            switch (objectDataType) {
+                case object_type:
+                    break;
+
+                case list_type:
+                    Type listType = parameterizedType.getActualTypeArguments()[0];
+                    TypeModel listTypeModel = getObjectsTypeModel(listType, componentModelMap);
+                    typeModel.setGenericKeyType(listTypeModel);
+                    break;
+
+                case map_type:
+                    Type keyType = parameterizedType.getActualTypeArguments()[0];
+                    TypeModel keyTypeModel = getObjectsTypeModel(keyType, componentModelMap);
+                    typeModel.setGenericKeyType(keyTypeModel);
+
+                    Type valueType = parameterizedType.getActualTypeArguments()[1];
+                    TypeModel valueTypeModel = getObjectsTypeModel(valueType, componentModelMap);
+                    typeModel.setGenericValueType(valueTypeModel);
+                    break;
+
+                default:
+                    throw new RuntimeException(new NoSuchFieldException("Enum value is not present"));
+            }
+        }
+
+        return typeModel;
     }
 
     /**

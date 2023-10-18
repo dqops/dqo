@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -109,6 +108,20 @@ public class ReflectionServiceImpl implements ReflectionService {
      * @return Field info for valid fields or null.
      */
     protected FieldInfo makeFieldInfo(Class<?> targetClass, Field field) {
+        FieldInfo fieldInfo = getFieldInfoForField(field);
+        if (fieldInfo != null) {
+            fieldInfo.setDirectField(targetClass == field.getDeclaringClass());
+        }
+
+        return fieldInfo;
+    }
+
+    /**
+     * Creates a field info from a given field, when the field is yaml serializable.
+     * @param field Field object received from the java reflection api.
+     * @return Field info for valid fields or null.
+     */
+    public FieldInfo getFieldInfoForField(Field field) {
         if (field.isSynthetic()) {
             return null;
         }
@@ -148,7 +161,6 @@ public class ReflectionServiceImpl implements ReflectionService {
             setYamlFieldName(yamlFieldName);
             setDisplayName(displayName != null ? displayName : yamlFieldName);
             setHelpText(helpText);
-            setDirectField(targetClass == field.getDeclaringClass());
             setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
             setDisplayHint(displayHint);
             setSampleValues(sampleValues);
@@ -158,37 +170,13 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(ControlType.class).value() : null;
 
         if (parameterDataType == null) {
-            if (KNOWN_DATA_TYPES.containsKey(fieldType)) {
-                parameterDataType = KNOWN_DATA_TYPES.get(fieldType);
-            } else if (fieldType.isEnum()) {
-                parameterDataType = ParameterDataType.enum_type;
-                fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
-            } else if (fieldType == List.class) {
-                Type listParameterType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-                if (listParameterType == String.class) {
-                    parameterDataType = ParameterDataType.string_list_type;
-                    try {
-                        Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
-                        fieldInfo.setConstructor(emptyConstructor);
-                    } catch (NoSuchMethodException e) {
-                    }
-                }
-                else if (listParameterType == Long.class) {
-                    parameterDataType = ParameterDataType.integer_list_type;
-                    try {
-                        Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
-                        fieldInfo.setConstructor(emptyConstructor);
-                    } catch (NoSuchMethodException e) {
-                    }
-                }
+            Type genericType = field.getGenericType();
+            if (genericType instanceof ParameterizedType) {
+                parameterDataType = determineParameterDataType(fieldType, (ParameterizedType) genericType, fieldInfo);
             } else {
-                parameterDataType = ParameterDataType.object_type;
-                Constructor<?>[] constructors = fieldType.getDeclaredConstructors();
-                Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
-                        .filter(c -> c.getParameterCount() == 0)
-                        .findFirst();
-                parameterlessConstructor.ifPresent(fieldInfo::setConstructor);
+                parameterDataType = determineParameterDataType(fieldType, null, fieldInfo);
             }
+
         }
         fieldInfo.setDataType(parameterDataType);
 
@@ -216,6 +204,60 @@ public class ReflectionServiceImpl implements ReflectionService {
         }
 
         return fieldInfo;
+    }
+
+    /**
+     * Determine parameter data type represented in <code>fieldType</code>.
+     * @param fieldType Class with the field type to be determined.
+     * @param genericType Optional type if <code>fieldType</code> is a generic wrapper.
+     * @param fieldInfo Field info to be modified with additional info about the determined type.
+     * @return Determined parameter type.
+     */
+    @Override
+    public ParameterDataType determineParameterDataType(Class<?> fieldType, ParameterizedType genericType, FieldInfo fieldInfo) {
+        ParameterDataType parameterDataType = null;
+        if (KNOWN_DATA_TYPES.containsKey(fieldType)) {
+            parameterDataType = KNOWN_DATA_TYPES.get(fieldType);
+        } else if (fieldType.isEnum()) {
+            parameterDataType = ParameterDataType.enum_type;
+            fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
+        } else if (fieldType == List.class) {
+            Type listParameterType = genericType.getActualTypeArguments()[0];
+            if (listParameterType == String.class) {
+                parameterDataType = ParameterDataType.string_list_type;
+                try {
+                    Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
+                    fieldInfo.setConstructor(emptyConstructor);
+                } catch (NoSuchMethodException e) {
+                }
+            }
+            else if (listParameterType == Long.class) {
+                parameterDataType = ParameterDataType.integer_list_type;
+                try {
+                    Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
+                    fieldInfo.setConstructor(emptyConstructor);
+                } catch (NoSuchMethodException e) {
+                }
+            }
+            else {
+                parameterDataType = ParameterDataType.object_type;
+                fieldInfo.setObjectDataType(ObjectDataType.list_type);
+            }
+        } else if (fieldType == Map.class) {
+            parameterDataType = ParameterDataType.object_type;
+            fieldInfo.setObjectDataType(ObjectDataType.map_type);
+        } else {
+            parameterDataType = ParameterDataType.object_type;
+            fieldInfo.setObjectDataType(ObjectDataType.object_type);
+            Constructor<?>[] constructors = fieldType.getDeclaredConstructors();
+            Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
+                    .filter(c -> c.getParameterCount() == 0)
+                    .findFirst();
+            parameterlessConstructor.ifPresent(fieldInfo::setConstructor);
+        }
+
+        fieldInfo.setGenericDataType(genericType);
+        return parameterDataType;
     }
 
     /**
