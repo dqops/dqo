@@ -10,8 +10,8 @@ import { AuthenticatedDashboardModel } from '../../api';
 import { TabOption } from '../../components/PageTabs/tab';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import axios from 'axios';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { useTree } from '../../contexts/treeContext';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
@@ -19,16 +19,8 @@ const Dashboards = () => {
     (state: IRootState) => state.dashboard
   );
 
-  const [objectNotFound, setObjectNotFound] = React.useState(false)
- 
+  const { objectNotFound, setObjectNotFound } = useTree()
 
-  axios.interceptors.response.use(undefined, function (error) {
-    const statusCode = error.response ? error.response.status : null;
-    if (statusCode === 404 ) {
-      setObjectNotFound(true)
-    }
-    return Promise.reject(error);
-  });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
   const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
     useDashboard();
