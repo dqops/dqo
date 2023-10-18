@@ -102,24 +102,15 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Profiling KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: Profiling KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
 
     - folder_name: Completeness
       dashboards:
@@ -134,7 +125,7 @@ spec:
     - folder_name: Volume
       dashboards:
         - dashboard_name: Largest tables by number of rows
-          url: https://lookerstudio.google.com/embed/reporting/58ba619a-5c39-43f2-996b-a22a60e25137/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/776b972d-3504-479a-98ed-2b8cb703279d/page/c5B8C
           width: 1400
           height: 1200
           parameters:
@@ -445,24 +436,6 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: KPI history
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
@@ -508,6 +481,16 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+
     - folder_name: Completeness
       dashboards:
       - dashboard_name: Number of null values in the columns
@@ -823,24 +806,6 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: KPIs per data quality dimensions - summary
-          url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-          width: 1400
-          height: 1300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
-        - dashboard_name: KPIs per check category - summary
-          url: https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
-          width: 1400
-          height: 1650
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: KPI history for daily partitions
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
@@ -886,6 +851,17 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+
+    - folder_name: Detail results
+      dashboards:
+        - dashboard_name: Check results
+          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          width: 1600
+          height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: partitioned
+
     - folder_name: Completeness
       dashboards:
         - dashboard_name: Number of null values in the columns
@@ -898,7 +874,7 @@ spec:
 
     - folder_name: Partition volume statistics
       dashboards:
-        - dashboard_name: Number of rows in partitions per day
+        - dashboard_name: Daily partitions row count
           url: https://lookerstudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
           width: 1400
           height: 2000

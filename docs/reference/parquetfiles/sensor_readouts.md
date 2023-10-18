@@ -1,7 +1,7 @@
 ##sensor_readouts  
-The data quality sensor readouts table that stores readouts (measures) captured by DQO sensors, before the value are evaluated by the data quality rules.
+The data quality sensor readouts table that stores readouts (measures) captured by DQOps sensors, before the value are evaluated by the data quality rules.
  The sensor readouts are stored in the sensor_readouts table is located in the $DQO_USER_HOME/.data/sensor_readouts folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user&#x27;s home folder).
+ The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/, for example: c&#x3D;myconnection/t&#x3D;public.testedtable/m&#x3D;2023-01-01/.  

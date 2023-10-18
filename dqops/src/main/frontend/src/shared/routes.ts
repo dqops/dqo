@@ -106,7 +106,7 @@ export const ROUTES = {
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
     DASHBOARDS: '/dashboards',
-    CREATE: '/create',
+    CREATE: '/:checkTypes/create',
     DEFINITIONS: '/definitions',
     INCIDENTS: '/incidents',
     SENSOR_DETAIL: '/definitions/sensors/:sensor',

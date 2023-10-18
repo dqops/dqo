@@ -48,7 +48,7 @@ To start DQO in a Shell mode follow the steps below.
 2. Run DQO Docker image
 
     ```
-    `docker run -v [enter the path to your local userhome folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo --dqo.cloud.api-key=[enter your API Key]`
+    docker run -v [enter the path to your local userhome folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo --dqo.cloud.api-key=[enter your API Key]
     ```
 
    - The `-v` flag mounts your locally created "userhome" folder into the container. You need to provide the path to your local userhome folder
