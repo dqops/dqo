@@ -16,6 +16,8 @@
 
 package com.dqops.metadata.search.pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.AbstractMap;
 import java.util.Map;
 
@@ -90,10 +92,17 @@ public class SearchPattern {
     }
 
     public boolean match(String otherString) {
+        if (this.searchPatternStrategy == null) {
+            return false;
+        }
         return this.searchPatternStrategy.match(otherString);
     }
 
+    @JsonIgnore
     public boolean isWildcardSearchPattern() {
+        if (this.searchPatternStrategy == null) {
+            return false;
+        }
         return this.searchPatternStrategy.isWildcardSearchPattern();
     }
 }

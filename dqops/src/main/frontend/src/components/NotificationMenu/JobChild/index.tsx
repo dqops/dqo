@@ -51,22 +51,22 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
           <div className="flex flex-wrap space-x-1 items-center">
             <div className="px-2">{job.jobType} </div>
-            {renderStatus()}
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
               <div
-                onClick={() =>
-                  cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
-                }
+              onClick={() =>
+                cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+              }
               >
                 <SvgIcon name="canceljobs" />
               </div>
             ) : (
               <div></div>
-            )}
+              )}
             <div className="group relative">
               <div className="flex items-center gap-x-2">
+                {renderStatus()}
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </div>
             </div>
@@ -86,8 +86,8 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {job.errorMessage &&
                   job.errorMessage.includes('dqocloud.accesskey') && (
                     <span className="px-2 text-red-500">
-                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
-                      {"'"}cloud login{"'"} from DQO shell)
+                      (Cloud DQOps Api Key is invalid. Your trial period has expired or a new version of DQOps was released.{' '}
+                       Please run {"'"}cloud login{"'"} from DQOps shell)
                     </span>
                   )}
               </td>
@@ -99,9 +99,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </td>
             </tr>
 
-            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+            {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
-                job?.parameters?.runChecksParameters?.checkSearchFilters
+                job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>
@@ -153,10 +153,10 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </>
             )}
             {job?.parameters?.collectStatisticsParameters
-              ?.statisticsCollectorSearchFilters &&
+              ?.statistics_collector_search_filters &&
               Object.entries(
                 job?.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters
+                  ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>

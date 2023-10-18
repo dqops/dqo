@@ -10,6 +10,8 @@ import { IRootState } from '../../../redux/reducers';
 import SvgIcon from '../../SvgIcon';
 import { useDashboard } from '../../../contexts/dashboardContext';
 import { DashboardsFolderSpec } from '../../../api';
+import { getDashboardTooltipState } from '../../../redux/actions/dashboard.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -20,12 +22,11 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-
-  const { dashboardFolders } = useSelector(
+  const { dashboardFolders, dashboardTooltipState } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
-
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -61,14 +62,46 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
+  const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
+
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
-    const { changeActiveTab, dashboardStatus, toggleDashboardFolder } =
+    const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
       useDashboard();
 
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
     );
+
+    useEffect(() => {
+      if(selected !== activeTab){
+        setSelected(activeTab);
+      }
+    },[activeTab]);
+
+    let mouseEnterTimeout: NodeJS.Timeout | undefined; 
+    
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
+      }
+      mouseEnterTimeout = setTimeout(() => {
+        const height = e.clientY;
+        dispatch(getDashboardTooltipState({height, label, url}));
+
+        setTimeout(() => {
+          dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
+        }, 3000);
+      }, 100); 
+    };
+
+    const handleMouseLeave = () => {
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
+      }
+      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
+    };
+    
 
     return (
       <div>
@@ -98,10 +131,11 @@ const LeftView = () => {
                 key={jIndex}
                 className={
                   selected === [key, dashboard.dashboard_name].join('-')
-                    ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300'
-                    : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300'
+                    ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
+                    : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
-                onClick={() => {
+                onMouseDown={() => {
+                  handleMouseLeave();
                   changeActiveTab(
                     dashboard,
                     folder.folder_name,
@@ -121,7 +155,9 @@ const LeftView = () => {
                 }}
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
-                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                <div className="text-[13px] leading-1.5 whitespace-nowrap" 
+                      onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
+                      onMouseLeave={(e) => handleMouseLeave()}>
                   {dashboard.dashboard_name}
                 </div>
               </div>
@@ -134,7 +170,7 @@ const LeftView = () => {
 
   return (
     <div
-      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white"
+      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white overflow-x-hidden"
       ref={sidebarRef}
       style={{ width: sidebarWidth }}
     >
@@ -149,7 +185,7 @@ const LeftView = () => {
       <div
         className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-20 top-16"
         onMouseDown={startResizing}
-        style={{ left: sidebarWidth }}
+        style={{ left: sidebarWidth, userSelect: "none" }}
       />
     </div>
   );

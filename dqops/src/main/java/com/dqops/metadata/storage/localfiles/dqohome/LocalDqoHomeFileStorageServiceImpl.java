@@ -39,7 +39,7 @@ public class LocalDqoHomeFileStorageServiceImpl extends LocalFileStorageServiceI
     }
 
     /**
-     * Creates a local DQO home file storage service given a direct path to the DQO_HOME folder.
+     * Creates a local DQOps home file storage service given a direct path to the DQO_HOME folder.
      * @param homePath Path to the DQO_HOME folder.
      */
     public LocalDqoHomeFileStorageServiceImpl(String homePath,

@@ -12,6 +12,7 @@ import {
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
+  StatisticsCollectorSearchFilters,
   TableColumnsStatisticsModel
 } from '../../api';
 import { AxiosResponse } from 'axios';
@@ -19,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../shared/routes';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 
 interface LocationState {
   bool: boolean;
@@ -38,12 +39,12 @@ const TableColumnsView = () => {
   );
   const dispatch = useDispatch();
   const history = useHistory();
-  const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
-
+  const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -65,31 +66,37 @@ const TableColumnsView = () => {
   const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
+  const onChangeSelectedColumns = (columns: Array<string>): void => {
+    setSelectedColumns(columns);
+  };
 
   const setNumberOfSelected = (param: number): void => {
     setSelected(param);
   };
 
-  useEffect(() => {
-    fetchColumns();
-  }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
-      setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
-        statistics?.collect_column_statistics_job_template
-      );
-    } finally {
-      setLoadingJob(false);
+        false,
+        undefined,
+        collectStiatisticsObject);
+      }catch (err){
+      console.error(err)
     }
   };
 
+  const collectStiatisticsObject : StatisticsCollectorSearchFilters = {
+    connectionName: connectionName,
+    schemaTableName: schemaName + "." + tableName,
+    enabled: true,
+     columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
+  }
   const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schemaName + '.' + tableName &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
@@ -102,7 +109,7 @@ const TableColumnsView = () => {
       connectionName,
       schemaName,
       tableName,
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       'sources',
@@ -144,6 +151,13 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
+
+  useEffect(() => {
+    if(filteredJobs !== undefined){
+      fetchColumns()
+      }
+  }, [job_dictionary_state])
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -154,16 +168,17 @@ const TableColumnsView = () => {
         <div className="flex items-center gap-x-2 justify-center">
           {selected !== 0 && selected <= 9 && (
             <Button
-              label="Create Data Stream"
+              label="Create Data Grouping"
               color="primary"
               onClick={postDataStream}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
           )}
           {selected > 9 && (
             <div className="flex items-center gap-x-2 justify-center text-red-500">
               (You can choose max 9 columns)
               <Button
-                label="Create Data Stream"
+                label="Create Data Grouping"
                 color="secondary"
                 className="text-black "
               />
@@ -175,18 +190,25 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
+                  connectionName
               )
                 ? 'Collecting...'
-                : 'Collect Statistic'
+                : 
+                selectedColumns?.length!== 0 ? 
+                'Collect statistics on selected' : 
+                'Collect Statistics'
             }
             color={
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
+                  connectionName
               )
                 ? 'secondary'
                 : 'primary'
@@ -195,18 +217,18 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.schemaTableName ===
                   schemaName + '.' + tableName
+                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
+                  connectionName
               ) ? (
                 <SvgIcon name="sync" className="w-4 h-4" />
               ) : (
                 ''
               )
             }
-            onClick={() => {
-              collectStatistics();
-            }}
-            loading={loadingJob}
+            onClick={collectStatistics}
+            disabled={userProfile.can_collect_statistics  !== true}
           />
         </div>
       </div>
@@ -219,6 +241,7 @@ const TableColumnsView = () => {
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
+          onChangeSelectedColumns = {onChangeSelectedColumns}
         />
       </div>
     </ConnectionLayout>

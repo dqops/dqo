@@ -1,9 +1,9 @@
-# DQO Data Quality Operations Center
+# DQOps Data Quality Operations Center
 
-DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-DQO comes with around 150 predefined data quality checks which helps you monitor the quality of your data.
+DQOps is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
+DQOps comes with around 150 predefined data quality checks which helps you monitor the quality of your data.
 
-![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
+![DQOps screens](https://dqops.com/docs/images/dqo-screens.gif)
 
 ## Key features
 - Intuitive graphical interface and access via CLI
@@ -18,16 +18,16 @@ DQO comes with around 150 predefined data quality checks which helps you monitor
 
 ## Installation
 
-To use DQO you need:
+To use DQOps you need:
 
 - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 - Ability to install Python packages with pip.
 - Installed JDK software (version 17) and set the JAVA_HOME environment variable.
 
 
-DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
+DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
-1. To install DQO via pip manager just run
+1. To install DQOps via pip manager just run
 
     ```
     python -m pip install --user dqops
@@ -36,29 +36,29 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
     If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
     and run
 
-2. Run dqo app to finalize the installation.
+2. Run dqops app to finalize the installation.
 
     ```
     python -m dqops
     ```
 
-3. Create DQO userhome folder.
+3. Create DQOps userhome folder.
 
-   After installation, you will be asked whether to initialize the DQO user's home folder in the default location. Type Y to create the folder.  
+   After installation, you will be asked whether to initialize the DQOps user's home folder in the default location. Type Y to create the folder.  
    The user's home folder locally stores data such as sensor readouts and the data quality check results, as well as data source configurations. [You can learn more about data storage here](https://dqops.com/docs/dqo-concepts/data-storage/data-storage/).
 
-4. Login to DQO Cloud.
+4. Login to DQOps Cloud.
 
-   To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
-   must create a DQO cloud account.
+   To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
+   must create a DQOps cloud account.
 
    After creating a user's home folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
-   redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+   redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
 
-   During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
+   During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQOps application.
    The API Key is now stored in the configuration file.
 
-5. Open the DQO User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
+5. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
    or by copying the link.
 
 ## Documentation

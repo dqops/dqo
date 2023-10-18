@@ -16,6 +16,7 @@
 package com.dqops.connectors;
 
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import tech.tablesaw.api.Table;
@@ -35,8 +36,9 @@ public interface SourceConnection extends Closeable {
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
-    void open();
+    void open(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Closes a connection.
@@ -98,4 +100,10 @@ public interface SourceConnection extends Closeable {
      * @param data Dataset with the expected data.
      */
     void loadData(TableSpec tableSpec, Table data);
+
+    /**
+     * Drops a target table following the table specification.
+     * @param tableSpec Table specification with the physical table name, column names and physical column data types.
+     */
+    void dropTable(TableSpec tableSpec);
 }

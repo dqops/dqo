@@ -16,7 +16,7 @@
 package com.dqops.data.readouts.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.data.readouts.services.models.SensorReadoutsDetailedDataModel;
+import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
 
 /**
  * Service that returns data from sensor readouts.
@@ -29,6 +29,6 @@ public interface SensorReadoutsDataService {
      * @param loadParameters          Load parameters.
      * @return Complete model of the sensor readouts.
      */
-    SensorReadoutsDetailedDataModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                SensorReadoutsDetailedFilterParameters loadParameters);
+    SensorReadoutsListModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                         SensorReadoutsDetailedFilterParameters loadParameters);
 }

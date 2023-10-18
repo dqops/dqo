@@ -39,4 +39,13 @@ public class TableModel {
 
     @JsonPropertyDescription("Full table specification including all nested information, the table name is inside the 'target' property.")
     private TableSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public TableModel() {
+    }
 }

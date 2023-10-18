@@ -18,6 +18,8 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -28,12 +30,15 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.comparison.TableComparisonConfigurationModel;
 import com.dqops.rest.models.comparison.TableComparisonModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -71,20 +76,26 @@ public class TableComparisonsController {
      * @return List of reference tables.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonConfigurations", notes = "Returns the list of table comparison configurations on a compared table", response = TableComparisonConfigurationModel[].class)
+    @ApiOperation(value = "getTableComparisonConfigurations", notes = "Returns the list of table comparison configurations on a compared table",
+            response = TableComparisonConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<TableComparisonConfigurationModel>> getTableComparisonConfigurations(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
+            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType,
-            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the recurring and partitioned checks (values: daily or monthly).", required = false)
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
@@ -93,6 +104,8 @@ public class TableComparisonsController {
         }
 
         List<TableComparisonConfigurationModel> result = new LinkedList<>();
+        boolean canCompareTables = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
             if (checkType.isPresent() && checkType.get() != tableComparisonConfigurationSpec.getCheckType()) {
                 continue;
@@ -102,7 +115,8 @@ public class TableComparisonsController {
                 continue;
             }
 
-            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
+            TableComparisonConfigurationModel tableComparisonConfigurationModel =
+                    TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec, canCompareTables);
             result.add(tableComparisonConfigurationModel);
         }
 
@@ -118,14 +132,20 @@ public class TableComparisonsController {
      * @return Table comparison model.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonConfiguration", notes = "Returns a model of the table comparison configuration", response = TableComparisonConfigurationModel.class)
+    @ApiOperation(value = "getTableComparisonConfiguration", notes = "Returns a model of the table comparison configuration",
+            response = TableComparisonConfigurationModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonConfigurationModel>> getTableComparisonConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -141,7 +161,8 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
+        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(
+                tableComparisonConfigurationSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
     }
 
@@ -157,16 +178,21 @@ public class TableComparisonsController {
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}",
             consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonConfiguration", notes = "Updates a table configuration configuration")
+    @ApiOperation(value = "updateTableComparisonConfiguration", notes = "Updates a table configuration configuration", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison configuration successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison on the table not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonConfiguration(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -223,16 +249,21 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonConfiguration", notes = "Creates a new table comparison configuration added to the compared table")
+    @ApiOperation(value = "createTableComparisonConfiguration", notes = "Creates a new table comparison configuration added to the compared table", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonConfiguration(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -272,15 +303,20 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisonconfigurations/{tableComparisonConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "deleteTableComparisonConfiguration", notes = "Deletes a table comparison configuration from a compared table")
+    @ApiOperation(value = "deleteTableComparisonConfiguration", notes = "Deletes a table comparison configuration from a compared table", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison configuration removed"),
+            @ApiResponse(code = 204, message = "Table comparison configuration removed", response = Void.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 406, message = "Invalid request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteTableComparisonConfiguration(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> deleteTableComparisonConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -324,14 +360,20 @@ public class TableComparisonsController {
      * @return Model of the table comparison using profiling checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using advanced profiling checks (comparison at any time)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using profiling checks (comparison at any time)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonProfiling(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -352,27 +394,35 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.profiling, null);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.profiling, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Returns the table comparison in the daily recurring check type.
+     * Returns the table comparison in the daily monitoring check type.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param tableComparisonConfigurationName Table comparison configuration name.
-     * @return Model of the table comparison using daily recurring checks.
+     * @return Model of the table comparison using daily monitoring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringDaily", notes = "Returns a model of the table comparison using daily recurring checks (comparison once a day)", response = TableComparisonModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringDaily", notes = "Returns a model of the table comparison using daily monitoring checks (comparison once a day)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonRecurringDaily(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -393,27 +443,35 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Returns the table comparison in the monthly recurring check type.
+     * Returns the table comparison in the monthly monitoring check type.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param tableComparisonConfigurationName Table comparison configuration name.
-     * @return Model of the table comparison using monthly recurring checks.
+     * @return Model of the table comparison using monthly monitoring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/recurring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringMonthly", notes = "Returns a model of the table comparison using monthly recurring checks (comparison once a month)", response = TableComparisonModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringMonthly", notes = "Returns a model of the table comparison using monthly monitoring checks (comparison once a month)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonRecurringMonthly(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -434,7 +492,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -447,14 +507,20 @@ public class TableComparisonsController {
      * @return Model of the table comparison using daily partitioned checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonPartitionedDaily", notes = "Returns a model of the table comparison using daily partition checks (comparing day to day)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonPartitionedDaily", notes = "Returns a model of the table comparison using daily partition checks (comparing day to day)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonPartitionedDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -475,7 +541,9 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -488,14 +556,20 @@ public class TableComparisonsController {
      * @return Model of the table comparison using monthly partitioned checks.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonPartitionedMonthly", notes = "Returns a model of the table comparison using monthly partition checks (comparing month to month)", response = TableComparisonModel.class)
+    @ApiOperation(value = "getTableComparisonPartitionedMonthly", notes = "Returns a model of the table comparison using monthly partition checks (comparing month to month)",
+            response = TableComparisonModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table configuration not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonPartitionedMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -516,12 +590,15 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
     /**
      * Creates a new table comparison configuration for a given check type and activates selected comparison checks.
+     * @param principal User principal.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
@@ -531,12 +608,13 @@ public class TableComparisonsController {
      * @return Rest method result.
      */
     @NotNull
-    private ResponseEntity<Mono<?>> createTableComparisonConfigurationWithChecks(String connectionName,
-                                                                                 String schemaName,
-                                                                                 String tableName,
-                                                                                 TableComparisonModel tableComparisonModel,
-                                                                                 CheckType checkType,
-                                                                                 CheckTimeScale checkTimeScale) {
+    private ResponseEntity<Mono<Void>> createTableComparisonConfigurationWithChecks(DqoUserPrincipal principal,
+                                                                                    String connectionName,
+                                                                                    String schemaName,
+                                                                                    String tableName,
+                                                                                    TableComparisonModel tableComparisonModel,
+                                                                                    CheckType checkType,
+                                                                                    CheckTimeScale checkTimeScale) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
@@ -577,75 +655,90 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using advanced profiling checks")
+    @ApiOperation(value = "createTableComparisonProfiling", notes = "Creates a table comparison configuration using profiling checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for profiling checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for profiling checks successfully created", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonProfiling(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonProfiling(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
+        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
     }
 
     /**
-     * Creates a configuration of daily recurring checks for performing the table comparison.
+     * Creates a configuration of daily monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonRecurringDaily", notes = "Creates a table comparison configuration using daily recurring checks")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableComparisonMonitoringDaily", notes = "Creates a table comparison configuration using daily monitoring checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for daily recurring checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for daily monitoring checks successfully created", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonRecurringDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonMonitoringDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.recurring, CheckTimeScale.daily);
+        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                CheckType.monitoring, CheckTimeScale.daily);
     }
 
     /**
-     * Creates a configuration of monthly recurring checks for performing the table comparison.
+     * Creates a configuration of monthly monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonRecurringMonthly", notes = "Creates a table comparison configuration using monthly recurring checks")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableComparisonMonitoringMonthly", notes = "Creates a table comparison configuration using monthly monitoring checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for monthly recurring checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for monthly monitoring checks successfully created", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonRecurringMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonMonitoringMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.recurring, CheckTimeScale.monthly);
+        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                CheckType.monitoring, CheckTimeScale.monthly);
     }
 
     /**
@@ -657,21 +750,26 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonPartitionedDaily", notes = "Creates a table comparison configuration using daily partitioned checks")
+    @ApiOperation(value = "createTableComparisonPartitionedDaily", notes = "Creates a table comparison configuration using daily partitioned checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for daily partitioned checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for daily partitioned checks successfully created", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonPartitionedDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonPartitionedDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
+        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                 CheckType.partitioned, CheckTimeScale.daily);
     }
 
@@ -684,26 +782,32 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTableComparisonPartitionedMonthly", notes = "Creates a table comparison configuration using monthly partitioned checks")
+    @ApiOperation(value = "createTableComparisonPartitionedMonthly", notes = "Creates a table comparison configuration using monthly partitioned checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table comparison configuration for monthly partitioned checks successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration for monthly partitioned checks successfully created", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTableComparisonPartitionedMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> createTableComparisonPartitionedMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
+        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                 CheckType.partitioned, CheckTimeScale.monthly);
     }
 
     /**
      * Updates a table comparison configuration and configures checks.
+     * @poram principal DQOps User principal.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
@@ -714,13 +818,14 @@ public class TableComparisonsController {
      * @return The response to return.
      */
     @NotNull
-    private ResponseEntity<Mono<?>> updateTableComparisonWithChecks(String connectionName,
-                                                                    String schemaName,
-                                                                    String tableName,
-                                                                    String tableComparisonConfigurationName,
-                                                                    TableComparisonModel tableComparisonModel,
-                                                                    CheckType checkType,
-                                                                    CheckTimeScale checkTimeScale) {
+    private ResponseEntity<Mono<Void>> updateTableComparisonWithChecks(DqoUserPrincipal principal,
+                                                                       String connectionName,
+                                                                       String schemaName,
+                                                                       String tableName,
+                                                                       String tableComparisonConfigurationName,
+                                                                       TableComparisonModel tableComparisonModel,
+                                                                       CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
@@ -761,27 +866,32 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/profiling/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks")
+    @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonProfiling(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonProfiling(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
+        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                 tableComparisonModel, CheckType.profiling, null);
     }
 
     /**
-     * Update the configuration of daily recurring checks for performing the table comparison.
+     * Update the configuration of daily monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -789,28 +899,33 @@ public class TableComparisonsController {
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonRecurringDaily", notes = "Updates a table comparison checks recurring daily")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonMonitoringDaily", notes = "Updates a table comparison checks monitoring daily", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison daily recurring checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonRecurringDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonMonitoringDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.recurring, CheckTimeScale.daily);
+        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                tableComparisonModel, CheckType.monitoring, CheckTimeScale.daily);
     }
 
     /**
-     * Update the configuration of monthly recurring checks for performing the table comparison.
+     * Update the configuration of monthly monitoring checks for performing the table comparison.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -818,24 +933,29 @@ public class TableComparisonsController {
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/recurring/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonRecurringMonthly", notes = "Updates a table comparison checks recurring monthly")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/monitoring/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonMonitoringMonthly", notes = "Updates a table comparison checks monitoring monthly", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison daily recurring checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison daily monitoring checks successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonRecurringMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonMonitoringMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.recurring, CheckTimeScale.monthly);
+        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                tableComparisonModel, CheckType.monitoring, CheckTimeScale.monthly);
     }
 
     /**
@@ -848,22 +968,27 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/daily/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonPartitionedDaily", notes = "Updates a table comparison checks partitioned daily (comparing day to day)")
+    @ApiOperation(value = "updateTableComparisonPartitionedDaily", notes = "Updates a table comparison checks partitioned daily (comparing day to day)", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison daily partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison daily partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonPartitionedDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonPartitionedDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
+        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                 tableComparisonModel, CheckType.partitioned, CheckTimeScale.daily);
     }
 
@@ -877,22 +1002,27 @@ public class TableComparisonsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/partitioned/monthly/{tableComparisonConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComparisonPartitionedMonthly", notes = "Updates a table comparison checks partitioned monthly (comparing month to month)")
+    @ApiOperation(value = "updateTableComparisonPartitionedMonthly", notes = "Updates a table comparison checks partitioned monthly (comparing month to month)", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table comparison monthly partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table comparison monthly partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComparisonPartitionedMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComparisonPartitionedMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
+        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                 tableComparisonModel, CheckType.partitioned, CheckTimeScale.monthly);
     }
 

@@ -27,7 +27,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -43,7 +43,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * The default configuration of checks that are enabled as data observability advanced profiling checks that will be detecting anomalies
+ * The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
  * for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for profiling checks only.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -385,7 +385,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.
      */
@@ -396,7 +396,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     }
 
     /**
-     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time scale for monitoring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time scale and return null.
      *
      * @return Time scale (daily, monthly, ...).
@@ -421,11 +421,11 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
      *
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @Override
     @JsonIgnore
-    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
+    public CheckRunScheduleGroup getSchedulingGroup() {
         return null;
     }
 

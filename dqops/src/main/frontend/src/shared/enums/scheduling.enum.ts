@@ -14,10 +14,10 @@
 /// limitations under the License.
 ///
 
-export enum CheckRunRecurringScheduleGroup {
+export enum CheckRunMonitoringScheduleGroup {
   profiling = "profiling",
-  recurring_daily = "recurring_daily",
-  recurring_monthly = "recurring_monthly",
+  monitoring_daily = "monitoring_daily",
+  monitoring_monthly = "monitoring_monthly",
   partitioned_daily = "partitioned_daily",
   partitioned_monthly = "partitioned_monthly",
 }

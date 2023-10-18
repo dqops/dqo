@@ -88,7 +88,7 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
                 }
                 return (char)readResult;
             } catch (IOException e) {
-                return null;
+                throw new RuntimeException("Failed to access the standard input stream: " + e.getMessage(), e);
             }
         });
 

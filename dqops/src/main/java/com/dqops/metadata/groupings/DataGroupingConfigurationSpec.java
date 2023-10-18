@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.groupings;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -289,36 +290,37 @@ public class DataGroupingConfigurationSpec extends AbstractSpec {
     /**
      * Creates a cloned copy of the object with all configurable parameters that have a variable like ${ENV_VAR} expanded.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Cloned and expanded deep copy of the object.
      */
-    public DataGroupingConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataGroupingConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         DataGroupingConfigurationSpec cloned = this.deepClone();
         if (cloned.level1 != null) {
-            cloned.level1 = cloned.level1.expandAndTrim(secretValueProvider);
+            cloned.level1 = cloned.level1.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level2 != null) {
-            cloned.level2 = cloned.level2.expandAndTrim(secretValueProvider);
+            cloned.level2 = cloned.level2.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level3 != null) {
-            cloned.level3 = cloned.level3.expandAndTrim(secretValueProvider);
+            cloned.level3 = cloned.level3.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level4 != null) {
-            cloned.level4 = cloned.level4.expandAndTrim(secretValueProvider);
+            cloned.level4 = cloned.level4.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level5 != null) {
-            cloned.level5 = cloned.level5.expandAndTrim(secretValueProvider);
+            cloned.level5 = cloned.level5.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level6 != null) {
-            cloned.level6 = cloned.level6.expandAndTrim(secretValueProvider);
+            cloned.level6 = cloned.level6.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level7 != null) {
-            cloned.level7 = cloned.level7.expandAndTrim(secretValueProvider);
+            cloned.level7 = cloned.level7.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level8 != null) {
-            cloned.level8 = cloned.level8.expandAndTrim(secretValueProvider);
+            cloned.level8 = cloned.level8.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.level9 != null) {
-            cloned.level9 = cloned.level9.expandAndTrim(secretValueProvider);
+            cloned.level9 = cloned.level9.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         return cloned;
     }

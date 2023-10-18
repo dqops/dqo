@@ -24,8 +24,8 @@ import 'chartjs-adapter-moment';
 
 axios.interceptors.response.use(undefined, function (error) {
   const statusCode = error.response ? error.response.status : null;
-  if (statusCode === 403) {
-    window.location.reload();
+  if (statusCode === 401 || statusCode === 403) {
+    location.reload();
   }
   return Promise.reject(error);
 });
@@ -40,7 +40,7 @@ const App = () => {
     dispatch(getAllJobs());
 
     window.onunhandledrejection = (event) => {
-      if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') < 0) {
+      if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') > 0) {
         LogErrorsApi.logError({
           window_location: window.location.href,
           message: event.reason?.toString()

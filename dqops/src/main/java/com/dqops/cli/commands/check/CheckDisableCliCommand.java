@@ -71,10 +71,10 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
             completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, monitoring, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for monitoring and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
@@ -183,7 +183,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
     }
 
     /**
-     * Gets the time scale filter for recurring and partitioned checks.
+     * Gets the time scale filter for monitoring and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -191,7 +191,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
     }
 
     /**
-     * Sets the time scale filter for recurring and partitioned checks.
+     * Sets the time scale filter for monitoring and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

@@ -61,7 +61,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
             Path pathToDqoUserHomeMarker = subPath.resolve(DQO_USER_HOME_MARKER_NAME);
             if (Files.exists(pathToDqoUserHomeMarker)) {
-                return subPath; // DQO USER HOME found in a parent folder, the user started dqo.sh/dqo.cmd when the current working folder was a nested path
+                return subPath; // DQOPS USER HOME found in a parent folder, the user started dqo.sh/dqo.cmd when the current working folder was a nested path
             }
         }
 
@@ -81,10 +81,10 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
             String userHomePathString = this.userConfigurationProperties.getHome();
             if (Strings.isNullOrEmpty(userHomePathString)) {
-                userHomePathString = Path.of(".").toAbsolutePath().toString();
+                userHomePathString = Path.of(".").toAbsolutePath().normalize().toString();
             }
 
-            Path candidatePathToUserHome = Path.of(userHomePathString).toAbsolutePath();
+            Path candidatePathToUserHome = Path.of(userHomePathString).toAbsolutePath().normalize();
             Path pathToUserHome = detectParentDqoUserHome(candidatePathToUserHome);
 
             if (Files.exists(pathToUserHome) && !Files.isDirectory(pathToUserHome)) {
@@ -96,7 +96,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
                     Files.createDirectories(pathToUserHome);
                 }
                 catch (IOException ex) {
-                    throw new LocalFileSystemException("Cannot create a DQO user home at " + pathToUserHome.toString(), ex);
+                    throw new LocalFileSystemException("Cannot create a DQOps user home at " + pathToUserHome.toString(), ex);
                 }
             }
 
@@ -120,7 +120,7 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
         Path pathToDqoHome = Path.of(this.dqoConfigurationProperties.getHome());
         if (Files.isDirectory(pathToDqoHome)) {
-            return pathToDqoHome.toAbsolutePath().toString();
+            return pathToDqoHome.toAbsolutePath().normalize().toString();
         } else {
             throw new LocalFileSystemException("DQO_HOME is not accessible or is not a directory: " + pathToDqoHome);
         }

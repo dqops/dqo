@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.timeseries;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -149,11 +150,12 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
     /**
      * Creates a clone of the object, expanding variables in parameters.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded instance of the object.
      */
-    public TimeSeriesConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public TimeSeriesConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         TimeSeriesConfigurationSpec cloned = this.deepClone();
-        cloned.timestampColumn = secretValueProvider.expandValue(cloned.timestampColumn);
+        cloned.timestampColumn = secretValueProvider.expandValue(cloned.timestampColumn, lookupContext);
         return cloned;
     }
 

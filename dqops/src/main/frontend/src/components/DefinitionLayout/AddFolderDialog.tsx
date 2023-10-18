@@ -1,20 +1,20 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
-import Input from "../Input";
-import { RuleBasicFolderModel, SensorBasicFolderModel } from "../../api";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
-import { updateSensorFolderTree } from "../../redux/actions/sensor.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { updateRuleFolderTree } from "../../redux/actions/rule.actions";
+import Input from '../Input';
+import { RuleFolderModel, SensorFolderModel } from '../../api';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import { updateSensorFolderTree } from '../../redux/actions/definition.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { updateRuleFolderTree } from '../../redux/actions/definition.actions';
 
 interface AddFolderDialogProps {
   open: boolean;
   onClose: () => void;
   path?: string[];
-  folder?: SensorBasicFolderModel;
-  type?: 'sensor' | 'rule'
+  folder?: SensorFolderModel;
+  type?: 'sensor' | 'rule';
 }
 
 const AddFolderDialog = ({
@@ -24,19 +24,23 @@ const AddFolderDialog = ({
   folder,
   type = 'sensor'
 }: AddFolderDialogProps) => {
-  const [name, setName] = useState("");
-  const [error, setError] = useState("");
-  const { sensorFolderTree } = useSelector((state: IRootState) => state.sensor);
-  const { ruleFolderTree } = useSelector((state: IRootState) => state.rule || {});
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const { sensorFolderTree } = useSelector(
+    (state: IRootState) => state.definition
+  );
+  const { ruleFolderTree } = useSelector(
+    (state: IRootState) => state.definition || {}
+  );
   const dispatch = useActionDispatch();
 
   const handleSubmit = async () => {
     if (!name) {
-      setError("Name is required.");
+      setError('Name is required.');
       return;
     }
-    if (name.includes("/") || name.includes("\\")) {
-      setError("Name has invalid character.");
+    if (name.includes('/') || name.includes('\\')) {
+      setError('Name has invalid character.');
       return;
     }
 
@@ -50,17 +54,18 @@ const AddFolderDialog = ({
         return;
       }
 
-      const newSensorFolderTree: SensorBasicFolderModel = structuredClone(sensorFolderTree);
+      const newSensorFolderTree: SensorFolderModel =
+        structuredClone(sensorFolderTree);
       let data = newSensorFolderTree;
 
-      for(const key of path || []) {
-        data = data.folders?.[key] as SensorBasicFolderModel;
+      for (const key of path || []) {
+        data = data.folders?.[key] as SensorFolderModel;
       }
 
       data.folders = {
-        ...data.folders || {},
+        ...(data.folders || {}),
         [name]: {}
-      }
+      };
 
       dispatch(updateSensorFolderTree(newSensorFolderTree));
     } else {
@@ -68,17 +73,18 @@ const AddFolderDialog = ({
         return;
       }
 
-      const newRuleFolderTree: RuleBasicFolderModel = structuredClone(ruleFolderTree);
+      const newRuleFolderTree: RuleFolderModel =
+        structuredClone(ruleFolderTree);
       let data = newRuleFolderTree;
 
-      for(const key of path || []) {
-        data = data.folders?.[key] as RuleBasicFolderModel;
+      for (const key of path || []) {
+        data = data.folders?.[key] as RuleFolderModel;
       }
 
       data.folders = {
-        ...data.folders || {},
+        ...(data.folders || {}),
         [name]: {}
-      }
+      };
 
       dispatch(updateRuleFolderTree(newRuleFolderTree));
     }
@@ -97,7 +103,7 @@ const AddFolderDialog = ({
       <Dialog open={open} handler={onClose}>
         <DialogBody className="pt-10 pb-2 px-8">
           <h1 className="mb-2">New folder name:</h1>
-          
+
           <div>
             <Input
               value={name}

@@ -16,6 +16,7 @@
 package com.dqops.core.filesystem.virtual;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -30,7 +31,7 @@ import java.util.*;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
-public class FolderTreeNode {
+public class FolderTreeNode implements Cloneable {
     private HomeFolderPath folderPath;
     private List<FolderTreeNode> subFolders = new ArrayList<>();
     private List<FileTreeNode> files = new ArrayList<>();
@@ -223,6 +224,12 @@ public class FolderTreeNode {
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CHECKS)) {
                     return FolderKind.CHECKS;
                 }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.SETTINGS)) {
+                    return FolderKind.SETTINGS;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CREDENTIALS)) {
+                    return FolderKind.CREDENTIALS;
+                }
                 return FolderKind.FOREIGN;
             case CHECKS:
                 return FolderKind.CHECK_SUBFOLDER;
@@ -232,6 +239,10 @@ public class FolderTreeNode {
                 return FolderKind.SOURCE_SUBFOLDER;
             case RULES:
                 return FolderKind.RULES_SUBFOLDER;
+            case SETTINGS:
+                return FolderKind.SETTINGS_SUBFOLDER;
+            case CREDENTIALS:
+                return FolderKind.CREDENTIALS_SUBFOLDER;
             default:
                 return FolderKind.UNKNOWN;
         }
@@ -473,5 +484,34 @@ public class FolderTreeNode {
         return "FolderTreeNode{" +
                 "folderPath=" + folderPath +
                 '}';
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public FolderTreeNode clone() {
+        try {
+            FolderTreeNode cloned = (FolderTreeNode) super.clone();
+            cloned.files = new ArrayList<>();
+
+            if (this.files != null && this.files.size() > 0) {
+                for (FileTreeNode fileNode : this.files) {
+                    cloned.files.add(fileNode.clone());
+                }
+            }
+
+            cloned.subFolders = new ArrayList<>();
+            if (this.subFolders != null && this.subFolders.size() > 0) {
+                for (FolderTreeNode folderTreeNode : this.subFolders) {
+                    cloned.subFolders.add(folderTreeNode.clone());
+                }
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }

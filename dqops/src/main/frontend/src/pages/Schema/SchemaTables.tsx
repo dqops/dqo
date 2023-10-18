@@ -1,8 +1,8 @@
 import React from "react";
-import { TableBasicModel } from "../../api";
+import { TableListModel } from "../../api";
 
 type SchemaTablesProps = {
-  tables: TableBasicModel[];
+  tables: TableListModel[];
 }
 
 export const SchemaTables = ({ tables }: SchemaTablesProps) => {

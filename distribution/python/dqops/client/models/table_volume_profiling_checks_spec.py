@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -22,15 +23,21 @@ if TYPE_CHECKING:
         TableChangeRowCountSinceYesterdayCheckSpec,
     )
     from ..models.table_row_count_check_spec import TableRowCountCheckSpec
+    from ..models.table_volume_profiling_checks_spec_custom_checks import (
+        TableVolumeProfilingChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableVolumeProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableVolumeProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableVolumeProfilingChecksSpecCustomChecks]): Dictionary of additional custom checks
+            within this category. The keys are check names defined in the definition section. The sensor parameters and
+            rules should match the type of the configured sensor and rule for the custom check.
         profile_row_count (Union[Unset, TableRowCountCheckSpec]):
         profile_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
         profile_row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
@@ -40,6 +47,7 @@ class TableVolumeProfilingChecksSpec:
         profile_row_count_change_30_days (Union[Unset, TableChangeRowCountSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "TableVolumeProfilingChecksSpecCustomChecks"] = UNSET
     profile_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     profile_row_count_change: Union[Unset, "TableChangeRowCountCheckSpec"] = UNSET
     profile_row_count_change_yesterday: Union[
@@ -57,9 +65,13 @@ class TableVolumeProfilingChecksSpec:
     profile_row_count_change_30_days: Union[
         Unset, "TableChangeRowCountSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_row_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_row_count, Unset):
             profile_row_count = self.profile_row_count.to_dict()
@@ -103,6 +115,8 @@ class TableVolumeProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_row_count is not UNSET:
             field_dict["profile_row_count"] = profile_row_count
         if profile_row_count_change is not UNSET:
@@ -151,8 +165,20 @@ class TableVolumeProfilingChecksSpec:
             TableChangeRowCountSinceYesterdayCheckSpec,
         )
         from ..models.table_row_count_check_spec import TableRowCountCheckSpec
+        from ..models.table_volume_profiling_checks_spec_custom_checks import (
+            TableVolumeProfilingChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableVolumeProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableVolumeProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_row_count = d.pop("profile_row_count", UNSET)
         profile_row_count: Union[Unset, TableRowCountCheckSpec]
         if isinstance(_profile_row_count, Unset):
@@ -245,6 +271,7 @@ class TableVolumeProfilingChecksSpec:
             )
 
         table_volume_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_row_count=profile_row_count,
             profile_row_count_change=profile_row_count_change,
             profile_row_count_change_yesterday=profile_row_count_change_yesterday,

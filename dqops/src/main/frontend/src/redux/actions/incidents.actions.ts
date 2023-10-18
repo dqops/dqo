@@ -20,7 +20,7 @@ import { IncidentsApi } from '../../services/apiClient';
 import { INCIDENTS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
-  CheckResultDetailedSingleModel,
+  CheckResultEntryModel,
   IncidentIssueHistogramModel,
   IncidentModel,
   IncidentsPerConnectionModel
@@ -88,7 +88,7 @@ export const getIncidentsByConnection = ({
   numberOfMonth = 3,
   openIncidents = true,
   acknowledgedIncidents = true,
-  resolvedIncidents = true,
+  resolvedIncidents = false,
   mutedIncidents = false,
   page = 1,
   pageSize = 50,
@@ -126,7 +126,7 @@ export const getIncidentsIssuesRequest = () => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES
 });
 
-export const getIncidentsIssuesSuccess = (data: Array<CheckResultDetailedSingleModel>, isEnd: boolean) => ({
+export const getIncidentsIssuesSuccess = (data: Array<CheckResultEntryModel>, isEnd: boolean) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS,
   data,
   isEnd
@@ -154,10 +154,10 @@ export const getIncidentsIssues = ({
 }: IncidentIssueFilter) => async (dispatch: Dispatch) => {
   dispatch(getIncidentsIssuesRequest());
   try {
-    const res: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
+    const res: AxiosResponse<Array<CheckResultEntryModel>> =
       await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page, pageSize, filter, days, date, column, check, order, direction);
 
-    const nextRes: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
+    const nextRes: AxiosResponse<Array<CheckResultEntryModel>> =
       await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page + 1, pageSize, filter, days, date, column, check, order, direction);
 
     dispatch(getIncidentsIssuesSuccess(res.data, !nextRes.data.length));

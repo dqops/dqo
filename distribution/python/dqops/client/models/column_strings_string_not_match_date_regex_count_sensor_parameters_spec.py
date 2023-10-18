@@ -1,30 +1,26 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.column_strings_string_not_match_date_regex_count_sensor_parameters_spec_date_formats import (
-    ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats,
-)
+from ..models.strings_built_in_date_formats import StringsBuiltInDateFormats
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        date_formats (Union[Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats]): Desired
-            date format. Sensor will try to parse the column records and cast the data using this format.
+        date_formats (Union[Unset, StringsBuiltInDateFormats]):
     """
 
     filter_: Union[Unset, str] = UNSET
-    date_formats: Union[
-        Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats
-    ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    date_formats: Union[Unset, StringsBuiltInDateFormats] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -48,16 +44,11 @@ class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
         filter_ = d.pop("filter", UNSET)
 
         _date_formats = d.pop("date_formats", UNSET)
-        date_formats: Union[
-            Unset,
-            ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats,
-        ]
+        date_formats: Union[Unset, StringsBuiltInDateFormats]
         if isinstance(_date_formats, Unset):
             date_formats = UNSET
         else:
-            date_formats = ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats(
-                _date_formats
-            )
+            date_formats = StringsBuiltInDateFormats(_date_formats)
 
         column_strings_string_not_match_date_regex_count_sensor_parameters_spec = cls(
             filter_=filter_,

@@ -1,7 +1,7 @@
 **not null count match** checks  
 
 **Description**  
-Column level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
+Column-level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
  Compares the count of not null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 ___
@@ -53,7 +53,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_not
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="24-34"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -314,7 +314,7 @@ Verifies that percentage of the difference between the count of not null values 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_null_count_match|recurring|daily|[not_null_count](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_not_null_count_match|monitoring|daily|[not_null_count](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -340,7 +340,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_not_n
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -355,7 +355,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_not_n
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="24-35"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -378,7 +378,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           comparisons:
             compare_to_source_of_truth_table:
@@ -617,7 +617,7 @@ Verifies that percentage of the difference between the count of not null values 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_null_count_match|recurring|monthly|[not_null_count](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_not_null_count_match|monitoring|monthly|[not_null_count](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -643,7 +643,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_not
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -658,7 +658,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_not
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="24-35"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -681,7 +681,7 @@ spec:
         reference_table_column_name: state_column_name_on_reference_table
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           comparisons:
             compare_to_source_of_truth_table:
@@ -960,14 +960,15 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="24-35"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+```yaml hl_lines="25-36"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1004,6 +1005,11 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    date_column:
+      labels:
+      - "date or datetime column used as a daily or monthly partitioning key, dates\
+        \ (and times) are truncated to a day or a month by the sensor's query for\
+        \ partitioned checks"
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -1035,8 +1041,8 @@ spec:
     SELECT
         COUNT(analyzed_table.`target_column`)
         AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1062,8 +1068,8 @@ spec:
     SELECT
         COUNT(analyzed_table.`target_column`)
         AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1099,8 +1105,8 @@ spec:
     FROM (
        SELECT
            original_table.*,
-        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
        FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     WHERE (analyzed_table."target_column") IS NOT NULL
@@ -1126,8 +1132,8 @@ spec:
     ```sql
     SELECT
         COUNT(analyzed_table."target_column") AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1151,8 +1157,8 @@ spec:
     ```sql
     SELECT
         COUNT(analyzed_table."target_column") AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1178,8 +1184,8 @@ spec:
     SELECT
         COUNT(analyzed_table."target_column")
         AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1203,11 +1209,11 @@ spec:
     ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[date_column] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-    ORDER BY CAST(analyzed_table.[] AS date)
+    GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+    ORDER BY CAST(analyzed_table.[date_column] AS date)
     
         
     ```
@@ -1267,14 +1273,15 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="24-35"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+```yaml hl_lines="25-36"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1311,6 +1318,11 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    date_column:
+      labels:
+      - "date or datetime column used as a daily or monthly partitioning key, dates\
+        \ (and times) are truncated to a day or a month by the sensor's query for\
+        \ partitioned checks"
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -1342,8 +1354,8 @@ spec:
     SELECT
         COUNT(analyzed_table.`target_column`)
         AS actual_value,
-        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
+        DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1369,8 +1381,8 @@ spec:
     SELECT
         COUNT(analyzed_table.`target_column`)
         AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1406,8 +1418,8 @@ spec:
     FROM (
        SELECT
            original_table.*,
-        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
        FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     WHERE (analyzed_table."target_column") IS NOT NULL
@@ -1433,8 +1445,8 @@ spec:
     ```sql
     SELECT
         COUNT(analyzed_table."target_column") AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1458,8 +1470,8 @@ spec:
     ```sql
     SELECT
         COUNT(analyzed_table."target_column") AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1485,8 +1497,8 @@ spec:
     SELECT
         COUNT(analyzed_table."target_column")
         AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1510,11 +1522,11 @@ spec:
     ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) AS actual_value,
-        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
     
         
     ```

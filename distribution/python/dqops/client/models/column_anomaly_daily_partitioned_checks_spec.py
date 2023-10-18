@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_anomaly_daily_partitioned_checks_spec_custom_checks import (
+        ColumnAnomalyDailyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
         ColumnAnomalyStationaryMean30DaysCheckSpec,
     )
@@ -58,10 +62,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnAnomalyDailyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnAnomalyDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnAnomalyDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_mean_change (Union[Unset, ColumnChangeMeanCheckSpec]):
         daily_partition_mean_change_yesterday (Union[Unset, ColumnChangeMeanSinceYesterdayCheckSpec]):
         daily_partition_median_change (Union[Unset, ColumnChangeMedianCheckSpec]):
@@ -83,6 +90,9 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
         daily_partition_sum_change_30_days (Union[Unset, ColumnChangeSumSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnAnomalyDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_mean_change: Union[Unset, "ColumnChangeMeanCheckSpec"] = UNSET
     daily_partition_mean_change_yesterday: Union[
         Unset, "ColumnChangeMeanSinceYesterdayCheckSpec"
@@ -131,9 +141,13 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
     daily_partition_sum_change_30_days: Union[
         Unset, "ColumnChangeSumSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_mean_change, Unset):
             daily_partition_mean_change = self.daily_partition_mean_change.to_dict()
@@ -247,6 +261,8 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_mean_change is not UNSET:
             field_dict["daily_partition_mean_change"] = daily_partition_mean_change
         if daily_partition_mean_change_yesterday is not UNSET:
@@ -318,6 +334,9 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_anomaly_daily_partitioned_checks_spec_custom_checks import (
+            ColumnAnomalyDailyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
             ColumnAnomalyStationaryMean30DaysCheckSpec,
         )
@@ -368,6 +387,17 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnAnomalyDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnAnomalyDailyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _daily_partition_mean_change = d.pop("daily_partition_mean_change", UNSET)
         daily_partition_mean_change: Union[Unset, ColumnChangeMeanCheckSpec]
         if isinstance(_daily_partition_mean_change, Unset):
@@ -621,6 +651,7 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
             )
 
         column_anomaly_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_mean_change=daily_partition_mean_change,
             daily_partition_mean_change_yesterday=daily_partition_mean_change_yesterday,
             daily_partition_median_change=daily_partition_median_change,

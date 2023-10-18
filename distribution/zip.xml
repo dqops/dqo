@@ -48,6 +48,14 @@
             <outputDirectory>/sensors</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../home/checks</directory>
+            <outputDirectory>/checks</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/../home/settings</directory>
+            <outputDirectory>/settings</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/../lib/target/output/dqo-lib-${project.version}/jars</directory>
             <outputDirectory>/jars</outputDirectory>
         </fileSet>
@@ -63,10 +71,6 @@
         </file>
         <file>
             <source>${project.basedir}/../home/core-site.xml</source>
-            <outputDirectory>/</outputDirectory>
-        </file>
-        <file>
-            <source>${project.basedir}/../home/dashboardslist.dqodashboards.yaml</source>
             <outputDirectory>/</outputDirectory>
         </file>
         <file>

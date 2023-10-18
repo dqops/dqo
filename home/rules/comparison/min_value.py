@@ -52,7 +52,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -62,9 +62,9 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
+    expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound

@@ -44,7 +44,9 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. " +
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. " +
+            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec monthlyPartitionMinRowCount;

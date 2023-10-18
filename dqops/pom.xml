@@ -27,10 +27,10 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>0.2.1</version>  <!-- DQO Version, do not touch (changed automatically) -->
+    <version>0.3.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
-	<description>DQO Data Quality Operations Center</description>
+	<description>DQOps Data Quality Operations Center</description>
 	<properties>
 		<java.version>15</java.version>
 		<tablesaw.version>0.43.1</tablesaw.version>
@@ -178,7 +178,7 @@
 					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.12.1</version>
+						<version>1.14.0</version>
 						<configuration>
 							<workingDirectory>src/main/frontend</workingDirectory>
 							<nodeVersion>v18.16.0</nodeVersion>
@@ -724,6 +724,11 @@
 			<artifactId>annotations</artifactId>
 			<version>24.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jodd</groupId>
+			<artifactId>jodd-util</artifactId>
+			<version>6.2.1</version>
+		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
 		<dependency>
@@ -769,11 +774,15 @@
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
-			<version>23.2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.4</version>
 		</dependency>
 
 		<!-- test dependencies -->
@@ -852,7 +861,7 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors</arg>
+						<arg>-Ajavadoc.packages=com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

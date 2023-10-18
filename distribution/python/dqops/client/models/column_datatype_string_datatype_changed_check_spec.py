@@ -1,30 +1,31 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-        ColumnStringsStringDatatypeDetectSensorParametersSpec,
+    from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+        ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
 
 
 T = TypeVar("T", bound="ColumnDatatypeStringDatatypeChangedCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnDatatypeStringDatatypeChangedCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
@@ -41,13 +42,13 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
-        parameters (Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]):
+        parameters (Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]):
         warning (Union[Unset, ValueChangedParametersSpec]):
         error (Union[Unset, ValueChangedParametersSpec]):
         fatal (Union[Unset, ValueChangedParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -56,12 +57,12 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "ColumnStringsStringDatatypeDetectSensorParametersSpec"
+        Unset, "ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
     ] = UNSET
     warning: Union[Unset, "ValueChangedParametersSpec"] = UNSET
     error: Union[Unset, "ValueChangedParametersSpec"] = UNSET
     fatal: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -130,20 +131,20 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-            ColumnStringsStringDatatypeDetectSensorParametersSpec,
+        from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+            ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -165,12 +166,12 @@ class ColumnDatatypeStringDatatypeChangedCheckSpec:
         data_grouping = d.pop("data_grouping", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]
+        parameters: Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
             parameters = (
-                ColumnStringsStringDatatypeDetectSensorParametersSpec.from_dict(
+                ColumnDatatypeStringDatatypeDetectSensorParametersSpec.from_dict(
                     _parameters
                 )
             )

@@ -20,7 +20,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -110,7 +110,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -120,10 +120,13 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    previous_readout = filtered[0]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0] if len(filtered) > 0 else None
+
+    if previous_readout is None:
+        return RuleExecutionResult()
 
     lower_bound = previous_readout + getattr(rule_parameters.parameters, 'from')
     upper_bound = previous_readout + rule_parameters.parameters.to
@@ -156,7 +159,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -258,7 +261,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -268,18 +271,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + getattr(rule_parameters.parameters, 'from')
     upper_bound = previous_readout + rule_parameters.parameters.to
@@ -312,7 +317,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -414,7 +419,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -424,20 +429,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-29]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + getattr(rule_parameters.parameters, 'from')
     upper_bound = previous_readout + rule_parameters.parameters.to
@@ -470,7 +475,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -572,7 +577,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -582,20 +587,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-6]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + getattr(rule_parameters.parameters, 'from')
     upper_bound = previous_readout + rule_parameters.parameters.to
@@ -627,7 +632,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -712,7 +717,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -722,10 +727,13 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    previous_readout = filtered[0]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0] if len(filtered) > 0 else None
+
+    if previous_readout is None:
+        return RuleExecutionResult()
 
     lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
@@ -758,7 +766,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -854,7 +862,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -864,18 +872,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
@@ -908,7 +918,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1004,7 +1014,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1014,20 +1024,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-29]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
@@ -1060,7 +1070,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1156,7 +1166,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1166,20 +1176,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-6]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
@@ -1210,7 +1220,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1288,7 +1298,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1298,10 +1308,13 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    previous_readout = filtered[0]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0] if len(filtered) > 0 else None
+
+    if previous_readout is None:
+        return RuleExecutionResult()
 
     lower_bound = previous_readout - rule_parameters.parameters.max_difference
     upper_bound = previous_readout + rule_parameters.parameters.max_difference
@@ -1333,7 +1346,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1422,7 +1435,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1432,18 +1445,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - rule_parameters.parameters.max_difference
     upper_bound = previous_readout + rule_parameters.parameters.max_difference
@@ -1475,7 +1490,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1564,7 +1579,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1574,20 +1589,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-29]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - rule_parameters.parameters.max_difference
     upper_bound = previous_readout + rule_parameters.parameters.max_difference
@@ -1619,7 +1634,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1708,7 +1723,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1718,20 +1733,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-6]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - rule_parameters.parameters.max_difference
     upper_bound = previous_readout + rule_parameters.parameters.max_difference
@@ -1762,7 +1777,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1841,7 +1856,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1851,10 +1866,13 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    previous_readout = filtered[0]
+    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0] if len(filtered) > 0 else None
+
+    if previous_readout is None:
+        return RuleExecutionResult()
 
     lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
@@ -1886,7 +1904,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -1975,7 +1993,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -1985,18 +2003,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
@@ -2028,7 +2048,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -2117,7 +2137,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -2127,20 +2147,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-29]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
@@ -2172,7 +2192,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Example**
 ```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -2261,7 +2281,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -2271,20 +2291,20 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     past_readouts = rule_parameters.previous_readouts[:-6]
     if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
 
         previous_readout = last_readout.sensor_readout
     else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
+        filtered_readouts = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1] if len(filtered_readouts) > 0 else None
+        if previous_readout is None:
+            return RuleExecutionResult()
 
     lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)

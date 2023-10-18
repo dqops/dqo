@@ -3,6 +3,8 @@
 We have provided a variety of examples to help you in using DQO effectively. These examples use openly available 
 datasets from [Google Cloud](https://cloud.google.com/datasets).
 
+You can find the full list of examples at the bottom of this article. 
+
 ## Prerequisite
 
 To use the examples you need:
@@ -29,13 +31,14 @@ configuration, and `*.dqotable.yaml` file, which stores the columns and tables m
 While it is not necessary to manually add the connection in our examples, you can find information on how to do it in the
 [Working with DQO section](../working-with-dqo/adding-data-source-connection/index.md).
 
+## Running the use cases
 
 To run the examples, follow the steps below. 
 
 1. Go to the directory where you installed DQO and navigate, for example, to 
     `examples/data-completeness/number-of-rows-in-the-table-bigquery`.  
     
-    Run the command provided below. 
+    Run the command provided below in the terminal. This will install DQO on your computer. 
 
     === "Windows"
 
@@ -60,41 +63,82 @@ To run the examples, follow the steps below.
     must create a DQO cloud account.
  
     After creating an userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
-    redirected to https://cloud.dqo.ai/registration, where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+    redirected to https://cloud.dqops.com/registration, where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQO application.
     The API Key is now stored in the configuration file.
 
+### **Executing the checks using the graphical interface**
 
-4. To execute the checks that were prepared in the example, run the following command in DQO Shell:
+You can execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
+Simply, open the DQO User Interface Console (http://localhost:8888).
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
+
+1. Go to the **Profiling** section.
+
+    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Profiling Checks** tab.
+
+    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+
+
+4. Run the enabled check using the **Run check** button.
+
+    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
+
+
+5. Access the results by clicking the **Results** button and review it.
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
+
+6. Review the results
+
+    To see the results which you should expect, refer to the description of each example.
+
+
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
+
+
+### **Executing the checks using the DQO Shell**
+
+You can also execute the checks that were prepared in the example, using the DQO Shell. 
+
+1. Just run the following command in DQO Shell:
 
     ```
     check run
     ```
-   
-    You can also execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
-    Simply, open the DQO User Interface Console (http://localhost:8888).
-
-    Go to the **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
-
-    Select the **Advanced Profiling** tab.
-    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
-
-    Run the enabled check using the **Run check** button.
-    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
-
-    Review the results by opening the **Check details** button.
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
+    
+    A summary table with the results will be displayed. To see the results which you should expect, refer to the description of each example.
 
 
-5. After executing the checks, synchronize the results with your DQO cloud account by running the following command or 
-    using the **Synchronize** button located in the upper right corner of the graphical interface.
+2. After executing the checks, synchronize the results with your DQO cloud account by running the following command.
 
     ```
     cloud sync all
     ``` 
 
-6. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
+
 
 ## List of the use cases
 
@@ -110,10 +154,10 @@ Here is a comprehensive list of examples with links to the relevant documentatio
 | **Data uniqueness**                                                                                                         |                                                                                                                                                                                                                                                                                                                       |                                                                                                                  |
 | [Percentage of duplicates](data-uniqueness/percentage-of-duplicates.md)                                                     | This example shows how to detect that the percentage of duplicate values in a column does not exceed the maximum accepted percentage using [duplicate_percent](../checks/column/uniqueness/duplicate-percent.md) check.                                                                                               | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he)                |
 | **Data validity**                                                                                                           |                                                                                                                                                                                                                                                                                                                       |                                                                                                                  |
-| [Percentage of valid USA zipcodes](data-validity/percentage-of-valid-usa-zipcodes.md)                                       | This example shows how to detect that the percentage of valid USA zip code in a column does not fall below a set threshold using [valid_usa_zipcode_percent](../checks/column/pii/valid-usa-zipcode-percent.md) check.                                                                                                | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he)                |
-| [Percentage of valid emails](data-validity/percentage-of-valid-emails.md)                                                   | This example shows how to detect that the percentage of valid email values in a column does not exceed the maximum accepted percentage using [valid_email_percent](../checks/column/pii/valid-email-percent.md) check.                                                                                                | DQOps dataset                                                                                                    |
+| [Percentage of rows containing USA zipcodes](data-validity/percentage-of-values-that-contains-usa-zipcode.md)               | This example shows how to detect that the percentage of rows that contains USA zipcode values in a column does not exceed a set threshold using [contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md) check.                                                                           | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he)                |
+| [Number of invalid emails](data-validity/number-of-invalid-emails.md)                                                       | This example shows how to detect that the number of invalid emails in a column does not exceed the maximum accepted count using [string_invalid_email_count](../checks/column/strings/string-invalid-email-count.md) check.                                                                                           | DQOps dataset                                                                                                    |
 | [Percentage of valid latitude and longitude](data-validity/percentage-of-valid-latitude-and-longitude.md)                   | This example shows how to detect that the percentage of valid latitude and longitude values remain above a set threshold using [numeric_valid_latitude_percent](../checks/column/numeric/valid-latitude-percent.md) and [numeric_valid_longitude_percent](../checks/column/numeric/valid-longitude-percent.md)checks. | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he)                |
-| [Percentage of valid IP4 address](data-validity/percentage-of-valid-IP4-address.md)                                         | This example shows how to detect that the percentage of valid IP4 address in a column does not fall below a set threshold using [valid_ip4_address_percent](../checks/column/pii/valid-ip4-address-percent.md) check.                                                                                                 | DQOps dataset                                                                                                    |
+| [Number of invalid IP4 address](data-validity/number-of-invalid-IP4-address.md)                                             | This example shows how to detect that the number of invalid IP4 address in a column does not exceed a set threshold using [string_invalid_ip4_address_count](../checks/column/strings/string-invalid-ip4-address-count.md) check.                                                                                     | DQOps dataset                                                                                                    |
 | [Percentage of strings matching date regex](data-validity/percentage-of-strings-matching-date-regex.md)                     | This example shows how to detect that the percentage of strings matching the date format regex in a column does not exceed a set threshold using [string_match_date_regex_percent](../checks/column/strings/string-match-date-regex-percent.md) check.                                                                | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                                     |
 | [Percentage of negative values](data-validity/percentage-of-negative-values.md)                                             | This example shows how to detect that the percentage of negative values in a column does not exceed a set threshold using [negative_percent](../checks/column/numeric/negative-percent.md) check.                                                                                                                     | [Link](https://www.worldometers.info/world-population/population-by-country/)                                    |
 | [Percentage of valid currency codes](data-validity/percentage-of-valid-currency-codes.md)                                   | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [string_valid_currency_code_percent](../checks/column/strings/string-valid-currency-code-percent.md) check.                                                                        | DQOps dataset                                                                                                    |

@@ -77,9 +77,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_match_name_regex_percent", o -> o.dailyPartitionStringMatchNameRegexPercent);
 
             put("daily_partition_expected_strings_in_top_values_count", o -> o.dailyPartitionExpectedStringsInTopValuesCount);
-
-            put("daily_partition_string_datatype_detected", o -> o.dailyPartitionStringDatatypeDetected);
-
         }
     };
 
@@ -188,9 +185,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnExpectedStringsInTopValuesCountCheckSpec dailyPartitionExpectedStringsInTopValuesCount;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected;
-
     /**
      * Returns a maximum string length below  check.
      * @return Maximum string length below  check.
@@ -224,7 +218,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     public void setDailyPartitionStringMinLength(ColumnStringMinLengthCheckSpec dailyPartitionStringMinLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMinLength, dailyPartitionStringMinLength));
         this.dailyPartitionStringMinLength = dailyPartitionStringMinLength;
-        propagateHierarchyIdToField(dailyPartitionStringMaxLength, "daily_partition_string_min_length");
+        propagateHierarchyIdToField(dailyPartitionStringMinLength, "daily_partition_string_min_length");
     }
 
     /**
@@ -820,24 +814,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedStringsInTopValuesCount, dailyPartitionExpectedStringsInTopValuesCount));
         this.dailyPartitionExpectedStringsInTopValuesCount = dailyPartitionExpectedStringsInTopValuesCount;
         propagateHierarchyIdToField(dailyPartitionExpectedStringsInTopValuesCount, "daily_partition_expected_strings_in_top_values_count");
-    }
-
-    /**
-     * Returns a count of expected values in datatype changed check.
-     * @return Datatype changed check.
-     */
-    public ColumnStringDatatypeDetectedCheckSpec getDailyPartitionStringDatatypeDetected() {
-        return dailyPartitionStringDatatypeDetected;
-    }
-
-    /**
-     * Sets a new definition of a datatype changed check.
-     * @param dailyPartitionStringDatatypeDetected Datatype changed check.
-     */
-    public void setDailyPartitionStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeDetected, dailyPartitionStringDatatypeDetected));
-        this.dailyPartitionStringDatatypeDetected = dailyPartitionStringDatatypeDetected;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeDetected, "daily_partition_string_datatype_detected");
     }
 
     /**

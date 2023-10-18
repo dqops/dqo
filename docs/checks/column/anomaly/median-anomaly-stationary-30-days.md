@@ -1,7 +1,7 @@
 **median anomaly stationary 30 days** checks  
 
 **Description**  
-Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 
@@ -52,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_med
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-23"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -356,7 +356,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-21 41-46"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -702,7 +702,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_anomaly_stationary_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_median_anomaly_stationary_30_days|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -728,7 +728,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_median_anomaly_stationary_30_days:
@@ -743,7 +743,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -755,7 +755,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_median_anomaly_stationary_30_days:
@@ -1048,7 +1048,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-21 42-47"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -1069,7 +1069,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               anomaly:
                 daily_median_anomaly_stationary_30_days:
@@ -1435,14 +1435,15 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                 anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="13-24"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+```yaml hl_lines="14-25"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
+    partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1468,6 +1469,11 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    date_column:
+      labels:
+      - "date or datetime column used as a daily or monthly partitioning key, dates\
+        \ (and times) are truncated to a day or a month by the sensor's query for\
+        \ partitioned checks"
 
 ```
 ### **BigQuery**
@@ -1532,12 +1538,12 @@ spec:
             0.5)
             OVER (PARTITION BY
                 
-        CAST(analyzed_table.`` AS DATE),
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE))
+        CAST(analyzed_table.`date_column` AS DATE),
+        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
                 
             ) AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1575,8 +1581,8 @@ spec:
     FROM(
         SELECT
             original_table.*,
-        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" original_table
     ) analyzed_table
     GROUP BY time_period, time_period_utc
@@ -1604,8 +1610,8 @@ spec:
     SELECT
         PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1632,8 +1638,8 @@ spec:
     SELECT
         PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1660,8 +1666,8 @@ spec:
     SELECT
         PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        CAST(analyzed_table."date_column" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1726,12 +1732,12 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table.[target_column])
             OVER (PARTITION BY
                 
-        CAST(analyzed_table.[] AS date),
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME)
+        CAST(analyzed_table.[date_column] AS date),
+        CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
                 
             ) AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[date_column] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
@@ -1740,14 +1746,15 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 42-47"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    ```yaml hl_lines="12-22 48-53"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
+        partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -1782,6 +1789,11 @@ spec:
         col_inserted_at:
           labels:
           - optional column that stores the timestamp when row was ingested
+        date_column:
+          labels:
+          - "date or datetime column used as a daily or monthly partitioning key, dates\
+            \ (and times) are truncated to a day or a month by the sensor's query for\
+            \ partitioned checks"
         country:
           labels:
           - column used as the first grouping key
@@ -1852,14 +1864,14 @@ spec:
                 0.5)
                 OVER (PARTITION BY
                     
-            CAST(analyzed_table.`` AS DATE),
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE))
+            CAST(analyzed_table.`date_column` AS DATE),
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
                     
             analyzed_table.`country` AS grouping_level_1
             analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1903,8 +1915,8 @@ spec:
                 original_table.*,
             original_table."country" AS grouping_level_1,
             original_table."state" AS grouping_level_2,
-            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" original_table
         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1933,8 +1945,8 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1962,8 +1974,8 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1991,8 +2003,8 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2058,12 +2070,12 @@ spec:
                 WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                 OVER (PARTITION BY
                     
-            CAST(analyzed_table.[] AS date),
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME)
+            CAST(analyzed_table.[date_column] AS date),
+            CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
                     
                 ) AS actual_value,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[date_column] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS grouping_level_1,

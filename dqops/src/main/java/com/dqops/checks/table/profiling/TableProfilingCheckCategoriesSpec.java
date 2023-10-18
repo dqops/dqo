@@ -17,11 +17,10 @@ package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,8 +52,8 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         }
     };
 
-    @JsonPropertyDescription("Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
-         "advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.")
+    @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent " +
+         "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProfilingTimePeriod resultTruncation;
 
@@ -265,7 +264,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.
      */
@@ -276,7 +275,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for monitoring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
@@ -301,11 +300,11 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
      *
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @Override
     @JsonIgnore
-    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.profiling;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.profiling;
     }
 }

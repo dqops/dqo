@@ -45,7 +45,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
     /**
      * Creates a rule documentation model factory.
      * @param projectRoot Project root path.
-     * @param dqoHomeContext DQO User home context.
+     * @param dqoHomeContext DQOps User home context.
      * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the rule parameters.
      */
     public RuleDocumentationModelFactoryImpl(Path projectRoot,

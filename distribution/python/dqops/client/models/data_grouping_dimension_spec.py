@@ -1,21 +1,19 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.data_grouping_dimension_spec_source import DataGroupingDimensionSpecSource
+from ..models.data_grouping_dimension_source import DataGroupingDimensionSource
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DataGroupingDimensionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DataGroupingDimensionSpec:
     """
     Attributes:
-        source (Union[Unset, DataGroupingDimensionSpecSource]): The source of the data grouping dimension value. The
-            default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the
-            same data for different areas (countries, etc.). This could be a country name if a table or partition stores
-            information for that country.
+        source (Union[Unset, DataGroupingDimensionSource]):
         tag (Union[Unset, str]): The value assigned to a data quality grouping dimension when the source is 'tag'.
             Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that
             store the same data for different areas (countries, etc.). This could be a country name if a table or partition
@@ -27,11 +25,11 @@ class DataGroupingDimensionSpec:
         name (Union[Unset, str]): Data grouping dimension name.
     """
 
-    source: Union[Unset, DataGroupingDimensionSpecSource] = UNSET
+    source: Union[Unset, DataGroupingDimensionSource] = UNSET
     tag: Union[Unset, str] = UNSET
     column: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         source: Union[Unset, str] = UNSET
@@ -60,11 +58,11 @@ class DataGroupingDimensionSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _source = d.pop("source", UNSET)
-        source: Union[Unset, DataGroupingDimensionSpecSource]
+        source: Union[Unset, DataGroupingDimensionSource]
         if isinstance(_source, Unset):
             source = UNSET
         else:
-            source = DataGroupingDimensionSpecSource(_source)
+            source = DataGroupingDimensionSource(_source)
 
         tag = d.pop("tag", UNSET)
 

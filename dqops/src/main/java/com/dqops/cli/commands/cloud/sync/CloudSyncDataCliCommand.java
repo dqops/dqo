@@ -22,6 +22,8 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,23 +34,27 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQO user home.
+ * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
+@CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     public CloudSyncDataCliCommand() {
     }
 
     @Autowired
     public CloudSyncDataCliCommand(CloudSynchronizationService cloudSynchronizationService,
-                                   TerminalFactory terminalFactory) {
+                                   TerminalFactory terminalFactory,
+                                   DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.cloudSynchronizationService = cloudSynchronizationService;
         this.terminalFactory = terminalFactory;
+        this.principalProvider = principalProvider;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -117,38 +123,40 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         try {
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+
             int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeReadoutsResult < 0) {
                 return synchronizeReadoutsResult;
             }
             int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeRuleResultsResult < 0) {
                 return synchronizeReadoutsResult;
             }
 
             int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeErrorsResult < 0) {
                 return synchronizeErrorsResult;
             }
 
             int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeStatisticsResult < 0) {
                 return synchronizeStatisticsResult;
             }
 
             int synchronizeIncidentsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
 
             return synchronizeIncidentsResult;
         }
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
                 TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                terminalWriter.writeLine(CloudSyncCliCommand.API_KEY_INVALID_MESSAGE);
                 return -1;
             }
 

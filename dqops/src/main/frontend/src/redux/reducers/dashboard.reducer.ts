@@ -19,18 +19,26 @@ import {
 } from '../../api';
 import { DASHBOARD_ACTION } from '../types';
 
+export type TDashboardTootlipProps = {
+  height?: number;
+  label?: string;
+  url?: string; 
+}
+
 export interface IDashboardState {
   dashboardFolders: DashboardsFolderSpec[];
   loading: boolean;
   error: any;
-  dashboardState: Record<string, boolean>
+  dashboardState: Record<string, boolean>;
+  dashboardTooltipState: TDashboardTootlipProps;
 }
 
 const initialState: IDashboardState = {
   dashboardFolders: [],
   loading: false,
   error: null,
-  dashboardState: {}
+  dashboardState: {},
+  dashboardTooltipState: {}
 };
 
 const dashboardReducer = (state = initialState, action: any) => {
@@ -60,6 +68,11 @@ const dashboardReducer = (state = initialState, action: any) => {
           ...state.dashboardState,
         }
       }
+    case DASHBOARD_ACTION.TOGGLE_DASHBOARD_TOOLTIP: 
+      return {
+        ...state,
+        dashboardTooltipState: action.dashboardTooltipState
+      }  
     default:
       return state;
   }

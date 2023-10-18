@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * Root DQO shell runner. Separated into a different class to avoid circular dependencies in IoC.
+ * Root DQOps shell runner. Separated into a different class to avoid circular dependencies in IoC.
  */
 @Component
 @Slf4j
@@ -57,7 +57,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
     @Override
     public Integer call() throws Exception {
         String prompt = new AttributedStringBuilder()
-                .style(AttributedStyle.DEFAULT.foreground(255, 153,0)) // DQO Orange
+                .style(AttributedStyle.DEFAULT.foreground(255, 153,0)) // DQOps Orange
                 .append(DQO_PROMPT)
                 .toAnsi();
         String rightPrompt = null;

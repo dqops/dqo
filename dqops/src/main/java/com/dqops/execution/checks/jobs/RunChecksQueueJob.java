@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.ParentDqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.checks.CheckExecutionService;
@@ -71,6 +72,8 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
      */
     @Override
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         ExecutionContext executionContext = this.executionContextFactory.create();
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
                 executionContext,
@@ -80,9 +83,10 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 this.parameters.isDummyExecution(),
                 true,
                 jobExecutionContext.getJobId(),
-                jobExecutionContext.getCancellationToken());
+                jobExecutionContext.getCancellationToken(),
+                this.getPrincipal());
 
-        RunChecksJobResult jobResultSummary = RunChecksJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        RunChecksResult jobResultSummary = RunChecksResult.fromCheckExecutionSummary(checkExecutionSummary);
         RunChecksParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setRunChecksResult(jobResultSummary);
         this.setParameters(clonedParameters);

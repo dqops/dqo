@@ -29,7 +29,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
- * DQO Cloud bucket credentials provider.
+ * DQOps Cloud bucket credentials provider.
  */
 @Component
 public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvider {
@@ -37,7 +37,7 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
 
     /**
      * Default injection constructor.
-     * @param dqoCloudApiClientFactory DQO Cloud API Client factory.
+     * @param dqoCloudApiClientFactory DQOps Cloud API Client factory.
      */
     @Autowired
     public DqoCloudCredentialsProviderImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {
@@ -79,6 +79,12 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
 
             case checks:
                 return accessTokenIssueApi.issueBucketChecksRWAccessToken();
+
+            case settings:
+                return accessTokenIssueApi.issueBucketSettingsRWAccessToken();
+
+            case credentials:
+                return accessTokenIssueApi.issueBucketCredentialsRWAccessToken();
 
             default:
                 throw new RuntimeException("Unknown root: " + rootType);

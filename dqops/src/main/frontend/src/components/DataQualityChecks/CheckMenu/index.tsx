@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { IconButton, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
 import SvgIcon from "../../SvgIcon";
 import Button from "../../Button";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../redux/reducers";
 
 
 export type CheckMenuProps = {
@@ -11,6 +13,9 @@ export type CheckMenuProps = {
 
 const CheckMenu = ({ onRunChecks, onDeleteChecks }: CheckMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -30,11 +35,13 @@ const CheckMenu = ({ onRunChecks, onDeleteChecks }: CheckMenuProps) => {
           onClick={onRunChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label="Run checks for the category"
+          disabled={userProfile.can_run_checks !== true}
         />
         <Button
           onClick={onDeleteChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
           label="Delete data for the category"
+          disabled={userProfile.can_delete_data === false}
         />
       </PopoverContent>
     </Popover>

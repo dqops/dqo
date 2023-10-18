@@ -1,32 +1,33 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-        ColumnStringsStringDatatypeDetectSensorParametersSpec,
+    from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+        ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
     )
 
 
 T = TypeVar("T", bound="ColumnStringsStringDatatypeDetectStatisticsCollectorSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec:
     """
     Attributes:
         disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
             process.
-        parameters (Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]):
+        parameters (Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]):
     """
 
     disabled: Union[Unset, bool] = UNSET
     parameters: Union[
-        Unset, "ColumnStringsStringDatatypeDetectSensorParametersSpec"
+        Unset, "ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         disabled = self.disabled
@@ -46,20 +47,20 @@ class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_strings_string_datatype_detect_sensor_parameters_spec import (
-            ColumnStringsStringDatatypeDetectSensorParametersSpec,
+        from ..models.column_datatype_string_datatype_detect_sensor_parameters_spec import (
+            ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
         )
 
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnStringsStringDatatypeDetectSensorParametersSpec]
+        parameters: Union[Unset, ColumnDatatypeStringDatatypeDetectSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
             parameters = (
-                ColumnStringsStringDatatypeDetectSensorParametersSpec.from_dict(
+                ColumnDatatypeStringDatatypeDetectSensorParametersSpec.from_dict(
                     _parameters
                 )
             )

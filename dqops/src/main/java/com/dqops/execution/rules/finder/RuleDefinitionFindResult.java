@@ -20,6 +20,8 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * Rule definition search result. Returned from the rule finder.
  */
@@ -28,6 +30,7 @@ public class RuleDefinitionFindResult {
     private HomeType home;
     private RuleDefinitionSpec ruleDefinitionSpec;
     private HomeFilePath rulePythonFilePath;
+    private Instant rulePythonFileLastModified;
 
     /**
      * The type of the home (user home or dqo system home) where the rule is defined.
@@ -75,5 +78,21 @@ public class RuleDefinitionFindResult {
      */
     public void setRulePythonFilePath(HomeFilePath rulePythonFilePath) {
         this.rulePythonFilePath = rulePythonFilePath;
+    }
+
+    /**
+     * Returns the timestamp when the Python module with the rule code was last modified.
+     * @return Last file modification timestamp.
+     */
+    public Instant getRulePythonFileLastModified() {
+        return rulePythonFileLastModified;
+    }
+
+    /**
+     * Sets the last file modification timestamp of the rule file.
+     * @param rulePythonFileLastModified Last file modification timestamp.
+     */
+    public void setRulePythonFileLastModified(Instant rulePythonFileLastModified) {
+        this.rulePythonFileLastModified = rulePythonFileLastModified;
     }
 }

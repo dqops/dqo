@@ -16,6 +16,7 @@
 
 package com.dqops.services.check;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
@@ -36,7 +37,8 @@ public interface CheckFlatConfigurationFactory {
     /**
      * Gets a collection of check configuration models that fit the provided filters.
      * @param checkSearchFilters Check search filters.
+     * @param principal User principal.
      * @return List of self-contained check configuration models that fit the filters.
      */
-    List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters);
+    List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal);
 }

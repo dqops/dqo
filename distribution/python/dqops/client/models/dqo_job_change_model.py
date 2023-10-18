@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.dqo_job_change_model_status import DqoJobChangeModelStatus
+from ..models.dqo_job_status import DqoJobStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -13,23 +14,23 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DqoJobChangeModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoJobChangeModel:
     """
     Attributes:
-        status (Union[Unset, DqoJobChangeModelStatus]):
+        status (Union[Unset, DqoJobStatus]):
         job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
         change_sequence (Union[Unset, int]):
         updated_model (Union[Unset, DqoJobHistoryEntryModel]):
         status_changed_at (Union[Unset, int]):
     """
 
-    status: Union[Unset, DqoJobChangeModelStatus] = UNSET
+    status: Union[Unset, DqoJobStatus] = UNSET
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
     change_sequence: Union[Unset, int] = UNSET
     updated_model: Union[Unset, "DqoJobHistoryEntryModel"] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         status: Union[Unset, str] = UNSET
@@ -70,11 +71,11 @@ class DqoJobChangeModel:
 
         d = src_dict.copy()
         _status = d.pop("status", UNSET)
-        status: Union[Unset, DqoJobChangeModelStatus]
+        status: Union[Unset, DqoJobStatus]
         if isinstance(_status, Unset):
             status = UNSET
         else:
-            status = DqoJobChangeModelStatus(_status)
+            status = DqoJobStatus(_status)
 
         _job_id = d.pop("jobId", UNSET)
         job_id: Union[Unset, DqoQueueJobId]

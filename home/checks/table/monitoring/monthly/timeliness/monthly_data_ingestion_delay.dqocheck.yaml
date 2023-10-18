@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/timeliness/data_ingestion_delay
+  rule_name: comparison/max_days
+  help_text: Monthly monitoring calculating the time difference in days between the
+    most recent event timestamp and the most recent ingestion timestamp

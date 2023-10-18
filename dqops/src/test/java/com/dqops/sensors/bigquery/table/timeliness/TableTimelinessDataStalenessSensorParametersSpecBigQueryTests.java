@@ -60,8 +60,8 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
         return SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(this.sampleTableMetadata, this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(this.sampleTableMetadata, this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(this.sampleTableMetadata, this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -237,10 +237,10 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensorWithTimestampInput_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -333,10 +333,10 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensorWithTimestampInput_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));

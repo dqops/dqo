@@ -53,7 +53,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -154,6 +154,44 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `<target_table>` AS analyzed_table
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "dim_customer" referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX(original_table."target_column") AS actual_value
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+    GROUP BY actual_value
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -307,7 +345,7 @@ Verifies that the percentage of difference in total max of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_total_max_match_percent|recurring|daily|[total_max_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-max-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_total_max_match_percent|monitoring|daily|[total_max_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-max-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -333,7 +371,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           accuracy:
             daily_total_max_match_percent:
@@ -349,7 +387,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -361,7 +399,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           accuracy:
             daily_total_max_match_percent:
@@ -451,6 +489,44 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `<target_table>` AS analyzed_table
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "dim_customer" referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX(original_table."target_column") AS actual_value
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+    GROUP BY actual_value
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -604,7 +680,7 @@ Verifies that the percentage of difference in total max of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_total_max_match_percent|recurring|monthly|[total_max_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-max-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_total_max_match_percent|monitoring|monthly|[total_max_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-max-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -630,7 +706,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           accuracy:
             monthly_total_max_match_percent:
@@ -646,7 +722,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -658,7 +734,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           accuracy:
             monthly_total_max_match_percent:
@@ -748,6 +824,44 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `<target_table>` AS analyzed_table
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "dim_customer" referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX(original_table."target_column") AS actual_value
+        FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+    GROUP BY actual_value
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"

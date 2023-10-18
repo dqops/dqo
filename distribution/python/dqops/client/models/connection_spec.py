@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.connection_spec_provider_type import ConnectionSpecProviderType
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -12,10 +13,10 @@ if TYPE_CHECKING:
         ConnectionIncidentGroupingSpec,
     )
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+    from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
-    from ..models.recurring_schedules_spec import RecurringSchedulesSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.sql_server_parameters_spec import SqlServerParametersSpec
@@ -24,11 +25,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ConnectionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ConnectionSpec:
     """
     Attributes:
-        provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required).
+        provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
         postgresql (Union[Unset, PostgresqlParametersSpec]):
@@ -39,7 +40,7 @@ class ConnectionSpec:
         parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
-        schedules (Union[Unset, RecurringSchedulesSpec]):
+        schedules (Union[Unset, MonitoringSchedulesSpec]):
         incident_grouping (Union[Unset, ConnectionIncidentGroupingSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
@@ -48,7 +49,7 @@ class ConnectionSpec:
             searching for tables when filtered data quality checks are executed.
     """
 
-    provider_type: Union[Unset, ConnectionSpecProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
@@ -60,11 +61,11 @@ class ConnectionSpec:
     default_grouping_configuration: Union[
         Unset, "DataGroupingConfigurationSpec"
     ] = UNSET
-    schedules: Union[Unset, "RecurringSchedulesSpec"] = UNSET
+    schedules: Union[Unset, "MonitoringSchedulesSpec"] = UNSET
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         provider_type: Union[Unset, str] = UNSET
@@ -172,21 +173,21 @@ class ConnectionSpec:
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
+        from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
-        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.sql_server_parameters_spec import SqlServerParametersSpec
 
         d = src_dict.copy()
         _provider_type = d.pop("provider_type", UNSET)
-        provider_type: Union[Unset, ConnectionSpecProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ConnectionSpecProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         _bigquery = d.pop("bigquery", UNSET)
         bigquery: Union[Unset, BigQueryParametersSpec]
@@ -249,11 +250,11 @@ class ConnectionSpec:
             )
 
         _schedules = d.pop("schedules", UNSET)
-        schedules: Union[Unset, RecurringSchedulesSpec]
+        schedules: Union[Unset, MonitoringSchedulesSpec]
         if isinstance(_schedules, Unset):
             schedules = UNSET
         else:
-            schedules = RecurringSchedulesSpec.from_dict(_schedules)
+            schedules = MonitoringSchedulesSpec.from_dict(_schedules)
 
         _incident_grouping = d.pop("incident_grouping", UNSET)
         incident_grouping: Union[Unset, ConnectionIncidentGroupingSpec]

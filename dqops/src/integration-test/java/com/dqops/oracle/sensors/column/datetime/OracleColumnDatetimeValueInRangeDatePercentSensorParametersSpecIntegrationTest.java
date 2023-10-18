@@ -77,7 +77,7 @@ public class OracleColumnDatetimeValueInRangeDatePercentSensorParametersSpecInte
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
@@ -98,7 +98,7 @@ public class OracleColumnDatetimeValueInRangeDatePercentSensorParametersSpecInte
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();

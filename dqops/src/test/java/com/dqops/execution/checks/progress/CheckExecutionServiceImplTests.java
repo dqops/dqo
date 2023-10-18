@@ -22,17 +22,20 @@ import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.sql.TableSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
 import com.dqops.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryObjectMother;
@@ -63,11 +66,12 @@ import com.dqops.metadata.traversal.HierarchyNodeTreeWalker;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,15 +100,15 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
         tableSpec.getProfilingChecks().getVolume().setProfileRowCount(new TableRowCountCheckSpec());
-        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule1ParametersSpec(5L));
 
-        tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
-        tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
-        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringChecksSpec());
+        tableSpec.setMonitoringChecks(new TableMonitoringChecksSpec());
+        tableSpec.getMonitoringChecks().setDaily(new TableDailyMonitoringCheckCategoriesSpec());
+        tableSpec.getMonitoringChecks().getDaily().setSql(new TableSqlDailyMonitoringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
-        tableSpec.getRecurringChecks().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
+        tableSpec.getMonitoringChecks().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
 
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
@@ -156,7 +160,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
-                DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault());
+                DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
+                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
@@ -175,50 +180,52 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         CheckSearchFilters profilingFilters = allFilters.clone();
         profilingFilters.setCheckType(CheckType.profiling);
 
-        CheckSearchFilters recurringFilters = allFilters.clone();
-        recurringFilters.setCheckType(CheckType.recurring);
+        CheckSearchFilters monitoringFilters = allFilters.clone();
+        monitoringFilters.setCheckType(CheckType.monitoring);
 
         CheckSearchFilters partitionedFilters = allFilters.clone();
         partitionedFilters.setCheckType(CheckType.partitioned);
 
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
-        CheckExecutionSummary recurringSummary = this.sut.executeChecks(
-                this.executionContext, recurringFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
+        CheckExecutionSummary monitoringSummary = this.sut.executeChecks(
+                this.executionContext, monitoringFilters, null, this.progressListener, true,
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
                 this.executionContext, partitionedFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
                 this.executionContext, allFilters, null, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(1, recurringSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, monitoringSummary.getTotalChecksExecutedCount());
 
 
         Assertions.assertEquals(2.0, profilingSummary.getValidResultsColumn().sum());
-        Assertions.assertEquals(0.0, recurringSummary.getValidResultsColumn().sum());
+        Assertions.assertEquals(0.0, monitoringSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
         Assertions.assertEquals(0, profilingSummary.getErrorSeverityIssuesCount());
-        Assertions.assertEquals(1, recurringSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(1, monitoringSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 
         Assertions.assertEquals(allSummary.getTotalChecksExecutedCount(),
                 profilingSummary.getTotalChecksExecutedCount() +
-                        recurringSummary.getTotalChecksExecutedCount() +
+                        monitoringSummary.getTotalChecksExecutedCount() +
                         partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(allSummary.getErrorSeverityIssuesCount(),
                 profilingSummary.getErrorSeverityIssuesCount() +
-                        recurringSummary.getErrorSeverityIssuesCount() +
+                        monitoringSummary.getErrorSeverityIssuesCount() +
                         partitionedSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(allSummary.getValidResultsColumn().sum(),
                 profilingSummary.getValidResultsColumn().sum() +
-                        recurringSummary.getValidResultsColumn().sum() +
+                        monitoringSummary.getValidResultsColumn().sum() +
                         partitionedSummary.getValidResultsColumn().sum());
     }
 }

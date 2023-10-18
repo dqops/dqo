@@ -33,6 +33,7 @@ package com.dqops.data.storage.parquet;
  * limitations under the License.
  */
 
+import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;
@@ -171,7 +172,9 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
 
             public void close() throws IOException {
                 synchronized (RawInMemoryFileSystem.this) {
-                    fAttr.bytes = fAttr.bos.toByteArray();
+                    fAttr.bos.trim();
+                    fAttr.bytes = fAttr.bos.array;
+                    fAttr.bos.close();
                     fAttr.bos = null;
                     pathToFileAttribs.put(getPath(f), fAttr);
                 }
@@ -314,6 +317,22 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
             }
         }
 
+        /**
+         * DQOps specific method - retrieves the byte array that was written.
+         * @param f File path.
+         * @return Byte array of the file content.
+         * @throws IOException When file was not found
+         */
+        public byte[] getInMemoryFileContent(Path f) throws IOException {
+            synchronized (this) {
+                FileAttributes attr = pathToFileAttribs.get(getPath(f));
+                if (attr==null) {
+                    throw new FileNotFoundException("File " + f + " does not exist.");
+                }
+                return attr.bytes;
+            }
+        }
+
         /** Some APIs exclusively for InMemoryFileSystem */
 
         /** Register a path with its size. */
@@ -403,7 +422,7 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
         }
 
         private static class FileAttributes {
-            public ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            public FastByteArrayOutputStream bos = new FastByteArrayOutputStream();
             private byte[] bytes;
 
             public FileAttributes() {
@@ -476,5 +495,17 @@ public class DqoInMemoryFileSystem extends ChecksumFileSystem {
 
     public float getPercentUsed() {
         return ((RawInMemoryFileSystem)getRawFileSystem()).getPercentUsed();
+    }
+
+    /**
+     * DQOps specific method - retrieves the byte array that was written.
+     * @param f File path.
+     * @return Byte array of the file content.
+     */
+    public byte[] getInMemoryFileContent(Path f) throws IOException {
+        synchronized (this) {
+            RawInMemoryFileSystem rawFileSystem = (RawInMemoryFileSystem) getRawFileSystem();
+            return rawFileSystem.getInMemoryFileContent(f);
+        }
     }
 }

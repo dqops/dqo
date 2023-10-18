@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/strings/string_parsable_to_integer_percent
+  rule_name: comparison/min_percent
+  help_text: Verifies that the percentage of parsable to integer string in a column
+    does not fall below the minimum accepted percentage. Stores the most recent captured
+    value for each day when the data quality check was evaluated.

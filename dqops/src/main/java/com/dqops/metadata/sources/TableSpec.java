@@ -22,9 +22,10 @@ import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSp
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -36,7 +37,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -70,7 +71,7 @@ public class TableSpec extends AbstractSpec {
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("profiling_checks", o -> o.profilingChecks);
-            put("recurring_checks", o -> o.recurringChecks);
+            put("monitoring_checks", o -> o.monitoringChecks);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics", o -> o.statistics);
             put("schedules_override", o -> o.schedulesOverride);
@@ -130,16 +131,19 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
 
-    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). " +
-                             "The reference table's metadata must be imported into DQO, but the reference table could be located on a different data source. " +
-                             "DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
+    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to " +
+                             "compare this table (called the compared table) with other reference tables (the source of truth). " +
+                             "The reference table's metadata must be imported into DQOps, but the reference table could be located on a different data source. " +
+                             "DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
                              "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
-                             "DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.")
+                             "DQOps will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), " +
+                             "comparing the measures (sensor readouts) captured from both the tables.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonConfigurationSpecMap tableComparisons = new TableComparisonConfigurationSpecMap();
 
-    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
+    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will " +
+            "override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableIncidentGroupingSpec incidentGrouping;
@@ -152,10 +156,10 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
 
-    @JsonPropertyDescription("Configuration of table level recurring checks. Recurring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring check stores only the most recent data quality check result for each period of time.")
+    @JsonPropertyDescription("Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableRecurringChecksSpec recurringChecks = new TableRecurringChecksSpec();
+    private TableMonitoringChecksSpec monitoringChecks = new TableMonitoringChecksSpec();
 
     @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -171,7 +175,7 @@ public class TableSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringSchedulesSpec schedulesOverride;
+    private MonitoringSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -399,21 +403,21 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled table level recurring.
-     * @return Table level recurring.
+     * Returns configuration of enabled table level monitoring.
+     * @return Table level monitoring.
      */
-    public TableRecurringChecksSpec getRecurringChecks() {
-        return recurringChecks;
+    public TableMonitoringChecksSpec getMonitoringChecks() {
+        return monitoringChecks;
     }
 
     /**
-     * Sets a new configuration of table level data quality recurring checks.
-     * @param recurringChecks New recurring checks configuration.
+     * Sets a new configuration of table level data quality monitoring checks.
+     * @param monitoringChecks New monitoring checks configuration.
      */
-    public void setRecurringChecks(TableRecurringChecksSpec recurringChecks) {
-        setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
-        this.recurringChecks = recurringChecks;
-        propagateHierarchyIdToField(recurringChecks, "recurring_checks");
+    public void setMonitoringChecks(TableMonitoringChecksSpec monitoringChecks) {
+        setDirtyIf(!Objects.equals(this.monitoringChecks, monitoringChecks));
+        this.monitoringChecks = monitoringChecks;
+        propagateHierarchyIdToField(monitoringChecks, "monitoring_checks");
     }
 
     /**
@@ -456,7 +460,7 @@ public class TableSpec extends AbstractSpec {
      * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
      * @return Configuration of schedules for each type of schedules.
      */
-    public RecurringSchedulesSpec getSchedulesOverride() {
+    public MonitoringSchedulesSpec getSchedulesOverride() {
         return schedulesOverride;
     }
 
@@ -464,7 +468,7 @@ public class TableSpec extends AbstractSpec {
      * Sets the table specific configuration of schedules for running checks.
      * @param schedulesOverride Configuration of schedules for running checks.
      */
-    public void setSchedulesOverride(RecurringSchedulesSpec schedulesOverride) {
+    public void setSchedulesOverride(MonitoringSchedulesSpec schedulesOverride) {
         setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
         this.schedulesOverride = schedulesOverride;
         propagateHierarchyIdToField(schedulesOverride, "schedules_override");
@@ -601,40 +605,40 @@ public class TableSpec extends AbstractSpec {
                 return tableProfilingCheckCategoriesSpec;
             }
 
-            case recurring: {
-                TableRecurringChecksSpec recurringSpec = this.recurringChecks;
-                if (recurringSpec == null) {
-                    recurringSpec = new TableRecurringChecksSpec();
-                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
+            case monitoring: {
+                TableMonitoringChecksSpec monitoringSpec = this.monitoringChecks;
+                if (monitoringSpec == null) {
+                    monitoringSpec = new TableMonitoringChecksSpec();
+                    monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
                     if (attachCheckContainer) {
-                        this.recurringChecks = recurringSpec;
+                        this.monitoringChecks = monitoringSpec;
                     }
                 }
 
                 switch (checkTimeScale) {
                     case daily: {
-                        if (recurringSpec.getDaily() != null) {
-                            return recurringSpec.getDaily();
+                        if (monitoringSpec.getDaily() != null) {
+                            return monitoringSpec.getDaily();
                         }
 
-                        TableDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new TableDailyRecurringCheckCategoriesSpec();
-                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        TableDailyMonitoringCheckCategoriesSpec dailyMonitoringCategoriesSpec = new TableDailyMonitoringCheckCategoriesSpec();
+                        dailyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
-                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                            monitoringSpec.setDaily(dailyMonitoringCategoriesSpec);
                         }
-                        return dailyRecurringCategoriesSpec;
+                        return dailyMonitoringCategoriesSpec;
                     }
                     case monthly: {
-                        if (recurringSpec.getMonthly() != null) {
-                            return recurringSpec.getMonthly();
+                        if (monitoringSpec.getMonthly() != null) {
+                            return monitoringSpec.getMonthly();
                         }
 
-                        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new TableMonthlyRecurringCheckCategoriesSpec();
-                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoringCategoriesSpec = new TableMonthlyMonitoringCheckCategoriesSpec();
+                        monthlyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "monthly"));
                         if (attachCheckContainer) {
-                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                            monitoringSpec.setMonthly(monthlyMonitoringCategoriesSpec);
                         }
-                        return monthlyRecurringCategoriesSpec;
+                        return monthlyMonitoringCategoriesSpec;
                     }
                     default:
                         throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
@@ -689,7 +693,7 @@ public class TableSpec extends AbstractSpec {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be a profiling check container, one of recurring check containers or one of partitioned check containers.
+     * The object could be a profiling check container, one of monitoring check containers or one of partitioned check containers.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -701,19 +705,19 @@ public class TableSpec extends AbstractSpec {
         if (checkRootContainer instanceof TableProfilingCheckCategoriesSpec) {
             this.setProfilingChecks((TableProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableDailyRecurringCheckCategoriesSpec) {
-            if (this.recurringChecks == null) {
-                this.setRecurringChecks(new TableRecurringChecksSpec());
+        else if (checkRootContainer instanceof TableDailyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new TableMonitoringChecksSpec());
             }
 
-            this.getRecurringChecks().setDaily((TableDailyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getMonitoringChecks().setDaily((TableDailyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableMonthlyRecurringCheckCategoriesSpec) {
-            if (this.recurringChecks == null) {
-                this.setRecurringChecks(new TableRecurringChecksSpec());
+        else if (checkRootContainer instanceof TableMonthlyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new TableMonitoringChecksSpec());
             }
 
-            this.getRecurringChecks().setMonthly((TableMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getMonitoringChecks().setMonthly((TableMonthlyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
@@ -763,7 +767,7 @@ public class TableSpec extends AbstractSpec {
             return true;
         }
 
-        if (this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks()) {
+        if (this.monitoringChecks != null && this.monitoringChecks.hasAnyConfiguredChecks()) {
             return true;
         }
 
@@ -784,8 +788,8 @@ public class TableSpec extends AbstractSpec {
             case profiling:
                 return this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks();
 
-            case recurring:
-                return this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks();
+            case monitoring:
+                return this.monitoringChecks != null && this.monitoringChecks.hasAnyConfiguredChecks();
 
             case partitioned:
                 return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
@@ -798,13 +802,14 @@ public class TableSpec extends AbstractSpec {
      * Creates an expanded and trimmed (no checks for columns, no comments) deep copy of the table.
      * Configurable properties will be expanded if they contain environment variables or secrets.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Cloned, trimmed and expanded table specification.
      */
-    public TableSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public TableSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.profilingChecks = null;
-            cloned.recurringChecks = null;
+            cloned.monitoringChecks = null;
             cloned.partitionedChecks = null;
             cloned.labels = null;
             cloned.owner = null;
@@ -812,18 +817,18 @@ public class TableSpec extends AbstractSpec {
             cloned.statistics = null;
             cloned.tableComparisons = null;
             if (cloned.timestampColumns != null) {
-                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
+                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incrementalTimeWindow != null) {
                 cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
             if (cloned.groupings != null) {
-                cloned.groupings = cloned.groupings.expandAndTrim(secretValueProvider);
+                cloned.groupings = cloned.groupings.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }
-            cloned.columns = this.columns.expandAndTrim(secretValueProvider);
+            cloned.columns = this.columns.expandAndTrim(secretValueProvider, secretValueLookupContext);
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -846,7 +851,7 @@ public class TableSpec extends AbstractSpec {
                 cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
             cloned.profilingChecks = null;
-            cloned.recurringChecks = null;
+            cloned.monitoringChecks = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.groupings = null;
@@ -872,7 +877,7 @@ public class TableSpec extends AbstractSpec {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.profilingChecks = null;
-            cloned.recurringChecks = null;
+            cloned.monitoringChecks = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timestampColumns = null;

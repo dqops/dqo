@@ -9,15 +9,15 @@ nav:
   - Getting started:
       - "getting-started/index.md"
       - Installation: "getting-started/installation/installation.md"
-      - Connect to a data source: "getting-started/adding-data-source-connection/adding-data-source-connection.md"
-      - Run data quality checks: "getting-started/run-data-quality-checks/run-data-quality-checks.md"
+      - Connect to a data source: "getting-started/add-data-source-connection/add-data-source-connection.md"
+      - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md"
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
   - DQO concepts:
       - "dqo-concepts/index.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
-          - Advanced profiling: "dqo-concepts/checks/advanced-profiling/advanced-profiling.md"
-          - Recurring checks: "dqo-concepts/checks/recurring-checks/recurring-checks.md"
+          - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
+          - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
       - Sensors: "dqo-concepts/sensors/sensors.md"
       - Rules: "dqo-concepts/rules/rules.md"
@@ -38,10 +38,10 @@ nav:
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
-          - Percentage of valid USA zipcodes: "examples/data-validity/percentage-of-valid-usa-zipcodes.md"
-          - Percentage of valid emails: "examples/data-validity/percentage-of-valid-emails.md"
+          - Percentage of rows containing USA zipcodes: "examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md"
+          - Number of invalid emails: "examples/data-validity/number-of-invalid-emails.md"
           - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
-          - Percentage of valid IP4 address: "examples/data-validity/percentage-of-valid-IP4-address.md"
+          - Number of invalid IP4 address: "examples/data-validity/number-of-invalid-IP4-address.md"
           - Percentage of strings matching date regex: "examples/data-validity/percentage-of-strings-matching-date-regex.md"
           - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
           - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
@@ -62,7 +62,7 @@ nav:
           - Install DQO using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
           - Install DQO from Git: "working-with-dqo/installation/install-dqo-from-git.md"
           - Install DQO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
-          - Run DQO as Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+          - Run DQO as a Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
       - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
@@ -72,6 +72,7 @@ nav:
           - PostgreSQL: "working-with-dqo/adding-data-source-connection/postgresql.md"
           - SQL Server: "working-with-dqo/adding-data-source-connection/sql-server.md"
           - MySQL: "working-with-dqo/adding-data-source-connection/mysql.md"
+          - Oracle: "working-with-dqo/adding-data-source-connection/oracle.md"
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
       - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
@@ -81,9 +82,13 @@ nav:
           - Configuring the schedules by modifying the YAML files: "working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md"
           - Time zone configuration: "working-with-dqo/schedules/timezone-configuration.md"
           - Cron formatting: "working-with-dqo/schedules/cron-formatting.md"
-      - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents-and-notifications.md"
+      - Incidents and notifications:
+          - Incidents: "working-with-dqo/incidents-and-notifications/incidents.md"
+          - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
+          - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
       - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
+      - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - index: 'command-line-interface/index.md'
@@ -110,6 +115,7 @@ nav:
         - table availability: 'checks/table/availability/table-availability.md'
       - comparisons:
         - row count match: 'checks/table/comparisons/row-count-match.md'
+        - column count match: 'checks/table/comparisons/column-count-match.md'
       - schema:
         - column count: 'checks/table/schema/column-count.md'
         - column count changed: 'checks/table/schema/column-count-changed.md'
@@ -174,9 +180,10 @@ nav:
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
       - datatype:
-        - date match format percent: 'checks/column/datatype/date-match-format-percent.md'
+        - string datatype detected: 'checks/column/datatype/string-datatype-detected.md'
         - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
       - datetime:
+        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
       - integrity:
@@ -220,15 +227,10 @@ nav:
         - invalid longitude count: 'checks/column/numeric/invalid-longitude-count.md'
         - valid longitude percent: 'checks/column/numeric/valid-longitude-percent.md'
       - pii:
-        - valid usa phone percent: 'checks/column/pii/valid-usa-phone-percent.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
-        - valid usa zipcode percent: 'checks/column/pii/valid-usa-zipcode-percent.md'
         - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
-        - valid email percent: 'checks/column/pii/valid-email-percent.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
-        - valid ip4 address percent: 'checks/column/pii/valid-ip4-address-percent.md'
         - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
-        - valid ip6 address percent: 'checks/column/pii/valid-ip6-address-percent.md'
         - contains ip6 percent: 'checks/column/pii/contains-ip6-percent.md'
       - schema:
         - column exists: 'checks/column/schema/column-exists.md'
@@ -273,12 +275,23 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
-        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
         - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
         - duplicate percent: 'checks/column/uniqueness/duplicate-percent.md'
+        - anomaly differencing distinct count 30 days: 'checks/column/uniqueness/anomaly-differencing-distinct-count-30-days.md'
+        - anomaly differencing distinct count: 'checks/column/uniqueness/anomaly-differencing-distinct-count.md'
+        - anomaly stationary distinct percent 30 days: 'checks/column/uniqueness/anomaly-stationary-distinct-percent-30-days.md'
+        - anomaly stationary distinct percent: 'checks/column/uniqueness/anomaly-stationary-distinct-percent.md'
+        - change distinct count: 'checks/column/uniqueness/change-distinct-count.md'
+        - change distinct count since 7 days: 'checks/column/uniqueness/change-distinct-count-since-7-days.md'
+        - change distinct count since 30 days: 'checks/column/uniqueness/change-distinct-count-since-30-days.md'
+        - change distinct count since yesterday: 'checks/column/uniqueness/change-distinct-count-since-yesterday.md'
+        - change distinct percent: 'checks/column/uniqueness/change-distinct-percent.md'
+        - change distinct percent since 7 days: 'checks/column/uniqueness/change-distinct-percent-since-7-days.md'
+        - change distinct percent since 30 days: 'checks/column/uniqueness/change-distinct-percent-since-30-days.md'
+        - change distinct percent since yesterday: 'checks/column/uniqueness/change-distinct-percent-since-yesterday.md'
     - index: 'checks/index.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
@@ -320,11 +333,11 @@ nav:
       - profiling:
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
         - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
-      - recurring:
-        - table daily recurring checks: 'reference/yaml/recurring/table-daily-recurring-checks.md'
-        - table monthly recurring checks: 'reference/yaml/recurring/table-monthly-recurring-checks.md'
-        - column daily recurring checks: 'reference/yaml/recurring/column-daily-recurring-checks.md'
-        - column monthly recurring checks: 'reference/yaml/recurring/column-monthly-recurring-checks.md'
+      - monitoring:
+        - table daily monitoring checks: 'reference/yaml/monitoring/table-daily-monitoring-checks.md'
+        - table monthly monitoring checks: 'reference/yaml/monitoring/table-monthly-monitoring-checks.md'
+        - column daily monitoring checks: 'reference/yaml/monitoring/column-daily-monitoring-checks.md'
+        - column monthly monitoring checks: 'reference/yaml/monitoring/column-monthly-monitoring-checks.md'
       - partitioned:
         - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
         - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'
@@ -340,7 +353,7 @@ nav:
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
-    - ParquetFiles:
+    - Parquet data files:
       - check_results: 'reference/parquetfiles/check_results.md'
       - errors: 'reference/parquetfiles/errors.md'
       - incidents: 'reference/parquetfiles/incidents.md'

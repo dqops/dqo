@@ -20,15 +20,15 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import java.nio.file.Path;
 
 /**
- * Service used during the build process (called from a maven profile) that updates the yaml definitions in the DQO Home sensor folder,
+ * Service used during the build process (called from a maven profile) that updates the yaml definitions in the DQOps Home sensor folder,
  * updating correct list of fields that were detected using reflection.
  */
 public interface SensorDefinitionDefaultSpecUpdateService {
     /**
-     * Checks if all rule definition yaml files in the DQO Home sensor folder have a correct list of parameters, matching the fields used in the Java spec classes.
+     * Checks if all rule definition yaml files in the DQOps Home sensor folder have a correct list of parameters, matching the fields used in the Java spec classes.
      *
      * @param projectRootPath Path to the dqops module folder (code folder).
-     * @param dqoHomeContext  DQO Home context.
+     * @param dqoHomeContext  DQOps Home context.
      */
     void updateSensorSpecifications(Path projectRootPath, DqoHomeContext dqoHomeContext);
 }

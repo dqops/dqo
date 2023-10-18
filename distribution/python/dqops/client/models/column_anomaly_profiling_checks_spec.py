@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -10,6 +11,9 @@ if TYPE_CHECKING:
     )
     from ..models.column_anomaly_differencing_sum_check_spec import (
         ColumnAnomalyDifferencingSumCheckSpec,
+    )
+    from ..models.column_anomaly_profiling_checks_spec_custom_checks import (
+        ColumnAnomalyProfilingChecksSpecCustomChecks,
     )
     from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
         ColumnAnomalyStationaryMean30DaysCheckSpec,
@@ -58,10 +62,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnAnomalyProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnAnomalyProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnAnomalyProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         profile_mean_change (Union[Unset, ColumnChangeMeanCheckSpec]):
         profile_mean_change_yesterday (Union[Unset, ColumnChangeMeanSinceYesterdayCheckSpec]):
         profile_median_change (Union[Unset, ColumnChangeMedianCheckSpec]):
@@ -82,6 +89,7 @@ class ColumnAnomalyProfilingChecksSpec:
         profile_sum_change_30_days (Union[Unset, ColumnChangeSumSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnAnomalyProfilingChecksSpecCustomChecks"] = UNSET
     profile_mean_change: Union[Unset, "ColumnChangeMeanCheckSpec"] = UNSET
     profile_mean_change_yesterday: Union[
         Unset, "ColumnChangeMeanSinceYesterdayCheckSpec"
@@ -130,9 +138,13 @@ class ColumnAnomalyProfilingChecksSpec:
     profile_sum_change_30_days: Union[
         Unset, "ColumnChangeSumSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_mean_change, Unset):
             profile_mean_change = self.profile_mean_change.to_dict()
@@ -222,6 +234,8 @@ class ColumnAnomalyProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_mean_change is not UNSET:
             field_dict["profile_mean_change"] = profile_mean_change
         if profile_mean_change_yesterday is not UNSET:
@@ -283,6 +297,9 @@ class ColumnAnomalyProfilingChecksSpec:
         from ..models.column_anomaly_differencing_sum_check_spec import (
             ColumnAnomalyDifferencingSumCheckSpec,
         )
+        from ..models.column_anomaly_profiling_checks_spec_custom_checks import (
+            ColumnAnomalyProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
             ColumnAnomalyStationaryMean30DaysCheckSpec,
         )
@@ -327,6 +344,15 @@ class ColumnAnomalyProfilingChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnAnomalyProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnAnomalyProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_mean_change = d.pop("profile_mean_change", UNSET)
         profile_mean_change: Union[Unset, ColumnChangeMeanCheckSpec]
         if isinstance(_profile_mean_change, Unset):
@@ -548,6 +574,7 @@ class ColumnAnomalyProfilingChecksSpec:
             )
 
         column_anomaly_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_mean_change=profile_mean_change,
             profile_mean_change_yesterday=profile_mean_change_yesterday,
             profile_median_change=profile_median_change,

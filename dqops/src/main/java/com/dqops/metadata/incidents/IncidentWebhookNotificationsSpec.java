@@ -16,6 +16,7 @@
 
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -40,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements Cloneable {
+public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentWebhookNotificationsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -183,14 +184,43 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         IncidentWebhookNotificationsSpec cloned = this.deepClone();
-        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl);
-        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl);
-        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl);
-        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl);
+        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl, lookupContext);
+        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl, lookupContext);
+        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl, lookupContext);
+        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
         return cloned;
     }
+
+    /**
+     * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
+     * @param defaultWebhooks Default incident webhook notification spec
+     * @return Combined IncidentWebhookNotificationsSpec object with default webhooks.
+     */
+    public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
+        IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
+
+        if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
+            clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentAcknowledgedWebhookUrl() == null){
+            clonedWebhooks.setIncidentAcknowledgedWebhookUrl(defaultWebhooks.getIncidentAcknowledgedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentResolvedWebhookUrl() == null){
+            clonedWebhooks.setIncidentResolvedWebhookUrl(defaultWebhooks.getIncidentResolvedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentMutedWebhookUrl() == null){
+            clonedWebhooks.setIncidentMutedWebhookUrl(defaultWebhooks.getIncidentMutedWebhookUrl());
+        }
+
+        return clonedWebhooks;
+    }
+
 }

@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="FieldModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class FieldModel:
     """Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the
     field and the current value.
@@ -28,7 +29,7 @@ class FieldModel:
             integer_value (Union[Unset, int]): Field value for an integer (32-bit) field.
             long_value (Union[Unset, int]): Field value for a long (64-bit) field.
             double_value (Union[Unset, float]): Field value for a double field.
-            date_time_value (Union[Unset, int]): Field value for a datetime field.
+            datetime_value (Union[Unset, datetime.datetime]): Field value for a date time field.
             column_name_value (Union[Unset, str]): Field value for a column name field.
             enum_value (Union[Unset, str]): Field value for an enum (choice) field.
             string_list_value (Union[Unset, List[str]]): Field value for an array (list) of strings.
@@ -44,13 +45,13 @@ class FieldModel:
     integer_value: Union[Unset, int] = UNSET
     long_value: Union[Unset, int] = UNSET
     double_value: Union[Unset, float] = UNSET
-    date_time_value: Union[Unset, int] = UNSET
+    datetime_value: Union[Unset, datetime.datetime] = UNSET
     column_name_value: Union[Unset, str] = UNSET
     enum_value: Union[Unset, str] = UNSET
     string_list_value: Union[Unset, List[str]] = UNSET
     integer_list_value: Union[Unset, List[int]] = UNSET
     date_value: Union[Unset, datetime.date] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         definition: Union[Unset, Dict[str, Any]] = UNSET
@@ -63,7 +64,10 @@ class FieldModel:
         integer_value = self.integer_value
         long_value = self.long_value
         double_value = self.double_value
-        date_time_value = self.date_time_value
+        datetime_value: Union[Unset, str] = UNSET
+        if not isinstance(self.datetime_value, Unset):
+            datetime_value = self.datetime_value.isoformat()
+
         column_name_value = self.column_name_value
         enum_value = self.enum_value
         string_list_value: Union[Unset, List[str]] = UNSET
@@ -95,8 +99,8 @@ class FieldModel:
             field_dict["long_value"] = long_value
         if double_value is not UNSET:
             field_dict["double_value"] = double_value
-        if date_time_value is not UNSET:
-            field_dict["date_time_value"] = date_time_value
+        if datetime_value is not UNSET:
+            field_dict["datetime_value"] = datetime_value
         if column_name_value is not UNSET:
             field_dict["column_name_value"] = column_name_value
         if enum_value is not UNSET:
@@ -134,7 +138,12 @@ class FieldModel:
 
         double_value = d.pop("double_value", UNSET)
 
-        date_time_value = d.pop("date_time_value", UNSET)
+        _datetime_value = d.pop("datetime_value", UNSET)
+        datetime_value: Union[Unset, datetime.datetime]
+        if isinstance(_datetime_value, Unset):
+            datetime_value = UNSET
+        else:
+            datetime_value = isoparse(_datetime_value)
 
         column_name_value = d.pop("column_name_value", UNSET)
 
@@ -159,7 +168,7 @@ class FieldModel:
             integer_value=integer_value,
             long_value=long_value,
             double_value=double_value,
-            date_time_value=date_time_value,
+            datetime_value=datetime_value,
             column_name_value=column_name_value,
             enum_value=enum_value,
             string_list_value=string_list_value,

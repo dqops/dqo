@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.table_profiling_check_categories_spec_result_truncation import (
-    TableProfilingCheckCategoriesSpecResultTruncation,
-)
+from ..models.profiling_time_period import ProfilingTimePeriod
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -35,16 +34,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableProfilingCheckCategoriesSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableProfilingCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, TableProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
-            names.
-        result_truncation (Union[Unset, TableProfilingCheckCategoriesSpecResultTruncation]): Defines how many advanced
-            profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration
-            and store only the most recent advanced profiling result executed during the month. By changing this value, it
-            is possible to store one value per day or even store all advanced profiling results.
+            names within this category.
+        result_truncation (Union[Unset, ProfilingTimePeriod]):
         volume (Union[Unset, TableVolumeProfilingChecksSpec]):
         timeliness (Union[Unset, TableTimelinessProfilingChecksSpec]):
         accuracy (Union[Unset, TableAccuracyProfilingChecksSpec]):
@@ -57,9 +53,7 @@ class TableProfilingCheckCategoriesSpec:
     """
 
     custom: Union[Unset, "TableProfilingCheckCategoriesSpecCustom"] = UNSET
-    result_truncation: Union[
-        Unset, TableProfilingCheckCategoriesSpecResultTruncation
-    ] = UNSET
+    result_truncation: Union[Unset, ProfilingTimePeriod] = UNSET
     volume: Union[Unset, "TableVolumeProfilingChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyProfilingChecksSpec"] = UNSET
@@ -67,7 +61,7 @@ class TableProfilingCheckCategoriesSpec:
     availability: Union[Unset, "TableAvailabilityProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "TableProfilingCheckCategoriesSpecComparisons"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         custom: Union[Unset, Dict[str, Any]] = UNSET
@@ -164,15 +158,11 @@ class TableProfilingCheckCategoriesSpec:
             custom = TableProfilingCheckCategoriesSpecCustom.from_dict(_custom)
 
         _result_truncation = d.pop("result_truncation", UNSET)
-        result_truncation: Union[
-            Unset, TableProfilingCheckCategoriesSpecResultTruncation
-        ]
+        result_truncation: Union[Unset, ProfilingTimePeriod]
         if isinstance(_result_truncation, Unset):
             result_truncation = UNSET
         else:
-            result_truncation = TableProfilingCheckCategoriesSpecResultTruncation(
-                _result_truncation
-            )
+            result_truncation = ProfilingTimePeriod(_result_truncation)
 
         _volume = d.pop("volume", UNSET)
         volume: Union[Unset, TableVolumeProfilingChecksSpec]

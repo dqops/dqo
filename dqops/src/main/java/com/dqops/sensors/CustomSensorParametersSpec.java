@@ -15,11 +15,9 @@
  */
 package com.dqops.sensors;
 
-import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomParametersSpecObject;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.schema.JsonAdditionalProperties;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +36,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @JsonAdditionalProperties
-public class CustomSensorParametersSpec extends AbstractSensorParametersSpec {
+public class CustomSensorParametersSpec extends AbstractSensorParametersSpec implements CustomParametersSpecObject {
     public static final ChildHierarchyNodeFieldMapImpl<CustomSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {

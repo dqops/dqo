@@ -1,29 +1,42 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
-import { DataGroupingConfigurationBasicModel, CheckModel } from '../../api';
+import { DataGroupingConfigurationListModel, CheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataGroupingConfigurationsApi } from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import Button from "../Button";
 import Input from "../Input";
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 interface ICheckSettingsTabProps {
   check?: CheckModel;
   onChange: (item: CheckModel) => void;
+  isDefaultEditing?: boolean
 }
 
-const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
+const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
   const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationListModel[]>([]);
+  const history = useHistory()
+  const dispatch = useActionDispatch();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   useEffect(() => {
-    DataGroupingConfigurationsApi.getTableGroupingConfigurations(connection ?? '', schema ?? '', table).then(
-      (res) => {
-        setDataGroupingConfigurations(res.data);
+    if(isDefaultEditing !== true){
+      DataGroupingConfigurationsApi.getTableGroupingConfigurations(connection ?? '', schema ?? '', table).then(
+        (res) => {
+          setDataGroupingConfigurations(res.data);
+        }
+        );
       }
-    );
   }, []);
 
   const options = useMemo(() => {
@@ -40,12 +53,32 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   }, [dataGroupingConfigurations]);
 
   const onAddDataGroupingConfiguration = () => {
-    window.location.href = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'data-streams');
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'data-groupings'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
   };
 
   return (
     <div>
-      <div className="">
+      <div className={clsx("", userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
         <table className="w-full">
           <tbody>
             <tr>
@@ -59,9 +92,10 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                 </div>
               </td>
             </tr>
+            {isDefaultEditing !== true && 
             <tr>
               <td className="px-4 py-2 w-60">Custom data grouping</td>
-              <td className="px-4 py-2">
+              <td className="px-4 py-2">   
                 <div className="flex items-center space-x-2">
                   <Select
                     className="w-50"
@@ -80,8 +114,9 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     onClick={onAddDataGroupingConfiguration}
                   />
                 </div>
-              </td>
+              </td>  
             </tr>
+                  }
             <tr>
               <td className="px-4 py-2">Exclude from KPI</td>
               <td className="px-4 py-2">

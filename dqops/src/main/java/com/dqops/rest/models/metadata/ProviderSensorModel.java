@@ -33,36 +33,58 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "ProviderSensorModel", description = "Provider sensor model")
 public class ProviderSensorModel {
-
+    /**
+     * Provider type.
+     */
     @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("Provider Sensor definition spec")
+    /**
+     * Provider specific sensor definition specification
+     */
+    @JsonPropertyDescription("Provider specific sensor definition specification")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ProviderSensorDefinitionSpec providerSensorDefinitionSpec;
 
-    @JsonPropertyDescription("Provider Sql template")
+    /**
+     * Provider specific Jinja2 SQL template
+     */
+    @JsonPropertyDescription("Provider specific Jinja2 SQL template")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String sqlTemplate;
 
+    /**
+     * Whether the provider sensor is a User Home provider sensor
+     */
     @JsonPropertyDescription("Whether the provider sensor is a User Home provider sensor")
     private boolean custom;
 
-    @JsonPropertyDescription("This is a DQO built-in provider sensor, whose parameters cannot be changed.")
+    /**
+     * This is a DQOps built-in provider sensor, whose parameters cannot be changed.
+     */
+    @JsonPropertyDescription("This is a DQOps built-in provider sensor, whose parameters cannot be changed.")
     public boolean builtIn;
 
-    public ProviderSensorModel(){}
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public ProviderSensorModel() {}
 
     public ProviderSensorModel(ProviderType providerType,
                                ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
                                String sqlTemplate,
                                boolean custom,
-                               boolean builtIn) {
+                               boolean builtIn,
+                               boolean canEdit) {
         this.providerType = providerType;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplate = sqlTemplate;
         this.custom = custom;
         this.builtIn = builtIn;
+        this.canEdit = canEdit;
     }
 
     /**

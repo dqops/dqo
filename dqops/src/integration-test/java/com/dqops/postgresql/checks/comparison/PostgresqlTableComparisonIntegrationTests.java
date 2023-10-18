@@ -154,8 +154,46 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
                 tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
         Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
-        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("row_count_match");
+        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_row_count_match");
         Assertions.assertEquals(1, rowCountMatchResultsModel.getValidResults());
+    }
+
+    @Test
+    void profiling_whenComparingColumnCountNoGroupingSameTable_thenValuesMatch() {
+        AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
+        AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
+                (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
+        ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+        rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec());
+
+        CheckExecutionSummary checkExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(this.executionContext,
+                this.userHomeContext.getUserHome(),
+                comparedConnectionWrapper,
+                comparedTableWrapper,
+                checkSearchFilters,
+                null,
+                new CheckExecutionProgressListenerStub(),
+                false,
+                JobCancellationToken.createDummyJobCancellationToken());
+
+        Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
+                checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
+                        checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getValidResultsCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+
+        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+        Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
+        ComparisonCheckResultModel columnCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_column_count_match");
+        Assertions.assertEquals(1, columnCountMatchResultsModel.getValidResults());
     }
 
     @Test
@@ -186,6 +224,40 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, checkExecutionSummary.getTotalCheckResultsCount());
         Assertions.assertEquals(2, checkExecutionSummary.getValidResultsCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+    }
+
+    @Test
+    void profiling_whenComparingColumnCountGroupingOnBooleanAndComparingToSameTable_thenValuesMatchButOnlyOneResultIsGenerated() {
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok"));
+
+        AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
+        AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
+                (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
+        ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+        rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec());
+
+        CheckExecutionSummary checkExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(this.executionContext,
+                this.userHomeContext.getUserHome(),
+                comparedConnectionWrapper,
+                comparedTableWrapper,
+                checkSearchFilters,
+                null,
+                new CheckExecutionProgressListenerStub(),
+                false,
+                JobCancellationToken.createDummyJobCancellationToken());
+
+        Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
+                checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
+                        checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getValidResultsCount());
         Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());

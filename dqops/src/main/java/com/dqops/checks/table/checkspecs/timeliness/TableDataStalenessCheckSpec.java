@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.
+ * Table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.
  * This check could be used only when the data pipeline, a ETL process or a trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded.
  * The ingestion column that is used for comparison is defined as the timestamp_columns.ingestion_timestamp_column on the table configuration.
  * This check is also known as "Data Staleness".

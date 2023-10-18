@@ -22,6 +22,8 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,23 +34,27 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync all" to synchronize all the files the DQO user home.
+ * 3st level CLI command "cloud sync all" to synchronize all the files the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "all", header = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders.")
+@CommandLine.Command(name = "all", header = "Synchronize local files with DQOps Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders.")
 public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     public CloudSyncAllCliCommand() {
     }
 
     @Autowired
     public CloudSyncAllCliCommand(CloudSynchronizationService cloudSynchronizationService,
-                                  TerminalFactory terminalFactory) {
+                                  TerminalFactory terminalFactory,
+                                  DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.cloudSynchronizationService = cloudSynchronizationService;
         this.terminalFactory = terminalFactory;
+        this.principalProvider = principalProvider;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -117,63 +123,77 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         try {
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+
             int synchronizeSourcesResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.sources, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.sources, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeSourcesResult < 0) {
                 return synchronizeSourcesResult;
             }
 
             int synchronizeSensorsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.sensors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.sensors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeSensorsResult < 0) {
                 return synchronizeSensorsResult;
             }
 
             int synchronizeRulesResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.rules, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.rules, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeRulesResult < 0) {
                 return synchronizeRulesResult;
             }
 
             int synchronizeChecksResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.checks, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.checks, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeChecksResult < 0) {
                 return synchronizeChecksResult;
             }
 
+            int synchronizeSettingsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.settings, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
+            if (synchronizeSettingsResult < 0) {
+                return synchronizeSettingsResult;
+            }
+
+            int synchronizeCredentialsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.credentials, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
+            if (synchronizeCredentialsResult < 0) {
+                return synchronizeCredentialsResult;
+            }
+
             int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeReadoutsResult < 0) {
                 return synchronizeReadoutsResult;
             }
 
             int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeRuleResultsResult < 0) {
                 return synchronizeRuleResultsResult;
             }
 
             int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeErrorsResult < 0) {
                 return synchronizeErrorsResult;
             }
 
             int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeStatisticsResult < 0) {
                 return synchronizeStatisticsResult;
             }
 
             int synchronizeIncidentsResult = this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+                    DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
 
             return synchronizeIncidentsResult;
         }
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
                 TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                terminalWriter.writeLine(CloudSyncCliCommand.API_KEY_INVALID_MESSAGE);
                 return -1;
             }
 

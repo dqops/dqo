@@ -4,22 +4,18 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.connection_basic_model import ConnectionBasicModel
-from ...models.connection_remote_model import ConnectionRemoteModel
+from ...client import AuthenticatedClient, Client
+from ...models.connection_model import ConnectionModel
+from ...models.connection_test_model import ConnectionTestModel
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
-    client: Client,
-    json_body: ConnectionBasicModel,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/datasource/testconnection".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["verifyNameUniqueness"] = verify_name_uniqueness
@@ -30,21 +26,17 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/datasource/testconnection",
         "json": json_json_body,
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[ConnectionRemoteModel]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[ConnectionTestModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = ConnectionRemoteModel.from_dict(response.json())
+        response_200 = ConnectionTestModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -54,8 +46,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[ConnectionRemoteModel]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[ConnectionTestModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,35 +58,33 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-    json_body: ConnectionBasicModel,
+    client: AuthenticatedClient,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Response[ConnectionRemoteModel]:
+) -> Response[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionRemoteModel]
+        Response[ConnectionTestModel]
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
         verify_name_uniqueness=verify_name_uniqueness,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -103,25 +93,25 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    json_body: ConnectionBasicModel,
+    client: AuthenticatedClient,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Optional[ConnectionRemoteModel]:
+) -> Optional[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionRemoteModel
+        ConnectionTestModel
     """
 
     return sync_detailed(
@@ -133,60 +123,58 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    json_body: ConnectionBasicModel,
+    client: AuthenticatedClient,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Response[ConnectionRemoteModel]:
+) -> Response[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ConnectionRemoteModel]
+        Response[ConnectionTestModel]
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
         verify_name_uniqueness=verify_name_uniqueness,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    json_body: ConnectionBasicModel,
+    client: AuthenticatedClient,
+    json_body: ConnectionModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-) -> Optional[ConnectionRemoteModel]:
+) -> Optional[ConnectionTestModel]:
     """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
-        json_body (ConnectionBasicModel): Basic connection model with a subset of parameters,
-            excluding all nested objects.
+        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
+            all nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ConnectionRemoteModel
+        ConnectionTestModel
     """
 
     return (

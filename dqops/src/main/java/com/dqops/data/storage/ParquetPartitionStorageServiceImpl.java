@@ -57,6 +57,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -67,6 +68,12 @@ import java.util.*;
  */
 @Service
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
+    /**
+     * The number of retries to write a parquet file when another thread was trying to write the same file.
+     * When a change was detected, new changes will be merged into the most current parquet file.
+     */
+    public static final int MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION = 3;
+
     private final ParquetPartitionMetadataService parquetPartitionMetadataService;
     private final LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
@@ -78,7 +85,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     /**
      * Dependency injection constructor.
      * @param parquetPartitionMetadataService Metadata service for READ info about the state in the storage.
-     * @param localDqoUserHomePathProvider DQO User home finder.
+     * @param localDqoUserHomePathProvider DQOps User home finder.
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
@@ -297,7 +304,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     private boolean savePartitionInternal(LoadedMonthlyPartition loadedPartition,
                                           TableDataChanges tableDataChanges,
                                           FileStorageSettings storageSettings) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
+        try {
             Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings);
             File targetParquetFile = targetParquetFilePath.toFile();
 
@@ -335,71 +342,130 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 return false; // nothing to change in this partition
             }
 
-            Table partitionDataOld;
-            if (targetParquetFile.exists() && targetParquetFile.lastModified() != loadedPartition.getLastModified()) {
-                // file was modified
-                TablesawParquetReadOptions readOptions = TablesawParquetReadOptions
-                        .builder(targetParquetFile)
-                        .build();
-                partitionDataOld = new TablesawParquetReader().read(readOptions); // reloading the data, now under an exclusive write lock
-            } else {
-                partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
-            }
+            for (int i = 0; i < MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION ; i++) {
+                Table partitionDataOld;
+                Long beforeReadFileLastModifiedTimestamp = null;
 
-            Table dataToSave = partitionDataOld;
-
-            if (newOrChangedDataPartitionMonth != null) {
-                if (partitionDataOld == null) {
-                    dataToSave = newOrChangedDataPartitionMonth;
-                    InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
-                    createdAtColumn.setMissingTo(Instant.now());
-                } else {
-                    String[] joinColumns = {
-                            storageSettings.getIdStringColumnName()
-                    };
-                    dataToSave = TableMergeUtility.mergeNewResults(partitionDataOld, newOrChangedDataPartitionMonth, joinColumns);
-                }
-            }
-
-            if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
-                Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
-                        .isIn(tableDataChanges.getDeletedIds());
-                if (rowsToDeleteSelection.size() > 0) {
-                    dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
-                } else if (newOrChangedDataPartitionMonth == null) {
-                    // no matching deletes and no new/updated changes in this monthly partition, skipping save
-                    return false;
-                }
-            }
-
-            if (dataToSave == null || dataToSave.isEmpty()) {
-                // ensure the partition data is deleted
-                if (targetParquetFile.exists()) {
-                    boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
-                    this.localFileSystemCache.removeFile(targetParquetFilePath);
-
-                    if (success) {
-                        return true;
+                try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+                    if (targetParquetFile.exists()) {
+                        beforeReadFileLastModifiedTimestamp = targetParquetFile.lastModified();
+                    } else {
+                        beforeReadFileLastModifiedTimestamp = null;
                     }
-                    // If unsuccessful, then proceed with the regular deleting method.
+
+                    if (targetParquetFile.exists() && targetParquetFile.lastModified() != loadedPartition.getLastModified()) {
+                        // file was modified
+                        TablesawParquetReadOptions readOptions = TablesawParquetReadOptions
+                                .builder(targetParquetFile)
+                                .build();
+                        partitionDataOld = new TablesawParquetReader().read(readOptions); // load the data
+                    } else {
+                        partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
+                    }
                 }
-                else {
-                    // there is no file, therefore no data to delete
-                    return false;
+
+                Table dataToSave = partitionDataOld;
+
+                if (newOrChangedDataPartitionMonth != null) {
+                    if (partitionDataOld == null) {
+                        dataToSave = newOrChangedDataPartitionMonth;
+                        InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
+                        createdAtColumn.setMissingTo(Instant.now());
+                    } else {
+                        String[] joinColumns = {
+                                storageSettings.getIdStringColumnName()
+                        };
+                        dataToSave = TableMergeUtility.mergeNewResults(partitionDataOld, newOrChangedDataPartitionMonth, joinColumns);
+                    }
+                }
+
+                if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
+                    Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
+                            .isIn(tableDataChanges.getDeletedIds());
+                    if (rowsToDeleteSelection.size() > 0) {
+                        dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
+                    } else if (newOrChangedDataPartitionMonth == null) {
+                        // no matching deletes and no new/updated changes in this monthly partition, skipping save
+                        return false;
+                    }
+                }
+
+                if (dataToSave == null || dataToSave.isEmpty()) {
+                    // ensure the partition data is deleted
+                    if (targetParquetFile.exists()) {
+                        boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+
+                        if (success) {
+                            return true;
+                        }
+                        // If unsuccessful, then proceed with the regular deleting method.
+                    } else {
+                        // there is no file, therefore no data to delete
+                        return false;
+                    }
+                }
+
+                Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
+                byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);
+
+                try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
+                    Long currentLastModifiedTimestamp;
+                    if (targetParquetFile.exists()) {
+                        currentLastModifiedTimestamp = targetParquetFile.lastModified();
+                    } else {
+                        currentLastModifiedTimestamp = null;
+                    }
+
+                    if (!Objects.equals(currentLastModifiedTimestamp, beforeReadFileLastModifiedTimestamp)) {
+                        continue; // retry
+                    }
+
+                    Path parentDirectory = targetParquetFilePath.getParent();
+                    if (!Files.exists(parentDirectory)) {
+                        Files.createDirectories(parentDirectory);
+                    }
+
+                    try {
+                        Files.write(targetParquetFilePath, parquetFileContent);
+                    } catch (Exception ex) {
+                        if (targetParquetFile.exists()) {
+                            targetParquetFile.delete();
+                        }
+                        throw ex;
+                    } finally {
+                        this.localFileSystemCache.removeFile(targetParquetFilePath);
+                    }
+
+                    return true;
                 }
             }
 
-            DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
-                    .dqoBuilder(targetParquetFile)
-                    .withOverwrite(true)
-                    .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
-                    .build();
+            throw new DataStorageIOException("Too many concurrent writes to the parquet file " + targetParquetFilePath + ". " +
+                    "Cancelling write after " + MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION + " retries.");
+        }
+        catch (Exception ex) {
+            throw new DataStorageIOException(ex.getMessage(), ex);
+        }
+    }
 
-            Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
-            new DqoTablesawParquetWriter(hadoopConfiguration).write(dataToSave, writeOptions);
-            this.localFileSystemCache.removeFile(targetParquetFilePath);
+    /**
+     * Deletes a partition file.
+     * @param loadedPartitionId Partition id to delete.
+     * @param storageSettings Storage settings.
+     * @return True when the file was removed, false otherwise.
+     */
+    public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
+                                       FileStorageSettings storageSettings) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings);
+            File targetParquetFile = targetParquetFilePath.toFile();
 
-            return true;
+            if (!targetParquetFile.exists()) {
+                return false;
+            }
+
+            boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+            return success;
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);
@@ -415,9 +481,10 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
-            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);
+            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath()
+                    .relativize(targetPartitionFilePath);
 
-            if (Files.isDirectory(homeRelativePath)) {
+            if (Files.isDirectory(targetPartitionFilePath)) {
                 return false;
             }
 
@@ -428,15 +495,18 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 );
             }
 
-            if (!this.localUserHomeFileStorageService.deleteFile(
-                    new HomeFilePath(
-                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
-                            homeRelativePath.getFileName().toString()
-                    )
-            )) {
+            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(homeRelativePath.toString()); new HomeFilePath(
+                    new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                    homeRelativePath.getFileName().toString()
+            );
+
+            if (!this.localUserHomeFileStorageService.deleteFile(homeFilePath)) {
                 // Deleting .parquet file failed.
                 return false;
             }
+
+            this.localFileSystemCache.removeFile(targetPartitionFilePath);
+
 
             while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.

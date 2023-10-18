@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -22,15 +23,21 @@ if TYPE_CHECKING:
         TableChangeRowCountSinceYesterdayCheckSpec,
     )
     from ..models.table_row_count_check_spec import TableRowCountCheckSpec
+    from ..models.table_volume_daily_partitioned_checks_spec_custom_checks import (
+        TableVolumeDailyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableVolumeDailyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableVolumeDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableVolumeDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_row_count (Union[Unset, TableRowCountCheckSpec]):
         daily_partition_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
         daily_partition_row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
@@ -41,6 +48,9 @@ class TableVolumeDailyPartitionedChecksSpec:
         daily_partition_row_count_change_30_days (Union[Unset, TableChangeRowCountSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableVolumeDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     daily_partition_row_count_change: Union[
         Unset, "TableChangeRowCountCheckSpec"
@@ -60,9 +70,13 @@ class TableVolumeDailyPartitionedChecksSpec:
     daily_partition_row_count_change_30_days: Union[
         Unset, "TableChangeRowCountSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_row_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_row_count, Unset):
             daily_partition_row_count = self.daily_partition_row_count.to_dict()
@@ -112,6 +126,8 @@ class TableVolumeDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_row_count is not UNSET:
             field_dict["daily_partition_row_count"] = daily_partition_row_count
         if daily_partition_row_count_change is not UNSET:
@@ -162,8 +178,20 @@ class TableVolumeDailyPartitionedChecksSpec:
             TableChangeRowCountSinceYesterdayCheckSpec,
         )
         from ..models.table_row_count_check_spec import TableRowCountCheckSpec
+        from ..models.table_volume_daily_partitioned_checks_spec_custom_checks import (
+            TableVolumeDailyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableVolumeDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableVolumeDailyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_partition_row_count = d.pop("daily_partition_row_count", UNSET)
         daily_partition_row_count: Union[Unset, TableRowCountCheckSpec]
         if isinstance(_daily_partition_row_count, Unset):
@@ -260,6 +288,7 @@ class TableVolumeDailyPartitionedChecksSpec:
             )
 
         table_volume_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_row_count=daily_partition_row_count,
             daily_partition_row_count_change=daily_partition_row_count_change,
             daily_partition_row_count_change_yesterday=daily_partition_row_count_change_yesterday,

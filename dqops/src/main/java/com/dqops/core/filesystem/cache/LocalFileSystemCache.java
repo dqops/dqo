@@ -21,7 +21,6 @@ import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import org.springframework.beans.factory.DisposableBean;
-import tech.tablesaw.api.Table;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -57,12 +56,12 @@ public interface LocalFileSystemCache extends DisposableBean {
     FileContent loadFileContent(Path key, Function<Path, FileContent> readFunction);
 
     /**
-     * Stores a content of a text file in the cache. Also invalidates a cached list of files from the parent folder.
+     * Stores a content of a file in the cache. Also invalidates a cached list of files from the parent folder.
      *
      * @param key         Cache key.
      * @param fileContent File content.
      */
-    void storeTextFile(Path key, FileContent fileContent);
+    void storeFile(Path key, FileContent fileContent);
 
     /**
      * Retrieves a cached parquet file.

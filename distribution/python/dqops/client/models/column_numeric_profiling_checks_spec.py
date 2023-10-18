@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -30,6 +31,9 @@ if TYPE_CHECKING:
     )
     from ..models.column_number_value_in_set_percent_check_spec import (
         ColumnNumberValueInSetPercentCheckSpec,
+    )
+    from ..models.column_numeric_profiling_checks_spec_custom_checks import (
+        ColumnNumericProfilingChecksSpecCustomChecks,
     )
     from ..models.column_percentile_10_in_range_check_spec import (
         ColumnPercentile10InRangeCheckSpec,
@@ -88,10 +92,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnNumericProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnNumericProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNumericProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         profile_negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
         profile_negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
         profile_non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
@@ -124,6 +131,7 @@ class ColumnNumericProfilingChecksSpec:
         profile_valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnNumericProfilingChecksSpecCustomChecks"] = UNSET
     profile_negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
     profile_negative_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = UNSET
     profile_non_negative_count: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
@@ -198,9 +206,13 @@ class ColumnNumericProfilingChecksSpec:
     profile_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_negative_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_negative_count, Unset):
             profile_negative_count = self.profile_negative_count.to_dict()
@@ -364,6 +376,8 @@ class ColumnNumericProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_negative_count is not UNSET:
             field_dict["profile_negative_count"] = profile_negative_count
         if profile_negative_percent is not UNSET:
@@ -499,6 +513,9 @@ class ColumnNumericProfilingChecksSpec:
         from ..models.column_number_value_in_set_percent_check_spec import (
             ColumnNumberValueInSetPercentCheckSpec,
         )
+        from ..models.column_numeric_profiling_checks_spec_custom_checks import (
+            ColumnNumericProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_percentile_10_in_range_check_spec import (
             ColumnPercentile10InRangeCheckSpec,
         )
@@ -553,6 +570,15 @@ class ColumnNumericProfilingChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNumericProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnNumericProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_negative_count = d.pop("profile_negative_count", UNSET)
         profile_negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
         if isinstance(_profile_negative_count, Unset):
@@ -920,6 +946,7 @@ class ColumnNumericProfilingChecksSpec:
             )
 
         column_numeric_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_negative_count=profile_negative_count,
             profile_negative_percent=profile_negative_percent,
             profile_non_negative_count=profile_non_negative_count,

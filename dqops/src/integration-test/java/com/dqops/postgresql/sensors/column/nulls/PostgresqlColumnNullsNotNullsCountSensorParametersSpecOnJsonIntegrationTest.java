@@ -70,7 +70,7 @@ public class PostgresqlColumnNullsNotNullsCountSensorParametersSpecOnJsonIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "json_nulls", this.checkSpec);
 

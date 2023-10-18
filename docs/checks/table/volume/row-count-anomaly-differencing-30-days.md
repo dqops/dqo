@@ -1,7 +1,7 @@
 **row count anomaly differencing 30 days** checks  
 
 **Description**  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 
@@ -50,7 +50,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_row
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -265,7 +265,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-19 36-41"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -523,7 +523,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_differencing_30_days|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
+|daily_row_count_anomaly_differencing_30_days|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -549,7 +549,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       volume:
         daily_row_count_anomaly_differencing_30_days:
@@ -562,7 +562,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -572,7 +572,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       volume:
         daily_row_count_anomaly_differencing_30_days:
@@ -778,7 +778,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-19 37-42"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -797,7 +797,7 @@ spec:
           level_2:
             source: column_value
             column: state
-      recurring_checks:
+      monitoring_checks:
         daily:
           volume:
             daily_row_count_anomaly_differencing_30_days:

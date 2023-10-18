@@ -30,6 +30,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.scheduler.Schedulers;
@@ -37,7 +38,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Collection;
 
 /**
- * Service that is called on startup, detects if there are any unsynchronized chages in any DQO User Home folder that should be synchronized to the DQO Cloud.
+ * Service that is called on startup, detects if there are any unsynchronized changes in any DQOps User Home folder that should be synchronized to the DQOps Cloud.
  */
 @Component
 @Slf4j
@@ -67,7 +68,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     }
 
     /**
-     * Detects if there are any not synchronized changes in a given DQO User home folder.
+     * Detects if there are any not synchronized changes in a given DQOps User home folder.
      * @param dqoRoot User home folder to be analyzed.
      * @return True when there are local not synchronized changes, false otherwise.
      */
@@ -112,13 +113,16 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
                 this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.changed);
             }
         }
+        catch (BeanCreationNotAllowedException ex) {
+            return; // shutdown was started before synchronization finished
+        }
         catch (Exception ex) {
             log.error("Failed to detect changes in a folder " + dqoRoot + ", error: " + ex.getMessage(), ex);
         }
     }
 
     /**
-     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQO Cloud.
+     * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQOps Cloud.
      */
     @Override
     public void detectNotSynchronizedChangesInBackground() {
@@ -127,6 +131,8 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.rules);
             detectAndPublishLocalFolderStatus(DqoRoot.checks);
+            detectAndPublishLocalFolderStatus(DqoRoot.settings);
+            detectAndPublishLocalFolderStatus(DqoRoot.credentials);
             detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts);
             detectAndPublishLocalFolderStatus(DqoRoot.data_check_results);
             detectAndPublishLocalFolderStatus(DqoRoot.data_errors);

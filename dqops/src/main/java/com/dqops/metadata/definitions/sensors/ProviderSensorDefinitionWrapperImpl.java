@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -37,6 +38,8 @@ public class ProviderSensorDefinitionWrapperImpl extends AbstractElementWrapper<
     private ProviderType provider;
     @JsonIgnore
     private String sqlTemplate;
+    @JsonIgnore
+    private Instant sqlTemplateLastModified;
 
     /**
      * Creates a new provider specific sensor definition wrapper.
@@ -83,6 +86,27 @@ public class ProviderSensorDefinitionWrapperImpl extends AbstractElementWrapper<
     public void setSqlTemplate(String sqlTemplate) {
 		this.setModifiedIf(!Objects.equals(this.sqlTemplate, sqlTemplate));
         this.sqlTemplate = sqlTemplate;
+    }
+
+    /**
+     * Returns the file modification timestamp when the SQL template was modified for the last time.
+     *
+     * @return Last file modification timestamp.
+     */
+    @Override
+    public Instant getSqlTemplateLastModified() {
+        return this.sqlTemplateLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the SQL template was modified for the last time.
+     *
+     * @param sqlTemplateLastModified SQL Template last modified timestamp.
+     */
+    @Override
+    public void setSqlTemplateLastModified(Instant sqlTemplateLastModified) {
+        this.setModifiedIf(!Objects.equals(this.sqlTemplateLastModified, sqlTemplateLastModified));
+        this.sqlTemplateLastModified = sqlTemplateLastModified;
     }
 
     /**

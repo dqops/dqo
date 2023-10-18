@@ -15,8 +15,10 @@
  */
 package com.dqops.cli;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,18 +32,34 @@ import java.util.stream.Collectors;
  * CLI entry point class.
  */
 @SpringBootApplication(scanBasePackages = "com.dqops")
+@Slf4j
 public class CliApplication {
-	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
-
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
+	private static boolean silentEnabledByArgument;
 
+	/**
+	 * Returns true if DQOps was started in a mode to run one command and exit.
+	 * @return True - command was given in the argument list, it will execute and the application will exit.
+	 */
 	public static boolean isRunningOneShotMode() {
 		return runningOneShotMode;
 	}
 
+	/**
+	 * Returns true if the web server must be started.
+	 * @return True - webserver must be started.
+	 */
 	public static boolean isRequiredWebServer() {
 		return requiredWebServer;
+	}
+
+	/**
+	 * Returns true if "--silent" or --silent=true was given on the command line.
+	 * @return True when a silent mode is enabled.
+	 */
+	public static boolean isSilentEnabledByArgument() {
+		return silentEnabledByArgument;
 	}
 
 	/**
@@ -80,6 +98,11 @@ public class CliApplication {
 		return true; // no parameters, just the shell mode, so we start the web server
 	}
 
+	/**
+	 * Detects a presence of a command in the argument list.
+	 * @param args Argument list.
+	 * @return True - a command to run and exit was found.
+	 */
 	public static boolean hasArgumentsForOneShot(String[] args) {
 		if (args == null || args.length == 0) {
 			// running just "dqo" in shell starts the interactive mode
@@ -98,16 +121,28 @@ public class CliApplication {
 	}
 
 	/**
-	 * Main entry method for the DQO CLI application.
+	 * Main entry method for the DQOps CLI application.
 	 * @param args Arguments.
 	 */
 	public static void main(String[] args) {
 		try {
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
+			boolean silentDisabledAsArgument = Arrays.stream(args)
+					.takeWhile(a -> a.startsWith("-"))
+					.anyMatch(a -> a.equals("--silent=false"));
+
+			silentEnabledByArgument = Arrays.stream(args)
+					.takeWhile(a -> a.startsWith("-"))
+					.anyMatch(a -> a.equals("--silent") || a.equals("--silent=true")) ||
+					(!silentDisabledAsArgument &&
+							(Objects.equals(System.getProperty("silent"), "true") ||
+					         Objects.equals(System.getenv("SILENT"), "true")));
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setLogStartupInfo(false);
+			springApplication.setBannerMode(silentEnabledByArgument ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 
@@ -115,12 +150,12 @@ public class CliApplication {
 		}
 	    catch (Throwable t) {
 			if (t instanceof IllegalStateException && t.getCause() instanceof org.jline.reader.EndOfFileException) {
-				System.err.println("DQO cannot open the terminal.");
-				System.err.println("If you have started DQO from docker and want to use the DQO shell, please run the container with docker's \"-it\" parameter.");
-				System.err.println("Alternatively, start DQO from docker in a server headless mode (without the DQO shell) using \"docker run dqops/dqo run\".");
+				System.err.println("DQOps cannot open the terminal.");
+				System.err.println("If you have started DQOps from docker and want to use the DQOps shell, please run the container with docker's \"-it\" parameter.");
+				System.err.println("Alternatively, start DQOps from docker in a server headless mode (without the DQOps shell) using \"docker run dqops/dqo run\".");
 				System.exit(-1);
 			}
-			LOG.error("Error at starting the application: " + t.getMessage(), t);
+			log.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}

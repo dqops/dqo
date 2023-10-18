@@ -1,7 +1,7 @@
 **column count changed** checks  
 
 **Description**  
-Table level check that detects if the number of columns in the table has changed since the check (checkpoint) was run the last time.
+A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run.
  This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
  that was captured and is stored in the data quality check results database.
 
@@ -49,7 +49,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-16"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -90,7 +90,7 @@ Detects if the count of columns has changed since the most recent day. Retrieves
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_count_changed|recurring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_count_changed|monitoring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -116,7 +116,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_count_changed:
@@ -126,7 +126,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-17"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -136,7 +136,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_count_changed:
@@ -168,7 +168,7 @@ Detects if the count of columns has changed since the last month. Retrieves the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_count_changed|recurring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_count_changed|monitoring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -194,7 +194,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_count_changed:
@@ -204,7 +204,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-17"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -214,7 +214,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_count_changed:

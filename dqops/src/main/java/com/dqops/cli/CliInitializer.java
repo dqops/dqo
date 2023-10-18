@@ -16,7 +16,7 @@
 package com.dqops.cli;
 
 /**
- * Initializes the local instance, configures a DQO user home, logs the user to the cloud dqo instance.
+ * Initializes the local instance, configures a DQOps user home, logs the user to the cloud dqo instance.
  * Component called by the CLI command runner just before the first command is executed.
  */
 public interface CliInitializer {

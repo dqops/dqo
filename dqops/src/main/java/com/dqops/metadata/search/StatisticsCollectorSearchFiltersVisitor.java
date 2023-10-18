@@ -28,6 +28,7 @@ import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.google.common.base.Strings;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -198,22 +199,32 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
-        String columnNameFilter = this.filters.getColumnName();
-        if (Strings.isNullOrEmpty(columnNameFilter)) {
+        Collection<String> targetColumnNames = this.filters.getColumnNames();
+        if (targetColumnNames == null || targetColumnNames.isEmpty()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
-        if (StringPatternComparer.isSearchPattern(columnNameFilter)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+        if (targetColumnNames.size() == 1) {
+            String columnNameFilter = targetColumnNames.stream().findFirst().get();
+            if (Strings.isNullOrEmpty(columnNameFilter)) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+            }
+
+            if (StringPatternComparer.isSearchPattern(columnNameFilter)) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+            }
+
+            // exact column name given, let's find it
+            ColumnSpec columnSpec = columnSpecMap.get(columnNameFilter);
+            if (columnSpec == null) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
+            }
+
+            return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
+
         }
 
-        // exact column name given, let's find it
-        ColumnSpec columnSpec = columnSpecMap.get(columnNameFilter);
-        if (columnSpec == null) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
-        }
-
-        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
@@ -243,10 +254,13 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        String columnNameFilter = this.filters.getColumnName();
-        if (!Strings.isNullOrEmpty(columnNameFilter)) {
+        Collection<String> columnNames = this.filters.getColumnNames();
+        if (columnNames != null && !columnNames.isEmpty()) {
             String columnName = columnSpec.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(columnName, columnNameFilter)) {
+            boolean columnNameMatch = columnNames.stream()
+                    .anyMatch(columnNameFilter -> StringPatternComparer.matchSearchPattern(columnName, columnNameFilter));
+
+            if (!columnNameMatch) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -363,6 +377,11 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             if (rootProfilerContainerSpec.getTarget() != targetFilter) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
+        }
+
+        if (rootProfilerContainerSpec.getTarget() == StatisticsCollectorTarget.table &&
+                this.filters.getColumnNames() != null && !this.filters.getColumnNames().isEmpty()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;  // target columns already selected, ignoring table level checks
         }
 
         return super.accept(rootProfilerContainerSpec, parameter);

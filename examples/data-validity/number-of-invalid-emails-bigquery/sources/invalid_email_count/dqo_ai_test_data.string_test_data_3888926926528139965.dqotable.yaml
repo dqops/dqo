@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  columns:
+    id:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    email:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          strings:
+            daily_string_invalid_email_count:
+              warning:
+                max_count: 0
+              error:
+                max_count: 10
+              fatal:
+                max_count: 15
+    email_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    surrounded_by_whitespace:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    surrounded_by_whitespace_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    null_placeholder:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    null_placeholder_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    boolean_placeholder:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    boolean_placeholder_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    empty_percent:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    empty_percent_ok:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    range_numeric:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    range_integers:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+    boolean_type_placeholder:
+      type_snapshot:
+        column_type: BOOL
+        nullable: true

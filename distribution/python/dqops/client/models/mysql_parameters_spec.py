@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.mysql_parameters_spec_sslmode import MysqlParametersSpecSslmode
+from ..models.my_sql_ssl_mode import MySqlSslMode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="MysqlParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class MysqlParametersSpec:
     """
     Attributes:
@@ -29,7 +30,7 @@ class MysqlParametersSpec:
         options (Union[Unset, str]): MySQL connection 'options' initialization parameter. For example setting this to -c
             statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
             ${MYSQL_OPTIONS} configuration with a custom environment variable.
-        sslmode (Union[Unset, MysqlParametersSpecSslmode]): SslMode MySQL connection parameter.
+        sslmode (Union[Unset, MySqlSslMode]):
         properties (Union[Unset, MysqlParametersSpecProperties]):
     """
 
@@ -39,9 +40,9 @@ class MysqlParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    sslmode: Union[Unset, MysqlParametersSpecSslmode] = UNSET
+    sslmode: Union[Unset, MySqlSslMode] = UNSET
     properties: Union[Unset, "MysqlParametersSpecProperties"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         host = self.host
@@ -100,11 +101,11 @@ class MysqlParametersSpec:
         options = d.pop("options", UNSET)
 
         _sslmode = d.pop("sslmode", UNSET)
-        sslmode: Union[Unset, MysqlParametersSpecSslmode]
+        sslmode: Union[Unset, MySqlSslMode]
         if isinstance(_sslmode, Unset):
             sslmode = UNSET
         else:
-            sslmode = MysqlParametersSpecSslmode(_sslmode)
+            sslmode = MySqlSslMode(_sslmode)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, MysqlParametersSpecProperties]

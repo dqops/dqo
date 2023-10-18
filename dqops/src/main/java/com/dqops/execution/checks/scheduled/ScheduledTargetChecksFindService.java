@@ -15,7 +15,7 @@
  */
 package com.dqops.execution.checks.scheduled;
 
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.userhome.UserHome;
 
 /**
@@ -31,5 +31,5 @@ public interface ScheduledTargetChecksFindService {
      * @param schedule Schedule to match.
      * @return List of target checks, grouped by a target table.
      */
-    ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RecurringScheduleSpec schedule);
+    ScheduledChecksCollection findChecksForSchedule(UserHome userHome, MonitoringScheduleSpec schedule);
 }

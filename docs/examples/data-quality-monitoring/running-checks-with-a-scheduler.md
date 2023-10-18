@@ -19,7 +19,7 @@ negatively impact our business, we want to monitor various data quality aspects 
 
 **SOLUTION**
 
-We will set six data quality recurring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
+We will set six data quality monitoring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
 
 1. [daily_table_availability](../../checks/table/availability/table-availability.md) check on `users` table with max failures thresholds levels:
     - warning: 1
@@ -36,7 +36,7 @@ We will set six data quality recurring checks on `bigquery-public-data.thelook_e
     - error: 98.0%
     - fatal: 95.0%
 
-4. [daily_valid_email_percent](../../checks/column/pii/valid-email-percent.md) check on `email` column with minimum percent thresholds levels
+4. [daily_contains_email_percent](../../checks/column/pii/contains-email-percent.md) check on `email` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -90,9 +90,8 @@ for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
 If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
 
-```yaml hl_lines="9-11"
-
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
+```yaml hl_lines="10-12"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
 spec:
@@ -100,8 +99,9 @@ spec:
   bigquery:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
+    jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
-    recurring_daily:
+    monitoring_daily:
       cron_expression: 0 8 * * *
   incident_grouping:
     grouping_level: table_dimension_category
@@ -119,14 +119,14 @@ It is important to keep in mind that the daily_values_in_range_numeric_percent c
 parameter has been set to "true" in the "schedule_override" section.
 
 ```yaml hl_lines="8-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -143,7 +143,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -167,7 +167,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -178,7 +178,7 @@ spec:
               fatal:
                 min_percent: 95.0
           pii:
-            daily_valid_email_percent:
+            daily_contains_email_percent:
               warning:
                 min_percent: 99.0
               error:
@@ -189,7 +189,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_values_in_range_numeric_percent:
@@ -208,7 +208,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_value_in_set_percent:
@@ -269,7 +269,7 @@ To view the connection-level schedule:
 
 1. Go to the Data Source section and select the "thelook_ecommerce" connection from the tree view on the left. 
 
-2. In the main workspace select the **Schedule** tab and the **Recurring Daily** tab. 
+2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
     Here, you can see that a schedule has been set to "Run every day at 8:00".
 
     ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule.png)
@@ -279,7 +279,7 @@ DQO allows to set check-level schedules and override the connection level settin
 
 To view and modify individual check-level schedules:
 
-1. Go to the section with a list of checks. In our example, we have set recurring checks, so go to the **Recurring Checks** section.
+1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
 
 2. In the main workspace select the table "users" from the tree view on the left. 
 
@@ -330,7 +330,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 
-You should see the results as the one below.
+Review the results which should be similar to the one below.
 Results from all checks appear to be valid except for one that indicates a fatal error.
 
 
@@ -351,5 +351,8 @@ check run --mode=debug
 ```
 
 ## Next step
-Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
-You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+- Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
+  You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
+- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

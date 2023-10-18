@@ -21,12 +21,12 @@ import { SOURCE_ACTION } from '../types';
 import {
   CommentSpec,
   DataGroupingConfigurationSpec,
-  RecurringScheduleSpec,
+  MonitoringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
-  TableBasicModel,
+  TableListModel,
   CheckContainerModel, TablePartitioningModel
 } from '../../api';
-import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
 import { CheckTypes } from "../../shared/routes";
 
 export const getTableBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
@@ -34,7 +34,7 @@ export const getTableBasicRequest = (checkType: CheckTypes, activeTab: string) =
   checkType, activeTab,
 });
 
-export const getTableBasicSuccess = (checkType: CheckTypes, activeTab: string, data: TableBasicModel) => ({
+export const getTableBasicSuccess = (checkType: CheckTypes, activeTab: string, data: TableListModel) => ({
   type: SOURCE_ACTION.GET_TABLE_BASIC_SUCCESS,
   checkType, activeTab,
   data
@@ -83,7 +83,7 @@ export const updateTableBasic =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: TableBasicModel
+    data: TableListModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableBasicRequest(checkType, activeTab));
@@ -110,7 +110,7 @@ export const getTableSchedulingGroupRequest = (checkType: CheckTypes, activeTab:
   checkType, activeTab,
 });
 
-export const getTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
+export const getTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, data: MonitoringScheduleSpec) => ({
   type: SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
   checkType, activeTab,
   schedulingGroup,
@@ -123,7 +123,7 @@ export const getTableSchedulingGroupFailed = (error: unknown) => ({
 });
 
 export const getTableSchedulingGroup =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, schedulingGroup: CheckRunRecurringScheduleGroup) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, schedulingGroup: CheckRunMonitoringScheduleGroup) =>
   async (dispatch: Dispatch) => {
     dispatch(getTableSchedulingGroupRequest(checkType, activeTab));
     try {
@@ -161,8 +161,8 @@ export const updateTableSchedulingGroup =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    schedulingGroup: CheckRunRecurringScheduleGroup,
-    data: RecurringScheduleSpec
+    schedulingGroup: CheckRunMonitoringScheduleGroup,
+    data: MonitoringScheduleSpec
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableSchedulingGroupRequest(checkType, activeTab));
@@ -503,57 +503,57 @@ export const updateTableDefaultDataGroupingConfiguration =
     }
   };
 
-export const getTableDailyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS,
+export const getTableDailyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS,
   checkType, activeTab,
 });
 
-export const getTableDailyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
-  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_SUCCESS,
+export const getTableDailyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_SUCCESS,
   checkType, activeTab,
   data
 });
 
-export const getTableDailyRecurringChecksFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_ERROR,
+export const getTableDailyMonitoringChecksFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_ERROR,
   error
 });
 
-export const getTableDailyRecurringChecks =
+export const getTableDailyMonitoringChecks =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
     if (loading) {
-      dispatch(getTableDailyRecurringChecksRequest(checkType, activeTab));
+      dispatch(getTableDailyMonitoringChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksModel(
+      const res = await TableApiClient.getTableMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         'daily'
       );
-      dispatch(getTableDailyRecurringChecksSuccess(checkType, activeTab, res.data));
+      dispatch(getTableDailyMonitoringChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getTableDailyRecurringChecksFailed(err));
+      dispatch(getTableDailyMonitoringChecksFailed(err));
     }
   };
 
-export const updateTableDailyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS,
+export const updateTableDailyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS,
   checkType, activeTab
 });
 
-export const updateTableDailyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_SUCCESS,
+export const updateTableDailyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_SUCCESS,
   checkType, activeTab
 });
 
-export const updateTableDailyRecurringChecksFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_ERROR,
+export const updateTableDailyMonitoringChecksFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_ERROR,
   error
 });
 
-export const updateTableDailyRecurringChecks =
+export const updateTableDailyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -563,74 +563,74 @@ export const updateTableDailyRecurringChecks =
     data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDailyRecurringChecksRequest(checkType, activeTab));
+    dispatch(updateTableDailyMonitoringChecksRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksModel(
+      await TableApiClient.updateTableMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         'daily',
         data
       );
-      dispatch(updateTableDailyRecurringChecksSuccess(checkType, activeTab));
+      dispatch(updateTableDailyMonitoringChecksSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateTableDailyRecurringChecksFailed(err));
+      dispatch(updateTableDailyMonitoringChecksFailed(err));
     }
   };
 
-export const getTableMonthlyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS,
+export const getTableMonthlyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS,
   checkType, activeTab
 });
 
-export const getTableMonthlyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
-  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS,
+export const getTableMonthlyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS,
   data,
   checkType, activeTab
 });
 
-export const getTableMonthlyRecurringChecksFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_ERROR,
+export const getTableMonthlyMonitoringChecksFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_ERROR,
   error
 });
 
-export const getTableMonthlyRecurringChecks =
+export const getTableMonthlyMonitoringChecks =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
     if (loading) {
-      dispatch(getTableMonthlyRecurringChecksRequest(checkType, activeTab));
+      dispatch(getTableMonthlyMonitoringChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksModel(
+      const res = await TableApiClient.getTableMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         'monthly'
       );
-      dispatch(getTableMonthlyRecurringChecksSuccess(checkType, activeTab, res.data));
+      dispatch(getTableMonthlyMonitoringChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getTableMonthlyRecurringChecksFailed(err));
+      dispatch(getTableMonthlyMonitoringChecksFailed(err));
     }
   };
 
-export const updateTableMonthlyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS,
+export const updateTableMonthlyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS,
   checkType,
   activeTab
 });
 
-export const updateTableMonthlyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS,
+export const updateTableMonthlyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS,
   checkType,
   activeTab
 });
 
-export const updateTableMonthlyRecurringChecksFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_ERROR,
+export const updateTableMonthlyMonitoringChecksFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_ERROR,
   error
 });
 
-export const updateTableMonthlyRecurringChecks =
+export const updateTableMonthlyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -640,18 +640,18 @@ export const updateTableMonthlyRecurringChecks =
     data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableMonthlyRecurringChecksRequest(checkType, activeTab));
+    dispatch(updateTableMonthlyMonitoringChecksRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksModel(
+      await TableApiClient.updateTableMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         'monthly',
         data
       );
-      dispatch(updateTableMonthlyRecurringChecksSuccess(checkType, activeTab));
+      dispatch(updateTableMonthlyMonitoringChecksSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateTableMonthlyRecurringChecksFailed(err));
+      dispatch(updateTableMonthlyMonitoringChecksFailed(err));
     }
   };
 
@@ -817,20 +817,20 @@ export const updateTableMonthlyPartitionedChecks =
     }
   };
 
-export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, table?: TableBasicModel) => ({
+export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, table?: TableListModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_TABLE_BASIC,
   data: table,
   checkType,
   activeTab
 });
 
-export const setUpdatedSchedule = (checkType: CheckTypes, activeTab: string, schedule?: RecurringScheduleSpec) => ({
+export const setUpdatedSchedule = (checkType: CheckTypes, activeTab: string, schedule?: MonitoringScheduleSpec) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE,
   data: schedule,
   checkType,
   activeTab
 });
-export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, schedule?: MonitoringScheduleSpec) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
   data: {
     schedulingGroup,
@@ -839,7 +839,7 @@ export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: stri
   checkType,
   activeTab
 });
-export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, isUpdated: boolean) => ({
   type: SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
   data: {
     isUpdated,
@@ -877,15 +877,15 @@ export const setUpdatedChecksModel = (checkType: CheckTypes, activeTab: string, 
   activeTab
 });
 
-export const setUpdatedDailyRecurringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_TABLE_DAILY_RECURRING_CHECKS,
+export const setUpdatedDailyMonitoringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_TABLE_DAILY_MONITORING_CHECKS,
   data: checksUI,
   checkType,
   activeTab
 });
 
-export const setUpdatedMonthlyRecurringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING_CHECKS,
+export const setUpdatedMonthlyMonitoringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_TABLE_MONTHLY_MONITORING_CHECKS,
   data: checksUI,
   checkType,
   activeTab
@@ -958,34 +958,34 @@ export const getTableProfilingChecksModelFilter =
       }
     };
 
-export const getTableRecurringChecksModelFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER,
+export const getTableMonitoringChecksModelFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER,
   checkType,
   activeTab
 });
 
-export const getTableRecurringChecksModelFilterSuccess = (
+export const getTableMonitoringChecksModelFilterSuccess = (
   checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
-  type: SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
-export const getTableRecurringChecksModelFilterFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_ERROR,
+export const getTableMonitoringChecksModelFilterFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_ERROR,
   error
 });
 
-export const getTableRecurringChecksModelFilter =
+export const getTableMonitoringChecksModelFilter =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
       if (loading) {
-        dispatch(getTableRecurringChecksModelFilterRequest(checkType, activeTab));
+        dispatch(getTableMonitoringChecksModelFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTableRecurringChecksModelFilter(
+        const res = await TableApiClient.getTableMonitoringChecksModelFilter(
           connectionName,
           schemaName,
           tableName,
@@ -993,9 +993,9 @@ export const getTableRecurringChecksModelFilter =
           category,
           checkName
         );
-        dispatch(getTableRecurringChecksModelFilterSuccess(checkType, activeTab, res.data));
+        dispatch(getTableMonitoringChecksModelFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
-        dispatch(getTableRecurringChecksModelFilterFailed(err));
+        dispatch(getTableMonitoringChecksModelFilterFailed(err));
       }
     };
 
@@ -1047,8 +1047,8 @@ export const setTableUpdatedProfilingChecksModelFilter = (checkType: CheckTypes,
   data: ui
 });
 
-export const setTableUpdatedRecurringChecksModelFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_UPDATED_RECURRING_CHECKS_MODEL_FILTER,
+export const setTableUpdatedMonitoringChecksModelFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_MONITORING_CHECKS_MODEL_FILTER,
   checkType,
   activeTab,
   data: ui

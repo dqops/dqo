@@ -64,12 +64,12 @@ public class OracleColumnStringsStringNullPlaceholderPercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(33.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "null_placeholder", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -77,12 +77,12 @@ public class OracleColumnStringsStringNullPlaceholderPercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(33.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "null_placeholder", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -90,7 +90,7 @@ public class OracleColumnStringsStringNullPlaceholderPercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(33.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class OracleColumnStringsStringNullPlaceholderPercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, (float) resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class OracleColumnStringsStringNullPlaceholderPercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(33.333, (float) resultTable.column(0).get(0), 0.001);
     }
 }

@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
+ * Column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -20,7 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.ValueChangedParametersSpec;
-import com.dqops.sensors.column.strings.ColumnStringsStringDatatypeDetectSensorParametersSpec;
+import com.dqops.sensors.column.datatype.ColumnDatatypeStringDatatypeDetectSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,23 +32,23 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- * The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily recurring checks, it will compare the value to yesterday's value (or an earlier date).
+ * Table-level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ * The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday's value (or an earlier date).
  * For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatatypeStringDatatypeChangedCheckSpec extends AbstractCheckSpec<ColumnStringsStringDatatypeDetectSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
+public class ColumnDatatypeStringDatatypeChangedCheckSpec extends AbstractCheckSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeStringDatatypeChangedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("The sensor parameters for a sensor that returns a value that identifies the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
+    @JsonPropertyDescription("The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringDatatypeDetectSensorParametersSpec parameters = new ColumnStringsStringDatatypeDetectSensorParametersSpec();
+    private ColumnDatatypeStringDatatypeDetectSensorParametersSpec parameters = new ColumnDatatypeStringDatatypeDetectSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class ColumnDatatypeStringDatatypeChangedCheckSpec extends AbstractCheckS
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringDatatypeDetectSensorParametersSpec getParameters() {
+    public ColumnDatatypeStringDatatypeDetectSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnDatatypeStringDatatypeChangedCheckSpec extends AbstractCheckS
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringDatatypeDetectSensorParametersSpec parameters) {
+    public void setParameters(ColumnDatatypeStringDatatypeDetectSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

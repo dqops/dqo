@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
 
 /**
  * Model that returns histograms of the data quality issue occurrences related to a data quality incident.
- * The dates in the daily histogram are using the default timezone of the DQO server.
+ * The dates in the daily histogram are using the default timezone of the DQOps server.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class IncidentIssueHistogramModel {
     /**
-     * A map of the numbers of data quality issues per day, the day uses the DQO server timezone.
+     * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
      */
-    @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQO server timezone.")
+    @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.")
     private TreeMap<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
 
     /**

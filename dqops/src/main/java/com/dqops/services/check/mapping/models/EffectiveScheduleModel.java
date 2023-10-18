@@ -15,8 +15,8 @@
  */
 package com.dqops.services.check.mapping.models;
 
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,7 +38,7 @@ import java.util.function.Function;
 @ApiModel(value = "EffectiveScheduleModel", description = "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.")
 public class EffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a schedule group to which this schedule belongs.")
-    private CheckRunRecurringScheduleGroup scheduleGroup;
+    private CheckRunScheduleGroup scheduleGroup;
 
     @JsonPropertyDescription("Field value for the level at which the schedule has been configured.")
     private EffectiveScheduleLevelModel scheduleLevel;
@@ -64,11 +64,11 @@ public class EffectiveScheduleModel {
      *                                     that will be regarded as the time of next execution, if scheduling is not disabled.
      * @return {@link EffectiveScheduleModel} instance based on the <code>scheduleSpec</code>.
      */
-    public static EffectiveScheduleModel fromRecurringScheduleSpec(
-            RecurringScheduleSpec scheduleSpec,
-            CheckRunRecurringScheduleGroup scheduleGroup,
+    public static EffectiveScheduleModel fromMonitoringScheduleSpec(
+            MonitoringScheduleSpec scheduleSpec,
+            CheckRunScheduleGroup scheduleGroup,
             EffectiveScheduleLevelModel scheduleLevel,
-            Function<RecurringScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
+            Function<MonitoringScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
         EffectiveScheduleModel effectiveScheduleModel = new EffectiveScheduleModel();
         effectiveScheduleModel.scheduleGroup = scheduleGroup;
         effectiveScheduleModel.scheduleLevel = scheduleLevel;

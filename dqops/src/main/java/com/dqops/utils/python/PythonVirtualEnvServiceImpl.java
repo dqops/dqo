@@ -53,7 +53,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 
     /**
      * Default injection constructor.
-     * @param dqoConfigurationProperties DQO configuration properties.
+     * @param dqoConfigurationProperties DQOps configuration properties.
      * @param pythonConfigurationProperties Python configuration properties.
      * @param userConfigurationProperties User configuration properties.
      */
@@ -138,6 +138,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
         }
 
         PythonVirtualEnv pythonVirtualEnv = new PythonVirtualEnv();
+        pythonVirtualEnv.setEnableDebugging(this.pythonConfigurationProperties.isEnableDebugging());
         if (!this.pythonConfigurationProperties.isUseHostPython()) {
             Path vEnvPath = getVEnvPath();
             pythonVirtualEnv.setVirtualEnvPath(vEnvPath);
@@ -326,7 +327,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
         try {
             Path pathToLastInstalledRequirements = pythonVirtualEnv.getVirtualEnvPath().resolve("user_requirements.txt");
             String userHome = this.userConfigurationProperties.getHome();
-            Path pathToRequirementsTxt = Path.of(userHome).resolve("requirements.txt");
+            Path pathToRequirementsTxt = Path.of(userHome).resolve("rules/requirements.txt");
 
             if (!Files.exists(pathToRequirementsTxt)) {
                 return; // the user has not configured personal python requirements

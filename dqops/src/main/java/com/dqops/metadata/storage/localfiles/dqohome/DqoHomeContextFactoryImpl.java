@@ -40,7 +40,7 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     }
 
     /**
-     * Opens and returns a shared DQO user home.
+     * Opens and returns a shared DQOps user home.
      * @return Dqo home context with an active DQO_HOME home model that is backed by the local home file system.
      */
     @Override
@@ -55,8 +55,8 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     }
 
     /**
-     * Loads a new DQO user home context, accessing the files again.
-     * @return New instance of a DQO home context with an active DQO_HOME home model that is backed by the local home file system.
+     * Loads a new DQOps user home context, accessing the files again.
+     * @return New instance of a DQOps home context with an active DQO_HOME home model that is backed by the local home file system.
      */
     public DqoHomeContext loadNewLocalDqoHome() {
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalDqoHome();

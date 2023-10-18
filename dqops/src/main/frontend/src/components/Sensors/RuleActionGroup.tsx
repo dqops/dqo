@@ -1,25 +1,40 @@
-import Button from "../Button";
-import React from "react";
-import { useSelector } from "react-redux";
-import { getFirstLevelSensorState } from "../../redux/selectors";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { updateRule } from "../../redux/actions/sensor.actions";
+import Button from '../Button';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { updateRule } from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
 
 type RuleActionGroupProps = {
   onSave: () => void;
-}
+  onCopy?: () => void;
+  onDelete?: () => void;
+};
 
-export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
-  const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail } = useSelector(getFirstLevelSensorState);
+export const RuleActionGroup = ({
+  onSave,
+  onCopy,
+  onDelete
+}: RuleActionGroupProps) => {
+  const {
+    full_rule_name,
+    ruleDetail,
+    isUpdating,
+    isUpdatedRuleDetail,
+    copied,
+    type
+  } = useSelector(getFirstLevelSensorState);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
-    if (onSave) {
+    if (onSave && (type === 'create' || copied === true)) {
       onSave();
       return;
     }
-    if(full_rule_name) {
-      dispatch(updateRule(full_rule_name, ruleDetail))
+    if (full_rule_name) {
+      dispatch(updateRule(full_rule_name, ruleDetail));
     }
   };
 
@@ -31,14 +46,26 @@ export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
           variant="outlined"
           label="Delete rule"
           className="w-40 !h-10"
+          disabled={userProfile.can_manage_definitions !== true}
+          onClick={onDelete}
         />
       )}
+      <Button
+        color="primary"
+        variant="outlined"
+        label="Copy"
+        className="w-40 !h-10"
+        disabled={userProfile.can_manage_definitions !== true}
+        onClick={onCopy}
+      />
       <Button
         color="primary"
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        disabled={!isUpdatedRuleDetail}
+        disabled={
+          !isUpdatedRuleDetail || userProfile.can_manage_definitions !== true
+        }
         onClick={handleSave}
         loading={isUpdating}
       />

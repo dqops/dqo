@@ -70,7 +70,7 @@ export const Pagination = ({ page, pageSize, totalPages, onChange, isEnd }: Pagi
         >
           <SvgIcon name="chevron-left" className="w-3 text-white" />
         </IconButton>
-        <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal">
+        <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" disabled={true}>
           {page}
         </IconButton>
         <IconButton

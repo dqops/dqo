@@ -15,25 +15,17 @@
  */
 package com.dqops.execution.checks;
 
-import com.dqops.connectors.ConnectionProviderRegistry;
-import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.jobqueue.*;
-import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
-import com.dqops.data.errors.normalization.ErrorsNormalizationService;
-import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
-import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
-import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.jobs.RunChecksOnTableQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksOnTableParameters;
 import com.dqops.execution.checks.progress.*;
-import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
 import com.dqops.execution.checks.scheduled.ScheduledChecksCollection;
 import com.dqops.execution.checks.scheduled.ScheduledTableChecksCollection;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
-import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.*;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.sources.*;
@@ -59,8 +51,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     /**
      * Creates a data quality check execution service.
      * @param hierarchyNodeTreeSearcher Hierarchy node searcher.
-     * @param dqoQueueJobFactory DQO job factory, used to create child jobs that will run checks per table.
-     * @param dqoJobQueue DQO job queue where child jobs (that run checks per table) are scheduled.
+     * @param dqoQueueJobFactory DQOps job factory, used to create child jobs that will run checks per table.
+     * @param dqoJobQueue DQOps job queue where child jobs (that run checks per table) are scheduled.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      * @param tableCheckExecutionService Check execution service that executes checks on a single table.
      */
@@ -87,6 +79,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
      * @param parentJobId Parent job id for the parent job.
      * @param jobCancellationToken Job cancellation token.
+     * @param principal Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
@@ -97,7 +90,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                boolean dummySensorExecution,
                                                boolean startChildJobsPerTable,
                                                DqoQueueJobId parentJobId,
-                                               JobCancellationToken jobCancellationToken) {
+                                               JobCancellationToken jobCancellationToken,
+                                               DqoUserPrincipal principal) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
@@ -123,7 +117,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 childTableJobs.add(runChecksOnTableJob);
             }
 
-            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId, principal);
             List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
             checkExecutionSummaries.forEach(checkExecutionSummary::append);
         }
@@ -151,14 +145,16 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param progressListener      Progress listener that receives progress calls.
      * @param parentJobId           Parent job id.
      * @param jobCancellationToken  Job cancellation token.
+     * @param principal             Principal that will be used to run the job.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
-                                                          RecurringScheduleSpec targetSchedule,
+                                                          MonitoringScheduleSpec targetSchedule,
                                                           CheckExecutionProgressListener progressListener,
                                                           DqoQueueJobId parentJobId,
-                                                          JobCancellationToken jobCancellationToken) {
+                                                          JobCancellationToken jobCancellationToken,
+                                                          DqoUserPrincipal principal) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
@@ -187,7 +183,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             childTableJobs.add(runChecksOnTableJob);
         }
 
-        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId, principal);
         List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
         checkExecutionSummaries.forEach(checkExecutionSummary::append);
 

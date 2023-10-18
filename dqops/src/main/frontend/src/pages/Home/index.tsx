@@ -11,7 +11,7 @@ const HomePage = () => {
       <Header />
       <div className="mt-16">
         <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
-          Welcome to DQO
+          Welcome to DQOps Data Quality Operations Center
         </div>
         <div className="px-8 py-4 w-full">
           <p className="font-bold text-xl mb-5">

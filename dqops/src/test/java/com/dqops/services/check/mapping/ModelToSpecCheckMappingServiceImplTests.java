@@ -22,6 +22,7 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.core.scheduler.quartz.*;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -64,9 +65,11 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        RuleDefinitionFindServiceImpl ruleDefinitionFindService = new RuleDefinitionFindServiceImpl();
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService,
+                ruleDefinitionFindService, dqoHomeContextFactory);
         this.specToUiMapper = new SpecToModelCheckMappingServiceImpl(
-                reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+                reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, schedulesUtilityService, similarCheckCache);
 
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         
@@ -80,25 +83,25 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, null, null);
+                this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
-        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec, this.tableSpec);
     }
 
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, null, null);
+                this.bigQueryConnectionSpec, this.tableSpec, null, null, true);
 
-        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec, this.tableSpec);
     }
 
     @Test
     void updateAllChecksSpec_whenChangesAppliedToDefaultProfilingObservabilityChecks_thenEnablesCheck() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingObservabilityChecksSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec.getTable(), null,
-                null, null, null, null);
+                null, null, null, null, true);
 
         QualityCategoryModel tableVolumeCategoryModel = uiModel.getCategories().stream()
                 .filter(cm -> cm.getCategory().equals("volume")).findFirst().get();
@@ -109,7 +112,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         profileRowCountModel.getRule().getWarning().setConfigured(true);
 
 
-        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable());
+        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable(), this.tableSpec);
 
         Assertions.assertNotNull(profilingObservabilityChecksSpec.getTable().getVolume());
         TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTable().getVolume().getProfileRowCount();

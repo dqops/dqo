@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: table/accuracy/total_row_count_match_percent
-  rule_name: comparison/diff_percent
-  help_text: Verifies the total ow count of a tested table and compares it to a row
-    count of a reference table. Stores the most recent captured value for each day
-    when the data quality check was evaluated.

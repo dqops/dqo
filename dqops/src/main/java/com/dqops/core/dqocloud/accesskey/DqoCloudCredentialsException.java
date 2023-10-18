@@ -18,7 +18,7 @@ package com.dqops.core.dqocloud.accesskey;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 
 /**
- * Exception thrown when it was not possible to create a DQO Cloud access token. The user was not logged in or the API Key expired.
+ * Exception thrown when it was not possible to create a DQOps Cloud access token. The user was not logged in or the API Key expired.
  */
 public class DqoCloudCredentialsException extends DqoRuntimeException {
     /**

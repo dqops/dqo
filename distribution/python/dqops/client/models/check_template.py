@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.check_template_check_target import CheckTemplateCheckTarget
+from ..models.check_target import CheckTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -13,13 +14,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckTemplate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckTemplate:
     """Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy
     tree.
 
         Attributes:
-            check_target (Union[Unset, CheckTemplateCheckTarget]): Check target (table, column)
+            check_target (Union[Unset, CheckTarget]):
             check_category (Union[Unset, str]): Data quality check category.
             check_name (Union[Unset, str]): Data quality check name that is used in YAML.
             help_text (Union[Unset, str]): Help text that describes the data quality check.
@@ -32,7 +33,7 @@ class CheckTemplate:
                 parameters definitions (for a single rule, regardless of severity).
     """
 
-    check_target: Union[Unset, CheckTemplateCheckTarget] = UNSET
+    check_target: Union[Unset, CheckTarget] = UNSET
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
@@ -40,7 +41,7 @@ class CheckTemplate:
     sensor_name: Union[Unset, str] = UNSET
     sensor_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     rule_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_target: Union[Unset, str] = UNSET
@@ -108,11 +109,11 @@ class CheckTemplate:
 
         d = src_dict.copy()
         _check_target = d.pop("check_target", UNSET)
-        check_target: Union[Unset, CheckTemplateCheckTarget]
+        check_target: Union[Unset, CheckTarget]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = CheckTemplateCheckTarget(_check_target)
+            check_target = CheckTarget(_check_target)
 
         check_category = d.pop("check_category", UNSET)
 

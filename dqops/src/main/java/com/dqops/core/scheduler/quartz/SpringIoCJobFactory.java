@@ -59,7 +59,7 @@ public class SpringIoCJobFactory implements JobFactory {
             return jobInstance;
         }
         catch (Exception ex) {
-            LOG.debug("Cannot create an instance of a job " + jobClass.getCanonicalName(), ex);
+            LOG.error("Cannot create an instance of a job " + jobClass.getCanonicalName(), ex);
             throw new SchedulerException("Cannot create an instance of a job " + jobClass.getCanonicalName(), ex);
         }
     }

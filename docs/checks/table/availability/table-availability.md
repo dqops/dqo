@@ -1,7 +1,9 @@
 **table availability** checks  
 
 **Description**  
-Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
+Table-level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
+ The actual value (the result of the check) is the number of failures. When the table is accessible and a simple query was executed without errors, the result is 0.0.
+ The sensor result (the actual value) 1.0 means that there is a failure. A value higher than 1.0 is stored only in the check result table and it is the number of consecutive failures in following days.
 
 ___
 
@@ -50,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tab
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -84,10 +86,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -105,10 +104,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM
@@ -130,10 +126,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -151,10 +144,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM
@@ -176,10 +166,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -197,10 +184,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -222,10 +206,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -243,10 +224,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -268,10 +246,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -289,10 +264,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM
@@ -314,34 +286,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 
@@ -360,7 +324,7 @@ Verifies availability on table in database using simple row count. Stores the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|daily_table_availability|monitoring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -386,7 +350,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -399,7 +363,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -409,7 +373,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -434,10 +398,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -455,10 +416,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
     FROM
@@ -480,10 +438,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -501,10 +456,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
     FROM
@@ -526,10 +478,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -547,10 +496,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -572,10 +518,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -593,10 +536,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -618,10 +558,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -639,10 +576,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
     FROM
@@ -664,34 +598,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 
@@ -710,7 +636,7 @@ Verifies availability on table in database using simple row count. Stores the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|monthly_table_availability|monitoring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -736,7 +662,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tab
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       availability:
         monthly_table_availability:
@@ -749,7 +675,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tab
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -759,7 +685,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       availability:
         monthly_table_availability:
@@ -784,10 +710,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -805,10 +728,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM
@@ -830,10 +750,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -851,10 +768,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM
@@ -876,10 +790,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -897,10 +808,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -922,10 +830,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -943,10 +848,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
@@ -968,10 +870,7 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -989,10 +888,7 @@ spec:
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value,
+        0.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM
@@ -1014,34 +910,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
-            LIMIT 1
         ) AS tab_scan
     ```
 === "Rendered SQL for SQL Server"
       
     ```sql
     SELECT
-        CASE
-           WHEN COUNT(*) > 0 THEN COUNT(*)
-           ELSE 1.0
-        END AS actual_value
+        0.0 AS actual_value
     FROM
         (
-            SELECT
+            SELECT TOP 1
                 *
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             
-            LIMIT 1
         ) AS tab_scan
     ```
 

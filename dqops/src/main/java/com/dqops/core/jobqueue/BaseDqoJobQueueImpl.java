@@ -22,10 +22,10 @@ import com.dqops.core.jobqueue.exceptions.DqoInvalidQueueConfigurationException;
 import com.dqops.core.jobqueue.exceptions.DqoJobQueuePushFailedException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * DQO job queue - manages a pool of threads that are executing operations.
+ * DQOps job queue - manages a pool of threads that are executing operations.
  * This is a base abstract class for two job queues, one is the main job queue that runs independent jobs and child jobs, but not parent jobs: {@link DqoJobQueueImpl}.
  * The other subclass is the {@link ParentDqoJobQueueImpl} that runs only {@link ParentDqoQueueJob} jobs that should not perform too much logic, they should just start child jobs on the {@link DqoJobQueueImpl} main queue and wait.
  */
@@ -46,7 +46,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
     protected ParallelJobLimitProvider parallelJobLimitProvider;
     private final DqoJobConcurrencyLimiter jobConcurrencyLimiter;
-    private DqoJobIdGenerator dqoJobIdGenerator;
+    private final DqoJobIdGenerator dqoJobIdGenerator;
     private final DqoJobQueueMonitoringService queueMonitoringService;
     private final AtomicInteger startedThreadsCount = new AtomicInteger();
     private final AtomicInteger runningJobsCount = new AtomicInteger();
@@ -54,7 +54,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry> jobEntriesByJobId;
     private Set<DqoJobQueueEntry> runningJobs;
     private List<DqoJobQueueEntry> jobsQueuedBeforeStart = new ArrayList<>();
-    private boolean started;
+    private volatile boolean started;
+    private volatile boolean stopInProgress;
+    private volatile boolean stopped;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
     private final Object runnerThreadsFuturesLock = new Object();
@@ -85,10 +87,11 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Starts the job queue, creates a thread pool.
      */
     public void start() {
-        if (started) {
+        if (started || this.stopInProgress) {
             return;
         }
 
+        this.stopped = false;
         this.jobsBlockingQueue = new LinkedBlockingQueue<>(queueConfigurationProperties.getMaxNonBlockingCapacity() != null ?
                 queueConfigurationProperties.getMaxNonBlockingCapacity() : Integer.MAX_VALUE);
 
@@ -122,8 +125,16 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         }
 
         for (DqoJobQueueEntry jobQueueEntry : preStartQueuedJobs) {
-            this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId());
+            this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId(), jobQueueEntry.getJob().getPrincipal());
         }
+    }
+
+    /**
+     * Checks if the job queue is started and is running. The health check depends on a working job queue.
+     * @return True when the job queue is started and is running, false when the job queue was not yet started or is stopping.
+     */
+    public boolean isStarted() {
+        return this.started;
     }
 
     /**
@@ -223,46 +234,62 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Stops the job queue.
      */
     public void stop() {
-        if (!this.started) {
+        if (!this.started || this.stopInProgress) {
             return;
         }
 
-        this.started = false;
+        this.stopInProgress = true;
 
-        int startedThreadsCount = this.startedThreadsCount.get();
-        for (int i = 0; i < startedThreadsCount; i++) {
-            try {
-                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
-            } catch (InterruptedException ex) {
-                log.error("Job queue stop() operation failed to publish a poison message", ex);
+        try {
+            int startedThreadsCount = this.startedThreadsCount.get();
+            for (int i = 0; i < startedThreadsCount; i++) {
+                try {
+                    DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
+                } catch (InterruptedException ex) {
+                    log.error("Job queue stop() operation failed to publish a poison message", ex);
+                }
             }
-        }
 
-        List<Future<?>> threadFinishFutures = null;
-        synchronized (this.runnerThreadsFuturesLock) {
-            threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
-        }
-
-        for (int i = 0; i < threadFinishFutures.size(); i++) {
-            Future<?> threadFinishFuture = threadFinishFutures.get(i);
-            try {
-                threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
+            List<Future<?>> threadFinishFutures = null;
+            synchronized (this.runnerThreadsFuturesLock) {
+                threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
             }
-            catch (Exception ex) {
-                log.error("Waiting for a job queue thread future failed: " + ex.getMessage(), ex);
+
+            for (int i = 0; i < threadFinishFutures.size(); i++) {
+                Future<?> threadFinishFuture = threadFinishFutures.get(i);
+                try {
+                    threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
+                }
+                catch (Exception ex) {
+                    log.error("Waiting for a job queue thread future failed: " + ex.getMessage(), ex);
+                }
             }
+
+            for (DqoJobQueueEntry jobBeforeStart : this.jobsQueuedBeforeStart) {
+                try {
+                    jobBeforeStart.getJob().getCancellationToken().cancel();
+                }
+                catch (Exception ex) {
+                    log.error("Failed to cancel a queued job: " + ex.getMessage(), ex);
+                }
+            }
+
+            this.jobsQueuedBeforeStart.clear();
+            this.executorService.shutdown();
+
+            cancelRemainingJobs();
         }
-
-        this.executorService.shutdown();
-
-        cancelRemainingJobs();
-
-        this.executorService = null;
-        this.runnerThreadsFutures = null;
-        this.jobsBlockingQueue = null;
-        this.runningJobs = null;
-        this.jobEntriesByJobId = null;
+        finally {
+            this.executorService = null;
+            this.runnerThreadsFutures = null;
+            this.jobsBlockingQueue = null;
+            this.runningJobs = null;
+            this.jobEntriesByJobId = null;
+            this.started = false;
+            this.stopInProgress = false;
+            this.stopped = true;
+        }
     }
 
     /**
@@ -296,9 +323,15 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * Pushes a job to the job queue without waiting.
      * @param job Job to be pushed.
      * @param parentJobId Parent job id.
+     * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
+    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
+        if (this.stopped || this.stopInProgress) {
+            job.getCancellationToken().cancel();
+            return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
+        }
+
         if (!this.started) {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
@@ -306,6 +339,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            job.setPrincipal(principal);
             synchronized (this) {
                 this.jobsQueuedBeforeStart.add(jobQueueEntry);
             }
@@ -324,6 +358,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            job.setPrincipal(principal);
             this.jobEntriesByJobId.put(job.getJobId(), jobQueueEntry);
 
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
@@ -340,6 +375,20 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * @param jobId Job id.
      */
     public void cancelJob(DqoQueueJobId jobId) {
+        synchronized (this) {
+            if (!this.jobsQueuedBeforeStart.isEmpty()) {
+                Optional<DqoJobQueueEntry> scheduledJobToStart = this.jobsQueuedBeforeStart.stream()
+                        .filter(j -> Objects.equals(j.getJobId(), jobId)).findFirst();
+                if (scheduledJobToStart.isPresent()) {
+                    this.jobsQueuedBeforeStart.remove(scheduledJobToStart);
+                }
+            }
+        }
+
+        if (!this.started || this.stopInProgress) {
+            return; // the job will be cancelled anyway or cannot be started
+        }
+
         DqoJobQueueEntry dqoJobQueueEntry = this.jobEntriesByJobId.get(jobId);
         if (dqoJobQueueEntry != null) {
             this.queueMonitoringService.publishJobCancellationRequestedEvent(dqoJobQueueEntry);
@@ -353,11 +402,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                     }
                 }
             }
-            return;
         }
-
-
-        // TODO: cancel also a job before it even started execution (remove from the queue, notify the job queue monitoring service)
     }
 
     /**

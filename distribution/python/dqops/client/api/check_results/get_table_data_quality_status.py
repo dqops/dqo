@@ -4,13 +4,9 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.get_table_data_quality_status_check_time_scale import (
-    GetTableDataQualityStatusCheckTimeScale,
-)
-from ...models.get_table_data_quality_status_check_type import (
-    GetTableDataQualityStatusCheckType,
-)
+from ...client import AuthenticatedClient, Client
+from ...models.check_time_scale import CheckTimeScale
+from ...models.check_type import CheckType
 from ...models.table_data_quality_status_model import TableDataQualityStatusModel
 from ...types import UNSET, Response, Unset
 
@@ -20,22 +16,11 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["months"] = months
@@ -56,17 +41,17 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[TableDataQualityStatusModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = TableDataQualityStatusModel.from_dict(response.json())
@@ -79,7 +64,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[TableDataQualityStatusModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -94,12 +79,10 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -114,8 +97,8 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,14 +112,12 @@ def sync_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         months=months,
         check_type=check_type,
         check_time_scale=check_time_scale,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -148,12 +129,10 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -168,8 +147,8 @@ def sync(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -195,12 +174,10 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -215,8 +192,8 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -230,14 +207,12 @@ async def asyncio_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         months=months,
         check_type=check_type,
         check_time_scale=check_time_scale,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -247,12 +222,10 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, GetTableDataQualityStatusCheckType] = UNSET,
-    check_time_scale: Union[
-        Unset, None, GetTableDataQualityStatusCheckTimeScale
-    ] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
+    check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -267,8 +240,8 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, GetTableDataQualityStatusCheckType]):
-        check_time_scale (Union[Unset, None, GetTableDataQualityStatusCheckTimeScale]):
+        check_type (Union[Unset, None, CheckType]):
+        check_time_scale (Union[Unset, None, CheckTimeScale]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

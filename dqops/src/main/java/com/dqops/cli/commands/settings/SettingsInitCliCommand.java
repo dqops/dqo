@@ -38,7 +38,8 @@ import static java.lang.Integer.parseInt;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "init", header = "Initialize settings file in UserHome directory", description = "Settings file in your UserHome directory. This file stores configuration options for the DQO.")
+@CommandLine.Command(name = "init", header = "Initialize settings file in UserHome directory",
+		description = "Settings file in your UserHome directory. This file stores configuration options for the DQOps.")
 public class SettingsInitCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

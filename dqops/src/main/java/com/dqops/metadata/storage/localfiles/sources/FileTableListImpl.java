@@ -49,7 +49,7 @@ public class FileTableListImpl extends TableListImpl {
      */
     @Override
     protected void load() {
-        for(FileTreeNode fileTreeNode : this.connectionFolder.getFiles()) {
+        for (FileTreeNode fileTreeNode : this.connectionFolder.getFiles()) {
             if (!fileTreeNode.getFilePath().getFileName().endsWith(SpecFileNames.TABLE_SPEC_FILE_EXT_YAML)) {
                 continue; // not a table file
             }

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.table_comparison_configuration_spec import (
@@ -11,20 +12,20 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableSpecTableComparisons")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSpecTableComparisons:
     """Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source
     comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The
-    reference table's metadata must be imported into DQO, but the reference table could be located on a different data
-    source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the
+    reference table's metadata must be imported into DQOps, but the reference table could be located on a different data
+    source. DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the
     user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the
-    reference table defined in selected data grouping configurations must match. DQO will run the same data quality
+    reference table defined in selected data grouping configurations must match. DQOps will run the same data quality
     sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the
     measures (sensor readouts) captured from both the tables.
 
     """
 
-    additional_properties: Dict[str, "TableComparisonConfigurationSpec"] = attr.ib(
+    additional_properties: Dict[str, "TableComparisonConfigurationSpec"] = _attrs_field(
         init=False, factory=dict
     )
 

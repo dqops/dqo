@@ -19,13 +19,13 @@ import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 
 /**
- * Factory for a DQO Cloud remote file system.
+ * Factory for a DQOps Cloud remote file system.
  */
 public interface DqoCloudRemoteFileSystemServiceFactory {
     /**
-     * Creates a remote file system that accesses a remote DQO Cloud bucket to read and write the tenant's data.
+     * Creates a remote file system that accesses a remote DQOps Cloud bucket to read and write the tenant's data.
      * @param rootType Root type.
-     * @return DQO Cloud remote file system.
+     * @return DQOps Cloud remote file system.
      */
     SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType);
 }

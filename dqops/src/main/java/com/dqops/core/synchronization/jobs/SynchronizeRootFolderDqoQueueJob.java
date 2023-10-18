@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -27,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO queue job that runs synchronization with DQO Cloud in the background for one user home's root folder (sources, sensors, etc.).
+ * DQOps queue job that runs synchronization with DQOps Cloud in the background for one user home's root folder (sources, sensors, etc.).
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -37,7 +38,7 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
 
     /**
      * Creates a synchronization job.
-     * @param cloudSynchronizationService DQO Cloud synchronization service to use (provided as a dependency).
+     * @param cloudSynchronizationService DQOps Cloud synchronization service to use (provided as a dependency).
      */
     @Autowired
     public SynchronizeRootFolderDqoQueueJob(
@@ -69,6 +70,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         this.cloudSynchronizationService.synchronizeFolder(
                 this.parameters.getSynchronizationParameter().getFolder(),
                 this.parameters.getSynchronizationParameter().getDirection(),

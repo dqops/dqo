@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: table/volume/row_count
-  rule_name: comparison/min_count
-  help_text: Verifies that the number of rows in a table does not exceed the minimum
-    accepted count. Stores the most recent captured value for each day when the data
-    quality check was evaluated.

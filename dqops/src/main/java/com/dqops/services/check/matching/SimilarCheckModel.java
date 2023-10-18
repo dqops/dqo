@@ -33,7 +33,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SimilarCheckModel", description = "Model that identifies a similar check in another category or another type of check (recurring, partition).")
+@ApiModel(value = "SimilarCheckModel", description = "Model that identifies a similar check in another category or another type of check (monitoring, partition).")
 public class SimilarCheckModel {
     /**
      * The check target (table or column).

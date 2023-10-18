@@ -28,6 +28,7 @@ import {
   setAdvisorObject,
   setAdvisorJobId
 } from '../../redux/actions/job.actions';
+import { Tooltip } from '@material-tailwind/react';
 
 const Header = () => {
   const history = useHistory();
@@ -227,77 +228,98 @@ const Header = () => {
           <Logo className="w-30 cursor-pointer" />
         </div>
         <div className="flex items-center">
+          <Tooltip content={"Add a new connection and manage its settings"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700" >
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.SOURCES)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.SOURCES)}
+              >
             Data Sources
           </div>
+          </Tooltip>
+          <Tooltip content={"Measure basic data statistics and experiment with various types of data quality checks"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.PROFILING)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.PROFILING)}
+              >
             Profiling
           </div>
+          </Tooltip>
+          <Tooltip content={"Run standard checks that monitor the data quality"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.RECURRING}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.RECURRING)}
-          >
-            Recurring Checks
+              location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.MONITORING)}
+              >
+            Monitoring Checks
           </div>
+            </Tooltip>
+            <Tooltip content={"Run checks designed to monitor the data quality of partitioned data"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.PARTITIONED)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.PARTITIONED)}
+              >
             Partition Checks
           </div>
+            </Tooltip>
+            <Tooltip content={"Review the summaries of data quality monitoring"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname === '/dashboards' ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/dashboards')}
-          >
+              )}
+              onClick={() => history.push('/dashboards')}
+              >
             Data Quality Dashboards
           </div>
+            </Tooltip>
+            <Tooltip content={"Review and manage the issues that arise during data quality monitoring"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith('/incidents') ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/incidents')}
-          >
+              )}
+              onClick={() => history.push('/incidents')}
+              >
             Incidents
           </div>
-          <div
-            className={clsx(
+            </Tooltip>
+          <Tooltip content={"Customize built-in data quality sensors and rules"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
+            <div
+            className={clsx(  
               'px-4 cursor-pointer',
               location.pathname.startsWith('/definitions') ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/definitions')}
-          >
-            Definitions
-          </div>
+              )}
+              onClick={() => history.push('/definitions')}
+              >
+            Configuration
+            </div>
+          </Tooltip>
         </div>
       </div>
       <div className="flex">

@@ -22,17 +22,21 @@ import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import com.dqops.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProviderStub;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceObjectMother;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -82,11 +86,13 @@ public class CheckCliServiceImplTests extends BaseTest {
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
+        RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
+        SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService,
+                sensorDefinitionFindService, ruleDefinitionFindService, schedulesUtilityService, similarCheckCache);
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
         ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
@@ -102,9 +108,13 @@ public class CheckCliServiceImplTests extends BaseTest {
                 parentDqoJobQueue,
                 userHomeContextFactory);
 
+        DqoCloudApiKeyPrincipalProviderStub principalProviderStub = new DqoCloudApiKeyPrincipalProviderStub(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin());
+
         this.sut = new CheckCliServiceImpl(
                 checkService,
-                allChecksModelFactory);
+                allChecksModelFactory,
+                principalProviderStub);
     }
 
     private ColumnSpec createColumn(String type, boolean nullable) {
@@ -138,7 +148,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
@@ -161,11 +171,11 @@ public class CheckCliServiceImplTests extends BaseTest {
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
-        ColumnRecurringChecksRootSpec col23recurringSpec = new ColumnRecurringChecksRootSpec();
-        col23.setRecurringChecks(col23recurringSpec);
-        ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
-        col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
+        ColumnMonitoringChecksRootSpec col23monitoringSpec = new ColumnMonitoringChecksRootSpec();
+        col23.setMonitoringChecks(col23monitoringSpec);
+        ColumnDailyMonitoringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
+        col23monitoringSpec.setDaily(col23categoriesSpec);
+        ColumnNumericDailyMonitoringChecksSpec col23numericChecksSpec = new ColumnNumericDailyMonitoringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);

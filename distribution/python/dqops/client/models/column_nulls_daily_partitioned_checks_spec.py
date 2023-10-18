@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -28,16 +29,22 @@ if TYPE_CHECKING:
         ColumnNotNullsPercentCheckSpec,
     )
     from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+    from ..models.column_nulls_daily_partitioned_checks_spec_custom_checks import (
+        ColumnNullsDailyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsDailyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnNullsDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNullsDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         daily_partition_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         daily_partition_nulls_percent_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryNullPercentCheckSpec]):
@@ -51,6 +58,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
         daily_partition_nulls_percent_change_30_days (Union[Unset, ColumnChangeNullPercentSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnNullsDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     daily_partition_nulls_percent_anomaly_stationary: Union[
@@ -77,9 +87,13 @@ class ColumnNullsDailyPartitionedChecksSpec:
     daily_partition_nulls_percent_change_30_days: Union[
         Unset, "ColumnChangeNullPercentSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_nulls_count, Unset):
             daily_partition_nulls_count = self.daily_partition_nulls_count.to_dict()
@@ -151,6 +165,8 @@ class ColumnNullsDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_nulls_count is not UNSET:
             field_dict["daily_partition_nulls_count"] = daily_partition_nulls_count
         if daily_partition_nulls_percent is not UNSET:
@@ -217,9 +233,21 @@ class ColumnNullsDailyPartitionedChecksSpec:
             ColumnNotNullsPercentCheckSpec,
         )
         from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
+        from ..models.column_nulls_daily_partitioned_checks_spec_custom_checks import (
+            ColumnNullsDailyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNullsDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnNullsDailyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_partition_nulls_count = d.pop("daily_partition_nulls_count", UNSET)
         daily_partition_nulls_count: Union[Unset, ColumnNullsCountCheckSpec]
         if isinstance(_daily_partition_nulls_count, Unset):
@@ -353,6 +381,7 @@ class ColumnNullsDailyPartitionedChecksSpec:
             )
 
         column_nulls_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_nulls_count=daily_partition_nulls_count,
             daily_partition_nulls_percent=daily_partition_nulls_percent,
             daily_partition_nulls_percent_anomaly_stationary=daily_partition_nulls_percent_anomaly_stationary,

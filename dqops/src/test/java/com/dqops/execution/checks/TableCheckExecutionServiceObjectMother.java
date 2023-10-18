@@ -17,31 +17,23 @@
 package com.dqops.execution.checks;
 
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
-import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
-import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
-import com.dqops.core.locks.UserHomeLockManager;
-import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
-import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactoryImpl;
 import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
 import com.dqops.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
-import com.dqops.data.local.LocalDqoUserHomePathProviderStub;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
-import com.dqops.data.storage.ParquetPartitionMetadataServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
-import com.dqops.data.storage.parquet.HadoopConfigurationProvider;
-import com.dqops.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
@@ -54,13 +46,11 @@ import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceObjectMothe
 import com.dqops.execution.sensors.runners.SensorRunnerFactoryObjectMother;
 import com.dqops.execution.sqltemplates.grouping.SqlQueryFragmentsParserImpl;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
-import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
-
-import java.nio.file.Path;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 
 /**
  * Object mother for {@link TableCheckExecutionService}
@@ -115,7 +105,8 @@ public class TableCheckExecutionServiceObjectMother {
                 errorsSnapshotFactory,
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
-                sensorLimitsConfigurationProperties);
+                sensorLimitsConfigurationProperties,
+                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
 
         return tableCheckExecutionService;
     }

@@ -5,10 +5,14 @@ import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
 import {
   BigQueryParametersSpec,
-  BigQueryParametersSpecAuthenticationModeEnum
+  BigQueryParametersSpecAuthenticationModeEnum,
+  BigQueryParametersSpecJobsCreateProjectEnum,
+  SharedCredentialListModel
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../redux/reducers';
 
 const options = [
   {
@@ -28,12 +32,17 @@ const options = [
 interface IBigqueryConnectionProps {
   bigquery?: BigQueryParametersSpec;
   onChange?: (obj: BigQueryParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   bigquery,
-  onChange
+  onChange,
+  sharedCredentials
 }) => {
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const handleChange = (obj: Partial<BigQueryParametersSpec>) => {
     if (!onChange) return;
 
@@ -42,7 +51,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       ...obj
     });
   };
-
+  console.log(bigquery)
   return (
     <SectionWrapper title="BigQuery connection parameters" className="mb-4">
       <FieldTypeInput
@@ -51,23 +60,40 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         name="source_project_id"
         value={bigquery?.source_project_id}
         onChange={(value) => handleChange({ source_project_id: value })}
+        disabled={userProfile.can_manage_data_sources!== true}
+        data={sharedCredentials}
       />
+        <Select
+          label="Authentication mode to the Google Cloud"
+          options={options}
+          className="mb-4"
+          value={
+            bigquery?.authentication_mode ||
+            BigQueryAuthenticationMode.google_application_credentials
+          }
+          onChange={(value) => handleChange({ authentication_mode: value })}
+          disabled={userProfile.can_manage_data_sources!== true}
+          
+        />
+        <Select
+         label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
+         options={Object.values(BigQueryParametersSpecJobsCreateProjectEnum).map((x) => ({label: x.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()), value: x}))}
+         className="mb-4"
+         value={
+           bigquery?.jobs_create_project ||
+           BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_source_project
+         }
+         onChange={(value) => handleChange({ jobs_create_project: value })}
+         disabled={userProfile.can_manage_data_sources!== true}
+       />
       <FieldTypeInput
-        className="mb-4"
+        className="mb-4" 
         label="Billing GCP project ID"
         name="billing_project_id"
         value={bigquery?.billing_project_id}
         onChange={(value) => handleChange({ billing_project_id: value })}
-      />
-      <Select
-        label="Authentication mode to the Google Cloud"
-        options={options}
-        className="mb-4"
-        value={
-          bigquery?.authentication_mode ||
-          BigQueryAuthenticationMode.google_application_credentials
-        }
-        onChange={(value) => handleChange({ authentication_mode: value })}
+        disabled={(bigquery?.jobs_create_project === BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_selected_billing_project_id || userProfile.can_manage_data_sources!== true) ? false: true}
+        data={sharedCredentials}
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
@@ -87,6 +113,8 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
           name="json_key_path"
           value={bigquery?.json_key_path}
           onChange={(value) => handleChange({ json_key_path: value })}
+          disabled={userProfile.can_manage_data_sources!== true}
+          data={sharedCredentials}
         />
       )}
       <FieldTypeInput
@@ -94,6 +122,8 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         name="quota_project_id"
         value={bigquery?.quota_project_id}
         onChange={(value) => handleChange({ quota_project_id: value })}
+        disabled={userProfile.can_manage_data_sources!== true}
+        data={sharedCredentials}
       />
     </SectionWrapper>
   );

@@ -21,8 +21,11 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -75,7 +78,8 @@ public class TableServiceImplTests extends BaseTest {
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
         CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
@@ -140,7 +144,8 @@ public class TableServiceImplTests extends BaseTest {
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
-        this.sut.deleteTable(connectionName, tableName);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteTable(connectionName, tableName, principal);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -160,7 +165,8 @@ public class TableServiceImplTests extends BaseTest {
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab3");
-        this.sut.deleteTable(connectionName, tableName);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteTable(connectionName, tableName, principal);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -181,7 +187,8 @@ public class TableServiceImplTests extends BaseTest {
         Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
         connToTablesMap.put(connectionName, tableNames);
 
-        this.sut.deleteTables(connToTablesMap);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteTables(connToTablesMap, principal);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -202,7 +209,8 @@ public class TableServiceImplTests extends BaseTest {
         Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
         connToTablesMap.put(connectionName, tableNames);
 
-        this.sut.deleteTables(connToTablesMap);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteTables(connToTablesMap, principal);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();

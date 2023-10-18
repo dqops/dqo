@@ -9,7 +9,7 @@ interface ConfirmErrorModalProps {
   onConfirm: () => void;
 }
 
-const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorModalProps) => {
+const ConfirmErrorModal = ({ open, onClose, message, onConfirm}: ConfirmErrorModalProps) => {
   return (
     <Dialog open={open} handler={onClose} className="min-w-200">
       <DialogBody className="pt-6 pb-2 px-6">
@@ -20,25 +20,22 @@ const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorMo
           <div className="text-xl text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
             {message}
           </div>
-          <div className="text-center text-xl text-gray-900">
-            Do you want to save the connection anyway?
-          </div>
         </div>
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button
           color="primary"
           className="px-8"
-          onClick={onClose}
-          label="No"
+          onClick={onConfirm}
+          label="Yes"
           variant="outlined"
         />
-
         <Button
           color="primary"
           className="px-8"
-          label="Yes"
-          onClick={onConfirm}
+          onClick={onClose}
+          label="No"
+          variant="outlined"
         />
       </DialogFooter>
     </Dialog>

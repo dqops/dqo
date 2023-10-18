@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,20 +15,27 @@ if TYPE_CHECKING:
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.column_sql_profiling_checks_spec_custom_checks import (
+        ColumnSqlProfilingChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnSqlProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnSqlProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnSqlProfilingChecksSpecCustomChecks]): Dictionary of additional custom checks
+            within this category. The keys are check names defined in the definition section. The sensor parameters and
+            rules should match the type of the configured sensor and rule for the custom check.
         profile_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
         profile_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         profile_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnSqlProfilingChecksSpecCustomChecks"] = UNSET
     profile_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
     ] = UNSET
@@ -37,9 +45,13 @@ class ColumnSqlProfilingChecksSpec:
     profile_sql_aggregate_expr_column: Union[
         Unset, "ColumnSqlAggregateExprCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
@@ -65,6 +77,8 @@ class ColumnSqlProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "profile_sql_condition_passed_percent_on_column"
@@ -91,8 +105,20 @@ class ColumnSqlProfilingChecksSpec:
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
         )
+        from ..models.column_sql_profiling_checks_spec_custom_checks import (
+            ColumnSqlProfilingChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnSqlProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnSqlProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_sql_condition_passed_percent_on_column = d.pop(
             "profile_sql_condition_passed_percent_on_column", UNSET
         )
@@ -137,6 +163,7 @@ class ColumnSqlProfilingChecksSpec:
             )
 
         column_sql_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_sql_condition_passed_percent_on_column=profile_sql_condition_passed_percent_on_column,
             profile_sql_condition_failed_count_on_column=profile_sql_condition_failed_count_on_column,
             profile_sql_aggregate_expr_column=profile_sql_aggregate_expr_column,

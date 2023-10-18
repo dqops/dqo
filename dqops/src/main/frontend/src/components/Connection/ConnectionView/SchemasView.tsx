@@ -8,12 +8,17 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
 import { setActiveFirstLevelTab } from '../../../redux/actions/source.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 const SchemasView = () => {
   const { connection, checkTypes }: { connection: string; checkTypes: CheckTypes } = useParams();
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const history = useHistory();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
 
@@ -55,6 +60,7 @@ const SchemasView = () => {
                   label="Import tables"
                   color="primary"
                   onClick={() => onImportTables(item)}
+                  disabled={userProfile.can_manage_data_sources !== true}
                 />
               </td>
             </tr>
@@ -68,6 +74,7 @@ const SchemasView = () => {
           label="Import more schemas"
           className="mt-4"
           onClick={goToSchemas}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
     </div>

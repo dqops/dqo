@@ -15,8 +15,8 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 
 /**
  * Hierarchy node search filters used to find all check nodes that match exactly a schedule (by a cron expression)
@@ -24,8 +24,8 @@ import com.dqops.metadata.scheduling.RecurringScheduleSpec;
  */
 public class ScheduledChecksSearchFilters {
     private Boolean enabled = true;
-    private RecurringScheduleSpec schedule;
-    private CheckRunRecurringScheduleGroup scheduleGroup;
+    private MonitoringScheduleSpec schedule;
+    private CheckRunScheduleGroup scheduleGroup;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -57,7 +57,7 @@ public class ScheduledChecksSearchFilters {
      * Returns a schedule that must be equal.
      * @return Schedule that must equal.
      */
-    public RecurringScheduleSpec getSchedule() {
+    public MonitoringScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -65,7 +65,7 @@ public class ScheduledChecksSearchFilters {
      * Sets a schedule template that must equal exactly.
      * @param schedule Expected schedule.
      */
-    public void setSchedule(RecurringScheduleSpec schedule) {
+    public void setSchedule(MonitoringScheduleSpec schedule) {
         this.schedule = schedule;
     }
 
@@ -74,7 +74,7 @@ public class ScheduledChecksSearchFilters {
      * The schedule group could be null to return all checks or when the search root object is an abstract check that has an individual schedule.
      * @return Optional schedule group.
      */
-    public CheckRunRecurringScheduleGroup getScheduleGroup() {
+    public CheckRunScheduleGroup getScheduleGroup() {
         return scheduleGroup;
     }
 
@@ -82,7 +82,7 @@ public class ScheduledChecksSearchFilters {
      * Sets a filter for a schedule group which identifies the expected type of checks.
      * @param scheduleGroup Schedule group.
      */
-    public void setScheduleGroup(CheckRunRecurringScheduleGroup scheduleGroup) {
+    public void setScheduleGroup(CheckRunScheduleGroup scheduleGroup) {
         this.scheduleGroup = scheduleGroup;
     }
 }

@@ -63,8 +63,8 @@ public class PythonRuleRunnerTests extends BaseTest {
         RuleExecutionResult executionResult = this.sut.executeRule(this.inMemoryCheckContext, ruleRunParameters, ruleDefinitionFindResult);
 
         Assertions.assertNotNull(executionResult);
-        Assertions.assertTrue(executionResult.isPassed());
-        Assertions.assertNull(executionResult.getExpectedValue());
+        Assertions.assertTrue(executionResult.getPassed());
+        Assertions.assertEquals(15.5, executionResult.getExpectedValue().doubleValue());
         Assertions.assertEquals(15.5, executionResult.getLowerBound().doubleValue());
         Assertions.assertNull(executionResult.getUpperBound());
     }

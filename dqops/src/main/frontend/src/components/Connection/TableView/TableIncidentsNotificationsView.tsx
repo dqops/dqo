@@ -13,16 +13,14 @@ import {
 import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
-  ConnectionIncidentGroupingSpecMinimumSeverityEnum, IncidentWebhookNotificationsSpec
+  ConnectionIncidentGroupingSpecMinimumSeverityEnum
 } from "../../../api";
 import Checkbox from "../../Checkbox";
 import NumberInput from "../../NumberInput";
 import TableActionGroup from "./TableActionGroup";
+import clsx from "clsx";
+import { IRootState } from "../../../redux/reducers";
 
-const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
-  label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
-  value: item
-}));
 
 const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
   label: item.charAt(0).toUpperCase() + item.slice(1),
@@ -30,9 +28,13 @@ const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinim
 }));
 
 export const TableIncidentsNotificationsView = () => {
+
   const { connection, schema, table, checkTypes }: { connection: string, schema: string, table: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
@@ -45,6 +47,13 @@ export const TableIncidentsNotificationsView = () => {
       ...obj,
     }));
   };
+  const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
+    label: item
+    .replace(/_(?=dimension)/, " / Quality ")
+    .replace(/_(?=(name|type|category))/g, " / Check ")
+    .replace(/^\w/g, c => c.toUpperCase()),
+    value: item
+  }));  
 
   const onUpdate = () => {
     dispatch(updateTableIncidentGrouping(checkTypes, firstLevelActiveTab, connection, schema, table, incidentGrouping));
@@ -57,7 +66,7 @@ export const TableIncidentsNotificationsView = () => {
         isUpdated={isUpdatedIncidentGroup}
         isUpdating={isUpdating}
       />
-      <div className="flex flex-col">
+      <div className={clsx("flex flex-col", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <div className="flex mb-4">
           <Select
             label="Data quality incident grouping level:"
@@ -65,6 +74,8 @@ export const TableIncidentsNotificationsView = () => {
             value={incidentGrouping?.grouping_level}
             prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
+            disabled={userProfile.can_manage_data_sources !== true}
+            className="min-w-110"
           />
         </div>
         <div className="flex mb-4">
@@ -73,6 +84,8 @@ export const TableIncidentsNotificationsView = () => {
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
+            disabled={userProfile.can_manage_data_sources !== true}
+            className="min-w-110"
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
@@ -90,8 +103,9 @@ export const TableIncidentsNotificationsView = () => {
             <NumberInput
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
-            <span>days. After this time, the DQO creates a new incident.</span>
+            <span>days. After this time, DQOps creates a new incident.</span>
           </div>
         </div>
         <div className="flex items-center mb-4 gap-2 text-sm">
@@ -100,8 +114,9 @@ export const TableIncidentsNotificationsView = () => {
             <NumberInput
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
+              disabled={userProfile.can_manage_data_sources !== true}
             />
-            <span> days. If the incident is muted, DQO will not create a new one.</span>
+            <span> days. If the incident is muted, DQOps will not create a new one.</span>
           </div>
         </div>
       </div>

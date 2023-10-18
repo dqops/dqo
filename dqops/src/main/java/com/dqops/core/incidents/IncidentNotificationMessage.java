@@ -144,15 +144,25 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
+     * Notification text in Markdown format that contains the most important fields from the class.
+     */
+    @JsonPropertyDescription("Notification text in Markdown format that contains the most important fields from the class.")
+    private String text;
+
+    /**
      * Creates a new incident notification message from a single row of the "incidents" table. The column names are defined in {@link com.dqops.data.incidents.factory.IncidentsColumnNames} class.
-     * @param incidentRow Incident row - a row from the Incident's Tablesaw row.
-     * @param connectionName Connection name.
+     * @param messageParameters Incident notification message parameters with Tablesaw row.
      * @return Incident notification message.
      */
-    public static IncidentNotificationMessage fromIncidentRow(Row incidentRow, String connectionName) {
+    public static IncidentNotificationMessage fromIncidentRow(
+            IncidentNotificationMessageParameters messageParameters,
+            IncidentNotificationMessageTextCreator textCreator) {
+
+        Row incidentRow = messageParameters.getIncidentRow();
+
         IncidentNotificationMessage message = new IncidentNotificationMessage();
         message.setIncidentId(incidentRow.getString(IncidentsColumnNames.ID_COLUMN_NAME));
-        message.setConnection(connectionName);
+        message.setConnection(messageParameters.getConnectionName());
         message.setSchema(incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME));
         message.setTable(incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME)) {
@@ -184,6 +194,16 @@ public class IncidentNotificationMessage {
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
+        message.setText(textCreator.prepareText(messageParameters));
+
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "IncidentNotificationMessage{" +
+                "incidentId='" + incidentId + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

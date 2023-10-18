@@ -21,12 +21,15 @@ const SetDefaultDialog = ({
   };
 
   return (
-    <Dialog open={open} handler={onClose} className='bg-yellow-100'>
+    <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-10 pb-2 px-8">
+        <div className='text-xl text-red-500 text-center'>
+          Warning <br/><br/>
+        </div>
         <div className="text-xl text-gray-700 text-center whitespace-normal ">
           {message}
           <br></br><br></br>
-          Please review DQO documentation before turning on a custom data grouping configuration.
+          Please review DQOps documentation before turning on a custom data grouping configuration.
           <br></br><br></br>
           Do you want to enable data grouping?
         </div>

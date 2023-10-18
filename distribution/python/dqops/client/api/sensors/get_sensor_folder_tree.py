@@ -1,38 +1,28 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.sensor_basic_folder_model import SensorBasicFolderModel
+from ...client import AuthenticatedClient, Client
+from ...models.sensor_folder_model import SensorFolderModel
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: Client,
-) -> Dict[str, Any]:
-    url = "{}api/definitions/sensors".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+def _get_kwargs() -> Dict[str, Any]:
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/definitions/sensors",
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[SensorBasicFolderModel]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[SensorFolderModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = SensorBasicFolderModel.from_dict(response.json())
+        response_200 = SensorFolderModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -42,8 +32,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[SensorBasicFolderModel]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[SensorFolderModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -54,27 +44,24 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-) -> Response[SensorBasicFolderModel]:
+    client: AuthenticatedClient,
+) -> Response[SensorFolderModel]:
     """getSensorFolderTree
 
-     Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
-    sensors.
+     Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or
+    customized sensors.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[SensorBasicFolderModel]
+        Response[SensorFolderModel]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -83,19 +70,19 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-) -> Optional[SensorBasicFolderModel]:
+    client: AuthenticatedClient,
+) -> Optional[SensorFolderModel]:
     """getSensorFolderTree
 
-     Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
-    sensors.
+     Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or
+    customized sensors.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        SensorBasicFolderModel
+        SensorFolderModel
     """
 
     return sync_detailed(
@@ -105,46 +92,43 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-) -> Response[SensorBasicFolderModel]:
+    client: AuthenticatedClient,
+) -> Response[SensorFolderModel]:
     """getSensorFolderTree
 
-     Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
-    sensors.
+     Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or
+    customized sensors.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[SensorBasicFolderModel]
+        Response[SensorFolderModel]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-) -> Optional[SensorBasicFolderModel]:
+    client: AuthenticatedClient,
+) -> Optional[SensorFolderModel]:
     """getSensorFolderTree
 
-     Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized
-    sensors.
+     Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or
+    customized sensors.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        SensorBasicFolderModel
+        SensorFolderModel
     """
 
     return (

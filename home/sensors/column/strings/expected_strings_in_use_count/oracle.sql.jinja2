@@ -1,0 +1,43 @@
+{% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+
+{%- macro extract_in_list(values_list) -%}
+    {%- for i in values_list -%}
+        {%- if not loop.last -%}
+            {{lib.make_text_constant(i)}}{{", "}}
+        {%- else -%}
+            {{lib.make_text_constant(i)}}
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro -%}
+
+{%- macro render_else() -%}
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        MAX(NULL)
+    {%- else -%}
+    COUNT(DISTINCT
+        CASE
+            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                THEN {{ lib.render_target_column('analyzed_table') }}
+            ELSE NULL
+        END
+    )
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN NULL
+        ELSE {{render_else()}}
+    END AS actual_value,
+    MAX({{ parameters.expected_values | length }}) expected_value
+    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+FROM(
+    SELECT
+        original_table.*
+        {{- lib.render_data_grouping_projections('original_table') }}
+        {{- lib.render_time_dimension_projection('original_table') }}
+    FROM {{ lib.render_target_table() }} original_table
+    {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

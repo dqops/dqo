@@ -28,7 +28,7 @@ public class DqoCloudRemoteBucket {
     private Storage storage;
 
     /**
-     * Creates a DQO Cloud remote bucket summary object.
+     * Creates a DQOps Cloud remote bucket summary object.
      * @param rootType Root type (identifies the purpose of the bucket).
      * @param bucketName Google storage bucket name.
      * @param objectPrefix Object prefix to be used as tentant's root folder.

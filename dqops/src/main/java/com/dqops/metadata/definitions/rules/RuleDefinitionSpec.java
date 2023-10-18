@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -52,13 +53,16 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Java class name for a rule runner that will execute the sensor. The \"type\" must be \"java_class\".")
     private String javaClassName = PythonRuleRunner.CLASS_NAME;
 
-    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.")
+    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. " +
+            "The number of time windows is configured in the time_window setting.")
     private RuleTimeWindowMode mode = RuleTimeWindowMode.current_value;
 
-    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
+    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that " +
+            "are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
     private RuleTimeWindowSettingsSpec timeWindow;
 
-    @JsonPropertyDescription("List of fields that are parameters of a custom rule. Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
+    @JsonPropertyDescription("List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens " +
+            "with proper UI controls for all required fields.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ParameterDefinitionsListSpec fields;
 
@@ -136,7 +140,7 @@ public class RuleDefinitionSpec extends AbstractSpec {
     }
 
     /**
-     * Returns a list of parameters (fields) used on this rule. Those parameters are shown by the DQO UI.
+     * Returns a list of parameters (fields) used on this rule. Those parameters are shown by the DQOps UI.
      * @return List of parameters.
      */
     public ParameterDefinitionsListSpec getFields() {
@@ -219,5 +223,18 @@ public class RuleDefinitionSpec extends AbstractSpec {
         RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
         cloned.fields = null;
         return cloned;
+    }
+
+    /**
+     * Returns the rule name, retrieved from the hierarchy id.
+     * @return Full rule name.
+     */
+    @JsonIgnore
+    public String getRuleName() {
+        if (this.getHierarchyId() == null) {
+            return null;
+        }
+
+        return (String)this.getHierarchyId().getLast();
     }
 }

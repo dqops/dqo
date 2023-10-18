@@ -4,21 +4,16 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.find_recent_incidents_on_connection_direction import (
-    FindRecentIncidentsOnConnectionDirection,
-)
-from ...models.find_recent_incidents_on_connection_order import (
-    FindRecentIncidentsOnConnectionOrder,
-)
+from ...client import AuthenticatedClient, Client
 from ...models.incident_model import IncidentModel
+from ...models.incident_sort_order import IncidentSortOrder
+from ...models.sort_direction import SortDirection
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     connection_name: str,
     *,
-    client: Client,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -27,15 +22,10 @@ def _get_kwargs(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/incidents/{connectionName}".format(
-        client.base_url, connectionName=connection_name
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["months"] = months
@@ -70,17 +60,15 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/incidents/{connectionName}".format(
+            connectionName=connection_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["IncidentModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -98,7 +86,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["IncidentModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -111,7 +99,7 @@ def _build_response(
 def sync_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -120,8 +108,8 @@ def sync_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -137,8 +125,8 @@ def sync_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -150,7 +138,6 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        client=client,
         months=months,
         open_=open_,
         acknowledged=acknowledged,
@@ -163,8 +150,7 @@ def sync_detailed(
         direction=direction,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -174,7 +160,7 @@ def sync_detailed(
 def sync(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -183,8 +169,8 @@ def sync(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -200,8 +186,8 @@ def sync(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -230,7 +216,7 @@ def sync(
 async def asyncio_detailed(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -239,8 +225,8 @@ async def asyncio_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -256,8 +242,8 @@ async def asyncio_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -269,7 +255,6 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        client=client,
         months=months,
         open_=open_,
         acknowledged=acknowledged,
@@ -282,8 +267,7 @@ async def asyncio_detailed(
         direction=direction,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -291,7 +275,7 @@ async def asyncio_detailed(
 async def asyncio(
     connection_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     open_: Union[Unset, None, bool] = UNSET,
     acknowledged: Union[Unset, None, bool] = UNSET,
@@ -300,8 +284,8 @@ async def asyncio(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
-    direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
+    order: Union[Unset, None, IncidentSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
     """findRecentIncidentsOnConnection
 
@@ -317,8 +301,8 @@ async def asyncio(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
-        order (Union[Unset, None, FindRecentIncidentsOnConnectionOrder]):
-        direction (Union[Unset, None, FindRecentIncidentsOnConnectionDirection]):
+        order (Union[Unset, None, IncidentSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

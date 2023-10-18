@@ -40,6 +40,11 @@ public final class BuiltInFolderNames {
     public static final String CHECKS = "checks";
 
     /**
+     * Folder where configuration files that could be synchronized to the cloud are stored.
+     */
+    public static final String SETTINGS = "settings";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";
@@ -75,7 +80,7 @@ public final class BuiltInFolderNames {
     public static final String INDEX = ".index";
 
     /**
-     * Credentials folder to store local credentials that are not stored in the repository.
+     * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";
 

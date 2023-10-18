@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/strings/string_length_below_min_length_percent
-  rule_name: comparison/max_percent
-  help_text: The check counts percentage of those strings with length below the one
-    provided by the user in a column. Stores the most recent row count for each month
-    when the data quality check was evaluated.

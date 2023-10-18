@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonModel:
     """Model that contains the all editable information about a table-to-table comparison defined on a compared table.
 
@@ -46,11 +47,23 @@ class TableComparisonModel:
             data quality issues at different severity levels when the difference between the compared (tested) table and the
             reference table (the source of truth) exceed given thresholds as a percentage of difference between the actual
             value and the expected value from the reference table.
+        compare_column_count (Union[Unset, CompareThresholdsModel]): Model with the compare threshold levels for raising
+            data quality issues at different severity levels when the difference between the compared (tested) table and the
+            reference table (the source of truth) exceed given thresholds as a percentage of difference between the actual
+            value and the expected value from the reference table.
+        supports_compare_column_count (Union[Unset, bool]): Boolean flag that decides if this comparison type supports
+            comparing the column count between tables. Partitioned table comparisons do not support comparing the column
+            counts.
         columns (Union[Unset, List['ColumnComparisonModel']]): The list of compared columns, their matching reference
             column and the enabled comparisons.
         compare_table_run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
         compare_table_clean_data_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete the table
+            comparison.
+        can_run_compare_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run comparison
+            checks.
+        can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     table_comparison_configuration_name: Union[Unset, str] = UNSET
@@ -63,12 +76,17 @@ class TableComparisonModel:
     ] = UNSET
     default_compare_thresholds: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_row_count: Union[Unset, "CompareThresholdsModel"] = UNSET
+    compare_column_count: Union[Unset, "CompareThresholdsModel"] = UNSET
+    supports_compare_column_count: Union[Unset, bool] = UNSET
     columns: Union[Unset, List["ColumnComparisonModel"]] = UNSET
     compare_table_run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     compare_table_clean_data_job_template: Union[
         Unset, "DeleteStoredDataQueueJobParameters"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_compare_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         table_comparison_configuration_name = self.table_comparison_configuration_name
@@ -98,6 +116,11 @@ class TableComparisonModel:
         if not isinstance(self.compare_row_count, Unset):
             compare_row_count = self.compare_row_count.to_dict()
 
+        compare_column_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.compare_column_count, Unset):
+            compare_column_count = self.compare_column_count.to_dict()
+
+        supports_compare_column_count = self.supports_compare_column_count
         columns: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.columns, Unset):
             columns = []
@@ -117,6 +140,10 @@ class TableComparisonModel:
             compare_table_clean_data_job_template = (
                 self.compare_table_clean_data_job_template.to_dict()
             )
+
+        can_edit = self.can_edit
+        can_run_compare_checks = self.can_run_compare_checks
+        can_delete_data = self.can_delete_data
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -139,6 +166,10 @@ class TableComparisonModel:
             field_dict["default_compare_thresholds"] = default_compare_thresholds
         if compare_row_count is not UNSET:
             field_dict["compare_row_count"] = compare_row_count
+        if compare_column_count is not UNSET:
+            field_dict["compare_column_count"] = compare_column_count
+        if supports_compare_column_count is not UNSET:
+            field_dict["supports_compare_column_count"] = supports_compare_column_count
         if columns is not UNSET:
             field_dict["columns"] = columns
         if compare_table_run_checks_job_template is not UNSET:
@@ -149,6 +180,12 @@ class TableComparisonModel:
             field_dict[
                 "compare_table_clean_data_job_template"
             ] = compare_table_clean_data_job_template
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_compare_checks is not UNSET:
+            field_dict["can_run_compare_checks"] = can_run_compare_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -213,6 +250,17 @@ class TableComparisonModel:
         else:
             compare_row_count = CompareThresholdsModel.from_dict(_compare_row_count)
 
+        _compare_column_count = d.pop("compare_column_count", UNSET)
+        compare_column_count: Union[Unset, CompareThresholdsModel]
+        if isinstance(_compare_column_count, Unset):
+            compare_column_count = UNSET
+        else:
+            compare_column_count = CompareThresholdsModel.from_dict(
+                _compare_column_count
+            )
+
+        supports_compare_column_count = d.pop("supports_compare_column_count", UNSET)
+
         columns = []
         _columns = d.pop("columns", UNSET)
         for columns_item_data in _columns or []:
@@ -246,6 +294,12 @@ class TableComparisonModel:
                 )
             )
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_compare_checks = d.pop("can_run_compare_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         table_comparison_model = cls(
             table_comparison_configuration_name=table_comparison_configuration_name,
             compared_connection=compared_connection,
@@ -255,9 +309,14 @@ class TableComparisonModel:
             grouping_columns=grouping_columns,
             default_compare_thresholds=default_compare_thresholds,
             compare_row_count=compare_row_count,
+            compare_column_count=compare_column_count,
+            supports_compare_column_count=supports_compare_column_count,
             columns=columns,
             compare_table_run_checks_job_template=compare_table_run_checks_job_template,
             compare_table_clean_data_job_template=compare_table_clean_data_job_template,
+            can_edit=can_edit,
+            can_run_compare_checks=can_run_compare_checks,
+            can_delete_data=can_delete_data,
         )
 
         table_comparison_model.additional_properties = d

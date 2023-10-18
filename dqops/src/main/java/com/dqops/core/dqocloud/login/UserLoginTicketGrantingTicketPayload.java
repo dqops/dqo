@@ -23,8 +23,8 @@ import lombok.Data;
 import java.time.Instant;
 
 /**
- * Object that is signed by the DQO Cloud and is used as a parameter with a base url to the return address used to authenticate
- * a remote user who is logging to the DQO instance. This object with a signature (and converted to hex) is sent as part of a request to the login page.
+ * Object that is signed by the DQOps Cloud and is used as a parameter with a base url to the return address used to authenticate
+ * a remote user who is logging to the DQOps instance. This object with a signature (and converted to hex) is sent as part of a request to the login page.
  */
 @Data
 public class UserLoginTicketGrantingTicketPayload {
@@ -64,9 +64,9 @@ public class UserLoginTicketGrantingTicketPayload {
     private String returnUrl;
 
     /**
-     * Encrypted client secret - a passcode used to sign and verify the token. DQO Cloud decrypts this token and uses it sign the response token.
+     * Encrypted client secret - a passcode used to sign and verify the token. DQOps Cloud decrypts this token and uses it sign the response token.
      */
-    @JsonPropertyDescription("Encrypted client secret - a passcode used to sign and verify the token. DQO Cloud decrypts this token and uses it sign the response token.")
+    @JsonPropertyDescription("Encrypted client secret - a passcode used to sign and verify the token. DQOps Cloud decrypts this token and uses it sign the response token.")
     @JsonProperty("cse")
     private String clientSecretEncrypted;
 }

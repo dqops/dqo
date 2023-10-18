@@ -1,19 +1,25 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  profiling_checks:
-    availability:
-      profile_table_availability:
-        warning:
-          max_failures: 1
-        error:
-          max_failures: 5
-        fatal:
-          max_failures: 10
+  monitoring_checks:
+    daily:
+      availability:
+        daily_table_availability:
+          comments:
+          - date: 2023-09-04T11:56:57.753
+            comment_by: user
+            comment: "In this example, we verify availability on table in database\
+              \ using simple row count."
+          warning:
+            max_failures: 0
+          error:
+            max_failures: 5
+          fatal:
+            max_failures: 10
   columns:
     edition:
       type_snapshot:

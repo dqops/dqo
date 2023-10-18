@@ -60,8 +60,8 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
-    void timeWindowSettingsPredictionTimeWindow_whenMaxFailureSensor_thenRequiresHistorical30ReadoutsForRuleEvaluation() {
-        Assertions.assertEquals(30, this.timeWindowSettings.getPredictionTimeWindow());
+    void timeWindowSettingsPredictionTimeWindow_whenMaxFailureSensor_thenRequiresHistorical60ReadoutsForRuleEvaluation() {
+        Assertions.assertEquals(60, this.timeWindowSettings.getPredictionTimeWindow());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
@@ -94,7 +94,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(0.0, ruleExecutionResult.getUpperBound());
@@ -112,7 +112,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
@@ -132,7 +132,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
@@ -150,7 +150,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
@@ -168,7 +168,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(0.0, ruleExecutionResult.getUpperBound());
@@ -186,7 +186,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
@@ -204,7 +204,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
@@ -222,7 +222,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
@@ -231,7 +231,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRuleMaxFailures_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

@@ -321,6 +321,30 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+                   original_table.*
+                       {{- lib.render_data_grouping_projections('original_table') }}
+                       {{- lib.render_time_dimension_projection('original_table') }}
+                   FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+         ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -442,6 +466,30 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      FROM(
+          SELECT
+                     original_table.*
+                         {{- lib.render_data_grouping_projections('original_table') }}
+                         {{- lib.render_time_dimension_projection('original_table') }}
+                     FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+      {{- lib.render_group_by() -}}
+      {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -2292,6 +2340,30 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      FROM(
+          SELECT
+                     original_table.*
+                         {{- lib.render_data_grouping_projections('original_table') }}
+                         {{- lib.render_time_dimension_projection('original_table') }}
+                     FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+      {{- lib.render_group_by() -}}
+      {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -2413,6 +2485,30 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      FROM(
+          SELECT
+                     original_table.*
+                         {{- lib.render_data_grouping_projections('original_table') }}
+                         {{- lib.render_time_dimension_projection('original_table') }}
+                     FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+      {{- lib.render_group_by() -}}
+      {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -2541,6 +2637,30 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      FROM(
+          SELECT
+                     original_table.*
+                         {{- lib.render_data_grouping_projections('original_table') }}
+                         {{- lib.render_time_dimension_projection('original_table') }}
+                     FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+      {{- lib.render_group_by() -}}
+      {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -2673,6 +2793,31 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
+      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      FROM(
+          SELECT
+                     original_table.*
+                         {{- lib.render_data_grouping_projections('original_table') }}
+                         {{- lib.render_time_dimension_projection('original_table') }}
+                     FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+      {{- lib.render_group_by() -}}
+      {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       

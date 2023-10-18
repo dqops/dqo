@@ -15,14 +15,19 @@
  */
 package com.dqops.core.dqocloud.apikey;
 
+import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,9 +51,17 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("tg")
     private int tenantGroup;
 
+    @JsonProperty("ac")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String accountName;
+
+    @JsonProperty("idp")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean idpTenant;
+
     @JsonProperty("lic")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String licenseType;
+    private DqoCloudLicenseType licenseType;
 
     @JsonProperty("lm")
     private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
@@ -68,6 +81,9 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String region;
 
+    @JsonProperty("arl")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private DqoUserRole accountRole = DqoUserRole.ADMIN;
 
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
@@ -101,15 +117,15 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
-     * Returns the DQO Cloud API Key version.
-     * @return DQO Cloud API Key version.
+     * Returns the DQOps Cloud API Key version.
+     * @return DQOps Cloud API Key version.
      */
     public Long getVersion() {
         return version;
     }
 
     /**
-     * Sets the DQO Cloud API Key version.
+     * Sets the DQOps Cloud API Key version.
      * @param version API Key version.
      */
     public void setVersion(Long version) {
@@ -149,10 +165,42 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
+     * Returns the account name for personal, team and enterprise accounts.
+     * @return Account name.
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets the account name for persona, team and enterprise accounts.
+     * @param accountName Account name.
+     */
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    /**
+     * Returns true if the account supports managing additional users.
+     * @return True when additional users could be added to the account, false when it is a free standalone account.
+     */
+    public boolean isIdpTenant() {
+        return idpTenant;
+    }
+
+    /**
+     * Sets a boolean flag to identify accounts that are capable of user management.
+     * @param idpTenant True when the account supports additional users (even if the limit is 1 user).
+     */
+    public void setIdpTenant(boolean idpTenant) {
+        this.idpTenant = idpTenant;
+    }
+
+    /**
      * Returns the license type.
      * @return License type.
      */
-    public String getLicenseType() {
+    public DqoCloudLicenseType getLicenseType() {
         return licenseType;
     }
 
@@ -160,7 +208,7 @@ public class DqoCloudApiKeyPayload {
      * Sets the license type.
      * @param licenseType License type.
      */
-    public void setLicenseType(String licenseType) {
+    public void setLicenseType(DqoCloudLicenseType licenseType) {
         this.licenseType = licenseType;
     }
 
@@ -244,6 +292,21 @@ public class DqoCloudApiKeyPayload {
         this.region = region;
     }
 
+    /**
+     * Returns the role of the user at the account (tenant) level.
+     * @return The role of the user at the account level.
+     */
+    public DqoUserRole getAccountRole() {
+        return accountRole;
+    }
+
+    /**
+     * Sets the role of the user at the account level.
+     * @param accountRole User's role at the account level.
+     */
+    public void setAccountRole(DqoUserRole accountRole) {
+        this.accountRole = accountRole;
+    }
 
     /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
@@ -256,6 +319,16 @@ public class DqoCloudApiKeyPayload {
             this.ignoredProperties = new LinkedHashMap<>();
         }
         this.ignoredProperties.put(name, value);
+    }
+
+    /**
+     * Create a user principal from the api key.
+     * @return User principal copied from the user.
+     */
+    public DqoUserPrincipal createUserPrincipal() {
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.subject, this.accountRole, grantedPrivileges,this);
+        return dqoUserPrincipal;
     }
 }
 

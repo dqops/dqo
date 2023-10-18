@@ -104,7 +104,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
 
         for (CompletableFuture<Long> awaitingClientFuture :  awaitingClients) {
-            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQO job queue was stopped"));
+            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQOps job queue was stopped"));
         }
     }
 
@@ -282,6 +282,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         synchronized (this.lock) {
             this.currentSynchronizationStatus = synchronizationStatus;
             this.currentSynchronizationStatusChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
+            if (this.jobUpdateSink == null) {
+                return; // shutdown was initiated
+            }
         }
 
         try {
@@ -330,10 +333,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         CompletableFuture<DqoJobQueueIncrementalSnapshotModel> waitForChangeFuture = null;
 
         synchronized (this.lock) {
-            if (!this.started) {
-                throw new DqoQueueJobExecutionException("Queue is stopped");
-            }
-
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)

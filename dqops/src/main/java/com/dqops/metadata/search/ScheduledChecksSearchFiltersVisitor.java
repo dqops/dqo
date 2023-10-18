@@ -16,8 +16,8 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 
@@ -54,11 +54,11 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null && !schedulesOverride.isDefault()) {
-            RecurringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(this.filters.getScheduleGroup());
+            MonitoringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(this.filters.getScheduleGroup());
 
             if (scheduleForCheckSchedulingGroup != null &&
                     !Objects.equals(scheduleForCheckSchedulingGroup, this.filters.getSchedule())) {
@@ -87,7 +87,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
+        MonitoringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {

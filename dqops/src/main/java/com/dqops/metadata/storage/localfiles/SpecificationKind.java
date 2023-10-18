@@ -46,5 +46,14 @@ public enum SpecificationKind {
     FILE_INDEX,
 
     @JsonProperty("dashboards")
-    DASHBOARDS
+    DASHBOARDS,
+
+    @JsonProperty("default_schedules")
+    DEFAULT_SCHEDULES,
+
+    @JsonProperty("default_checks")
+    DEFAULT_CHECKS,
+
+    @JsonProperty("default_notifications")
+    DEFAULT_NOTIFICATIONS;
 }

@@ -22,6 +22,7 @@ import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.exceptions.RunSilently;
@@ -60,21 +61,22 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      *
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         SqlServerParametersSpec sqlserverSpec = connectionSpec.getSqlserver();
 
-        String host = this.getSecretValueProvider().expandValue(sqlserverSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(sqlserverSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:sqlserver://;serverName=");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(sqlserverSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(sqlserverSpec.getPort(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
@@ -85,7 +87,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 throw new ConnectorOperationFailedException("Cannot create a connection to SQLSERVER, the port number is invalid: " + port, nfe);
             }
         }
-        String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(";databaseName=");
             jdbcConnectionBuilder.append(database);
@@ -104,13 +106,13 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(sqlserverSpec.getProperties());
         }
 
-        String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions());
+        String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
             dataSourceProperties.put("options", options);
         }

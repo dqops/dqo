@@ -39,6 +39,8 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     private HierarchyId hierarchyId;
     @JsonIgnore
     private boolean dirty;
+    @JsonIgnore
+    private final Object lock = new Object();
 
     /**
      * Finds an existing object given the object name.
@@ -291,11 +293,13 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      * Loads the list once, only when it was not loaded yet.
      */
     protected void loadOnce() {
-        if (this.loaded) {
-            return;
+        synchronized (this.lock) {
+            if (this.loaded) {
+                return;
+            }
+            this.loaded = true; // this will avoid calling the load from an iterator again
+            this.load();
         }
-		this.loaded = true; // this will avoid calling the load from an iterator again
-		this.load();
     }
 
     /**

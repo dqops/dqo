@@ -47,7 +47,7 @@ const HelpMenu = () => {
             Browse documentation
           </a>
           <a
-            href="https://cloud.dqo.ai/account"
+            href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
             className="block text-gray-700 mb-3"
@@ -57,7 +57,7 @@ const HelpMenu = () => {
           <SettingsPopUp />
         </div>
         <div className="px-4 pt-3 border-t border-gray-300">
-          <h6 className="mb-3">Promote DQO on GitHub</h6>
+          <h6 className="mb-3">Promote DQOps on GitHub</h6>
           <div className="mb-2">
             <GitHubButton
               href="https://github.com/dqops/dqo"

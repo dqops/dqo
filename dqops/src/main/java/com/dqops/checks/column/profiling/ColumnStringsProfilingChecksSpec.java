@@ -77,8 +77,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_string_match_name_regex_percent", o -> o.profileStringMatchNameRegexPercent);
 
             put("profile_expected_strings_in_top_values_count", o -> o.profileExpectedStringsInTopValuesCount);
-
-            put("profile_string_datatype_detected", o -> o.profileStringDatatypeDetected);
         }
     };
 
@@ -186,9 +184,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values.")
     private ColumnExpectedStringsInTopValuesCountCheckSpec profileExpectedStringsInTopValuesCount;
-
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")
-    private ColumnStringDatatypeDetectedCheckSpec profileStringDatatypeDetected;
 
     /**
      * Returns a maximum string length below check.
@@ -818,24 +813,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.profileExpectedStringsInTopValuesCount, profileExpectedStringsInTopValuesCount));
         this.profileExpectedStringsInTopValuesCount = profileExpectedStringsInTopValuesCount;
         propagateHierarchyIdToField(profileExpectedStringsInTopValuesCount, "profile_expected_strings_in_top_values_count");
-    }
-
-    /**
-     * Returns a count of expected values in datatype detected check.
-     * @return Datatype detected check.
-     */
-    public ColumnStringDatatypeDetectedCheckSpec getProfileStringDatatypeDetected() {
-        return profileStringDatatypeDetected;
-    }
-
-    /**
-     * Sets a new definition of a datatype detected check.
-     * @param profileStringDatatypeDetected Datatype detected check.
-     */
-    public void setProfileStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec profileStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.profileStringDatatypeDetected, profileStringDatatypeDetected));
-        this.profileStringDatatypeDetected = profileStringDatatypeDetected;
-        propagateHierarchyIdToField(profileStringDatatypeDetected, "profile_string_datatype_detected");
     }
 
     /**

@@ -36,4 +36,13 @@ public class DataGroupingConfigurationTrimmedModel {
 
     @JsonPropertyDescription("Data grouping configuration specification.")
     private DataGroupingConfigurationSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public DataGroupingConfigurationTrimmedModel() {
+    }
 }

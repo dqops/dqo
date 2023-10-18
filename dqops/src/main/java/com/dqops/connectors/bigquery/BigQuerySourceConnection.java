@@ -17,6 +17,7 @@ package com.dqops.connectors.bigquery;
 
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
@@ -76,10 +77,11 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      */
     @Override
-    public void open() {
-        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
+    public void open(SecretValueLookupContext secretValueLookupContext) {
+        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec(), secretValueLookupContext);
    }
 
     /**

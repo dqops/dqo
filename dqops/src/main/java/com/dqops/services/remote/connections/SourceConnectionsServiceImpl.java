@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -26,7 +27,7 @@ import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.remote.ConnectionStatusRemote;
+import com.dqops.rest.models.remote.ConnectionTestStatus;
 import com.dqops.rest.models.remote.ConnectionTestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class SourceConnectionsServiceImpl implements SourceConnectionsService {
-
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
     private final UserHomeContextFactory userHomeContextFactory;
 
 
-
     @Autowired
     public SourceConnectionsServiceImpl(ConnectionProviderRegistry connectionProviderRegistry,
-                                        SecretValueProvider secretValueProvider, UserHomeContextFactory userHomeContextFactory) {
+                                        SecretValueProvider secretValueProvider,
+                                        UserHomeContextFactory userHomeContextFactory) {
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
         this.userHomeContextFactory = userHomeContextFactory;
@@ -72,24 +72,25 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
         if (verifyNameUniqueness) {
             ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
             if (connectionWrapper != null) {
-                connectionTestModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
+                connectionTestModel.setConnectionTestResult(ConnectionTestStatus.CONNECTION_ALREADY_EXISTS);
                 connectionTestModel.setErrorMessage("A connection with the name you specified: " + connectionName + " already exists!");
                 return connectionTestModel;
             }
         }
 
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
 
         try {
-            SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true);
+            SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext);
             sourceConnection.listSchemas();
-            connectionTestModel.setConnectionStatus(ConnectionStatusRemote.SUCCESS);
+            connectionTestModel.setConnectionTestResult(ConnectionTestStatus.SUCCESS);
 
         } catch (Exception e) {
-            log.debug("Failed to test a connection, error: " + e.getMessage(), e);
-            connectionTestModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
+            log.info("Failed to test a connection, error: " + e.getMessage(), e);
+            connectionTestModel.setConnectionTestResult(ConnectionTestStatus.FAILURE);
             connectionTestModel.setErrorMessage(e.getMessage());
         }
         return connectionTestModel;

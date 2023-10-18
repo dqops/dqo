@@ -31,5 +31,5 @@ variable "snowflake_password" {
 }
 
 variable "testable_api_key" {
-    description = "DQO Cloud API Key"
+    description = "DQOps Cloud API Key"
 }

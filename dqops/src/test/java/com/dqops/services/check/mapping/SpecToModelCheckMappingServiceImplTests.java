@@ -17,14 +17,15 @@ package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -37,9 +38,9 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObject
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
-import com.dqops.services.check.mapping.basicmodels.CheckBasicModel;
-import com.dqops.services.check.mapping.utils.CheckContainerBasicModelUtility;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
+import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -75,11 +76,15 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        RuleDefinitionFindServiceImpl ruleDefinitionFindService = new RuleDefinitionFindServiceImpl();
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService,
+                sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
         this.sut = new SpecToModelCheckMappingServiceImpl(
                 reflectionService,
                 sensorDefinitionFindService,
+                ruleDefinitionFindService,
                 schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+                similarCheckCache);
         
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");
@@ -91,7 +96,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(6, uiModel.getCategories().size());
@@ -102,7 +107,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         this.tableSpec.getTableComparisons().put("comparison1", new TableComparisonConfigurationSpec());
         CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(7, uiModel.getCategories().size());
@@ -112,7 +117,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(13, uiModel.getCategories().size());
@@ -120,7 +125,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(
             CheckContainerModel uiModel,
-            CheckContainerBasicModel uiBasicModel) {
+            CheckContainerListModel uiBasicModel) {
 
         Iterable<String> checksModel =
                 uiModel.getCategories().stream()
@@ -133,7 +138,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
         Iterable<String> checksBasicModel =
                 uiBasicModel.getChecks().stream()
-                        .map(CheckBasicModel::getCheckName)
+                        .map(CheckListModel::getCheckName)
                         .sorted().collect(Collectors.toList());
 
         return new AbstractMap.SimpleEntry<>(checksModel, checksBasicModel);
@@ -143,11 +148,11 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
+        CheckContainerListModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(6, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
@@ -158,11 +163,11 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
-                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
+        CheckContainerListModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
@@ -173,7 +178,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiModel_whenDataObservabilityProfilingTableConfigurationGiven_thenCreatesUiModel() {
         DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
         CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getTable(), null,
-                null, null, this.executionContext, null);
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(3, uiModel.getCategories().size());
@@ -183,47 +188,47 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void createUiModel_whenDataObservabilityProfilingColumnConfigurationGiven_thenCreatesUiModel() {
         DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
         CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getColumn(), null,
-                null, null, this.executionContext, null);
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(10, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityDailyRecurringTableConfigurationGiven_thenCreatesUiModel() {
-        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getTable(), null,
-                null, null, this.executionContext, null);
+    void createUiModel_whenDataObservabilityDailyMonitoringTableConfigurationGiven_thenCreatesUiModel() {
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getTable(), null,
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityDailyRecurringColumnConfigurationGiven_thenCreatesUiModel() {
-        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getColumn(), null,
-                null, null, this.executionContext, null);
+    void createUiModel_whenDataObservabilityDailyMonitoringColumnConfigurationGiven_thenCreatesUiModel() {
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getColumn(), null,
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(10, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityMonthlyRecurringTableConfigurationGiven_thenCreatesUiModel() {
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getTable(), null,
-                null, null, this.executionContext, null);
+    void createUiModel_whenDataObservabilityMonthlyMonitoringTableConfigurationGiven_thenCreatesUiModel() {
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getTable(), null,
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityMonthlyRecurringColumnConfigurationGiven_thenCreatesUiModel() {
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getColumn(), null,
-                null, null, this.executionContext, null);
+    void createUiModel_whenDataObservabilityMonthlyMonitoringColumnConfigurationGiven_thenCreatesUiModel() {
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getColumn(), null,
+                null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(10, uiModel.getCategories().size());

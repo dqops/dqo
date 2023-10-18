@@ -38,84 +38,188 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnPiiContainsIp6PercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private final String testedColumnName = "ip6";
+    private final String validExamplesFilterText = "result = 1";
+    private final String invalidExamplesFilterText = "result = 0";
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.contains_ip6_test, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother
+                .createSampleTableMetadataForCsvFile(SampleCsvFileNames.contains_ip6_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother
+                .createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnPiiContainsIp6PercentSensorParametersSpec();
         this.checkSpec = new ColumnPiiContainsIp6PercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
-    @Test
-    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "ip6", this.checkSpec);
+    // todo: test for verification the 0.0 score when no rows (fragment such as: WHEN COUNT(*) = 0 THEN 0.0)
 
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+    @Test
+    void runSensor_whenSensorExecutedProfilingValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
+        this.sut.setFilter(validExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForProfilingCheck(sampleTableMetadata, testedColumnName, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily);
+    void runSensor_whenSensorExecutedProfilingInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+        this.sut.setFilter(invalidExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForProfilingCheck(sampleTableMetadata, testedColumnName, this.checkSpec);
 
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly);
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily,"date");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly,"date");
+    void runSensor_whenSensorExecutedMonitoringDailyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
+        this.sut.setFilter(validExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForMonitoringCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily);
 
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedMonitoringDailyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+        this.sut.setFilter(invalidExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForMonitoringCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedMonitoringMonthlyValidRows_thenReturnsOneRowWithTotallySuccessPercentage() {
+        this.sut.setFilter(validExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForMonitoringCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedMonitoringMonthlyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+        this.sut.setFilter(invalidExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForMonitoringCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDailyValidRows_thenReturnTotallySuccessPercentage() {
+        this.sut.setFilter(validExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForPartitionedCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(1));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDailyInvalidRows_thenReturnsTotallyFailedPercentage() {
+        this.sut.setFilter(invalidExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForPartitionedCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.daily,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(3, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(1));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(2));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthlyValidRows_thenReturnsTotallySuccessPercentage() {
+        this.sut.setFilter(validExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForPartitionedCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthlyInvalidRows_thenReturnsTotallyFailedPercentage() {
+        this.sut.setFilter(invalidExamplesFilterText);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
+                .createForTableColumnForPartitionedCheck(
+                        sampleTableMetadata, testedColumnName, this.checkSpec, CheckTimeScale.monthly,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
+                .executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(1));
     }
 }

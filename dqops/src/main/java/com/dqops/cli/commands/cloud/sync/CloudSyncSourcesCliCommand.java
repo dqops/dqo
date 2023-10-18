@@ -22,6 +22,8 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,23 +34,27 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync sources" to synchronize the "sources" folder in the DQO user home.
+ * 3st level CLI command "cloud sync sources" to synchronize the "sources" folder in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "sources", header = "Synchronize local \"sources\" connection and table level quality definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sources\" folder.")
+@CommandLine.Command(name = "sources", header = "Synchronize local \"sources\" connection and table level quality definitions with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sources\" folder.")
 public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     public CloudSyncSourcesCliCommand() {
     }
 
     @Autowired
     public CloudSyncSourcesCliCommand(CloudSynchronizationService cloudSynchronizationService,
-                                      TerminalFactory terminalFactory) {
+                                      TerminalFactory terminalFactory,
+                                      DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.cloudSynchronizationService = cloudSynchronizationService;
         this.terminalFactory = terminalFactory;
+        this.principalProvider = principalProvider;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -98,13 +104,14 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     @Override
     public Integer call() throws Exception {
         try {
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
             return this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true);
+                    DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true, principal);
         }
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
                 TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                terminalWriter.writeLine(CloudSyncCliCommand.API_KEY_INVALID_MESSAGE);
                 return -1;
             }
 

@@ -1,16 +1,17 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="TableComparisonGroupingColumnPairModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonGroupingColumnPairModel:
     """Model that identifies a pair of column names used for grouping the data on both the compared table and the reference
-    table. The groups are then matched (joined) by DQO to compare aggregated results.
+    table. The groups are then matched (joined) by DQOps to compare aggregated results.
 
         Attributes:
             compared_table_column_name (Union[Unset, str]): The name of the column on the compared table (the parent table)
@@ -23,7 +24,7 @@ class TableComparisonGroupingColumnPairModel:
 
     compared_table_column_name: Union[Unset, str] = UNSET
     reference_table_column_name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         compared_table_column_name = self.compared_table_column_name

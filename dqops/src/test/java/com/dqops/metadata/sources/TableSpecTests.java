@@ -18,11 +18,11 @@ package com.dqops.metadata.sources;
 import com.dqops.BaseTest;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
-import com.dqops.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.groupings.DataStreamLevelSpecObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -155,26 +155,26 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
-        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
-        TableDailyRecurringCheckCategoriesSpec daily = new TableDailyRecurringCheckCategoriesSpec();
-        TableVolumeDailyRecurringChecksSpec volume = new TableVolumeDailyRecurringChecksSpec();
+    void hasAnyChecksConfigured_whenOneDailyMonitoringCheckConfigured_thenReturnsTrue() {
+        TableMonitoringChecksSpec monitoring = new TableMonitoringChecksSpec();
+        TableDailyMonitoringCheckCategoriesSpec daily = new TableDailyMonitoringCheckCategoriesSpec();
+        TableVolumeDailyMonitoringChecksSpec volume = new TableVolumeDailyMonitoringChecksSpec();
         volume.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setVolume(volume);
-        recurring.setDaily(daily);
-        this.sut.setRecurringChecks(recurring);
+        monitoring.setDaily(daily);
+        this.sut.setMonitoringChecks(monitoring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
-        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
-        TableMonthlyRecurringCheckCategoriesSpec daily = new TableMonthlyRecurringCheckCategoriesSpec();
-        TableVolumeMonthlyRecurringChecksSpec volume = new TableVolumeMonthlyRecurringChecksSpec();
+    void hasAnyChecksConfigured_whenOneMonthlyMonitoringCheckConfigured_thenReturnsTrue() {
+        TableMonitoringChecksSpec monitoring = new TableMonitoringChecksSpec();
+        TableMonthlyMonitoringCheckCategoriesSpec daily = new TableMonthlyMonitoringCheckCategoriesSpec();
+        TableVolumeMonthlyMonitoringChecksSpec volume = new TableVolumeMonthlyMonitoringChecksSpec();
         volume.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setVolume(volume);
-        recurring.setMonthly(daily);
-        this.sut.setRecurringChecks(recurring);
+        monitoring.setMonthly(daily);
+        this.sut.setMonitoringChecks(monitoring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 

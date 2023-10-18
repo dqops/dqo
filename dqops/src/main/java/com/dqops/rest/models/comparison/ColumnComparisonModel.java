@@ -129,8 +129,8 @@ public class ColumnComparisonModel {
      * Creates a column comparison model, copying the configuration of all comparison checks on the column level.
      * @param columnSpec Source column specification.
      * @param referenceTableConfigurationName The table comparison name.
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param checkTimeScale Check time scale for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param checkTimeScale Check time scale for monitoring and partitioned checks.
      * @return Column comparison model.
      */
     public static ColumnComparisonModel fromColumnSpec(ColumnSpec columnSpec,
@@ -181,8 +181,8 @@ public class ColumnComparisonModel {
      * Copies the configuration of comparisons to column level checks at the given column.
      * @param targetColumnSpec Target column specification.
      * @param referenceTableConfigurationName Table comparison name.
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param checkTimeScale Optional time scale for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param checkTimeScale Optional time scale for monitoring and partitioned checks.
      */
     public void copyToColumnSpec(ColumnSpec targetColumnSpec,
                                  String referenceTableConfigurationName,

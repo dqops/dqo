@@ -52,7 +52,7 @@ public class DqoJobQueueInitialSnapshotModel {
     }
 
     /**
-     * Returns the current DQO Cloud folder synchronization status.
+     * Returns the current DQOps Cloud folder synchronization status.
      * @return Folder synchronization status.
      */
     public CloudSynchronizationFoldersStatusModel getFolderSynchronizationStatus() {

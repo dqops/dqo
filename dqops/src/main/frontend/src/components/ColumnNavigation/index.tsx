@@ -25,8 +25,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -114,8 +114,8 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     );
 
     if (defaultTab) {
-      if (item.value === CheckTypes.RECURRING) {
-        url = ROUTES.COLUMN_RECURRING(
+      if (item.value === CheckTypes.MONITORING) {
+        url = ROUTES.COLUMN_MONITORING(
           item.value,
           connection,
           schema,
@@ -123,7 +123,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
           column,
           defaultTab
         );
-        value = ROUTES.COLUMN_RECURRING_VALUE(
+        value = ROUTES.COLUMN_MONITORING_VALUE(
           item.value,
           connection,
           schema,
@@ -149,7 +149,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
       }
     } else {
       const tab =
-        item.value === CheckTypes.RECURRING ||
+        item.value === CheckTypes.MONITORING ||
         item.value === CheckTypes.PARTITIONED
           ? 'daily'
           : item.value === CheckTypes.PROFILING

@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoSensorLimitsConfigurationProperties implements Cloneable {
     /**
-     * Default row count limit retrieved from a single sensor for non-partitioned checks (profiling, recurring). This is the row count limit applied when querying the data source.
+     * Default row count limit retrieved from a single sensor for non-partitioned checks (profiling, monitoring). This is the row count limit applied when querying the data source.
      */
     public static final int DEFAULT_SENSOR_READOUT_LIMIT = 1000;
 

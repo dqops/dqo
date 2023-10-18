@@ -47,8 +47,8 @@ public class SchemaModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this schema.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this schema.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this schema.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this schema.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
@@ -63,16 +63,50 @@ public class SchemaModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the schema.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the schema.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a schema model from connection and schema names.
      * @param connectionName Connection name to store in the model.
      * @param schemaName     Schema name.
+     * @param isEditor       The current user has the editor permission.
+     * @param isOperator     The current user has the operator permission.
      * @return Schema model.
      */
-    public static SchemaModel fromSchemaNameStrings(String connectionName, String schemaName) {
+    public static SchemaModel fromSchemaNameStrings(
+            String connectionName,
+            String schemaName,
+            boolean isEditor,
+            boolean isOperator) {
         return new SchemaModel()
         {{
             setConnectionName(connectionName);
             setSchemaName(schemaName);
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -86,11 +120,11 @@ public class SchemaModel {
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.recurring);
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

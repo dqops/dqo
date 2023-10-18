@@ -97,7 +97,7 @@ public class CliConfiguration {
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
      * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
-     * @param coreConfigurationProperties DQO Core configuration properties.
+     * @param coreConfigurationProperties DQOps Core configuration properties.
      * @return Command line.
      */
     @Bean(name = "commandLine")

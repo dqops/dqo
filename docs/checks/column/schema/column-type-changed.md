@@ -2,7 +2,7 @@
 
 **Description**  
 Column level check that detects if the data type of the column has changed since the last time it was retrieved.
- This check will calculate a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ This check calculates a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
  A data quality issue will be detected if the hash of the column&#x27;s data types has changed.
 
 ___
@@ -49,7 +49,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-18"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -93,7 +93,7 @@ Checks the metadata of the monitored column and detects if the data type (includ
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_type_changed|recurring|daily|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_type_changed|monitoring|daily|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -119,7 +119,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           schema:
             daily_column_type_changed:
@@ -129,7 +129,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -141,7 +141,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           schema:
             daily_column_type_changed:
@@ -174,7 +174,7 @@ Checks the metadata of the monitored column and detects if the data type (includ
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_type_changed|recurring|monthly|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_type_changed|monitoring|monthly|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -200,7 +200,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           schema:
             monthly_column_type_changed:
@@ -210,7 +210,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -222,7 +222,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           schema:
             monthly_column_type_changed:

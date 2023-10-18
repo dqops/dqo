@@ -22,17 +22,24 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "cloud sync" 2t level cli command to connect and synchronize with DQO Cloud
+ * "cloud sync" 2nd level cli command to connect and synchronize with DQOps Cloud
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "sync", description = "Synchronize local data with DQO Cloud", subcommands = {
+@CommandLine.Command(name = "sync", description = "Synchronize local data with DQOps Cloud", subcommands = {
         CloudSyncDataCliCommand.class,
         CloudSyncSourcesCliCommand.class,
         CloudSyncSensorsCliCommand.class,
         CloudSyncRulesCliCommand.class,
         CloudSyncChecksCliCommand.class,
+        CloudSyncSettingsCliCommand.class,
+        CloudSyncCredentialsCliCommand.class,
         CloudSyncAllCliCommand.class
 })
 public class CloudSyncCliCommand extends BaseCommand {
+    /**
+     * Message shown by CLI operations when the DQOps Cloud api key is invalid.
+     */
+    public static final String API_KEY_INVALID_MESSAGE = "Invalid DQOps Cloud credentials, probably your trial period has expired or a new version of DQOps was released. " +
+            "Please run \"cloud login\" from the command-line to get a new DQOps Cloud API Key.";
 }

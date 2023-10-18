@@ -18,7 +18,7 @@ package com.dqops.statistics.column.strings;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.sensors.column.strings.ColumnStringsStringDatatypeDetectSensorParametersSpec;
+import com.dqops.sensors.column.datatype.ColumnDatatypeStringDatatypeDetectSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnStringsStringDatatypeDetectSensorParametersSpec> {
+public class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringDatatypeDetectStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec extends Ab
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringDatatypeDetectSensorParametersSpec parameters = new ColumnStringsStringDatatypeDetectSensorParametersSpec();
+    private ColumnDatatypeStringDatatypeDetectSensorParametersSpec parameters = new ColumnDatatypeStringDatatypeDetectSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnStringsStringDatatypeDetectSensorParametersSpec getParameters() {
+    public ColumnDatatypeStringDatatypeDetectSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnStringsStringDatatypeDetectStatisticsCollectorSpec extends Ab
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnStringsStringDatatypeDetectSensorParametersSpec parameters) {
+    public void setParameters(ColumnDatatypeStringDatatypeDetectSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

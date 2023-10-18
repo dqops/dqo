@@ -65,13 +65,28 @@ public final class SpecFileNames {
     public static final String CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY = ".py";
 
     /**
-     * Custom settings file.
+     * Local settings file.
      */
-    public static final String SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
+    public static final String LOCAL_SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
 
     /**
      * Data quality dashboards definitions file name.
      */
     public static final String DASHBOARDS_SPEC_FILE_NAME_YAML = "dashboardslist.dqodashboards.yaml";
+
+    /**
+     * Default monitoring schedules file name.
+     */
+    public static final String DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML = "defaultschedules.dqoschedules.yaml";
+
+    /**
+     * Default checks file name.
+     */
+    public static final String DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML = "defaultchecks.dqochecks.yaml";
+
+    /**
+     * Default notification configuration file name.
+     */
+    public static final String DEFAULT_NOTIFICATIONS_FILE_NAME_YAML = "defaultnotifications.dqonotifications.yaml";
 
 }

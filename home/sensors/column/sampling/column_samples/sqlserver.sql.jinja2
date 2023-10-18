@@ -11,8 +11,8 @@ WITH column_samples AS (
             COUNT(*) AS sample_count
         FROM
             {{ lib.render_target_table() }} AS analyzed_table
-        GROUP BY {{ lib.render_target_column('analyzed_table') }}
         {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+        GROUP BY {{ lib.render_target_column('analyzed_table') }}
     ) AS unlimited_samples
 )
 SELECT

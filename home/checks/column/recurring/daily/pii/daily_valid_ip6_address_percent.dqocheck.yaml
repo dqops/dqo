@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/pii/valid_ip6_address_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of valid IP6 address values in a column
-    does not fall below the minimum accepted percentage. Stores the most recent captured
-    value for each day when the data quality check was evaluated.

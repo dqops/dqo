@@ -9,39 +9,40 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useHistory, useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
-import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import { CheckRunMonitoringScheduleGroup } from "../../../shared/enums/scheduling.enum";
 import Tabs from "../../Tabs";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
 import qs from "query-string";
 
+
 const pageTabs = [
   {
     label: 'Profiling',
-    value: CheckRunRecurringScheduleGroup.profiling
+    value: CheckRunMonitoringScheduleGroup.profiling
   },
   {
-    label: 'Recurring Daily',
-    value: CheckRunRecurringScheduleGroup.recurring_daily
+    label: 'Monitoring Daily',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
   },
   {
-    label: 'Recurring Monthly',
-    value: CheckRunRecurringScheduleGroup.recurring_monthly
+    label: 'Monitoring Monthly',
+    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
   },
   {
     label: 'Partitioned Daily',
-    value: CheckRunRecurringScheduleGroup.partitioned_daily
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
   },
   {
     label: 'Partitioned Monthly',
-    value: CheckRunRecurringScheduleGroup.partitioned_monthly
+    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
   },
 ]
 
 const ScheduleDetail = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
-  const { activeTab = CheckRunRecurringScheduleGroup.profiling } = qs.parse(location.search) as any;
+  const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
 
   const { isUpdating, scheduleGroups } = useSelector(getFirstLevelState(checkTypes));
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
@@ -50,7 +51,7 @@ const ScheduleDetail = () => {
   const history = useHistory();
 
   const dispatch = useActionDispatch();
-  const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
+  const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
     history.push(`${location.pathname}?activeTab=${tab}`)
   }
 
@@ -100,7 +101,7 @@ const ScheduleDetail = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule}/>
     </div>
   );
 };

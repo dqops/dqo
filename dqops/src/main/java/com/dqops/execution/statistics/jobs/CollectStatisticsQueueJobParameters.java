@@ -23,6 +23,8 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -30,6 +32,7 @@ import lombok.EqualsAndHashCode;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CollectStatisticsQueueJobParameters implements Cloneable {
     /**
      * Statistics collectors search filters that identify the type of statistics collector to run.
@@ -60,7 +63,7 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
      * The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.
      */
     @JsonPropertyDescription("The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.")
-    private CollectStatisticsQueueJobResult collectStatisticsResult;
+    private CollectStatisticsResult collectStatisticsResult;
 
     public CollectStatisticsQueueJobParameters() {
     }
@@ -118,7 +121,7 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
      * Returns the results of a finished job with the count of statistics that were collected.
      * @return The results of a finished job with the count of statistics that were collected.
      */
-    public CollectStatisticsQueueJobResult getCollectStatisticsResult() {
+    public CollectStatisticsResult getCollectStatisticsResult() {
         return collectStatisticsResult;
     }
 
@@ -126,7 +129,7 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
      * Sets the summary result of the statistics collection job, this method is called by the job when it finished successfully.
      * @param collectStatisticsResult The statistics collection result.
      */
-    public void setCollectStatisticsResult(CollectStatisticsQueueJobResult collectStatisticsResult) {
+    public void setCollectStatisticsResult(CollectStatisticsResult collectStatisticsResult) {
         this.collectStatisticsResult = collectStatisticsResult;
     }
 

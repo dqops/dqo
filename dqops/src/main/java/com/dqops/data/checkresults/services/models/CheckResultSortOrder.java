@@ -17,7 +17,7 @@
 package com.dqops.data.checkresults.services.models;
 
 /**
- * Enumeration of columns names on a {@link CheckResultDetailedSingleModel} that could be sorted.
+ * Enumeration of columns names on a {@link CheckResultEntryModel} that could be sorted.
  */
 public enum CheckResultSortOrder {
     executedAt,

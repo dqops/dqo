@@ -1,4 +1,4 @@
-import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
+import { CheckResultEntryModel, IncidentModel } from "../../api";
 import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 type IncidentIssueRowProps = {
-  issue: CheckResultDetailedSingleModel;
+  issue: CheckResultEntryModel;
   incidentDetail?: IncidentModel;
 }
 
@@ -42,7 +42,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     return name;
   }
 
-  const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
+  const getSeverityClass = (row: CheckResultEntryModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
     if (row.severity === 2) return 'bg-orange-100';
     if (row.severity === 3) return 'bg-red-100';
@@ -176,7 +176,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
 };
 
 type IncidentIssueListProps = {
-  issues: CheckResultDetailedSingleModel[];
+  issues: CheckResultEntryModel[];
   filters?: IncidentIssueFilter;
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
   incidentDetail?: IncidentModel;

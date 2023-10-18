@@ -52,4 +52,25 @@ public class CheckContainerModel {
 
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
+    /**
+     * Boolean flag that decides if the current user can edit the check.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    public CheckContainerModel() {
+    }
 }

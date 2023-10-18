@@ -16,7 +16,7 @@ We want to verify the percentage of valid latitude and longitude values in `lati
 
 **SOLUTION**
 
-We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
+We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using monitoring
 [valid_latitude_percent](../../checks/column/numeric/valid-latitude-percent.md) and 
 [valid_longitude_percent](../../checks/column/numeric/valid-longitude-percent.md) column checks.
 Our goal is to verify if the percentage of valid latitude values in the `latitude` and `longitude` columns are above the set threshold.
@@ -52,6 +52,95 @@ The `latitude` and `longitude` columns of interest contains valid values.
 | 14-00001652 | ARR Missed Yard Trimmings /Organics | PROVENCIAL                          | **30.28755755** | **-97.66188875** |
 | 14-00001654 | Parking Ticket Complaint            | 9TH                                 | **30.27091532** | **-97.7417791**  |
 
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks.png)
+
+1. Go to the **Monitoring** section.
+
+   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+
+
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+
+3. Select the **Monitoring Checks** tab.
+
+   In this tab you can find a list of data quality checks.
+
+
+4. Run the enabled check using the **Run check** button.
+
+   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+
+   ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks.png)
+
+
+5. Access the results by clicking the **Results** button.
+
+   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+   that occurred during the check's execution.
+
+   ![Check details](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-details.png)
+
+
+6. Review the results which should be similar to the one below.
+   
+    The actual value in this example is 99, which is above the minimum threshold level set in the warning (99.0%).
+    The check gives a valid error (notice the green square on the left of the name of the check).
+
+    ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results.png)
+
+7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+
+    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+ 
+    Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection and issues per schema.
+
+    ![Valid-latitude-and-longitude-percent check results on Issues count per table dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-issues-count-per-table-dashboard.png)
+
+## Configuring a schedule at connection level
+
+With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+table, or individual check.
+
+After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+
+![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+
+1. Navigate to the **Data Source** section.
+
+2. Choose the connection from the tree view on the left.
+
+3. Click on the **Schedule** tab.
+
+4. Select the Monitoring Daily tab
+
+5. Select the **Run every day at** option and specify the time as 12:00.
+
+6. Once you have set the schedule, click on the **Save** button to save your changes.
+
+7. Enable the scheduler by clicking the toggle button.
+
+![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
+
+Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
+all tables associated with that connection.
+
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
+
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -63,12 +152,12 @@ In this example, we have set three maximum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `valid_latitude_percent` and 
-`valid_longitude_percent`checks are configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_latitude_percent` and
+`daily_valid_longitude_percent`checks are configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="78-109"
+```yaml hl_lines="12-39"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -80,155 +169,35 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-    complaint_description:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    source:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    status:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    status_change_date:
-      type_snapshot:
-        column_type: TIMESTAMP
-        nullable: true
-    created_date:
-      type_snapshot:
-        column_type: TIMESTAMP
-        nullable: true
-    last_update_date:
-      type_snapshot:
-        column_type: TIMESTAMP
-        nullable: true
-    close_date:
-      type_snapshot:
-        column_type: TIMESTAMP
-        nullable: true
-    incident_address:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    street_number:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    street_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    city:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    incident_zip:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    county:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    state_plane_x_coordinate:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    state_plane_y_coordinate:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
     latitude:
       type_snapshot:
         column_type: FLOAT64
         nullable: true
-      profiling_checks:
-        numeric:
-          profile_valid_latitude_percent:
-            comments:
-            - date: 2023-04-14T09:03:21.495+00:00
-              comment_by: user
-              comment: "In this example, values in the \"latitude\" column are verified\
-                \ whether the percentage of values within the latitude range is above\
-                \ the set threshold."
-            warning:
-              min_percent: 99.0
-            error:
-              min_percent: 98.0
-            fatal:
-              min_percent: 95.0
+      monitoring_checks:
+        daily:
+          numeric:
+            daily_valid_latitude_percent:
+              warning:
+                min_percent: 99.0
+              error:
+                min_percent: 98.0
+              fatal:
+                min_percent: 95.0
     longitude:
       type_snapshot:
         column_type: FLOAT64
         nullable: true
-      profiling_checks:
-        numeric:
-          valid_longitude_percent:
-            comments:
-            - date: 2023-05-08T13:27:46.412+00:00
-              comment_by: user
-              comment: "In this example, values in the \"longitude\" column are verified\
-                \ whether the percentage of values within the longitude range is are\
-                \ above the set threshold."
-            warning:
-              min_percent: 99.0
-            error:
-              min_percent: 98.0
-            fatal:
-              min_percent: 95.0
-    location:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    council_district_code:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    map_page:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    map_tile:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
+      monitoring_checks:
+        daily:
+          numeric:
+            daily_valid_longitude_percent:
+              warning:
+                min_percent: 99.0
+              error:
+                min_percent: 98.0
+              fatal:
+                min_percent: 95.0
 ```
-## Running the checks in the example and evaluating the results using the graphical interface
-
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
-
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-valid-latitude-and-longitude-percent-check.png)
-
-1. Go to **Profiling** section.
-
-2. Select the table or column mentioned in the example description from the tree view on the left.
-
-3. Select **Advanced Profiling** tab.
-
-4. Run the enabled check using the **Run check** button.
-   ![Run check](https://dqops.com/docs/images/examples/valid-latitude-and-longitude-percent-run-check.png)
-
-5. Review the results by opening the **Check details** button.
-   ![Check details](https://dqops.com/docs/images/examples/valid-latitude-and-longitude-percent-check-details.png)
-
-6. You should see the results as the one below.
-   The actual value in this example is 99, which is above the minimum threshold level set in the warning (99.0%).
-   The check gives a valid error (notice the green square on the left of the name of the check).
-
-   ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/valid-latitude-and-longitude-percent-check-results.png)
-
-7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
-   located in the upper right corner of the graphical interface.
-
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
-   the results displayed on the KPI day by day dashboard showing results by connections, schemas, dimensions, tables, columns, checks, check categories and data groups.
-
-   ![Valid-latitude-and-longitude-percent check results on KPI day by day-dashboard](https://dqops.com/docs/images/examples/valid-latitude-and-longitude-percent-check-results-on-KPI-day-by-day-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
@@ -239,7 +208,7 @@ To execute the check prepared in the example, run the following command in DQO S
 ``` 
 check run
 ```
-You should see the results as the one below.
+Review the results which should be similar to the one below.
 The percent of valid latitude and longitude values is above the 99% and the checks results are valid.
 
 ```
@@ -326,3 +295,10 @@ Results returned by the sensor:
 |99.19006528255773|2023-05-08T13:34:23.984Z|2023-05-08T13:34:23.984Z|
 +-----------------+------------------------+------------------------+
 ```
+## Next steps
+
+- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [valid_latitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-latitude-percent.md).
+- For details on the [valid_longitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-longitude-percent.md).
+- You might be interested in another validity check that [evaluates that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage](../data-validity/percentage-of-valid-uuid.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).

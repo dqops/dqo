@@ -18,7 +18,7 @@ package com.dqops.core.jobqueue.concurrency;
 import com.dqops.core.jobqueue.DqoJobQueueEntry;
 
 /**
- * DQO job queue concurrency limiter. Maintains a count of concurrent jobs running in parallel in order to enforce
+ * DQOps job queue concurrency limiter. Maintains a count of concurrent jobs running in parallel in order to enforce
  * concurrency limits.
  */
 public interface DqoJobConcurrencyLimiter {

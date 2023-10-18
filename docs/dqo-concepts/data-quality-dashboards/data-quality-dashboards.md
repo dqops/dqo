@@ -12,30 +12,21 @@ to the data quality lakehouse.
 
 ## Groups of dashboards
 
-Data quality dashboards are divided into multiple groups, depending on the audience and purpose of these dashboards. 
+There are several groups and subgroups of data quality dashboards dedicated to analyzing data quality.
 
-- **Governance dashboards**. These dashboards show high-level data quality KPIs, aggregated on a macro scale that should be shared
-at a corporate level. With governance dashboards senior management is able to review key data metrics per connection, 
-[data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), [check category](../checks/#categories-of-checks) 
-and [data streams](../data-grouping/data-grouping.md).
-The governance dashboards allows filtering data by time period and previously defined data streams which can represent location, 
-business unit, vendor, supplier, or subsidiary.
+1. Profiling, Monitoring, and Partitions groups each contain subgroups for analyzing results from profiling, monitoring, and partitions check types. 
+    - **Current table status** dashboards allow data engineers and data owners for viewing the statuses of the tables and columns grouped by [data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md) or check categories. Dashboards within this group also allow for a quick evaluation of the current issue severity status per table, column, data quality dimension, [data grouping](../data-grouping/data-grouping.md), [check category](../../checks/#categories-of-checks), and per day of the month.
+    - **Data quality issues count** dashboards allow for reviewing and filtering a summary number of issues that arise from data quality checks. The summary can be categorized by table, [data grouping](../data-grouping/data-grouping.md), day, or [check category](../../checks/#categories-of-checks). These dashboards help data engineers and data owners identify areas (tables or data pipelines) with the highest number of data quality issues that should be addressed.
+    - **Data quality KPIs** dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a corporate level. With these dashboards, senior management can review data quality KPIs per table, column, [data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), [check category](../../checks/#categories-of-checks), and [data grouping](../data-grouping/data-grouping.md). They can also review how KPIs changed during each day of the month.
 
-- **Operational dashboards**. Operational dashboards helps data engineers and data owners to identify areas (tables or 
-data pipelines) in a data warehouse or data lake with the highest number of data quality issues that should be addressed. 
+2. **Statistics of data sources**  group of dashboards contains summaries for check categories such as availability, volume, data completeness, and timeliness.
 
-- **Data Quality Issue Details dashboards**. This type of data quality dashboard show detailed information about the issues at the table level. 
-In DQO there are two groups of dashboards in this category: Issue details and Details per category. Issue details group 
-focuses on issues grouped by [quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), 
-[check types](../checks/#types-of-checks), [check categories](../checks/#categories-of-checks) or tables. Details per 
-category groups issues by volume, timeliness and completeness. The detailed dashboards are useful for data engineers and data owners 
-to better understand data dynamics during the investigation phase when the data quality issue is being diagnosed and 
-later to confirm whether it has been resolved.
+3. **DQO usage** group of dashboards contains summaries of executed checks per table, column, [data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/#categories-of-checks). Within this group, there are also dashboards showing checks that are no longer in use.
 
-- **Data Source States dashboards**. This group of dashboards contains a summaries on most incomplete columns, table 
-    freshness, table ingestion delay, the biggest tables measured by recurring checks anf table row count for time partitions.
+4. **Aggregated results for all check types** group is similar to the first category but contains aggregates for all check types (profiling, monitoring, and partitions)
 
-- **DQ Statistics dashboards**. This group of dashboards contains the summaries of daily tests per check, data stream and table, as well as checks no longer in use.
+On each dashboard, data can filter by clicking on the filters on the top part of the dashboard, as well as clicking on the name of the connection, schema, data group, etc.
+
 
 
 ## What's next

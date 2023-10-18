@@ -74,7 +74,7 @@ public class BetweenPercentChange7DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.1,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(19.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(18.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound());
@@ -99,7 +99,7 @@ public class BetweenPercentChange7DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound());
@@ -123,7 +123,7 @@ public class BetweenPercentChange7DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1251.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(51.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(22.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(80.0, ruleExecutionResult.getUpperBound());
@@ -148,7 +148,7 @@ public class BetweenPercentChange7DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(42.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
@@ -162,7 +162,7 @@ public class BetweenPercentChange7DaysRuleParametersSpecTests extends BaseTest {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

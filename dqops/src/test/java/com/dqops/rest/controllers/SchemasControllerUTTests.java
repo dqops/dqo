@@ -26,8 +26,10 @@ import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -76,7 +78,8 @@ public class SchemasControllerUTTests extends BaseTest {
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
         CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
@@ -115,7 +118,7 @@ public class SchemasControllerUTTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
@@ -128,7 +131,7 @@ public class SchemasControllerUTTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t2volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t2rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t2rowCountErrorSpec.setMinCount(100L);
         t2rowCountFatalSpec.setMinCount(10L);
@@ -172,6 +175,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -216,6 +220,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -258,6 +263,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String schemaName = "sch";
 
         ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
                 Optional.empty(),

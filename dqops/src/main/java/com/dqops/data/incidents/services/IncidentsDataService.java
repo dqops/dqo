@@ -16,7 +16,7 @@
 
 package com.dqops.data.incidents.services;
 
-import com.dqops.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import com.dqops.data.checkresults.services.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.services.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.services.models.IncidentHistogramFilterParameters;
 import com.dqops.data.checkresults.services.models.IncidentIssueHistogramModel;
@@ -65,11 +65,11 @@ public interface IncidentsDataService {
      * @param filterParameters Filter parameters.
      * @return Array of check results for the incident.
      */
-    CheckResultDetailedSingleModel[] loadCheckResultsForIncident(String connectionName,
-                                                                 int year,
-                                                                 int month,
-                                                                 String incidentId,
-                                                                 CheckResultListFilterParameters filterParameters);
+    CheckResultEntryModel[] loadCheckResultsForIncident(String connectionName,
+                                                        int year,
+                                                        int month,
+                                                        String incidentId,
+                                                        CheckResultListFilterParameters filterParameters);
 
     /**
      * Builds a histogram of data quality issue occurrences per day.

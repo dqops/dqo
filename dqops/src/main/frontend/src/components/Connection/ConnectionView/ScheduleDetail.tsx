@@ -10,40 +10,44 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import Tabs from "../../Tabs";
-import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import { CheckRunMonitoringScheduleGroup } from "../../../shared/enums/scheduling.enum";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
 import qs from "query-string";
+import { SettingsApi } from '../../../services/apiClient';
+import { MonitoringScheduleSpec } from '../../../api';
 
 const pageTabs = [
   {
     label: 'Profiling',
-    value: CheckRunRecurringScheduleGroup.profiling
+    value: CheckRunMonitoringScheduleGroup.profiling
   },
   {
-    label: 'Recurring daily',
-    value: CheckRunRecurringScheduleGroup.recurring_daily
+    label: 'Monitoring daily',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
   },
   {
-    label: 'Recurring monthly',
-    value: CheckRunRecurringScheduleGroup.recurring_monthly
+    label: 'Monitoring monthly',
+    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
   },
   {
     label: 'Partitioned daily',
-    value: CheckRunRecurringScheduleGroup.partitioned_daily
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
   },
   {
     label: 'Partitioned monthly',
-    value: CheckRunRecurringScheduleGroup.partitioned_monthly
+    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
   },
 ]
 
-const ScheduleDetail = () => {
+const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
+  const [updatedSchedule, setUpdatedSchedule] = useState<MonitoringScheduleSpec | undefined>()
+  const [isDefaultUpdated, setIsDefaultUpdated] = useState(false)
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
-  const { activeTab = CheckRunRecurringScheduleGroup.profiling } = qs.parse(location.search) as any;
+  const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
   const history = useHistory();
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -54,14 +58,46 @@ const ScheduleDetail = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
 
-  const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
-  const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
 
-  const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
+
+  const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
+  const fetchDefaultSchedule = async () => {
+    try {
+        await SettingsApi.getDefaultSchedule(String(activeTab).replace(/\s/g, "_").toLowerCase() as 'profiling' | 'monitoring_daily' | 'monitoring_monthly' | 'partitioned_daily' | 'partitioned_monthly' ?? 'profiling') 
+          .then((res) => setUpdatedSchedule(res.data));
+
+    } catch (error) {
+      console.error(error)
+
+    }
+  }
+  useEffect(() => {
+    if (isDefault === true) {
+      fetchDefaultSchedule()
+    } else {
+      setUpdatedSchedule(scheduleGroups?.[activeTab]?.updatedSchedule);
+    }
+  } , [activeTab])
+
+  const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
     history.push(`${location.pathname}?activeTab=${tab}`)
   }
+  const updateDefaultSchedules = async (obj: MonitoringScheduleSpec | undefined) =>{
+    await SettingsApi.updateDefaultSchedules(String(activeTab).replace(/\s/g, "_").toLowerCase() as 'profiling' | 'monitoring_daily' | 'monitoring_monthly' | 'partitioned_daily' | 'partitioned_monthly' ?? 'profiling', obj)
+      .then(() => setIsDefaultUpdated(false))
+      .catch((err) => console.error(err))
 
-  const handleChange = (obj: any) => {
+  }
+
+  const handleChange = (obj: MonitoringScheduleSpec) => {
+    if (isDefault === true) {
+      setUpdatedSchedule((prevState) => ({
+        ...prevState,
+        cron_expression: obj.cron_expression,
+        disabled: obj.disabled
+      }));
+      setIsDefaultUpdated(true)
+    }
     dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, true));
     dispatch(
       setUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, {
@@ -80,6 +116,9 @@ const ScheduleDetail = () => {
   const onUpdate = async () => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
+    }
+    if (isDefault === true) {
+      updateDefaultSchedules(updatedSchedule)
     }
     await dispatch(updateConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab, updatedSchedule));
     await dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
@@ -104,58 +143,58 @@ const ScheduleDetail = () => {
       setTabs([
         {
           label: 'Profiling',
-          value: CheckRunRecurringScheduleGroup.profiling
+          value: CheckRunMonitoringScheduleGroup.profiling
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
-    } else if (checkTypes === 'recurring') {
+      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
+    } else if (checkTypes === 'monitoring') {
       setTabs([
         {
-          label: 'Recurring Daily',
-          value: CheckRunRecurringScheduleGroup.recurring_daily
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
         },
         {
-          label: 'Recurring Monthly',
-          value: CheckRunRecurringScheduleGroup.recurring_monthly
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.recurring_daily);
+      onChangeTab(CheckRunMonitoringScheduleGroup.monitoring_daily);
     } else if (checkTypes === 'partitioned') {
       setTabs([
         {
           label: 'Partitioned Daily',
-          value: CheckRunRecurringScheduleGroup.partitioned_daily
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
           label: 'Partitioned Monthly',
-          value: CheckRunRecurringScheduleGroup.partitioned_monthly
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.partitioned_daily);
+      onChangeTab(CheckRunMonitoringScheduleGroup.partitioned_daily);
     } else {
       setTabs([
         {
           label: 'Profiling',
-          value: CheckRunRecurringScheduleGroup.profiling
+          value: CheckRunMonitoringScheduleGroup.profiling
         },
         {
-          label: 'Recurring Daily',
-          value: CheckRunRecurringScheduleGroup.recurring_daily
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
         },
         {
-          label: 'Recurring Monthly',
-          value: CheckRunRecurringScheduleGroup.recurring_monthly
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
         {
           label: 'Partitioned Daily',
-          value: CheckRunRecurringScheduleGroup.partitioned_daily
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
           label: 'Partitioned Monthly',
-          value: CheckRunRecurringScheduleGroup.partitioned_monthly
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
-      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
+      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
     }
   }, [checkTypes]);
 
@@ -163,13 +202,13 @@ const ScheduleDetail = () => {
     <div className="py-4 px-8">
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdatedSchedule}
+        isUpdated={isUpdatedSchedule || isDefaultUpdated}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault={isDefault}/>
     </div>
   );
 };

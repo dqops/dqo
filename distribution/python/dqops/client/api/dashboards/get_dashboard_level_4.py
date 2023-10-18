@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.authenticated_dashboard_model import AuthenticatedDashboardModel
 from ...types import UNSET, Response, Unset
 
@@ -16,20 +16,9 @@ def _get_kwargs(
     folder4: str,
     dashboard_name: str,
     *,
-    client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}".format(
-        client.base_url,
-        folder1=folder1,
-        folder2=folder2,
-        folder3=folder3,
-        folder4=folder4,
-        dashboardName=dashboard_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["windowLocationOrigin"] = window_location_origin
@@ -38,17 +27,19 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}".format(
+            folder1=folder1,
+            folder2=folder2,
+            folder3=folder3,
+            folder4=folder4,
+            dashboardName=dashboard_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[AuthenticatedDashboardModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = AuthenticatedDashboardModel.from_dict(response.json())
@@ -61,7 +52,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[AuthenticatedDashboardModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -78,7 +69,7 @@ def sync_detailed(
     folder4: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel4
@@ -107,12 +98,10 @@ def sync_detailed(
         folder3=folder3,
         folder4=folder4,
         dashboard_name=dashboard_name,
-        client=client,
         window_location_origin=window_location_origin,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -126,7 +115,7 @@ def sync(
     folder4: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel4
@@ -167,7 +156,7 @@ async def asyncio_detailed(
     folder4: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Response[AuthenticatedDashboardModel]:
     """getDashboardLevel4
@@ -196,12 +185,10 @@ async def asyncio_detailed(
         folder3=folder3,
         folder4=folder4,
         dashboard_name=dashboard_name,
-        client=client,
         window_location_origin=window_location_origin,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -213,7 +200,7 @@ async def asyncio(
     folder4: str,
     dashboard_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Optional[AuthenticatedDashboardModel]:
     """getDashboardLevel4

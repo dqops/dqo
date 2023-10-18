@@ -16,10 +16,11 @@
 package com.dqops.core.scheduler.synchronize;
 
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
-import com.dqops.metadata.search.RecurringScheduleSearchFilters;
+import com.dqops.metadata.search.MonitoringScheduleSearchFilters;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -57,25 +58,27 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 
-        RecurringScheduleSearchFilters recurringScheduleSearchFilters = new RecurringScheduleSearchFilters();
-        recurringScheduleSearchFilters.setScheduleEnabled(true);
+        MonitoringScheduleSearchFilters monitoringScheduleSearchFilters = new MonitoringScheduleSearchFilters();
+        monitoringScheduleSearchFilters.setScheduleEnabled(true);
         // we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
-        Collection<RecurringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, recurringScheduleSearchFilters);
+        Collection<MonitoringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, monitoringScheduleSearchFilters);
 
         UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();
-        for (RecurringScheduleSpec recurringSchedule : schedules) {
-            if (Strings.isNullOrEmpty(recurringSchedule.getCronExpression())) {
+        for (MonitoringScheduleSpec monitoringSchedule : schedules) {
+            if (Strings.isNullOrEmpty(monitoringSchedule.getCronExpression())) {
                 continue;
             }
 
-            ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
+            ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(monitoringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
-            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.expandAndTrim(this.secretValueProvider);
-            clonedRecurringSchedule.setHierarchyId(null);
+            MonitoringScheduleSpec clonedMonitoringSchedule = monitoringSchedule.expandAndTrim(
+                    this.secretValueProvider, secretValueLookupContext);
+            clonedMonitoringSchedule.setHierarchyId(null);
 
-            uniqueSchedulesCollection.add(clonedRecurringSchedule);
+            uniqueSchedulesCollection.add(clonedMonitoringSchedule);
         }
 
         return uniqueSchedulesCollection;

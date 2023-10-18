@@ -29,6 +29,7 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -114,6 +115,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
 				this.setSqlTemplate(textContent);
+                this.setSqlTemplateLastModified(fileContent.getLastModified());
 				clearDirty(false);
 
                return textContent;
@@ -124,6 +126,23 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
     }
 
     /**
+     * Returns the file modification timestamp when the SQL template was modified for the last time.
+     *
+     * @return Last file modification timestamp.
+     */
+    @Override
+    public Instant getSqlTemplateLastModified() {
+        Instant sqlTemplateLastModified = super.getSqlTemplateLastModified();
+        if (sqlTemplateLastModified == null) {
+            this.getSqlTemplate(); // trigger loading
+        } else {
+            return sqlTemplateLastModified;
+        }
+
+        return super.getSqlTemplateLastModified();
+    }
+
+    /**
      * Flushes changes to the persistent storage. Derived classes (that are based on a real persistence store) should override
      * this method and perform a store specific serialization.
      */
@@ -131,6 +150,10 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
     public void flush() {
         if (this.getStatus() == InstanceStatus.DELETED) {
             return; // do nothing
+        }
+
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+            return; // nothing to do, the instance was never touched
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {

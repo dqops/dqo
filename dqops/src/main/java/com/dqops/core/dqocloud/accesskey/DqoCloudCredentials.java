@@ -18,12 +18,15 @@ package com.dqops.core.dqocloud.accesskey;
 import com.dqops.cloud.rest.model.TenantAccessTokenModel;
 import com.google.auth.oauth2.AccessToken;
 
+import java.time.Instant;
+
 /**
- * Model object that stores the credentials model returned from the DQO Cloud and a GCP API access token.
+ * Model object that stores the credentials model returned from the DQOps Cloud and a GCP API access token.
  */
 public class DqoCloudCredentials {
     private TenantAccessTokenModel tenantAccessTokenModel;
     private AccessToken accessToken;
+    private Instant createdAt = Instant.now();
 
     /**
      * Creates a pair of a full tenant access token (with the details of the google storage bucket) and a GCP API access token.
@@ -49,5 +52,13 @@ public class DqoCloudCredentials {
      */
     public AccessToken getAccessToken() {
         return accessToken;
+    }
+
+    /**
+     * Returns the timestamp when the object was created.
+     * @return Timestamp when the object was created.
+     */
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 }

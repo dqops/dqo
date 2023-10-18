@@ -17,7 +17,7 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  limit = 10,
+  limit = 7,
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab);

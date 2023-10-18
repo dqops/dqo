@@ -19,14 +19,14 @@ import org.apache.commons.codec.DecoderException;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Service that retrieves the active DQO Cloud API key for the current user.
+ * Service that retrieves the active DQOps Cloud API key for the current user.
  * The api key could be enforced by setting an environment variable DQO_CLOUD_APIKEY or is stored in the settings
  * after the user executed the "login" CLI command.
  */
 public interface DqoCloudApiKeyProvider {
     /**
-     * Returns the api key for the DQO Cloud.
-     * @return DQO Cloud api key or null when the key was not yet configured.
+     * Returns the api key for the DQOps Cloud.
+     * @return DQOps Cloud api key or null when the key was not yet configured.
      */
     DqoCloudApiKey getApiKey();
 

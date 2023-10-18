@@ -16,16 +16,24 @@
 
 package com.dqops.rest.controllers;
 
-import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
@@ -33,6 +41,8 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -44,7 +54,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/defaults")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Settings", description = "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.")
+@Api(value = "Defaults", description = "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.")
 public class DefaultsController {
     private ExecutionContextFactory executionContextFactory;
     private SpecToModelCheckMappingService specToModelCheckMappingService;
@@ -66,28 +76,37 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/profiling/table", produces = "application/json")
     @ApiOperation(value = "getDefaultProfilingTableChecks", notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultProfilingObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getProfiling() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getProfiling() == null
+        ) {
             defaultChecksContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getProfiling();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getProfiling();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -98,156 +117,201 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultchecks/profiling/column", produces = "application/json")
     @ApiOperation(value = "getDefaultProfilingColumnChecks", notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.",
-            response = CheckContainerModel.class)
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
+        UserHome userHome = userHomeContext.getUserHome();
         DefaultProfilingObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getProfiling() == null) {
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getProfiling() == null
+        ) {
             defaultChecksContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getProfiling();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getProfiling();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
 
     /**
-     * Returns the UI model for the default configuration of default daily recurring checks on a table level.
-     * @return Check UI model with the configuration of the daily recurring checks that are applied to new tables.
+     * Returns the UI model for the default configuration of default daily monitoring checks on a table level.
+     * @return Check UI model with the configuration of the daily monitoring checks that are applied to new tables.
      */
-    @GetMapping(value = "/defaultchecks/dataobservability/recurring/daily/table", produces = "application/json")
-    @ApiOperation(value = "getDefaultDataObservabilityDailyRecurringTableChecks", notes = "Returns UI model to show and edit the default configuration of the daily recurring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+    @GetMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", produces = "application/json")
+    @ApiOperation(value = "getDefaultDataObservabilityDailyMonitoringTableChecks", notes = "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyRecurringTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
-        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getRecurringDaily() == null) {
-            defaultChecksContainerSpec = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily() == null
+        ) {
+            defaultChecksContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getRecurringDaily();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
 
     /**
-     * Returns the UI model for the default configuration of default daily recurring checks on a column level.
-     * @return Check UI model with the configuration of the daily recurring checks that are applied to new tables.
+     * Returns the UI model for the default configuration of default daily monitoring checks on a column level.
+     * @return Check UI model with the configuration of the daily monitoring checks that are applied to new tables.
      */
-    @GetMapping(value = "/defaultchecks/dataobservability/recurring/daily/column", produces = "application/json")
-    @ApiOperation(value = "getDefaultDataObservabilityDailyRecurringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the daily recurring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.",
-            response = CheckContainerModel.class)
+    @GetMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", produces = "application/json")
+    @ApiOperation(value = "getDefaultDataObservabilityDailyMonitoringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyRecurringColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
-        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getRecurringDaily() == null) {
-            defaultChecksContainerSpec = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily() == null
+        ) {
+            defaultChecksContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getRecurringDaily();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringDaily();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
 
     /**
-     * Returns the UI model for the default configuration of default monthly recurring checks on a table level.
-     * @return Check UI model with the configuration of the monthly recurring checks that are applied to new tables.
+     * Returns the UI model for the default configuration of default monthly monitoring checks on a table level.
+     * @return Check UI model with the configuration of the monthly monitoring checks that are applied to new tables.
      */
-    @GetMapping(value = "/defaultchecks/dataobservability/recurring/monthly/table", produces = "application/json")
-    @ApiOperation(value = "getDefaultDataObservabilityMonthlyRecurringTableChecks", notes = "Returns UI model to show and edit the default configuration of the monthly recurring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.",
-            response = CheckContainerModel.class)
+    @GetMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", produces = "application/json")
+    @ApiOperation(value = "getDefaultDataObservabilityMonthlyMonitoringTableChecks", notes = "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyRecurringTableChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getRecurringMonthly() == null) {
-            defaultChecksContainerSpec = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly() == null
+        ) {
+            defaultChecksContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getRecurringMonthly();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getTable(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
 
     /**
-     * Returns the UI model for the default configuration of default monthly recurring checks on a column level.
-     * @return Check UI model with the configuration of the monthly recurring checks that are applied to new tables.
+     * Returns the UI model for the default configuration of default monthly monitoring checks on a column level.
+     * @return Check UI model with the configuration of the monthly monitoring checks that are applied to new tables.
      */
-    @GetMapping(value = "/defaultchecks/dataobservability/recurring/monthly/column", produces = "application/json")
-    @ApiOperation(value = "getDefaultDataObservabilityMonthlyRecurringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the monthly recurring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.",
-            response = CheckContainerModel.class)
+    @GetMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", produces = "application/json")
+    @ApiOperation(value = "getDefaultDataObservabilityMonthlyMonitoringColumnChecks", notes = "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CheckContainerModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyRecurringColumnChecks() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        SettingsSpec settingsSpec = userHomeContext.getUserHome().getSettings().getSpec();
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
+        UserHome userHome = userHomeContext.getUserHome();
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultChecksContainerSpec = null;
 
-        if (settingsSpec == null || settingsSpec.getDefaultDataObservabilityChecks() == null ||
-                settingsSpec.getDefaultDataObservabilityChecks().getRecurringMonthly() == null) {
-            defaultChecksContainerSpec = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+        if (userHome == null
+                || userHome.getDefaultObservabilityChecks() == null
+                || userHome.getDefaultObservabilityChecks().getSpec() == null
+                || userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly() == null
+        ) {
+            defaultChecksContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         } else {
-            defaultChecksContainerSpec = settingsSpec.getDefaultDataObservabilityChecks().getRecurringMonthly();
+            defaultChecksContainerSpec = userHome.getDefaultObservabilityChecks().getSpec().getMonitoringMonthly();
         }
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(defaultChecksContainerSpec.getColumn(),
-                null, null, null, executionContext, null);
+                null, null, null, executionContext, null,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
     }
@@ -258,21 +322,28 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/profiling/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingTableChecks", notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.")
+    @ApiOperation(value = "updateDefaultProfilingTableChecks",
+            notes = "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultProfilingTableChecks(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultProfilingTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -280,11 +351,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -292,7 +360,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -307,21 +375,27 @@ public class DefaultsController {
      * @return Empty response.
      */
     @PutMapping(value = "/defaultchecks/profiling/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingColumnChecks", notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.")
+    @ApiOperation(value = "updateDefaultProfilingColumnChecks",
+            notes = "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of profiling checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultProfilingColumnChecks(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultProfilingColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -329,11 +403,8 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
         DefaultProfilingObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getProfiling();
         if (checkContainerSpec == null) {
@@ -341,7 +412,7 @@ public class DefaultsController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -351,26 +422,32 @@ public class DefaultsController {
     }
 
     /**
-     * Updates the configuration of default daily recurring (data observability) checks on a table level.
-     * @param checkContainerModel New configuration of the default daily recurring checks.
+     * Updates the configuration of default daily monitoring (data observability) checks on a table level.
+     * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/recurring/daily/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityDailyRecurringTableChecks", notes = "New configuration of the default daily recurring (data observability) checks on a table level. These checks will be applied on new tables.")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/table", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringTableChecks",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily recurring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyRecurringTableChecks(
-            @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily recurring checks configuration")
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -378,20 +455,17 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
-        DefaultDailyRecurringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getRecurringDaily();
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
-            checkContainerSpec = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+            checkContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
-            defaultDataObservabilityChecks.setRecurringDaily(checkContainerSpec);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
+            defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
         userHomeContext.flush();
@@ -400,26 +474,32 @@ public class DefaultsController {
     }
 
     /**
-     * Updates the configuration of default daily recurring (data observability) checks on a column level.
-     * @param checkContainerModel New configuration of the default daily recurring checks.
+     * Updates the configuration of default daily monitoring (data observability) checks on a column level.
+     * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/recurring/daily/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityDailyRecurringColumnChecks", notes = "New configuration of the default daily recurring (data observability) checks on a column level. These checks will be applied on new columns.")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/daily/column", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
+            notes = "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily recurring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityDailyRecurringColumnChecks(
-            @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily recurring checks configuration")
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -427,20 +507,17 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
-        DefaultDailyRecurringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getRecurringDaily();
+        DefaultDailyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringDaily();
         if (checkContainerSpec == null) {
-            checkContainerSpec = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+            checkContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
-            defaultDataObservabilityChecks.setRecurringDaily(checkContainerSpec);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
+            defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
         userHomeContext.flush();
@@ -449,26 +526,32 @@ public class DefaultsController {
     }
 
     /**
-     * Updates the configuration of default monthly recurring (data observability) checks on a table level.
-     * @param checkContainerModel New configuration of the default daily recurring checks.
+     * Updates the configuration of default monthly monitoring (data observability) checks on a table level.
+     * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/recurring/monthly/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyRecurringTableChecks", notes = "New configuration of the default monthly recurring checkpoints on a table level. These checks will be applied on new tables.")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/table", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
+            notes = "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily recurring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyRecurringTableChecks(
-            @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly recurring checks configuration")
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -476,20 +559,17 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getRecurringMonthly();
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
-            checkContainerSpec = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+            checkContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable());
-            defaultDataObservabilityChecks.setRecurringMonthly(checkContainerSpec);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
+            defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
         userHomeContext.flush();
@@ -498,26 +578,32 @@ public class DefaultsController {
     }
 
     /**
-     * Updates the configuration of default monthly recurring (data observability) checks on a column level.
-     * @param checkContainerModel New configuration of the default daily recurring checks.
+     * Updates the configuration of default monthly monitoring (data observability) checks on a column level.
+     * @param checkContainerModel New configuration of the default daily monitoring checks.
      * @return Empty response.
      */
-    @PutMapping(value = "/defaultchecks/dataobservability/recurring/monthly/column", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyRecurringColumnChecks", notes = "New configuration of the default monthly recurring checkpoints on a column level. These checks will be applied on new columns.")
+    @PutMapping(value = "/defaultchecks/dataobservability/monitoring/monthly/column", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
+            notes = "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of daily recurring (daily data observability) checks successfully updated."),
+            @ApiResponse(code = 204, message = "The default configuration of daily monitoring (daily data observability) checks successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateDefaultDataObservabilityMonthlyRecurringColumnChecks(
-            @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly recurring checks configuration")
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsWrapper settingsWrapper = userHome.getSettings();
 
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -525,24 +611,182 @@ public class DefaultsController {
             settingsWrapper.setSpec(settingsSpec);
         }
 
-        DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks = settingsSpec.getDefaultDataObservabilityChecks();
-        if (defaultDataObservabilityChecks == null) {
-            defaultDataObservabilityChecks = new DefaultObservabilityCheckSettingsSpec();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultDataObservabilityChecks);
-        }
+        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
+                .getDefaultObservabilityChecks(true).getSpec();
 
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getRecurringMonthly();
+        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec checkContainerSpec = defaultDataObservabilityChecks.getMonitoringMonthly();
         if (checkContainerSpec == null) {
-            checkContainerSpec = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+            checkContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn());
-            defaultDataObservabilityChecks.setRecurringMonthly(checkContainerSpec);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
+            defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
+
+    /**
+     * Returns the spec for the default schedule configuration for given scheduling group.
+     * @return Schedule spec for given scheduling group.
+     */
+    @GetMapping(value = "/defaultschedule/{schedulingGroup}", produces = "application/json")
+    @ApiOperation(value = "getDefaultSchedules", notes = "Returns spec to show and edit the default configuration of schedules.",
+            response = MonitoringScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = MonitoringScheduleSpec.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getDefaultSchedule(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+        MonitoringScheduleSpec defaultMonitoringScheduleSpec = null;
+
+        if (userHome == null
+                || userHome.getDefaultSchedules() == null
+                || userHome.getDefaultSchedules().getSpec() == null
+        ) {
+            defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+        } else {
+            defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
+                    .getScheduleForCheckSchedulingGroup(schedulingGroup);
+        }
+
+        return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
+    }
+
+    /**
+     * Updates the configuration of default schedules for given scheduling group.
+     * @param newMonitoringScheduleSpec New configuration of the default schedules
+     * @return Empty response.
+     */
+    @PutMapping(value = "/defaultschedule/{schedulingGroup}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultSchedules",
+            notes = "New configuration of the default schedules.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "The default configuration of schedules successfully updated.", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultSchedules(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
+            @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+
+        MonitoringSchedulesSpec monitoringSchedulesSpec = null;
+
+        if (userHome == null
+                || userHome.getDefaultSchedules() == null
+                || userHome.getDefaultSchedules().getSpec() == null
+        ) {
+            monitoringSchedulesSpec = new MonitoringSchedulesSpec();
+        } else {
+            monitoringSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+        }
+
+        if (newMonitoringScheduleSpec.isPresent()) {
+            monitoringSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+        }
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Returns the spec for the default notification webhooks.
+     * @return Notification webhooks spec.
+     */
+    @GetMapping(value = "/defaultwebhooks", produces = "application/json")
+    @ApiOperation(value = "getDefaultWebhooks", notes = "Returns spec to show and edit the default configuration of webhooks.",
+            response = IncidentWebhookNotificationsSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = IncidentWebhookNotificationsSpec.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<IncidentWebhookNotificationsSpec>> getDefaultWebhooks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+        IncidentWebhookNotificationsSpec defaultNotificationWebhooks = null;
+
+        if (userHome == null
+                || userHome.getDefaultNotificationWebhook() == null
+                || userHome.getDefaultNotificationWebhook().getSpec() == null
+        ) {
+            defaultNotificationWebhooks = new IncidentWebhookNotificationsSpec();
+        } else {
+            defaultNotificationWebhooks = userHome.getDefaultNotificationWebhook().getSpec();
+        }
+
+        return new ResponseEntity<>(Mono.just(defaultNotificationWebhooks), HttpStatus.OK);
+    }
+
+    /**
+     * Updates the configuration of default notification webhooks
+     * @param newIncidentWebhookNotificationsSpec New configuration of the default notification webhooks
+     * @return Empty response.
+     */
+    @PutMapping(value = "/defaultwebhooks", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultWebhooks",
+            notes = "New configuration of the default webhooks.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "The default configuration of notification webhooks successfully updated.", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateDefaultWebhooks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
+            @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
+        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+
+        UserHome userHome = userHomeContext.getUserHome();
+
+        if (newIncidentWebhookNotificationsSpec.isPresent()) {
+            userHome.getDefaultNotificationWebhook().setSpec(newIncidentWebhookNotificationsSpec.get());
+        }
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
 }

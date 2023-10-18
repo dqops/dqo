@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -29,15 +30,21 @@ if TYPE_CHECKING:
     )
     from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+    from ..models.column_nulls_profiling_checks_spec_custom_checks import (
+        ColumnNullsProfilingChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnNullsProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnNullsProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnNullsProfilingChecksSpecCustomChecks]): Dictionary of additional custom checks
+            within this category. The keys are check names defined in the definition section. The sensor parameters and
+            rules should match the type of the configured sensor and rule for the custom check.
         profile_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         profile_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         profile_nulls_percent_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryNullPercentCheckSpec]):
@@ -52,6 +59,7 @@ class ColumnNullsProfilingChecksSpec:
         profile_nulls_percent_change_30_days (Union[Unset, ColumnChangeNullPercentSince30DaysCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnNullsProfilingChecksSpecCustomChecks"] = UNSET
     profile_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     profile_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     profile_nulls_percent_anomaly_stationary: Union[
@@ -77,9 +85,13 @@ class ColumnNullsProfilingChecksSpec:
     profile_nulls_percent_change_30_days: Union[
         Unset, "ColumnChangeNullPercentSince30DaysCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_nulls_count, Unset):
             profile_nulls_count = self.profile_nulls_count.to_dict()
@@ -141,6 +153,8 @@ class ColumnNullsProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_nulls_count is not UNSET:
             field_dict["profile_nulls_count"] = profile_nulls_count
         if profile_nulls_percent is not UNSET:
@@ -206,8 +220,20 @@ class ColumnNullsProfilingChecksSpec:
         )
         from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+        from ..models.column_nulls_profiling_checks_spec_custom_checks import (
+            ColumnNullsProfilingChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnNullsProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnNullsProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_nulls_count = d.pop("profile_nulls_count", UNSET)
         profile_nulls_count: Union[Unset, ColumnNullsCountCheckSpec]
         if isinstance(_profile_nulls_count, Unset):
@@ -344,6 +370,7 @@ class ColumnNullsProfilingChecksSpec:
             )
 
         column_nulls_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_nulls_count=profile_nulls_count,
             profile_nulls_percent=profile_nulls_percent,
             profile_nulls_percent_anomaly_stationary=profile_nulls_percent_anomaly_stationary,

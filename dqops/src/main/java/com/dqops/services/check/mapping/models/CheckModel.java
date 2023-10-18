@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
@@ -115,7 +115,7 @@ public class CheckModel implements Cloneable {
      * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
      */
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    private RecurringScheduleSpec scheduleOverride;
+    private MonitoringScheduleSpec scheduleOverride;
 
     /**
      * Model of configured schedule enabled on the check level.
@@ -193,13 +193,35 @@ public class CheckModel implements Cloneable {
      * List of configuration errors that must be fixed before the data quality check could be executed.
      */
     @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
-    private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;
+    private List<String> configurationRequirementsErrors;
 
     /**
      * List of similar checks in other check types or in other time scales.
      */
     @JsonPropertyDescription("List of similar checks in other check types or in other time scales.")
     private List<SimilarCheckModel> similarChecks;
+
+    /**
+     * Boolean flag that decides if the current user can edit the check.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    public CheckModel() {
+    }
+
     /**
      * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
      * @return Check sensor rule key.
@@ -278,7 +300,7 @@ public class CheckModel implements Cloneable {
      * Adds a configuration error to the list of errors.
      * @param configurationRequirementsError Configuration requirement error.
      */
-    public void pushError(CheckConfigurationRequirementsError configurationRequirementsError) {
+    public void pushError(String configurationRequirementsError) {
         if (this.configurationRequirementsErrors == null) {
             this.configurationRequirementsErrors = new ArrayList<>();
         }
