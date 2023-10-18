@@ -95,7 +95,7 @@ public class ConnectionWrapperImpl extends AbstractElementWrapper<String, Connec
      * @param tables New tables collection.
      */
     public void setTables(TableListImpl tables) {
-		this.setDirtyIf(this.tables != tables);
+		this.setDirtyIf(this.tables != tables); // special condition
         this.tables = tables;
 		this.propagateHierarchyIdToField(tables, "tables");
     }

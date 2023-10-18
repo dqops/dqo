@@ -1,7 +1,9 @@
+from typing import Any, Dict, Union
+
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.client.models.check_type import CheckType
 from dqops.client.types import UNSET
-from typing import Any, Dict, Union
+
 
 class DqopsRunPartitionedChecksOperator(DqopsRunChecksOperator):
     """
@@ -36,7 +38,7 @@ class DqopsRunPartitionedChecksOperator(DqopsRunChecksOperator):
         fail_on_timeout : str
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
         """
-        
+
         super().__init__(
             base_url=base_url,
             api_key=api_key,

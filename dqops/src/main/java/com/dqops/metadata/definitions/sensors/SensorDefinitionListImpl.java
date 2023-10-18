@@ -16,6 +16,7 @@
 package com.dqops.metadata.definitions.sensors;
 
 import com.dqops.metadata.basespecs.AbstractIndexingList;
+import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SensorDefinitionListImpl extends AbstractIndexingList<String, Senso
         SensorDefinitionWrapperImpl checkDefinitionWrapper = new SensorDefinitionWrapperImpl();
         checkDefinitionWrapper.setName(sensorName);
         checkDefinitionWrapper.setSpec(new SensorDefinitionSpec());
+        checkDefinitionWrapper.setStatus(InstanceStatus.ADDED);
         return checkDefinitionWrapper;
     }
 

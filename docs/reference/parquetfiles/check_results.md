@@ -3,7 +3,7 @@ The data quality check results table that stores check results - a copy of senso
  This table differs from the sensor_readouts by adding also the result of the rule evaluation. The additional columns are the &#x27;severity&#x27; which says if the check passed (the severity is 0)
  or the data quality check raised a data quality issue with a severity warning - 1, error - 2 or fatal - 3.
  The check results are stored in the check_results table is located in the $DQO_USER_HOME/.data/check_results folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user&#x27;s home folder).
+ The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/, for example: c&#x3D;myconnection/t&#x3D;public.testedtable/m&#x3D;2023-01-01/.  

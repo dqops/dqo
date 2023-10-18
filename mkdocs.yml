@@ -5,14 +5,14 @@ edit_uri: edit/main/docs/
 
 # Docs navigation
 nav:
-  - What is DQO?: "index.md"
+  - What is DQOps?: "index.md"
   - Getting started:
       - "getting-started/index.md"
       - Installation: "getting-started/installation/installation.md"
       - Connect to a data source: "getting-started/add-data-source-connection/add-data-source-connection.md"
       - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md"
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
-  - DQO concepts:
+  - DQOps concepts:
       - "dqo-concepts/index.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
@@ -53,16 +53,16 @@ nav:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
           - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Stability:
+      - Availability:
           - Table availability: "examples/stability/table-availability.md"
       - Data quality monitoring:
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
-  - Working with DQO:
+  - Working with DQOps:
       - Installation:
-          - Install DQO using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
-          - Install DQO from Git: "working-with-dqo/installation/install-dqo-from-git.md"
-          - Install DQO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
-          - Run DQO as a Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+          - Install DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
+          - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+          - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
+          - Install DQpsO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
       - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
@@ -87,7 +87,7 @@ nav:
           - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
           - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
-      - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
+      - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:

@@ -1,8 +1,12 @@
 import json
 import logging
+from typing import Any, Dict, Optional, Union
+
 import httpx
-from airflow.exceptions import AirflowException
 from airflow.models.baseoperator import BaseOperator
+from httpx import ReadTimeout
+
+from airflow.exceptions import AirflowException
 from dqops.airflow.exceptions.dqops_checks_failed_exception import (
     DqopsChecksFailedException,
 )
@@ -20,8 +24,6 @@ from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.models.run_checks_parameters import RunChecksParameters
 from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
 from dqops.client.types import UNSET, Response
-from httpx import ReadTimeout
-from typing import Any, Dict, Optional, Union
 
 
 class DqopsRunChecksOperator(BaseOperator):
@@ -89,6 +91,13 @@ class DqopsRunChecksOperator(BaseOperator):
                 httpx.Timeout(self.wait_timeout + extra_timeout_seconds)
             )
 
+        if self.api_key is not UNSET:
+            client.with_headers(
+                {
+                    "Authorization": "Bearer " + self.api_key
+                }
+            )
+
         try:
             response: Response[RunChecksQueueJobResult] = sync_detailed(
                 client=client,
@@ -112,21 +121,20 @@ class DqopsRunChecksOperator(BaseOperator):
         if job_result.status == DqoJobStatus.FAILED:
             raise DqopsJobFailedException()
 
+        if job_result.status == DqoJobStatus.CANCELLED:
+            raise DqopsJobFailedException()
+
         # dqo times out with RunChecksQueueJobResult object details
         if job_result.status == DqoJobStatus.RUNNING:
             self._handle_dqo_timeout()
 
-        if (
-            job_result.result.highest_severity is not None
-            and job_result.result.highest_severity != RuleSeverityLevel.VALID
-            and job_result.status != DqoJobStatus.CANCELLED
-        ):
+        if job_result.result.highest_severity == RuleSeverityLevel.FATAL:
             raise DqopsChecksFailedException()
 
         return job_result.to_dict()
 
     def _handle_dqo_timeout(self):
-        timeout_message: str = "DQOps' job has timed out!"
+        timeout_message: str = "DQOps job has timed out!"
 
         if self.fail_on_timeout:
             logging.error(timeout_message)
@@ -135,7 +143,7 @@ class DqopsRunChecksOperator(BaseOperator):
             logging.info(timeout_message)
 
     def _handle_python_timeout(self, exception):
-        timeout_message: str = "Python client has timed out!"
+        timeout_message: str = "DQOps Python client has timed out, please increase the timeout to wait for all data quality checks to finish"
         if self.fail_on_timeout:
             logging.error(timeout_message)
             raise exception

@@ -11,7 +11,7 @@
 
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-distribution</artifactId>
-    <version>0.2.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>0.3.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<name>dqo-distribution</name>
 	<description>DQOps Data Quality Operations Center final assembly</description>
 	<packaging>pom</packaging>

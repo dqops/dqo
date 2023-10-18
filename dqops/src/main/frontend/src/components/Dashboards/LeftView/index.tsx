@@ -62,6 +62,8 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
+  const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
+
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
       useDashboard();
@@ -73,32 +75,34 @@ const LeftView = () => {
 
     useEffect(() => {
       if(selected !== activeTab){
-        setSelected(activeTab)
+        setSelected(activeTab);
       }
-    },[activeTab])
+    },[activeTab]);
 
     let mouseEnterTimeout: NodeJS.Timeout | undefined; 
     
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
-
       if (mouseEnterTimeout) {
         clearTimeout(mouseEnterTimeout);
       }
       mouseEnterTimeout = setTimeout(() => {
         const height = e.clientY;
-        dispatch(getDashboardTooltipState({height, label, url}))
+        dispatch(getDashboardTooltipState({height, label, url}));
+
+        setTimeout(() => {
+          dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
+        }, 3000);
       }, 100); 
     };
-    const handleMouseLeave = () => {
 
+    const handleMouseLeave = () => {
       if (mouseEnterTimeout) {
         clearTimeout(mouseEnterTimeout);
       }
-      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}))
+      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
     };
     
 
-  console.log(dashboardTooltipState)
     return (
       <div>
         <div
@@ -130,7 +134,8 @@ const LeftView = () => {
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
-                onClick={() => {
+                onMouseDown={() => {
+                  handleMouseLeave();
                   changeActiveTab(
                     dashboard,
                     folder.folder_name,
@@ -152,7 +157,7 @@ const LeftView = () => {
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
                       onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
-                      onMouseLeave={handleMouseLeave}>
+                      onMouseLeave={(e) => handleMouseLeave()}>
                   {dashboard.dashboard_name}
                 </div>
               </div>
