@@ -904,13 +904,13 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Maximum accepted count of null not met issues
-          url: https://lookerstudio.google.com/u/0/embed/reporting/181d7f96-f991-44a4-94d0-3880377333cf/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/181d7f96-f991-44a4-94d0-3880377333cf/page/c5B8C
           width: 1400
           height: 1800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Maximum accepted percent of null not met issues
-          url: https://lookerstudio.google.com/u/0/embed/reporting/b03a8216-712a-491c-b46f-340290d46eed/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/b03a8216-712a-491c-b46f-340290d46eed/page/c5B8C
           width: 1400
           height: 1800
           parameters:

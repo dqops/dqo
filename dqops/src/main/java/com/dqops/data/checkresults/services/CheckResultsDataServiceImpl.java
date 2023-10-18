@@ -665,7 +665,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             long currentCheckHash = checkHashColumn.getLong(i);
             String currentTimeSeriesId = timeSeriesIdColumn.getString(i);
 
-            if (lastCheckHash == currentCheckHash && lastTimeSeriesId.equals(currentTimeSeriesId)) {
+            if (lastCheckHash == currentCheckHash && Objects.equals(lastTimeSeriesId, currentTimeSeriesId)) {
                 continue;
             }
 
