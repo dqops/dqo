@@ -1,7 +1,10 @@
+from typing import Any, Dict, Union
+
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.client.models.check_type import CheckType
+from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET
-from typing import Any, Dict, Union
+
 
 class DqopsRunProfilingChecksOperator(DqopsRunChecksOperator):
     """
@@ -18,23 +21,26 @@ class DqopsRunProfilingChecksOperator(DqopsRunChecksOperator):
         schema_table_name: str = UNSET,
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
+        maximum_severity_threshold: RuleSeverityLevel = RuleSeverityLevel.ERROR,
         **kwargs
     ) -> Union[Dict[str, Any], None]:
         """
         Parameters
         ----------
-        base_url : str
-            The base url to DQOps application. Default value is http://localhost:8888
-        api_key : str
+        base_url : str [optional, default="http://localhost:8888/"]
+            The base url to DQOps application.
+        api_key : str [optional, default=UNSET]
             Api key to DQOps application. Not set as default.
-        connection_name : str
+        connection_name : str [optional, default=UNSET]
             The connection name to the data source in DQOps. When not set, all connection names will be used.
-        schema_table_name : str
+        schema_table_name : str [optional, default=UNSET]
             The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.
-        wait_timeout : int
+        wait_timeout : int [optional, default=UNSET]
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
-        fail_on_timeout : str
+        fail_on_timeout : bool [optional, default=True]
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
+        maximum_severity_threshold: RuleSeverityLevel [optional, default=RuleSeverityLevel.ERROR]
+            The maximum level of rule severity that is accepted, causing that an airflow task finishes with succeeded status.
         """
 
         super().__init__(
@@ -45,5 +51,6 @@ class DqopsRunProfilingChecksOperator(DqopsRunChecksOperator):
             check_type=CheckType.PROFILING,
             wait_timeout=wait_timeout,
             fail_on_timeout=fail_on_timeout,
+            maximum_severity_threshold=maximum_severity_threshold,
             **kwargs
         )
