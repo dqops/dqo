@@ -1,7 +1,7 @@
 **sum anomaly differencing 30 days** checks  
 
 **Description**  
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 
@@ -50,7 +50,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_sum
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -271,7 +271,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-21 39-44"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -535,7 +535,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_anomaly_differencing_30_days|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
+|daily_sum_anomaly_differencing_30_days|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -561,7 +561,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_a
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_sum_anomaly_differencing_30_days:
@@ -574,7 +574,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_a
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -586,7 +586,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           anomaly:
             daily_sum_anomaly_differencing_30_days:
@@ -796,7 +796,7 @@ spec:
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
     ```yaml hl_lines="11-21 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -817,7 +817,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               anomaly:
                 daily_sum_anomaly_differencing_30_days:

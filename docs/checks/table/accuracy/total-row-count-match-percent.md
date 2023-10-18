@@ -1,7 +1,7 @@
 **total row count match percent** checks  
 
 **Description**  
-Table level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
+Table-level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
 
 ___
 
@@ -52,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-21"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -302,7 +302,7 @@ Verifies the total ow count of a tested table and compares it to a row count of 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_total_row_count_match_percent|recurring|daily|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_total_row_count_match_percent|monitoring|daily|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -328,7 +328,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       accuracy:
         daily_total_row_count_match_percent:
@@ -343,7 +343,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -353,7 +353,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       accuracy:
         daily_total_row_count_match_percent:
@@ -594,7 +594,7 @@ Verifies the total row count of a tested table and compares it to a row count of
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_total_row_count_match_percent|recurring|monthly|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_total_row_count_match_percent|monitoring|monthly|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -620,7 +620,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       accuracy:
         monthly_total_row_count_match_percent:
@@ -635,7 +635,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -645,7 +645,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       accuracy:
         monthly_total_row_count_match_percent:

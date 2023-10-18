@@ -15,7 +15,7 @@ import { useParams, useRouteMatch } from "react-router-dom";
 import { findTreeNode } from "../../../utils/tree";
 import { AxiosResponse } from "axios";
 import {
-  ConnectionBasicModel,
+  ConnectionModel,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
@@ -82,7 +82,7 @@ const Tree = () => {
       let newTreeData = [...(treeData || [])];
 
       if (!newTreeData.length) {
-        const res: AxiosResponse<ConnectionBasicModel[]> =
+        const res: AxiosResponse<ConnectionModel[]> =
           await ConnectionApiClient.getAllConnections();
         const mappedConnectionsToTreeData = res.data.map((item) => ({
           id: item.connection_name ?? '',
@@ -91,7 +91,7 @@ const Tree = () => {
           items: [],
           level: TREE_LEVEL.DATABASE,
           tooltip: item.connection_name,
-          run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
+          run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionModel],
           collect_statistics_job_template: item.collect_statistics_job_template,
           data_clean_job_template: item.data_clean_job_template,
           open: false
@@ -143,11 +143,11 @@ const Tree = () => {
         setActiveTab(`${tableNode?.id || ""}.incidents`);
       }
 
-      if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
+      if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_DAILY) {
         setActiveTab(`${tableNode?.id || ""}.dailyCheck`);
       }
 
-      if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_MONTHLY) {
+      if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_MONTHLY) {
         setActiveTab(`${tableNode?.id || ""}.monthlyCheck`);
       }
 
@@ -184,7 +184,7 @@ const Tree = () => {
 
         setActiveTab(`${columnNode?.id || ""}.checks`);
       }
-      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_DAILY) {
+      if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_DAILY) {
         const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
@@ -200,7 +200,7 @@ const Tree = () => {
 
         setActiveTab(`${columnNode?.id || ""}.dailyCheck`);
       }
-      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY) {
+      if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_MONTHLY) {
         const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);

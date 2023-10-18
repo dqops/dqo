@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.check_search_filters_check_target import CheckSearchFiltersCheckTarget
-from ..models.check_search_filters_check_type import CheckSearchFiltersCheckType
-from ..models.check_search_filters_time_scale import CheckSearchFiltersTimeScale
+from ..models.check_target import CheckTarget
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckSearchFilters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckSearchFilters:
     """Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
@@ -27,9 +28,9 @@ class CheckSearchFilters:
         column_name (Union[Unset, str]):
         column_data_type (Union[Unset, str]):
         column_nullable (Union[Unset, bool]):
-        check_target (Union[Unset, CheckSearchFiltersCheckTarget]):
-        check_type (Union[Unset, CheckSearchFiltersCheckType]):
-        time_scale (Union[Unset, CheckSearchFiltersTimeScale]):
+        check_target (Union[Unset, CheckTarget]):
+        check_type (Union[Unset, CheckType]):
+        time_scale (Union[Unset, CheckTimeScale]):
         check_category (Union[Unset, str]):
         table_comparison_name (Union[Unset, str]):
         check_name (Union[Unset, str]):
@@ -46,16 +47,16 @@ class CheckSearchFilters:
     column_name: Union[Unset, str] = UNSET
     column_data_type: Union[Unset, str] = UNSET
     column_nullable: Union[Unset, bool] = UNSET
-    check_target: Union[Unset, CheckSearchFiltersCheckTarget] = UNSET
-    check_type: Union[Unset, CheckSearchFiltersCheckType] = UNSET
-    time_scale: Union[Unset, CheckSearchFiltersTimeScale] = UNSET
+    check_target: Union[Unset, CheckTarget] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    time_scale: Union[Unset, CheckTimeScale] = UNSET
     check_category: Union[Unset, str] = UNSET
     table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     check_configured: Union[Unset, bool] = UNSET
     check_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -161,25 +162,25 @@ class CheckSearchFilters:
         column_nullable = d.pop("columnNullable", UNSET)
 
         _check_target = d.pop("checkTarget", UNSET)
-        check_target: Union[Unset, CheckSearchFiltersCheckTarget]
+        check_target: Union[Unset, CheckTarget]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = CheckSearchFiltersCheckTarget(_check_target)
+            check_target = CheckTarget(_check_target)
 
         _check_type = d.pop("checkType", UNSET)
-        check_type: Union[Unset, CheckSearchFiltersCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = CheckSearchFiltersCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _time_scale = d.pop("timeScale", UNSET)
-        time_scale: Union[Unset, CheckSearchFiltersTimeScale]
+        time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_time_scale, Unset):
             time_scale = UNSET
         else:
-            time_scale = CheckSearchFiltersTimeScale(_time_scale)
+            time_scale = CheckTimeScale(_time_scale)
 
         check_category = d.pop("checkCategory", UNSET)
 

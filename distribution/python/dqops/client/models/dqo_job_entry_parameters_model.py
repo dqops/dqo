@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
     from ..models.import_tables_queue_job_parameters import (
         ImportTablesQueueJobParameters,
     )
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.repair_stored_data_queue_job_parameters import (
         RepairStoredDataQueueJobParameters,
     )
@@ -37,13 +38,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DqoJobEntryParametersModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoJobEntryParametersModel:
     """
     Attributes:
         synchronize_root_folder_parameters (Union[Unset, SynchronizeRootFolderDqoQueueJobParameters]):
         synchronize_multiple_folders_parameters (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParameters]):
-        run_scheduled_checks_parameters (Union[Unset, RecurringScheduleSpec]):
+        run_scheduled_checks_parameters (Union[Unset, MonitoringScheduleSpec]):
         run_checks_parameters (Union[Unset, RunChecksParameters]): Run checks configuration, specifies the target checks
             that should be executed and an optional time window.
         run_checks_on_table_parameters (Union[Unset, RunChecksOnTableParameters]): Run checks configuration for a job
@@ -63,7 +64,7 @@ class DqoJobEntryParametersModel:
     synchronize_multiple_folders_parameters: Union[
         Unset, "SynchronizeMultipleFoldersDqoQueueJobParameters"
     ] = UNSET
-    run_scheduled_checks_parameters: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    run_scheduled_checks_parameters: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     run_checks_parameters: Union[Unset, "RunChecksParameters"] = UNSET
     run_checks_on_table_parameters: Union[Unset, "RunChecksOnTableParameters"] = UNSET
     collect_statistics_parameters: Union[
@@ -80,7 +81,7 @@ class DqoJobEntryParametersModel:
     repair_stored_data_parameters: Union[
         Unset, "RepairStoredDataQueueJobParameters"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         synchronize_root_folder_parameters: Union[Unset, Dict[str, Any]] = UNSET
@@ -188,7 +189,7 @@ class DqoJobEntryParametersModel:
         from ..models.import_tables_queue_job_parameters import (
             ImportTablesQueueJobParameters,
         )
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.repair_stored_data_queue_job_parameters import (
             RepairStoredDataQueueJobParameters,
         )
@@ -233,11 +234,11 @@ class DqoJobEntryParametersModel:
             )
 
         _run_scheduled_checks_parameters = d.pop("runScheduledChecksParameters", UNSET)
-        run_scheduled_checks_parameters: Union[Unset, RecurringScheduleSpec]
+        run_scheduled_checks_parameters: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_run_scheduled_checks_parameters, Unset):
             run_scheduled_checks_parameters = UNSET
         else:
-            run_scheduled_checks_parameters = RecurringScheduleSpec.from_dict(
+            run_scheduled_checks_parameters = MonitoringScheduleSpec.from_dict(
                 _run_scheduled_checks_parameters
             )
 

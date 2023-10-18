@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
+ * Table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

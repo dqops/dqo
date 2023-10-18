@@ -15,7 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import org.quartz.JobDataMap;
 
 /**
@@ -26,14 +26,14 @@ public interface JobDataMapAdapter {
     /**
      * Stores the schedule in the job data map as a serialized JSON.
      * @param dataMap Target data map to store the schedule.
-     * @param recurringSchedule Schedule specification to store.
+     * @param monitoringSchedule Schedule specification to store.
      */
-    void setSchedule(JobDataMap dataMap, RecurringScheduleSpec recurringSchedule);
+    void setSchedule(JobDataMap dataMap, MonitoringScheduleSpec monitoringSchedule);
 
     /**
      * Retrieves a serialized schedule specification from the job data map.
      * @param jobDataMap Job data map to read.
-     * @return Deserialized recurring schedule specification.
+     * @return Deserialized monitoring schedule specification.
      */
-    RecurringScheduleSpec getSchedule(JobDataMap jobDataMap);
+    MonitoringScheduleSpec getSchedule(JobDataMap jobDataMap);
 }

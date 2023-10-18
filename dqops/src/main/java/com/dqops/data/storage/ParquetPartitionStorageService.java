@@ -92,4 +92,13 @@ public interface ParquetPartitionStorageService {
     void savePartition(LoadedMonthlyPartition loadedPartition,
                        TableDataChanges tableDataChanges,
                        FileStorageSettings storageSettings);
+
+    /**
+     * Deletes a partition file.
+     * @param loadedPartitionId Partition id to delete.
+     * @param storageSettings Storage settings.
+     * @return True when the file was removed, false otherwise.
+     */
+    boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
+                                FileStorageSettings storageSettings);
 }

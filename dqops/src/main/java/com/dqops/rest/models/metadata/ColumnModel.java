@@ -46,4 +46,13 @@ public class ColumnModel {
 
     @JsonPropertyDescription("Full column specification.")
     private ColumnSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public ColumnModel() {
+    }
 }

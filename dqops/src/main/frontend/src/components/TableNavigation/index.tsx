@@ -21,8 +21,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -40,7 +40,8 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     connection,
     schema,
     table,
-    checkTypes
+    checkTypes,
+    tab
   }: {
     connection: string;
     schema: string;
@@ -63,20 +64,30 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       connection,
       schema,
       table,
-      'detail'
+      'statistics'
     );
+    if(checkTypes === CheckTypes.SOURCES){
+      url = ROUTES.TABLE_LEVEL_PAGE(
+        item.value,
+        connection,
+        schema,
+        table,
+        'detail'
+      );
+    }
+
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 
     if (defaultTab) {
-      if (item.value === CheckTypes.RECURRING) {
-        url = ROUTES.TABLE_RECURRING(
+      if (item.value === CheckTypes.MONITORING) {
+        url = ROUTES.TABLE_MONITORING(
           item.value,
           connection,
           schema,
           table,
           defaultTab
         );
-        value = ROUTES.TABLE_RECURRING_VALUE(
+        value = ROUTES.TABLE_MONITORING_VALUE(
           item.value,
           connection,
           schema,
@@ -107,15 +118,15 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
       }
     } else {
-      const tab =
-        item.value === CheckTypes.RECURRING ||
-        item.value === CheckTypes.PARTITIONED
-          ? 'daily'
-          : item.value === CheckTypes.PROFILING
-          ? 'statistics'
-          : 'detail';
-      url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
-    }
+        const tab =
+          item.value === CheckTypes.MONITORING ||
+          item.value === CheckTypes.PARTITIONED
+            ? 'daily'
+            : item.value === CheckTypes.PROFILING
+            ? 'statistics'
+            : 'detail';
+        url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
+    } 
     dispatch(
       addFirstLevelTab(item.value, {
         url,
@@ -126,7 +137,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     );
     history.push(url);
   };
-
   return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (

@@ -142,13 +142,13 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="justify-end text-sm"
-          label="Failed checks count"
+          label="Total data quality issues"
           order="failedChecksCount"
           direction={filters.sortBy === 'failedChecksCount' ? filters.sortDirection : undefined}
           onChange={handleSortChange}
         />
       ),
-      label: 'Failed checks count',
+      label: 'Total data quality issues',
       className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },
@@ -175,13 +175,13 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="text-sm"
-          label="Checks"
-          order="checkName"
-          direction={filters.sortBy === 'checkName' ? filters.sortDirection : undefined}
+          label="Data quality issue grouping"
+          order="qualityDimension"
+          direction={filters.sortBy === 'qualityDimension' ? filters.sortDirection : undefined}
           onChange={handleSortChange}
         />
       ),
-      label: 'Checks',
+      label: 'Data quality issue grouping',
       className: 'text-left py-2 px-4',
       value: 'checkName',
       render: (value: string, row: IncidentModel) => {
@@ -293,7 +293,9 @@ export const IncidentConnection = () => {
   useEffect(() => {
     onChangeFilter({
       optionalFilter: debouncedSearchTerm,
-      page: 1
+      page: 1,
+      openIncidents: true,
+      acknowledgedIncidents: true
     })
   }, [debouncedSearchTerm]);
 

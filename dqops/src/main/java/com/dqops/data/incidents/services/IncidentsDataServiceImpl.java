@@ -17,7 +17,7 @@ package com.dqops.data.incidents.services;
 
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
-import com.dqops.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import com.dqops.data.checkresults.services.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.services.models.IncidentHistogramFilterParameters;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
@@ -64,7 +64,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param incidentsSnapshotFactory Incident snapshot factory.
      * @param checkResultsDataService Data quality check results data service, used to load results (matching issues).
      * @param userHomeContextFactory User home context factory, used to load a list of connections.
-     * @param dqoIncidentsConfigurationProperties DQO incidents configuration parameters.
+     * @param dqoIncidentsConfigurationProperties DQOps incidents configuration parameters.
      */
     @Autowired
     public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
@@ -248,17 +248,17 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @return Array of check results for the incident.
      */
     @Override
-    public CheckResultDetailedSingleModel[] loadCheckResultsForIncident(String connectionName,
-                                                                        int year,
-                                                                        int month,
-                                                                        String incidentId,
-                                                                        CheckResultListFilterParameters filterParameters) {
+    public CheckResultEntryModel[] loadCheckResultsForIncident(String connectionName,
+                                                               int year,
+                                                               int month,
+                                                               String incidentId,
+                                                               CheckResultListFilterParameters filterParameters) {
         IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
         if (incidentModel == null) {
             return null;
         }
 
-        CheckResultDetailedSingleModel[] failedChecks = this.checkResultsDataService.loadCheckResultsRelatedToIncident(
+        CheckResultEntryModel[] failedChecks = this.checkResultsDataService.loadCheckResultsRelatedToIncident(
                 connectionName,
                 new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
                 incidentModel.getIncidentHash(),

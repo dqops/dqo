@@ -5,6 +5,8 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
 import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -26,6 +28,8 @@ const ConnectionActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
 
   const removeConnection = async () => {
     await ConnectionApiClient.deleteConnection(
@@ -46,24 +50,27 @@ const ConnectionActionGroup = ({
         <>
           <Button
             className="!h-10"
-            variant="outlined"
-            color="primary"
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
             label="Add Schema"
             onClick={() => setAddSchemaDialogOpen(true)}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
           <Button
             className="!h-10"
-            variant="outlined"
-            color="primary"
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
             label="Delete Connection"
             onClick={() => setIsOpen(true)}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
           <Button
             className="!h-10"
             label="Import metadata"
-            color="primary"
-            variant="outlined"
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         </>
       ) : (
@@ -71,22 +78,24 @@ const ConnectionActionGroup = ({
           <Button
             className="!h-10"
             label="Manage metadata"
-            color="primary"
-            variant="outlined"
+            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
             onClick={() => goToSchemas()}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : null
       )}
 
       {onUpdate && (
         <Button
-          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
+          
         />
       )}
       <ConfirmDialog

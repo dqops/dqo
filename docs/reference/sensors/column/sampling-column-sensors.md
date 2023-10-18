@@ -33,8 +33,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY sample_value
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY sample_value
         ) AS unlimited_samples
     )
     SELECT
@@ -61,8 +61,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY sample_value
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY sample_value
         ) AS unlimited_samples
     )
     SELECT
@@ -89,8 +89,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY sample_value
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY sample_value
         ) AS unlimited_samples
     )
     SELECT
@@ -117,8 +117,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY sample_value
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY sample_value
         ) AS unlimited_samples
     )
     SELECT
@@ -145,8 +145,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY sample_value
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY sample_value
         ) AS unlimited_samples
     )
     SELECT
@@ -173,8 +173,8 @@ Column level sensor that retrieves a column value samples. Column value sampling
                 COUNT(*) AS sample_count
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            GROUP BY {{ lib.render_target_column('analyzed_table') }}
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+            GROUP BY {{ lib.render_target_column('analyzed_table') }}
         ) AS unlimited_samples
     )
     SELECT

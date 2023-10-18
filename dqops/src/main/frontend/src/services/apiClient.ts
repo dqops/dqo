@@ -38,7 +38,10 @@ import {
   EnvironmentApiFactory,
   ChecksApiFactory,
   TableComparisonsApiFactory,
-  TableComparisonResultsApiFactory
+  TableComparisonResultsApiFactory,
+  DefaultsApiFactory,
+  UsersApiFactory,
+  SharedCredentialsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -131,3 +134,9 @@ export const TableComparisonResultsApi = TableComparisonResultsApiFactory(
   '',
   axios
 );
+
+export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);
+
+export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
+
+export const SharedCredentailsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);

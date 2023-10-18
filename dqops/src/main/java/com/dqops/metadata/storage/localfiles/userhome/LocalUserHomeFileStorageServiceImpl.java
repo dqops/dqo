@@ -103,15 +103,15 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
     }
 
     @Override
-    public FileContent readTextFile(HomeFilePath filePath) {
+    public FileContent readFile(HomeFilePath filePath) {
         DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.readTextFile(filePath);
+                return super.readFile(filePath);
             }
         }
         else {
-            return super.readTextFile(filePath);
+            return super.readFile(filePath);
         }
     }
 

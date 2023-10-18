@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO Cloud API client factory.
+ * DQOps Cloud API client factory.
  */
 @Component
 public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
@@ -32,8 +32,8 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
 
     /**
      * Default injection constructor.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
-     * @param dqoCloudApiKeyProvider DQO CLoud api key provider.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
+     * @param dqoCloudApiKeyProvider DQOps CLoud api key provider.
      */
     @Autowired
     public DqoCloudApiClientFactoryImpl(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
@@ -43,7 +43,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
     }
 
     /**
-     * Creates an unauthenticated API client for the DQO Cloud.
+     * Creates an unauthenticated API client for the DQOps Cloud.
      * @return Unauthenticated client.
      */
     public ApiClient createUnauthenticatedClient() {
@@ -53,7 +53,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
     }
 
     /**
-     * Creates an authenticated API client for the DQO Cloud. The authentication uses the API Key that must be obtained by running the "login" CLI command.
+     * Creates an authenticated API client for the DQOps Cloud. The authentication uses the API Key that must be obtained by running the "login" CLI command.
      * @return Authenticated client.
      */
     public ApiClient createAuthenticatedClient() {
@@ -61,7 +61,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         apiClient.setApiKey(apiKey.getApiKeyToken());
-        apiClient.getAuthentication("api_key");
+//        apiClient.setDebugging(true);
 
         return apiClient;
     }

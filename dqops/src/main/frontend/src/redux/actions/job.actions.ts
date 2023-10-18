@@ -22,6 +22,7 @@ import { AxiosResponse } from 'axios';
 import {
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel,
+  DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
@@ -130,4 +131,9 @@ export const setCronScheduler = (isCronScheduled: boolean) => ({
 export const setLicenseFree = (isLicenseFree: boolean) => ({
   type: JOB_ACTION.SET_IS_LICENSE_FREE,
   isLicenseFree
+});
+
+export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
+  type: JOB_ACTION.SET_USER_PROFILE,
+  userProfile
 });

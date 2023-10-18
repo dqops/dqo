@@ -34,7 +34,7 @@ const tabs = [
     value: 'statistics'
   },
   {
-    label: 'Advanced Profiling',
+    label: 'Profiling Checks',
     value: 'advanced'
   }
 ];
@@ -155,6 +155,8 @@ const ColumnProfilingChecksView = ({
     try {
       setLoadingJob(true);
       await JobApiClient.collectStatisticsOnTable(
+        false,
+        undefined,
         statistics?.collect_column_statistics_job_template
       );
     } finally {
@@ -175,9 +177,10 @@ const ColumnProfilingChecksView = ({
     );
     setActiveTab(tab);
   };
-
+    console.log(tabs)
   return (
-    <div>
+    <div className="flex flex-col overflow-x-auto overflow-y-hidden"
+    >
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -187,7 +190,7 @@ const ColumnProfilingChecksView = ({
         onCollectStatistics={onCollectStatistics}
         runningStatistics={loadingJob}
       />
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
       {activeTab === 'statistics' && <ColumnStatisticsView />}
       {activeTab === 'advanced' && (
         <DataQualityChecks

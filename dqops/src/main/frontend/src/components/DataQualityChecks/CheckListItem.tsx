@@ -26,6 +26,7 @@ import Checkbox from '../Checkbox';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { getLocalDateInUserTimeZone } from '../../utils';
 
 export interface ITab {
   label: string;
@@ -46,8 +47,13 @@ interface ICheckListItemProps {
   changeCopyUI: (checked: boolean) => void;
   checkedCopyUI?: boolean;
   comparisonName?: string;
+  isDefaultEditing?: boolean;
+  canUserRunChecks?: boolean;
 }
 
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 const CheckListItem = ({
   mode,
   check,
@@ -59,12 +65,14 @@ const CheckListItem = ({
   changeCopyUI,
   checkedCopyUI,
   category,
-  comparisonName
+  comparisonName,
+  isDefaultEditing,
+  canUserRunChecks
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('data-streams');
+  const [activeTab, setActiveTab] = useState('check-settings');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
@@ -89,6 +97,11 @@ const CheckListItem = ({
     'error' | 'warning' | 'fatal' | ''
   >('');
 
+  const [refreshCheckObject, setRefreshCheckObject] = useState<IRefetchResultsProps | undefined>()
+
+  const onChangeRefrshCheckObject = (obj: IRefetchResultsProps) => {
+    setRefreshCheckObject(obj)
+  }
   useEffect(() => {
     const localState = localStorage.getItem(
       `${checkTypes}_${check.check_name}`
@@ -138,14 +151,6 @@ const CheckListItem = ({
           label: 'Check Settings',
           value: 'check-settings'
         },
-        ...(check?.supports_grouping
-          ? [
-              {
-                label: 'Grouping configuration override',
-                value: 'data-streams'
-              }
-            ]
-          : []),
         {
           label: 'Schedule override',
           value: 'schedule'
@@ -194,7 +199,7 @@ const CheckListItem = ({
     }
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: check?.run_checks_job_template,
+      check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})
@@ -203,10 +208,10 @@ const CheckListItem = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId?.jobId);
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -264,22 +269,10 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}_details`,
       newValue.toString()
     );
+    if(refreshCheckObject) {
+      refreshCheckObject.fetchCheckResults()
+    }
     setShowDetails(newValue);
-  };
-  const getLocalDateInUserTimeZone = (date: Date): string => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone: userTimeZone
-    };
-
-    return date.toLocaleString('en-US', options);
   };
 
   useEffect(() => {
@@ -356,7 +349,7 @@ const CheckListItem = ({
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
-              <div>
+              <div className={clsx(userProfile.can_manage_data_sources===false ? "cursor-not-allowed pointer-events-none" : ""  )}>
                 <SvgIcon
                   name={!check?.disabled ? 'stop' : 'disable'}
                   className={clsx(
@@ -406,20 +399,21 @@ const CheckListItem = ({
             </Tooltip>
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <Tooltip
-                content="Run Check"
-                className="max-w-80 py-4 px-4 bg-gray-800"
-              >
-                <div>
-                  <SvgIcon
-                    name="play"
-                    className="text-primary h-5 cursor-pointer"
-                    onClick={onRunCheck}
-                  />
-                </div>
-              </Tooltip>
-            )}
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+              isDefaultEditing !== true && (
+                <Tooltip
+                  content="Run Check"
+                  className="max-w-80 py-4 px-4 bg-gray-800"
+                >
+                  <div>
+                    <SvgIcon
+                      name="play"
+                      className={clsx("h-5 ", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
+                      onClick={canUserRunChecks!==false ? onRunCheck : undefined}
+                    />
+                  </div>
+                </Tooltip>
+              )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
                 content="Waiting"
@@ -447,18 +441,20 @@ const CheckListItem = ({
                 </div>
               </Tooltip>
             )}
-            <Tooltip
-              content="Results"
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div className="w-5 h-5">
-                <SvgIcon
-                  name="rectangle-list"
-                  className="text-gray-700 h-5 cursor-pointer"
-                  onClick={toggleCheckDetails}
-                />
-              </div>
-            </Tooltip>
+            {isDefaultEditing !== true && (
+              <Tooltip
+                content="Results"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div className="w-5 h-5">
+                  <SvgIcon
+                    name="rectangle-list"
+                    className="text-gray-700 h-5 cursor-pointer"
+                    onClick={toggleCheckDetails}
+                  />
+                </div>
+              </Tooltip>
+            )}
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -526,6 +522,17 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
+        <div className='flex justify-center items-center mt-6'>
+        {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
+          <Tooltip
+                content={check.configuration_requirements_errors?.map((x) => x)}
+                className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
+                <div>
+                  <SvgIcon name='warning' className='w-5 h-5'/>
+                </div>
+          </Tooltip>
+        : null }
+        </div>
         <td className="py-2 px-4 flex items-end justify-end">
           <div className=" space-x-2">
             <div className="text-gray-700 text-sm w-full ">
@@ -540,7 +547,7 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100">
+        <td className="py-2 px-4 bg-yellow-100 relative">
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -557,6 +564,7 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
@@ -605,6 +613,7 @@ const CheckListItem = ({
               onClose={closeExpand}
               onChange={onChange}
               check={check}
+              isDefaultEditing={isDefaultEditing}
             />
           </td>
         </tr>
@@ -626,6 +635,7 @@ const CheckListItem = ({
               category={category}
               comparisonName={comparisonName}
               data_clean_job_template={check.data_clean_job_template}
+              onChangeRefreshCheckObject={onChangeRefrshCheckObject}
             />
           </td>
         </tr>

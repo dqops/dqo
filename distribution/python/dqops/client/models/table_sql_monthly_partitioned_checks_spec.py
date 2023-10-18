@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,21 +15,30 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_monthly_partitioned_checks_spec_custom_checks import (
+        TableSqlMonthlyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableSqlMonthlyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSqlMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableSqlMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         monthly_partition_sql_condition_failed_count_on_table (Union[Unset, TableSqlConditionFailedCountCheckSpec]):
         monthly_partition_sql_aggregate_expr_table (Union[Unset, TableSqlAggregateExprCheckSpec]):
         min_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableSqlMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_sql_condition_passed_percent_on_table: Union[
         Unset, "TableSqlConditionPassedPercentCheckSpec"
     ] = UNSET
@@ -41,9 +51,13 @@ class TableSqlMonthlyPartitionedChecksSpec:
     min_sql_condition_passed_percent_on_table: Union[
         Unset, "TableSqlConditionPassedPercentCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_sql_condition_passed_percent_on_table: Union[
             Unset, Dict[str, Any]
         ] = UNSET
@@ -79,6 +93,8 @@ class TableSqlMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_sql_condition_passed_percent_on_table is not UNSET:
             field_dict[
                 "monthly_partition_sql_condition_passed_percent_on_table"
@@ -109,8 +125,20 @@ class TableSqlMonthlyPartitionedChecksSpec:
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
         )
+        from ..models.table_sql_monthly_partitioned_checks_spec_custom_checks import (
+            TableSqlMonthlyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableSqlMonthlyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableSqlMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _monthly_partition_sql_condition_passed_percent_on_table = d.pop(
             "monthly_partition_sql_condition_passed_percent_on_table", UNSET
         )
@@ -172,6 +200,7 @@ class TableSqlMonthlyPartitionedChecksSpec:
             )
 
         table_sql_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_sql_condition_passed_percent_on_table=monthly_partition_sql_condition_passed_percent_on_table,
             monthly_partition_sql_condition_failed_count_on_table=monthly_partition_sql_condition_failed_count_on_table,
             monthly_partition_sql_aggregate_expr_table=monthly_partition_sql_aggregate_expr_table,

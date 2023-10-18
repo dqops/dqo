@@ -26,6 +26,7 @@ import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 
 /**
@@ -35,21 +36,23 @@ public interface SensorExecutionRunParametersFactory {
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
      * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param dataGroupingConfigurationOverride Data grouping configuration override. Used when not null. We need to assign a custom data grouping configuration for table comparison checks.
      * @param tableComparisonConfigurationSpec Table comparison configuration - only for comparison checks.
-     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, monitoring, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+    SensorExecutionRunParameters createSensorParameters(UserHome userHome,
+                                                        ConnectionSpec connection,
                                                         TableSpec table,
                                                         ColumnSpec column,
                                                         AbstractCheckSpec<?,?,?,?> check,
@@ -64,6 +67,7 @@ public interface SensorExecutionRunParametersFactory {
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
@@ -73,7 +77,8 @@ public interface SensorExecutionRunParametersFactory {
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+    SensorExecutionRunParameters createStatisticsSensorParameters(UserHome userHome,
+                                                                  ConnectionSpec connection,
                                                                   TableSpec table,
                                                                   ColumnSpec column,
                                                                   AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,

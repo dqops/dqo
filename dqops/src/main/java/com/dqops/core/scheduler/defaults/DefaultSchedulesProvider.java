@@ -16,7 +16,8 @@
 
 package com.dqops.core.scheduler.defaults;
 
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.userhome.UserHome;
 
 /**
  * Retrieves and creates the default configuration of schedules for new connections.
@@ -27,12 +28,12 @@ public interface DefaultSchedulesProvider {
      *
      * @return Schedules configuration with the default schedules (only configured ones) or null when no schedules are configured.
      */
-    RecurringSchedulesSpec createDefaultRecurringSchedules();
+    MonitoringSchedulesSpec createDefaultMonitoringSchedules();
 
     /**
-     * Creates a new recurring schedule configuration for a new connection.
+     * Creates a new monitoring schedule configuration for a new connection.
      *
-     * @return New recurring schedule configuration for a new connection.
+     * @return New monitoring schedule configuration for a new connection.
      */
-    RecurringSchedulesSpec createRecurringSchedulesSpecForNewConnection();
+    MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome);
 }

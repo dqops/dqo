@@ -16,6 +16,7 @@
 package com.dqops.execution.rules.finder;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -23,7 +24,10 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.userhome.UserHome;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 
 /**
  * Rule definition search service. Finds the rule definition in the user come (custom definitions and overrides), then in the DQO_HOME (built-in rules).
@@ -37,6 +41,10 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
      * @return Rule definition find result or null when the rule was not found.
      */
     public RuleDefinitionFindResult findRule(ExecutionContext executionContext, String ruleName) {
+        if (Strings.isNullOrEmpty(ruleName)) {
+            return null;
+        }
+
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
         // remove the optional .py file extension
@@ -49,10 +57,12 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
 
         RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(bareRuleName, true);
         if (userRuleDefinitionWrapper != null) {
+            FileContent userRuleModuleContent = userRuleDefinitionWrapper.getRulePythonModuleContent();
             RuleDefinitionFindResult userRuleResult = new RuleDefinitionFindResult() {{
 				setHome(HomeType.USER_HOME);
 				setRuleDefinitionSpec(userRuleDefinitionWrapper.getSpec());
 				setRulePythonFilePath(pythonFileHomePath);
+                setRulePythonFileLastModified(userRuleModuleContent != null ? userRuleModuleContent.getLastModified() : Instant.now());
             }};
             return userRuleResult;
         }
@@ -60,10 +70,12 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
         RuleDefinitionWrapper dqoRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(bareRuleName, true);
         if (dqoRuleDefinitionWrapper != null) {
+            FileContent dqoRulePythonModuleContent = dqoRuleDefinitionWrapper.getRulePythonModuleContent();
             RuleDefinitionFindResult dqoRuleResult = new RuleDefinitionFindResult() {{
 				setHome(HomeType.DQO_HOME);
 				setRuleDefinitionSpec(dqoRuleDefinitionWrapper.getSpec());
 				setRulePythonFilePath(pythonFileHomePath);
+                setRulePythonFileLastModified(dqoRulePythonModuleContent != null ? dqoRulePythonModuleContent.getLastModified() : Instant.now());
             }};
             return dqoRuleResult;
         }

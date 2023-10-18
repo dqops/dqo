@@ -89,6 +89,10 @@ import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as NotEqualSvg } from './svg/not-equal.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
+import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
+import { ReactComponent as DoneSvg } from './svg/done.svg';
+import { ReactComponent as WarningSvg } from './svg/warning.svg';
+import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -185,7 +189,11 @@ const iconsMap: any = {
   oracle: OracleSvg,
   'not-equal': NotEqualSvg,
   definitionsrules: DefinitionsRulesSvg,
-  definitionssensors: DefinitionsSensorsSvg
+  definitionssensors: DefinitionsSensorsSvg,
+  copytext : CopyTextSvg,
+  done: DoneSvg,
+  warning: WarningSvg,
+  webhooks: WebhooksSvg
 };
 
 interface SvgIconProps {

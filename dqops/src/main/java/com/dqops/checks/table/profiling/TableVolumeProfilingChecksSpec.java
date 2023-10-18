@@ -47,7 +47,9 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the tested table has at least a minimum accepted number of rows. " +
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. " +
+            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
     private TableRowCountCheckSpec profileRowCount;
 
     @JsonProperty("profile_row_count_anomaly_differencing_30_days")

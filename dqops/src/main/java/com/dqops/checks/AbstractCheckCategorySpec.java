@@ -15,15 +15,21 @@
  */
 package com.dqops.checks;
 
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildFieldEntry;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Base abstract class for containers of checks for a single category.
@@ -34,8 +40,32 @@ import lombok.EqualsAndHashCode;
 public abstract class AbstractCheckCategorySpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckCategorySpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("custom_checks", o -> o.customChecks);
         }
     };
+
+    @JsonPropertyDescription("Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private CustomCategoryCheckSpecMap customChecks;
+
+    /**
+     * Returns a dictionary of custom checks.
+     * @return Dictionary of custom checks.
+     */
+    public CustomCategoryCheckSpecMap getCustomChecks() {
+        return customChecks;
+    }
+
+    /**
+     * Set a dictionary of custom checks.
+     * @param customChecks Dictionary of custom checks.
+     */
+    public void setCustomChecks(CustomCategoryCheckSpecMap customChecks) {
+        this.setDirtyIf(!Objects.equals(this.customChecks, customChecks));
+        this.customChecks = customChecks;
+        propagateHierarchyIdToField(customChecks, "custom_checks");
+    }
 
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.

@@ -1,26 +1,36 @@
 # Checks overview
 
-In DQO, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a 
-[data quality rule](../rules/rules.md).
+In DQO, the check is a data quality test that can be run on both table or column levels. The check consists of a 
+[data quality sensor](../sensors/sensors.md) and a [data quality rule](../rules/rules.md).
 
-Data quality sensor reads the value from the data source at a given point in time. While data quality rule is a set of 
-conditions against which sensor readouts are verified, described by a list of thresholds.
+The data quality sensor reads the value from the data source at a given point in time. The data quality rule includes 
+a set of conditions (thresholds) that the sensor readout must meet. When the conditions are not met, the check detects 
+an issue with your data, and it creates an [incident that can be viewed, filtered, and managed](../../working-with-dqo/incidents-and-notifications/incidents.md).
 
 ## Types of checks
 
-In DQO there are 3 types of checks:
+In DQO, checks are divided into 3 types:
 
-- [Advanced profiling checks](./advanced-profiling/advanced-profiling.md) that should be used to profile data and run 
-experiments to see which check would be most appropriate for monitoring the quality of data.
+- [**Profiling checks**](profiling-checks/profiling-checks.md) enable you to run more advanced data analyses than 
+[**Basic data statistics**](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). Profiling checks are also useful for 
+exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
-- [Recurring checks](./recurring-checks/recurring-checks.md) are standard checks that monitor data quality. Recurring 
-checks can be run daily and monthly. Daily recurring checks stores the most recent sensor readouts for each day when 
-the data quality check was run. While monthly recurring checks store the most recent sensor readout for each month 
-when the data quality check was run.
 
-- [Partition checks](./partition-checks/partition-checks.md) measure data quality for each daily or monthly partition by
-creating a separate data quality score. To run a partition check, you need to select a data column that is the time 
-partitioning key for the table.
+- [**Monitoring checks**](monitoring-checks/monitoring-checks.md) are standard checks that monitor the data quality of a 
+table or column. These checks create a single data quality result for the entire table or column. There are two categories
+of monitoring checks: daily checks and monthly checks. When run multiple times per day, the **daily checks** store only
+the most recent result for each day. **Monthly checks** store the most recent results for each month the data quality 
+checks were run.
+
+
+- [**Partition checks**](./partition-checks/partition-checks.md) are designed to measure the data quality in **partitioned data**.
+In contrast to monitoring checks, partition checks produce separate monitoring results for each partition. 
+To run a partition check, you need to select a column that serves as the time partitioning key for the data. 
+Partition checks are also divided into two categories: daily checks and monthly checks.
+
+The data in the table often comes from different data sources, different vendors, or is loaded by different data pipelines.
+That is why DQO supports the setting of up to 9 different data grouping dimensions (levels). 
+[Read more about the data grouping here](../data-grouping/data-grouping.md)
 
 ## Categories of checks
 
@@ -39,7 +49,7 @@ You can access the full lists of available checks with detailed descriptions by 
 | [Accuracy](../../checks/#accuracy)         | Compares the tested table with another (reference) table.                                                                                                                                                                                   |
 | [SQL](../../checks/#sql)                   | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
 | [Availability](../../checks/#availability) | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
-| [Schema](../../checks/#schema)             | Detects changes in the schema                                                                                                                                                                                                               |                                                                                                                                                                                                                                            |
+| [Schema](../../checks/#schema)             | Detects changes in the schema.                                                                                                                                                                                                              |                                                                                                                                                                                                                                            |
 
 ### **Column checks**
 
@@ -100,25 +110,28 @@ Data quality checks are defined as YAML files that support code completion in co
 Data quality check definitions can be stored in the source code repository, and versioned along with any other data
 pipeline or machine learning code.
 
-Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
-``` yaml hl_lines="14-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+``` yaml hl_lines="17-25"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
-    partitioned_checks_timestamp_source: event_timestamp
+    partition_by_column:: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1    
   columns:
     target_column:
-      checks:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks:
         nulls:
-          nulls_percent:
+          profile_nulls_percent:
             warning:
               max_percent: 1.0
             error:
@@ -127,19 +140,13 @@ spec:
               max_percent: 30.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested  
 ```
 The `spec` section contains the details of the table, including the target schema and table name. 
 
 The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
 The `columns` section lists the columns in the table which has configured checks. In this example the column named 
-`target_column` has a configured check `nulls_percent`. This means that the sensor reads the percentage of null
+`target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 
@@ -272,7 +279,7 @@ identification of the source of the data quality issue.
 
 ## What's next
 
-- [Learn more about advanced profiling checks](./advanced-profiling/advanced-profiling.md)
-- [Learn more about recurring checks](./recurring-checks/recurring-checks.md)
+- [Learn more about profiling checks](profiling-checks/profiling-checks.md)
+- [Learn more about monitoring checks](monitoring-checks/monitoring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)
 - [Learn how to configure schedules](../../working-with-dqo/schedules/index.md)

@@ -25,9 +25,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
-    private String columnName;
+    private Collection<String> columnNames = new LinkedHashSet<>();
     private String collectorName;
     private String sensorName;
     private String collectorCategory;
@@ -47,7 +45,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
     private Set<HierarchyId> collectorsHierarchyIds;
 
     @JsonIgnore
-    private SearchPattern columnNameSearchPattern;
+    private List<SearchPattern> columnNameSearchPatterns;
     @JsonIgnore
     private SearchPattern collectorNameSearchPattern;
     @JsonIgnore
@@ -62,19 +60,19 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
     }
 
     /**
-     * Gets a column name search pattern.
-     * @return Column name search pattern.
+     * Returns a set of target column names. When the collection of column names is not empty, only column level statistics are collected.
+     * @return Collection of target column names.
      */
-    public String getColumnName() {
-        return columnName;
+    public Collection<String> getColumnNames() {
+        return columnNames;
     }
 
     /**
-     * Sets a column name search pattern.
-     * @param columnName Column name search pattern.
+     * Sets a set of target column names.
+     * @param columnNames Set of target column names.
      */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setColumnNames(Collection<String> columnNames) {
+        this.columnNames = columnNames;
     }
 
     /**
@@ -191,12 +189,15 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>columnName</code>.
      */
-    public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
-            columnNameSearchPattern = SearchPattern.create(false, columnName);
+    @JsonIgnore
+    public List<SearchPattern> getColumnNameSearchPatterns() {
+        if (columnNameSearchPatterns == null && this.columnNames != null) {
+            columnNameSearchPatterns = this.columnNames.stream()
+                    .map(cn -> SearchPattern.create(false, cn))
+                    .collect(Collectors.toList());
         }
 
-        return columnNameSearchPattern;
+        return columnNameSearchPatterns;
     }
 
     /**
@@ -204,6 +205,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>collectorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>collectorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getCollectorNameSearchPattern() {
         if (collectorNameSearchPattern == null && collectorName != null) {
             collectorNameSearchPattern = SearchPattern.create(false, collectorName);
@@ -217,6 +219,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>sensorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
         if (sensorNameSearchPattern == null && sensorName != null) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);

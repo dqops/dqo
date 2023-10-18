@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -27,7 +28,7 @@ import java.util.Objects;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
-public class FileTreeNode {
+public class FileTreeNode implements Cloneable {
     private HomeFilePath filePath;
     private FileContent content; // the file content is loaded lazy, only when requested
     private FileTreeNodeStatus status = FileTreeNodeStatus.NOT_LOADED;
@@ -200,5 +201,18 @@ public class FileTreeNode {
                 "filePath=" + filePath +
                 ", status=" + status +
                 '}';
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public FileTreeNode clone() {
+        try {
+            return (FileTreeNode) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }

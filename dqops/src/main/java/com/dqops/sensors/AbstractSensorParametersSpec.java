@@ -15,6 +15,7 @@
  */
 package com.dqops.sensors;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -82,11 +83,12 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
      * Creates a cloned and trimmed version of the object. A trimmed and cloned copy is passed to the sensor.
      * All configurable variables that may use a secret value or environment variable expansion in the form ${ENV_VAR} are also expanded.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
-        cloned.filter = secretValueProvider.expandValue(cloned.filter);
+        cloned.filter = secretValueProvider.expandValue(cloned.filter, lookupContext);
         return cloned;
     }
 
@@ -139,4 +141,11 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     public boolean getAlwaysSupportedOnAllProviders() {
         return false;
     }
+
+    /**
+     * Returns the default value that is used when the sensor returned no rows.
+     * @return Default value to use when the sensor returned no rows.
+     */
+    @JsonIgnore
+    public Double getDefaultValue() { return null;}
 }

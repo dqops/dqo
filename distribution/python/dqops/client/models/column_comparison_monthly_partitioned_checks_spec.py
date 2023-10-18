@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,6 +14,9 @@ if TYPE_CHECKING:
     )
     from ..models.column_comparison_min_match_check_spec import (
         ColumnComparisonMinMatchCheckSpec,
+    )
+    from ..models.column_comparison_monthly_partitioned_checks_spec_custom_checks import (
+        ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks,
     )
     from ..models.column_comparison_not_null_count_match_check_spec import (
         ColumnComparisonNotNullCountMatchCheckSpec,
@@ -28,10 +32,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnComparisonMonthlyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnComparisonMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         reference_column (Union[Unset, str]): The name of the reference column name in the reference table. It is the
             column to which the current column is compared to.
         monthly_partition_sum_match (Union[Unset, ColumnComparisonSumMatchCheckSpec]):
@@ -42,6 +49,9 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         monthly_partition_null_count_match (Union[Unset, ColumnComparisonNullCountMatchCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     reference_column: Union[Unset, str] = UNSET
     monthly_partition_sum_match: Union[
         Unset, "ColumnComparisonSumMatchCheckSpec"
@@ -61,9 +71,13 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
     monthly_partition_null_count_match: Union[
         Unset, "ColumnComparisonNullCountMatchCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         reference_column = self.reference_column
         monthly_partition_sum_match: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_sum_match, Unset):
@@ -96,6 +110,8 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if reference_column is not UNSET:
             field_dict["reference_column"] = reference_column
         if monthly_partition_sum_match is not UNSET:
@@ -128,6 +144,9 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         from ..models.column_comparison_min_match_check_spec import (
             ColumnComparisonMinMatchCheckSpec,
         )
+        from ..models.column_comparison_monthly_partitioned_checks_spec_custom_checks import (
+            ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.column_comparison_not_null_count_match_check_spec import (
             ColumnComparisonNotNullCountMatchCheckSpec,
         )
@@ -139,6 +158,19 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         reference_column = d.pop("reference_column", UNSET)
 
         _monthly_partition_sum_match = d.pop("monthly_partition_sum_match", UNSET)
@@ -208,6 +240,7 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
             )
 
         column_comparison_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             reference_column=reference_column,
             monthly_partition_sum_match=monthly_partition_sum_match,
             monthly_partition_min_match=monthly_partition_min_match,

@@ -12,15 +12,15 @@ policies that restrict this communication. In case of restrictions you need to a
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
 2. Select Snowflake database type.
 
-     ![Selecting Snowflake database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-snowflake.jpg)
+     ![Selecting Snowflake database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-snowflake.png)
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake.jpg)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake2.png)
 
     | Snowflake connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                              | 
     |-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -55,11 +55,15 @@ policies that restrict this communication. In case of restrictions you need to a
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+
+8. When new tables are imported, DQO automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+
+    ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
 ## Adding Snowflake connection using DQO Shell
 

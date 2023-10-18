@@ -15,13 +15,14 @@
  */
 package com.dqops.data.statistics.services;
 
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshot;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshotFactory;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
      * @return Data delete operation summary.
      */
     @Override
-    public DataDeleteResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -65,13 +66,13 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
             conditions.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = StatisticsSnapshot.createStatisticsStorageSettings();
         List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
         if (connections == null) {
             // No connections present.
-            return dataDeleteResult;
+            return deleteStoredDataResult;
         }
 
         List<String> filteredConnections = connections.stream()
@@ -89,8 +90,13 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
 
             Collection<StatisticsSnapshot> statisticsSnapshots = tables.stream()
                     .filter(schemaTableName ->
-                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                            {
+                                SearchPattern schemaNameSearchPattern = filter.getTableSearchFilters().getSchemaNameSearchPattern();
+                                SearchPattern tableNameSearchPattern = filter.getTableSearchFilters().getTableNameSearchPattern();
+
+                                return (schemaNameSearchPattern == null || schemaNameSearchPattern.match(schemaTableName.getSchemaName())) &&
+                                        (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
+                            })
                     .map(tableName -> this.statisticsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName
@@ -107,13 +113,13 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
                     continue;
                 }
 
-                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
-                dataDeleteResult.concat(snapshotDataDeleteResult);
+                DeleteStoredDataResult snapshotDeleteStoredDataResult = currentSnapshot.getDeleteResults();
+                deleteStoredDataResult.concat(snapshotDeleteStoredDataResult);
 
                 currentSnapshot.save();
             }
         }
 
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 }

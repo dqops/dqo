@@ -20,6 +20,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -133,11 +134,12 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
      * Gets a collection of check configuration models that fit the provided filters.
      *
      * @param checkSearchFilters Check search filters.
+     * @param principal User principal.
      * @return List of self-contained check configuration models that fit the filters.
      */
     @Override
-    public List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
-        return this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters).stream()
+    public List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
+        return this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal).stream()
                 .flatMap(allChecksModel -> this.fromAllChecksModel(allChecksModel).stream())
                 .collect(Collectors.toList());
     }

@@ -1,7 +1,7 @@
 **column list or order changed** checks  
 
 **Description**  
-Table level check that detects if the list of columns and the order of columns have changed since the last time this check was run.
+Table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run.
  This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns.
  A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.
 
@@ -49,7 +49,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-16"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -90,7 +90,7 @@ Detects if new columns were added, existing columns were removed or the columns 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_list_or_order_changed|recurring|daily|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_list_or_order_changed|monitoring|daily|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -116,7 +116,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_list_or_order_changed:
@@ -126,7 +126,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-17"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -136,7 +136,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       schema:
         daily_column_list_or_order_changed:
@@ -168,7 +168,7 @@ Detects if new columns were added, existing columns were removed or the columns 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_list_or_order_changed|recurring|monthly|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_list_or_order_changed|monitoring|monthly|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -194,7 +194,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Check structure (Yaml)**
 ```yaml
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_list_or_order_changed:
@@ -204,7 +204,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-17"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -214,7 +214,7 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     monthly:
       schema:
         monthly_column_list_or_order_changed:

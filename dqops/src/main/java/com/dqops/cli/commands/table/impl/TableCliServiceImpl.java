@@ -30,7 +30,11 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.search.TableSearchFilters;
@@ -61,12 +65,13 @@ public class TableCliServiceImpl implements TableCliService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
-    private SecretValueProvider secretValueProvider;
+    private final SecretValueProvider secretValueProvider;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final TerminalTableWritter terminalTableWritter;
     private final OutputFormatService outputFormatService;
     private final DqoJobQueue dqoJobQueue;
     private final DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
 
     @Autowired
     public TableCliServiceImpl(TableService tableService,
@@ -78,7 +83,8 @@ public class TableCliServiceImpl implements TableCliService {
                                TerminalTableWritter terminalTableWritter,
                                OutputFormatService outputFormatService,
                                DqoJobQueue dqoJobQueue,
-                               DqoQueueJobFactory dqoQueueJobFactory) {
+                               DqoQueueJobFactory dqoQueueJobFactory,
+                               DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -89,6 +95,7 @@ public class TableCliServiceImpl implements TableCliService {
         this.outputFormatService = outputFormatService;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -100,13 +107,22 @@ public class TableCliServiceImpl implements TableCliService {
      */
     @Override
     public Table loadSchemaList(String connectionName, String schemaFilter) throws TableImportFailedException {
-        ConnectionWrapper connectionWrapper = getConnection(connectionName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionList connections = userHome.getConnections();
+
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            throw new TableImportFailedException("Connection was not found");
+        }
+
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         ProviderType providerType = connectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceSchemaModel> schemas = sourceConnection.listSchemas().stream()
                     .filter(schema -> (schemaFilter == null || StringPatternComparer.matchSearchPattern(schema.getSchemaName(), schemaFilter)))
                     .collect(Collectors.toList());
@@ -118,26 +134,6 @@ public class TableCliServiceImpl implements TableCliService {
 
             return resultTable;
         }
-    }
-
-    /**
-     * Retrieves a connection by name.
-     *
-     * @param connectionName Connection name to return.
-     * @return Connection specification object.
-     * @throws TableImportFailedException Raised when the connection was not found.
-     */
-    public ConnectionWrapper getConnection(String connectionName) throws TableImportFailedException {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
-
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            throw new TableImportFailedException("Connection was not found");
-        }
-
-        return connectionWrapper;
     }
 
     /**
@@ -170,7 +166,8 @@ public class TableCliServiceImpl implements TableCliService {
                 connectionName, schemaName, tableName);
         importSchemaJob.setImportParameters(importParameters);
 
-        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob);
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob, principal);
 
         try {
             ImportSchemaQueueJobResult importSchemaQueueJobResult = pushJobResult.getFinishedFuture().get(); // TODO: add import timeout to stop blocking the CLI and run the import in the background after a while
@@ -299,6 +296,7 @@ public class TableCliServiceImpl implements TableCliService {
      * @param fullTableName Full table name.
      * @return Cli operation status.
      */
+    @Override
     public CliOperationStatus removeTable(String connectionName, String fullTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
@@ -333,10 +331,12 @@ public class TableCliServiceImpl implements TableCliService {
                 .map(TableWrapper::getPhysicalTableName)
                 .collect(Collectors.toList());
         connToTablesMap.put(connectionName, tableNames);
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap);
+
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap, principal);
 
         try {
-            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+            for (PushJobResult<DeleteStoredDataResult> job: backgroundJobs) {
                 job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {
@@ -365,6 +365,7 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus updateTable(String connectionName, String schemaName, String tableName, String newTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
         CliOperationStatus deleteStatus = removeTable(connectionName, schemaName + "." + tableName);
         if (!deleteStatus.isSuccess()) {
             cliOperationStatus.setFailedMessage(deleteStatus.getMessage());

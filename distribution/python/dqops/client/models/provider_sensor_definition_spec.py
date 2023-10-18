@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.provider_sensor_definition_spec_type import (
-    ProviderSensorDefinitionSpecType,
-)
+from ..models.provider_sensor_runner_type import ProviderSensorRunnerType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -16,11 +15,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ProviderSensorDefinitionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ProviderSensorDefinitionSpec:
     """
     Attributes:
-        type (Union[Unset, ProviderSensorDefinitionSpecType]): Sensor implementation type
+        type (Union[Unset, ProviderSensorRunnerType]):
         java_class_name (Union[Unset, str]): Java class name for a sensor runner that will execute the sensor. The
             "type" must be "java_class".
         supports_grouping (Union[Unset, bool]): The sensor supports grouping, using the GROUP BY clause in SQL. Sensors
@@ -36,13 +35,13 @@ class ProviderSensorDefinitionSpec:
             parameter is 'true', the sensor's SQL will be executed as an independent query.
     """
 
-    type: Union[Unset, ProviderSensorDefinitionSpecType] = UNSET
+    type: Union[Unset, ProviderSensorRunnerType] = UNSET
     java_class_name: Union[Unset, str] = UNSET
     supports_grouping: Union[Unset, bool] = UNSET
     supports_partitioned_checks: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "ProviderSensorDefinitionSpecParameters"] = UNSET
     disable_merging_queries: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         type: Union[Unset, str] = UNSET
@@ -84,11 +83,11 @@ class ProviderSensorDefinitionSpec:
 
         d = src_dict.copy()
         _type = d.pop("type", UNSET)
-        type: Union[Unset, ProviderSensorDefinitionSpecType]
+        type: Union[Unset, ProviderSensorRunnerType]
         if isinstance(_type, Unset):
             type = UNSET
         else:
-            type = ProviderSensorDefinitionSpecType(_type)
+            type = ProviderSensorRunnerType(_type)
 
         java_class_name = d.pop("java_class_name", UNSET)
 

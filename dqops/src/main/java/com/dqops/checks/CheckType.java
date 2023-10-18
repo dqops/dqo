@@ -18,14 +18,14 @@ package com.dqops.checks;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of data quality check types: profiling, recurring, partitioned.
+ * Enumeration of data quality check types: profiling, monitoring, partitioned.
  */
 public enum CheckType {
     @JsonProperty("profiling")
     profiling("profiling"),
 
-    @JsonProperty("recurring")
-    recurring("recurring"),
+    @JsonProperty("monitoring")
+    monitoring("monitoring"),
 
     @JsonProperty("partitioned")
     partitioned("partitioned");

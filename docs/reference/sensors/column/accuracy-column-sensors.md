@@ -5,7 +5,7 @@
 column/accuracy/total_average_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in average of a column in a table and average of a column of another table.
+Column level sensor that calculates the percentage of the difference in average of a column in a table and average of a column of another table.
 
 **Parameters**  
   
@@ -61,6 +61,31 @@ Column level sensor that calculates percentage of the difference in average of a
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            AVG({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
       
@@ -161,7 +186,7 @@ ___
 column/accuracy/total_max_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in max of a column in a table and max of a column of another table.
+Column level sensor that calculates the percentage of the difference in max of a column in a table and max of a column of another table.
 
 **Parameters**  
   
@@ -217,6 +242,30 @@ Column level sensor that calculates percentage of the difference in max of a col
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,analyzed_table.actual_value
+    FROM (SELECT
+            MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
       
@@ -314,7 +363,7 @@ ___
 column/accuracy/total_min_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in min of a column in a table and min of a column of another table.
+Column level sensor that calculates the percentage of the difference in min of a column in a table and min of a column of another table.
 
 **Parameters**  
   
@@ -370,6 +419,31 @@ Column level sensor that calculates percentage of the difference in min of a col
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            MIN({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
       
@@ -467,7 +541,7 @@ ___
 column/accuracy/total_not_null_count_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in row count of a column in a table and row count of a column of another table.
+Column level sensor that calculates the percentage of the difference in row count of a column in a table and row count of a column of another table.
 
 **Parameters**  
   
@@ -523,6 +597,31 @@ Column level sensor that calculates percentage of the difference in row count of
         COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            COUNT({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
       
@@ -620,7 +719,7 @@ ___
 column/accuracy/total_sum_match_percent
 ```
 **Description**  
-Column level sensor that calculates percentage of the difference in sum of a column in a table and sum of a column of another table.
+Column level sensor that calculates the percentage of the difference in sum of a column in a table and sum of a column of another table.
 
 **Parameters**  
   

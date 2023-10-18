@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ConnectionBasicModel,
-  ConnectionRemoteModel,
-  ConnectionRemoteModelConnectionStatusEnum,
-  ConnectionSpecProviderTypeEnum
+  ConnectionModel,
+  ConnectionTestModel,
+  ConnectionTestModelConnectionTestResultEnum,
+  ConnectionSpecProviderTypeEnum,
+  SharedCredentialListModel
 } from '../../../api';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
@@ -20,7 +21,7 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
-import { DataSourcesApi } from "../../../services/apiClient";
+import { DataSourcesApi, SharedCredentailsApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
@@ -29,6 +30,8 @@ import OracleConnection from "../../Dashboard/DatabaseConnection/OracleConnectio
 import MySQLConnection from "../../Dashboard/DatabaseConnection/MySQLConnection";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -36,17 +39,21 @@ const ConnectionDetail = () => {
   const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { connectionBasic, isUpdatedConnectionBasic, isUpdating }: {
-    connectionBasic?: ConnectionBasicModel
+    connectionBasic?: ConnectionModel
     isUpdatedConnectionBasic?: boolean;
     isUpdating?: boolean;
   } = useSelector(getFirstLevelState(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
+  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
 
   useEffect(() => {
     dispatch(getConnectionBasic(checkTypes, activeTab, connection));
@@ -87,10 +94,12 @@ const ConnectionDetail = () => {
     const testRes = await DataSourcesApi.testConnection(false, connectionBasic);
     setIsTesting(false);
 
-    if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
+    if (testRes.data?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.SUCCESS) {
       await onConfirmSave();
-    } else {
+    } else if (testRes.data?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.FAILURE) {
       setShowConfirm(true);
+      setMessage(testRes.data?.errorMessage);
+    } else {
       setMessage(testRes.data?.errorMessage);
     }
   };
@@ -111,8 +120,17 @@ const ConnectionDetail = () => {
     setShowError(true);
   };
 
+  const getSharedCredentials = async () => {
+    await SharedCredentailsApi.getAllSharedCredentials()
+      .then((res) => setSharedCredentials(res.data))
+  }
+
+  useEffect(() => {
+    getSharedCredentials()
+  },[])
+
   return (
-    <div className="p-4">
+    <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
@@ -137,6 +155,7 @@ const ConnectionDetail = () => {
           <BigqueryConnection
             bigquery={connectionBasic?.bigquery}
             onChange={(bigquery) => onChange({ bigquery })}
+            sharedCredentials = {sharedCredentials}
           />
         )}
         {connectionBasic?.provider_type ===
@@ -144,6 +163,7 @@ const ConnectionDetail = () => {
             <SnowflakeConnection
               snowflake={connectionBasic?.snowflake}
               onChange={(snowflake) => onChange({ snowflake })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -152,6 +172,7 @@ const ConnectionDetail = () => {
             <RedshiftConnection
               redshift={connectionBasic?.redshift}
               onChange={(redshift) => onChange({ redshift })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -160,6 +181,7 @@ const ConnectionDetail = () => {
             <SqlServerConnection
               sqlserver={connectionBasic?.sqlserver}
               onChange={(sqlserver) => onChange({ sqlserver })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -168,6 +190,7 @@ const ConnectionDetail = () => {
             <PostgreSQLConnection
               postgresql={connectionBasic?.postgresql}
               onChange={(postgresql) => onChange({ postgresql })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -176,6 +199,7 @@ const ConnectionDetail = () => {
             <MySQLConnection
               mysql={connectionBasic?.mysql}
               onChange={(mysql) => onChange({ mysql })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -184,6 +208,7 @@ const ConnectionDetail = () => {
             <OracleConnection
               oracle={connectionBasic?.oracle}
               onChange={(oracle) => onChange({ oracle })}
+              sharedCredentials = {sharedCredentials}
             />
           )
         }
@@ -194,14 +219,14 @@ const ConnectionDetail = () => {
           <Loader isFull={false} className="w-8 h-8 !text-primary" />
         )}
         {
-          testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.SUCCESS && (
             <div className="text-primary text-sm">
               Connection successful
             </div>
           )
         }
         {
-          testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.FAILURE && (
             <div className="text-red-700 text-sm">
               <span>Connection failed</span>
               <span
@@ -213,12 +238,19 @@ const ConnectionDetail = () => {
             </div>
           )
         }
+        {
+          testResult?.connectionTestResult === ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS && (
+            <div className="text-red-700 text-sm">
+              <span>Connection already exists</span>
+            </div>
+          )
+        }
         <Button
           color="primary"
           variant="outlined"
-          label="Test Connection"
+          label="Test connection"
           onClick={onTestConnection}
-          disabled={isTesting}
+          disabled={isTesting || userProfile.can_manage_data_sources !== true}
         />
       </div>
       <ErrorModal

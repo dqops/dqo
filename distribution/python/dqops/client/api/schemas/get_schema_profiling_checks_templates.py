@@ -4,11 +4,9 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
+from ...models.check_target import CheckTarget
 from ...models.check_template import CheckTemplate
-from ...models.get_schema_profiling_checks_templates_check_target import (
-    GetSchemaProfilingChecksTemplatesCheckTarget,
-)
 from ...types import UNSET, Response, Unset
 
 
@@ -16,19 +14,11 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling".format(
-        client.base_url, connectionName=connection_name, schemaName=schema_name
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     json_check_target: Union[Unset, None, str] = UNSET
@@ -45,17 +35,16 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[List["CheckTemplate"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -73,7 +62,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[List["CheckTemplate"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -87,10 +76,8 @@ def sync_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -101,7 +88,7 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -116,14 +103,12 @@ def sync_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
-        client=client,
         check_target=check_target,
         check_category=check_category,
         check_name=check_name,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -134,10 +119,8 @@ def sync(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -148,7 +131,7 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -174,10 +157,8 @@ async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckTemplate"]]:
@@ -188,7 +169,7 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 
@@ -203,14 +184,12 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
-        client=client,
         check_target=check_target,
         check_category=check_category,
         check_name=check_name,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -219,10 +198,8 @@ async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
-    client: Client,
-    check_target: Union[
-        Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget
-    ] = UNSET,
+    client: AuthenticatedClient,
+    check_target: Union[Unset, None, CheckTarget] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckTemplate"]]:
@@ -233,7 +210,7 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
-        check_target (Union[Unset, None, GetSchemaProfilingChecksTemplatesCheckTarget]):
+        check_target (Union[Unset, None, CheckTarget]):
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
 

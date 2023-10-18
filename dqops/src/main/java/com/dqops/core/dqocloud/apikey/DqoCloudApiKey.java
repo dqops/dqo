@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.apikey;
 
 /**
- * DQO Cloud API key, both as a token and parsed.
+ * DQOps Cloud API key, both as a token and parsed.
  */
 public class DqoCloudApiKey {
     private String apiKeyToken;

@@ -22,8 +22,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -45,7 +45,7 @@ const TableNavigation = ({ incident }: TableNavigationProps) => {
   const onChangeNavigation = async (item: NavigationMenu) => {
     const value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 
-    const tab = item.value === CheckTypes.RECURRING || item.value === CheckTypes.PARTITIONED ? 'daily' : 'detail';
+    const tab = item.value === CheckTypes.MONITORING || item.value === CheckTypes.PARTITIONED ? 'daily' : 'detail';
     const url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
 
     dispatch(addFirstLevelTab(item.value, {

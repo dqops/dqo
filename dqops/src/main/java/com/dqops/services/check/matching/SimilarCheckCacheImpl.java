@@ -17,6 +17,7 @@
 package com.dqops.services.check.matching;
 
 import com.dqops.checks.CheckTarget;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -48,8 +49,10 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
     @Autowired
     public SimilarCheckCacheImpl(ReflectionService reflectionService,
                                  SensorDefinitionFindService sensorDefinitionFindService,
+                                 RuleDefinitionFindService ruleDefinitionFindService,
                                  DqoHomeContextFactory dqoHomeContextFactory) {
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, sensorDefinitionFindService);
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, sensorDefinitionFindService, ruleDefinitionFindService);
         this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, dqoHomeContextFactory);
     }
 

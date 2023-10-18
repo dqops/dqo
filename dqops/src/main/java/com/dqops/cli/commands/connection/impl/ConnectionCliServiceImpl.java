@@ -25,8 +25,12 @@ import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.ConnectionSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.search.TableSearchFilters;
@@ -63,6 +67,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     private final OutputFormatService outputFormatService;
     private final EditorLaunchService editorLaunchService;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
+    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
 
     @Autowired
     public ConnectionCliServiceImpl(ConnectionService connectionService,
@@ -73,7 +78,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                     SecretValueProvider secretValueProvider,
                                     OutputFormatService outputFormatService,
                                     EditorLaunchService editorLaunchService,
-                                    DefaultSchedulesProvider defaultSchedulesProvider) {
+                                    DefaultSchedulesProvider defaultSchedulesProvider,
+                                    DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
         this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -83,6 +89,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         this.outputFormatService = outputFormatService;
         this.editorLaunchService = editorLaunchService;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -113,13 +120,14 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(fullTableName);
 
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             ArrayList<String> tableNames = new ArrayList<>();
             tableNames.add(physicalTableName.getTableName());
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames);
@@ -200,11 +208,12 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName);
             if (schemaModels.size() == 0) {
                 cliOperationStatus.setFailedMessage("No schemas found in the data source");
@@ -283,11 +292,12 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<SourceSchemaModel> schemaModels = sourceConnection.listSchemas();
 
             if (schemaModels.size() == 0) {
@@ -407,7 +417,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         connectionWrapper.setSpec(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
             // no configuration, apply the defaults
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
         userHomeContext.flush();
         cliOperationStatus.setSuccessMessage(String.format(
@@ -455,11 +465,12 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 .map(ConnectionSpec::getConnectionName)
                 .collect(Collectors.toList());
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
-                connectionNames);
+        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
+        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.connectionService.deleteConnections(
+                connectionNames, userPrincipal);
 
         try {
-            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+            for (PushJobResult<DeleteStoredDataResult> job: backgroundJobs) {
                 job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {

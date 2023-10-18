@@ -1,21 +1,27 @@
 import React, { useEffect, useMemo } from 'react';
 
-import Header from "../Header";
-import DefinitionTree from "./DefinitionTree";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
-import PageTabs from "../PageTabs";
-import { useHistory, useLocation } from "react-router-dom";
-import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/sensor.actions";
-import { TabOption } from "../PageTabs/tab";
+import Header from '../Header';
+import DefinitionTree from './DefinitionTree';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import PageTabs from '../PageTabs';
+import { useHistory, useLocation } from 'react-router-dom';
+import {
+  closeFirstLevelTab,
+  setActiveFirstLevelTab
+} from '../../redux/actions/definition.actions';
+import { TabOption } from '../PageTabs/tab';
 
 interface LayoutProps {
   children?: any;
 }
 
 const DefinitionLayout = ({ children }: LayoutProps) => {
-  const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.sensor);
-  const dispatch= useDispatch();
+  const { tabs: pageTabs, activeTab } = useSelector(
+    (state: IRootState) => state.definition
+  );
+
+  const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
 
@@ -25,22 +31,24 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
-    dispatch(closeFirstLevelTab(value))
+    dispatch(closeFirstLevelTab(value));
   };
 
   const tabOptions = useMemo(() => {
-    return pageTabs?.map((item) => ({
-      value: item.url,
-      url: item.url,
-      label: item.label
-    })) || [];
+    return (
+      pageTabs?.map((item) => ({
+        value: item.url,
+        url: item.url,
+        label: item.label
+      })) || []
+    );
   }, [pageTabs]);
 
   useEffect(() => {
     if (activeTab && activeTab !== location.pathname) {
       history.push(activeTab);
     }
-  }, [activeTab])
+  }, [activeTab]);
 
   return (
     <div className="flex min-h-screen overflow-hidden">
@@ -60,17 +68,13 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
               activeTab={activeTab}
               onChange={handleChange}
               onRemoveTab={closeTab}
-              limit={10}
+              limit={7}
             />
             <div
-              className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-              style={{ maxHeight: "calc(100vh - 80px)" }}
+              className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
+              style={{ maxHeight: 'calc(100vh - 80px)' }}
             >
-              {!!activeTab && (
-                <div>
-                  {children}
-                </div>
-              )}
+              {!!activeTab && pageTabs.length !== 0 && <div>{children}</div>}
             </div>
           </div>
         </div>

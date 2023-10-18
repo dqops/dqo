@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { DqoJobHistoryEntryModelStatusEnum } from "../../api";
 
 export const SynchronizeButton = () => {
-  const { folderSynchronizationStatus, job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { folderSynchronizationStatus, job_dictionary_state, userProfile } = useSelector((state: IRootState) => state.job || {});
   const [loading, setLoading] = useState(false);
   const [jobId, setJobId] = useState<number>();
 
@@ -18,7 +18,7 @@ export const SynchronizeButton = () => {
   const syncAllFolders = async () => {
     try {
       setLoading(true);
-      const res = await JobApiClient.synchronizeFolders({
+      const res = await JobApiClient.synchronizeFolders(false, undefined, {
         sources: true,
         sensors: true,
         rules: true,
@@ -27,10 +27,12 @@ export const SynchronizeButton = () => {
         dataCheckResults: true,
         dataStatistics: true,
         dataErrors: true,
-        dataIncidents: true
+        dataIncidents: true,
+        settings: true,
+        credentials: true
       });
       if (res.data) {
-        setJobId(res.data.jobId);
+        setJobId(res.data.jobId?.jobId);
       }
     } finally {
       setLoading(false);
@@ -53,7 +55,7 @@ export const SynchronizeButton = () => {
       )}
       onClick={syncAllFolders}
       variant={isGreenBorder ? "outlined" : "contained"}
-      disabled={disabled || loading}
+      disabled={disabled || loading || userProfile.can_synchronize === false}
     />
   );
 };

@@ -42,7 +42,7 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
     /**
      * Called when a local change (from the source) was applied on the target file system.
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the source file system that was applied (uploaded, deleted, etc.)
@@ -73,7 +73,7 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
     /**
      * Called when a remote change (from the target system) was applied on the source file system (downloaded).
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the target (remote) file system that was applied (uploaded, deleted, etc.) on the source system (downloaded).

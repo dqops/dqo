@@ -19,9 +19,10 @@ import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
      * @return Data delete operation summary.
      */
     @Override
-    public DataDeleteResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -62,13 +63,13 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
             conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
         List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
         if (connections == null) {
             // No connections present.
-            return dataDeleteResult;
+            return deleteStoredDataResult;
         }
 
         List<String> filteredConnections = connections.stream()
@@ -86,8 +87,13 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
 
             Collection<CheckResultsSnapshot> checkResultsSnapshots = tables.stream()
                     .filter(schemaTableName ->
-                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                            {
+                                SearchPattern schemaNameSearchPattern = filter.getTableSearchFilters().getSchemaNameSearchPattern();
+                                SearchPattern tableNameSearchPattern = filter.getTableSearchFilters().getTableNameSearchPattern();
+
+                                return (schemaNameSearchPattern == null || schemaNameSearchPattern.match(schemaTableName.getSchemaName())) &&
+                                       (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
+                            })
                     .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName
@@ -104,13 +110,13 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
                     continue;
                 }
 
-                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
-                dataDeleteResult.concat(snapshotDataDeleteResult);
+                DeleteStoredDataResult snapshotDeleteStoredDataResult = currentSnapshot.getDeleteResults();
+                deleteStoredDataResult.concat(snapshotDeleteStoredDataResult);
 
                 currentSnapshot.save();
             }
         }
 
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 }

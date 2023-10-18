@@ -16,6 +16,7 @@
 package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -233,17 +234,19 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public MysqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public MysqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         MysqlParametersSpec cloned = this.deepClone();
-        cloned.host = secretValueProvider.expandValue(cloned.host);
-        cloned.port = secretValueProvider.expandValue(cloned.port);
-        cloned.database = secretValueProvider.expandValue(cloned.database);
-        cloned.user = secretValueProvider.expandValue(cloned.user);
-        cloned.password = secretValueProvider.expandValue(cloned.password);
-        cloned.options = secretValueProvider.expandValue(cloned.options);
-        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+        cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
+        cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
+        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
+        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
     }

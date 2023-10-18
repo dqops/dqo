@@ -57,17 +57,22 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private IncidentNotificationService incidentNotificationService;
     private final Object connectionsLock = new Object();
     private final Map<String, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
+    private final IncidentNotificationMessageTextCreator incidentNotificationMessageTextCreator;
 
     /**
      * Creates an incident import queue service.
-     * @param incidentsSnapshotFactory Incident snapshot factory.
-     * @param incidentNotificationService Incident notification service. Sends notifications to webhooks.
+     *
+     * @param incidentsSnapshotFactory               Incident snapshot factory.
+     * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
+     * @param incidentNotificationMessageTextCreator
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
-                                          IncidentNotificationService incidentNotificationService) {
+                                          IncidentNotificationService incidentNotificationService,
+                                          IncidentNotificationMessageTextCreator incidentNotificationMessageTextCreator) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
+        this.incidentNotificationMessageTextCreator = incidentNotificationMessageTextCreator;
     }
 
     /**
@@ -486,10 +491,14 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
             List<IncidentNotificationMessage> incidentNotificationMessages = newIncidentsRowIndexes.stream()
                     .map(newIncidentRowIndex -> {
-                        Row incidentRow = this.allNewIncidentRows.row(newIncidentRowIndex);
-                        IncidentNotificationMessage newIncidentNotificationMessage =
-                                IncidentNotificationMessage.fromIncidentRow(incidentRow, connectionName);
-                        return newIncidentNotificationMessage;
+                        IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                                .builder()
+                                .incidentRow(this.allNewIncidentRows.row(newIncidentRowIndex))
+                                .connectionName(connectionName)
+                                .build();
+
+                        return IncidentNotificationMessage
+                                .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
                     })
                     .collect(Collectors.toList());
 
@@ -558,8 +567,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(newRowIndex, newStatusString);
 
-                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(newRowIndex),
-                            incidentStatusChangeParameters.getConnectionName());
+                    IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                            .builder()
+                            .incidentRow(this.allNewIncidentRows.row(newRowIndex))
+                            .connectionName(incidentStatusChangeParameters.getConnectionName())
+                            .build();
+                    return IncidentNotificationMessage
+                            .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
                 }
             } else if (this.allExistingIncidentRows != null) {
                 Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
@@ -589,8 +603,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(targetNewIncidentsRowIndex, newStatusString);
 
-                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex),
-                            incidentStatusChangeParameters.getConnectionName());
+                    IncidentNotificationMessageParameters messageParameters = IncidentNotificationMessageParameters
+                            .builder()
+                            .incidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex))
+                            .connectionName(incidentStatusChangeParameters.getConnectionName())
+                            .build();
+                    return IncidentNotificationMessage
+                            .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
                 }
             }
 

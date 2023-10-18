@@ -22,7 +22,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -62,14 +62,14 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec scheduleOverride;
+    private MonitoringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
@@ -99,7 +99,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
-    public RecurringScheduleSpec getScheduleOverride() {
+    public MonitoringScheduleSpec getScheduleOverride() {
         return scheduleOverride;
     }
 
@@ -107,7 +107,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Stores a new schedule configuration.
      * @param scheduleOverride New schedule configuration.
      */
-    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
+    public void setScheduleOverride(MonitoringScheduleSpec scheduleOverride) {
         setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
         this.scheduleOverride = scheduleOverride;
         propagateHierarchyIdToField(scheduleOverride, "schedule_override");
@@ -132,7 +132,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
-     * Checks if the data quality check (or recurring) is disabled.
+     * Checks if the data quality check (or monitoring) is disabled.
      * @return True when the check is disabled.
      */
     public boolean isDisabled() {

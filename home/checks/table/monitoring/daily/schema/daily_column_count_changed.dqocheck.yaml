@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/schema/column_count
+  rule_name: comparison/value_changed
+  help_text: "Detects if the count of columns has changed since the most recent day.\
+    \ Retrieves the metadata of the monitored table, counts the number of columns\
+    \ and compares it the last known column count that was captured when this data\
+    \ quality check was executed the last time. Stores the most recent column count\
+    \ for each day when the data quality check was evaluated."

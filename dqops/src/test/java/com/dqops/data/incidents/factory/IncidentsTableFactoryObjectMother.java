@@ -15,8 +15,6 @@
  */
 package com.dqops.data.incidents.factory;
 
-import com.dqops.data.readouts.factory.SensorReadoutsTableFactory;
-import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import tech.tablesaw.api.Table;
 
 /**

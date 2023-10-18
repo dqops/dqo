@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SensorModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SensorModel:
     """Sensor model.
 
@@ -22,7 +23,8 @@ class SensorModel:
         provider_sensor_list (Union[Unset, List['ProviderSensorModel']]): Provider sensors list with provider specific
             sensor definitions.
         custom (Union[Unset, bool]): Whether the sensor is a User Home sensor
-        built_in (Union[Unset, bool]): This is a DQO built-in sensor, whose parameters cannot be changed.
+        built_in (Union[Unset, bool]): This is a DQOps built-in sensor, whose parameters cannot be changed.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     full_sensor_name: Union[Unset, str] = UNSET
@@ -30,7 +32,8 @@ class SensorModel:
     provider_sensor_list: Union[Unset, List["ProviderSensorModel"]] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         full_sensor_name = self.full_sensor_name
@@ -48,6 +51,7 @@ class SensorModel:
 
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -62,6 +66,8 @@ class SensorModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["built_in"] = built_in
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -95,12 +101,15 @@ class SensorModel:
 
         built_in = d.pop("built_in", UNSET)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         sensor_model = cls(
             full_sensor_name=full_sensor_name,
             sensor_definition_spec=sensor_definition_spec,
             provider_sensor_list=provider_sensor_list,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
         )
 
         sensor_model.additional_properties = d

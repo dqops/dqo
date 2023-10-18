@@ -16,20 +16,29 @@
 package com.dqops.core.scheduler.synchronize;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.PushJobResult;
+import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * Quartz job implementation that scans the metadata and activates new schedules or stops unused schedules.
@@ -38,24 +47,38 @@ import org.springframework.stereotype.Component;
 @DisallowConcurrentExecution
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class SynchronizeMetadataSchedulerJob implements Job {
+public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
+    /**
+     * The number of seconds to sleep before starting.
+     */
+    public static final int MINIMUM_SYNCHRONIZATION_DELAY_SECONDS = 60;
+
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private static LocalDateTime lastExecutedAtHour;
+    private static int jobRunCount;
+    private static Random random = new Random();
+    private volatile boolean interrupted;
+    private volatile SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob;
 
     /**
      * Creates a schedule metadata job instance using dependencies.
-     * @param dqoQueueJobFactory DQO job queue factory.
-     * @param dqoJobQueue DQO job queue to push the actual job to execute.
-     * @param dqoSchedulerConfigurationProperties DQO cron scheduler configuration properties.
+     * @param dqoQueueJobFactory DQOps job queue factory.
+     * @param dqoJobQueue DQOps job queue to push the actual job to execute.
+     * @param dqoSchedulerConfigurationProperties DQOps cron scheduler configuration properties.
+     * @param principalProvider Principal provider for the local instance.
      */
     @Autowired
     public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
                                            ParentDqoJobQueue dqoJobQueue,
-                                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties) {
+                                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                                           DqoCloudApiKeyPrincipalProvider principalProvider) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -66,33 +89,101 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
-            SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
+            if (cloudApiKeyPayload == null) {
+                return;
+            }
 
-            if (this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
-                switch (this.dqoSchedulerConfigurationProperties.getSynchronizedFolders()) {
-                    case all: {
-                        jobParameters.synchronizeAllFolders();
-                        break;
-                    }
+            if (jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
+                    cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
+                    cloudApiKeyPayload.getExpiresAt() != null)) {
+                // free user
 
-                    case locally_changed:
-                    default: {
-                        jobParameters.setSynchronizeFolderWithLocalChanges(true);
-                        break;
-                    }
+                LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
+                if (Objects.equals(executionHour, lastExecutedAtHour)) {
+                    return;
+                }
+
+                lastExecutedAtHour = executionHour;
+                if (!waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+                    return;
                 }
             }
 
+            if (jobRunCount > 0 && !interrupted && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+                return;
+            }
+
+            this.synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
+            SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
+
+            if (this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
+                if (jobRunCount == 0 ||  // first synchronization when the application starts, must download everything
+                        this.dqoSchedulerConfigurationProperties.getSynchronizedFolders() == ScheduledSynchronizationFolderSelectionMode.all) {
+                    jobParameters.synchronizeAllFolders();
+                } else {
+                    jobParameters.setSynchronizeFolderWithLocalChanges(true);
+                }
+            }
+
+            jobRunCount++;
             jobParameters.setDetectCronSchedules(true);
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 
-            PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
+            PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
             pushJobResult.getFinishedFuture().get();
+            this.synchronizeMultipleFoldersJob = null;
         }
         catch (Exception ex) {
             log.error("Failed to execute a metadata synchronization job", ex);
             throw new JobExecutionException(ex);
+        }
+    }
+
+    /**
+     * Waits a random number of seconds before starting a synchronization, to distribute load.
+     * @param jobExecutionContext Quartz job context.
+     * @param waitSeconds Number of seconds to wait.
+     * @return True - run the job, false - scheduler was stopped and the job was cancelled.
+     * @throws InterruptedException
+     * @throws SchedulerException
+     */
+    public boolean waitRandomTime(JobExecutionContext jobExecutionContext,
+                                  int waitSeconds)
+            throws InterruptedException, SchedulerException {
+        int startSecondOffset = random.nextInt() % waitSeconds;
+
+        Instant expectedRunAt = Instant.now().plus(startSecondOffset, ChronoUnit.SECONDS);
+        while (Instant.now().isBefore(expectedRunAt)) {
+            Thread.sleep(100);
+
+            if (this.interrupted) {
+                return false;
+            }
+
+            if (jobExecutionContext.getScheduler().isShutdown()) {
+                return false;
+            }
+
+            if (!jobExecutionContext.getScheduler().checkExists(jobExecutionContext.getTrigger().getKey())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Called by the scheduler when the job is asked to exit.
+     * @throws UnableToInterruptJobException
+     */
+    @Override
+    public void interrupt() throws UnableToInterruptJobException {
+        this.interrupted = true;
+        SynchronizeMultipleFoldersDqoQueueJob job = this.synchronizeMultipleFoldersJob;
+        if (job != null) {
+            this.dqoJobQueue.cancelJob(job.getJobId());
         }
     }
 }

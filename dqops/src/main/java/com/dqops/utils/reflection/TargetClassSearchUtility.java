@@ -36,7 +36,7 @@ public class TargetClassSearchUtility {
      * @return List of matching classes.
      * @param <T> Base class type.
      */
-    public static <T> List<? extends Class<? extends T>> findClasses(String packageName, Path projectDir, Class<T> baseClass) {
+    public static <T> List<Class<? extends T>> findClasses(String packageName, Path projectDir, Class<T> baseClass) {
         Path classesRootFolder = projectDir.resolve("target/classes");
         Path packageClassDir = classesRootFolder.resolve(packageName.replace('.', '/'));
         try {
@@ -45,8 +45,8 @@ public class TargetClassSearchUtility {
                         .filter(path -> Files.isRegularFile(path) && path.getFileName().toString().endsWith(".class"))
                         .collect(Collectors.toList());
 
-                List<? extends Class<? extends T>> classes = pathsToClassFiles.stream()
-                        .map(path -> classesRootFolder.relativize(path))
+                return pathsToClassFiles.stream()
+                        .map(classesRootFolder::relativize)
                         .map(filePath -> filePath.toString()
                                 .replace('\\', '.')
                                 .replace('/', '.')
@@ -54,8 +54,6 @@ public class TargetClassSearchUtility {
                         .map(className -> (Class<? extends T>) tryLoadSubclass(className, baseClass))
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
-
-                return classes;
             }
         }
         catch (IOException ex) {
@@ -81,6 +79,10 @@ public class TargetClassSearchUtility {
         }
         catch (ClassNotFoundException e) {
             System.err.println("Class " + className + " not found: " + e.getMessage());
+            return null;
+        }
+        catch (NoClassDefFoundError e) {
+            System.err.println("Class " + className + " depends on not found class: " + e.getCause().getMessage());
             return null;
         }
     }

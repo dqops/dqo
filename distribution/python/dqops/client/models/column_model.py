@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnModel:
     """Full column model
 
@@ -22,6 +23,7 @@ class ColumnModel:
         column_name (Union[Unset, str]): Column name.
         column_hash (Union[Unset, int]): Column hash that identifies the column using a unique hash code.
         spec (Union[Unset, ColumnSpec]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -29,7 +31,8 @@ class ColumnModel:
     column_name: Union[Unset, str] = UNSET
     column_hash: Union[Unset, int] = UNSET
     spec: Union[Unset, "ColumnSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -42,6 +45,8 @@ class ColumnModel:
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
+
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -56,6 +61,8 @@ class ColumnModel:
             field_dict["column_hash"] = column_hash
         if spec is not UNSET:
             field_dict["spec"] = spec
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -85,12 +92,15 @@ class ColumnModel:
         else:
             spec = ColumnSpec.from_dict(_spec)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         column_model = cls(
             connection_name=connection_name,
             table=table,
             column_name=column_name,
             column_hash=column_hash,
             spec=spec,
+            can_edit=can_edit,
         )
 
         column_model.additional_properties = d

@@ -16,13 +16,13 @@ connection edit -c=testconnection
 ```
 
 To add a schedule to the YAML file, start by including the `schedules:` parameter at the end of the document. Then, specify the check type you want
-to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
+to run (`profiling`, `monitoring_daily`, `monitoring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
 Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
 
 ``` yaml hl_lines="9-19"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
 spec:
@@ -30,12 +30,13 @@ spec:
   bigquery:
     source_project_id: bigquery-public-data
     authentication_mode: google_application_credentials
+    jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
     profiling:
       cron_expression: 0 12 * * *
-    recurring_daily:
+    monitoring_daily:
       cron_expression: 0 12 * * *
-    recurring_monthly:
+    monitoring_monthly:
       cron_expression: 0 12 * * *
     partitioned_daily:
       cron_expression: 0 12 * * *
@@ -60,14 +61,14 @@ table edit -c=testconnection -t=austin_crime.crime
 ```
 
 To set a schedule for an entire table in the YAML file, begin by adding the `schedules_override:` parameter before the 
-column section. Then, specify the check type you want to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
+column section. Then, specify the check type you want to run (`profiling`, `monitoring_daily`, `monitoring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
 Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 
 For example, to schedule checks to run every day at 10:00 for all profiling checks, the YAML file will look like the one provided below:
 
 ``` yaml hl_lines="8-10"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -104,7 +105,7 @@ the YAML files will look like the ones provided below:
 
 === "Schedule on table level row_count check"
     ``` yaml hl_lines="11-12"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -134,7 +135,7 @@ the YAML files will look like the ones provided below:
     ```
 === "Schedule on column level nulls_count check"
     ```yaml hl_lines="16-17"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:

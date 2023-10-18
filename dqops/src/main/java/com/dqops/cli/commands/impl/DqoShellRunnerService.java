@@ -18,7 +18,7 @@ package com.dqops.cli.commands.impl;
 import java.util.concurrent.Callable;
 
 /**
- * Root DQO shell runner. Separated into a different class to avoid circular dependencies in IoC.
+ * Root DQOps shell runner. Separated into a different class to avoid circular dependencies in IoC.
  */
 public interface DqoShellRunnerService extends Callable<Integer> {
 }

@@ -45,4 +45,13 @@ public class DataGroupingConfigurationModel {
 
     @JsonPropertyDescription("Data stream specification.")
     private DataGroupingConfigurationSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    public DataGroupingConfigurationModel() {
+    }
 }

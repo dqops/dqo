@@ -18,6 +18,7 @@ package com.dqops.services.check;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
@@ -65,7 +66,7 @@ public class CheckServiceImpl implements CheckService {
      * @param allChecksModelFactory UI all checks patch factory for creating patches to be updated.
      * @param allChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
-     * @param parentDqoJobQueue DQO job queue to execute the operation.
+     * @param parentDqoJobQueue DQOps job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
@@ -87,19 +88,21 @@ public class CheckServiceImpl implements CheckService {
      * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param principal Principal that will be used to run the job.
      * @return Check execution summary.
      */
     @Override
     public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
-										   boolean dummyRun) {
+										   boolean dummyRun,
+                                           DqoUserPrincipal principal) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         RunChecksParameters parameters = new RunChecksParameters(checkSearchFilters, timeWindowFilterParameters,
                 checkExecutionProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 
-        this.parentDqoJobQueue.pushJob(runChecksJob);
+        this.parentDqoJobQueue.pushJob(runChecksJob, principal);
         return runChecksJob.getResult();
     }
 
@@ -161,10 +164,11 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Update checks configuration based on provided parameters.
      * @param parameters Parameters for creating the patches and updating.
+     * @param principal  User principal.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters) {
+    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal) {
         if (parameters == null
                 || parameters.getCheckSearchFilters() == null
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnectionName())
@@ -174,7 +178,7 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters(), principal);
         if (parameters.getSelectedTablesToColumns() != null) {
             for (AllChecksModel patch: patches) {
                 AllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);

@@ -18,6 +18,7 @@ package com.dqops.connectors;
 import com.dqops.cli.exceptions.CliRequiredParameterMissingException;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import tech.tablesaw.columns.Column;
@@ -30,9 +31,10 @@ public interface ConnectionProvider {
      * Creates a connection to a target data source.
      * @param connectionSpec Connection specification.
      * @param openConnection Open the connection after creating.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection object.
      */
-    SourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection);
+    SourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Returns the dialect settings for the provider. The dialect settings has information about supported SQL features, identifier quoting, etc.

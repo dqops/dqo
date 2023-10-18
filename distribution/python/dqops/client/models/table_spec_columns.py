@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.column_spec import ColumnSpec
@@ -9,14 +10,16 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableSpecColumns")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSpecColumns:
     """Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data
     type and a list of column level data quality checks that are enabled for a column.
 
     """
 
-    additional_properties: Dict[str, "ColumnSpec"] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, "ColumnSpec"] = _attrs_field(
+        init=False, factory=dict
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         pass

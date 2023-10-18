@@ -69,7 +69,7 @@ To use DQO you need:
     must create a DQO cloud account.
  
     After creating a userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
-    redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+    redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQO application.
     The API Key is now stored in the configuration file.

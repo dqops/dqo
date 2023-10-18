@@ -80,7 +80,7 @@ public class ChangeMultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseT
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
         Assertions.assertEquals(39.34, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(44.28, ruleExecutionResult.getUpperBound(), 0.1);
@@ -104,7 +104,7 @@ public class ChangeMultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseT
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
@@ -118,7 +118,7 @@ public class ChangeMultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseT
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

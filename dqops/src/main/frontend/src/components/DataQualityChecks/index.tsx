@@ -28,6 +28,7 @@ interface IDataQualityChecksProps {
   getCheckOverview: () => void;
   onUpdate: () => void;
   loading?: boolean;
+  isDefaultEditing?: boolean;
 }
 
 const DataQualityChecks = ({
@@ -37,7 +38,8 @@ const DataQualityChecks = ({
   checkResultsOverview = [],
   getCheckOverview,
   onUpdate,
-  loading
+  loading,
+  isDefaultEditing
 }: IDataQualityChecksProps) => {
   const {
     checkTypes,
@@ -307,6 +309,7 @@ const DataQualityChecks = ({
       }}
     >
       <div className="flex items-center text-sm mb-3 gap-6">
+        {isDefaultEditing !== true &&
         <div className="flex items-center space-x-1 gap-x-4">
           <div className="flex items-center space-x-1">
             <span>Scheduling status:</span>
@@ -349,7 +352,10 @@ const DataQualityChecks = ({
             </div>
           )}
         </div>
+        }
+        {isDefaultEditing !== true && 
         <div className="flex items-center justify-between">
+          <span className='pr-2'>Schedule configuration: </span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}
           </a>
@@ -377,6 +383,7 @@ const DataQualityChecks = ({
             </div>
           )}
         </div>
+        }
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
@@ -419,6 +426,7 @@ const DataQualityChecks = ({
           copyUI={copyUI}
           setCopyUI={setCopyUI}
           onUpdate={onUpdate}
+          isDefaultEditing={isDefaultEditing}
         />
         <tbody>
           {checksUI?.categories.map((category, index) => (
@@ -437,6 +445,7 @@ const DataQualityChecks = ({
               copyCategory={copyUI?.categories?.find(
                 (item) => item.category === category.category
               )}
+              isDefaultEditing={isDefaultEditing}
             />
           ))}
         </tbody>

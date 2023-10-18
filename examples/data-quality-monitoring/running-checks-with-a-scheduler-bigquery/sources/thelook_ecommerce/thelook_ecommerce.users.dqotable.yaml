@@ -1,11 +1,11 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
@@ -22,7 +22,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -46,7 +46,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -57,7 +57,7 @@ spec:
               fatal:
                 min_percent: 95.0
           pii:
-            daily_valid_email_percent:
+            daily_contains_email_percent:
               warning:
                 min_percent: 99.0
               error:
@@ -68,7 +68,7 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_values_in_range_numeric_percent:
@@ -87,7 +87,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           strings:
             daily_string_value_in_set_percent:

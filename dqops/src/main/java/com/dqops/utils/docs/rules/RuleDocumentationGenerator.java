@@ -30,7 +30,7 @@ public interface RuleDocumentationGenerator {
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param linkageStore
-     * @param dqoHome         DQO home.
+     * @param dqoHome         DQOps home.
      * @return Folder structure with rendered markdown files.
      */
     DocumentationFolder renderRuleDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome);

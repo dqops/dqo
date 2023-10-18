@@ -16,6 +16,7 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 
 /**
@@ -27,6 +28,7 @@ public interface ModelToSpecCheckMappingService {
      *
      * @param model              Data quality check model with the updates.
      * @param checkContainerSpec The target check container spec object that will be updated.
+     * @param parentTable        Parent table specification.
      */
-    void updateCheckContainerSpec(CheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec);
+    void updateCheckContainerSpec(CheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec, TableSpec parentTable);
 }

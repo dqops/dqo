@@ -55,8 +55,8 @@ public class FileConnectionListImpl extends ConnectionListImpl {
      */
     @Override
     protected void load() {
-        for(FolderTreeNode sourceFolderNode : this.sourcesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML, false)) {
-            String connectionName = sourceFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "sensors" folder
+        for (FolderTreeNode sourceFolderNode : this.sourcesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML, false)) {
+            String connectionName = sourceFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "sources" folder
             if (this.getByObjectName(connectionName, false) != null) {
                 continue; // was already added
             }

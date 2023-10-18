@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -10,28 +11,41 @@ if TYPE_CHECKING:
         TableDataIngestionDelayCheckSpec,
     )
     from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
+    from ..models.table_timeliness_profiling_checks_spec_custom_checks import (
+        TableTimelinessProfilingChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableTimelinessProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableTimelinessProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableTimelinessProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         profile_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         profile_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
         profile_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableTimelinessProfilingChecksSpecCustomChecks"
+    ] = UNSET
     profile_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
     profile_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
     profile_data_ingestion_delay: Union[
         Unset, "TableDataIngestionDelayCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_data_freshness, Unset):
             profile_data_freshness = self.profile_data_freshness.to_dict()
@@ -47,6 +61,8 @@ class TableTimelinessProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_data_freshness is not UNSET:
             field_dict["profile_data_freshness"] = profile_data_freshness
         if profile_data_staleness is not UNSET:
@@ -63,8 +79,20 @@ class TableTimelinessProfilingChecksSpec:
             TableDataIngestionDelayCheckSpec,
         )
         from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
+        from ..models.table_timeliness_profiling_checks_spec_custom_checks import (
+            TableTimelinessProfilingChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, TableTimelinessProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = TableTimelinessProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_data_freshness = d.pop("profile_data_freshness", UNSET)
         profile_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
         if isinstance(_profile_data_freshness, Unset):
@@ -93,6 +121,7 @@ class TableTimelinessProfilingChecksSpec:
             )
 
         table_timeliness_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_data_freshness=profile_data_freshness,
             profile_data_staleness=profile_data_staleness,
             profile_data_ingestion_delay=profile_data_ingestion_delay,

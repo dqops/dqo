@@ -59,7 +59,7 @@ public class DqoChangeNotificationEntry {
     }
 
     /**
-     * Returns a new DQO Cloud file synchronization folder status change if the reason of the notification is a change to a folder status.
+     * Returns a new DQOps Cloud file synchronization folder status change if the reason of the notification is a change to a folder status.
      * @return Folder status change.
      */
     public CloudSynchronizationFoldersStatusModel getSynchronizationStatus() {

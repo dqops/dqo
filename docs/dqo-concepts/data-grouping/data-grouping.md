@@ -81,9 +81,9 @@ Here is an example of data stream configuration in the YAML file using a tag nam
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: public
-    table_name: fact_sales_uk
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   groupings:
     by_country:
       level_1:
@@ -101,9 +101,9 @@ Here is another example of the YAML file that uses a 'country' column to identif
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: public
-    table_name: fact_sales_uk
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   groupings:
     by_country:
       level_1:

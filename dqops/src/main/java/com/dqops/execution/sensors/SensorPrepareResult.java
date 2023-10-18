@@ -155,7 +155,7 @@ public class SensorPrepareResult {
     }
 
     /**
-     * Returns the sensor definition that was found in DQO.
+     * Returns the sensor definition that was found in DQOps.
      * @return Sensor definition that was found.
      */
     public SensorDefinitionFindResult getSensorDefinition() {

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,14 +14,14 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableDataQualityStatusModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableDataQualityStatusModel:
     """The table's most recent data quality status. It is a summary of the results of the most recently executed data
     quality checks on the table. Verify the value of the highest_severity_issue (0 - all data quality checks passed, 1 -
     a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.
 
         Attributes:
-            connection_name (Union[Unset, str]): The connection name in DQO.
+            connection_name (Union[Unset, str]): The connection name in DQOps.
             schema_name (Union[Unset, str]): The schema name.
             table_name (Union[Unset, str]): The table name.
             highest_severity_issue (Union[Unset, int]): The severity of the highest identified data quality issue (1 =
@@ -39,12 +40,12 @@ class TableDataQualityStatusModel:
             fatals (Union[Unset, int]): The number of most recent data quality checks that failed by raising a fatal
                 severity data quality issue.
             execution_errors (Union[Unset, int]): The number of data quality check execution errors that were reported due
-                to access issues to the data source, invalid mapping in DQO, invalid queries in data quality sensors or invalid
-                python rules. When an execution error is reported, the configuration of a data quality check on a table must be
-                updated.
+                to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or
+                invalid python rules. When an execution error is reported, the configuration of a data quality check on a table
+                must be updated.
             failed_checks_statuses (Union[Unset, TableDataQualityStatusModelFailedChecksStatuses]): The paths to all failed
-                data quality checks (keys) and severity of the highest data quality issue that was detected. Table level checks
-                are identified by the check name. Column level checks are identified as a check_name[column_name].
+                data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
+                are identified by the check name. Column-level checks are identified as a check_name[column_name].
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -61,7 +62,7 @@ class TableDataQualityStatusModel:
     failed_checks_statuses: Union[
         Unset, "TableDataQualityStatusModelFailedChecksStatuses"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

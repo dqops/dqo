@@ -8,7 +8,7 @@ spring:
   application:
     name: dqo
   lifecycle:
-    timeout-per-shutdown-phase: 10s
+    timeout-per-shutdown-phase: 60s
   codec:
     max-in-memory-size: 10MB
   mvc:
@@ -17,6 +17,9 @@ spring:
   shell:
     interactive:
       enabled: false
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 
 server:
   port: ${port:8888}
@@ -45,8 +48,6 @@ logging:
           util: ERROR
     com:
       google: OFF
-    ai:
-      dqo: WARN
 
 picocli:
   ansi: true
@@ -68,6 +69,7 @@ dqo:
     evaluate-rules-module: lib/evaluate_rules.py
     python-script-timeout-seconds: 120
     use-host-python: false
+    enable-debugging: false
   user:
     home: .
     has-local-home: true
@@ -77,16 +79,31 @@ dqo:
     max-history: 7
     pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%rootException%n"
     total-size-cap: 10mb
+    console-immediate-flush: false
+    console: OFF
+    log-errors-to-stderr: false
+    encode-message: true
+    json-log-field-message: log
+    json-log-field-timestamp: time
+    json-log-field-arguments: attrs
+    json-timestamp-pattern: "[ISO_INSTANT]"
+    json-message-max-length: 1000
+    user-errors:
+      sensors-log-level: WARN
+      rules-log-level: WARN
+      checks-log-level: WARN
+      statistics-log-level: WARN
+      yaml-log-level: WARN
   storage:
     gcp:
       upload-buffer-size: 5000000
       http2: true
       http2-max-concurrent-streams: 2000
       parallel-delete-operations: 2000
-  yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
+  yaml-schema-server: https://cloud.dqops.com/dqo-yaml-schema/
   cloud:
-    ui-base-url: https://cloud.dqo.ai
-    rest-api-base-url: https://api.dqo.ai
+    ui-base-url: https://cloud.dqops.com
+    rest-api-base-url: https://api.dqops.com
     #ui-base-url: http://localhost:8080
     #rest-api-base-url: http://localhost:8080
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
@@ -116,6 +133,8 @@ dqo:
     process-file-changes-delay-millis: 100
   instance:
     authentication-token-expiration-minutes: 10080
+    return-base-url: http://localhost:8888
+    validate-return-base-url: false
   sensor:
     limits:
       sensor-readout-limit: 1000
@@ -138,20 +157,27 @@ dqo:
     get-job-changes-since-wait-seconds: 20
     wait-timeouts:
       run-checks: 120
+      collect-statistics: 120
+      import-tables: 120
+      delete-stored-data: 120
+      synchronize-multiple-folders: 120
       default-wait-timeout: 120
   scheduler:
-    #start: true
+    start: true
     synchronization-mode: silent
     check-run-mode: silent
-    synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronize-cron-schedule: "5 * * * *"   # 5 minutes after every hour, but a free version starts just once an hour on a minute that is 5 minutes after the start
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:
       profiling: "0 12 * * *"  # 12PM every day (noon)
-      recurring-daily: "0 12 * * *"  # 12PM every day (noon)
-      recurring-monthly: "0 12 * * *"  # 12PM every day (noon)
+      monitoring-daily: "0 12 * * *"  # 12PM every day (noon)
+      monitoring-monthly: "0 12 * * *"  # 12PM every day (noon)
       partitioned-daily: "0 12 * * *"  # 12PM every day (noon)
       partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
+  webserver:
+    static-files-cache-control-max-age: 604800
+    dynamic-files-cache-control-max-age: 0
   cli:
     oneshot:
       terminal-width: 150

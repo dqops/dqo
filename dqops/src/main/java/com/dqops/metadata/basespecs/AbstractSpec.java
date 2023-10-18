@@ -17,10 +17,9 @@ package com.dqops.metadata.basespecs;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.*;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
-import com.dqops.utils.reflection.ReflectionService;
-import com.dqops.utils.reflection.ReflectionServiceSingleton;
 import com.dqops.utils.serialization.DeserializationAware;
 import com.dqops.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -37,6 +36,8 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware, Cloneable {
+    public static boolean VALIDATE_FIELD_MAP_ON_WRITE = false;
+
     /**
      * Default empty field map.
      */
@@ -136,6 +137,13 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
      * @param fieldName Field name.
      */
     protected void propagateHierarchyIdToField(HierarchyNode childNode, Object fieldName) {
+        if (VALIDATE_FIELD_MAP_ON_WRITE) {
+            if (childNode != getChild(fieldName)) {
+                throw new DqoRuntimeException("Child node " + fieldName + " on the class " + this.getClass().getSimpleName() +
+                        " uses a wrong name when accessing the field map, update the names of fields.");
+            }
+        }
+
         if (childNode == null || this.hierarchyId == null) {
             return;
         }
@@ -171,6 +179,28 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         for(HierarchyNode child : this.children()) {
             if (child.isDirty()) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the object is dirty (has changes), but the <code>checkAlsoChildren</code> parameter wil decide if we want to iterate also over child items (which could trigger loading them).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @JsonIgnore
+    public boolean isDirty(boolean checkAlsoChildren) {
+        if (super.isDirty()) {
+            return true;
+        }
+
+        if (checkAlsoChildren) {
+            for(HierarchyNode child : this.children()) {
+                if (child.isDirty()) {
+                    return true;
+                }
             }
         }
 

@@ -25,7 +25,9 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -43,8 +45,8 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(boolean.class, ParameterDataType.boolean_type);
         put(Double.class, ParameterDataType.double_type);
         put(double.class, ParameterDataType.double_type);
-        put(Instant.class, ParameterDataType.instant_type);
-        put(LocalDate.class, ParameterDataType.date_type);
+         put(LocalDate.class, ParameterDataType.date_type);
+        put(LocalDateTime.class, ParameterDataType.datetime_type);
     }};
 
     private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{
@@ -160,11 +162,7 @@ public class ReflectionServiceImpl implements ReflectionService {
                 parameterDataType = KNOWN_DATA_TYPES.get(fieldType);
             } else if (fieldType.isEnum()) {
                 parameterDataType = ParameterDataType.enum_type;
-                Object[] enumConstants = fieldType.getEnumConstants();
-                Map<String, EnumValueInfo> enumDictionary = Arrays.stream(enumConstants)
-                        .map(e -> createEnumValue((Enum<?>) e))
-                        .collect(Collectors.toMap(e -> e.getJavaName(), e -> e));
-                fieldInfo.setEnumValuesByName(enumDictionary);
+                fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
             } else if (fieldType == List.class) {
                 Type listParameterType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
                 if (listParameterType == String.class) {
@@ -183,8 +181,7 @@ public class ReflectionServiceImpl implements ReflectionService {
                     } catch (NoSuchMethodException e) {
                     }
                 }
-            }
-            else {
+            } else {
                 parameterDataType = ParameterDataType.object_type;
                 Constructor<?>[] constructors = fieldType.getDeclaredConstructors();
                 Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
@@ -250,5 +247,13 @@ public class ReflectionServiceImpl implements ReflectionService {
         }
 
         return enumInfo;
+    }
+
+    @Override
+    public Map<String, EnumValueInfo> getEnumValuesMap(Class<? extends Enum> targetEnum) {
+        Object[] enumConstants = targetEnum.getEnumConstants();
+        return Arrays.stream(enumConstants)
+                .map(e -> createEnumValue((Enum<?>) e))
+                .collect(Collectors.toMap(EnumValueInfo::getJavaName, Function.identity()));
     }
 }

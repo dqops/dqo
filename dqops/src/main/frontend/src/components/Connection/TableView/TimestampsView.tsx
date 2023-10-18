@@ -13,12 +13,17 @@ import NumberInput from "../../NumberInput";
 import Checkbox from "../../Checkbox";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import clsx from 'clsx';
+import { IRootState } from '../../../redux/reducers';
 
 const TimestampsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const handleChangeTimestamps = (obj: any) => {
     dispatch(setUpdatedTablePartitioning(checkTypes, firstLevelActiveTab, {
@@ -64,21 +69,22 @@ const TimestampsView = () => {
         isDisabled={isDisabled}
       />
 
-      <div className="mb-4">
+      <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Event timestamp column name for timeliness checks"
+          label="Event timestamp column name for timeliness freshness checks (most current data)"
           value={tablePartitioning?.timestamp_columns?.event_timestamp_column}
           onChange={(column) =>
             handleChangeTimestamps({
               event_timestamp_column: column
             })
           }
+          
         />
       </div>
 
-      <div className="mb-4">
+      <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Ingestion timestamp column name for timeliness checks"
+          label="Ingestion timestamp column name for timeliness staleness checks (last load timestamp)"
           value={tablePartitioning?.timestamp_columns?.ingestion_timestamp_column}
           onChange={(column) =>
             handleChangeTimestamps({
@@ -88,9 +94,9 @@ const TimestampsView = () => {
         />
       </div>
 
-      <div className="mb-10">
+      <div className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
         <ColumnSelect
-          label="Date or datetime column name for partition checks"
+          label="Date or datetime column name used for date/time partitioning used in partition checks"
           value={tablePartitioning?.timestamp_columns?.partition_by_column}
           onChange={(column) =>
             handleChangeTimestamps({
@@ -103,7 +109,7 @@ const TimestampsView = () => {
         />
       </div>
 
-      <SectionWrapper className="mb-8" title="Incremental daily partitioned checks time window">
+      <SectionWrapper className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental daily partitioned partitioned checks">
         <div className="flex mb-4">
           <span className="w-80 text-sm">Recent days</span>
 
@@ -132,7 +138,7 @@ const TimestampsView = () => {
         </div>
       </SectionWrapper>
 
-      <SectionWrapper title="Incremental monthly partitioned checks time window">
+      <SectionWrapper className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental monthly partitioned partitioned checks">
         <div className="flex mb-4 text-sm">
           <span className="w-80">Recent months</span>
 

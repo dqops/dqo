@@ -7,14 +7,19 @@ import SvgIcon from '../SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import Tree from '../MainLayout/Tree';
 import { CheckTypes } from "../../shared/routes";
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
+ 
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth } = useTree();
+  const { sidebarWidth, setSidebarWidth, treeData, sidebarScrollHeight, setSidebarScrollHeight } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -37,6 +42,12 @@ const Sidebar = () => {
     [isResizing]
   );
 
+  const handleScroll = () => {
+    if (sidebarRef.current) {
+      setSidebarScrollHeight(sidebarRef.current.scrollTop);
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResizing);
@@ -46,21 +57,29 @@ const Sidebar = () => {
     };
   }, [resize, stopResizing]);
 
+  useEffect(() => {
+    if (sidebarRef.current) {
+      sidebarRef.current.scrollTop = sidebarScrollHeight;
+    }
+  }, [sidebarScrollHeight])
+
   return (
     <div
       className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
       ref={sidebarRef}
+      onScroll={handleScroll}
       // onMouseDown={(e) => e.preventDefault()}
       style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
-        {checkTypes === 'sources' ? (
+        {(checkTypes === 'sources' || Object.keys(treeData).length === 0) ? (
           <Button
             label="Add connection"
             color="primary"
             className="px-4"
             leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
-            onClick={() => history.push('/create')}
+            onClick={() => history.push('/sources/create')}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : (
           <div />

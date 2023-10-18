@@ -18,6 +18,7 @@ package com.dqops.utils.docs.checks;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
@@ -339,8 +340,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         AbstractRootChecksContainerSpec checkRootContainer =
             (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
-                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false) :
-                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false);
+                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), true) :
+                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), true);
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
         }
@@ -348,11 +349,25 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
         }
 
+        if (checkRootContainer.getCheckType() == CheckType.partitioned) {
+            trimmedTableSpec.getColumns().put("date_column", createColumnWithLabel("date or datetime column used as a daily or monthly partitioning key, dates (and times) are truncated to a day or a month by the sensor's query for partitioned checks"));
+            trimmedTableSpec.getTimestampColumns().setPartitionByColumn("date_column");
+        }
+
         CheckContainerModel allChecksModel = new CheckContainerModel();
         QualityCategoryModel uiCategoryModel;
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
         if (Objects.equals(checkCategoryName, AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
             uiCategoryModel = new QualityCategoryModel(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/" + COMPARISON_NAME);
             uiCategoryModel.setComparisonName(COMPARISON_NAME);
+
+            tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+            tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
+            tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
+            tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
+
+            trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
+            trimmedTableSpec.getTableComparisons().put(COMPARISON_NAME, tableComparisonConfigurationSpec);
         } else {
             uiCategoryModel = new QualityCategoryModel(checkCategoryName);
         }
@@ -370,14 +385,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer, trimmedTableSpec);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(checkCategoryName);
         if (checkCategoryContainer == null) {
             System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + checkCategoryName);
         }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
         if (checkCategoryContainer instanceof AbstractComparisonCheckCategorySpecMap) {
             AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec> comparisonCategoryMap =
                     (AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec>)checkCategoryContainer;
@@ -391,11 +405,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 columnComparisonCheckCategorySpec.setReferenceColumn("source_of_truth_column_name");
             }
 
-            tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-            tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
-            tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
-            tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
-
             trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
             trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
             tableComparisonConfigurationSpec.getGroupingColumns().add(new TableComparisonGroupingColumnsPairSpec() {{
@@ -406,9 +415,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 setComparedTableColumnName("state");
                 setReferenceTableColumnName("state_column_name_on_reference_table");
             }});
-
-            trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
-            trimmedTableSpec.getTableComparisons().put(comparisonCheckCategorySpec.getComparisonName(), tableComparisonConfigurationSpec);
         }
 
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
@@ -471,7 +477,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
         String profilingBeginMarker = "profiling_checks:";
-        String recurringBeginMarker = "recurring_checks:";
+        String monitoringBeginMarker = "monitoring_checks:";
         String partitionedBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
@@ -482,7 +488,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains(profilingBeginMarker) || splitYaml.get(i).contains(recurringBeginMarker) || splitYaml.get(i).contains(partitionedBeginMarker)) {
+            if (splitYaml.get(i).contains(profilingBeginMarker) || splitYaml.get(i).contains(monitoringBeginMarker) || splitYaml.get(i).contains(partitionedBeginMarker)) {
                 isCheckSection = true;
                 checkDocumentationModel.setCheckSampleBeginLine(i + 1);
             }
@@ -593,7 +599,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
 
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
-                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate,
+                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate, providerSensorDefinitionWrapper.getSqlTemplateLastModified(),
                         providerType, HomeType.DQO_HOME, null);
 
                 ConnectionSpec connectionSpec = new ConnectionSpec();

@@ -1,7 +1,7 @@
 **total sum match percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
+Column-level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
 
 ___
 
@@ -53,7 +53,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -307,7 +307,7 @@ Verifies that the percentage of difference in total sum of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_total_sum_match_percent|recurring|daily|[total_sum_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_total_sum_match_percent|monitoring|daily|[total_sum_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -333,7 +333,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         daily:
           accuracy:
             daily_total_sum_match_percent:
@@ -349,7 +349,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_total
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -361,7 +361,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           accuracy:
             daily_total_sum_match_percent:
@@ -604,7 +604,7 @@ Verifies that the percentage of difference in total sum of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_total_sum_match_percent|recurring|monthly|[total_sum_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_total_sum_match_percent|monitoring|monthly|[total_sum_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -630,7 +630,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Check structure (Yaml)**
 ```yaml
-      recurring_checks:
+      monitoring_checks:
         monthly:
           accuracy:
             monthly_total_sum_match_percent:
@@ -646,7 +646,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tot
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -658,7 +658,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           accuracy:
             monthly_total_sum_match_percent:

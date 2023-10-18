@@ -50,7 +50,7 @@ public interface LocalFileStorageService {
      * @param filePath File path relative to the home root.
      * @return File content or null when the file was not found.
      */
-    FileContent readTextFile(HomeFilePath filePath);
+    FileContent readFile(HomeFilePath filePath);
 
     /**
      * Save a file to the user home folder.

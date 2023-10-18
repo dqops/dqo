@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
 import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
@@ -8,6 +8,10 @@ import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 import { TabOption } from "../PageTabs/tab";
 import qs from "query-string";
+import axios from 'axios';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { checkIfTabCouldExist } from '../../utils';
 
 interface ConnectionLayoutProps {
   children: any;
@@ -22,8 +26,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const history = useHistory();
   const location = useLocation();
   const match = useRouteMatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [objectNotFound, setObjectNotFound] = useState(false)
 
   const handleChange = (tab: TabOption) => {
+    console.log("here")
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
     if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
@@ -48,34 +55,49 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
         if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
-          history.push(activeUrl);
+          history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
         }
       }
     }
   }, [activeTab]);
 
+axios.interceptors.response.use(undefined, function (error) {
+  const statusCode = error.response ? error.response.status : null;
+  if (statusCode === 404 ) {
+    console.log(error)
+    setObjectNotFound(true)
+  }
+  return Promise.reject(error);
+});
+
   return (
     <MainLayout>
-      <div className="flex-1 h-full flex flex-col">
+      <div className="h-full flex flex-col">
         <PageTabs
           tabs={tabOptions}
           activeTab={activeTab}
           onChange={handleChange}
           onRemoveTab={closeTab}
-          limit={10}
+          limit={7}
         />
         <div
-          className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-          style={{ maxHeight: "calc(100vh - 80px)" }}
+          className=" bg-white border border-gray-300 min-h-0 overflow-auto h-full w-full"
         >
           {!!activeTab && pageTabs.length ? (
-            <div>
+            <div className='w-full h-full'>
               {children}
             </div>
           ) : null}
         </div>
       </div>
+      <ConfirmDialog
+      open={objectNotFound}
+      onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
+      isCancelExcluded={true} 
+      onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
+      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
     </MainLayout>
+    
   );
 };
 

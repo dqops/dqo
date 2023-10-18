@@ -1,11 +1,11 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.mono_object import MonoObject
+from ...client import AuthenticatedClient, Client
+from ...models.mono_void import MonoVoid
 from ...types import UNSET, Response
 
 
@@ -14,18 +14,9 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
     data_grouping_configuration_name: str,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["dataGroupingConfigurationName"] = data_grouping_configuration_name
@@ -34,20 +25,20 @@ def _get_kwargs(
 
     return {
         "method": "patch",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[MonoObject]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonoObject.from_dict(response.json())
+        response_200 = MonoVoid.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -57,8 +48,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[MonoObject]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -72,9 +63,9 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
-) -> Response[MonoObject]:
+) -> Response[MonoVoid]:
     """setTableDefaultGroupingConfiguration
 
      Sets a table's grouping configuration as the default or disables data grouping
@@ -90,19 +81,17 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         data_grouping_configuration_name=data_grouping_configuration_name,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -114,9 +103,9 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
-) -> Optional[MonoObject]:
+) -> Optional[MonoVoid]:
     """setTableDefaultGroupingConfiguration
 
      Sets a table's grouping configuration as the default or disables data grouping
@@ -132,7 +121,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return sync_detailed(
@@ -149,9 +138,9 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
-) -> Response[MonoObject]:
+) -> Response[MonoVoid]:
     """setTableDefaultGroupingConfiguration
 
      Sets a table's grouping configuration as the default or disables data grouping
@@ -167,19 +156,17 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoVoid]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         data_grouping_configuration_name=data_grouping_configuration_name,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -189,9 +176,9 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_grouping_configuration_name: str,
-) -> Optional[MonoObject]:
+) -> Optional[MonoVoid]:
     """setTableDefaultGroupingConfiguration
 
      Sets a table's grouping configuration as the default or disables data grouping
@@ -207,7 +194,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoVoid
     """
 
     return (

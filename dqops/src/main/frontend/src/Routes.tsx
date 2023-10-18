@@ -11,8 +11,8 @@ import Dashboards from './pages/Dashboards';
 import ConnectionPage from "./pages/Connection";
 import SchemaPage from "./pages/Schema";
 import TablePage from "./pages/Table";
-import TableDailyChecksView from "./pages/TableDailyRecurringChecksView";
-import TableMonthlyChecksView from "./pages/TableMonthlyRecurringChecksView";
+import TableDailyChecksView from "./pages/TableDailyMonitoringChecksView";
+import TableMonthlyChecksView from "./pages/TableMonthlyMonitoringChecksView";
 import TableDailyPartitionedChecksView from "./pages/TableDailyPartitionedChecksView";
 import TableMonthlyPartitionedChecksView from "./pages/TableMonthlyPartitionedChecksView";
 import TableProfilingChecksUIFilterView from "./pages/TableProfilingChecksUIFilterView";
@@ -20,13 +20,13 @@ import TableColumnsView from "./pages/TableColumnsView";
 import ColumnView from "./pages/ColumnView";
 import ColumnProfilingChecksView from "./pages/ColumnProfilingChecksView";
 import ColumnProfilingChecksUIFilterView from "./pages/ColumnProfilingChecksUIFilterView";
-import ColumnDailyRecurringChecksView from "./pages/ColumnDailyRecurringChecksView";
-import ColumnRecurringChecksUIFilterView from "./pages/ColumnRecurringChecksUIFilterView";
-import ColumnMonthlyRecurringChecksView from "./pages/ColumnMonthlyRecurringChecksView";
+import ColumnDailyMonitoringChecksView from "./pages/ColumnDailyMonitoringChecksView";
+import ColumnMonitoringChecksUIFilterView from "./pages/ColumnMonitoringChecksUIFilterView";
+import ColumnMonthlyMonitoringChecksView from "./pages/ColumnMonthlyMonitoringChecksView";
 import ColumnDailyPartitionedChecksView from "./pages/ColumnDailyPartitionedChecksView";
 import ColumnMonthlyPartitionedChecksView from "./pages/ColumnMonthlyPartitionedChecksView";
 import ColumnPartitionedChecksUIFilterView from "./pages/ColumnPartitionedChecksUIFilterView";
-import TableRecurringChecksUIFilterView from "./pages/TableRecurringChecksUIFilterView";
+import TableMonitoringChecksUIFilterView from "./pages/TableMonitoringChecksUIFilterView";
 import TablePartitionedChecksUIFilterView from "./pages/TablePartitionedChecksUIFilterView";
 import { ROUTES } from "./shared/routes";
 import Definitions from "./pages/Definitions";
@@ -37,6 +37,14 @@ import IncidentConnection from "./pages/IncidentConnection";
 import IncidentDetail from "./pages/IncidentDetail";
 import NotFound from "./pages/NotFound";
 import TableIncidents from "./pages/TableIncidents";
+import CheckDetail from "./pages/CheckDetail";
+import DefaultCheckDetail from "./pages/DefaultChecksDetail"
+import UserListDetail from "./pages/UserListDetail";
+import UserDetail from "./pages/UserListDetail/UserDetail";
+import DefaultSchedules from "./pages/DefaultSchedulesDetail";
+import DefaultWebhooksDetail from "./pages/DefaultWebhooksDetail";
+import SharedCredentailsDetail from "./pages/SharedCredentialsDetail";
+import SingleSharedCredential from "./pages/SharedCredentialsDetail/SingleSharedCredential";
 
 const Routes = () => {
   return (
@@ -47,9 +55,9 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.TABLE} component={TablePage} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PROFILING} component={TableProfilingChecksView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PROFILING_FILTER} component={TableProfilingChecksUIFilterView} />
-      <Route exact path={ROUTES.PATTERNS.TABLE_RECURRING_DAILY} component={TableDailyChecksView} />
-      <Route exact path={ROUTES.PATTERNS.TABLE_RECURRING_MONTHLY} component={TableMonthlyChecksView} />
-      <Route exact path={ROUTES.PATTERNS.TABLE_RECURRING_FILTER} component={TableRecurringChecksUIFilterView} />
+      <Route exact path={ROUTES.PATTERNS.TABLE_MONITORING_DAILY} component={TableDailyChecksView} />
+      <Route exact path={ROUTES.PATTERNS.TABLE_MONITORING_MONTHLY} component={TableMonthlyChecksView} />
+      <Route exact path={ROUTES.PATTERNS.TABLE_MONITORING_FILTER} component={TableMonitoringChecksUIFilterView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PARTITIONED_DAILY} component={TableDailyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY} component={TableMonthlyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PARTITIONED_FILTER} component={TablePartitionedChecksUIFilterView} />
@@ -58,9 +66,9 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.COLUMN} component={ColumnView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PROFILING} component={ColumnProfilingChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PROFILING_FILTER} component={ColumnProfilingChecksUIFilterView} />
-      <Route exact path={ROUTES.PATTERNS.COLUMN_RECURRING_DAILY} component={ColumnDailyRecurringChecksView} />
-      <Route exact path={ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY} component={ColumnMonthlyRecurringChecksView} />
-      <Route exact path={ROUTES.PATTERNS.COLUMN_RECURRING_FILTER} component={ColumnRecurringChecksUIFilterView} />
+      <Route exact path={ROUTES.PATTERNS.COLUMN_MONITORING_DAILY} component={ColumnDailyMonitoringChecksView} />
+      <Route exact path={ROUTES.PATTERNS.COLUMN_MONITORING_MONTHLY} component={ColumnMonthlyMonitoringChecksView} />
+      <Route exact path={ROUTES.PATTERNS.COLUMN_MONITORING_FILTER} component={ColumnMonitoringChecksUIFilterView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY} component={ColumnDailyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY} component={ColumnMonthlyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER} component={ColumnPartitionedChecksUIFilterView} />
@@ -68,11 +76,19 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
       <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} component={SensorDetail} />
       <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
+      <Route exact path={ROUTES.PATTERNS.CHECK_DETAIL} component={CheckDetail} />
+      <Route exact path={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} component={DefaultCheckDetail} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
+      <Route exact path={ROUTES.PATTERNS.USERS_LIST_DETAIL} component={UserListDetail} />
+      <Route exact path={ROUTES.PATTERNS.USER_DETAIL} component={UserDetail} />
+      <Route exact path={ROUTES.PATTERNS.SCHEDULES_DEFAULT_DETAIL} component={DefaultSchedules} />
+      <Route exact path={ROUTES.PATTERNS.WEBHOOKS_DEFAULT_DETAIL} component={DefaultWebhooksDetail}/>
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTAILS_LIST_DETAIL} component={SharedCredentailsDetail}/>
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTAILS_DETAIL} component={SingleSharedCredential}/>
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
       <Route exact path="*" component={NotFound} />
     </Switch>

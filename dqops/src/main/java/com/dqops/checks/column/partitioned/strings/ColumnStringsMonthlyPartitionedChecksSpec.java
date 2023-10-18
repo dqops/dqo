@@ -77,9 +77,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_match_name_regex_percent", o -> o.monthlyPartitionStringMatchNameRegexPercent);
 
             put("monthly_partition_expected_strings_in_top_values_count", o -> o.monthlyPartitionExpectedStringsInTopValuesCount);
-
-            put("monthly_partition_string_datatype_detected", o -> o.monthlyPartitionStringDatatypeDetected);
-
         }
     };
 
@@ -188,9 +185,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected;
-    
     /**
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
@@ -824,24 +818,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInTopValuesCount, monthlyPartitionExpectedStringsInTopValuesCount));
         this.monthlyPartitionExpectedStringsInTopValuesCount = monthlyPartitionExpectedStringsInTopValuesCount;
         propagateHierarchyIdToField(monthlyPartitionExpectedStringsInTopValuesCount, "monthly_partition_expected_strings_in_top_values_count");
-    }
-
-    /**
-     * Returns a count of expected values in datatype detected check.
-     * @return Datatype detected check.
-     */
-    public ColumnStringDatatypeDetectedCheckSpec getMonthlyPartitionStringDatatypeDetected() {
-        return monthlyPartitionStringDatatypeDetected;
-    }
-
-    /**
-     * Sets a new definition of a datatype detected check.
-     * @param monthlyPartitionStringDatatypeDetected Datatype detected check.
-     */
-    public void setMonthlyPartitionStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetected, monthlyPartitionStringDatatypeDetected));
-        this.monthlyPartitionStringDatatypeDetected = monthlyPartitionStringDatatypeDetected;
-        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetected, "monthly_partition_string_datatype_detected");
     }
 
     /**

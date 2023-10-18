@@ -15,6 +15,8 @@ import { CheckTypes } from '../../shared/routes';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { IRootState } from '../../redux/reducers';
+import { clsx } from 'clsx';
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -29,6 +31,7 @@ interface CheckCategoriesViewProps {
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
   copyCategory?: QualityCategoryModel;
+  isDefaultEditing?: boolean;
 }
 const CheckCategoriesView = ({
   mode,
@@ -39,13 +42,16 @@ const CheckCategoriesView = ({
   getCheckOverview,
   timeWindowFilter,
   changeCopyUI,
-  copyCategory
+  copyCategory,
+  isDefaultEditing
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);
+
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
     if (category.checks?.some((x) => x.configured === true)) {
@@ -56,7 +62,7 @@ const CheckCategoriesView = ({
   const onRunChecks = async () => {
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: category?.run_checks_job_template,
+      check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})
@@ -65,7 +71,7 @@ const CheckCategoriesView = ({
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
 
@@ -85,7 +91,7 @@ const CheckCategoriesView = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="font-semibold text-gray-700 capitalize flex items-center justify-center gap-x-3 cursor-pointer"
+                className="font-semibold text-gray-700 flex items-center justify-center gap-x-3 cursor-pointer"
                 onClick={() => setIsExtended(!isExtended)}
               >
                 {isExtended === false ? (
@@ -99,7 +105,7 @@ const CheckCategoriesView = ({
                     className="w-5 h-5 text-gray-700"
                   />
                 )}
-                {category.category}
+                {category.category?.replace(/^\w/, c => c.toUpperCase())}
               </div>
             </div>
             <div> </div>
@@ -108,30 +114,32 @@ const CheckCategoriesView = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          <div className="flex justify-end gap-x-3">
-            <div className="group relative">
-              <SvgIcon
-                name="delete"
-                width={20}
-                className="cursor-pointer"
-                onClick={() => setDeleteDataDialogOpened(true)}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Delete data for the category
+          {isDefaultEditing !== true && (
+            <div className="flex justify-end gap-x-3">
+              <div className="group relative">
+                <SvgIcon
+                  name="delete"
+                  width={20}
+                  className="cursor-pointer"
+                  onClick={() => setDeleteDataDialogOpened(true)}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Delete data for the category
+                </div>
+              </div>
+              <div className="group relative">
+                <SvgIcon
+                  name="play"
+                  width={20}
+                  className={clsx("text-primary", userProfile.can_run_checks !== true ? "pointer-events-none cursor-not-allowed" : "cursor-pointer")}
+                  onClick={onRunChecks}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Run checks for the category
+                </div>
               </div>
             </div>
-            <div className="group relative">
-              <SvgIcon
-                name="play"
-                width={20}
-                className="text-primary cursor-pointer"
-                onClick={onRunChecks}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Run checks for the category
-              </div>
-            </div>
-          </div>
+          )}
         </td>
       </tr>
       {category.checks &&
@@ -166,6 +174,8 @@ const CheckCategoriesView = ({
             }
             category={category.category}
             comparisonName={category.comparison_name}
+            isDefaultEditing={isDefaultEditing}
+            canUserRunChecks={userProfile.can_run_checks}
           />
         ))}
       <DeleteOnlyDataDialog
@@ -173,7 +183,10 @@ const CheckCategoriesView = ({
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
+          JobApiClient.deleteStoredData(
+            false,
+            undefined,
+            {
             ...category.data_clean_job_template,
             ...params
           });

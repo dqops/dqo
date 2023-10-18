@@ -111,7 +111,7 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name")
     private String check;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, monitoring, partitioned)")
     private CheckType checkType;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (volume, nulls, numeric, etc.)")

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,20 +15,29 @@ if TYPE_CHECKING:
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.column_sql_daily_partitioned_checks_spec_custom_checks import (
+        ColumnSqlDailyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnSqlDailyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnSqlDailyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnSqlDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
         daily_partition_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         daily_partition_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnSqlDailyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     daily_partition_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
     ] = UNSET
@@ -37,9 +47,13 @@ class ColumnSqlDailyPartitionedChecksSpec:
     daily_partition_sql_aggregate_expr_column: Union[
         Unset, "ColumnSqlAggregateExprCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         daily_partition_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
@@ -69,6 +83,8 @@ class ColumnSqlDailyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if daily_partition_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "daily_partition_sql_condition_passed_percent_on_column"
@@ -95,8 +111,20 @@ class ColumnSqlDailyPartitionedChecksSpec:
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
         )
+        from ..models.column_sql_daily_partitioned_checks_spec_custom_checks import (
+            ColumnSqlDailyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnSqlDailyPartitionedChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnSqlDailyPartitionedChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _daily_partition_sql_condition_passed_percent_on_column = d.pop(
             "daily_partition_sql_condition_passed_percent_on_column", UNSET
         )
@@ -143,6 +171,7 @@ class ColumnSqlDailyPartitionedChecksSpec:
             )
 
         column_sql_daily_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             daily_partition_sql_condition_passed_percent_on_column=daily_partition_sql_condition_passed_percent_on_column,
             daily_partition_sql_condition_failed_count_on_column=daily_partition_sql_condition_failed_count_on_column,
             daily_partition_sql_aggregate_expr_column=daily_partition_sql_aggregate_expr_column,

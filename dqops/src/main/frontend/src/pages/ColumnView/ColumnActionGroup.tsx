@@ -7,6 +7,10 @@ import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
 import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import { DqoJobHistoryEntryModelStatusEnum } from '../../api';
+import SvgIcon from '../../components/SvgIcon';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -34,6 +38,7 @@ const ColumnActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const { userProfile, job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -43,25 +48,40 @@ const ColumnActionGroup = ({
     );
   };
 
+  const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.schemaTableName ===
+        schema + '.' + table && 
+         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connectionName === 
+        connection &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  ).length !==0 
+
   const columnPath = `${connection}.${schema}.${table}.${column}`
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {shouldDelete && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Delete Column"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
 
@@ -71,14 +91,26 @@ const ColumnActionGroup = ({
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           <Button
-            color="primary"
-            variant="outlined"
-            label="Collect Statistics"
+          color={
+          filteredCollectStatisticsJobs
+          ? 'secondary'
+          : 'primary'
+            }           
+            label={filteredCollectStatisticsJobs
+              ? 'Collecting...'
+              : "Collect Statistics"}
             className={clsx(
-              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
+              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
             )}
+            leftIcon={
+              filteredCollectStatisticsJobs? (
+                <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
+              ) : (
+                ''
+              )
+            }
             onClick={onCollectStatistics}
-            disabled={runningStatistics}
+            disabled={runningStatistics || userProfile.can_collect_statistics  !== true || filteredCollectStatisticsJobs}
           />
         </div>
       ) : (
@@ -89,7 +121,8 @@ const ColumnActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
+          
         />
       )}
       <ConfirmDialog

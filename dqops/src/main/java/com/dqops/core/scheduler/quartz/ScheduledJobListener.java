@@ -32,14 +32,14 @@ public class ScheduledJobListener implements JobListener {
 
     @Override
     public String getName() {
-        return "DQO Job Listener";
+        return "DQOps Job Listener";
     }
 
     @Override
     public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
         JobDetail jobDetail = jobExecutionContext.getJobDetail();
         String jobName = jobDetail.getKey().getName();
-        LOG.info("Job is about to be executed: " + jobName);
+        LOG.debug("Job is about to be executed: " + jobName);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ScheduledJobListener implements JobListener {
         JobDetail jobDetail = jobExecutionContext.getJobDetail();
         String jobName = jobDetail.getKey().getName();
         if (e == null) {
-            LOG.info("Job was executed successfully: " + jobName);
+            LOG.debug("Job was executed successfully: " + jobName);
         }
         else {
             LOG.error("Job " + jobName + " failed to execute, error: " + e.getMessage(), e);

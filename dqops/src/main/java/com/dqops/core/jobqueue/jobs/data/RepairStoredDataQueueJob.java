@@ -20,26 +20,29 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshot;
 import com.dqops.data.storage.*;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.TextColumn;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Queue job that repairs data stored in user's ".data" directory.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Slf4j
 public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJobResult> {
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private ParquetPartitionMetadataService parquetPartitionMetadataService;
@@ -76,20 +79,22 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      */
     @Override
     public RepairStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
 
         if (this.repairParameters.isRepairErrors()) {
             // Load and ignore results to force automatic repair of corrupted data.
-            this.loadMonthlyPartitions(ErrorsSnapshot.createErrorsStorageSettings());
+            this.loadAndFixMonthlyPartitions(ErrorsSnapshot.createErrorsStorageSettings());
         }
         if (this.repairParameters.isRepairStatistics()) {
-            this.loadMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
+            this.loadAndFixMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
         }
         if (this.repairParameters.isRepairCheckResults()) {
-            this.loadMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings());
+            this.loadAndFixMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings());
         }
         if (this.repairParameters.isRepairSensorReadouts()) {
-            this.loadMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings());
+            this.loadAndFixMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings());
         }
 
         return result;
@@ -100,30 +105,55 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      * @param fileStorageSettings File storage settings.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
-    protected Map<ParquetPartitionId, LoadedMonthlyPartition> loadMonthlyPartitions(FileStorageSettings fileStorageSettings) {
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings) {
+        SearchPattern connectionSearchPattern = SearchPattern.create(false, this.repairParameters.getConnectionName());
+        if (connectionSearchPattern.isWildcardSearchPattern()) {
+            List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+            for (String connectionName : connectionNamesList) {
+                if (connectionSearchPattern.match(connectionName)) {
+                    loadAndFixMonthlyPartitions(fileStorageSettings, connectionName);
+                }
+            }
+        } else {
+            loadAndFixMonthlyPartitions(fileStorageSettings, this.repairParameters.getConnectionName());
+        }
+    }
+
+    /**
+     * Load all partitions fitting the <code>repairParameters</code> for given storage settings.
+     * @param fileStorageSettings File storage settings.
+     * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
+     */
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, String connectionName) {
         List<ParquetPartitionId> partitionIds;
         if (this.repairParameters.getSchemaTableName() == null) {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    this.repairParameters.getConnectionName(), fileStorageSettings);
+                    connectionName, fileStorageSettings);
         } else {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    this.repairParameters.getConnectionName(),
+                    connectionName,
                     PhysicalTableName.fromSchemaTableFilter(this.repairParameters.getSchemaTableName()),
                     fileStorageSettings);
         }
 
         if (partitionIds == null) {
-            return null;
+            return;
         }
 
-        Map<ParquetPartitionId, LoadedMonthlyPartition> result = new HashMap<>();
         for (ParquetPartitionId partitionId: partitionIds) {
             // columnNames is null in order to force parquetPartitionStorageService to load all columns.
             LoadedMonthlyPartition loadedMonthlyPartition = this.parquetPartitionStorageService.loadPartition(
                     partitionId, fileStorageSettings, null);
-            result.put(partitionId, loadedMonthlyPartition);
+
+            if (loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() != 0) {
+                TextColumn idColumn = loadedMonthlyPartition.getData().textColumn(fileStorageSettings.getIdStringColumnName());
+                if (idColumn.countUnique() != idColumn.size()) {
+                    // duplicates found, removing the partition
+                    this.parquetPartitionStorageService.deletePartitionFile(loadedMonthlyPartition.getPartitionId(), fileStorageSettings);
+                    log.warn("Parquet file with duplicate rows having the same ID was identified, the parquet file was removed: " + loadedMonthlyPartition.getPartitionId().toString());
+                }
+            }
         }
-        return result;
     }
 
     /**

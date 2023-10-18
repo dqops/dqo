@@ -15,12 +15,18 @@
  */
 package com.dqops.services.check.mapping;
 
+import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
+import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.custom.CustomParametersSpecObject;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -58,9 +64,12 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
      *
      * @param model              Data quality check model with the updates.
      * @param checkContainerSpec The target check container spec object that will be updated.
+     * @param parentTableSpec    Parent table specification.
      */
     @Override
-    public void updateCheckContainerSpec(CheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec) {
+    public void updateCheckContainerSpec(CheckContainerModel model,
+                                         AbstractRootChecksContainerSpec checkContainerSpec,
+                                         TableSpec parentTableSpec) {
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkContainerSpec.getClass());
         List<QualityCategoryModel> categoryModelList = model.getCategories();
         if (categoryModelList == null) {
@@ -72,6 +81,11 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
             if (categoryDisplayName.startsWith("comparisons/")) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisons = checkContainerSpec.getComparisons();
                 String comparisonName = categoryModel.getComparisonName();
+
+                if (parentTableSpec.getTableComparisons() == null || !parentTableSpec.getTableComparisons().containsKey(comparisonName)) {
+                    continue; // skipping the comparisons, because we cannot save checks for a comparison that is not defined
+                }
+
                 AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = comparisons.get(comparisonName);
                 if (comparisonCheckCategorySpec == null) {
                     Type actualTypeArgument = ((ParameterizedType) comparisons.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -97,13 +111,26 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
                 throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkContainerSpec.getClass().getCanonicalName());
             }
 
-            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkContainerSpec);
-            updateCategoryChecksSpec(categoryModel, categorySpec);
+            Object categoryContainerSpec = categoryFieldInfo.getFieldValueOrNewObject(checkContainerSpec);
+            if (categoryContainerSpec instanceof AbstractCheckCategorySpec) {
+                AbstractCheckCategorySpec categorySpec = (AbstractCheckCategorySpec) categoryContainerSpec;
+                updateCategoryChecksSpec(categoryModel, categorySpec);
 
-            if (categorySpec.isDefault()) {
-                categoryFieldInfo.setFieldValue(null, checkContainerSpec);
-            } else {
-                categoryFieldInfo.setFieldValue(categorySpec, checkContainerSpec);
+                if (categorySpec.isDefault()) {
+                    categoryFieldInfo.setFieldValue(null, checkContainerSpec);
+                } else {
+                    categoryFieldInfo.setFieldValue(categorySpec, checkContainerSpec);
+                }
+            }
+            else if (categoryContainerSpec instanceof CustomCheckSpecMap) {
+                CustomCheckSpecMap customChecksMap = (CustomCheckSpecMap)categoryContainerSpec;
+                updateCustomChecksMap(categoryModel, customChecksMap);
+
+                if (customChecksMap.isDefault()) {
+                    categoryFieldInfo.setFieldValue(null, checkContainerSpec);
+                } else {
+                    categoryFieldInfo.setFieldValue(customChecksMap, checkContainerSpec);
+                }
             }
         }
     }
@@ -115,8 +142,71 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
      * @param categoryModel Source category model with the updates.
      * @param categorySpec  Target category specification to update.
      */
-    protected void updateCategoryChecksSpec(QualityCategoryModel categoryModel, AbstractSpec categorySpec) {
+    protected void updateCategoryChecksSpec(QualityCategoryModel categoryModel, AbstractCheckCategorySpec categorySpec) {
+        List<CheckModel> checkModels = categoryModel.getChecks();
+        if (checkModels == null) {
+            return;
+        }
+
         ClassInfo checkCategoryClassInfo = reflectionService.getClassInfoForClass(categorySpec.getClass());
+        for (CheckModel checkModel : checkModels) {
+            String yamlCheckName = checkModel.getCheckName();
+            FieldInfo checkFieldInfo = checkCategoryClassInfo.getFieldByYamlName(yamlCheckName);
+
+            if (checkFieldInfo != null) {
+                if (!checkModel.isConfigured()) {
+                    // the check was unconfigured (selected to be deleted from YAML)
+                    checkFieldInfo.setFieldValue(null, categorySpec);
+                    continue;
+                }
+
+                AbstractSpec checkNodeObject = (AbstractSpec) checkFieldInfo.getFieldValueOrNewObject(categorySpec);
+
+                AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkNodeObject;
+                updateCheckSpec(checkModel, checkSpec);
+
+                if (checkNodeObject.isDefault()) {
+                    checkFieldInfo.setFieldValue(null, categorySpec);  // when api has sent no configuration (all fields nulls or defaults)
+                } else {
+                    checkFieldInfo.setFieldValue(checkNodeObject, categorySpec);
+                }
+            } else {
+                // custom check
+                CustomCategoryCheckSpecMap customChecksMap = categorySpec.getCustomChecks();
+                if (!checkModel.isConfigured()) {
+                    if (customChecksMap != null) {
+                        customChecksMap.remove(yamlCheckName);
+                    }
+                    continue;
+                }
+
+                if (customChecksMap == null) {
+                    customChecksMap = new CustomCategoryCheckSpecMap();
+                    categorySpec.setCustomChecks(customChecksMap);
+                }
+
+                CustomCheckSpec customCheckSpec = customChecksMap.get(yamlCheckName);
+                if (customCheckSpec == null) {
+                    customCheckSpec = new CustomCheckSpec();
+                }
+
+                updateCustomCheckSpec(checkModel, customCheckSpec);
+
+                if (customCheckSpec.isDefault()) {
+                    customChecksMap.remove(yamlCheckName);
+                } else {
+                    customChecksMap.put(yamlCheckName, customCheckSpec);
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates a map of custom checks with the checks from the model.
+     * @param categoryModel Source category model with models of custom checks to update.
+     * @param customChecksMap Target custom checks map to update.
+     */
+    protected void updateCustomChecksMap(QualityCategoryModel categoryModel, CustomCheckSpecMap customChecksMap) {
         List<CheckModel> checkModels = categoryModel.getChecks();
         if (checkModels == null) {
             return;
@@ -124,27 +214,17 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
 
         for (CheckModel checkModel : checkModels) {
             String yamlCheckName = checkModel.getCheckName();
-            FieldInfo checkFieldInfo = checkCategoryClassInfo.getFieldByYamlName(yamlCheckName);
 
-            if (checkFieldInfo == null) {
-                throw new DqoRuntimeException("Check " + yamlCheckName + " not found on " + categorySpec.getClass().getCanonicalName());
-            }
+            if (checkModel.isConfigured()) {
+                CustomCheckSpec customCheckSpec = customChecksMap.get(yamlCheckName);
+                if (customCheckSpec == null) {
+                    customCheckSpec = new CustomCheckSpec();
+                }
 
-            if (!checkModel.isConfigured()) {
-                // the check was unconfigured (selected to be deleted from YAML)
-                checkFieldInfo.setFieldValue(null, categorySpec);
-                continue;
-            }
-
-            AbstractSpec checkNodeObject = (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(categorySpec);
-
-            AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>)checkNodeObject;
-            updateCheckSpec(checkModel, checkSpec);
-
-            if (checkNodeObject.isDefault()) {
-                checkFieldInfo.setFieldValue(null, categorySpec);  // when api has sent no configuration (all fields nulls or defaults)
+                updateCustomCheckSpec(checkModel, customCheckSpec);
+                customChecksMap.put(yamlCheckName, customCheckSpec);
             } else {
-                checkFieldInfo.setFieldValue(checkNodeObject, categorySpec);
+                customChecksMap.remove(yamlCheckName);
             }
         }
     }
@@ -156,6 +236,34 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
      * @param checkSpec  Target check specification to update.
      */
     protected void updateCheckSpec(CheckModel checkModel, AbstractCheckSpec<?,?,?,?> checkSpec) {
+        checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
+        checkSpec.setComments(checkModel.getComments());
+        checkSpec.setDisabled(checkModel.isDisabled());
+        checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
+        if (checkSpec.getDefaultDataQualityDimension() != null &&
+                Objects.equals(checkModel.getQualityDimension(), checkSpec.getDefaultDataQualityDimension().name())) {
+            checkSpec.setQualityDimension(null);
+        }
+        else {
+            checkSpec.setQualityDimension(checkModel.getQualityDimension());
+        }
+        checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
+        checkSpec.getParameters().setFilter(checkModel.getFilter());
+        checkSpec.setDataGrouping(checkModel.getDataGroupingConfiguration());
+
+        updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
+
+        RuleThresholdsModel ruleThresholdsModel = checkModel.getRule();
+        updateRuleThresholdsSpec(ruleThresholdsModel, checkSpec);
+    }
+
+    /**
+     * Updates the custom check specification <code>checkSpec</code> from the changes in the <code>checkModel</code>.
+     *
+     * @param checkModel Source model for the data quality check.
+     * @param checkSpec  Target custom check specification to update.
+     */
+    protected void updateCustomCheckSpec(CheckModel checkModel, CustomCheckSpec checkSpec) {
         checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
@@ -223,6 +331,16 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
      * @param targetParametersSpec Target parameters (rule or sensor) specification object to update.
      */
     protected void updateFieldValues(List<FieldModel> fieldModels, AbstractSpec targetParametersSpec) {
+        if (targetParametersSpec instanceof CustomParametersSpecObject) {
+            CustomParametersSpecObject customParametersSpecObject = (CustomParametersSpecObject)targetParametersSpec;
+            for (FieldModel fieldModel : fieldModels) {
+                Object fieldValue = fieldModel.getValue();
+                customParametersSpecObject.setParameter(fieldModel.getDefinition().getFieldName(), fieldValue);
+            }
+
+            return;
+        }
+
         ClassInfo parametersClassInfo = reflectionService.getClassInfoForClass(targetParametersSpec.getClass());
 
         if (fieldModels == null) {
@@ -261,8 +379,8 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
                 case double_type:
                     fieldInfo.setFieldValue(fieldModelForUpdate.getDoubleValue(), targetParametersSpec);
                     break;
-                case instant_type:
-                    fieldInfo.setFieldValue(fieldModelForUpdate.getDateTimeValue(), targetParametersSpec);
+                case datetime_type:
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getDatetimeValue(), targetParametersSpec);
                     break;
                 case column_name_type:
                     fieldInfo.setFieldValue(fieldModelForUpdate.getColumnNameValue(), targetParametersSpec);

@@ -23,13 +23,13 @@ import com.dqops.utils.python.PythonVirtualEnv;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Build action called from maven. Performs two actions: first converts the DQO Swagger 2.x file to Swagger 3.x,
- * then updates the DQO python client.
+ * Build action called from maven. Performs two actions: first converts the DQOps Swagger 2.x file to Swagger 3.x,
+ * then updates the DQOps python client.
  */
 public class GeneratePythonClientPostProcessor {
     /**
@@ -39,7 +39,7 @@ public class GeneratePythonClientPostProcessor {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 3) {
-            System.out.println("DQO Python client generator utility");
+            System.out.println("DQOps Python client generator utility");
             System.out.println("Missing required parameter: <path to the source swagger 2 yaml file> <path to the target swagger 3 yaml file> <project root path>");
             return;
         }
@@ -49,6 +49,7 @@ public class GeneratePythonClientPostProcessor {
         }
         catch (Exception ex) {
             System.err.println("Cannot convert Swagger 2 to Swagger 3, error: " + ex.getMessage());
+            ex.printStackTrace();
             return;
         }
 
@@ -78,6 +79,12 @@ public class GeneratePythonClientPostProcessor {
                     .directory(projectRoot.resolve("../distribution/python").toFile());
 
             Map<String, String> environment = processBuilder.environment();
+            for (String exitingVarEnvName : new ArrayList<>(environment.keySet())) {
+                if (exitingVarEnvName.startsWith("DQO_")) {
+                    environment.remove(exitingVarEnvName);
+                }
+            }
+
             for (Map.Entry<String, String> envVarKeyPair : pythonVirtualEnv.getEnvironmentVariables().entrySet()) {
                 environment.put(envVarKeyPair.getKey(), envVarKeyPair.getValue());
             }
@@ -89,9 +96,12 @@ public class GeneratePythonClientPostProcessor {
             if (!isSuccess || pipProcess.exitValue() != 0) {
                 throw new PythonExecutionException("Failed to start " + String.join(" ", commandLine) + ", error code: " + pipProcess.exitValue());
             }
+
+            GeneratedPythonClientModifier.modifyClient(projectRoot);
         }
         catch (Exception ex) {
-            System.err.println("Cannot generate a DQO Python client, error: " + ex.getMessage());
+            System.err.println("Cannot generate a DQOps Python client, error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

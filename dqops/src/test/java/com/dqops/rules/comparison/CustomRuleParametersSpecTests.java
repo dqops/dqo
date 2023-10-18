@@ -36,8 +36,8 @@ public class CustomRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsAboveMinValue_thenReturnsPassed() {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.5, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -46,8 +46,8 @@ public class CustomRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualMinValue_thenReturnsPassed() {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.3, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -56,8 +56,8 @@ public class CustomRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBelowMinValue_thenReturnsFailed() {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.2, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -84,7 +84,7 @@ public class CustomRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

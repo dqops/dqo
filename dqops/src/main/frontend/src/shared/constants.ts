@@ -1,11 +1,16 @@
-import { CheckTypes } from './routes';
+
 import { TimeWindowFilterParameters } from '../api';
 
 export type PageTab = {
   label: string;
   value: string;
 };
-
+enum CheckTypes {
+  MONITORING = 'monitoring',
+  SOURCES = 'sources',
+  PROFILING = 'profiling',
+  PARTITIONED = 'partitioned',
+}
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
 } = {
@@ -55,7 +60,7 @@ export const CONNECTION_LEVEL_TABS: {
       value: 'schemas'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Schedule',
       value: 'schedule'
@@ -98,9 +103,17 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
-    }
+      label: 'statistics',
+      value: 'statistics'
+    }, 
+    {
+      label: 'advanced',
+      value: 'advanced'
+    },
+    {
+      label: 'table-comparison',
+      value: 'table-comparison'
+    },
   ],
   [CheckTypes.PARTITIONED]: [
     {
@@ -112,7 +125,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'monthly'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Daily',
       value: 'daily'
@@ -143,9 +156,17 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
-    }
+      label: 'statistics',
+      value: 'statistics'
+    },
+    {
+      label: 'advanced',
+      value: 'advanced'
+    },
+    {
+      label: 'table-comparison',
+      value: 'table-comparison'
+    },
   ],
   [CheckTypes.PARTITIONED]: [
     {
@@ -157,7 +178,7 @@ export const COLUMN_LEVEL_TABS: {
       value: 'monthly'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Daily',
       value: 'daily'

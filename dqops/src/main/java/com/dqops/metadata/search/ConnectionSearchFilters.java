@@ -113,6 +113,7 @@ public class ConnectionSearchFilters {
      * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>connectionName</code>.
      */
+    @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
         if (connectionNameSearchPattern == null && connectionName != null) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);

@@ -47,14 +47,14 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	}
 
 	/**
-	 * Loads the table spec with the table details.
-	 * @return Loaded table specification.
+	 * Loads the settings specification.
+	 * @return Loaded settings specification.
 	 */
 	@Override
 	public SettingsSpec getSpec() {
 		SettingsSpec spec = super.getSpec();
-		if (spec == null) {
-			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+		if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
 				String textContent = fileContent.getTextContent();
@@ -76,6 +76,8 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 				deserializedSpec.clearDirty(true);
 				this.clearDirty(false);
 				return deserializedSpec;
+			} else {
+				this.setSpec(null);
 			}
 		}
 		return spec;
@@ -87,8 +89,12 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	 */
 	@Override
 	public void flush() {
-		if (this.getStatus() == InstanceStatus.DELETED) {
+		if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
 			return; // do nothing
+		}
+
+		if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+			return; // nothing to do, the instance is empty (no file)
 		}
 
 		if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
@@ -99,7 +105,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 		SettingsYaml settingsYaml = new SettingsYaml(this.getSpec());
 		String specAsYaml = this.yamlSerializer.serialize(settingsYaml);
 		FileContent newFileContent = new FileContent(specAsYaml);
-		String fileNameWithExt = SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML;
+		String fileNameWithExt = SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML;
 
 		switch (this.getStatus()) {
 			case ADDED:

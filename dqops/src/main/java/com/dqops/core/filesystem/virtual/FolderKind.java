@@ -85,5 +85,29 @@ public enum FolderKind {
      * Subfolder in the custom "rules" folder.
      */
     @JsonProperty("rules_subfolder")
-    RULES_SUBFOLDER
+    RULES_SUBFOLDER,
+
+    /**
+     * Shared settings folder.
+     */
+    @JsonProperty("settings")
+    SETTINGS,
+
+    /**
+     * Subfolder in the shared settings folder.
+     */
+    @JsonProperty("settings_subfolder")
+    SETTINGS_SUBFOLDER,
+
+    /**
+     * Shared credentials folder.
+     */
+    @JsonProperty("credentials")
+    CREDENTIALS,
+
+    /**
+     * Subfolder in the credentials folder.
+     */
+    @JsonProperty("credentials_subfolder")
+    CREDENTIALS_SUBFOLDER
 }

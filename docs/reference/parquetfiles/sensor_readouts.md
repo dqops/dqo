@@ -1,7 +1,7 @@
 ##sensor_readouts  
-The data quality sensor readouts table that stores readouts (measures) captured by DQO sensors, before the value are evaluated by the data quality rules.
+The data quality sensor readouts table that stores readouts (measures) captured by DQOps sensors, before the value are evaluated by the data quality rules.
  The sensor readouts are stored in the sensor_readouts table is located in the $DQO_USER_HOME/.data/sensor_readouts folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user&#x27;s home folder).
+ The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/, for example: c&#x3D;myconnection/t&#x3D;public.testedtable/m&#x3D;2023-01-01/.  
@@ -15,7 +15,7 @@ The data quality sensor readouts table that stores readouts (measures) captured 
  | expected_value | The expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks). | double |
  | time_period | The time period of the sensor readout (timestamp), using a local timezone from the data source. | local_date_time |
  | time_period_utc | The time period of the sensor readout (timestamp) as a UTC timestamp. | instant |
- | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
+ | time_gradient | The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
  | grouping_level_1 | Column name for the data stream. | text |
  | grouping_level_2 | Column name for the data stream. | text |
  | grouping_level_3 | Column name for the data stream. | text |
@@ -43,7 +43,7 @@ The data quality sensor readouts table that stores readouts (measures) captured 
  | check_hash | The hash of a data quality check. | long |
  | check_name | The data quality check name. | text |
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
- | check_type | The data quality check type (profiling, recurring, partitioned). | text |
+ | check_type | The data quality check type (profiling, monitoring, partitioned). | text |
  | check_category | The data quality check category name. | text |
  | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | text |
  | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | text |

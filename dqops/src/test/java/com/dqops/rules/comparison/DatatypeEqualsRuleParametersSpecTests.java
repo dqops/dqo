@@ -36,7 +36,7 @@ public class DatatypeEqualsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualExpectedDatatype_thenReturnsPassed() {
         this.sut.setExpectedDatatype(2);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(2.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(2.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(2.0, ruleExecutionResult.getUpperBound());
@@ -46,7 +46,7 @@ public class DatatypeEqualsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualNotExpectedDatatype_thenReturnsPassed() {
         this.sut.setExpectedDatatype(2);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(2.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(2.0, ruleExecutionResult.getUpperBound());
@@ -55,7 +55,7 @@ public class DatatypeEqualsRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

@@ -27,7 +27,7 @@ const ConfirmDialog = ({
     <div>
       <Dialog open={open} handler={onClose}>
         <DialogBody className="pt-10 pb-2 px-8">
-          <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
+          <div className="text-2xl text-gray-700 text-center whitespace-normal">
             Are you sure you want to delete the connection{' '}
             {`${connection}`}?
           </div>

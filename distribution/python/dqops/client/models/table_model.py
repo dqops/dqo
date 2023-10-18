@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableModel:
     """Full table model, including all nested objects like columns or checks.
 
@@ -19,12 +20,14 @@ class TableModel:
         connection_name (Union[Unset, str]): Connection name.
         table_hash (Union[Unset, int]): Table hash that identifies the table using a unique hash code.
         spec (Union[Unset, TableSpec]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     connection_name: Union[Unset, str] = UNSET
     table_hash: Union[Unset, int] = UNSET
     spec: Union[Unset, "TableSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -32,6 +35,8 @@ class TableModel:
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
+
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,6 +47,8 @@ class TableModel:
             field_dict["table_hash"] = table_hash
         if spec is not UNSET:
             field_dict["spec"] = spec
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -61,10 +68,13 @@ class TableModel:
         else:
             spec = TableSpec.from_dict(_spec)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         table_model = cls(
             connection_name=connection_name,
             table_hash=table_hash,
             spec=spec,
+            can_edit=can_edit,
         )
 
         table_model.additional_properties = d

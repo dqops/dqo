@@ -4,7 +4,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 If you want to [install DQO directly from Git go to this section](../../working-with-dqo/installation/install-dqo-from-git.md).
 
-You can also [run DQO as Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+You can also [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 
 ## Prerequisites
 
@@ -72,7 +72,7 @@ To use DQO you need:
     must create a DQO cloud account.
 
     After creating a userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be 
-    redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account. 
+    redirected to [https://cloud.dqops.com/registration](https://cloud.dqps.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account. 
 
     During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
     The API Key is now stored in the configuration file. 
@@ -82,4 +82,4 @@ To use DQO you need:
 
 ## Next step
 
-Now that you have installed and opened DQO, it is time to [connect your first data source](../adding-data-source-connection/adding-data-source-connection.md).
+Now that you have installed and opened DQO, it is time to [connect your first data source](../add-data-source-connection/add-data-source-connection.md).

@@ -16,10 +16,10 @@
 
 package com.dqops.checks.defaults.services;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 
 /**
- * Factory that creates the default configuration of checks, when DQO is initialized and the initial configuration is loaded into the local settings.
+ * Factory that creates the default configuration of checks, when DQOps is initialized and the initial configuration is loaded into the local settings.
  */
 public interface DefaultObservabilityCheckSettingsFactory {
     /**
@@ -27,5 +27,5 @@ public interface DefaultObservabilityCheckSettingsFactory {
      *
      * @return Default observability settings.
      */
-    DefaultObservabilityCheckSettingsSpec createDefaultCheckSettings();
+    DefaultObservabilityChecksSpec createDefaultCheckSettings();
 }

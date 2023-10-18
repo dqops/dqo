@@ -15,7 +15,7 @@
  */
 package com.dqops.data.statistics.services;
 
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 
 /**
@@ -28,5 +28,5 @@ public interface StatisticsDeleteService {
      * @param filter Filter for the statistics results fragment that is of interest.
      * @return Data delete operation summary.
      */
-    DataDeleteResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter);
 }

@@ -15,6 +15,7 @@
  */
 package com.dqops.services.check;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -35,12 +36,14 @@ public interface CheckService {
      * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param principal Principal that will be used to run the job.
      * @return Check execution summary.
      */
     CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                     TimeWindowFilterParameters timeWindowFilterParameters,
                                     CheckExecutionProgressListener checkExecutionProgressListener,
-                                    boolean dummyRun);
+                                    boolean dummyRun,
+                                    DqoUserPrincipal principal);
 
     /**
      * Disable existing checks matching the provided filters.
@@ -52,7 +55,8 @@ public interface CheckService {
     /**
      * Update checks configuration based on provided parameters.
      * @param parameters Parameters for creating the patches and updating.
+     * @param principal  User principal.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
-    List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters);
+    List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal);
 }

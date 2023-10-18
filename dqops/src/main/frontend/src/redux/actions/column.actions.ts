@@ -18,7 +18,7 @@ import { Dispatch } from 'redux';
 
 import { ColumnApiClient } from '../../services/apiClient';
 import { SOURCE_ACTION } from '../types';
-import { ColumnBasicModel, CommentSpec, CheckContainerModel } from '../../api';
+import { ColumnListModel, CommentSpec, CheckContainerModel } from '../../api';
 import { CheckTypes } from "../../shared/routes";
 
 export const getColumnBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
@@ -27,7 +27,7 @@ export const getColumnBasicRequest = (checkType: CheckTypes, activeTab: string) 
   activeTab,
 });
 
-export const getColumnBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ColumnBasicModel) => ({
+export const getColumnBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ColumnListModel) => ({
   type: SOURCE_ACTION.GET_COLUMN_BASIC_SUCCESS,
   checkType,
   activeTab,
@@ -91,7 +91,7 @@ export const updateColumnBasic =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: ColumnBasicModel
+    data: ColumnListModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnBasicRequest(checkType, activeTab));
@@ -383,27 +383,27 @@ export const updateColumnProfilingChecksModel =
     }
   };
 
-export const getColumnDailyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS,
+export const getColumnDailyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS,
   checkType,
   activeTab,
 });
 
-export const getColumnDailyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
-  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS,
+export const getColumnDailyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
-export const getColumnDailyRecurringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_ERROR,
+export const getColumnDailyMonitoringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const getColumnDailyRecurringChecks =
+export const getColumnDailyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -415,42 +415,42 @@ export const getColumnDailyRecurringChecks =
   ) =>
   async (dispatch: Dispatch) => {
     if (loading) {
-      dispatch(getColumnDailyRecurringChecksRequest(checkType, activeTab));
+      dispatch(getColumnDailyMonitoringChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await ColumnApiClient.getColumnRecurringChecksModel(
+      const res = await ColumnApiClient.getColumnMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         columnName,
         'daily'
       );
-      dispatch(getColumnDailyRecurringChecksSuccess(checkType, activeTab, res.data));
+      dispatch(getColumnDailyMonitoringChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getColumnDailyRecurringChecksFailed(checkType, activeTab, err));
+      dispatch(getColumnDailyMonitoringChecksFailed(checkType, activeTab, err));
     }
   };
 
-export const updateColumnDailyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS,
+export const updateColumnDailyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS,
   checkType,
   activeTab,
 });
 
-export const updateColumnDailyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS,
+export const updateColumnDailyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS,
   checkType,
   activeTab,
 });
 
-export const updateColumnDailyRecurringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_ERROR,
+export const updateColumnDailyMonitoringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const updateColumnDailyRecurringChecks =
+export const updateColumnDailyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -461,9 +461,9 @@ export const updateColumnDailyRecurringChecks =
     data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateColumnDailyRecurringChecksRequest(checkType, activeTab));
+    dispatch(updateColumnDailyMonitoringChecksRequest(checkType, activeTab));
     try {
-      await ColumnApiClient.updateColumnRecurringChecksModel(
+      await ColumnApiClient.updateColumnMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -471,33 +471,33 @@ export const updateColumnDailyRecurringChecks =
         'daily',
         data
       );
-      dispatch(updateColumnDailyRecurringChecksSuccess(checkType, activeTab));
+      dispatch(updateColumnDailyMonitoringChecksSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateColumnDailyRecurringChecksFailed(checkType, activeTab, err));
+      dispatch(updateColumnDailyMonitoringChecksFailed(checkType, activeTab, err));
     }
   };
 
-export const getColumnMonthlyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS,
+export const getColumnMonthlyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS,
   checkType,
   activeTab,
 });
 
-export const getColumnMonthlyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
-  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS,
+export const getColumnMonthlyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
-export const getColumnMonthlyRecurringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR,
+export const getColumnMonthlyMonitoringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const getColumnMonthlyRecurringChecks =
+export const getColumnMonthlyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -509,42 +509,42 @@ export const getColumnMonthlyRecurringChecks =
   ) =>
   async (dispatch: Dispatch) => {
     if (loading) {
-      dispatch(getColumnMonthlyRecurringChecksRequest(checkType, activeTab));
+      dispatch(getColumnMonthlyMonitoringChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await ColumnApiClient.getColumnRecurringChecksModel(
+      const res = await ColumnApiClient.getColumnMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
         columnName,
         'monthly'
       );
-      dispatch(getColumnMonthlyRecurringChecksSuccess(checkType, activeTab, res.data));
+      dispatch(getColumnMonthlyMonitoringChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getColumnMonthlyRecurringChecksFailed(checkType, activeTab, err));
+      dispatch(getColumnMonthlyMonitoringChecksFailed(checkType, activeTab, err));
     }
   };
 
-export const updateColumnMonthlyRecurringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS,
+export const updateColumnMonthlyMonitoringChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS,
   checkType,
   activeTab,
 });
 
-export const updateColumnMonthlyRecurringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS,
+export const updateColumnMonthlyMonitoringChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS,
   checkType,
   activeTab,
 });
 
-export const updateColumnMonthlyRecurringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR,
+export const updateColumnMonthlyMonitoringChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const updateColumnMonthlyRecurringChecks =
+export const updateColumnMonthlyMonitoringChecks =
   (
     checkType: CheckTypes,
     activeTab: string,
@@ -555,9 +555,9 @@ export const updateColumnMonthlyRecurringChecks =
     data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateColumnMonthlyRecurringChecksRequest(checkType, activeTab));
+    dispatch(updateColumnMonthlyMonitoringChecksRequest(checkType, activeTab));
     try {
-      await ColumnApiClient.updateColumnRecurringChecksModel(
+      await ColumnApiClient.updateColumnMonitoringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -565,9 +565,9 @@ export const updateColumnMonthlyRecurringChecks =
         'monthly',
         data
       );
-      dispatch(updateColumnMonthlyRecurringChecksSuccess(checkType, activeTab));
+      dispatch(updateColumnMonthlyMonitoringChecksSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateColumnMonthlyRecurringChecksFailed(checkType, activeTab, err));
+      dispatch(updateColumnMonthlyMonitoringChecksFailed(checkType, activeTab, err));
     }
   };
 
@@ -767,7 +767,7 @@ export const updateColumnMonthlyPartitionedChecks =
     }
   };
 
-export const setUpdatedColumnBasic = (checkType: CheckTypes, activeTab: string, column?: ColumnBasicModel) => ({
+export const setUpdatedColumnBasic = (checkType: CheckTypes, activeTab: string, column?: ColumnListModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_COLUMN_BASIC,
   checkType,
   activeTab,
@@ -802,15 +802,15 @@ export const setUpdatedChecksModel = (checkType: CheckTypes, activeTab: string, 
   data: checksUI
 });
 
-export const setUpdatedDailyRecurringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING_CHECKS,
+export const setUpdatedDailyMonitoringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_COLUMN_DAILY_MONITORING_CHECKS,
   checkType,
   activeTab,
   data: checksUI
 });
 
-export const setUpdatedMonthlyRecurringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING_CHECKS,
+export const setUpdatedMonthlyMonitoringChecks = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_COLUMN_MONTHLY_MONITORING_CHECKS,
   checkType,
   activeTab,
   data: checksUI
@@ -883,38 +883,38 @@ export const getColumnProfilingChecksModelFilter =
       }
     };
 
-export const getColumnRecurringChecksModelFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER,
+export const getColumnMonitoringChecksModelFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER,
   checkType,
   activeTab,
 });
 
-export const getColumnRecurringChecksModelFilterSuccess = (
+export const getColumnMonitoringChecksModelFilterSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   data: CheckContainerModel
 ) => ({
-  type: SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
-export const getColumnRecurringChecksModelFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_ERROR,
+export const getColumnMonitoringChecksModelFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const getColumnRecurringChecksModelFilter =
+export const getColumnMonitoringChecksModelFilter =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
       if (loading) {
-        dispatch(getColumnRecurringChecksModelFilterRequest(checkType, activeTab));
+        dispatch(getColumnMonitoringChecksModelFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await ColumnApiClient.getColumnRecurringChecksModelFilter(
+        const res = await ColumnApiClient.getColumnMonitoringChecksModelFilter(
           connectionName,
           schemaName,
           tableName,
@@ -923,9 +923,9 @@ export const getColumnRecurringChecksModelFilter =
           category,
           checkName
         );
-        dispatch(getColumnRecurringChecksModelFilterSuccess(checkType, activeTab, res.data));
+        dispatch(getColumnMonitoringChecksModelFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
-        dispatch(getColumnRecurringChecksModelFilterFailed(checkType, activeTab, err));
+        dispatch(getColumnMonitoringChecksModelFilterFailed(checkType, activeTab, err));
       }
     };
 
@@ -982,8 +982,8 @@ export const setColumnUpdatedProfilingChecksModelFilter = (checkType: CheckTypes
   data: ui
 });
 
-export const setColumnUpdatedRecurringChecksModelFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
-  type: SOURCE_ACTION.SET_UPDATED_RECURRING_CHECKS_MODEL_FILTER,
+export const setColumnUpdatedMonitoringChecksModelFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_MONITORING_CHECKS_MODEL_FILTER,
   checkType,
   activeTab,
   data: ui

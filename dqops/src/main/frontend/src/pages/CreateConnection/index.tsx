@@ -5,17 +5,17 @@ import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
 import ImportSchemas from '../../components/ImportSchemas';
 import {
-  ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum
+  ConnectionModel,
+  ConnectionModelProviderTypeEnum
 } from '../../api';
 
 const CreateConnection = () => {
   const [step, setStep] = useState(0);
-  const [database, setDatabase] = useState<ConnectionBasicModel>({});
+  const [database, setDatabase] = useState<ConnectionModel>({});
   const [nameofDB, setNameofDB] = useState<string>('');
 
   const onSelect = (
-    db: ConnectionBasicModelProviderTypeEnum,
+    db: ConnectionModelProviderTypeEnum,
     nameOfdatabase?: string
   ) => {
     setDatabase({

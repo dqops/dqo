@@ -76,19 +76,20 @@ public class AllChecksPatchApplierImpl implements AllChecksPatchApplier {
     }
 
     protected void applyColumnPatchOnTable(TableColumnChecksModel tableColumnChecksPatch, TableWrapper tableWrapper) {
-        ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpecMap columns = tableSpec.getColumns();
 
         List<ColumnChecksModel> columnChecksPatches = tableColumnChecksPatch.getColumnChecksModels();
         for (ColumnChecksModel columnChecksPatch: columnChecksPatches) {
             String columnName = columnChecksPatch.getColumnName();
             ColumnSpec column = columns.get(columnName);
             if (column != null) {
-                this.applyColumnPatchOnColumn(columnChecksPatch, column);
+                this.applyColumnPatchOnColumn(columnChecksPatch, column, tableSpec);
             }
         }
     }
 
-    protected void applyColumnPatchOnColumn(ColumnChecksModel columnChecksPatch, ColumnSpec columnSpec) {
+    protected void applyColumnPatchOnColumn(ColumnChecksModel columnChecksPatch, ColumnSpec columnSpec, TableSpec parentTableSpec) {
         Map<CheckContainerTypeModel, CheckContainerModel> checkContainerPatches = columnChecksPatch.getCheckContainers();
 
         for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerPatchPair: checkContainerPatches.entrySet()) {
@@ -97,7 +98,7 @@ public class AllChecksPatchApplierImpl implements AllChecksPatchApplier {
 
             AbstractRootChecksContainerSpec toPatch = columnSpec.getColumnCheckRootContainer(
                     checkTypeTarget.getCheckType(), checkTypeTarget.getCheckTimeScale(), true);
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkPatch, toPatch);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkPatch, toPatch, parentTableSpec);
         }
     }
 
@@ -134,7 +135,7 @@ public class AllChecksPatchApplierImpl implements AllChecksPatchApplier {
 
             AbstractRootChecksContainerSpec toPatch = tableWrapper.getSpec().getTableCheckRootContainer(
                     checkTypeTarget.getCheckType(), checkTypeTarget.getCheckTimeScale(), true);
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkPatch, toPatch);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkPatch, toPatch, tableWrapper.getSpec());
         }
     }
 }

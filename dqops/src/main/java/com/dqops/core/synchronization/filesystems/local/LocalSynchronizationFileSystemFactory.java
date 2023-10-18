@@ -19,13 +19,13 @@ import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 
 /**
- * DQO file system that accesses local files (selected folders) in the DQO_USER_HOME.
+ * DQOps file system that accesses local files (selected folders) in the DQO_USER_HOME.
  */
 public interface LocalSynchronizationFileSystemFactory {
     /**
-     * Creates a DQO file system that accesses physical files on the local file system.
+     * Creates a DQOps file system that accesses physical files on the local file system.
      * @param rootType Root type (folder type).
-     * @return DQO file system that can manage local files in a selected folder.
+     * @return DQOps file system that can manage local files in a selected folder.
      */
     SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType);
 }

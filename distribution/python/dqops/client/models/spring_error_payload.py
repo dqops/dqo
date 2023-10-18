@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="SpringErrorPayload")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SpringErrorPayload:
     """Spring error payload that identifies the fields in the error returned by the REST API in case of unexpected errors
     (exceptions).
@@ -27,7 +28,7 @@ class SpringErrorPayload:
     exception: Union[Unset, str] = UNSET
     message: Union[Unset, str] = UNSET
     path: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         timestamp = self.timestamp

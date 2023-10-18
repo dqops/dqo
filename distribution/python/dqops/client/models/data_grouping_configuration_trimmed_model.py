@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,24 +12,28 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DataGroupingConfigurationTrimmedModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DataGroupingConfigurationTrimmedModel:
     """Data grouping configuration model with trimmed path
 
     Attributes:
         data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
         spec (Union[Unset, DataGroupingConfigurationSpec]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     data_grouping_configuration_name: Union[Unset, str] = UNSET
     spec: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         data_grouping_configuration_name = self.data_grouping_configuration_name
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
+
+        can_edit = self.can_edit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -39,6 +44,8 @@ class DataGroupingConfigurationTrimmedModel:
             ] = data_grouping_configuration_name
         if spec is not UNSET:
             field_dict["spec"] = spec
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -60,9 +67,12 @@ class DataGroupingConfigurationTrimmedModel:
         else:
             spec = DataGroupingConfigurationSpec.from_dict(_spec)
 
+        can_edit = d.pop("can_edit", UNSET)
+
         data_grouping_configuration_trimmed_model = cls(
             data_grouping_configuration_name=data_grouping_configuration_name,
             spec=spec,
+            can_edit=can_edit,
         )
 
         data_grouping_configuration_trimmed_model.additional_properties = d

@@ -15,6 +15,7 @@
  */
 package com.dqops.services.check.mapping;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
 
@@ -27,7 +28,9 @@ public interface AllChecksModelFactory {
     /**
      * Creates a list of {@link AllChecksModel}s based on provided filters.
      * @param checkSearchFilters Check search filters.
+     * @param principal User principal.
      * @return List of {@link AllChecksModel}s (by connections) fitting the filters.
      */
-    List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters);
+    List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
+                                                DqoUserPrincipal principal);
 }

@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.ParentDqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
@@ -71,6 +72,8 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
      */
     @Override
     public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         ExecutionContext executionContext = this.executionContextFactory.create();
         StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectors(
                 executionContext,
@@ -80,12 +83,22 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                 this.parameters.isDummySensorExecution(),
                 true,
                 jobExecutionContext.getJobId(),
-                jobExecutionContext.getCancellationToken());
+                jobExecutionContext.getCancellationToken(),
+                this.getPrincipal());
 
-        CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
-                CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
+        if (statisticsCollectionExecutionSummary.getAllChecksFailed()) {
+            String firstConnectionName = statisticsCollectionExecutionSummary.getFirstConnectionName();
+            String firstErrorMessage = statisticsCollectionExecutionSummary.getFirstException() != null ?
+                    statisticsCollectionExecutionSummary.getFirstException().getMessage() : "";
+            throw new DqoStatisticsCollectionJobFailedException("Cannot collect statistics on the connection " + firstConnectionName +
+                    ", the first error: " + firstErrorMessage,
+                    statisticsCollectionExecutionSummary.getFirstException());
+        }
+
+        CollectStatisticsResult collectStatisticsResult =
+                CollectStatisticsResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
         CollectStatisticsQueueJobParameters clonedParameters = this.getParameters().clone();
-        clonedParameters.setCollectStatisticsResult(collectStatisticsQueueJobResult);
+        clonedParameters.setCollectStatisticsResult(collectStatisticsResult);
         setParameters(clonedParameters);
 
         return statisticsCollectionExecutionSummary;

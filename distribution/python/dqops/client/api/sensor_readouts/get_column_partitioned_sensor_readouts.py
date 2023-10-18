@@ -5,13 +5,9 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.get_column_partitioned_sensor_readouts_time_scale import (
-    GetColumnPartitionedSensorReadoutsTimeScale,
-)
-from ...models.sensor_readouts_detailed_data_model import (
-    SensorReadoutsDetailedDataModel,
-)
+from ...client import AuthenticatedClient, Client
+from ...models.check_time_scale import CheckTimeScale
+from ...models.sensor_readouts_list_model import SensorReadoutsListModel
 from ...types import UNSET, Response, Unset
 
 
@@ -20,9 +16,8 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedSensorReadoutsTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -31,17 +26,7 @@ def _get_kwargs(
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-        columnName=column_name,
-        timeScale=time_scale,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["dataGroup"] = data_group
@@ -70,23 +55,25 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+            columnName=column_name,
+            timeScale=time_scale,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["SensorReadoutsListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = SensorReadoutsDetailedDataModel.from_dict(
+            response_200_item = SensorReadoutsListModel.from_dict(
                 response_200_item_data
             )
 
@@ -100,8 +87,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["SensorReadoutsListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -115,9 +102,9 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedSensorReadoutsTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -125,7 +112,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+) -> Response[List["SensorReadoutsListModel"]]:
     """getColumnPartitionedSensorReadouts
 
      Returns a view of the sensor readouts for recent column level partitioned checks executions for a
@@ -136,7 +123,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedSensorReadoutsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -150,7 +137,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorReadoutsDetailedDataModel']]
+        Response[List['SensorReadoutsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -159,7 +146,6 @@ def sync_detailed(
         table_name=table_name,
         column_name=column_name,
         time_scale=time_scale,
-        client=client,
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
@@ -169,8 +155,7 @@ def sync_detailed(
         max_results_per_check=max_results_per_check,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -182,9 +167,9 @@ def sync(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedSensorReadoutsTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -192,7 +177,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+) -> Optional[List["SensorReadoutsListModel"]]:
     """getColumnPartitionedSensorReadouts
 
      Returns a view of the sensor readouts for recent column level partitioned checks executions for a
@@ -203,7 +188,7 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedSensorReadoutsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -217,7 +202,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorReadoutsDetailedDataModel']
+        List['SensorReadoutsListModel']
     """
 
     return sync_detailed(
@@ -242,9 +227,9 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedSensorReadoutsTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -252,7 +237,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+) -> Response[List["SensorReadoutsListModel"]]:
     """getColumnPartitionedSensorReadouts
 
      Returns a view of the sensor readouts for recent column level partitioned checks executions for a
@@ -263,7 +248,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedSensorReadoutsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -277,7 +262,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['SensorReadoutsDetailedDataModel']]
+        Response[List['SensorReadoutsListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -286,7 +271,6 @@ async def asyncio_detailed(
         table_name=table_name,
         column_name=column_name,
         time_scale=time_scale,
-        client=client,
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
@@ -296,8 +280,7 @@ async def asyncio_detailed(
         max_results_per_check=max_results_per_check,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -307,9 +290,9 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     column_name: str,
-    time_scale: GetColumnPartitionedSensorReadoutsTimeScale,
+    time_scale: CheckTimeScale,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -317,7 +300,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+) -> Optional[List["SensorReadoutsListModel"]]:
     """getColumnPartitionedSensorReadouts
 
      Returns a view of the sensor readouts for recent column level partitioned checks executions for a
@@ -328,7 +311,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
-        time_scale (GetColumnPartitionedSensorReadoutsTimeScale):
+        time_scale (CheckTimeScale):
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
@@ -342,7 +325,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['SensorReadoutsDetailedDataModel']
+        List['SensorReadoutsListModel']
     """
 
     return (

@@ -18,7 +18,7 @@ package com.dqops.core.synchronization.service;
 import com.dqops.core.synchronization.fileexchange.TargetTableModifiedPartitions;
 
 /**
- * Service that asks the DQO Cloud to refresh the data quality data warehouse after uploading new parquet files.
+ * Service that asks the DQOps Cloud to refresh the data quality data warehouse after uploading new parquet files.
  */
 public interface DqoCloudWarehouseService {
     /**

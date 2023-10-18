@@ -97,7 +97,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
           <thead>
             <tr>
               <th className="py-2 pr-4 text-left">Source Schema Name</th>
-              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th className="py-2 px-4 text-left">Import status</th>
               <th />
             </tr>
           </thead>

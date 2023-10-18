@@ -1,16 +1,11 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.check_configuration_model_check_target import (
-    CheckConfigurationModelCheckTarget,
-)
-from ..models.check_configuration_model_check_time_scale import (
-    CheckConfigurationModelCheckTimeScale,
-)
-from ..models.check_configuration_model_check_type import (
-    CheckConfigurationModelCheckType,
-)
+from ..models.check_target import CheckTarget
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -21,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CheckConfigurationModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckConfigurationModel:
     """Model containing fundamental configuration of a single data quality check.
 
@@ -30,9 +25,9 @@ class CheckConfigurationModel:
         schema_name (Union[Unset, str]): Schema name.
         table_name (Union[Unset, str]): Table name.
         column_name (Union[Unset, str]): Column name, if the check is set up on a column.
-        check_target (Union[Unset, CheckConfigurationModelCheckTarget]): Check target (table or column).
-        check_type (Union[Unset, CheckConfigurationModelCheckType]): Check type (profiling, recurring, partitioned).
-        check_time_scale (Union[Unset, CheckConfigurationModelCheckTimeScale]): Category to which this check belongs.
+        check_target (Union[Unset, CheckTarget]):
+        check_type (Union[Unset, CheckType]):
+        check_time_scale (Union[Unset, CheckTimeScale]):
         category_name (Union[Unset, str]): Category to which this check belongs.
         check_name (Union[Unset, str]): Check name that is used in YAML file.
         sensor_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the sensor parameters.
@@ -53,9 +48,9 @@ class CheckConfigurationModel:
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
     column_name: Union[Unset, str] = UNSET
-    check_target: Union[Unset, CheckConfigurationModelCheckTarget] = UNSET
-    check_type: Union[Unset, CheckConfigurationModelCheckType] = UNSET
-    check_time_scale: Union[Unset, CheckConfigurationModelCheckTimeScale] = UNSET
+    check_target: Union[Unset, CheckTarget] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    check_time_scale: Union[Unset, CheckTimeScale] = UNSET
     category_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_parameters: Union[Unset, List["FieldModel"]] = UNSET
@@ -66,7 +61,7 @@ class CheckConfigurationModel:
     fatal: Union[Unset, "RuleParametersModel"] = UNSET
     disabled: Union[Unset, bool] = UNSET
     configured: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -167,25 +162,25 @@ class CheckConfigurationModel:
         column_name = d.pop("column_name", UNSET)
 
         _check_target = d.pop("check_target", UNSET)
-        check_target: Union[Unset, CheckConfigurationModelCheckTarget]
+        check_target: Union[Unset, CheckTarget]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = CheckConfigurationModelCheckTarget(_check_target)
+            check_target = CheckTarget(_check_target)
 
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, CheckConfigurationModelCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = CheckConfigurationModelCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _check_time_scale = d.pop("check_time_scale", UNSET)
-        check_time_scale: Union[Unset, CheckConfigurationModelCheckTimeScale]
+        check_time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_check_time_scale, Unset):
             check_time_scale = UNSET
         else:
-            check_time_scale = CheckConfigurationModelCheckTimeScale(_check_time_scale)
+            check_time_scale = CheckTimeScale(_check_time_scale)
 
         category_name = d.pop("category_name", UNSET)
 

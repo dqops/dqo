@@ -24,10 +24,14 @@ import com.dqops.metadata.storage.localfiles.HomeType;
 import org.springframework.beans.factory.BeanInitializationException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.List;
@@ -46,7 +50,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     /**
      * Creates a local storage service that manages files in the given folder in the file system.
      * @param homeRootDirectory Path to the root file folder on the local machine that stores the files.
-     * @param homeType DQO Home type (dqo system home or user home).
+     * @param homeType DQOps Home type (dqo system home or user home).
      */
     public LocalFileStorageServiceImpl(String homeRootDirectory,
                                        HomeType homeType,
@@ -138,37 +142,63 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     }
 
     /**
-     * Reads a text file given the file name components.
+     * Reads a file given the file name components.
      *
      * @param filePath File path relative to the home root.
      * @return File content or null when the file was not found.
      */
     @Override
-    public FileContent readTextFile(HomeFilePath filePath) {
+    public FileContent readFile(HomeFilePath filePath) {
         Path relativeFilePath = filePath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
-        FileContent fileContent = this.localFileSystemCache.loadFileContent(absolutePath, key -> this.readTextFileDirect(absolutePath));
+        FileContent fileContent = this.localFileSystemCache.loadFileContent(absolutePath, key -> this.readFileDirect(absolutePath));
         return fileContent;
     }
 
     /**
-     * Reads a text file given the file name components. Skips the cache.
+     * Reads a file given the file name components. Skips the cache. Detects the file type, if it is parsable as UTF-8 then it is a text, otherwise it is considered as a binary file.
      *
      * @param absolutePath File path relative to the home root.
      * @return File content or null when the file was not found.
      */
-    public FileContent readTextFileDirect(Path absolutePath) {
+    public FileContent readFileDirect(Path absolutePath) {
         try {
             if (!Files.exists(absolutePath)) {
                 return null;
             }
 
-            String textContent = Files.readString(absolutePath, StandardCharsets.UTF_8);
+            byte[] originalByteContent = Files.readAllBytes(absolutePath);
+            byte[] byteContentParsable = originalByteContent;
+            if (originalByteContent.length >= 3 &&
+                originalByteContent[0] == (byte)0xEF &&
+                originalByteContent[1] == (byte)0xBB &&
+                originalByteContent[2] == (byte)0xBF) {
+                // Windows UTF-8 byte-order mark, skipping
+
+                byteContentParsable = new byte[originalByteContent.length - 3];
+                System.arraycopy(originalByteContent, 3, byteContentParsable, 0, byteContentParsable.length);
+            }
+
+            String textContent = null;
+            byte[] byteContent = null;
+            try {
+                ByteBuffer contentByteBuffer = ByteBuffer.wrap(byteContentParsable);
+                CharsetDecoder charsetDecoder = StandardCharsets.UTF_8
+                        .newDecoder()
+                        .onMalformedInput(CodingErrorAction.REPORT)
+                        .onUnmappableCharacter(CodingErrorAction.REPORT);
+                CharBuffer decodedCharacters = charsetDecoder.decode(contentByteBuffer);
+                textContent = decodedCharacters.toString();
+            }
+            catch (CharacterCodingException cce) {
+                byteContent = originalByteContent;
+            }
+
             FileTime lastModifiedFileTime = Files.getLastModifiedTime(absolutePath);
             Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
-            return new FileContent(textContent, lastModifiedInstant);
+            return new FileContent(textContent, byteContent, lastModifiedInstant);
         } catch (Exception ex) {
-            throw new LocalFileSystemException("Cannot read a text file", ex);
+            throw new LocalFileSystemException("Cannot read a file", ex);
         }
     }
 
@@ -191,17 +221,18 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
 
             String textContent = fileContent.getTextContent();
             if (textContent != null) {
-                Files.writeString(absoluteFilePath, textContent, StandardCharsets.UTF_8,
-                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-                FileTime lastModifiedFileTime = Files.getLastModifiedTime(absoluteFilePath);
-                Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
-                fileContent.setLastModified(lastModifiedInstant);
-
-                this.localFileSystemCache.storeTextFile(absoluteFilePath, fileContent);
+                Files.writeString(absoluteFilePath, textContent, StandardCharsets.UTF_8);
+            } else if (fileContent.getByteContent() != null) {
+                Files.write(absoluteFilePath, fileContent.getByteContent());
             } else {
                 throw new LocalFileSystemException("File content type not supported");
             }
+
+            FileTime lastModifiedFileTime = Files.getLastModifiedTime(absoluteFilePath);
+            Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
+            fileContent.setLastModified(lastModifiedInstant);
+
+            this.localFileSystemCache.storeFile(absoluteFilePath, fileContent);
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot write a file", ex);
         }

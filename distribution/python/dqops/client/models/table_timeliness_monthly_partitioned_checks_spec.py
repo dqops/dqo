@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,21 +14,30 @@ if TYPE_CHECKING:
     from ..models.table_partition_reload_lag_check_spec import (
         TablePartitionReloadLagCheckSpec,
     )
+    from ..models.table_timeliness_monthly_partitioned_checks_spec_custom_checks import (
+        TableTimelinessMonthlyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="TableTimelinessMonthlyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableTimelinessMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableTimelinessMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         monthly_partition_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
         monthly_partition_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
         monthly_partition_reload_lag (Union[Unset, TablePartitionReloadLagCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableTimelinessMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_data_freshness: Union[
         Unset, "TableDataFreshnessCheckSpec"
     ] = UNSET
@@ -40,9 +50,13 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
     monthly_partition_reload_lag: Union[
         Unset, "TablePartitionReloadLagCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_data_freshness, Unset):
             monthly_partition_data_freshness = (
@@ -68,6 +82,8 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_data_freshness is not UNSET:
             field_dict[
                 "monthly_partition_data_freshness"
@@ -95,8 +111,24 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
         from ..models.table_partition_reload_lag_check_spec import (
             TablePartitionReloadLagCheckSpec,
         )
+        from ..models.table_timeliness_monthly_partitioned_checks_spec_custom_checks import (
+            TableTimelinessMonthlyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, TableTimelinessMonthlyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableTimelinessMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_partition_data_freshness = d.pop(
             "monthly_partition_data_freshness", UNSET
         )
@@ -144,6 +176,7 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
             )
 
         table_timeliness_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_data_freshness=monthly_partition_data_freshness,
             monthly_partition_data_staleness=monthly_partition_data_staleness,
             monthly_partition_data_ingestion_delay=monthly_partition_data_ingestion_delay,

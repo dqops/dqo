@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO. Properties are mapped to the "dqo.queue.wait-timeouts" prefix that are responsible for the configuration of
+ * Configuration POJO with the configuration for DQOps. Properties are mapped to the "dqo.queue.wait-timeouts" prefix that are responsible for the configuration of
  * the default rest api timeouts when a job is started using the rest api with the wait=true option and no timeout provided by the client.
  */
 @Configuration
@@ -34,6 +34,26 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
      * Wait timeout for the "run checks" job.
      */
     private long runChecks = 120L;
+
+    /**
+     * Wait timeout for the "collect statistics" job.
+     */
+    private long collectStatistics = 120L;
+
+    /**
+     * Wait timeout for the "import tables" job.
+     */
+    private long importTables = 120L;
+
+    /**
+     * Wait timeout for the "delete stored data" job.
+     */
+    private long deleteStoredData = 120L;
+
+    /**
+     * Wait timeout for the "synchronize multiple folders" job.
+     */
+    private long synchronizeMultipleFolders = 120L;
 
     /**
      * The default wait timeout for any kind of job.
@@ -65,6 +85,17 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
             case RUN_CHECKS_ON_TABLE:
             case RUN_SCHEDULED_CHECKS_CRON:
                 return this.runChecks;
+
+            case COLLECT_STATISTICS:
+            case COLLECT_STATISTICS_ON_TABLE:
+                return this.collectStatistics;
+
+            case DELETE_STORED_DATA:
+                return this.deleteStoredData;
+
+            case IMPORT_SCHEMA:
+            case IMPORT_TABLES:
+                return this.importTables;
 
             default:
                 return this.defaultWaitTimeout;

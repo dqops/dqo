@@ -36,7 +36,7 @@ import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import com.dqops.data.storage.*;
 import com.dqops.data.storage.parquet.HadoopConfigurationProviderObjectMother;
@@ -378,7 +378,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedErrorsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedErrorsFragment(filter);
         Assertions.assertTrue(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
@@ -441,7 +441,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedErrorsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedErrorsFragment(filter);
         Assertions.assertFalse(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(

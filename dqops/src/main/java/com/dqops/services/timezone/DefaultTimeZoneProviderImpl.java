@@ -16,6 +16,7 @@
 package com.dqops.services.timezone;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
@@ -31,7 +32,7 @@ import java.time.ZoneId;
 import java.util.TimeZone;
 
 /**
- * Service that returns the default time zone configured on the DQO instance.
+ * Service that returns the default time zone configured on the DQOps instance.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -43,7 +44,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
 
     /**
      * Creates a default time zone provider.
-     * @param dqoConfigurationProperties DQO configuration properties with the system provided time zone. The configuration object has a default value that is the local computer's time zone.
+     * @param dqoConfigurationProperties DQOps configuration properties with the system provided time zone. The configuration object has a default value that is the local computer's time zone.
      * @param userHomeContextFactory User home context factory to read the time zone that was customized by the user.
      * @param secretValueProvider Secret value provider that will extract secrets in the user local settings (to support using environment variables or secret managers).
      */
@@ -82,7 +83,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
     /**
      * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
      * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
-     * @param userHomeContext DQO User home context with parameters.
+     * @param userHomeContext DQOps User home context with parameters.
      * @return Default Java time zone.
      */
     @Override
@@ -107,7 +108,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
 
     /**
      * Retrieves the time zone name from the local settings file in the user home, that is a user configured time zone.
-     * @param userHomeContext DQO User home context with parameters.
+     * @param userHomeContext DQOps User home context with parameters.
      * @return The time zone name of a user configured time zone or null when the time zone is not configured.
      */
     public String getTimeZoneFromUserLocalSettings(UserHomeContext userHomeContext) {
@@ -121,7 +122,8 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
             return null;
         }
 
-        return this.secretValueProvider.expandValue(settingsSpec.getTimeZone());
+        SecretValueLookupContext lookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
+        return this.secretValueProvider.expandValue(settingsSpec.getTimeZone(), lookupContext);
     }
 
     /**

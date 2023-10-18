@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
-import { TableRemoteBasicModel } from '../../../api';
+import { RemoteTableListModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import Loader from '../../Loader';
 import ConnectionActionGroup from './ConnectionActionGroup';
@@ -33,7 +33,7 @@ const SourceTablesView = ({
   } = useParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
-  const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
+  const [tables, setTables] = useState<RemoteTableListModel[]>([]);
  
   const dispatch = useActionDispatch();
   const { job_dictionary_state } =
@@ -67,36 +67,45 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    const res = await JobApiClient.importTables({
+    const res = await JobApiClient.importTables(
+      false, 
+      undefined,
+      {
       connectionName,
       schemaName,
       tableNames: selectedTables
-    })
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          (res.data as any)?.jobId?.jobId
-        )
-      );
-      setJobId((res.data as any)?.jobId);
-    dispatch(toggleAdvisor(true)); 
-  };
-
-  const importAllTables = async () => {
-    const res = await JobApiClient.importTables({
-      connectionName,
-      schemaName,
-      tableNames: tables.map((item) => item.tableName ?? '')
-    })
+    });
+    
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId);
+    
+    setJobId(res.data?.jobId?.jobId);
+    dispatch(toggleAdvisor(true)); 
+  };
+
+  const importAllTables = async () => {
+    const res = await JobApiClient.importTables(
+      false,
+      undefined,
+      {
+      connectionName,
+      schemaName,
+      tableNames: tables.map((item) => item.tableName ?? '')
+    });
+
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        res.data?.jobId?.jobId ?? 0
+      )
+    );
+    setJobId(res.data?.jobId?.jobId);
     dispatch(toggleAdvisor(true));
   };
 
@@ -152,7 +161,7 @@ const SourceTablesView = ({
             <tr className="border-b border-gray-300">
               <th />
               <th className="py-2 px-4 text-left">Source Table Name</th>
-              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th className="py-2 px-4 text-left">Import status</th>
             </tr>
           </thead>
           <tbody>

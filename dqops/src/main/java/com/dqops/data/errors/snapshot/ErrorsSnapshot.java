@@ -23,7 +23,6 @@ import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.data.storage.TableDataSnapshot;
 import com.dqops.data.storage.TablePartitioningPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import tech.tablesaw.api.Table;
 
 /**
@@ -74,5 +73,17 @@ public class ErrorsSnapshot extends TableDataSnapshot {
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,
                 ErrorsColumnNames.ID_COLUMN_NAME,
                 TablePartitioningPattern.CTM);
+    }
+
+    /**
+     * Saves all results to a persistent storage (like files). New rows are added, rows with matching IDs are updated.
+     * Rows identified by an ID column are deleted.
+     * [NOT ON READ-ONLY]
+     */
+    @Override
+    public void save() {
+        this.dropDuplicateNewRows();
+
+        super.save();
     }
 }

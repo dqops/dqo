@@ -58,7 +58,7 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns the error with a unique ID of the sensor readout. There could be multiple rows with the same readout_id, especially for recurring and partitioned checks.
+     * Returns the error with a unique ID of the sensor readout. There could be multiple rows with the same readout_id, especially for monitoring and partitioned checks.
      * @return Column with the readout ID that is the same ID that would be used as the "ID" column in sensor_readouts or rule_results.
      */
     public TextColumn getReadoutIdColumn() {
@@ -82,9 +82,9 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns the error timestamp column. It is the time when the error happened, but it is stored as a local timestamp of the DQO instance that executed the failed check.
+     * Returns the error timestamp column. It is the time when the error happened, but it is stored as a local timestamp of the DQOps instance that executed the failed check.
      * This column is used as a partitioning key to store monthly parquet partitions.
-     * @return Error timetamp column.
+     * @return Error timestamp column.
      */
     public DateTimeColumn getErrorTimestampColumn() {
         return errorTimestampColumn;

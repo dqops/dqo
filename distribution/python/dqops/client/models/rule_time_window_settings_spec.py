@@ -1,16 +1,15 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.rule_time_window_settings_spec_historic_data_point_grouping import (
-    RuleTimeWindowSettingsSpecHistoricDataPointGrouping,
-)
+from ..models.historic_data_points_grouping import HistoricDataPointsGrouping
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="RuleTimeWindowSettingsSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RuleTimeWindowSettingsSpec:
     """
     Attributes:
@@ -23,19 +22,13 @@ class RuleTimeWindowSettingsSpec:
             must be present in the data in order to call the rule. The rule is not called and the sensor readout is
             discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor
             readouts is not met. The default is 7.
-        historic_data_point_grouping (Union[Unset, RuleTimeWindowSettingsSpecHistoricDataPointGrouping]): Time period
-            grouping for collecting previous data quality sensor results for the data quality rules that use historic data
-            for prediction. For example, when the default time period grouping 'day' is used, DQO will find the most recent
-            data quality sensor readout for each day and pass an array of most recent days per day in an array of historic
-            sensor readout data points to a data quality rule for prediction.
+        historic_data_point_grouping (Union[Unset, HistoricDataPointsGrouping]):
     """
 
     prediction_time_window: Union[Unset, int] = UNSET
     min_periods_with_readouts: Union[Unset, int] = UNSET
-    historic_data_point_grouping: Union[
-        Unset, RuleTimeWindowSettingsSpecHistoricDataPointGrouping
-    ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    historic_data_point_grouping: Union[Unset, HistoricDataPointsGrouping] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         prediction_time_window = self.prediction_time_window
@@ -64,16 +57,12 @@ class RuleTimeWindowSettingsSpec:
         min_periods_with_readouts = d.pop("min_periods_with_readouts", UNSET)
 
         _historic_data_point_grouping = d.pop("historic_data_point_grouping", UNSET)
-        historic_data_point_grouping: Union[
-            Unset, RuleTimeWindowSettingsSpecHistoricDataPointGrouping
-        ]
+        historic_data_point_grouping: Union[Unset, HistoricDataPointsGrouping]
         if isinstance(_historic_data_point_grouping, Unset):
             historic_data_point_grouping = UNSET
         else:
-            historic_data_point_grouping = (
-                RuleTimeWindowSettingsSpecHistoricDataPointGrouping(
-                    _historic_data_point_grouping
-                )
+            historic_data_point_grouping = HistoricDataPointsGrouping(
+                _historic_data_point_grouping
             )
 
         rule_time_window_settings_spec = cls(

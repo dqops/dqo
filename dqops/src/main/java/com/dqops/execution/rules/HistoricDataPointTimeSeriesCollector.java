@@ -92,7 +92,7 @@ public class HistoricDataPointTimeSeriesCollector {
             if (rowTimePeriodUtc == null) {
                 rowTimePeriodUtc = rowTimePeriodInDefaultTz;
             }
-            Duration timeZoneOffsetDuration = Duration.between(rowTimePeriodUtc, rowTimePeriodInDefaultTz); // this is the difference between the database default timezone and the DQO instance default time zone
+            Duration timeZoneOffsetDuration = Duration.between(rowTimePeriodUtc, rowTimePeriodInDefaultTz); // this is the difference between the database default timezone and the DQOps instance default time zone
 
             LocalDateTime rowTruncatedTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(rowTimePeriod, this.gradient);
             Double rowActualValue = this.actualValueColumn.get(rowIndex);

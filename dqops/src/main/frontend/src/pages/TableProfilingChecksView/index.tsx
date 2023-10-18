@@ -71,7 +71,7 @@ const TableProfilingsView = () => {
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14 max-w-full">
           <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
             <SvgIcon name="table-check" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">{`Advanced profiling for ${connectionName}.${schemaName}.${tableName}`}</div>
+            <div className="text-xl font-semibold truncate">{`Profiling checks for ${connectionName}.${schemaName}.${tableName}`}</div>
           </div>
           <Button
             color={isUpdated ? 'primary' : 'secondary'}

@@ -17,6 +17,7 @@ package com.dqops.cli.commands.column.impl;
 
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.TabularOutputFormat;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.sources.ColumnSpec;
 
 /**
@@ -50,9 +51,10 @@ public interface ColumnCliService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param columnName Column name.
+	 * @param principal Principal that will be used to run the job.
 	 * @return Cli operation status.
 	 */
-	CliOperationStatus removeColumn(String connectionName, String tableName, String columnName);
+	CliOperationStatus removeColumn(String connectionName, String tableName, String columnName, DqoUserPrincipal principal);
 
 	/**
 	 * Update a column from a given connection, table and column.

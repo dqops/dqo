@@ -23,6 +23,7 @@ import tech.tablesaw.api.*;
  * Tabular object returned from {@link StatisticsCollectorsExecutionService} with a summary of statistics collector that were executed.
  */
 public class StatisticsCollectionExecutionSummary {
+    private Throwable firstException;
     private final TextColumn connectionColumn;
     private final TextColumn tableColumn;
     private final IntColumn collectorsExecutedColumn;
@@ -142,6 +143,9 @@ public class StatisticsCollectionExecutionSummary {
 		this.collectorsColumnsSuccessfullyColumn.set(row.getRowNumber(), executionStatistics.getProfiledColumnSuccessfullyCount());
 		this.collectorsFailedColumn.set(row.getRowNumber(), executionStatistics.getCollectorsFailedCount());
         this.collectorsResultsColumn.set(row.getRowNumber(), executionStatistics.getCollectorsResultsCount());
+        if (this.firstException == null && executionStatistics.getFirstException() != null) {
+            this.firstException = executionStatistics.getFirstException();
+        }
     }
 
     /**
@@ -150,6 +154,9 @@ public class StatisticsCollectionExecutionSummary {
      */
     public void append(StatisticsCollectionExecutionSummary otherExecutionSummary) {
         this.summaryTable.append(otherExecutionSummary.getSummaryTable());
+        if (this.firstException == null && otherExecutionSummary.getFirstException() != null) {
+            this.firstException = otherExecutionSummary.getFirstException();
+        }
     }
 
     /**
@@ -161,15 +168,15 @@ public class StatisticsCollectionExecutionSummary {
     }
 
     /**
-     * Returns the count of columns for which DQO executed a collector and tried to read the statistics.
-     * @return The count of columns for which DQO executed a collector and tried to read the statistics.
+     * Returns the count of columns for which DQOps executed a collector and tried to read the statistics.
+     * @return The count of columns for which DQOps executed a collector and tried to read the statistics.
      */
     public int getColumnsAnalyzedCount() {
         return (int)this.collectorsColumnsColumn.sum();
     }
 
     /**
-     * Returns the number of columns for which DQO managed to obtain statistics.
+     * Returns the number of columns for which DQOps managed to obtain statistics.
      * @return Number of columns that were analyzed successfully.
      */
     public int getColumnsSuccessfullyAnalyzed() {
@@ -190,5 +197,53 @@ public class StatisticsCollectionExecutionSummary {
      */
     public int getTotalCollectedResults() {
         return (int)this.collectorsResultsColumn.sum();
+    }
+
+    /**
+     * Returns the first exception that was thrown when running the statistics collection. It is the exception from the first statistics collector that failed.
+     * @return The exception from the first failed statistics collector or null when no collectors failed.
+     */
+    public Throwable getFirstException() {
+        return firstException;
+    }
+
+    /**
+     * Checks if the whole statistics collection job failed, resulting only in failures.
+     * @return True when the statistics collection failed for all collectors, false when some collectors managed to collect statistics.
+     */
+    public boolean getAllChecksFailed() {
+        if (this.getTotalCollectorsExecuted() > 0 &&  // there are some matches to run collects
+            this.getTotalCollectedResults() == 0 &&   // but no results were collected
+            this.getTotalCollectorsFailed() > 0) {    // and only failures were recorded, probably no access to the data source
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Extracts the table name from the first reported row.
+     * @return The table name for the first row or null.
+     */
+    public String getFirstTableName() {
+        if (this.summaryTable.rowCount() == 0) {
+            return null;
+        }
+
+        String tableName = this.getTableColumn().getString(0);
+        return tableName;
+    }
+
+    /**
+     * Extracts the connection name from the first reported row.
+     * @return The table connection for the first row or null.
+     */
+    public String getFirstConnectionName() {
+        if (this.summaryTable.rowCount() == 0) {
+            return null;
+        }
+
+        String connectionName = this.getConnectionColumn().getString(0);
+        return connectionName;
     }
 }

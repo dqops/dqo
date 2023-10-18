@@ -64,7 +64,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
 
     /**
      * Prepare the sensor before it is executed on the data source.
-     * @param executionContext DQO execution context that provides access to the DQO and user home.
+     * @param executionContext DQOps execution context that provides access to the DQOps system and user home.
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @return Sensor preparation result with a rendered sensor.

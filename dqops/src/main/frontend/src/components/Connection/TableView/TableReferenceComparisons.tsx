@@ -8,19 +8,19 @@ import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
-  fetchChecks: () => Promise<void>;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
   timePartitioned,
   checksUI,
-  fetchChecks
 }: TableReferenceComparisonsProps) => {
   const {
     connection,
@@ -35,7 +35,11 @@ export const TableReferenceComparisons = ({
   const [isEditing, setIsEditing] = useState(false);
   const [selectedReference, setSelectedReference] = useState<string>();
   const [isCreating, setIsCreting] = useState(false);
+  const [isComparisonDeleted, setIsComparisonDeleted] = useState(false)
   const location = useLocation();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const onChangeSelectedReference = (arg: string) => {
     setSelectedReference(arg);
@@ -50,8 +54,7 @@ export const TableReferenceComparisons = ({
   useEffect(() => {
     getNewTableComparison();
     setIsCreting(false);
-    fetchChecks();
-  }, []);
+  }, [isComparisonDeleted, table, schema, connection]);
 
   const getNewTableComparison = () => {
     if (checkTypes === CheckTypes.PROFILING) {
@@ -74,7 +77,7 @@ export const TableReferenceComparisons = ({
       ).then((res) => {
         setReferences(res.data);
       });
-    } else if (checkTypes === CheckTypes.RECURRING) {
+    } else if (checkTypes === CheckTypes.MONITORING) {
       TableComparisonsApi.getTableComparisonConfigurations(
         connection,
         schema,
@@ -86,36 +89,8 @@ export const TableReferenceComparisons = ({
       });
     }
     setIsCreting(false);
-    fetchChecks();
   };
 
-  const onEditReference = (reference: TableComparisonConfigurationModel) => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      connection,
-      schema,
-      table,
-      'table-comparisons'
-    )}?isEditing=true&reference=${
-      reference.table_comparison_configuration_name
-    }`;
-
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table
-        ),
-        state: {},
-        label: table
-      })
-    );
-
-    history.push(url);
-  };
 
   const onChangeEditing = (value: boolean, reference?: string) => {
     setIsEditing(value);
@@ -139,8 +114,9 @@ export const TableReferenceComparisons = ({
     if (stayOnSamePage === false) {
       setIsEditing(true);
     } else {
+      let url = '';
       if (checkTypes === CheckTypes.PROFILING) {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+         url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -160,13 +136,8 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          fetchChecks();
-          getNewTableComparison();
-        }
-        history.push(url);
       } else if (timePartitioned === 'daily') {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+         url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -186,13 +157,8 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          fetchChecks();
-          getNewTableComparison();
-        }
-        history.push(url);
       } else if (timePartitioned === 'monthly') {
-        const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        url = `${ROUTES.TABLE_LEVEL_PAGE(
           checkTypes,
           connection,
           schema,
@@ -212,12 +178,11 @@ export const TableReferenceComparisons = ({
             label: table
           })
         );
-        if (isCreating === true) {
-          fetchChecks();
-          getNewTableComparison();
-        }
-        history.push(url);
       }
+      if (isCreating === true) {
+        getNewTableComparison();
+      }
+      history.push(url);
       setIsCreting(false);
     }
   };
@@ -225,6 +190,15 @@ export const TableReferenceComparisons = ({
   const onCreate = () => {
     setIsCreting(true);
     setIsEditing(true);
+  };
+
+  const deleteComparison = async (tableComparisonConfigurationName: string) => {
+    await TableComparisonsApi.deleteTableComparisonConfiguration(
+      connection,
+      schema,
+      table,
+      tableComparisonConfigurationName
+    ).then(() =>  setIsComparisonDeleted(!isComparisonDeleted))
   };
 
   return (
@@ -245,14 +219,17 @@ export const TableReferenceComparisons = ({
           isCreating={isCreating}
           getNewTableComparison={getNewTableComparison}
           onChangeSelectedReference={onChangeSelectedReference}
-          listOfExistingReferences = {references.map((x) => x.table_comparison_configuration_name)}
+          listOfExistingReferences={references.map(
+            (x) => x.table_comparison_configuration_name
+          )}
         />
       ) : (
         <ProfilingReferenceTableList
           references={references}
           onCreate={onCreate}
           selectReference={onEditProfilingReference}
-          onEdit={onEditReference}
+          canUserCreateTableComparison={userProfile.can_manage_data_sources}
+          deleteComparison = {deleteComparison}
         />
       )}
     </>

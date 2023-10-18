@@ -16,7 +16,7 @@
 package com.dqops.data.errors.services;
 
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 
 /**
  * Service that deletes outdated errors of a check run.
@@ -28,5 +28,5 @@ public interface ErrorsDeleteService {
      * @param filter Filter for the errors fragment that is of interest.
      * @return Data delete operation summary.
      */
-    DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
 }

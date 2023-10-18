@@ -73,7 +73,7 @@ public class BigQueryColumnStringsStringValueInSetPercentSensorParametersSpecInt
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("e55e");
         values.add("a111a");
@@ -82,7 +82,7 @@ public class BigQueryColumnStringsStringValueInSetPercentSensorParametersSpecInt
         values.add("b22b");
         this.sut.setExpectedValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -94,7 +94,7 @@ public class BigQueryColumnStringsStringValueInSetPercentSensorParametersSpecInt
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("e55e");
         values.add("a111a");
@@ -103,7 +103,7 @@ public class BigQueryColumnStringsStringValueInSetPercentSensorParametersSpecInt
         values.add("b22b");
         this.sut.setExpectedValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

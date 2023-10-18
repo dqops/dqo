@@ -23,17 +23,21 @@ import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import com.dqops.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceObjectMother;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
@@ -89,11 +93,13 @@ public class CheckServiceImplTests extends BaseTest {
         this.reflectionService = ReflectionServiceSingleton.getInstance();
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
+        RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        this.specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
+        this.specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService,
+                sensorDefinitionFindService, ruleDefinitionFindService, schedulesUtilityService, similarCheckCache);
         this.allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
         ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
@@ -141,7 +147,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
@@ -154,7 +160,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
         TableVolumeProfilingChecksSpec t2volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
-        MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRule1ParametersSpec t2rowCountErrorSpec = new MinCountRule1ParametersSpec();
         MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t2rowCountErrorSpec.setMinCount(100L);
         t2rowCountFatalSpec.setMinCount(10L);
@@ -177,11 +183,11 @@ public class CheckServiceImplTests extends BaseTest {
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
-        ColumnRecurringChecksRootSpec col23recurringSpec = new ColumnRecurringChecksRootSpec();
-        col23.setRecurringChecks(col23recurringSpec);
-        ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
-        col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
+        ColumnMonitoringChecksRootSpec col23monitoringSpec = new ColumnMonitoringChecksRootSpec();
+        col23.setMonitoringChecks(col23monitoringSpec);
+        ColumnDailyMonitoringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
+        col23monitoringSpec.setDaily(col23categoriesSpec);
+        ColumnNumericDailyMonitoringChecksSpec col23numericChecksSpec = new ColumnNumericDailyMonitoringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
@@ -385,7 +391,8 @@ public class CheckServiceImplTests extends BaseTest {
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -404,7 +411,7 @@ public class CheckServiceImplTests extends BaseTest {
         CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
         allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
@@ -429,7 +436,8 @@ public class CheckServiceImplTests extends BaseTest {
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -458,7 +466,7 @@ public class CheckServiceImplTests extends BaseTest {
         selectedTablesToColumns.put("tab2", selectedColumns2);
         allChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);

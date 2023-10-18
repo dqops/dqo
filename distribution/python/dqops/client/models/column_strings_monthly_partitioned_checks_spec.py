@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,9 +14,6 @@ if TYPE_CHECKING:
     )
     from ..models.column_string_boolean_placeholder_percent_check_spec import (
         ColumnStringBooleanPlaceholderPercentCheckSpec,
-    )
-    from ..models.column_string_datatype_detected_check_spec import (
-        ColumnStringDatatypeDetectedCheckSpec,
     )
     from ..models.column_string_empty_count_check_spec import (
         ColumnStringEmptyCountCheckSpec,
@@ -113,15 +111,21 @@ if TYPE_CHECKING:
     from ..models.column_string_whitespace_percent_check_spec import (
         ColumnStringWhitespacePercentCheckSpec,
     )
+    from ..models.column_strings_monthly_partitioned_checks_spec_custom_checks import (
+        ColumnStringsMonthlyPartitionedChecksSpecCustomChecks,
+    )
 
 
 T = TypeVar("T", bound="ColumnStringsMonthlyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnStringsMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnStringsMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_string_max_length (Union[Unset, ColumnStringMaxLengthCheckSpec]):
         monthly_partition_string_min_length (Union[Unset, ColumnStringMinLengthCheckSpec]):
         monthly_partition_string_mean_length (Union[Unset, ColumnStringMeanLengthCheckSpec]):
@@ -168,9 +172,11 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
         monthly_partition_string_match_name_regex_percent (Union[Unset, ColumnStringMatchNameRegexPercentCheckSpec]):
         monthly_partition_expected_strings_in_top_values_count (Union[Unset,
             ColumnExpectedStringsInTopValuesCountCheckSpec]):
-        monthly_partition_string_datatype_detected (Union[Unset, ColumnStringDatatypeDetectedCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "ColumnStringsMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_string_max_length: Union[
         Unset, "ColumnStringMaxLengthCheckSpec"
     ] = UNSET
@@ -276,12 +282,13 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
     monthly_partition_expected_strings_in_top_values_count: Union[
         Unset, "ColumnExpectedStringsInTopValuesCountCheckSpec"
     ] = UNSET
-    monthly_partition_string_datatype_detected: Union[
-        Unset, "ColumnStringDatatypeDetectedCheckSpec"
-    ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_string_max_length: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_string_max_length, Unset):
             monthly_partition_string_max_length = (
@@ -584,15 +591,11 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
                 self.monthly_partition_expected_strings_in_top_values_count.to_dict()
             )
 
-        monthly_partition_string_datatype_detected: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_partition_string_datatype_detected, Unset):
-            monthly_partition_string_datatype_detected = (
-                self.monthly_partition_string_datatype_detected.to_dict()
-            )
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_string_max_length is not UNSET:
             field_dict[
                 "monthly_partition_string_max_length"
@@ -733,10 +736,6 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
             field_dict[
                 "monthly_partition_expected_strings_in_top_values_count"
             ] = monthly_partition_expected_strings_in_top_values_count
-        if monthly_partition_string_datatype_detected is not UNSET:
-            field_dict[
-                "monthly_partition_string_datatype_detected"
-            ] = monthly_partition_string_datatype_detected
 
         return field_dict
 
@@ -750,9 +749,6 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
         )
         from ..models.column_string_boolean_placeholder_percent_check_spec import (
             ColumnStringBooleanPlaceholderPercentCheckSpec,
-        )
-        from ..models.column_string_datatype_detected_check_spec import (
-            ColumnStringDatatypeDetectedCheckSpec,
         )
         from ..models.column_string_empty_count_check_spec import (
             ColumnStringEmptyCountCheckSpec,
@@ -850,8 +846,24 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
         from ..models.column_string_whitespace_percent_check_spec import (
             ColumnStringWhitespacePercentCheckSpec,
         )
+        from ..models.column_strings_monthly_partitioned_checks_spec_custom_checks import (
+            ColumnStringsMonthlyPartitionedChecksSpecCustomChecks,
+        )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, ColumnStringsMonthlyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                ColumnStringsMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_partition_string_max_length = d.pop(
             "monthly_partition_string_max_length", UNSET
         )
@@ -1379,22 +1391,8 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
                 )
             )
 
-        _monthly_partition_string_datatype_detected = d.pop(
-            "monthly_partition_string_datatype_detected", UNSET
-        )
-        monthly_partition_string_datatype_detected: Union[
-            Unset, ColumnStringDatatypeDetectedCheckSpec
-        ]
-        if isinstance(_monthly_partition_string_datatype_detected, Unset):
-            monthly_partition_string_datatype_detected = UNSET
-        else:
-            monthly_partition_string_datatype_detected = (
-                ColumnStringDatatypeDetectedCheckSpec.from_dict(
-                    _monthly_partition_string_datatype_detected
-                )
-            )
-
         column_strings_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_string_max_length=monthly_partition_string_max_length,
             monthly_partition_string_min_length=monthly_partition_string_min_length,
             monthly_partition_string_mean_length=monthly_partition_string_mean_length,
@@ -1430,7 +1428,6 @@ class ColumnStringsMonthlyPartitionedChecksSpec:
             monthly_partition_string_match_date_regex_percent=monthly_partition_string_match_date_regex_percent,
             monthly_partition_string_match_name_regex_percent=monthly_partition_string_match_name_regex_percent,
             monthly_partition_expected_strings_in_top_values_count=monthly_partition_expected_strings_in_top_values_count,
-            monthly_partition_string_datatype_detected=monthly_partition_string_datatype_detected,
         )
 
         column_strings_monthly_partitioned_checks_spec.additional_properties = d

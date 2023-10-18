@@ -16,8 +16,12 @@
 
 package com.dqops.core.jobqueue;
 
+import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
+import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.google.api.gax.rpc.InvalidArgumentException;
+
 /**
- * DQO job completion status, which says how a job has finished: the job was finished, the job failed with an exception, the job was cancelled.
+ * DQOps job completion status, which says how a job has finished: the job was finished, the job failed with an exception, the job was cancelled.
  */
 public enum DqoJobCompletionStatus {
     /**
@@ -33,5 +37,23 @@ public enum DqoJobCompletionStatus {
     /**
      * The job was cancelled.
      */
-    CANCELLED
+    CANCELLED;
+
+    /**
+     * Converts the job status calculated from the completable future to a compatible job status.
+     * Not all statuses are covered.
+     * @return Job status.
+     */
+    public DqoJobStatus toJobStatus() {
+        switch (this) {
+            case SUCCEEDED:
+                return DqoJobStatus.succeeded;
+            case FAILED:
+                return DqoJobStatus.failed;
+            case CANCELLED:
+                return DqoJobStatus.cancelled;
+            default:
+                throw new DqoRuntimeException("Unknown status " + this);
+        }
+    }
 }

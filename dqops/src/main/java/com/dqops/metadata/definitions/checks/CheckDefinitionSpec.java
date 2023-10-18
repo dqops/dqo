@@ -15,18 +15,18 @@
  */
 package com.dqops.metadata.definitions.checks;
 
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -57,10 +57,12 @@ public class CheckDefinitionSpec extends AbstractSpec {
         this.helpText = helpText;
     }
 
-    @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/volume/row_count.")
+    @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. " +
+            "Sample sensor name: table/volume/row_count.")
     private String sensorName;
 
-    @JsonPropertyDescription("Rule name used for the check. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
+    @JsonPropertyDescription("Rule name used for the check. It is a path to a custom rule python module that starts at the user's home 'rules' folder. " +
+            "The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
     private String ruleName;
 
     @JsonPropertyDescription("Help text that describes the data quality check.")
@@ -156,5 +158,50 @@ public class CheckDefinitionSpec extends AbstractSpec {
     public CheckDefinitionSpec deepClone() {
         CheckDefinitionSpec cloned = (CheckDefinitionSpec)super.deepClone();
         return cloned;
+    }
+
+    /**
+     * Returns the full check name, including the target, check type, time scale, category and the check name.
+     * @return Full check name.
+     */
+    @JsonIgnore
+    public String getFullCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Returns the check name, without the category.
+     * @return Check name, without the category or type.
+     */
+    @JsonIgnore
+    public String getCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 1];
+    }
+
+    /**
+     * Returns the check category extracted from the full check name.
+     * @return Check category.
+     */
+    @JsonIgnore
+    public String getCheckCategory() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 2];
     }
 }

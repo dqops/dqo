@@ -34,6 +34,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMothe
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -209,7 +210,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         this.tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec() {{
             setVolume(new TableVolumeProfilingChecksSpec() {{
                 setProfileRowCount(new TableRowCountCheckSpec() {{
-                    setError(new MinCountRule0ParametersSpec(10L));
+                    setError(new MinCountRule1ParametersSpec(10L));
                 }});
             }});
         }});

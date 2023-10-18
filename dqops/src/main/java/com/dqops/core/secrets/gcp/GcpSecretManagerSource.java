@@ -16,6 +16,7 @@
 package com.dqops.core.secrets.gcp;
 
 import com.dqops.core.configuration.DqoSecretsConfigurationProperties;
+import com.dqops.core.secrets.CurrentSecretValueLookupContext;
 import com.dqops.core.secrets.SecretExpandFailedException;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
@@ -95,11 +96,11 @@ public class GcpSecretManagerSource {
             }
             catch (Exception ex) {
 				LOG.warn("Cannot find a GCP secret " + corePropertyName, ex);
-                return this.secretValueProvider.expandValue(defaultValue);
+                return this.secretValueProvider.expandValue(defaultValue, CurrentSecretValueLookupContext.getCurrentLookupContext());
             }
         }
         else {
-            return this.secretValueProvider.expandValue(defaultValue);
+            return this.secretValueProvider.expandValue(defaultValue, CurrentSecretValueLookupContext.getCurrentLookupContext());
         }
     }
 }

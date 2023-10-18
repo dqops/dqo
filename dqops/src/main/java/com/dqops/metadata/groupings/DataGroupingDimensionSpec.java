@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.groupings;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ControlType;
@@ -183,12 +184,13 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret value lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public DataGroupingDimensionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataGroupingDimensionSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DataGroupingDimensionSpec cloned = this.deepClone();
-        cloned.tag = cloned.source == DataGroupingDimensionSource.tag ? secretValueProvider.expandValue(cloned.tag) : null;
-        cloned.column = cloned.source == DataGroupingDimensionSource.column_value ? secretValueProvider.expandValue(cloned.column) : null;
+        cloned.tag = cloned.source == DataGroupingDimensionSource.tag ? secretValueProvider.expandValue(cloned.tag, lookupContext) : null;
+        cloned.column = cloned.source == DataGroupingDimensionSource.column_value ? secretValueProvider.expandValue(cloned.column, lookupContext) : null;
         return cloned;
     }
 

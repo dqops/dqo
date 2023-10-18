@@ -5,7 +5,7 @@ import Tabs from '../../components/Tabs';
 import ColumnDetails from './ColumnDetails';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnLabelsView from './ColumnLabelsView';
-import ColumnRecurringChecksView from './ColumnRecurringChecksView';
+import ColumnMonitoringChecksView from './ColumnMonitoringChecksView';
 import ColumnProfilingView from './ColumnProfilingChecksView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const initTabs = [
   {
-    label: 'Column',
+    label: 'Column metadata',
     value: 'detail'
   },
   {
@@ -58,13 +58,13 @@ const ColumnView = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyRecurring,
-    isUpdatedMonthlyRecurring,
+    isUpdatedDailyMonitoring,
+    isUpdatedMonthlyMonitoring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector(getFirstLevelState(checkTypes));
-  const isRecurringOnly = useMemo(
-    () => checkTypes === CheckTypes.RECURRING,
+  const isMonitoringOnly = useMemo(
+    () => checkTypes === CheckTypes.MONITORING,
     [checkTypes]
   );
   const isPartitionCheckOnly = useMemo(
@@ -76,7 +76,7 @@ const ColumnView = () => {
     [checkTypes]
   );
   const showAllSubTabs = () =>
-    !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly;
+    !isMonitoringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly;
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
@@ -149,15 +149,15 @@ const ColumnView = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'recurring'
+        item.value === 'monitoring'
           ? {
               ...item,
-              isUpdated: isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
+              isUpdated: isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring
             }
           : item
       )
     );
-  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
+  }, [isUpdatedDailyMonitoring, isUpdatedMonthlyMonitoring]);
 
   useEffect(() => {
     setTabs(
@@ -176,13 +176,13 @@ const ColumnView = () => {
 
   const description = useMemo(() => {
     if (isProfilingCheckOnly) {
-      return 'Advanced profiling for ';
+      return 'Profiling checks for ';
     }
-    if (isRecurringOnly) {
+    if (isMonitoringOnly) {
       if (activeTab === 'monthly') {
-        return 'Monthly recurring checks for ';
+        return 'Monthly monitoring checks for ';
       } else {
-        return 'Daily recurring checks for ';
+        return 'Daily monitoring checks for ';
       }
     }
     if (isPartitionCheckOnly) {
@@ -197,7 +197,7 @@ const ColumnView = () => {
       return 'Data source configuration for ';
     }
     return '';
-  }, [isProfilingCheckOnly, isRecurringOnly, isPartitionCheckOnly, activeTab]);
+  }, [isProfilingCheckOnly, isMonitoringOnly, isPartitionCheckOnly, activeTab]);
 
   return (
     <ConnectionLayout>
@@ -209,7 +209,7 @@ const ColumnView = () => {
           </div>
         </div>
         <ColumnNavigation />
-        {isRecurringOnly && <ColumnRecurringChecksView />}
+        {isMonitoringOnly && <ColumnMonitoringChecksView />}
         {isPartitionCheckOnly && <ColumnPartitionedChecksView />}
         {isProfilingCheckOnly && (
           <ColumnProfilingView

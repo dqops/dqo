@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableSpecGroupings")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSpecGroupings:
     """Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the
     table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for
@@ -19,7 +20,7 @@ class TableSpecGroupings:
 
     """
 
-    additional_properties: Dict[str, "DataGroupingConfigurationSpec"] = attr.ib(
+    additional_properties: Dict[str, "DataGroupingConfigurationSpec"] = _attrs_field(
         init=False, factory=dict
     )
 

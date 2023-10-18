@@ -156,7 +156,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param connectionName The connection name of the compared table.
      * @param physicalTableName Physical table name (schema and table) of the compared table.
      * @param checkType Check type.
-     * @param timeScale Optional check scale (daily, monthly) for recurring and partitioned checks.
+     * @param timeScale Optional check scale (daily, monthly) for monitoring and partitioned checks.
      * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Returns the summary information about the table comparison.
      */
@@ -211,21 +211,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @return Detailed model of the check results.
      */
     @Override
-    public CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                     CheckResultsDetailedFilterParameters loadParameters) {
-        Map<Long, CheckResultsDetailedDataModel> resultMap = new LinkedHashMap<>();
+    public CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                             CheckResultsDetailedFilterParameters loadParameters) {
+        Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
         Table ruleResultsTable = loadRecentRuleResults(loadParameters, connectionName, physicalTableName);
         if (ruleResultsTable == null || ruleResultsTable.isEmpty()) {
-            return new CheckResultsDetailedDataModel[0]; // empty array
+            return new CheckResultsListModel[0]; // empty array
         }
 
         Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, ruleResultsTable, loadParameters);
         if (filteredTable.isEmpty()) {
-            return new CheckResultsDetailedDataModel[0]; // empty array
+            return new CheckResultsListModel[0]; // empty array
         }
         Table filteredTableByDataGroup = filteredTable;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
@@ -234,7 +234,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         if (filteredTableByDataGroup.isEmpty()) {
-            return new CheckResultsDetailedDataModel[0]; // empty array
+            return new CheckResultsListModel[0]; // empty array
         }
 
         Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
@@ -251,27 +251,27 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             Long checkHash = checkHashColumn.get(rowIndex);
             String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(checkHash);
+            CheckResultsListModel checkResultsListModel = resultMap.get(checkHash);
 
-            CheckResultDetailedSingleModel singleModel = null;
+            CheckResultEntryModel singleModel = null;
 
-            if (checkResultsDetailedDataModel != null) {
-                if (checkResultsDetailedDataModel.getSingleCheckResults().size() >= loadParameters.getMaxResultsPerCheck()) {
+            if (checkResultsListModel != null) {
+                if (checkResultsListModel.getCheckResultEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
                     continue; // enough results loaded
                 }
 
-                if (!Objects.equals(dataGroupNameForCheck, checkResultsDetailedDataModel.getDataGroup())) {
+                if (!Objects.equals(dataGroupNameForCheck, checkResultsListModel.getDataGroup())) {
                     continue; // we are not mixing groups, results for a different group were already loaded
                 }
             } else {
                 singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
-                checkResultsDetailedDataModel = new CheckResultsDetailedDataModel();
-                checkResultsDetailedDataModel.setCheckCategory(singleModel.getCheckCategory());
-                checkResultsDetailedDataModel.setCheckName(singleModel.getCheckName());
-                checkResultsDetailedDataModel.setCheckHash(singleModel.getCheckHash());
-                checkResultsDetailedDataModel.setCheckType(singleModel.getCheckType());
-                checkResultsDetailedDataModel.setCheckDisplayName(singleModel.getCheckDisplayName());
-                checkResultsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
+                checkResultsListModel = new CheckResultsListModel();
+                checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
+                checkResultsListModel.setCheckName(singleModel.getCheckName());
+                checkResultsListModel.setCheckHash(singleModel.getCheckHash());
+                checkResultsListModel.setCheckType(singleModel.getCheckType());
+                checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                checkResultsListModel.setDataGroup(dataGroupNameForCheck);
 
                 Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
                 List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
@@ -281,18 +281,18 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
                 }
 
-                checkResultsDetailedDataModel.setDataGroups(dataGroupsForCheck);
-                resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
+                checkResultsListModel.setDataGroups(dataGroupsForCheck);
+                resultMap.put(singleModel.getCheckHash(), checkResultsListModel);
             }
 
             if (singleModel == null) {
                 singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
             }
 
-            checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
+            checkResultsListModel.getCheckResultEntries().add(singleModel);
         }
 
-        return resultMap.values().toArray(CheckResultsDetailedDataModel[]::new);
+        return resultMap.values().toArray(CheckResultsListModel[]::new);
     }
 
     /**
@@ -301,7 +301,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @return Model with all information for a single check result.
      */
     @NotNull
-    protected CheckResultDetailedSingleModel createSingleCheckResultDetailedModel(Row row) {
+    protected CheckResultEntryModel createSingleCheckResultDetailedModel(Row row) {
         String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
         Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
@@ -333,7 +333,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
 
-        CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
+        CheckResultEntryModel singleModel = new CheckResultEntryModel() {{
             setId(id);
             setActualValue(actualValue);
             setExpectedValue(expectedValue);
@@ -382,13 +382,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @return An array of matching check results.
      */
     @Override
-    public CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
-                                                                              PhysicalTableName physicalTableName,
-                                                                              long incidentHash,
-                                                                              Instant firstSeen,
-                                                                              Instant incidentUntil,
-                                                                              int minSeverity,
-                                                                              CheckResultListFilterParameters filterParameters) {
+    public CheckResultEntryModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                                     PhysicalTableName physicalTableName,
+                                                                     long incidentHash,
+                                                                     Instant firstSeen,
+                                                                     Instant incidentUntil,
+                                                                     int minSeverity,
+                                                                     CheckResultListFilterParameters filterParameters) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
@@ -402,7 +402,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
-            return new CheckResultDetailedSingleModel[0];
+            return new CheckResultEntryModel[0];
         }
 
         Instant startTimestamp = firstSeen;
@@ -418,7 +418,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
-        List<CheckResultDetailedSingleModel> resultsList = new ArrayList<>();
+        List<CheckResultEntryModel> resultsList = new ArrayList<>();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -454,7 +454,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
                 Row row = partitionData.row(rowIndex);
-                CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
 
                 if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
                         !singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
@@ -465,7 +465,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
-        Comparator<CheckResultDetailedSingleModel> sortComparator = CheckResultDetailedSingleModel.makeSortComparator(filterParameters.getOrder());
+        Comparator<CheckResultEntryModel> sortComparator = CheckResultEntryModel.makeSortComparator(filterParameters.getOrder());
         if (filterParameters.getSortDirection() == SortDirection.asc) {
             resultsList.sort(sortComparator);
         }
@@ -477,11 +477,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         int untilRowIndexInPage = filterParameters.getPage() * filterParameters.getLimit();
 
         if (startRowIndexInPage >= resultsList.size()) {
-            return new CheckResultDetailedSingleModel[0]; // no results
+            return new CheckResultEntryModel[0]; // no results
         }
 
-        List<CheckResultDetailedSingleModel> pageResults = resultsList.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, resultsList.size()));
-        CheckResultDetailedSingleModel[] resultsArray = pageResults.toArray(CheckResultDetailedSingleModel[]::new);
+        List<CheckResultEntryModel> pageResults = resultsList.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, resultsList.size()));
+        CheckResultEntryModel[] resultsArray = pageResults.toArray(CheckResultEntryModel[]::new);
         return resultsArray;
     }
 
@@ -558,7 +558,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Row row = partitionData.row(rowIndex);
 
                 if (!Strings.isNullOrEmpty(filterParameters.getFilter())) {
-                    CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                    CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
                     if (!singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
                         continue;
                     }
@@ -651,21 +651,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
 
         LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn timeSeriesIdColumn = sortedTable.longColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        TextColumn timeSeriesIdColumn = sortedTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
         TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
 
         long lastCheckHash = Long.MIN_VALUE;
-        long lastTimeSeriesId = Long.MIN_VALUE;
+        String lastTimeSeriesId = "";
         int rowCount = sortedTable.rowCount();
 
         for (int i = 0; i < rowCount; i++) {
             long currentCheckHash = checkHashColumn.getLong(i);
-            long currentTimeSeriesId = timeSeriesIdColumn.getLong(i);
+            String currentTimeSeriesId = timeSeriesIdColumn.getString(i);
 
-            if (lastCheckHash == currentCheckHash && lastTimeSeriesId == currentTimeSeriesId) {
+            if (lastCheckHash == currentCheckHash && Objects.equals(lastTimeSeriesId, currentTimeSeriesId)) {
                 continue;
             }
 

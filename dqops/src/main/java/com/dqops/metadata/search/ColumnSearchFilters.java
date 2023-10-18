@@ -185,6 +185,7 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>connectionName</code>.
      */
+    @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
         if (connectionNameSearchPattern == null && connectionName != null) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
@@ -198,6 +199,7 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>schemaTableName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>schemaTableName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSchemaTableNameSearchPattern() {
         if (schemaTableNameSearchPattern == null && schemaTableName != null) {
             schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
@@ -211,6 +213,7 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>columnName</code>.
      */
+    @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
         if (columnNameSearchPattern == null && columnName != null) {
             columnNameSearchPattern = SearchPattern.create(false, columnName);

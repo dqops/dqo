@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors.bigquery;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 
 /**
@@ -24,7 +25,8 @@ public interface BigQueryConnectionPool {
     /**
      * Returns or creates a BigQuery service for the given connection specification.
      * @param connectionSpec Connection specification (should be not mutable).
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return BigQuery service.
      */
-    BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec);
+    BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext);
 }

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -6,13 +6,13 @@ spec:
   java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
-    prediction_time_window: 30
+    prediction_time_window: 60
     min_periods_with_readouts: 0
     historic_data_point_grouping: last_n_readouts
   fields:
   - field_name: max_failures
     display_name: max_failures
-    help_text: "Maximum number of consecutive check failures, a check is failed when\
-      \ the sensor's query failed to execute due to a connection error, missing table\
-      \ or a corrupted table."
+    help_text: "Maximum number of consecutive days with check failures. A check is\
+      \ failed when a sensor query fails due to a connection error, missing or corrupted\
+      \ table."
     data_type: long

@@ -1,0 +1,106 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  columns:
+    unique_key:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    complaint_description:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    source:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    status:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    status_change_date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    created_date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    last_update_date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    close_date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    incident_address:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    street_number:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    street_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    city:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    incident_zip:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      monitoring_checks:
+        daily:
+          pii:
+            daily_contains_usa_zipcode_percent:
+              warning:
+                max_percent: 10.0
+              error:
+                max_percent: 25.0
+              fatal:
+                max_percent: 35.0
+    county:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    state_plane_x_coordinate:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    state_plane_y_coordinate:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    latitude:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    longitude:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    location:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    council_district_code:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    map_page:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    map_tile:
+      type_snapshot:
+        column_type: STRING
+        nullable: true

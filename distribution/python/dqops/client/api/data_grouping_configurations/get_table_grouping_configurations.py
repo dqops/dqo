@@ -1,12 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.data_grouping_configuration_basic_model import (
-    DataGroupingConfigurationBasicModel,
+from ...client import AuthenticatedClient, Client
+from ...models.data_grouping_configuration_list_model import (
+    DataGroupingConfigurationListModel,
 )
 from ...types import Response
 
@@ -15,37 +15,27 @@ def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
-    *,
-    client: Client,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+        ),
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["DataGroupingConfigurationListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = DataGroupingConfigurationBasicModel.from_dict(
+            response_200_item = DataGroupingConfigurationListModel.from_dict(
                 response_200_item_data
             )
 
@@ -59,8 +49,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["DataGroupingConfigurationBasicModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["DataGroupingConfigurationListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -74,8 +64,8 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
-) -> Response[List["DataGroupingConfigurationBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Response[List["DataGroupingConfigurationListModel"]]:
     """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
@@ -90,18 +80,16 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['DataGroupingConfigurationBasicModel']]
+        Response[List['DataGroupingConfigurationListModel']]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -113,8 +101,8 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
-) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Optional[List["DataGroupingConfigurationListModel"]]:
     """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
@@ -129,7 +117,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['DataGroupingConfigurationBasicModel']
+        List['DataGroupingConfigurationListModel']
     """
 
     return sync_detailed(
@@ -145,8 +133,8 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
-) -> Response[List["DataGroupingConfigurationBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Response[List["DataGroupingConfigurationListModel"]]:
     """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
@@ -161,18 +149,16 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['DataGroupingConfigurationBasicModel']]
+        Response[List['DataGroupingConfigurationListModel']]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -182,8 +168,8 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
-) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Optional[List["DataGroupingConfigurationListModel"]]:
     """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
@@ -198,7 +184,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['DataGroupingConfigurationBasicModel']
+        List['DataGroupingConfigurationListModel']
     """
 
     return (

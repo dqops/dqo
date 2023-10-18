@@ -17,6 +17,7 @@ package com.dqops.execution.statistics;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
@@ -38,6 +39,7 @@ public interface StatisticsCollectorsExecutionService {
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
+     * @param principal Principal that will be used to run the job.
      * @return Collector summary table with the count of executed and successful profile executions for each table.
      */
     StatisticsCollectionExecutionSummary executeStatisticsCollectors(ExecutionContext executionContext,
@@ -47,7 +49,8 @@ public interface StatisticsCollectorsExecutionService {
                                                                      boolean dummySensorExecution,
                                                                      boolean startChildJobsPerTable,
                                                                      DqoQueueJobId parentJobId,
-                                                                     JobCancellationToken jobCancellationToken);
+                                                                     JobCancellationToken jobCancellationToken,
+                                                                     DqoUserPrincipal principal);
 
     /**
      * Executes data statistics collectors on a single table (as a child job). Reports progress and saves the results.

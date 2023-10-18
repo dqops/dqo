@@ -142,6 +142,7 @@ public class TableSearchFilters {
      * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>connectionName</code>.
      */
+    @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
         if (connectionNameSearchPattern == null && connectionName != null) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
@@ -161,6 +162,7 @@ public class TableSearchFilters {
      * Lazy getter, parses <code>schemaName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>schemaName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSchemaNameSearchPattern() {
         if (schemaNameSearchPattern == null && schemaTableName != null) {
             recreateSchemaTableNameSearchPatterns();
@@ -174,7 +176,8 @@ public class TableSearchFilters {
      * Lazy getter, parses <code>tableName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>tableName</code>.
      */
-    public SearchPattern gettableNameSearchPattern() {
+    @JsonIgnore
+    public SearchPattern getTableNameSearchPattern() {
         if (tableNameSearchPattern == null && schemaTableName != null) {
             recreateSchemaTableNameSearchPatterns();
         }

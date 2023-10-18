@@ -13,7 +13,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
@@ -76,6 +76,7 @@ interface ITableColumnsProps {
   setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: Array<string>) => void
 }
 
 const labels = [
@@ -86,7 +87,7 @@ const labels = [
   'Scale',
   'Min value',
   'Max value',
-  'Null count'
+  'Nulls count'
 ];
 
 const TableColumns = ({
@@ -96,7 +97,8 @@ const TableColumns = ({
   updateData,
   setLevelsData,
   setNumberOfSelected,
-  statistics
+  statistics,
+  onChangeSelectedColumns
 }: ITableColumnsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
@@ -106,7 +108,7 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
-
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
       ...prevStates,
@@ -180,7 +182,9 @@ const TableColumns = ({
     statistics?.column_statistics &&
       statistics?.column_statistics.map(async (x, index) =>
         x.column_hash === hashValue
-          ? await JobApiClient.collectStatisticsOnDataGroups(
+          ? await JobApiClient.collectStatisticsOnTable(
+              false,
+              undefined,
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
             )
@@ -260,16 +264,16 @@ const TableColumns = ({
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.schemaTableName ===
         schemaName + '.' + tableName &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
   );
-  const filteredColumns = filteredJobs?.map(
+  const filteredColumns = filteredJobs?.flatMap(
     (x) =>
       x.parameters?.collectStatisticsParameters
-        ?.statisticsCollectorSearchFilters?.columnName
+        ?.statistics_collector_search_filters?.columnNames
   );
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>
@@ -303,10 +307,10 @@ const TableColumns = ({
   );
 
   const maximumValueData = statistics?.column_statistics?.map((x) =>
-  x.statistics
-    ?.filter((item) => item.collector === 'max_value')
-    .map((item) => item.result)
-);
+    x.statistics
+      ?.filter((item) => item.collector === 'max_value')
+      .map((item) => item.result)
+  );
   const lengthData = statistics?.column_statistics?.map(
     (x) => x.type_snapshot?.length
   );
@@ -345,7 +349,7 @@ const TableColumns = ({
     }
   }
 
-  const sortAlphabetictly = (typ : keyof MyData) => {
+  const sortAlphabetictly = (typ: keyof MyData) => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
       const nullsCountA = String(a[typ]);
@@ -478,13 +482,13 @@ const TableColumns = ({
   const handleSorting = (param: string) => {
     switch (param) {
       case 'Column name':
-        sortAlphabetictly("nameOfCol");
+        sortAlphabetictly('nameOfCol');
         break;
       case 'Detected data type':
         sortData<MyData>('detectedDatatypeVar');
         break;
       case 'Imported data type':
-        sortAlphabetictly("importedDatatype");
+        sortAlphabetictly('importedDatatype');
         break;
       case 'Length':
         sortData<MyData>('length');
@@ -492,7 +496,7 @@ const TableColumns = ({
       case 'Scale':
         sortData<MyData>('scale');
         break;
-      case 'Null count':
+      case 'Nulls count':
         sortData<MyData>('null_count');
         break;
       case 'Min value':
@@ -500,7 +504,7 @@ const TableColumns = ({
         break;
       case 'Max value':
         sortDataByMinimalValue('maximumValue');
-        break  
+        break;
     }
   };
 
@@ -565,12 +569,24 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
+  const setAllSelectedColumns = () => {
+    const keysWithTrueValues = [];
+    for (const key in objectStates) {
+      if (objectStates[key] === true) {
+        keysWithTrueValues.push(key);
+      }
+    }
+    onChangeSelectedColumns && onChangeSelectedColumns(keysWithTrueValues)
+  }
+
+
   useEffect(() => {
     const joinedValues = fixString();
     setLevelsData(setSpec2());
     countTrueValues(objectStates);
     updateData(joinedValues);
     setCreatedDataStream(true, fixString(), setSpec2());
+    setAllSelectedColumns()
   }, [spec, objectStates]);
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
@@ -690,6 +706,7 @@ const TableColumns = ({
             <div>
               <IconButton
                 size="sm"
+                disabled={userProfile.can_collect_statistics  !== true}
                 className={
                   filteredColumns?.find((x) => x === column.nameOfCol)
                     ? 'group bg-gray-400 ml-1.5'
@@ -707,6 +724,7 @@ const TableColumns = ({
               <IconButton
                 size="sm"
                 className="group bg-teal-500 ml-3"
+                disabled={userProfile.can_manage_data_sources !== true}
                 onClick={() => {
                   rewriteData(column.columnHash);
                 }}
@@ -750,7 +768,9 @@ const TableColumns = ({
                   className="flex"
                   style={{
                     justifyContent:
-                      x === 'Min value' || x === 'Null count' || x==="Max value"
+                      x === 'Min value' ||
+                      x === 'Nulls count' ||
+                      x === 'Max value'
                         ? 'flex-end'
                         : 'flex-start'
                   }}
@@ -773,7 +793,7 @@ const TableColumns = ({
                 onClick={() => sortData<MyData>('null_percent')}
               >
                 <div onClick={() => updateData('updated data')}>
-                  Null percent
+                  Nulls percent
                 </div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />

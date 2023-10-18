@@ -6,16 +6,13 @@ data serialization language that is often used for writing configuration files.
 Defining data quality checks in the YAML files allows checks definitions to be stored in a source code repository and 
 versioned along with any other pipeline code or machine learning code.
 
-Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 
-``` yaml hl_lines="15-25"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+``` yaml hl_lines="14-22"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -36,12 +33,6 @@ spec:
               max_percent: 30.0
       labels:
         - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested  
 ```
 The `spec` section contains the details of the table, including the target schema and table name.
 
@@ -55,7 +46,7 @@ be raised.
 ## Editing the YAML files
 
 YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
-[here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
+[here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json). 
 
 The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
 extension by RedHat and Better Jinja by Samuel Colvin.

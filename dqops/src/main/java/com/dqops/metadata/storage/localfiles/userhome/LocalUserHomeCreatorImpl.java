@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -27,7 +27,8 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -36,9 +37,14 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
+import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
+import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +59,10 @@ import java.util.Base64;
 import java.util.stream.Stream;
 
 /**
- * Component that ensures that a DQO local user home was created and the default files were written.
+ * Component that ensures that a DQOps local user home was created and the default files were written.
  */
 @Component
+@Slf4j
 public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
     private UserHomeContextFactory userHomeContextFactory;
@@ -75,9 +82,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
      *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
-     * @param userConfigurationProperties DQO user home configuration parameters.
-     * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
-     * @param dqoInstanceConfigurationProperties DQO instance configuration parameters.
+     * @param userConfigurationProperties DQOps user home configuration parameters.
+     * @param dockerUserhomeConfigurationProperties DQOps user home configuration properties related specifically to running under docker.
+     * @param dqoInstanceConfigurationProperties DQOps instance configuration parameters.
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
@@ -125,12 +132,11 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Initializes the DQO user home at the default location.
+     * Initializes the DQOps user home at the default location.
      */
     @Override
     public void initializeDefaultDqoUserHome() {
         String userHomePathString = this.homeLocationFindService.getUserHomePath();
-
         if (userHomePathString == null) {
             return;
         }
@@ -139,8 +145,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Checks the default DQO_USER_HOME path if it points to a valid and initialized DQO user home.
-     * @return True when the path points to a valid DQO User home, false otherwise (the user home must be initialized before first use).
+     * Checks the default DQO_USER_HOME path if it points to a valid and initialized DQOps user home.
+     * @return True when the path points to a valid DQOps User home, false otherwise (the user home must be initialized before first use).
      */
     @Override
     public boolean isDefaultDqoUserHomeInitialized() {
@@ -154,9 +160,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Checks the given path if it points to a valid and initialized DQO user home.
-     * @param userHomePathString Path to a potential DQO user home.
-     * @return True when the path points to a valid DQO User home, false otherwise.
+     * Checks the given path if it points to a valid and initialized DQOps user home.
+     * @param userHomePathString Path to a potential DQOps user home.
+     * @return True when the path points to a valid DQOps User home, false otherwise.
      */
     @Override
     public boolean isDqoUserHomeInitialized(String userHomePathString) {
@@ -174,39 +180,44 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         // we are not checking the existence of other folders (like rules, sensors, sources) because they
-        // may have been empty when teh code was checked into Git and the user just checked the configuration out
+        // may have been empty when the code was checked into Git and the user just checked the configuration out
         // those folders will be created on first use anyway, we need to ensure that the "marker" is there
 
         return true;
     }
 
     /**
-     * Initializes a DQO user home at a given location.
-     * @param userHomePathString Path to the DQO user home.
+     * Initializes a DQOps user home at a given location.
+     * @param userHomePathString Path to the DQOps user home.
      */
     @Override
     public void initializeDqoUserHome(String userHomePathString) {
         try {
             Path userHomePath = Path.of(userHomePathString);
+            if (log.isDebugEnabled()) {
+                log.debug("Initializing DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
+
             initializeEmptyFolder(userHomePath);
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SENSORS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CHECKS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SETTINGS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
-//        initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
             if (!Files.exists(gitIgnorePath)) {
                 String gitIgnoreContent =
                         BuiltInFolderNames.CREDENTIALS + "/\n" +
-                                BuiltInFolderNames.DATA + "/\n" +
-                                BuiltInFolderNames.INDEX + "/\n" +
-                                BuiltInFolderNames.LOGS + "/\n" +
-                                ".venv/\n" +
-                                SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML + "\n";
+                        BuiltInFolderNames.DATA + "/\n" +
+                        BuiltInFolderNames.INDEX + "/\n" +
+                        BuiltInFolderNames.LOGS + "/\n" +
+                        ".venv/\n" +
+                        SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 
                 Files.writeString(gitIgnorePath, gitIgnoreContent);
             }
@@ -218,25 +229,57 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(userHomeMarkerPath, userHomeMarkerContent);
             }
 
-            Path localSettingsPath = userHomePath.resolve(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+            Path localSettingsPath = userHomePath.resolve(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(localSettingsPath)) {
                 SettingsYaml settingsYaml = new SettingsYaml();
-                SettingsSpec settingsSpec = settingsYaml.getSpec();
-                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultRecurringSchedules());
-                settingsSpec.setDefaultDataObservabilityChecks(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
-
                 String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
                 Files.writeString(localSettingsPath, emptyLocalSettings);
             }
+
+            Path customDashboardsPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(customDashboardsPath)) {
+                DashboardYaml dashboardYaml = new DashboardYaml();
+                String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
+                Files.writeString(customDashboardsPath, emptyDashboards);
+            }
+
+            Path defaultSchedulesPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(defaultSchedulesPath)) {
+                DefaultSchedulesYaml schedulesYaml = new DefaultSchedulesYaml();
+                schedulesYaml.setSpec(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
+                String defaultSchedules = this.yamlSerializer.serialize(schedulesYaml);
+                Files.writeString(defaultSchedulesPath, defaultSchedules);
+            }
+
+            Path defaultDataObservabilityChecksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS)
+                    .resolve(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(defaultDataObservabilityChecksPath)) {
+                DefaultObservabilityChecksYaml defaultObservabilityChecksYaml = new DefaultObservabilityChecksYaml();
+                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
+                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
+                Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
+            }
+
+            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
+            if (!Files.exists(defaultNotificaitonWebhooksPath)) {
+                DefaultNotificationsYaml webhooksYaml = new DefaultNotificationsYaml();
+                String defaultWebhooks = this.yamlSerializer.serialize(webhooksYaml);
+                Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
+            }
+
+            Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
+            if (!Files.exists(rulesRequirementTxtPath)) {
+                Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQOps starts\n");
+            }
         }
         catch (Exception ex) {
-            throw new LocalFileSystemException("Cannot initialize a DQO User home at " + userHomePathString, ex);
+            throw new LocalFileSystemException("Cannot initialize a DQOps User home at " + userHomePathString, ex);
         }
     }
 
     /**
      * Checks for the existence of <code>.DQO_USER_HOME_NOT_MOUNTED</code> file in DQO_USER_HOME.
-     * @param userHomePath DQO User Home path.
+     * @param userHomePath DQOps User Home path.
      * @return True if the application is run inside a docker container and DQO_USER_HOME hasn't been mounted to an external volume.
      */
     protected boolean isUninitializedInUnmountedDockerVolume(Path userHomePath) {
@@ -252,8 +295,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Ensures that the DQO User home is initialized at the default location. Prompts the user before creating the user home to confirm.
-     * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQO User home.
+     * Ensures that the DQOps User home is initialized at the default location. Prompts the user before creating the user home to confirm.
+     * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQOps User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
      */
     @Override
@@ -263,22 +306,27 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return; // the dqo user home is not required for some reason (configurable)
         }
 
+        Path userHomePath = Paths.get(userHomePathString);
         if (this.isDefaultDqoUserHomeInitialized()) {
+            if (log.isDebugEnabled()) {
+                log.debug("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
             activateFileLoggingInUserHome();
             applyDefaultConfigurationWhenMissing();
             return;
         }
 
-        if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString)) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
+        if (this.isUninitializedInUnmountedDockerVolume(userHomePath) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-            terminalWriter.writeLine("DQO User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("DQOps User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
             terminalWriter.writeLine("In order to mount a volume, execute docker run with parameter \"-v\":");
             terminalWriter.writeLine("\tdocker run -it -v $DQO_USER_HOME:" + userHomePathString + " -p 8888:8888 dqops/dqo");
-            terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
+            terminalWriter.writeLine("To run DQOps in docker using a User Home folder inside the docker image (not advised),"
                     + " do one of the following:");
-            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.user-home.allow-unmounted=true");
-            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USER_HOME_ALLOW_UNMOUNTED=true");
-            terminalWriter.writeLine("DQO will quit.");
+            terminalWriter.writeLine("\t- Start DQOps with a parameter --dqo.docker.user-home.allow-unmounted=true");
+            terminalWriter.writeLine("\t- or set the environment variable DQO_DOCKER_USER_HOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("DQOps will quit.");
+            log.error("DQOps User Home folder cannot be initialized at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(101);
         }
 
@@ -287,13 +335,14 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             activateFileLoggingInUserHome();
         }
         else {
-            if (this.terminalFactory.getReader().promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
+            if (this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home at " + userHomePathString, true)) {
                 this.initializeDefaultDqoUserHome();
                 activateFileLoggingInUserHome();
                 return;
             }
 
-            this.terminalFactory.getWriter().writeLine("DQO user home will not be created, exiting.");
+            this.terminalFactory.getWriter().writeLine("DQOps user home will not be created, exiting.");
+            log.error("DQOps User Home folder initialization cancelled, cannot create the DQOps User Home at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(100);
         }
     }
@@ -307,8 +356,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsSpec settingsSpec = userHome.getSettings().getSpec();
         if (settingsSpec != null &&
-                settingsSpec.getDefaultDataObservabilityChecks() != null &&
-                settingsSpec.getDefaultSchedules() != null &&
+                userHome.getDefaultObservabilityChecks() != null && userHome.getDefaultObservabilityChecks().getSpec() != null &&
+                userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() != null &&
+                userHome.getDashboards() != null && userHome.getDashboards().getSpec() != null &&
                 (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
             return;
         }
@@ -318,14 +368,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             userHome.getSettings().setSpec(settingsSpec);
         }
 
-        if (settingsSpec.getDefaultDataObservabilityChecks() == null) {
-            DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
-            settingsSpec.setDefaultDataObservabilityChecks(defaultObservabilityCheckSettingsSpec);
+        if (userHome.getDefaultObservabilityChecks() == null || userHome.getDefaultObservabilityChecks().getSpec() == null) {
+            DefaultObservabilityChecksSpec defaultObservabilityChecksSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
+            userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityChecksSpec);
         }
 
-        if (settingsSpec.getDefaultSchedules() == null) {
-            RecurringSchedulesSpec defaultRecurringSchedules = this.defaultSchedulesProvider.createDefaultRecurringSchedules();
-            settingsSpec.setDefaultSchedules(defaultRecurringSchedules);
+        if (userHome.getDefaultSchedules() == null || userHome.getDefaultSchedules().getSpec() == null) {
+            MonitoringSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultMonitoringSchedules();
+            userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
+        }
+
+        if (userHome.getDashboards() == null || userHome.getDashboards().getSpec() == null) {
+            userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
         }
 
         if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

@@ -14,7 +14,7 @@ import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { formatNumber } from '../../shared/constants';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 
 export default function TableStatisticsView({
   connectionName,
@@ -23,7 +23,9 @@ export default function TableStatisticsView({
   updateData2,
   setLevelsData2,
   setNumberOfSelected2,
-  statistics
+  statistics,
+  onChangeSelectedColumns,
+
 }: {
   connectionName: string;
   schemaName: string;
@@ -32,6 +34,8 @@ export default function TableStatisticsView({
   setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: string[]) => void;
+
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -62,7 +66,7 @@ export default function TableStatisticsView({
   };
   useEffect(() => {
     fetchRows();
-  }, [connectionName, schemaName, tableName]);
+  }, [connectionName, schemaName, tableName, statistics]);
 
   useEffect(() => {
     setNumberOfSelected(0);
@@ -120,6 +124,19 @@ export default function TableStatisticsView({
                 ))}
             </div>
           </div>
+          <div className="flex gap-x-6 ml-3">
+            <div>Total Columns</div>
+            <div>
+              {rowCount &&
+                rowCount.statistics?.map((x, index) => (
+                  <div key={index} className="font-bold">
+                    {x.collector === 'column_count'
+                      ? formatNumber(Number(renderValue(x.result)))
+                      : ''}
+                  </div>
+                ))}
+            </div>
+          </div>
           <div className="flex gap-x-6 mr-5">
             <div>Collected at</div>
             <div>
@@ -145,6 +162,7 @@ export default function TableStatisticsView({
         setLevelsData={setLevelsData}
         setNumberOfSelected={setNumberOfSelected}
         statistics={statistics}
+        onChangeSelectedColumns={onChangeSelectedColumns}
       />
     </div>
   );

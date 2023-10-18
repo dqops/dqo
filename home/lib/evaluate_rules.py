@@ -16,6 +16,7 @@
 
 import importlib.util
 import json
+import os
 import sys
 import traceback
 import types
@@ -46,7 +47,9 @@ class RuleExecutionRunParameters:
 
 class PythonRuleCallInput:
     rule_module_path: str
+    home_path: str
     rule_parameters: any
+    rule_module_last_modified: datetime
 
 
 class PythonRuleCallOutput:
@@ -58,6 +61,15 @@ class PythonRuleCallOutput:
         self.result = result
         self.parameters = parameters
         self.error = error
+
+
+class LoadedModule:
+    rule_module: any
+    rule_module_last_modified: datetime
+
+    def __init__(self, rule_module, rule_module_last_modified):
+        self.rule_module = rule_module
+        self.rule_module_last_modified = rule_module_last_modified
 
 
 class RuleRunner:
@@ -79,14 +91,16 @@ class RuleRunner:
         try:
             rule_module_path = request.rule_module_path
             rule_parameters = request.rule_parameters
-            if rule_module_path not in self.rule_modules:
+            rule_module_last_modified = request.rule_module_last_modified
+
+            if rule_module_path not in self.rule_modules or self.rule_modules[rule_module_path].rule_module_last_modified != rule_module_last_modified:
                 rules_folder_index = rule_module_path.rfind('rules')
                 rule_module_name = rule_module_path[rules_folder_index + len('rules') + 1: -3] \
                     .replace('\\', '.').replace('/', '.')
                 rule_module = self.import_source_file(rule_module_path, rule_module_name)
-                self.rule_modules[rule_module_path] = rule_module
+                self.rule_modules[rule_module_path] = LoadedModule(rule_module, rule_module_last_modified)
 
-            rule_module = self.rule_modules[rule_module_path]
+            rule_module = self.rule_modules[rule_module_path].rule_module
             rule_function = getattr(rule_module, 'evaluate_rule')
             rule_result = rule_function(rule_parameters)
             return PythonRuleCallOutput(rule_result, rule_parameters, None)
@@ -95,10 +109,16 @@ class RuleRunner:
 
 
 def main():
-    rule_runner = RuleRunner()
-    for request, duration_millis in streaming.stream_json_objects(sys.stdin):
-        response = rule_runner.process_rule_request(request)
-        sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
+    try:
+        rule_runner = RuleRunner()
+        for request, duration_millis in streaming.stream_json_objects(sys.stdin):
+            response = rule_runner.process_rule_request(request)
+            sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+    except Exception as ex:
+        print('Error processing a rule: ' + traceback.format_exc(), file=sys.stderr)
+        sys.stdout.write(json.dumps(PythonRuleCallOutput(None, None, traceback.format_exc()), cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")
         sys.stdout.flush()
 

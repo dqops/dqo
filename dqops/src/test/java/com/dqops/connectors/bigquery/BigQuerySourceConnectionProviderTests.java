@@ -18,6 +18,7 @@ package com.dqops.connectors.bigquery;
 import com.dqops.BaseTest;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +48,7 @@ public class BigQuerySourceConnectionProviderTests extends BaseTest {
     @Test
     void createConnection_whenCalledWithBigQueryConnectionClosed_thenCreatesConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.createLegacy();
-        BigQuerySourceConnection connection = this.sut.createConnection(connectionSpec, false);
+        BigQuerySourceConnection connection = this.sut.createConnection(connectionSpec, false, new SecretValueLookupContext(null));
         Assertions.assertNotNull(connection);
         Assertions.assertSame(connectionSpec, connection.getConnectionSpec());
     }

@@ -16,7 +16,7 @@
 package com.dqops.utils.exceptions;
 
 /**
- * Base class for all runtime exceptions thrown by DQO.
+ * Base class for all runtime exceptions thrown by DQOps.
  */
 public class DqoRuntimeException extends RuntimeException {
     /**

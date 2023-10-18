@@ -10,6 +10,8 @@ import Button from '../Button';
 import React, { useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import Checkbox from '../Checkbox';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -36,6 +38,9 @@ const DeleteOnlyDataDialog = ({
     deleteCheckResults: true,
     deleteSensorReadouts: true
   });
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const myArr: string[] = [];
   useEffect(() => {
@@ -166,6 +171,7 @@ const DeleteOnlyDataDialog = ({
           className="px-8"
           onClick={onConfirm}
           label="Delete"
+          disabled={userProfile.can_delete_data !== true}
         />
       </DialogFooter>
     </Dialog>

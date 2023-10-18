@@ -2,14 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from '../../Button';
 import Input from '../../Input';
 import {
-  ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum,
-  ConnectionRemoteModel,
-  ConnectionRemoteModelConnectionStatusEnum
+  ConnectionModel,
+  ConnectionModelProviderTypeEnum,
+  ConnectionTestModel,
+  ConnectionTestModelConnectionTestResultEnum,
+  SharedCredentialListModel
 } from '../../../api';
 import {
   ConnectionApiClient,
-  DataSourcesApi
+  DataSourcesApi,
+  SharedCredentailsApi
 } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
@@ -33,8 +35,8 @@ import SvgIcon from '../../SvgIcon';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
-  database: ConnectionBasicModel;
-  onChange: (db: ConnectionBasicModel) => void;
+  database: ConnectionModel;
+  onChange: (db: ConnectionModel) => void;
   nameOfdatabase?: string;
 }
 
@@ -45,12 +47,13 @@ const DatabaseConnection = ({
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
   const [nameError, setNameError] = useState('');
+  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -93,21 +96,21 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    let testRes;
+    let testRes : ConnectionTestModel | null = null;
     try {
-      testRes = await DataSourcesApi.testConnection(true, database);
+      testRes = (await DataSourcesApi.testConnection(true, database)).data;
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
     } finally {
       if (
-        testRes?.data?.connectionStatus ===
-        ConnectionRemoteModelConnectionStatusEnum.SUCCESS
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.SUCCESS
       ) {
         await onConfirmSave();
-      } else {
-        setShowConfirm(true);
-        setMessage(testRes?.data?.errorMessage);
+      } else if (testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS) {
+        setMessage(testRes?.errorMessage);
       }
     }
   };
@@ -128,87 +131,103 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionBasicModelProviderTypeEnum) => {
+  const getTitle = (provider?: ConnectionModelProviderTypeEnum) => {
     switch (provider) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+      case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return 'Snowflake Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return 'Amazon Redshift Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return 'Microsoft SQL Server Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.mysql:
         return 'MySQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
       default:
         return 'Database Connection Settings';
     }
   };
 
+  const getSharedCredentials = async () => {
+    await SharedCredentailsApi.getAllSharedCredentials()
+      .then((res) => setSharedCredentials(res.data))
+  }
+
+  useEffect(() => {
+    getSharedCredentials()
+  },[])
+
   const components = {
-    [ConnectionBasicModelProviderTypeEnum.bigquery]: (
+    [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
         bigquery={database.bigquery}
         onChange={(bigquery) => onChange({ ...database, bigquery })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.snowflake]: (
+    [ConnectionModelProviderTypeEnum.snowflake]: (
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.postgresql]: (
+    [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.redshift]: (
+    [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
+    [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.mysql]: (
+    [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.oracle]: (
+    [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
           oracle={database.oracle}
           onChange={(oracle) => onChange({ ...database, oracle })}
+          sharedCredentials = {sharedCredentials}
       />
     )
   };
 
   const dbImage = useMemo(() => {
     switch (database.provider_type) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+      case ConnectionModelProviderTypeEnum.bigquery:
         return BigqueryLogo;
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return SnowflakeLogo;
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return RedshiftLogo;
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.mysql:
         return MySQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
       default:
         return '';
@@ -255,12 +274,18 @@ const DatabaseConnection = ({
           {isTesting && (
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.SUCCESS && (
             <div className="text-primary text-sm">Connection successful</div>
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS && (
+            <div className="text-red-700 text-sm">
+              <span>Connection already exists</span>
+            </div>
+          )}
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.FAILURE && (
             <div className="text-red-700 text-sm">
               <span>Connection failed</span>
               <span

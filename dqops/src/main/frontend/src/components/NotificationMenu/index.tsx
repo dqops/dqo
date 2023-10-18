@@ -18,13 +18,14 @@ import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 import { DqoJobHistoryEntryModel } from '../../api';
+import clsx from 'clsx';
 
 interface jobInterface extends Omit<DqoJobHistoryEntryModel, 'childs'> {
   childs?: DqoJobHistoryEntryModel[];
 }
 
 const NotificationMenu = () => {
-  const { job_dictionary_state, isOpen, isCronScheduled } = useSelector(
+  const { job_dictionary_state, isOpen, isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -190,7 +191,7 @@ const NotificationMenu = () => {
           </div>
           <div className="flex items-center gap-x-3 text-sm">
             <div className="whitespace-no-wrap">Jobs scheduler </div>
-            <div>
+            <div className={clsx(userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
               <Switch
                 checked={isCronScheduled ? isCronScheduled : false}
                 onChange={() => changeStatus()}
@@ -212,6 +213,7 @@ const NotificationMenu = () => {
                 job={notification}
                 key={index}
                 notifnumber={data.length}
+                canUserCancelJobs={userProfile.can_cancel_jobs}
               />
             )
           )}

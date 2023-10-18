@@ -45,7 +45,7 @@ public class TableComparisonConfigurationSpecMap extends AbstractDirtyTrackingSp
     public TableComparisonConfigurationSpecMap deepClone() {
         TableComparisonConfigurationSpecMap cloned = new TableComparisonConfigurationSpecMap();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, TableComparisonConfigurationSpec> keyPair : this.entrySet()) {

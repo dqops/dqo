@@ -97,9 +97,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         DateTimeColumn timePeriodColumn = normalizedSensorResults.getTimePeriodColumn();
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
-        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
+        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames() != null ?
+                sensorRunParameters.getEffectiveSensorRuleNames().getRuleName() : null;
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
-        RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
+        RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null ?
+                ruleFindResult.getRuleDefinitionSpec().getTimeWindow() : null;
         TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
@@ -143,6 +145,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
                                 timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
                     }
+
+                    if (previousDataPoints == null) {
+                        previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
+                    }
                 } else {
                     HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
                     if (ruleTimeWindowSettings != null) {
@@ -173,10 +179,93 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
                             continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                         }
+                    } else {
+                        previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
                     }
                 }
 
                 Integer highestSeverity = null;
+                AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
+                AbstractRuleParametersSpec errorRule = checkSpec.getError();
+                AbstractRuleParametersSpec warningRule = checkSpec.getWarning();
+                Double expectedValue = null;
+                Double newActualValue = null;
+
+                RuleExecutionResult ruleExecutionResultFatal = null;
+                RuleExecutionResult ruleExecutionResultError = null;
+                RuleExecutionResult ruleExecutionResultWarning = null;
+
+                if (fatalRule != null) {
+                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
+
+                    if (ruleExecutionResultFatal.getPassed() != null && !ruleExecutionResultFatal.getPassed()) {
+                        highestSeverity = 3;
+                    }
+
+                    if (ruleExecutionResultFatal.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultFatal.getExpectedValue();
+                    }
+
+                    if (ruleExecutionResultFatal.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultFatal.getNewActualValue();
+                    }
+                }
+
+                if (errorRule != null) {
+                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
+
+                    if (ruleExecutionResultError.getPassed() != null && highestSeverity == null && !ruleExecutionResultError.getPassed()) {
+                        highestSeverity = 2;
+                    }
+
+                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultError.getExpectedValue();
+                    }
+
+                    if (newActualValue == null && ruleExecutionResultError.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultError.getNewActualValue();
+                    }
+                }
+
+                if (warningRule != null) {
+                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
+
+                    if (ruleExecutionResultWarning.getPassed() != null && highestSeverity == null && !ruleExecutionResultWarning.getPassed()) {
+                        highestSeverity = 1;
+                    }
+
+                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultWarning.getExpectedValue();
+                    }
+
+                    if (newActualValue == null && ruleExecutionResultWarning.getNewActualValue() != null) {
+                        newActualValue = ruleExecutionResultWarning.getNewActualValue();
+                    }
+                }
+
+                if (warningRule == null && errorRule == null && fatalRule == null) {
+                    // no rules are enabled, we are appending the check result as passed
+                } else {
+                    if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
+                            (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
+                            (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
+                        // no rule managed to evaluate, the result is inconclusive, no rule returned any result,
+                        // probably not enough historical data to calculate, we are not adding a check result row
+                        continue;
+                    }
+                }
+
+                if (highestSeverity == null) {
+                    // some rules evaluated, not no rule raised an error, setting the passing severity
+                    highestSeverity = 0; // pass
+                }
+
                 Row targetRuleResultRow = result.appendRow();
                 int targetRowIndex = targetRuleResultRow.getRowNumber();
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
@@ -190,97 +279,32 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     result.getReferenceColumnColumn().set(targetRowIndex, sensorRunParameters.getReferenceColumnName());
                 }
 
-                AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
-                AbstractRuleParametersSpec errorRule = checkSpec.getError();
-                AbstractRuleParametersSpec warningRule = checkSpec.getWarning();
-                Double expectedValue = null;
-                Double newActualValue = null;
-
-                if (fatalRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
-
-                    if (!ruleExecutionResultFatal.isPassed()) {
-                        highestSeverity = 3;
-                    }
-
-                    if (ruleExecutionResultFatal.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultFatal.getExpectedValue();
-                    }
-
-                    if (ruleExecutionResultFatal.getNewActualValue() != null) {
-                        newActualValue = ruleExecutionResultFatal.getNewActualValue();
-                    }
-
-                    if (ruleExecutionResultFatal.getLowerBound() != null) {
-                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getLowerBound());
-                    }
-                    if (ruleExecutionResultFatal.getUpperBound() != null) {
-                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getUpperBound());
-                    }
+                if (ruleExecutionResultFatal != null && ruleExecutionResultFatal.getLowerBound() != null) {
+                    result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getLowerBound());
+                }
+                if (ruleExecutionResultFatal != null && ruleExecutionResultFatal.getUpperBound() != null) {
+                    result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getUpperBound());
                 }
 
-                if (errorRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
-
-                    if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
-                        highestSeverity = 2;
-                    }
-
-                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultError.getExpectedValue();
-                    }
-
-                    if (newActualValue == null && ruleExecutionResultError.getNewActualValue() != null) {
-                        newActualValue = ruleExecutionResultError.getNewActualValue();
-                    }
-
-                    if (ruleExecutionResultError.getLowerBound() != null) {
-                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultError.getLowerBound());
-                    }
-                    if (ruleExecutionResultError.getUpperBound() != null) {
-                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultError.getUpperBound());
-                    }
+                if (ruleExecutionResultError != null && ruleExecutionResultError.getLowerBound() != null) {
+                    result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultError.getLowerBound());
+                }
+                if (ruleExecutionResultError != null && ruleExecutionResultError.getUpperBound() != null) {
+                    result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultError.getUpperBound());
                 }
 
-                if (warningRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
-
-                    if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
-                        highestSeverity = 1;
-                    }
-
-                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultWarning.getExpectedValue();
-                    }
-
-                    if (newActualValue == null && ruleExecutionResultWarning.getNewActualValue() != null) {
-                        newActualValue = ruleExecutionResultWarning.getNewActualValue();
-                    }
-
-                    if (ruleExecutionResultWarning.getLowerBound() != null) {
-                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getLowerBound());
-                    }
-                    if (ruleExecutionResultWarning.getUpperBound() != null) {
-                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getUpperBound());
-                    }
+                if (ruleExecutionResultWarning != null && ruleExecutionResultWarning.getLowerBound() != null) {
+                    result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getLowerBound());
                 }
-
-                if (highestSeverity == null) {
-                    highestSeverity = 0; // no alert
+                if (ruleExecutionResultWarning != null && ruleExecutionResultWarning.getUpperBound() != null) {
+                    result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getUpperBound());
                 }
 
                 ConnectionIncidentGroupingSpec connectionIncidentGrouping = sensorRunParameters.getConnection().getIncidentGrouping();
                 TableIncidentGroupingSpec tableIncidentGrouping = sensorRunParameters.getTable().getIncidentGrouping();
                 EffectiveIncidentGroupingConfiguration effectiveIncidentGrouping = new EffectiveIncidentGroupingConfiguration(connectionIncidentGrouping, tableIncidentGrouping);
 
-                if (effectiveIncidentGrouping != null && !effectiveIncidentGrouping.isDisabled() &&
-                        highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
+                if (!effectiveIncidentGrouping.isDisabled() && highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
                     String dataStreamName = !normalizedSensorResults.getDataGroupNameColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getDataGroupNameColumn().get(allSensorResultsRowIndex) : null;
                     String qualityDimension = !normalizedSensorResults.getQualityDimensionColumn().isMissing(allSensorResultsRowIndex) ?

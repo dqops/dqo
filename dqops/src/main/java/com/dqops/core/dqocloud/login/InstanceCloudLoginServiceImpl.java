@@ -24,8 +24,10 @@ import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.ServerConfigurationProperties;
 import com.dqops.core.configuration.ServerSslConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.signature.InstanceSignatureKeyProvider;
 import com.dqops.core.secrets.signature.SignatureService;
 import com.dqops.core.secrets.signature.SignedObject;
@@ -37,12 +39,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 /**
- * Service that manages communication with DQO Cloud for authenticating local users using their DQO Cloud credentials.
+ * Service that manages communication with DQOps Cloud for authenticating local users using their DQOps Cloud credentials.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -78,8 +81,8 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Finds out or derives the base url of the web server of this DQO instance.
-     * @return Base url of this DQO instance.
+     * Finds out or derives the base url of the web server of this DQOps instance.
+     * @return Base url of this DQOps instance.
      */
     @Override
     public String getReturnBaseUrl() {
@@ -114,7 +117,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Returns the ticket granting ticket that should be added as a query parameter to the "/login" page on the DQO Cloud
+     * Returns the ticket granting ticket that should be added as a query parameter to the "/login" page on the DQOps Cloud
      * for performing an identity provider login.
      * @return Ticket granting ticket.
      */
@@ -148,31 +151,47 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Builds a url to the DQO Cloud's login page with the ticket granting ticket and the return url.
+     * Builds a url to the DQOps Cloud's login page with the ticket granting ticket and the return url.
      * @param returnUrl Return url.
-     * @return Url to the DQO Cloud's login page to redirect to.
+     * @return Url to the DQOps Cloud's login page to redirect to.
      */
     @Override
     public String makeDqoLoginUrl(String returnUrl) {
         String returnBaseUrl = this.getReturnBaseUrl();
-        if (!returnUrl.startsWith(returnBaseUrl)) {
-            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQO instance must begin with " + returnBaseUrl);
+        if (this.dqoInstanceConfigurationProperties.isValidateReturnBaseUrl() && !returnUrl.startsWith(returnBaseUrl)) {
+            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQOps instance must begin with " + returnBaseUrl +
+                    ". You can change the configuration by setting the --dqo.instance.return-base-url or setting the environment variable " +
+                    "DQO_INSTANCE_RETURN_BASE_URL to the base url of your DQOps instance, for example --dqo.instance.return-base-url=https://dqoinstance.yourcompany.com");
         }
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         String dqoCloudUiUrlBase = this.dqoCloudConfigurationProperties.getUiBaseUrl();
 
         try {
+            if (!returnUrl.startsWith(returnBaseUrl)) {
+                URI originalReturnUri = new URI(returnUrl);
+                URIBuilder returnUrlBuilder = new URIBuilder(returnBaseUrl);
+                returnUrlBuilder.setPath(originalReturnUri.getPath());
+                if (originalReturnUri.getRawQuery() != null) {
+                    returnUrlBuilder.setCustomQuery(originalReturnUri.getRawQuery());
+                }
+                returnUrl = returnUrlBuilder.build().toString();
+            }
+
             URIBuilder uriBuilder = new URIBuilder(dqoCloudUiUrlBase);
             uriBuilder.setPath("/login");
             uriBuilder.addParameter("tgt", ticketGrantingTicket);
+            if (!Strings.isNullOrEmpty(apiKey.getApiKeyPayload().getAccountName())) {
+                uriBuilder.addParameter("account", apiKey.getApiKeyPayload().getAccountName());
+            }
             uriBuilder.addParameter("returnUrl", returnUrl);
 
             String dqoLoginUrl = uriBuilder.build().toString();
             return dqoLoginUrl;
         }
         catch (Exception ex) {
-            throw new DqoRuntimeException("Invalid DQO cloud base url, error: " + ex.getMessage(), ex);
+            throw new DqoRuntimeException("Invalid DQOps Cloud base url, error: " + ex.getMessage(), ex);
         }
     }
 
@@ -214,6 +233,27 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
 
         SignedObject<DqoUserTokenPayload> signedApiKeyToken = this.signatureService.createSigned(authenticationToken);
         return signedApiKeyToken;
+    }
+
+    /**
+     * Issues an API key token for the calling user, using a principal. Generates a local API Key independent of the authentication method (DQOps Cloud federated login or a local login).
+     * @param principal User principal
+     * @return Signed API Key token.
+     */
+    @Override
+    public SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserPrincipal principal) {
+        DqoUserTokenPayload userTokenPayload = principal.getUserTokenPayload();
+        if (userTokenPayload != null ) {
+            return issueApiKey(userTokenPayload); // federated login
+        }
+
+        DqoCloudApiKeyPayload apiKeyPayload = principal.getApiKeyPayload();
+        if (apiKeyPayload != null) {
+            DqoUserTokenPayload userTokenFromApiKey = DqoUserTokenPayload.createFromCloudApiKey(apiKeyPayload);
+            return issueApiKey(userTokenFromApiKey); // local user login
+        }
+
+        return null;
     }
 
     /**

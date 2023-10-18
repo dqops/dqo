@@ -16,16 +16,21 @@
 
 package com.dqops.core.dqocloud.login;
 
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
- * DQO login token payload returned by the DQO Cloud or issued locally.
+ * DQOps login token payload returned by the DQOp Cloud or issued locally.
  */
 @Data
 public class DqoUserTokenPayload implements Cloneable {
@@ -70,7 +75,14 @@ public class DqoUserTokenPayload implements Cloneable {
      */
     @JsonProperty("dr")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LinkedHashMap<String, DqoUserDataDomainRole> domainRoles = new LinkedHashMap<>();
+    private LinkedHashMap<String, DqoUserRole> domainRoles = new LinkedHashMap<>();
+
+    /**
+     * User's role at the account level.
+     */
+    @JsonProperty("arl")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private DqoUserRole accountRole;
 
     /**
      * Creates and returns a copy of this object.
@@ -80,12 +92,39 @@ public class DqoUserTokenPayload implements Cloneable {
         try {
             DqoUserTokenPayload cloned = (DqoUserTokenPayload) super.clone();
             if (cloned.domainRoles != null) {
-                cloned.domainRoles = (LinkedHashMap<String, DqoUserDataDomainRole>) cloned.domainRoles.clone();
+                cloned.domainRoles = (LinkedHashMap<String, DqoUserRole>) cloned.domainRoles.clone();
             }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned", ex);
         }
+    }
+
+    /**
+     * Create a user principal from the user token issued by DQOps Cloud.
+     * @return User principal copied from the user token issued by DQOps Cloud.
+     */
+    public DqoUserPrincipal createUserPrincipal() {
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.user, this.accountRole, grantedPrivileges, this);
+        return dqoUserPrincipal;
+    }
+
+    /**
+     * Creates a local DQOps instance authentication token from the DQOps Cloud API Key that identifies the instance and the main user.
+     * @param cloudApiKey Cloud API key.
+     * @return User token payload for a local authentication.
+     */
+    public static DqoUserTokenPayload createFromCloudApiKey(DqoCloudApiKeyPayload cloudApiKey) {
+        DqoUserTokenPayload dqoUserTokenPayload = new DqoUserTokenPayload();
+        dqoUserTokenPayload.setUser(cloudApiKey.getSubject());
+        dqoUserTokenPayload.setExpiresAt(cloudApiKey.getExpiresAt());
+        dqoUserTokenPayload.setDisposition(DqoUserAuthenticationTokenDisposition.API_KEY);
+        dqoUserTokenPayload.setTenantId(cloudApiKey.getTenantId());
+        dqoUserTokenPayload.setTenantGroup(cloudApiKey.getTenantGroup());
+        dqoUserTokenPayload.setAccountRole(cloudApiKey.getAccountRole());
+
+        return dqoUserTokenPayload;
     }
 }

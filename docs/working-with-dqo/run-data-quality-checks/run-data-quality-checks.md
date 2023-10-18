@@ -11,7 +11,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
 ## Run data quality checks using the graphical interface
 
-1. In DQO graphical interface navigate to the check section Profiling, Recurring Checks or Partition Checks at the top of the screen.
+1. In DQO graphical interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
    
@@ -38,7 +38,7 @@ For more information about different categories of checks, see [DQO concepts sec
     - orange for an error
     - red for a fatal error
 
-   You can view the details by placing the mouse cursor on the square.
+    You can view the details by placing the mouse cursor on the square.
 
 6. Click the "Results" icon to view more details of the results.
 
@@ -50,7 +50,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
     To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
 
-### Configure date or datetime column for partition checks
+### **Configure date or datetime column for partition checks**
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
@@ -72,7 +72,7 @@ To configure the date or datetime colum:
 4. Click the Save button in the upper right corner.
 
 
-### Configure event and ingestion timestamp columns for timeliness checks
+### **Configure event and ingestion timestamp columns for timeliness checks**
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 
@@ -93,7 +93,7 @@ To configure the event and/or ingestion timestamp columns:
 ## Run data quality checks using the DQO Shell
 
 Data quality checks are stored in YAML configuration files. YAMl configuration files are located in the `./sources` folder.
-The complete DQO YAML schema can be found [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json).
+The complete DQO YAML schema can be found [here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
 
 The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
 extension by RedHat and Better Jinja by Samuel Colvin.
@@ -120,7 +120,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 
 3. Add the check to the YAML file using Visual Studio Code editor and save the file. 
 
-    Below is an example of the YAML file showing sample configuration of an advanced profiling table check row_count. 
+    Below is an example of the YAML file showing sample configuration of a profiling table check row_count. 
     Some columns were truncated for clarity
 
     ```yaml hl_lines="9-13"
@@ -211,7 +211,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
     **************************************************
     ```
 
-### Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks
+### **Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks**
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 To run partition checks you need to configure Date or datetime colum which will be used as the time partitioning key for the table.

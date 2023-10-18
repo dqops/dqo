@@ -1,7 +1,8 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="TimeWindowFilterParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TimeWindowFilterParameters:
     """Time window configuration for partitioned checks (the number of recent days or months to analyze in an incremental
     mode) or an absolute time range to analyze.
@@ -63,7 +64,7 @@ class TimeWindowFilterParameters:
     to_date: Union[Unset, datetime.date] = UNSET
     to_date_time: Union[Unset, datetime.datetime] = UNSET
     to_date_time_offset: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         daily_partitioning_recent_days = self.daily_partitioning_recent_days

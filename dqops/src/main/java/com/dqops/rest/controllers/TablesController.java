@@ -23,12 +23,15 @@ import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSp
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
@@ -37,9 +40,9 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -48,14 +51,15 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
-import com.dqops.rest.models.metadata.TableBasicModel;
+import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.metadata.TableModel;
 import com.dqops.rest.models.metadata.TablePartitioningModel;
 import com.dqops.rest.models.metadata.TableStatisticsModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
@@ -68,6 +72,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -101,7 +107,7 @@ public class TablesController {
      * Creates an instance of a controller by injecting dependencies.
      * @param tableService                     Table logic service.
      * @param userHomeContextFactory           User home context factory.
-     * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
+     * @param dqoHomeContextFactory            DQOps home context factory, used to retrieve the definition of built-in sensors.
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
@@ -128,14 +134,19 @@ public class TablesController {
      * @return List of tables inside a connection's schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
-    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableBasicModel[].class)
+    @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = TableBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableListModel[].class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<TableBasicModel>> getTables(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<TableListModel>> getTables(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -154,8 +165,11 @@ public class TablesController {
                 .map(TableWrapper::getSpec)
                 .collect(Collectors.toList());
 
-        Stream<TableBasicModel> modelStream = tableSpecs.stream()
-                .map(ts -> TableBasicModel.fromTableSpecificationForListEntry(connectionName, ts));
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+        Stream<TableListModel> modelStream = tableSpecs.stream()
+                .map(ts -> TableListModel.fromTableSpecificationForListEntry(
+                        connectionName, ts, isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }
@@ -168,14 +182,19 @@ public class TablesController {
      * @return Table specification for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
-    @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class)
+    @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table full specification returned", response = TableModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableModel>> getTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -199,6 +218,7 @@ public class TablesController {
             setConnectionName(connectionWrapper.getName());
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setSpec(tableSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
@@ -212,14 +232,19 @@ public class TablesController {
      * @return Table basic information for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", produces = "application/json")
-    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableBasicModel.class)
+    @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table basic information returned", response = TableBasicModel.class),
+            @ApiResponse(code = 200, message = "Table basic information returned", response = TableListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableBasicModel>> getTableBasic(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableListModel>> getTableBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -239,9 +264,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableBasicModel tableBasicModel = TableBasicModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
+        TableListModel tableListModel = TableListModel.fromTableSpecification(
+                connectionWrapper.getName(), tableSpec,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(tableBasicModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(tableListModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -252,14 +280,19 @@ public class TablesController {
      * @return Table partitioning information for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", produces = "application/json")
-    @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class)
+    @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table partitioning information returned", response = TablePartitioningModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TablePartitioningModel>> getTablePartitioning(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -279,7 +312,8 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
+        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(
+                connectionWrapper.getName(), tableSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
         return new ResponseEntity<>(Mono.just(tablePartitioningModel), HttpStatus.OK); // 200
     }
@@ -292,14 +326,20 @@ public class TablesController {
      * @return Default data grouping configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", produces = "application/json")
-    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a table.", response = DataGroupingConfigurationSpec.class)
+    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a table.",
+            response = DataGroupingConfigurationSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Default data grouping configuration for a table returned", response = DataGroupingConfigurationSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getTableDefaultGroupingConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -333,18 +373,24 @@ public class TablesController {
      * @return Overridden schedule configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table", response = RecurringScheduleSpec.class)
+    @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table",
+            response = MonitoringScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = RecurringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = MonitoringScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getTableSchedulingGroupOverride(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getTableSchedulingGroupOverride(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -361,12 +407,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        RecurringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        RecurringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
         return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
     }
@@ -379,14 +425,20 @@ public class TablesController {
      * @return Incident grouping configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", produces = "application/json")
-    @ApiOperation(value = "getTableIncidentGrouping", notes = "Return the configuration of incident grouping on a table", response = TableIncidentGroupingSpec.class)
+    @ApiOperation(value = "getTableIncidentGrouping", notes = "Return the configuration of incident grouping on a table",
+            response = TableIncidentGroupingSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table's incident grouping configuration returned", response = TableIncidentGroupingSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableIncidentGroupingSpec>> getTableIncidentGrouping(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -422,14 +474,19 @@ public class TablesController {
      * @return Labels assigned to the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", produces = "application/json")
-    @ApiOperation(value = "getTableLabels", notes = "Return the list of labels assigned to a table", response = LabelSetSpec.class)
+    @ApiOperation(value = "getTableLabels", notes = "Return the list of labels assigned to a table", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of labels on a table returned", response = LabelSetSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<LabelSetSpec>> getTableLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -462,14 +519,19 @@ public class TablesController {
      * @return Comments on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", produces = "application/json")
-    @ApiOperation(value = "getTableComments", notes = "Return the list of comments added to a table", response = CommentsListSpec.class)
+    @ApiOperation(value = "getTableComments", notes = "Return the list of comments added to a table", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of comments on a table returned", response = CommentsListSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CommentsListSpec>> getTableComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -503,14 +565,20 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableProfilingCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table",
+            response = TableProfilingCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableProfilingCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableProfilingCheckCategoriesSpec>> getTableProfilingChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -539,21 +607,28 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of daily data quality recurring on a table given a connection name and table name.
+     * Retrieves the configuration of daily data quality monitoring on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Daily data quality recurring on a requested table.
+     * @return Daily data quality monitoring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCheckCategoriesSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksDaily", notes = "Return the configuration of daily table level data quality monitoring on a table",
+            response = TableDailyMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily table level data quality recurring on a table returned", response = TableDailyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily table level data quality monitoring on a table returned",
+                    response = TableDailyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableDailyRecurringCheckCategoriesSpec>> getTableDailyRecurringChecks(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>> getTableDailyMonitoringChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -577,26 +652,33 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableDailyRecurringCheckCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
+        TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = tableSpec.getMonitoringChecks().getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of monthly data quality recurring on a table given a connection name and table name.
+     * Retrieves the configuration of monthly data quality monitoring on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Monthly data quality recurring on a requested table.
+     * @return Monthly data quality monitoring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksMonthly", notes = "Return the configuration of monthly table level data quality recurring on a table", response = TableMonthlyRecurringCheckCategoriesSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksMonthly", notes = "Return the configuration of monthly table level data quality monitoring on a table",
+            response = TableMonthlyMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality recurring on a table returned", response = TableMonthlyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality monitoring on a table returned",
+                    response = TableMonthlyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableMonthlyRecurringCheckCategoriesSpec>> getTableRecurringChecksMonthly(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableMonthlyMonitoringCheckCategoriesSpec>> getTableMonitoringChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -620,8 +702,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
+        TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = tableSpec.getMonitoringChecks().getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
     }
     
     /**
@@ -632,14 +714,21 @@ public class TablesController {
      * @return Daily data quality partitioned checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table", response = TableDailyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table",
+            response = TableDailyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableDailyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned",
+                    response = TableDailyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> getTableDailyPartitionedChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -675,14 +764,21 @@ public class TablesController {
      * @return Monthly data quality partitioned checks on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table", response = TableMonthlyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table",
+            response = TableMonthlyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableMonthlyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned",
+                    response = TableMonthlyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableMonthlyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -718,14 +814,21 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksModel", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableProfilingChecksModel", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned",
+                    response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getTableProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -766,27 +869,34 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                  new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale.
+     * Retrieves the configuration of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
-     * @return UI friendly data quality recurring configuration list on a requested table.
+     * @return UI friendly data quality monitoring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksModel", notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getTableRecurringChecksModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -811,7 +921,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -826,7 +936,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -839,14 +950,20 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksModel", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksModel", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getTablePartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -886,7 +1003,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -899,14 +1017,20 @@ public class TablesController {
      * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getTableProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableProfilingChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getTableProfilingChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -931,31 +1055,38 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves a simplistic list of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale.
+     * Retrieves a simplistic list of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
-     * @return Simplistic UI friendly data quality recurring list on a requested table.
+     * @return Simplistic UI friendly data quality monitoring list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality recurring on a table for a given time scale", response = CheckContainerBasicModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/basic", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality recurring on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTableRecurringChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getTableMonitoringChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -980,11 +1111,12 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -998,14 +1130,20 @@ public class TablesController {
      * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getTablePartitionedChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getTablePartitionedChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1031,9 +1169,10 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -1048,14 +1187,20 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksModelFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTableProfilingChecksModelFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getTableProfilingChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1099,30 +1244,38 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of data quality recurring as a UI friendly model on a table given a connection name, a table name, and a time scale, filtered by category and check name.
+     * Retrieves the configuration of data quality monitoring as a UI friendly model on a table given a connection name, a table name, and a time scale, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale  Time scale.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly data quality recurring configuration list on a requested table.
+     * @return UI friendly data quality monitoring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksModelFilter",
+            notes = "Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality monitoring on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getTableRecurringChecksModelFilter(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1149,7 +1302,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1166,7 +1319,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1182,14 +1336,21 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksModelFilter", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.", response = CheckContainerModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksModelFilter",
+            notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality partitioned checks on a table returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getTablePartitionedChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1233,7 +1394,8 @@ public class TablesController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
@@ -1247,14 +1409,19 @@ public class TablesController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics", produces = "application/json")
     @ApiOperation(value = "getTableStatistics",
             notes = "Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.",
-            response = TableStatisticsModel.class)
+            response = TableStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableStatisticsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableStatisticsModel>> getTableStatistics(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -1282,6 +1449,7 @@ public class TablesController {
         resultModel.setConnectionName(connectionName);
         resultModel.setTable(physicalTableName);
         resultModel.setStatistics(mostRecentStatisticsMetricsForTable.getMetrics());
+        resultModel.setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
@@ -1315,14 +1483,20 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1355,14 +1529,15 @@ public class TablesController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves a UI friendly data quality recurring check configuration list of column-level checks on a requested table.
+     * Retrieves a UI friendly data quality monitoring check configuration list of column-level checks on a requested table.
      * @param connectionName    Connection name.
      * @param schemaName        Schema name.
      * @param tableName         Table name.
@@ -1373,17 +1548,23 @@ public class TablesController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
-     * @return UI friendly data quality recurring check configuration list on a requested schema.
+     * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsRecurringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = CheckConfigurationModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getTableColumnsMonitoringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality monitoring checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = CheckConfigurationModel[].class),
+            @ApiResponse(code = 200, message = "Configuration of data quality monitoring checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsRecurringChecksModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1410,14 +1591,15 @@ public class TablesController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.recurring, timeScale),
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
                 CheckTarget.column,
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -1438,14 +1620,20 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = CheckConfigurationModel[].class)
+    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table",
+            response = CheckConfigurationModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsPartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1479,7 +1667,8 @@ public class TablesController {
                 checkCategory.orElse(null),
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
-                checkConfigured.orElse(null)
+                checkConfigured.orElse(null),
+                principal
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -1495,14 +1684,19 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckTemplate>> getTableProfilingChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1519,13 +1713,13 @@ public class TablesController {
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
                 connectionName, fullTableName, CheckType.profiling,
-                null, checkCategory.orElse(null), checkName.orElse(null));
+                null, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the list of recurring checks templates on the given table.
+     * Retrieves the list of monitoring checks templates on the given table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -1534,15 +1728,20 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/monitoring/{timeScale}", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getTableRecurringChecksTemplates(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckTemplate>> getTableMonitoringChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1559,8 +1758,8 @@ public class TablesController {
         }
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.recurring,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
+                connectionName, fullTableName, CheckType.monitoring,
+                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -1576,14 +1775,19 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
+    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CheckTemplate>> getTablePartitionedChecksTemplates(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1601,7 +1805,7 @@ public class TablesController {
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
                 connectionName, fullTableName, CheckType.partitioned,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
+                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
@@ -1616,16 +1820,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)")
+    @ApiOperation(value = "createTable", notes = "Creates a new table (adds a table metadata)", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New table successfully created"),
+            @ApiResponse(code = 201, message = "New table successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Table with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createTable(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> createTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1668,16 +1877,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields")
+    @ApiOperation(value = "updateTable", notes = "Updates an existing table specification, changing all the fields", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table successfully updated"),
+            @ApiResponse(code = 204, message = "Table successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTable(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1715,35 +1929,39 @@ public class TablesController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param tableBasicModel Basic table model with the new values.
+     * @param tableListModel Basic table model with the new values.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.")
+    @ApiOperation(value = "updateTableBasic", notes = "Updates the basic field of an existing table, changing only the most important fields.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table successfully updated"),
+            @ApiResponse(code = 204, message = "Table successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableBasic(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTableBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Table basic model with the updated settings") @RequestBody TableBasicModel tableBasicModel) {
+            @ApiParam("Table basic model with the updated settings") @RequestBody TableListModel tableListModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        if (tableBasicModel.getTarget() == null ||
-                !Objects.equals(schemaName, tableBasicModel.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tableBasicModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+        if (tableListModel.getTarget() == null ||
+                !Objects.equals(schemaName, tableListModel.getTarget().getSchemaName()) ||
+                !Objects.equals(tableName, tableListModel.getTarget().getTableName())) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -1763,7 +1981,7 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        tableBasicModel.copyToTableSpecification(tableSpec);
+        tableListModel.copyToTableSpecification(tableSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -1778,16 +1996,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.")
+    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table partitioning successfully updated"),
+            @ApiResponse(code = 204, message = "Table partitioning successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTablePartitioning(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTablePartitioning(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1801,8 +2024,7 @@ public class TablesController {
         if (tablePartitioningModel.getTarget() == null ||
                 !Objects.equals(schemaName, tablePartitioningModel.getTarget().getSchemaName()) ||
                 !Objects.equals(tableName, tablePartitioningModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -1837,16 +2059,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.")
+    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDefaultGroupingConfiguration(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTableDefaultGroupingConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1898,26 +2125,32 @@ public class TablesController {
      * @param connectionName              Connection name.
      * @param schemaName                  Schema name.
      * @param tableName                   Table name.
-     * @param recurringScheduleSpec       New recurring schedule configuration or an emtpy optional to clear the schedule configuration.
+     * @param monitoringScheduleSpec       New monitoring schedule configuration or an emtpy optional to clear the schedule configuration.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableSchedulingGroupOverride", notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).")
+    @ApiOperation(value = "updateTableSchedulingGroupOverride",
+            notes = "Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableSchedulingGroupOverride(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTableSchedulingGroupOverride(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
-                @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+                @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1940,37 +2173,14 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        RecurringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
-            schedules = new RecurringSchedulesSpec();
+            schedules = new MonitoringSchedulesSpec();
             tableSpec.setSchedulesOverride(schedules);
         }
 
-        RecurringScheduleSpec newScheduleSpec = recurringScheduleSpec.orElse(null);
-        switch (schedulingGroup) {
-            case profiling:
-                schedules.setProfiling(newScheduleSpec);
-                break;
-
-            case recurring_daily:
-                schedules.setRecurringDaily(newScheduleSpec);
-                break;
-
-            case recurring_monthly:
-                schedules.setRecurringMonthly(newScheduleSpec);
-                break;
-
-            case partitioned_daily:
-                schedules.setPartitionedDaily(newScheduleSpec);
-                break;
-
-            case partitioned_monthly:
-                schedules.setPartitionedMonthly(newScheduleSpec);
-                break;
-
-            default:
-                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
-        }
+        MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
+        schedules.setScheduleForCheckSchedulingGroup(newScheduleSpec, schedulingGroup);
 
         userHomeContext.flush();
 
@@ -1987,16 +2197,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.")
+    @ApiOperation(value = "updateTableIncidentGrouping", notes = "Updates the configuration of incident grouping on a table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's incident grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's incident grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableIncidentGrouping(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateTableIncidentGrouping(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2043,16 +2258,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.")
+    @ApiOperation(value = "updateTableLabels", notes = "Updates the list of assigned labels of an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's labels successfully updated"),
+            @ApiResponse(code = 204, message = "Table's labels successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableLabels(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2100,16 +2320,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.")
+    @ApiOperation(value = "updateTableComments", notes = "Updates the list of comments on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's comments successfully updated"),
+            @ApiResponse(code = 204, message = "Table's comments successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableComments(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2149,6 +2374,7 @@ public class TablesController {
     }
 
     protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecks(
+            DqoUserPrincipal principal,
             Consumer<TableSpec> tableSpecUpdater,
             String connectionName,
             String schemaName,
@@ -2185,16 +2411,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableProfilingChecks(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableProfilingChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2207,6 +2438,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecks(
+                principal,
                 spec -> {
                     if (tableProfilingCheckCategoriesSpec.isPresent()) {
                         spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec.get());
@@ -2227,29 +2459,34 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of daily table level data quality recurring of an existing table.
+     * Updates the configuration of daily table level data quality monitoring of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableDailyRecurringSpec     New configuration of the daily data quality recurring on the table level.
+     * @param tableDailyMonitoringSpec     New configuration of the daily data quality monitoring on the table level.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksDaily", notes = "Updates the list of daily table level data quality recurring on an existing table.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksDaily", notes = "Updates the list of daily table level data quality monitoring on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDailyRecurringChecks(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableDailyMonitoringChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of daily table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableDailyRecurringCheckCategoriesSpec> tableDailyRecurringSpec) {
+            @ApiParam("Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
+            @RequestBody Optional<TableDailyMonitoringCheckCategoriesSpec> tableDailyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2257,13 +2494,14 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecks(
+                principal,
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
+                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
 
-                    if (tableDailyRecurringSpec.isPresent()) {
-                        recurringSpec.setDaily(tableDailyRecurringSpec.get());
+                    if (tableDailyMonitoringSpec.isPresent()) {
+                        monitoringSpec.setDaily(tableDailyMonitoringSpec.get());
                     } else {
-                        recurringSpec.setDaily(null);
+                        monitoringSpec.setDaily(null);
                     }
                 },
                 connectionName,
@@ -2279,29 +2517,34 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of monthly table level data quality recurring of an existing table.
+     * Updates the configuration of monthly table level data quality monitoring of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableMonthlyRecurringSpec     New configuration of the monthly data quality recurring on the table level.
+     * @param tableMonthlyMonitoringSpec     New configuration of the monthly data quality monitoring on the table level.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksMonthly", notes = "Updates the list of monthly table level data quality recurring on an existing table.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksMonthly", notes = "Updates the list of monthly table level data quality monitoring on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of monthly table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableMonthlyRecurringCheckCategoriesSpec> tableMonthlyRecurringSpec) {
+            @ApiParam("Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
+            @RequestBody Optional<TableMonthlyMonitoringCheckCategoriesSpec> tableMonthlyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2309,13 +2552,14 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecks(
+                principal,
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
+                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
 
-                    if (tableMonthlyRecurringSpec.isPresent()) {
-                        recurringSpec.setMonthly(tableMonthlyRecurringSpec.get());
+                    if (tableMonthlyMonitoringSpec.isPresent()) {
+                        monitoringSpec.setMonthly(tableMonthlyMonitoringSpec.get());
                     } else {
-                        recurringSpec.setMonthly(null);
+                        monitoringSpec.setMonthly(null);
                     }
                 },
                 connectionName,
@@ -2339,16 +2583,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.")
+    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecksDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2361,6 +2610,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecks(
+                principal,
                 spec -> {
                     TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
                     
@@ -2391,16 +2641,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.")
+    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecksMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2413,6 +2668,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecks(
+                principal,
                 spec -> {
                     TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
 
@@ -2435,6 +2691,7 @@ public class TablesController {
     }
 
     protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecksModel(
+            DqoUserPrincipal principal,
             Function<TableSpec, T> tableSpecToRootCheck,
             String connectionName,
             String schemaName,
@@ -2462,7 +2719,7 @@ public class TablesController {
         }
 
         if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
             tableSpec.setTableCheckRootContainer(checksToUpdate);
         } else {
             // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
@@ -2481,16 +2738,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableProfilingChecksModel", notes = "Updates the data quality profiling checks from a model that contains a patch with changes.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableProfilingChecksModel(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2503,6 +2765,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
+                principal,
                 TableSpec::getProfilingChecks,
                 connectionName,
                 schemaName,
@@ -2519,30 +2782,35 @@ public class TablesController {
     }
 
     /**
-     * Updates the data quality recurring specification on an existing table for a given time scale from a check model with a patch of changes.
+     * Updates the data quality monitoring specification on an existing table for a given time scale from a check model with a patch of changes.
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
      * @param timeScale                Time scale.
-     * @param checkContainerModel      New configuration of the data quality recurring on the table level provided as a model. The model may contain only a subset of data quality dimensions or checks. Only those recurring that are present in the model are updated, the others are preserved without any changes.
+     * @param checkContainerModel      New configuration of the data quality monitoring on the table level provided as a model. The model may contain only a subset of data quality dimensions or checks. Only those monitoring that are present in the model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableRecurringChecksModel", notes = "Updates the data quality recurring from a model that contains a patch with changes.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableMonitoringChecksModel", notes = "Updates the data quality monitoring from a model that contains a patch with changes.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksModel(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Model with the changes to be applied to the data quality recurring configuration.")
+            @ApiParam("Model with the changes to be applied to the data quality monitoring configuration.")
             @RequestBody Optional<CheckContainerModel> checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -2551,7 +2819,8 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
-                spec -> spec.getTableCheckRootContainer(CheckType.recurring, timeScale, true),
+                principal,
+                spec -> spec.getTableCheckRootContainer(CheckType.monitoring, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,
@@ -2576,16 +2845,21 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.")
+    @ApiOperation(value = "updateTablePartitionedChecksModel", notes = "Updates the data quality partitioned checks from a model that contains a patch with changes.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<?>> updateTablePartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2599,6 +2873,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
+                principal,
                 spec -> spec.getTableCheckRootContainer(CheckType.partitioned, timeScale, true),
                 connectionName,
                 schemaName,
@@ -2622,14 +2897,19 @@ public class TablesController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
-    @ApiOperation(value = "deleteTable", notes = "Deletes a table", response = DqoQueueJobId.class)
+    @ApiOperation(value = "deleteTable", notes = "Deletes a table", response = DqoQueueJobId.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<DqoQueueJobId>> deleteTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -2648,8 +2928,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(
-                connectionName, tableWrapper.getPhysicalTableName());
+        PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
+                connectionName, tableWrapper.getPhysicalTableName(), principal);
 
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }

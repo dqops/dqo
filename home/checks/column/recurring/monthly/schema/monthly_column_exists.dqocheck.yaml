@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/schema/column_exists
-  rule_name: comparison/equals_integer
-  help_text: Checks the metadata of the monitored table and verifies if the column
-    exists. Stores the most recent value for each month when the data quality check
-    was evaluated.

@@ -18,7 +18,7 @@ package com.dqops.execution.checks.scheduled;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.*;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
@@ -52,7 +52,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
      * @return List of target checks, grouped by a target table.
      */
     @Override
-    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RecurringScheduleSpec schedule) {
+    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, MonitoringScheduleSpec schedule) {
         ScheduledChecksCollection scheduledChecksCollection = new ScheduledChecksCollection();
 
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();

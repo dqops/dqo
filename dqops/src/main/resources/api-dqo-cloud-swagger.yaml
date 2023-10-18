@@ -1,21 +1,22 @@
 ---
 swagger: "2.0"
 info:
-  description: "DQO Cloud API"
+  description: "DQOps Cloud API"
   version: "v1"
-  title: "DQO Cloud"
+  title: "DQOps Cloud"
   termsOfService: "https://dqops.com/terms-of-service"
   contact:
-    name: "DQO Cloud Support"
+    name: "DQOps Cloud Support"
     url: "https://dqops.com/"
     email: "support@dqops.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "api.dqo.ai"
+host: "api.dqops.com"
 basePath: "/"
 tags:
 - name: "AccessTokenIssue"
+- name: "AccountUsers"
 - name: "ApiKeyRequest"
 - name: "LookerStudioKeyRequest"
 - name: "RefreshTokenIssue"
@@ -63,6 +64,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom check definitions"
       operationId: "issueBucketChecksRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/credentials:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketCredentialsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with credentials (.credentials folder)"
+      operationId: "issueBucketCredentialsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -167,6 +184,22 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/settings:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSettingsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with settings"
+      operationId: "issueBucketSettingsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/sources:
     get:
       tags:
@@ -199,21 +232,24 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/apikey/issued/{apiKeyRequest}:
-    put:
+  /api/v1/apikey/issueapikey:
+    post:
       tags:
       - "ApiKeyRequest"
       summary: "issueApiKey"
       description: "Issues an API Key by the DQO Cloud UI, this operation can also\
         \ generate a new fresh API key."
       operationId: "issueApiKey"
+      consumes:
+      - "text/plain"
       produces:
       - "text/plain"
       parameters:
-      - name: "apiKeyRequest"
-        in: "path"
-        required: true
-        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "string"
       responses:
         200:
           description: "successful operation"
@@ -350,6 +386,132 @@ paths:
             type: "string"
       security:
       - api_key: []
+  /api/v1/users:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "listAccountUsers"
+      description: "Returns a list of users for the current account. Only a user with\
+        \ an ADMIN role can call this operation."
+      operationId: "listAccountUsers"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "createAccountUser"
+      description: "Adds a new user to a multi-user account. Only accounts on a TEAM\
+        \ or ENTERPRISE license can add new users."
+      operationId: "createAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New user model"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/users/{email}:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "getAccountUser"
+      description: "Returns the information about a single user."
+      operationId: "getAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    put:
+      tags:
+      - "AccountUsers"
+      summary: "updateAccountUser"
+      description: "Updates a new user in a multi-user account. Supports changing\
+        \ the account role and/or updating the password. For a free user account,\
+        \ only the password is changed if it is provided."
+      operationId: "updateAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Updated user model with a new role and possibly a new password"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "AccountUsers"
+      summary: "deleteAccountUser"
+      description: "Deletes a user from a multi-user account. Only a user with an\
+        \ ADMIN right for a multi-user account (TEAM or ENTERPRISE edition) can perform\
+        \ this operation."
+      operationId: "deleteAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/users/{email}/password:
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "changeAccountUserPassword"
+      description: "Changes the password of the given user. The user can change his\
+        \ own password."
+      operationId: "changeAccountUserPassword"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New password"
+        required: false
+        schema:
+          type: "string"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
 securityDefinitions:
   api_key:
     type: "apiKey"
@@ -362,6 +524,26 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
 definitions:
+  DqoUserModel:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Email that identifies the user."
+      accountRole:
+        type: "string"
+        description: "Global account role assigned to the user."
+        enum:
+        - "admin"
+        - "editor"
+        - "operator"
+        - "viewer"
+        - "none"
+      newPassword:
+        type: "string"
+        description: "Write-only property used to update the password. This field\
+          \ does not return the current password."
+    description: "DQO Cloud user model that describes a user in multi-user SaaS deployments."
   RefreshTableRequest:
     type: "object"
     properties:
@@ -379,6 +561,8 @@ definitions:
         - "sensors"
         - "rules"
         - "checks"
+        - "settings"
+        - "credentials"
       connections:
         type: "array"
         description: "Optional list of connection names that were modified and the\
@@ -398,8 +582,28 @@ definitions:
         items:
           type: "string"
           format: "date"
+      partitions:
+        type: "array"
+        description: "Optional list of partitions that should be loaded from parquet\
+          \ files to the native tables in the data warehouse."
+        items:
+          $ref: "#/definitions/RefreshedPartitionModel"
     description: "Request object for refreshing a native table in the data quality\
       \ data warehouse."
+  RefreshedPartitionModel:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "Connection name that should be refreshed."
+      schemaTableName:
+        type: "string"
+        description: "Full table name (schema.table) that should be refreshed."
+      month:
+        type: "string"
+        format: "date"
+        description: "The date of the first day of the month that should be refreshed. "
+    description: "Identifies a partition that should be refreshed."
   TenantAccessTokenModel:
     type: "object"
     properties:

@@ -1,15 +1,12 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..models.effective_schedule_model_schedule_group import (
-    EffectiveScheduleModelScheduleGroup,
-)
-from ..models.effective_schedule_model_schedule_level import (
-    EffectiveScheduleModelScheduleLevel,
-)
+from ..models.check_run_schedule_group import CheckRunScheduleGroup
+from ..models.effective_schedule_level_model import EffectiveScheduleLevelModel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -19,16 +16,14 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="EffectiveScheduleModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class EffectiveScheduleModel:
     """Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON
     expression and the time of the upcoming execution, as well as the duration until this time.
 
         Attributes:
-            schedule_group (Union[Unset, EffectiveScheduleModelScheduleGroup]): Field value for a schedule group to which
-                this schedule belongs.
-            schedule_level (Union[Unset, EffectiveScheduleModelScheduleLevel]): Field value for the level at which the
-                schedule has been configured.
+            schedule_group (Union[Unset, CheckRunScheduleGroup]):
+            schedule_level (Union[Unset, EffectiveScheduleLevelModel]):
             cron_expression (Union[Unset, str]): Field value for a CRON expression defining the scheduling.
             time_of_execution (Union[Unset, datetime.datetime]): Field value for the time at which the scheduled checks will
                 be executed.
@@ -36,13 +31,13 @@ class EffectiveScheduleModel:
             disabled (Union[Unset, bool]): Field value stating if the schedule has been explicitly disabled.
     """
 
-    schedule_group: Union[Unset, EffectiveScheduleModelScheduleGroup] = UNSET
-    schedule_level: Union[Unset, EffectiveScheduleModelScheduleLevel] = UNSET
+    schedule_group: Union[Unset, CheckRunScheduleGroup] = UNSET
+    schedule_level: Union[Unset, EffectiveScheduleLevelModel] = UNSET
     cron_expression: Union[Unset, str] = UNSET
     time_of_execution: Union[Unset, datetime.datetime] = UNSET
     time_until_execution: Union[Unset, "Duration"] = UNSET
     disabled: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_group: Union[Unset, str] = UNSET
@@ -88,18 +83,18 @@ class EffectiveScheduleModel:
 
         d = src_dict.copy()
         _schedule_group = d.pop("schedule_group", UNSET)
-        schedule_group: Union[Unset, EffectiveScheduleModelScheduleGroup]
+        schedule_group: Union[Unset, CheckRunScheduleGroup]
         if isinstance(_schedule_group, Unset):
             schedule_group = UNSET
         else:
-            schedule_group = EffectiveScheduleModelScheduleGroup(_schedule_group)
+            schedule_group = CheckRunScheduleGroup(_schedule_group)
 
         _schedule_level = d.pop("schedule_level", UNSET)
-        schedule_level: Union[Unset, EffectiveScheduleModelScheduleLevel]
+        schedule_level: Union[Unset, EffectiveScheduleLevelModel]
         if isinstance(_schedule_level, Unset):
             schedule_level = UNSET
         else:
-            schedule_level = EffectiveScheduleModelScheduleLevel(_schedule_level)
+            schedule_level = EffectiveScheduleLevelModel(_schedule_level)
 
         cron_expression = d.pop("cron_expression", UNSET)
 

@@ -16,6 +16,7 @@
 package com.dqops.execution.statistics;
 
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
@@ -47,8 +48,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
     /**
      * Creates a statistics collectors execution service with given dependencies.
      * @param hierarchyNodeTreeSearcher Target node search service.
-     * @param dqoQueueJobFactory DQO job factory to create a child job.
-     * @param dqoJobQueue DQO job queue where the child job is started.
+     * @param dqoQueueJobFactory DQOps job factory to create a child job.
+     * @param dqoJobQueue DQOps job queue where the child job is started.
      * @param tableStatisticsCollectorsExecutionService Statistics collector execution service that collects statistics on a single table.
      */
     @Autowired
@@ -72,6 +73,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
+     * @param principal Principal that will be used to run the job.
      * @return Statistics collector summary table with the count of executed and successful collectors executions for each table.
      */
     @Override
@@ -82,7 +84,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                             boolean dummySensorExecution,
                                                                             boolean startChildJobsPerTable,
                                                                             DqoQueueJobId parentJobId,
-                                                                            JobCancellationToken jobCancellationToken) {
+                                                                            JobCancellationToken jobCancellationToken,
+                                                                            DqoUserPrincipal principal) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, statisticsCollectorSearchFilters);
         StatisticsCollectionExecutionSummary statisticsCollectorExecutionSummary = null;
@@ -109,7 +112,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                 childTableJobs.add(collectStatisticsOnTableQueueJob);
             }
 
-            ChildDqoQueueJobsContainer<StatisticsCollectionExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+            ChildDqoQueueJobsContainer<StatisticsCollectionExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId, principal);
             List<StatisticsCollectionExecutionSummary> collectorExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
 
             StatisticsCollectionExecutionSummary executionSummaryForMerge = new StatisticsCollectionExecutionSummary();

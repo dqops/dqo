@@ -43,24 +43,33 @@ public class SensorDefinitionSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("List of fields that are parameters of a custom sensor. Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
+    @JsonPropertyDescription("List of fields that are parameters of a custom sensor. " +
+            "Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ParameterDefinitionsListSpec fields;
 
-    @JsonPropertyDescription("The data quality sensor depends on the configuration of the event timestamp column name on the analyzed table. When true, the name of the column that stores the event (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the table.")
+    @JsonPropertyDescription("The data quality sensor depends on the configuration of the event timestamp column name on the analyzed table. " +
+            "When true, the name of the column that stores the event (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the table.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean requiresEventTimestamp;
 
-    @JsonPropertyDescription("The data quality sensor depends on the configuration of the ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the ingestion (created_at, loaded_at, etc.) timestamp must be specified in the timestamp_columns.ingestion_timestamp_column field on the table.")
+    @JsonPropertyDescription("The data quality sensor depends on the configuration of the ingestion timestamp column name on the analyzed table. " +
+            "When true, the name of the column that stores the ingestion (created_at, loaded_at, etc.) timestamp must be specified " +
+            "in the timestamp_columns.ingestion_timestamp_column field on the table.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean requiresIngestionTimestamp;
+
+    @JsonPropertyDescription("Default value that is used when the sensor returns no rows. " +
+            "A row count sensor may return no rows when a GROUP BY condition is added to capture the database server's local time zone. In order to always return a value, a sensor may have a default value configured.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Double defaultValue;
 
     @JsonPropertyDescription("Additional sensor definition parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
 
     /**
-     * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQO UI.
+     * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQOps UI.
      * @return List of parameters.
      */
     public ParameterDefinitionsListSpec getFields() {
@@ -109,6 +118,23 @@ public class SensorDefinitionSpec extends AbstractSpec {
     public void setRequiresIngestionTimestamp(boolean requiresIngestionTimestamp) {
         setDirtyIf(this.requiresIngestionTimestamp != requiresIngestionTimestamp);
         this.requiresIngestionTimestamp = requiresIngestionTimestamp;
+    }
+
+    /**
+     * Returns the default value that is used when the sensor does not return any result (no rows returned due to a GROUP BY clause on a whole table).
+     * @return Default value to return.
+     */
+    public Double getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * Sets the default value to return when the sensor does not return a result.
+     * @param defaultValue Default value to return.
+     */
+    public void setDefaultValue(Double defaultValue) {
+        setDirtyIf(!Objects.equals(this.defaultValue, defaultValue));
+        this.defaultValue = defaultValue;
     }
 
     /**

@@ -3,6 +3,7 @@ import Input from '../../../Input';
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import { IconButton } from "@material-tailwind/react";
 import SvgIcon from "../../../SvgIcon";
+import { SharedCredentialListModel } from '../../../../api';
 
 interface IJdbcPropertyItemProps {
   idx: number;
@@ -11,6 +12,7 @@ interface IJdbcPropertyItemProps {
   onRemove: (key: number) => void;
   isLast?: boolean;
   onChange: (key: number, value: [string, string]) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const JdbcPropertyItem = ({
@@ -19,7 +21,8 @@ const JdbcPropertyItem = ({
   isLast,
   idx,
   onRemove,
-  onChange
+  onChange,
+  sharedCredentials
 }: IJdbcPropertyItemProps) => {
 
   return (
@@ -34,6 +37,8 @@ const JdbcPropertyItem = ({
         <FieldTypeInput
           value={value}
           onChange={(val) => onChange(idx, [name, val])}
+          credential={true}
+          data={sharedCredentials}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">

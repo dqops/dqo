@@ -2,7 +2,7 @@
 The data quality incidents table that tracks open incidents. Incidents are grouping multiple failed data quality checks (stored in the check_results table).
  The check results that are part of an incident could be matched to incidents by the incident_hash column.
  The incidents are stored in the errors table is located in the $DQO_USER_HOME/.data/incidents folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user&#x27;s home folder).
+ The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  c&#x3D;[connection_name]/m&#x3D;[first_day_of_month]/, for example: c&#x3D;myconnection/m&#x3D;2023-01-01/.  

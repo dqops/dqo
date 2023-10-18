@@ -105,9 +105,10 @@ public interface TerminalReader {
     /**
      * Starts a background job that will wait for any input on the console.
      * @param waitDuration Wait duration.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Completable future that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
      */
-    CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration);
+    CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration, boolean peekOnly);
 
     /**
      * Hangs on waiting for the user to confirm that the application should exit.

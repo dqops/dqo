@@ -24,11 +24,13 @@ import com.dqops.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSys
 import com.dqops.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 import com.dqops.metadata.fileindices.FileIndexName;
+import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.fileindices.FileIndexWrapper;
 import com.dqops.metadata.fileindices.FileLocation;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +38,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * File synchronization service. Performs a full synchronization of a given category of files to the DQO Cloud.
+ * File synchronization service. Performs a full synchronization of a given category of files to the DQOps Cloud.
  */
 @Component
+@Slf4j
 public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizationService {
     private UserHomeContextFactory userHomeContextFactory;
     private FileSystemSynchronizationService fileSystemSynchronizationService;
@@ -52,9 +55,9 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param userHomeContextFactory User home context factory. Provides access to the local user home context.
      * @param fileSystemSynchronizationService File system synchronization utility.
      * @param localSynchronizationFileSystemFactory User home file system factory.
-     * @param dqoCloudRemoteFileSystemServiceFactory DQO Cloud remote file system factory.
+     * @param dqoCloudRemoteFileSystemServiceFactory DQOps Cloud remote file system factory.
      * @param dqoCloudApiKeyProvider API key provider.
-     * @param dqoCloudWarehouseService DQO CLoud warehouse refresh service, used to refresh the native tables.
+     * @param dqoCloudWarehouseService DQOps Cloud warehouse refresh service, used to refresh the native tables.
      */
     @Autowired
     public DqoCloudSynchronizationServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -72,7 +75,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     }
 
     /**
-     * Performs synchronization of a given user home folder to the DQO Cloud.
+     * Performs synchronization of a given user home folder to the DQOps Cloud.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
@@ -82,6 +85,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                                   FileSynchronizationDirection synchronizationDirection,
                                   boolean forceRefreshNativeTable,
                                   FileSystemSynchronizationListener synchronizationListener) {
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -89,6 +93,18 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         FileIndexWrapper localFileIndexWrapper = userHome.getFileIndices().getByObjectName(localIndexName, true);
         if (localFileIndexWrapper == null) {
             localFileIndexWrapper = userHome.getFileIndices().createAndAddNew(localIndexName);
+            localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+            localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+        } else {
+            if (localFileIndexWrapper.getSpec().getTenantId() == null) {
+                localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            } else if (!Objects.equals(localFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
+                       !Objects.equals(localFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                localFileIndexWrapper.setSpec(new FileIndexSpec());
+                localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            }
         }
 
         FileIndexName remoteIndexName = new FileIndexName(dqoRoot, FileLocation.REMOTE);
@@ -96,10 +112,28 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteIndexName, true);
         if (remoteFileIndexWrapper == null) {
             remoteFileIndexWrapper = userHome.getFileIndices().createAndAddNew(remoteIndexName);
+            remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+            remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+        } else {
+            if (remoteFileIndexWrapper.getSpec().getTenantId() == null) {
+                remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            } else if (!Objects.equals(remoteFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
+                    !Objects.equals(remoteFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                remoteFileIndexWrapper.setSpec(new FileIndexSpec());
+                remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
+                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            }
         }
 
         SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot);
         SynchronizationRoot remoteDqoCloudFileSystem = this.dqoCloudRemoteFileSystemServiceFactory.createRemoteDqoCloudFSRW(dqoRoot);
+
+        if (remoteDqoCloudFileSystem == null) {
+            // no access to the remote file system
+            log.warn("Cannot access the remote file system for the folder root: " + dqoRoot);
+            return;
+        }
 
         FileSystemChangeSet sourceChangeSet = new FileSystemChangeSet(
                 userHomeFolderFileSystem,
@@ -111,7 +145,6 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteFileIndexWrapper.getSpec().getFolder(),
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
                 sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, apiKey, synchronizationListener);
 
@@ -152,6 +185,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.sensors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.rules, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.checks, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.settings, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.credentials, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);

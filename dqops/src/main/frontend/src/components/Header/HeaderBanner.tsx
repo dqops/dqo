@@ -21,10 +21,6 @@ type HeaderBannerProps = {
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [openPopover, setOpenPopover] = React.useState(false);
-  const triggers = {
-    onMouseEnter: () => setOpenPopover(true),
-    onMouseLeave: () => setOpenPopover(false)
-  };
   const {
     connection
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
@@ -34,19 +30,19 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [scheduleConfigured, setScheduleConfigured] = useState(false);
   const [isCollected, setIsCollected] = useState(false);
   const [isProfilingChecked, setIsProfilingChecked] = useState(false);
-  const { advisorObject } = useSelector((state: IRootState) => state.job);
+  const { advisorObject, userProfile } = useSelector((state: IRootState) => state.job);
 
   const collectStatistics = () => {
     setIsCollected(true);
 
-    JobApiClient.collectStatisticsOnDataGroups({
+    JobApiClient.collectStatisticsOnTable(false, undefined, {
       connectionName: advisorObject.connectionName
     });
   };
 
   const runProfilingChecks = () => {
     JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: {
+      check_search_filters: {
         connectionName: advisorObject.connectionName,
         checkType: CheckTypes.PROFILING
       }
@@ -76,12 +72,13 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   return (
     <div className="absolute z-10 top-0 left-0 right-0">
       <Popover open={openPopover} handler={setOpenPopover}>
-        <PopoverHandler {...triggers}>
-          <div className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90">
+        <PopoverHandler>
+          <div className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90 cursor-pointer"
+          onClick={() => setOpenPopover(!openPopover)}>
             <div className="flex items-center gap-2">
               <SvgIcon name="info" className="text-white" />
               <h4 className="text-white font-bold">
-                Data source needs configuration
+                New tables have been imported and the automatic monitoring has been scheduled. Click here for more actions.
               </h4>
             </div>
 
@@ -97,22 +94,23 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
         </PopoverHandler>
 
         <PopoverContent
-          {...triggers}
-          className="max-w-150 z-50 !top-12 !left-0 rounded-none text-gray-700"
+          className="max-w-250 z-50 !top-12 !left-0 rounded-none text-gray-700"
         >
-          <div className="flex mb-2 items-center justify-between">
+          <div className="flex mb-4  items-center justify-between">
             <div className="grow">Collect basic statistics</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
                 variant={'contained'}
                 color={isCollected ? 'secondary' : 'primary'}
-                label="Collect statistics"
-                className="text-sm px-2 w-40"
+                label={isCollected ? "The job has started" :"Collect statistics"}
+                className="text-sm px-2 w-45"
                 onClick={isCollected ? undefined : collectStatistics}
+                disabled={userProfile.can_collect_statistics  !== true}
+                
               />
 
-              <div className="pr-4 flex items-center">
+              <div className="px-4 flex items-center">
                 <Checkbox
                   checked={isCollected}
                   onChange={() => {
@@ -122,19 +120,20 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
               </div>
             </div>
           </div>
-          <div className="flex mb-2 items-center justify-between">
-            <div className="grow">Run advanced profiling checks</div>
+          <div className="flex mb-4 items-center justify-between">
+            <div className="grow">Run profiling checks</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
                 variant="contained"
                 color={isProfilingChecked ? 'secondary' : 'primary'}
-                label="Run profiling checks"
-                className="text-sm px-2 w-40"
+                label={isProfilingChecked ? "The job has started": "Run profiling checks"}
+                className="text-sm px-2 w-45"
                 onClick={isProfilingChecked ? undefined : runProfilingChecks}
+                disabled={userProfile.can_run_checks !== true}
               />
 
-              <div className="pr-4 flex items-center">
+              <div className="px-4 flex items-center">
                 <Checkbox
                   checked={isProfilingChecked}
                   onChange={() => {
@@ -144,21 +143,22 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
               </div>
             </div>
           </div>
-          <div className="flex mb-2 items-center justify-between">
+          <div className="flex mb-4 w-150 items-center justify-between">
             <div className="grow">
-              Configure scheduling for profiling and daily recurring checks
+              Review scheduling for profiling and
+              <br></br> daily monitoring checks
             </div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
                 variant={scheduleConfigured ? 'contained' : 'outlined'}
                 color={scheduleConfigured ? 'secondary' : 'primary'}
-                label="Configure scheduling"
-                className="text-sm px-2 w-40"
+                label="Review scheduling"
+                className="text-sm px-2 w-45"
                 onClick={scheduleConfigured ? undefined : configureScheduling}
               />
 
-              <div className="pr-4 flex items-center">
+              <div className="px-4 flex items-center">
                 <Checkbox
                   checked={scheduleConfigured}
                   onChange={() => {
@@ -188,6 +188,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
       <AdvisorConfirmDialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
+        onConfirm = {onClose}
       />
     </div>
   );

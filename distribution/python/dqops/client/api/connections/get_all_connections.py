@@ -1,41 +1,31 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.connection_basic_model import ConnectionBasicModel
+from ...client import AuthenticatedClient, Client
+from ...models.connection_model import ConnectionModel
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: Client,
-) -> Dict[str, Any]:
-    url = "{}api/connections".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+def _get_kwargs() -> Dict[str, Any]:
+    pass
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections",
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["ConnectionBasicModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["ConnectionModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = ConnectionBasicModel.from_dict(response_200_item_data)
+            response_200_item = ConnectionModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -47,8 +37,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["ConnectionBasicModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["ConnectionModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -59,8 +49,8 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-) -> Response[List["ConnectionBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Response[List["ConnectionModel"]]:
     """getAllConnections
 
      Returns a list of connections (data sources)
@@ -70,15 +60,12 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ConnectionBasicModel']]
+        Response[List['ConnectionModel']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -87,8 +74,8 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-) -> Optional[List["ConnectionBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Optional[List["ConnectionModel"]]:
     """getAllConnections
 
      Returns a list of connections (data sources)
@@ -98,7 +85,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ConnectionBasicModel']
+        List['ConnectionModel']
     """
 
     return sync_detailed(
@@ -108,8 +95,8 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-) -> Response[List["ConnectionBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Response[List["ConnectionModel"]]:
     """getAllConnections
 
      Returns a list of connections (data sources)
@@ -119,23 +106,20 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ConnectionBasicModel']]
+        Response[List['ConnectionModel']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-) -> Optional[List["ConnectionBasicModel"]]:
+    client: AuthenticatedClient,
+) -> Optional[List["ConnectionModel"]]:
     """getAllConnections
 
      Returns a list of connections (data sources)
@@ -145,7 +129,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ConnectionBasicModel']
+        List['ConnectionModel']
     """
 
     return (

@@ -1,19 +1,20 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
+    from ..models.min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
     from ..models.min_count_rule_fatal_parameters_spec import (
         MinCountRuleFatalParametersSpec,
     )
     from ..models.min_count_rule_warning_parameters_spec import (
         MinCountRuleWarningParametersSpec,
     )
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
         TableVolumeRowCountSensorParametersSpec,
     )
@@ -22,15 +23,15 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableRowCountCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableRowCountCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
@@ -49,11 +50,11 @@ class TableRowCountCheckSpec:
             table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
         warning (Union[Unset, MinCountRuleWarningParametersSpec]):
-        error (Union[Unset, MinCountRule0ParametersSpec]):
+        error (Union[Unset, MinCountRule1ParametersSpec]):
         fatal (Union[Unset, MinCountRuleFatalParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -63,9 +64,9 @@ class TableRowCountCheckSpec:
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
     warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinCountRule0ParametersSpec"] = UNSET
+    error: Union[Unset, "MinCountRule1ParametersSpec"] = UNSET
     fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -135,8 +136,8 @@ class TableRowCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.min_count_rule_0_parameters_spec import (
-            MinCountRule0ParametersSpec,
+        from ..models.min_count_rule_1_parameters_spec import (
+            MinCountRule1ParametersSpec,
         )
         from ..models.min_count_rule_fatal_parameters_spec import (
             MinCountRuleFatalParametersSpec,
@@ -144,18 +145,18 @@ class TableRowCountCheckSpec:
         from ..models.min_count_rule_warning_parameters_spec import (
             MinCountRuleWarningParametersSpec,
         )
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
             TableVolumeRowCountSensorParametersSpec,
         )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -191,11 +192,11 @@ class TableRowCountCheckSpec:
             warning = MinCountRuleWarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinCountRule0ParametersSpec]
+        error: Union[Unset, MinCountRule1ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinCountRule0ParametersSpec.from_dict(_error)
+            error = MinCountRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MinCountRuleFatalParametersSpec]

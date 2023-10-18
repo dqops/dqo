@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.comparison_check_result_model import ComparisonCheckResultModel
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonResultsModelTableComparisonResults")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonResultsModelTableComparisonResults:
     """The dictionary of comparison results between the tables for table level comparisons (the row count). The keys for
     the dictionary are the check names. The value in the dictionary is a summary information about the most recent
@@ -17,7 +18,7 @@ class TableComparisonResultsModelTableComparisonResults:
 
     """
 
-    additional_properties: Dict[str, "ComparisonCheckResultModel"] = attr.ib(
+    additional_properties: Dict[str, "ComparisonCheckResultModel"] = _attrs_field(
         init=False, factory=dict
     )
 
