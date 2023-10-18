@@ -1,5 +1,6 @@
 import re
 
+
 def extract_base_url(url: str) -> str:
     """
     Extracts base url form the url provided in the argument.
