@@ -56,7 +56,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
     /**
      * Creates a service given dependencies.
      * @param specToModelCheckMappingService Check specification to check model mapping service.
-     * @param dqoHomeContextFactory Returns the default DQO home context.
+     * @param dqoHomeContextFactory Returns the default DQOps home context.
      */
     @Autowired
     public SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService,

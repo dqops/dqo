@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO that configures the default cron schedules applied to new connections. Properties are mapped to the "dqo.scheduler.default-schedules." prefix.
+ * Configuration POJO with the configuration for DQOps that configures the default cron schedules applied to new connections. Properties are mapped to the "dqo.scheduler.default-schedules." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.scheduler.default-schedules")

@@ -41,7 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Helper class that upgrades the Swagger 2.x file generated from DQO REST Api model to Swagger 3.
+ * Helper class that upgrades the Swagger 2.x file generated from DQOps REST Api model to Swagger 3.
  */
 public class SwaggerFileUpgradeUtility {
     private static final ReflectionService reflectionService = new ReflectionServiceImpl();
@@ -96,7 +96,7 @@ public class SwaggerFileUpgradeUtility {
 
         public OpenAPIBuilder mutateLocalhostAsServerUrl() {
             openApi.getServers().forEach(server -> {
-                server.setUrl("http://localhost:8888/");  // set the url to a local DQO instance as the default
+                server.setUrl("http://localhost:8888/");  // set the url to a local DQOps instance as the default
             });
             return this;
         }

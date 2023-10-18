@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -49,7 +50,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnProfilingCheckCategoriesSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnProfilingCheckCategoriesSpec:
     """
     Attributes:
@@ -88,7 +89,7 @@ class ColumnProfilingCheckCategoriesSpec:
     anomaly: Union[Unset, "ColumnAnomalyProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "ColumnProfilingCheckCategoriesSpecComparisons"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         custom: Union[Unset, Dict[str, Any]] = UNSET

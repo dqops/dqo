@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.display_hint import DisplayHint
 from ..models.parameter_data_type import ParameterDataType
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ParameterDefinitionSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ParameterDefinitionSpec:
     """Defines a single field that is a sensor parameter or a rule parameter.
 
@@ -35,7 +36,7 @@ class ParameterDefinitionSpec:
     required: Union[Unset, bool] = UNSET
     allowed_values: Union[Unset, List[str]] = UNSET
     sample_values: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         field_name = self.field_name

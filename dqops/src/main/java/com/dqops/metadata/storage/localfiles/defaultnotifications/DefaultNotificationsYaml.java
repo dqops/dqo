@@ -6,7 +6,7 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
  * The default configuration of notifications. Notifications are published by calling webhooks defined in this object.
- * The default notification settings are stored in the settings/defaultnotifications.dqonotifications.yaml file in the DQO user's home folder.
+ * The default notification settings are stored in the settings/defaultnotifications.dqonotifications.yaml file in the DQOps user's home folder.
  */
 public class DefaultNotificationsYaml {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;

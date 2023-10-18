@@ -35,11 +35,12 @@ import picocli.CommandLine;
 import java.util.Objects;
 
 /**
- * 2st level CLI command "cloud password" for changing the DQO Cloud password used to log in to the DQO Cloud account.
+ * 2st level CLI command "cloud password" for changing the DQOps Cloud password used to log in to the DQOps Cloud account.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "password", header = "Changes the user's password in DQO Cloud", description = "Allows the user to change the password that is used to log in to DQO Cloud account using the email and password.")
+@CommandLine.Command(name = "password", header = "Changes the user's password in DQOps Cloud",
+        description = "Allows the user to change the password that is used to log in to DQOps Cloud account using the email and password.")
 @Slf4j
 public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
     private UserManagementService userManagementService;
@@ -70,7 +71,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
         TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
         if (userPrincipal.getApiKeyPayload() == null) {
-            terminalWriter.writeLine("This instance is not authenticated to DQO Cloud. Please run 'cloud login' command first.");
+            terminalWriter.writeLine("This instance is not authenticated to DQOps Cloud. Please run 'cloud login' command first.");
             return -1;
         }
 

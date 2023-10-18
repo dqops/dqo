@@ -1,19 +1,20 @@
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ComparisonCheckResultModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ComparisonCheckResultModel:
     """The table comparison check result model for the most recent data comparison run. Identifies the check name and the
     number of data groupings that passed or failed the comparison.
 
         Attributes:
-            check_name (Union[Unset, str]): DQO data quality check name.
+            check_name (Union[Unset, str]): DQOps data quality check name.
             executed_at (Union[Unset, int]): The timestamp when the check was executed.
             valid_results (Union[Unset, int]): The number of data groups that were compared and the values matched within
                 the accepted error margin for all check severity levels.
@@ -36,7 +37,7 @@ class ComparisonCheckResultModel:
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
     not_matching_data_groups: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name

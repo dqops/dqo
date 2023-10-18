@@ -59,27 +59,18 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   const encodeValue = (text: string, textType: string) => {
     if (textType === 'env') {
       return '${' + text + '}';
-    }else if (textType === 'credential') {
-      return '${credential' + text + '}';
     }
     return text;
   };
 
-  // useEffect(() => {
-  //   if (!value) return;
-
-  //   if (value.startsWith('${') && value.endsWith('}')) {
-  //     setText(value.substr(2, value.length - 3));
-  //   } else {
-  //     setText(value);
-  //     setType('text');
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (!value) return;
+      setText(value);
+  }, [value]);
 
   const inputType = maskingType === 'password' && type !== 'env'
   ? 'password'
   : 'text';
-console.log(data)
   return (
     <div className={clsx('', className)}>
       <div>{label}</div>
@@ -99,10 +90,10 @@ console.log(data)
           </div>
           {(type === 'env' || type === 'credential') && <div>{'}'}</div>}
         </div>
-        <Select options={credential ? [...options, { 
+        <Select options={[...options, { 
         label: '${credential: CREDENTIAL}',
         value: 'credential'
-        }] : options}
+        }]}
       value={type} onChange={onChangeType} disabled={disabled} placeholder=""/>
       </div>
     </div>

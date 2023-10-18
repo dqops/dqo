@@ -34,9 +34,9 @@ import lombok.EqualsAndHashCode;
 @Data
 public class SynchronizeMultipleFoldersQueueJobResult {
     /**
-     * Job id that identifies a job that was started on the DQO job queue.
+     * Job id that identifies a job that was started on the DQOps job queue.
      */
-    @JsonPropertyDescription("Job id that identifies a job that was started on the DQO job queue.")
+    @JsonPropertyDescription("Job id that identifies a job that was started on the DQOps job queue.")
     private DqoQueueJobId jobId;
 
     /**

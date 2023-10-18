@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { SqlServerParametersSpec } from "../../../../api";
+import { SharedCredentialListModel, SqlServerParametersSpec } from "../../../../api";
 import JdbcPropertiesView from "../JdbcProperties";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import Checkbox from "../../../Checkbox";
@@ -9,11 +9,13 @@ import Checkbox from "../../../Checkbox";
 interface ISqlServerConnectionProps {
   sqlserver?: SqlServerParametersSpec;
   onChange?: (obj: SqlServerParametersSpec) => void;
+  sharedCredentials ?: SharedCredentialListModel[];
 }
 
 const SqlServerConnection = ({
   sqlserver,
-  onChange
+  onChange,
+  sharedCredentials
 }: ISqlServerConnectionProps) => {
 
   const handleChange = (obj: Partial<SqlServerParametersSpec>) => {
@@ -27,31 +29,35 @@ const SqlServerConnection = ({
 
   return (
     <SectionWrapper title="Microsoft SQL Server/SQL Server connection parameters" className="mb-4">
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Host"
         className="mb-4"
         value={sqlserver?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  data = {sharedCredentials}
         label="Port"
         className="mb-4"
         value={(sqlserver?.port || 1433).toString()}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Database"
         className="mb-4"
         value={sqlserver?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput 
+        data = {sharedCredentials}
         label="User name"
         className="mb-4"
         value={sqlserver?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput
+      <FieldTypeInput  
+        data = {sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"
@@ -67,6 +73,7 @@ const SqlServerConnection = ({
       <JdbcPropertiesView
         properties={sqlserver?.properties}
         onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
   );

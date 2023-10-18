@@ -33,25 +33,29 @@ import java.util.Map;
 public class EncodingLoggingEvent implements ILoggingEvent {
     private ILoggingEvent wrappedEvent;
     private Object[] augmentedArgumentArray;
-    private boolean encodeDoubleQuotesInJson;
+    private boolean quoteMessage;
     private List<KeyValuePair> keyValuePairs;
+    private Integer jsonMessageMaxLength;
 
     /**
      * Creates a wrapper over an original logging event.
      *
      * @param wrappedEvent             The original logging event.
      * @param augmentedArgumentArray   An alternate array of arguments, added to the "attrs" (or "attributes") dictionary.
-     * @param encodeDoubleQuotesInJson Encodes all double quotes the message field again.
+     * @param quoteMessage             Encodes all double quotes and backslashes the message field again.
      * @param keyValuePairs            Alternative list of key-value pairs.
+     * @param jsonMessageMaxLength     Maximum length of a message field, the rest is truncated.
      */
     public EncodingLoggingEvent(ILoggingEvent wrappedEvent,
                                 Object[] augmentedArgumentArray,
-                                boolean encodeDoubleQuotesInJson,
-                                List<KeyValuePair> keyValuePairs) {
+                                boolean quoteMessage,
+                                List<KeyValuePair> keyValuePairs,
+                                Integer jsonMessageMaxLength) {
         this.wrappedEvent = wrappedEvent;
         this.augmentedArgumentArray = augmentedArgumentArray;
-        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+        this.quoteMessage = quoteMessage;
         this.keyValuePairs = keyValuePairs;
+        this.jsonMessageMaxLength = jsonMessageMaxLength;
     }
 
     @Override
@@ -66,7 +70,13 @@ public class EncodingLoggingEvent implements ILoggingEvent {
 
     @Override
     public String getMessage() {
-        return wrappedEvent.getMessage();
+        String message = wrappedEvent.getMessage();
+        if (message != null && this.jsonMessageMaxLength != null) {
+            if (message.length() > this.jsonMessageMaxLength) {
+                message = message.substring(0, this.jsonMessageMaxLength);
+            }
+        }
+        return message;
     }
 
     /**
@@ -86,9 +96,20 @@ public class EncodingLoggingEvent implements ILoggingEvent {
     @Override
     public String getFormattedMessage() {
         String formattedMessage = wrappedEvent.getFormattedMessage();
-        if (this.encodeDoubleQuotesInJson && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
+        if (formattedMessage != null && this.jsonMessageMaxLength != null) {
+            if (formattedMessage.length() > this.jsonMessageMaxLength) {
+                formattedMessage = formattedMessage.substring(0, this.jsonMessageMaxLength);
+            }
+        }
+
+        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('\\') >= 0) {
+            formattedMessage = formattedMessage.replace("\\", "\\\\");
+        }
+
+        if (this.quoteMessage && formattedMessage != null && formattedMessage.indexOf('"') >= 0) {
             formattedMessage = formattedMessage.replace("\"", "\\\"");
         }
+
         return formattedMessage;
     }
 

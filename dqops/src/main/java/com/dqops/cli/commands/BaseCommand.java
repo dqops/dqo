@@ -27,9 +27,9 @@ public abstract class BaseCommand {
      * Default parameter to enable a headless (no user input allowed) mode. The default behavior of the command line is to prompt the user for all required parameters. When the --headless mode is enabled, user prompting is disabled and a lack of required parameter generates an error
      */
     @CommandLine.Option(names = {"--headless", "-hl"},
-            description = "Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start " +
-                    "because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to " +
-                    "approve the setup of the DQO user home folder structure and/or log into DQO Cloud.", defaultValue = "false")
+            description = "Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start " +
+                    "because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to " +
+                    "approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.", defaultValue = "false")
     private boolean headless;
 
     @CommandLine.Option(names = {"-h", "--help"}, description = "Show the help for the command and parameters", required = false, usageHelp = true)

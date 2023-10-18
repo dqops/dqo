@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.dqo_settings_model_properties_additional_property import (
@@ -11,16 +12,16 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DqoSettingsModelProperties")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoSettingsModelProperties:
-    """Dictionary of all effective DQO system properties, retrieved from the default configuration files, user
+    """Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user
     configuration files, environment variables and 'dqo' command arguments.
 
     """
 
     additional_properties: Dict[
         str, "DqoSettingsModelPropertiesAdditionalProperty"
-    ] = attr.ib(init=False, factory=dict)
+    ] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         pass

@@ -27,7 +27,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
            [-l=<labels>]... [-tag=<tags>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
@@ -64,7 +64,7 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |`--from-date`<br/>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.| ||
 |`--from-date-time`<br/>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.| ||
 |`--from-date-time-offset`<br/>|Analyze the data since the given date and time with a time zone offset (inclusive). The date and time should be an ISO 8601 date and time followed by a time zone offset (yyyy-MM-dd HH\:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, info, debug)| |silent<br/>summary<br/>info<br/>debug<br/>|
@@ -99,7 +99,7 @@ $ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<
               [-W=<String=String>]...
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -123,7 +123,7 @@ dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-E`<br/>`--error-rule`<br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--nullable`<br/>|Enable check only on nullable columns (false for explicitly non-nullable columns).| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -153,7 +153,7 @@ $ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<
                [-t=<table>] [-ts=<timeScale>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -173,7 +173,7 @@ dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to disable checks.| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--nullable`<br/>|Disable check only on nullable columns (false for explicitly non-nullable columns).| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|

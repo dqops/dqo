@@ -82,11 +82,12 @@ dqo:
     console-immediate-flush: false
     console: OFF
     log-errors-to-stderr: false
-    encode-double-quotes-in-json: true
+    encode-message: true
     json-log-field-message: log
     json-log-field-timestamp: time
     json-log-field-arguments: attrs
     json-timestamp-pattern: "[ISO_INSTANT]"
+    json-message-max-length: 1000
     user-errors:
       sensors-log-level: WARN
       rules-log-level: WARN
@@ -176,7 +177,7 @@ dqo:
       partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
   webserver:
     static-files-cache-control-max-age: 604800
-    dynamic-files-cache-control-max-age: 86400
+    dynamic-files-cache-control-max-age: 0
   cli:
     oneshot:
       terminal-width: 150

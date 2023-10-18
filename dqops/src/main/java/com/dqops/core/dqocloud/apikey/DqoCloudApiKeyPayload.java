@@ -117,15 +117,15 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
-     * Returns the DQO Cloud API Key version.
-     * @return DQO Cloud API Key version.
+     * Returns the DQOps Cloud API Key version.
+     * @return DQOps Cloud API Key version.
      */
     public Long getVersion() {
         return version;
     }
 
     /**
-     * Sets the DQO Cloud API Key version.
+     * Sets the DQOps Cloud API Key version.
      * @param version API Key version.
      */
     public void setVersion(Long version) {

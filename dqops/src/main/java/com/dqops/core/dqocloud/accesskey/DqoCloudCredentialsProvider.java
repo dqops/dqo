@@ -20,7 +20,7 @@ import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 
 /**
- * DQO Cloud bucket credentials provider.
+ * DQOps Cloud bucket credentials provider.
  */
 public interface DqoCloudCredentialsProvider {
     /**

@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.apikey;
 
 /**
- * DQO Cloud license type.
+ * DQOps Cloud license type.
  */
 public enum DqoCloudLicenseType {
     /**

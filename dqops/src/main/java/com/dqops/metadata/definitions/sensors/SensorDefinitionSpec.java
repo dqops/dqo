@@ -44,7 +44,7 @@ public class SensorDefinitionSpec extends AbstractSpec {
     };
 
     @JsonPropertyDescription("List of fields that are parameters of a custom sensor. " +
-            "Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
+            "Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ParameterDefinitionsListSpec fields;
 
@@ -69,7 +69,7 @@ public class SensorDefinitionSpec extends AbstractSpec {
     private Map<String, String> parameters;
 
     /**
-     * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQO UI.
+     * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQOps UI.
      * @return List of parameters.
      */
     public ParameterDefinitionsListSpec getFields() {

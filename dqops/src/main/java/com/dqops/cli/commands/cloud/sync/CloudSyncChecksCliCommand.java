@@ -34,11 +34,12 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync checks" to synchronize the "checks" folder with custom checks in the DQO user home.
+ * 3st level CLI command "cloud sync checks" to synchronize the "checks" folder with custom checks in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "checks", header = "Synchronize local \"checks\" folder with custom check definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"checks\" folder.")
+@CommandLine.Command(name = "checks", header = "Synchronize local \"checks\" folder with custom check definitions with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"checks\" folder.")
 public class CloudSyncChecksCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;

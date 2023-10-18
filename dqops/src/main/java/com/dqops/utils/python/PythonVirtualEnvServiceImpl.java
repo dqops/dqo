@@ -53,7 +53,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 
     /**
      * Default injection constructor.
-     * @param dqoConfigurationProperties DQO configuration properties.
+     * @param dqoConfigurationProperties DQOps configuration properties.
      * @param pythonConfigurationProperties Python configuration properties.
      * @param userConfigurationProperties User configuration properties.
      */

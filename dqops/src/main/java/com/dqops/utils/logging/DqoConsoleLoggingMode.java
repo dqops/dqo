@@ -17,7 +17,7 @@
 package com.dqops.utils.logging;
 
 /**
- * Console logging mode configuration. Decides how DQO sends logging events to the console.
+ * Console logging mode configuration. Decides how DQOps sends logging events to the console.
  */
 public enum DqoConsoleLoggingMode {
     /**

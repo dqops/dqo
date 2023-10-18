@@ -94,6 +94,7 @@ function TreeProvider(props: any) {
   const activeTab = activeTabMaps[checkTypes];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [sidebarScrollHeight, setSidebarScrollHeight] = useState(0)
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -1188,8 +1189,10 @@ function TreeProvider(props: any) {
         checkType === CheckTypes.PARTITIONED
       ) {
         tab = tab || 'daily';
-      } else {
+      } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
+      } else {
+        tab = tab || 'detail'
       }
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -1810,6 +1813,8 @@ function TreeProvider(props: any) {
         changeActiveTab,
         sidebarWidth,
         setSidebarWidth,
+        sidebarScrollHeight,
+        setSidebarScrollHeight,
         removeTreeNode,
         removeNode,
         refreshNode,

@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for the dqo.logging that configures how file logging works inside the DQO user home .log folder.
+ * Configuration POJO with the configuration for the dqo.logging that configures how file logging works inside the DQOps user home .log folder.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.logging")
@@ -55,7 +55,8 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     private String jsonLogFieldTimestamp;
     private String jsonLogFieldArguments;
     private String jsonTimestampPattern;
-    private boolean encodeDoubleQuotesInJson = true;
+    private boolean encodeMessage = true;
+    private Integer jsonMessageMaxLength;
 
     /**
      * Returns the flag if file logging inside the user home's .log folder should be enabled.
@@ -266,20 +267,36 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Applies additional quoting of double quote " when logging to console in JSON format is enabled.
-     * This option is enabled by default, to enable proper logging of message when DQO runs inside a docker container.
+     * Returns the maximum length of the message field in a json formatted log entry. Remaining characters are truncated.
+     * @return Maximum length of the message field.
+     */
+    public Integer getJsonMessageMaxLength() {
+        return jsonMessageMaxLength;
+    }
+
+    /**
+     * Sets the maximum length of a message field in a json formatted log entry.
+     * @param jsonMessageMaxLength Maximum length in characters.
+     */
+    public void setJsonMessageMaxLength(Integer jsonMessageMaxLength) {
+        this.jsonMessageMaxLength = jsonMessageMaxLength;
+    }
+
+    /**
+     * Applies additional quoting of double quote " and backslashes \\ when logging to console in JSON format is enabled.
+     * This option is enabled by default, to enable proper logging of message when DQOps runs inside a docker container.
      * @return Encode double quotes in JSON log entries.
      */
-    public boolean isEncodeDoubleQuotesInJson() {
-        return encodeDoubleQuotesInJson;
+    public boolean isEncodeMessage() {
+        return encodeMessage;
     }
 
     /**
      * Turns on the flag to encode double quotes.
-     * @param encodeDoubleQuotesInJson Encode double quotes.
+     * @param encodeMessage Encode double quotes.
      */
-    public void setEncodeDoubleQuotesInJson(boolean encodeDoubleQuotesInJson) {
-        this.encodeDoubleQuotesInJson = encodeDoubleQuotesInJson;
+    public void setEncodeMessage(boolean encodeMessage) {
+        this.encodeMessage = encodeMessage;
     }
 
     /**

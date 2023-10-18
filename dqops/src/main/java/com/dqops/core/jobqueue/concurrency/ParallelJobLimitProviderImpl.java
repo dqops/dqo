@@ -33,8 +33,8 @@ public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
 
     /**
      * Default dependency injection constructor.
-     * @param dqoCloudApiKeyProvider DQO Cloud api provider - used to retrieve the licensed limit of concurrent jobs.
-     * @param dqoQueueConfigurationProperties DQO Queue configuration parameters with a user-provided additional concurrency limit.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider - used to retrieve the licensed limit of concurrent jobs.
+     * @param dqoQueueConfigurationProperties DQOps Queue configuration parameters with a user-provided additional concurrency limit.
      */
     @Autowired
     public ParallelJobLimitProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,

@@ -82,7 +82,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param connectionProviderRegistry Connection provider.
      * @param statisticsResultsNormalizationService Normalization service that creates profiling results.
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
-     * @param dqoSensorLimitsConfigurationProperties DQO sensor limits configuration.
+     * @param dqoSensorLimitsConfigurationProperties DQOps sensor limits configuration.
      * @param statisticsCollectorConfigurationProperties Statistics collector configuration properties.
      * @param userErrorLogger Execution logger.
      */

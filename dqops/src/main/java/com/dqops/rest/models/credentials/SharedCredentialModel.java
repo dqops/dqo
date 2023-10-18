@@ -32,9 +32,9 @@ import lombok.Data;
 @ApiModel(value = "SharedCredentialModel", description = "Shared credentials full model used to create and update the credential. Contains one of two forms of the credential's value: a text or a base64 binary value.")
 public class SharedCredentialModel {
     /**
-     * Credential name. It is the name of a file in the .credentials/ folder inside the DQO user's home folder.
+     * Credential name. It is the name of a file in the .credentials/ folder inside the DQOps user's home folder.
      */
-    @JsonPropertyDescription("Credential name. It is the name of a file in the .credentials/ folder inside the DQO user's home folder.")
+    @JsonPropertyDescription("Credential name. It is the name of a file in the .credentials/ folder inside the DQOps user's home folder.")
     private String credentialName;
 
     /**

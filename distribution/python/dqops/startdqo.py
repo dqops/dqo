@@ -33,7 +33,7 @@ try:
         ).read()
     )
 except IOError:
-    print("Failed to load DQO version file.", file=sys.stderr)
+    print("Failed to load DQOps version file.", file=sys.stderr)
     sys.exit(-1)
 
 

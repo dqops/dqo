@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
@@ -14,31 +14,23 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     data_grouping_configuration_name: str,
-    *,
-    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-        dataGroupingConfigurationName=data_grouping_configuration_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     return {
         "method": "delete",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+            dataGroupingConfigurationName=data_grouping_configuration_name,
+        ),
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoVoid]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[MonoVoid]:
     if response.status_code == HTTPStatus.OK:
         response_200 = MonoVoid.from_dict(response.json())
 
@@ -49,7 +41,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Mon
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoVoid]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[MonoVoid]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -89,11 +83,9 @@ def sync_detailed(
         schema_name=schema_name,
         table_name=table_name,
         data_grouping_configuration_name=data_grouping_configuration_name,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -166,11 +158,9 @@ async def asyncio_detailed(
         schema_name=schema_name,
         table_name=table_name,
         data_grouping_configuration_name=data_grouping_configuration_name,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

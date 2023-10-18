@@ -80,7 +80,7 @@ public final class BuiltInFolderNames {
     public static final String INDEX = ".index";
 
     /**
-     * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQO cloud.
+     * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";
 

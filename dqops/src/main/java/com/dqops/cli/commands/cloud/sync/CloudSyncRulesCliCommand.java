@@ -34,11 +34,12 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync rules" to synchronize the "rules" folder with custom rules in the DQO user home.
+ * 3st level CLI command "cloud sync rules" to synchronize the "rules" folder with custom rules in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "rules", header = "Synchronize local \"rules\" folder with custom rule definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"rules\" folder.")
+@CommandLine.Command(name = "rules", header = "Synchronize local \"rules\" folder with custom rule definitions with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"rules\" folder.")
 public class CloudSyncRulesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
     private TerminalFactory terminalFactory;

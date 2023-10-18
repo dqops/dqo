@@ -178,7 +178,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -202,7 +202,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -272,6 +272,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @param defaultParameters A list of default parameters (using just the first parameter value for all other parameters.
      */
     protected void addExpandedDashboards(DashboardsFolderSpec targetFolder, DashboardSpec templatedDashboardSpec, LinkedHashMap<String, String> defaultParameters) {
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
@@ -323,6 +327,11 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      */
     protected LinkedHashMap<String, String> createDefaultParameters(DashboardSpec templatedDashboardSpec) {
         LinkedHashMap<String, String> defaultParameters = new LinkedHashMap<>();
+
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return defaultParameters;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
@@ -357,7 +366,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
 
     /**
      * Merges the current folder with the <code>otherFolder</code>, adding or overriding dashboard configuration.
-     * @param otherFolder The other dashboard configuration, from the DQO user home, containing user overwritten dashboards.
+     * @param otherFolder The other dashboard configuration, from the DQOps user home, containing user overwritten dashboards.
      * @return Merged folder that includes current folders and dashboards, merged with the other dashboards.
      */
     public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {

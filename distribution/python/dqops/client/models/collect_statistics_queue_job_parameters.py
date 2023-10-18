@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.statistics_data_scope import StatisticsDataScope
 from ..types import UNSET, Unset
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CollectStatisticsQueueJobParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CollectStatisticsQueueJobParameters:
     """
     Attributes:
@@ -33,7 +34,7 @@ class CollectStatisticsQueueJobParameters:
     data_scope: Union[Unset, StatisticsDataScope] = UNSET
     dummy_sensor_execution: Union[Unset, bool] = UNSET
     collect_statistics_result: Union[Unset, "CollectStatisticsResult"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         statistics_collector_search_filters: Union[Unset, Dict[str, Any]] = UNSET

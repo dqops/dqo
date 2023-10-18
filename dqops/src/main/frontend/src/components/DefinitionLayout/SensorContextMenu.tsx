@@ -15,6 +15,7 @@ import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { SensorsApi } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { urlencodeDecoder } from '../../utils';
 
 interface SensorContextMenuProps {
   folder?: SensorFolderModel;
@@ -88,7 +89,8 @@ const SensorContextMenu = ({
   };
 
   const deleteSensorFromTree = async () => {
-    await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '').then(
+    console.log(urlencodeDecoder(sensor?.full_sensor_name ?? ''))
+    await SensorsApi.deleteSensor(urlencodeDecoder(sensor?.full_sensor_name ?? '') ?? '').then(
       () => dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
   };

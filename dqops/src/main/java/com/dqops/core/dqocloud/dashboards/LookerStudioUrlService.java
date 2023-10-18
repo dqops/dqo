@@ -32,7 +32,7 @@ public interface LookerStudioUrlService {
      * Creates an authenticated URL for a looker studio dashboard.
      *
      * @param dashboardSpec Dashboard specification.
-     * @param dqoWindowLocationOrigin URL to the DQO instance (the window.location.origin value).
+     * @param dqoWindowLocationOrigin URL to the DQOps instance (the window.location.origin value).
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
     String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin);

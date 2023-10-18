@@ -209,7 +209,7 @@ const DataGroupingConfigurationListView = ({
         open={defaultOpen}
         onClose={() => setDefaultOpen(false)}
         message={
-          'Data grouping is an advanced functionality of DQO that requires planning. DQO will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQO and will impact data quality KPIs.'
+          'Data grouping is an advanced functionality of DQOps that requires planning. DQOps will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQOps and will impact data quality KPIs.'
         }
         onConfirm={() =>
           setDefaultGroupingConfiguration(

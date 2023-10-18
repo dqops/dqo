@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service called by "cloud sync" CLI commands to synchronize the data with DQO Cloud.
+ * Service called by "cloud sync" CLI commands to synchronize the data with DQOps Cloud.
  */
 @Service
 public class CloudSynchronizationServiceImpl implements CloudSynchronizationService {
@@ -52,11 +52,11 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * Default injection constructor.
      * @param dqoCloudSynchronizationService Cloud synchronization service.
      * @param systemSynchronizationListenerProvider Synchronization listener provider.
-     * @param apiKeyProvider Api key provider - used to check if the user logged in to DQO Cloud.
+     * @param apiKeyProvider Api key provider - used to check if the user logged in to DQOps Cloud.
      * @param cloudLoginService Cloud login service - used to log in.
      * @param terminalFactory Terminal factory.
-     * @param dqoQueueJobFactory DQO job factory used to create a new instance of a folder synchronization job.
-     * @param dqoJobQueue DQO job queue to execute a background synchronization.
+     * @param dqoQueueJobFactory DQOps job factory used to create a new instance of a folder synchronization job.
+     * @param dqoJobQueue DQOps job queue to execute a background synchronization.
      */
     @Autowired
     public CloudSynchronizationServiceImpl(
@@ -77,13 +77,13 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     }
 
     /**
-     * Synchronize a folder type to/from DQO Cloud.
+     * Synchronize a folder type to/from DQOps Cloud.
      * @param rootType Root type.
      * @param reportingMode File synchronization progress reporting mode.
      * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
      * @param synchronizationDirection File synchronization direction.
      * @param forceRefreshNativeTable Forces to refresh a whole native table for data folders.
-     * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
+     * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQOps job queue.
      *                             False when the operation should be executed on the caller's thread.
      * @param principal Principal that will be used to run the job.
      * @return 0 when success, -1 when an error.
@@ -101,10 +101,10 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             // the api key is missing
 
             if (headlessMode) {
-                throw new CliRequiredParameterMissingException("API Key is missing, please run \"cloud login\" to configure your DQO Cloud API KEY");
+                throw new CliRequiredParameterMissingException("API Key is missing, please run \"cloud login\" to configure your DQOps Cloud API KEY");
             }
 
-            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQO Cloud API Key is missing, do you want to log in or register to DOQ Cloud?",
+            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQOps Cloud API Key is missing, do you want to log in or register to DOQps Cloud?",
                     true);
             if (loginMe) {
                 if (!this.cloudLoginService.logInToDqoCloud()) {
@@ -132,7 +132,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         }
 
-        this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");
+        this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQOps User Home and DQOps Cloud finished.\n");
 
         return 0;
     }

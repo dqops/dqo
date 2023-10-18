@@ -92,7 +92,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-120 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
+      <PopoverContent className="bg-white h-110 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
         <div className="flex justify-between items-center h-12 ">
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
@@ -174,17 +174,19 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div> 
         : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}
         </div>
-        <div className="w-full text-center flex flex-col justify-between items-center h-30 text-black mt-4">
+        <div className="w-full flex flex-col h-30 text-black mt-4">
+        {userProfile.can_manage_account === true ? 
           <a
             href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
-            className="block text-gray-700 mb-3"
+            className="block text-teal-500 text-lg underline mb-3"
           >
-            <Button label="Manage account" color="primary" disabled={userProfile.can_manage_account === false} className='w-45'/>
-          </a>
-          <Button label='Change password' onClick={() => setOpen(true)} color='primary' variant='outlined'/>
-          <div className='text-green-500 pt-2 text-lg   '>{passwordChangedMessage}</div>
+            Manage account 
+          </a> 
+          : <span className='text-teal-500 underline'>Manage account</span> }
+          <div className='text-teal-500 mb-3 text-lg cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
+          <div className='text-green-500 pt-2 text-lg'>{passwordChangedMessage}</div>
         </div>
         <ChangePrincipalPasswordDialog open = {open} onClose={() => setOpen(false)} handleSubmit={changePrincipalPassword}/>
       </PopoverContent>

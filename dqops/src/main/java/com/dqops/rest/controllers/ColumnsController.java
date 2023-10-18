@@ -89,7 +89,7 @@ public class ColumnsController {
      * Creates a columns rest controller.
      * @param columnService               Column logic service.
      * @param userHomeContextFactory      User home context factory.
-     * @param dqoHomeContextFactory       DQO home context factory, used to find built-in sensors.
+     * @param dqoHomeContextFactory       DQOps home context factory, used to find built-in sensors.
      * @param specToModelCheckMappingService Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService Check mapper to convert the check model to a check specification.
      * @param statisticsDataService       Statistics data service.

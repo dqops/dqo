@@ -24,23 +24,28 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. The groups are then matched (joined) by DQO to compare aggregated results.
+ * Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. The groups are then matched (joined) by DQOps to compare aggregated results.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableComparisonGroupingColumnPairModel", description = "Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. The groups are then matched (joined) by DQO to compare aggregated results.")
+@ApiModel(value = "TableComparisonGroupingColumnPairModel", description = "Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. " +
+        "The groups are then matched (joined) by DQOps to compare aggregated results.")
 @Data
 public class TableComparisonGroupingColumnPairModel {
     /**
-     * The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the reference table.
+     * The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated.
+     * This column is also used to join (match) results to the reference table.
      */
-    @JsonPropertyDescription("The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the reference table.")
+    @JsonPropertyDescription("The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared " +
+            "aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the reference table.")
     private String comparedTableColumnName;
 
     /**
-     * The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.
+     * The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared " +
+     * "aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.
      */
-    @JsonPropertyDescription("The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.")
+    @JsonPropertyDescription("The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared " +
+            "aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.")
     private String referenceTableColumnName;
 
     /**

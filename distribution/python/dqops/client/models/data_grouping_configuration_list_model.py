@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DataGroupingConfigurationListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DataGroupingConfigurationListModel:
     """Data grouping configurations list model not containing nested objects, but only the name of the grouping
     configuration.
@@ -28,7 +29,7 @@ class DataGroupingConfigurationListModel:
     data_grouping_configuration_name: Union[Unset, str] = UNSET
     default_data_grouping_configuration: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

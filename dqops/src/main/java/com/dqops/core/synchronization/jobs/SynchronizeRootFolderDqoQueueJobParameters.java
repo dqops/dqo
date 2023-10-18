@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.EqualsAndHashCode;
 
 /**
- * Parameters object for a job that synchronizes one folder with DQO Cloud.
+ * Parameters object for a job that synchronizes one folder with DQOps Cloud.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
@@ -40,7 +40,7 @@ public class SynchronizeRootFolderDqoQueueJobParameters {
 
     /**
      * Creates a new parameters object for a synchronize folder job.
-     * @param synchronizationParameter Synchronization parameter that is a serializable object with the folder (DQO Root) and direction to be synchronized.
+     * @param synchronizationParameter Synchronization parameter that is a serializable object with the folder (DQOps Root) and direction to be synchronized.
      * @param fileSystemSynchronizationListener File synchronization progress listener. Must be thread save because will be called from another thread (but ony one thread, no concurrent modifications).
      */
     public SynchronizeRootFolderDqoQueueJobParameters(SynchronizeRootFolderParameters synchronizationParameter,

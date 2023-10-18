@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -37,7 +38,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DqoJobEntryParametersModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoJobEntryParametersModel:
     """
     Attributes:
@@ -80,7 +81,7 @@ class DqoJobEntryParametersModel:
     repair_stored_data_parameters: Union[
         Unset, "RepairStoredDataQueueJobParameters"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         synchronize_root_folder_parameters: Union[Unset, Dict[str, Any]] = UNSET

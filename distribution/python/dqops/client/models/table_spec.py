@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -31,7 +32,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSpec:
     """
     Attributes:
@@ -60,12 +61,12 @@ class TableSpec:
         table_comparisons (Union[Unset, TableSpecTableComparisons]): Dictionary of data comparison configurations. Data
             comparison configurations are used for cross data-source comparisons to compare this table (called the compared
             table) with other reference tables (the source of truth). The reference table's metadata must be imported into
-            DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated
-            for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data
-            grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected
-            data grouping configurations must match. DQO will run the same data quality sensors on both the parent table
-            (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured
-            from both the tables.
+            DQOps, but the reference table could be located on a different data source. DQOps will compare metrics
+            calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a
+            data grouping. The number of data grouping dimensions on the parent table and the reference table defined in
+            selected data grouping configurations must match. DQOps will run the same data quality sensors on both the
+            parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor
+            readouts) captured from both the tables.
         incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
@@ -101,7 +102,7 @@ class TableSpec:
     columns: Union[Unset, "TableSpecColumns"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         disabled = self.disabled

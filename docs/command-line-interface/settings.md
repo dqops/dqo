@@ -16,7 +16,7 @@ $ dqo [dqo options...] settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-
                      [-p=<editorPath>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
                      [-p=<editorPath>]
@@ -28,7 +28,7 @@ dqo> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--name`<br/>|Editor name| |VSC<br/>IntelliJ<br/>Eclipse<br/>PyCharm<br/>|
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -52,7 +52,7 @@ Remove the editor settings from your configuration. This will revert the editor 
 $ dqo [dqo options...] settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -63,7 +63,7 @@ dqo> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -85,7 +85,7 @@ Display the current editor settings.
 $ dqo [dqo options...] settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -96,7 +96,7 @@ dqo> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -110,7 +110,7 @@ Initialize settings file in UserHome directory
 
 **Description**
 
-Settings file in your UserHome directory. This file stores configuration options for the DQO.
+Settings file in your UserHome directory. This file stores configuration options for the DQOps.
 
 
 **Command-line synopsis**
@@ -118,7 +118,7 @@ Settings file in your UserHome directory. This file stores configuration options
 $ dqo [dqo options...] settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -129,7 +129,7 @@ dqo> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -151,7 +151,7 @@ Removes the settings file from your UserHome directory.
 $ dqo [dqo options...] settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -162,7 +162,7 @@ dqo> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -184,7 +184,7 @@ Set the API key used for accessing external services. This key is used to authen
 $ dqo [dqo options...] settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
@@ -195,7 +195,7 @@ dqo> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -217,7 +217,7 @@ Remove the API key used for accessing external services.
 $ dqo [dqo options...] settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -228,7 +228,7 @@ dqo> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -250,7 +250,7 @@ Display the current API key used for accessing external services.
 $ dqo [dqo options...] settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -261,7 +261,7 @@ dqo> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -275,7 +275,7 @@ Set the default time zone
 
 **Description**
 
-Set the default time zone used by the DQO.
+Set the default time zone used by the DQOps.
 
 
 **Command-line synopsis**
@@ -283,7 +283,7 @@ Set the default time zone used by the DQO.
 $ dqo [dqo options...] settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
@@ -294,7 +294,7 @@ dqo> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -316,7 +316,7 @@ Remove the custom time zone from your settings. Once removed, the time zone for 
 $ dqo [dqo options...] settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -327,7 +327,7 @@ dqo> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
@@ -349,7 +349,7 @@ Displays the default time zone that is currently set in your settings. This time
 $ dqo [dqo options...] settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQO Shell synopsis**
+**DQOps Shell synopsis**
 ```
 dqo> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -360,7 +360,7 @@ dqo> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQO in a headless mode. When DQO runs in a headless mode and the application cannot start because the DQO Cloud API key is missing or the DQO user home folder is not configured, DQO will stop silently instead of asking the user to approve the setup of the DQO user home folder structure and/or log into DQO Cloud.| ||
+|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 

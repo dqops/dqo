@@ -107,7 +107,7 @@ public class TablesController {
      * Creates an instance of a controller by injecting dependencies.
      * @param tableService                     Table logic service.
      * @param userHomeContextFactory           User home context factory.
-     * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
+     * @param dqoHomeContextFactory            DQOps home context factory, used to retrieve the definition of built-in sensors.
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).

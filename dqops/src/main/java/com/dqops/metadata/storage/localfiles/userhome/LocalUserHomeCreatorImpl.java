@@ -59,7 +59,7 @@ import java.util.Base64;
 import java.util.stream.Stream;
 
 /**
- * Component that ensures that a DQO local user home was created and the default files were written.
+ * Component that ensures that a DQOps local user home was created and the default files were written.
  */
 @Component
 @Slf4j
@@ -82,9 +82,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
      *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
-     * @param userConfigurationProperties DQO user home configuration parameters.
-     * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
-     * @param dqoInstanceConfigurationProperties DQO instance configuration parameters.
+     * @param userConfigurationProperties DQOps user home configuration parameters.
+     * @param dockerUserhomeConfigurationProperties DQOps user home configuration properties related specifically to running under docker.
+     * @param dqoInstanceConfigurationProperties DQOps instance configuration parameters.
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
@@ -132,7 +132,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Initializes the DQO user home at the default location.
+     * Initializes the DQOps user home at the default location.
      */
     @Override
     public void initializeDefaultDqoUserHome() {
@@ -145,8 +145,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Checks the default DQO_USER_HOME path if it points to a valid and initialized DQO user home.
-     * @return True when the path points to a valid DQO User home, false otherwise (the user home must be initialized before first use).
+     * Checks the default DQO_USER_HOME path if it points to a valid and initialized DQOps user home.
+     * @return True when the path points to a valid DQOps User home, false otherwise (the user home must be initialized before first use).
      */
     @Override
     public boolean isDefaultDqoUserHomeInitialized() {
@@ -160,9 +160,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Checks the given path if it points to a valid and initialized DQO user home.
-     * @param userHomePathString Path to a potential DQO user home.
-     * @return True when the path points to a valid DQO User home, false otherwise.
+     * Checks the given path if it points to a valid and initialized DQOps user home.
+     * @param userHomePathString Path to a potential DQOps user home.
+     * @return True when the path points to a valid DQOps User home, false otherwise.
      */
     @Override
     public boolean isDqoUserHomeInitialized(String userHomePathString) {
@@ -187,14 +187,16 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Initializes a DQO user home at a given location.
-     * @param userHomePathString Path to the DQO user home.
+     * Initializes a DQOps user home at a given location.
+     * @param userHomePathString Path to the DQOps user home.
      */
     @Override
     public void initializeDqoUserHome(String userHomePathString) {
         try {
             Path userHomePath = Path.of(userHomePathString);
-            log.info("Initializing DQO User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            if (log.isDebugEnabled()) {
+                log.debug("Initializing DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
 
             initializeEmptyFolder(userHomePath);
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
@@ -267,17 +269,17 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
             Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
             if (!Files.exists(rulesRequirementTxtPath)) {
-                Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQO starts\n");
+                Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQOps starts\n");
             }
         }
         catch (Exception ex) {
-            throw new LocalFileSystemException("Cannot initialize a DQO User home at " + userHomePathString, ex);
+            throw new LocalFileSystemException("Cannot initialize a DQOps User home at " + userHomePathString, ex);
         }
     }
 
     /**
      * Checks for the existence of <code>.DQO_USER_HOME_NOT_MOUNTED</code> file in DQO_USER_HOME.
-     * @param userHomePath DQO User Home path.
+     * @param userHomePath DQOps User Home path.
      * @return True if the application is run inside a docker container and DQO_USER_HOME hasn't been mounted to an external volume.
      */
     protected boolean isUninitializedInUnmountedDockerVolume(Path userHomePath) {
@@ -293,8 +295,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
-     * Ensures that the DQO User home is initialized at the default location. Prompts the user before creating the user home to confirm.
-     * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQO User home.
+     * Ensures that the DQOps User home is initialized at the default location. Prompts the user before creating the user home to confirm.
+     * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQOps User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
      */
     @Override
@@ -306,7 +308,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         Path userHomePath = Paths.get(userHomePathString);
         if (this.isDefaultDqoUserHomeInitialized()) {
-            log.info("Using a DQO User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            if (log.isDebugEnabled()) {
+                log.debug("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
+            }
             activateFileLoggingInUserHome();
             applyDefaultConfigurationWhenMissing();
             return;
@@ -314,15 +318,15 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         if (this.isUninitializedInUnmountedDockerVolume(userHomePath) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-            terminalWriter.writeLine("DQO User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("DQOps User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
             terminalWriter.writeLine("In order to mount a volume, execute docker run with parameter \"-v\":");
             terminalWriter.writeLine("\tdocker run -it -v $DQO_USER_HOME:" + userHomePathString + " -p 8888:8888 dqops/dqo");
-            terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
+            terminalWriter.writeLine("To run DQOps in docker using a User Home folder inside the docker image (not advised),"
                     + " do one of the following:");
-            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.user-home.allow-unmounted=true");
-            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USER_HOME_ALLOW_UNMOUNTED=true");
-            terminalWriter.writeLine("DQO will quit.");
-            log.error("DQO User Home folder cannot be initialized at " + userHomePath.normalize().toAbsolutePath().toString());
+            terminalWriter.writeLine("\t- Start DQOps with a parameter --dqo.docker.user-home.allow-unmounted=true");
+            terminalWriter.writeLine("\t- or set the environment variable DQO_DOCKER_USER_HOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("DQOps will quit.");
+            log.error("DQOps User Home folder cannot be initialized at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(101);
         }
 
@@ -331,14 +335,14 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             activateFileLoggingInUserHome();
         }
         else {
-            if (this.terminalFactory.getReader().promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
+            if (this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home at " + userHomePathString, true)) {
                 this.initializeDefaultDqoUserHome();
                 activateFileLoggingInUserHome();
                 return;
             }
 
-            this.terminalFactory.getWriter().writeLine("DQO user home will not be created, exiting.");
-            log.error("DQO User Home folder initialization cancelled, cannot create the DQO User Home at " + userHomePath.normalize().toAbsolutePath().toString());
+            this.terminalFactory.getWriter().writeLine("DQOps user home will not be created, exiting.");
+            log.error("DQOps User Home folder initialization cancelled, cannot create the DQOps User Home at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(100);
         }
     }

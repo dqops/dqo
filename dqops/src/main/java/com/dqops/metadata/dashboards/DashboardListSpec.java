@@ -55,7 +55,7 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.

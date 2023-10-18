@@ -1,6 +1,6 @@
 # Command-line interface
 ___
-**This is a list of the CLI commands in DQO broken down by category and a brief description of what they do.**
+**This is a list of the CLI commands in DQOps broken down by category and a brief description of what they do.**
 
 ## dqo
 | Command&nbsp;name | Description |
@@ -64,12 +64,12 @@ ___
  | [dqo settings editor set](./settings/#dqo-settings editor set) | Set the settings for the editor. It allows user to set the editor to use a specific output format. |
  | [dqo settings editor remove](./settings/#dqo-settings editor remove) | Remove the editor settings from your configuration. This will revert the editor to its default settings. |
  | [dqo settings editor show](./settings/#dqo-settings editor show) | Display the current editor settings. |
- | [dqo settings init](./settings/#dqo-settings init) | Settings file in your UserHome directory. This file stores configuration options for the DQO. |
+ | [dqo settings init](./settings/#dqo-settings init) | Settings file in your UserHome directory. This file stores configuration options for the DQOps. |
  | [dqo settings remove](./settings/#dqo-settings remove) | Removes the settings file from your UserHome directory. |
  | [dqo settings apikey set](./settings/#dqo-settings apikey set) | Set the API key used for accessing external services. This key is used to authenticate requests to the service. |
  | [dqo settings apikey remove](./settings/#dqo-settings apikey remove) | Remove the API key used for accessing external services. |
  | [dqo settings apikey show](./settings/#dqo-settings apikey show) | Display the current API key used for accessing external services. |
- | [dqo settings timezone set](./settings/#dqo-settings timezone set) | Set the default time zone used by the DQO. |
+ | [dqo settings timezone set](./settings/#dqo-settings timezone set) | Set the default time zone used by the DQOps. |
  | [dqo settings timezone remove](./settings/#dqo-settings timezone remove) | Remove the custom time zone from your settings. Once removed, the time zone for your account will be set to the system default. |
  | [dqo settings timezone show](./settings/#dqo-settings timezone show) | Displays the default time zone that is currently set in your settings. This time zone will be used to display all date and time values in the application. |
 
@@ -78,7 +78,7 @@ ___
 | Command&nbsp;name | Description |
 |--------------|-------------|
  | [dqo cloud login](./cloud/#dqo-cloud login) | Allow user to provide login credentials if the user already has an account. |
- | [dqo cloud password](./cloud/#dqo-cloud password) | Allows the user to change the password that is used to log in to DQO Cloud account using the email and password. |
+ | [dqo cloud password](./cloud/#dqo-cloud password) | Allows the user to change the password that is used to log in to DQOps Cloud account using the email and password. |
  | [dqo cloud sync data](./cloud/#dqo-cloud sync data) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;data&quot; folder. |
  | [dqo cloud sync sources](./cloud/#dqo-cloud sync sources) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sources&quot; folder. |
  | [dqo cloud sync sensors](./cloud/#dqo-cloud sync sensors) | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder. |
@@ -98,7 +98,7 @@ ___
 ## scheduler
 | Command&nbsp;name | Description |
 |--------------|-------------|
- | [dqo scheduler start](./scheduler/#dqo-scheduler start) | This operation should be called only from the shell mode. When the DQO is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately. |
+ | [dqo scheduler start](./scheduler/#dqo-scheduler start) | This operation should be called only from the shell mode. When the DQOps is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately. |
  | [dqo scheduler stop](./scheduler/#dqo-scheduler stop) | This operation should be called only from the shell mode after the scheduler was started. |
 
 
@@ -112,7 +112,7 @@ ___
 ## run
 | Command&nbsp;name | Description |
 |--------------|-------------|
- | [dqo run](./run/#dqo-run) | This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQO is running. |
+ | [dqo run](./run/#dqo-run) | This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQOps is running. |
 
 
 ## rule

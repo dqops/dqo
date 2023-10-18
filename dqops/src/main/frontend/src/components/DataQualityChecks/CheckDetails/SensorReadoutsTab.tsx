@@ -134,7 +134,7 @@ const SensorReadoutsTab = ({
             columns={columns}
             data={result.sensorReadoutEntries?.map((item) => ({
               ...item,
-              executedAt: getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
             })) || []}
           />
         </div>

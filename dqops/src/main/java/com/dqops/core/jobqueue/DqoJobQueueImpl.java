@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.function.BiConsumer;
 
 /**
- * The implementation of the main DQO job queue that runs independent jobs and child jobs, but will reject all {@link ParentDqoQueueJob} parent jobs.
+ * The implementation of the main DQOps job queue that runs independent jobs and child jobs, but will reject all {@link ParentDqoQueueJob} parent jobs.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)

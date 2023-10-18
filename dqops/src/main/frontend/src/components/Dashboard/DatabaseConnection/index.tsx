@@ -5,11 +5,13 @@ import {
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
   ConnectionTestModel,
-  ConnectionTestModelConnectionTestResultEnum
+  ConnectionTestModelConnectionTestResultEnum,
+  SharedCredentialListModel
 } from '../../../api';
 import {
   ConnectionApiClient,
-  DataSourcesApi
+  DataSourcesApi,
+  SharedCredentailsApi
 } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
@@ -51,6 +53,7 @@ const DatabaseConnection = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
   const [nameError, setNameError] = useState('');
+  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -149,47 +152,63 @@ const DatabaseConnection = ({
     }
   };
 
+  const getSharedCredentials = async () => {
+    await SharedCredentailsApi.getAllSharedCredentials()
+      .then((res) => setSharedCredentials(res.data))
+  }
+
+  useEffect(() => {
+    getSharedCredentials()
+  },[])
+
   const components = {
     [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
         bigquery={database.bigquery}
         onChange={(bigquery) => onChange({ ...database, bigquery })}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.snowflake]: (
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
+        sharedCredentials = {sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
           oracle={database.oracle}
           onChange={(oracle) => onChange({ ...database, oracle })}
+          sharedCredentials = {sharedCredentials}
       />
     )
   };

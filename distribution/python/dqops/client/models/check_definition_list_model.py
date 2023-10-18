@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckDefinitionListModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckDefinitionListModel:
     """Data quality check definition list model.
 
@@ -15,7 +16,7 @@ class CheckDefinitionListModel:
         check_name (Union[Unset, str]): Check name
         full_check_name (Union[Unset, str]): Full check name
         custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
-        built_in (Union[Unset, bool]): This check is provided with DQO as a built-in check.
+        built_in (Union[Unset, bool]): This check is provided with DQOps as a built-in check.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
@@ -24,7 +25,7 @@ class CheckDefinitionListModel:
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name

@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.check_time_scale import CheckTimeScale
 from ..models.check_type import CheckType
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="CheckContainerTypeModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckContainerTypeModel:
     """Model identifying the check type and timescale of checks belonging to a container.
 
@@ -20,7 +21,7 @@ class CheckContainerTypeModel:
 
     check_type: Union[Unset, CheckType] = UNSET
     check_time_scale: Union[Unset, CheckTimeScale] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_type: Union[Unset, str] = UNSET

@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * DQO job queue - manages a pool of threads that are executing operations.
+ * DQOps job queue - manages a pool of threads that are executing operations.
  * This is a base abstract class for two job queues, one is the main job queue that runs independent jobs and child jobs, but not parent jobs: {@link DqoJobQueueImpl}.
  * The other subclass is the {@link ParentDqoJobQueueImpl} that runs only {@link ParentDqoQueueJob} jobs that should not perform too much logic, they should just start child jobs on the {@link DqoJobQueueImpl} main queue and wait.
  */

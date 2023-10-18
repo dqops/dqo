@@ -40,7 +40,7 @@ public class SynchronizationStatusTrackerStub implements SynchronizationStatusTr
     }
 
     /**
-     * Returns the current folder synchronization status for each folder that is synchronized do DQO Cloud.
+     * Returns the current folder synchronization status for each folder that is synchronized do DQOps Cloud.
      *
      * @return Current folder synchronization status.
      */

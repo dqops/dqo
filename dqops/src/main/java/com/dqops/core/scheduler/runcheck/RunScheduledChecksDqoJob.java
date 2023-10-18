@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO job that runs all scheduled checks for one CRON schedule within the job scheduler (quartz).
+ * DQOps job that runs all scheduled checks for one CRON schedule within the job scheduler (quartz).
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

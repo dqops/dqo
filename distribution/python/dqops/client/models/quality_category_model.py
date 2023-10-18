@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="QualityCategoryModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class QualityCategoryModel:
     """Model that returns the form definition and the form data to edit all checks within a single category.
 
@@ -38,7 +39,7 @@ class QualityCategoryModel:
     checks: Union[Unset, List["CheckModel"]] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         category = self.category

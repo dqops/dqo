@@ -16,7 +16,7 @@
 package com.dqops.cli.commands.cloud.impl;
 
 /**
- * Service that will open a browser and log in to the DQO cloud.
+ * Service that will open a browser and log in to the DQOps cloud.
  */
 public interface CloudLoginService {
     /**

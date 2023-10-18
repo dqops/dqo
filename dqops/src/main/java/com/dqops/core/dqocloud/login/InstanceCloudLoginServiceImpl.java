@@ -45,7 +45,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 /**
- * Service that manages communication with DQO Cloud for authenticating local users using their DQO Cloud credentials.
+ * Service that manages communication with DQOps Cloud for authenticating local users using their DQOps Cloud credentials.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -81,8 +81,8 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Finds out or derives the base url of the web server of this DQO instance.
-     * @return Base url of this DQO instance.
+     * Finds out or derives the base url of the web server of this DQOps instance.
+     * @return Base url of this DQOps instance.
      */
     @Override
     public String getReturnBaseUrl() {
@@ -117,7 +117,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Returns the ticket granting ticket that should be added as a query parameter to the "/login" page on the DQO Cloud
+     * Returns the ticket granting ticket that should be added as a query parameter to the "/login" page on the DQOps Cloud
      * for performing an identity provider login.
      * @return Ticket granting ticket.
      */
@@ -151,17 +151,17 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Builds a url to the DQO Cloud's login page with the ticket granting ticket and the return url.
+     * Builds a url to the DQOps Cloud's login page with the ticket granting ticket and the return url.
      * @param returnUrl Return url.
-     * @return Url to the DQO Cloud's login page to redirect to.
+     * @return Url to the DQOps Cloud's login page to redirect to.
      */
     @Override
     public String makeDqoLoginUrl(String returnUrl) {
         String returnBaseUrl = this.getReturnBaseUrl();
         if (this.dqoInstanceConfigurationProperties.isValidateReturnBaseUrl() && !returnUrl.startsWith(returnBaseUrl)) {
-            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQO instance must begin with " + returnBaseUrl +
+            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQOps instance must begin with " + returnBaseUrl +
                     ". You can change the configuration by setting the --dqo.instance.return-base-url or setting the environment variable " +
-                    "DQO_INSTANCE_RETURN_BASE_URL to the base url of your DQO instance, for example --dqo.instance.return-base-url=https://dqoinstance.yourcompany.com");
+                    "DQO_INSTANCE_RETURN_BASE_URL to the base url of your DQOps instance, for example --dqo.instance.return-base-url=https://dqoinstance.yourcompany.com");
         }
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();
@@ -191,7 +191,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
             return dqoLoginUrl;
         }
         catch (Exception ex) {
-            throw new DqoRuntimeException("Invalid DQO cloud base url, error: " + ex.getMessage(), ex);
+            throw new DqoRuntimeException("Invalid DQOps Cloud base url, error: " + ex.getMessage(), ex);
         }
     }
 
@@ -236,7 +236,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
-     * Issues an API key token for the calling user, using a principal. Generates a local API Key independent of the authentication method (DQO Cloud federated login or a local login).
+     * Issues an API key token for the calling user, using a principal. Generates a local API Key independent of the authentication method (DQOps Cloud federated login or a local login).
      * @param principal User principal
      * @return Signed API Key token.
      */

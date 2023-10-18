@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.folder_synchronization_status import FolderSynchronizationStatus
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="CloudSynchronizationFoldersStatusModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CloudSynchronizationFoldersStatusModel:
     """
     Attributes:
@@ -36,7 +37,7 @@ class CloudSynchronizationFoldersStatusModel:
     data_statistics: Union[Unset, FolderSynchronizationStatus] = UNSET
     data_errors: Union[Unset, FolderSynchronizationStatus] = UNSET
     data_incidents: Union[Unset, FolderSynchronizationStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         sources: Union[Unset, str] = UNSET
