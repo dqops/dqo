@@ -22,7 +22,7 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { dashboardFolders, dashboardTooltipState } = useSelector(
+  const { dashboardFolders } = useSelector(
     (state: IRootState) => state.dashboard
   );
   const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
@@ -62,47 +62,38 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
-  const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
-
+  
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
-      useDashboard();
-
+    useDashboard();
+    
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
-    );
+      );
+      
+      useEffect(() => {
+        if(selected !== activeTab){
+          setSelected(activeTab);
+        }
+      },[activeTab]);
+      
+    const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
 
-    useEffect(() => {
-      if(selected !== activeTab){
-        setSelected(activeTab);
-      }
-    },[activeTab]);
-
-    let mouseEnterTimeout: NodeJS.Timeout | undefined; 
-    
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
-      if (mouseEnterTimeout) {
-        clearTimeout(mouseEnterTimeout);
-      }
-      mouseEnterTimeout = setTimeout(() => {
+      setMouseEnterTimeout(setTimeout(() => {
         const height = e.clientY;
         dispatch(getDashboardTooltipState({height, label, url}));
-
-        setTimeout(() => {
-          dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
-        }, 3000);
-      }, 100); 
+      }, 50))
     };
 
     const handleMouseLeave = () => {
       if (mouseEnterTimeout) {
         clearTimeout(mouseEnterTimeout);
       }
-      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}));
+      dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
     };
     
-
     return (
       <div>
         <div
@@ -135,7 +126,6 @@ const LeftView = () => {
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
                 onMouseDown={() => {
-                  handleMouseLeave();
                   changeActiveTab(
                     dashboard,
                     folder.folder_name,
@@ -157,7 +147,7 @@ const LeftView = () => {
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
                       onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
-                      onMouseLeave={(e) => handleMouseLeave()}>
+                      onMouseLeave={() => handleMouseLeave()}>
                   {dashboard.dashboard_name}
                 </div>
               </div>
