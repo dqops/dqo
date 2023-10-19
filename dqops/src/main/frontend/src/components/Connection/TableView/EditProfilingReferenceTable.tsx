@@ -16,7 +16,8 @@ import {
   TableComparisonResultsModel,
   DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
-  ComparisonCheckResultModel
+  ComparisonCheckResultModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -489,11 +490,10 @@ export const EditProfilingReferenceTable = ({
       const res = await JobApiClient.runChecks(
         false,
         undefined,
-        categoryCheck?.run_checks_job_template
-          ? {
-              check_search_filters: categoryCheck?.run_checks_job_template
-            }
-          : undefined
+        { check_search_filters: categoryCheck ? categoryCheck?.run_checks_job_template : 
+        { connectionName: connection, schemaTableName: schema + "." + table,
+         tableComparisonName: reference?.table_comparison_configuration_name, enabled: true,
+         checkCategory: 'comparisons', checkType: checkTypes as CheckSearchFiltersCheckTypeEnum }} 
       );
       dispatch(
         setCurrentJobId(
