@@ -91,11 +91,9 @@ from .check_list_model import CheckListModel
 from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
+from .check_result_status import CheckResultStatus
 from .check_results_list_model import CheckResultsListModel
 from .check_results_overview_data_model import CheckResultsOverviewDataModel
-from .check_results_overview_data_model_statuses_item import (
-    CheckResultsOverviewDataModelStatusesItem,
-)
 from .check_run_schedule_group import CheckRunScheduleGroup
 from .check_search_filters import CheckSearchFilters
 from .check_target import CheckTarget
@@ -1610,9 +1608,6 @@ from .table_data_quality_status_model import TableDataQualityStatusModel
 from .table_data_quality_status_model_failed_checks_statuses import (
     TableDataQualityStatusModelFailedChecksStatuses,
 )
-from .table_data_quality_status_model_failed_checks_statuses_additional_property import (
-    TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
-)
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_list_model import TableListModel
@@ -1853,7 +1848,7 @@ __all__ = (
     "CheckResultsListModel",
     "CheckResultSortOrder",
     "CheckResultsOverviewDataModel",
-    "CheckResultsOverviewDataModelStatusesItem",
+    "CheckResultStatus",
     "CheckRunScheduleGroup",
     "CheckSearchFilters",
     "CheckTarget",
@@ -2540,7 +2535,6 @@ __all__ = (
     "TableDataIngestionDelayCheckSpec",
     "TableDataQualityStatusModel",
     "TableDataQualityStatusModelFailedChecksStatuses",
-    "TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty",
     "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableListModel",

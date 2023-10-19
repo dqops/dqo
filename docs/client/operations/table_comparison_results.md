@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\models\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\models\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 
@@ -84,7 +84,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](\docs\client\models\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)||[TableComparisonResultsModel](\docs\client\models\table_comparison_results\#tablecomparisonresultsmodel)|
 
 
 

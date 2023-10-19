@@ -27,7 +27,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Rule model|[RuleModel](\docs\client\models\#rulemodel)|false|
+|Rule model|[RuleModel](\docs\client\models\rules\#rulemodel)|false|
 
 
 
@@ -92,7 +92,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_model](\docs\client\models\#rulemodel)||[RuleModel](\docs\client\models\#rulemodel)|
+|[rule_model](\docs\client\models\rules\#rulemodel)||[RuleModel](\docs\client\models\rules\#rulemodel)|
 
 
 
@@ -156,7 +156,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|List of rule definitions|[RuleModel](\docs\client\models\#rulemodel)|false|
+|List of rule definitions|[RuleModel](\docs\client\models\rules\#rulemodel)|false|
 
 
 

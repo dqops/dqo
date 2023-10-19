@@ -50,6 +50,23 @@ Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryM
 
 ___  
 
+## IncidentDailyIssuesCount  
+A model that stores a daily number of incidents.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|warnings|The number of failed data quality checks that generated a warning severity data quality issue.|integer|
+|errors|The number of failed data quality checks that generated an error severity data quality issue.|integer|
+|fatals|The number of failed data quality checks that generated a fatal severity data quality issue.|integer|
+|total_count|The total count of failed data quality checks on this day.|integer|
+
+
+___  
+
 ## IncidentIssueHistogramModel  
 Model that returns histograms of the data quality issue occurrences related to a data quality incident.
  The dates in the daily histogram are using the default timezone of the DQOps server.  
@@ -60,6 +77,9 @@ Model that returns histograms of the data quality issue occurrences related to a
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Map&lt;date, [IncidentDailyIssuesCount](#incidentdailyissuescount)&gt;|
+|columns|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Map&lt;string, integer&gt;|
+|checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Map&lt;string, integer&gt;|
 
 
 ___  
@@ -103,7 +123,7 @@ Data quality incident model shown on an incident details screen.
 |minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer|
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string|
-|status|Incident status.|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|
+|[status](\docs\client\models\incidents\#incidentstatus)|Incident status.|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|
 
 
 ___  

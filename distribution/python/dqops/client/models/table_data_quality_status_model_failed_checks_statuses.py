@@ -3,9 +3,7 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.table_data_quality_status_model_failed_checks_statuses_additional_property import (
-    TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
-)
+from ..models.check_result_status import CheckResultStatus
 
 T = TypeVar("T", bound="TableDataQualityStatusModelFailedChecksStatuses")
 
@@ -18,9 +16,9 @@ class TableDataQualityStatusModelFailedChecksStatuses:
 
     """
 
-    additional_properties: Dict[
-        str, TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty
-    ] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, CheckResultStatus] = _attrs_field(
+        init=False, factory=dict
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         field_dict: Dict[str, Any] = {}
@@ -38,11 +36,7 @@ class TableDataQualityStatusModelFailedChecksStatuses:
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
-            additional_property = (
-                TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty(
-                    prop_dict
-                )
-            )
+            additional_property = CheckResultStatus(prop_dict)
 
             additional_properties[prop_name] = additional_property
 
@@ -55,16 +49,10 @@ class TableDataQualityStatusModelFailedChecksStatuses:
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(
-        self, key: str
-    ) -> TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty:
+    def __getitem__(self, key: str) -> CheckResultStatus:
         return self.additional_properties[key]
 
-    def __setitem__(
-        self,
-        key: str,
-        value: TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
-    ) -> None:
+    def __setitem__(self, key: str, value: CheckResultStatus) -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

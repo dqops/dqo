@@ -56,14 +56,11 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     public List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels) {
         Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
 
-        List<ComponentModel> subModels = componentModels.stream()
-                .filter(componentModel -> componentModel.getDocsLink() == null)
-                .collect(Collectors.toList());
         List<ComponentModel> exclusiveModels = componentModels.stream()
                 .filter(this::isComponentModelExclusive)
                 .collect(Collectors.toList());
 
-        Map<String, List<ComponentModel>> modelsForController = new HashMap<>();
+        Map<String, List<ComponentModel>> modelsForController = new TreeMap<>();
         for (ComponentModel model : exclusiveModels) {
             String controllerName = getControllerNameFromDocsLink(model.getDocsLink());
             if (!modelsForController.containsKey(controllerName)) {
@@ -74,6 +71,9 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
         List<ModelsSuperiorObjectDocumentationModel> documentationModels = new ArrayList<>();
         for (Map.Entry<String, List<ComponentModel>> controllerModelsEntry : modelsForController.entrySet()) {
+            List<ComponentModel> subModels = componentModels.stream()
+                    .filter(componentModel -> componentModel.getDocsLink() == null)
+                    .collect(Collectors.toList());
             String controllerName = controllerModelsEntry.getKey();
             List<ComponentModel> controllerModels = controllerModelsEntry.getValue();
             controllerModels.sort(Comparator.comparing(ComponentModel::getClassName));
@@ -160,10 +160,6 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
         return modelsSuperiorObjectDocumentationModel;
     }
 
-    private String getObjectSimpleName(String name) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-    }
-
     /**
      * Create a yaml documentation in recursive for given class and add them to map.
      *
@@ -205,7 +201,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             modelsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
             modelsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
             modelsObjectDocumentationModel.setObjectClassPath(
-                    Path.of("/docs/client/models/").resolve("#" + classInfo.getReflectedClass().getSimpleName())
+                    Path.of(absoluteFilePathToRef("/docs/client/models/" + destinationPath))
+                            .resolve("#" + classInfo.getReflectedClass().getSimpleName())
             );
 
             for (FieldInfo info : infoFields) {
@@ -275,7 +272,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                                                                                              TypeModel typeModel,
                                                                                              Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects,
                                                                                              Map<String, ComponentModel> componentModelMap) {
-        if (typeModel.getObjectDataType() == ObjectDataType.object_type) {
+        if (typeModel.getDataType() == ParameterDataType.enum_type || typeModel.getObjectDataType() == ObjectDataType.object_type) {
             return generateModelObjectDocumentationModelRecursive(destinationPath, typeModel.getClazz(), visitedObjects, componentModelMap);
         } else {
             return new ArrayList<>();
@@ -300,17 +297,17 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             if (componentModel != null && componentModel.getDocsLink() != null) {
                 typeModel.setClassUsedOnTheFieldPath(componentModel.getDocsLink().toString());
             } else {
-                typeModel.setClassUsedOnTheFieldPath("#" + typeModel.getClassNameUsedOnTheField());
+                typeModel.setClassUsedOnTheFieldPath("#" + clazz.getSimpleName());
             }
         }
 
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType(clazz, genericType, fieldInfoContainer);
 
+        String classSimpleName = clazz.getSimpleName();
+        typeModel.setClassNameUsedOnTheField(classSimpleName);
         typeModel.setClazz(clazz);
         typeModel.setDataType(parameterDataType);
         typeModel.setObjectDataType(fieldInfoContainer.getObjectDataType());
-        String classSimpleName = clazz.getSimpleName();
-        typeModel.setClassNameUsedOnTheField(classSimpleName);
 
         if (parameterDataType == ParameterDataType.object_type ||
                 (parameterDataType == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {

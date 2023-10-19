@@ -86,7 +86,7 @@ public class HandlebarsDocumentationUtilities {
             if (displayText != null) {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
-                if (typeModel.getObjectDataType() == ObjectDataType.object_type) {
+                if (isSimpleObject(typeModel) || isLinkableEnum(typeModel)) {
                     templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
                 } else {
                     templateToReturn = "%s";
@@ -94,8 +94,7 @@ public class HandlebarsDocumentationUtilities {
                 return templateToReturn.formatted(displayText);
             }
 
-            if (typeModel.getDataType() != ParameterDataType.object_type &&
-                    !(typeModel.getDataType() == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {
+            if (!isObject(typeModel) && !isLinkableEnum(typeModel)) {
                 // Simple types
                 String dataTypeString = typeModel.getDataType().toString();
                 return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
@@ -112,6 +111,17 @@ public class HandlebarsDocumentationUtilities {
                     return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
                             "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
             }
+        }
+
+        private boolean isLinkableEnum(TypeModel typeModel) {
+            return typeModel.getDataType() == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null;
+        }
+
+        private boolean isObject(TypeModel typeModel) {
+            return typeModel.getDataType() == ParameterDataType.object_type;
+        }
+        private boolean isSimpleObject(TypeModel typeModel) {
+            return isObject(typeModel) && typeModel.getObjectDataType() == ObjectDataType.object_type;
         }
     };
 }

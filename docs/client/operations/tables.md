@@ -80,7 +80,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_model](\docs\client\models\#tablemodel)||[TableModel](\docs\client\models\#tablemodel)|
+|[table_model](\docs\client\models\tables\#tablemodel)||[TableModel](\docs\client\models\tables\#tablemodel)|
 
 
 
@@ -112,7 +112,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_list_model](\docs\client\models\#tablelistmodel)||[TableListModel](\docs\client\models\#tablelistmodel)|
+|[table_list_model](\docs\client\models\tables\#tablelistmodel)||[TableListModel](\docs\client\models\tables\#tablelistmodel)|
 
 
 
@@ -292,7 +292,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_daily_monitoring_check_categories_spec](\docs\client\models\#tabledailymonitoringcheckcategoriesspec)||[TableDailyMonitoringCheckCategoriesSpec](\docs\client\models\#tabledailymonitoringcheckcategoriesspec)|
+|[table_daily_monitoring_check_categories_spec](\docs\client\models\tables\#tabledailymonitoringcheckcategoriesspec)||[TableDailyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tabledailymonitoringcheckcategoriesspec)|
 
 
 
@@ -324,7 +324,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_daily_partitioned_check_categories_spec](\docs\client\models\#tabledailypartitionedcheckcategoriesspec)||[TableDailyPartitionedCheckCategoriesSpec](\docs\client\models\#tabledailypartitionedcheckcategoriesspec)|
+|[table_daily_partitioned_check_categories_spec](\docs\client\models\tables\#tabledailypartitionedcheckcategoriesspec)||[TableDailyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tabledailypartitionedcheckcategoriesspec)|
 
 
 
@@ -553,7 +553,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_monthly_monitoring_check_categories_spec](\docs\client\models\#tablemonthlymonitoringcheckcategoriesspec)||[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\#tablemonthlymonitoringcheckcategoriesspec)|
+|[table_monthly_monitoring_check_categories_spec](\docs\client\models\tables\#tablemonthlymonitoringcheckcategoriesspec)||[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlymonitoringcheckcategoriesspec)|
 
 
 
@@ -721,7 +721,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_monthly_partitioned_check_categories_spec](\docs\client\models\#tablemonthlypartitionedcheckcategoriesspec)||[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\#tablemonthlypartitionedcheckcategoriesspec)|
+|[table_monthly_partitioned_check_categories_spec](\docs\client\models\tables\#tablemonthlypartitionedcheckcategoriesspec)||[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlypartitionedcheckcategoriesspec)|
 
 
 
@@ -788,7 +788,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_partitioning_model](\docs\client\models\#tablepartitioningmodel)||[TablePartitioningModel](\docs\client\models\#tablepartitioningmodel)|
+|[table_partitioning_model](\docs\client\models\tables\#tablepartitioningmodel)||[TablePartitioningModel](\docs\client\models\tables\#tablepartitioningmodel)|
 
 
 
@@ -820,7 +820,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_profiling_check_categories_spec](\docs\client\models\#tableprofilingcheckcategoriesspec)||[TableProfilingCheckCategoriesSpec](\docs\client\models\#tableprofilingcheckcategoriesspec)|
+|[table_profiling_check_categories_spec](\docs\client\models\tables\#tableprofilingcheckcategoriesspec)||[TableProfilingCheckCategoriesSpec](\docs\client\models\tables\#tableprofilingcheckcategoriesspec)|
 
 
 
@@ -1017,7 +1017,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_statistics_model](\docs\client\models\#tablestatisticsmodel)||[TableStatisticsModel](\docs\client\models\#tablestatisticsmodel)|
+|[table_statistics_model](\docs\client\models\tables\#tablestatisticsmodel)||[TableStatisticsModel](\docs\client\models\tables\#tablestatisticsmodel)|
 
 
 
@@ -1049,7 +1049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_list_model](\docs\client\models\#tablelistmodel)||[TableListModel](\docs\client\models\#tablelistmodel)|
+|[table_list_model](\docs\client\models\tables\#tablelistmodel)||[TableListModel](\docs\client\models\tables\#tablelistmodel)|
 
 
 
@@ -1125,7 +1125,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Table basic model with the updated settings|[TableListModel](\docs\client\models\#tablelistmodel)|false|
+|Table basic model with the updated settings|[TableListModel](\docs\client\models\tables\#tablelistmodel)|false|
 
 
 
@@ -1189,7 +1189,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableDailyMonitoringCheckCategoriesSpec](\docs\client\models\#tabledailymonitoringcheckcategoriesspec)|false|
+|Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableDailyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tabledailymonitoringcheckcategoriesspec)|false|
 
 
 
@@ -1350,7 +1350,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\#tablemonthlymonitoringcheckcategoriesspec)|false|
+|Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableMonthlyMonitoringCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlymonitoringcheckcategoriesspec)|false|
 
 
 
@@ -1382,7 +1382,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableDailyPartitionedCheckCategoriesSpec](\docs\client\models\#tabledailypartitionedcheckcategoriesspec)|false|
+|Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableDailyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tabledailypartitionedcheckcategoriesspec)|false|
 
 
 
@@ -1447,7 +1447,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\#tablemonthlypartitionedcheckcategoriesspec)|false|
+|Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableMonthlyPartitionedCheckCategoriesSpec](\docs\client\models\tables\#tablemonthlypartitionedcheckcategoriesspec)|false|
 
 
 
@@ -1479,7 +1479,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Table partitioning model with the updated settings|[TablePartitioningModel](\docs\client\models\#tablepartitioningmodel)|false|
+|Table partitioning model with the updated settings|[TablePartitioningModel](\docs\client\models\tables\#tablepartitioningmodel)|false|
 
 
 
@@ -1511,7 +1511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).|[TableProfilingCheckCategoriesSpec](\docs\client\models\#tableprofilingcheckcategoriesspec)|false|
+|Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).|[TableProfilingCheckCategoriesSpec](\docs\client\models\tables\#tableprofilingcheckcategoriesspec)|false|
 
 
 

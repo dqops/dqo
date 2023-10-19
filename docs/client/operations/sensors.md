@@ -27,7 +27,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Dictionary of sensor definitions|[SensorModel](\docs\client\models\#sensormodel)|false|
+|Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
 
 
@@ -92,7 +92,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_model](\docs\client\models\#sensormodel)||[SensorModel](\docs\client\models\#sensormodel)|
+|[sensor_model](\docs\client\models\sensors\#sensormodel)||[SensorModel](\docs\client\models\sensors\#sensormodel)|
 
 
 
@@ -157,7 +157,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|Dictionary of sensor definitions|[SensorModel](\docs\client\models\#sensormodel)|false|
+|Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
 
 

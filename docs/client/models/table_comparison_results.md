@@ -28,8 +28,8 @@ The table comparison result model with the summary information about the most re
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|table_comparison_results|The dictionary of comparison results between the tables for table level comparisons (the row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.|Map&lt;string, [ComparisonCheckResultModel](#null)&gt;|
-|column_comparison_results|The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.|Map&lt;string, Map&lt;string, [ComparisonCheckResultModel](\docs\client\models\#comparisoncheckresultmodel)&gt;&gt;|
+|table_comparison_results|The dictionary of comparison results between the tables for table level comparisons (the row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.|Map&lt;string, [ComparisonCheckResultModel](#comparisoncheckresultmodel)&gt;|
+|column_comparison_results|The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.|Map&lt;string, Map&lt;string, [ComparisonCheckResultModel](\docs\client\models\table_comparison_results\#comparisoncheckresultmodel)&gt;&gt;|
 
 
 ___  

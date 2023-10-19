@@ -221,7 +221,7 @@ public class ReflectionServiceImpl implements ReflectionService {
         } else if (fieldType.isEnum()) {
             parameterDataType = ParameterDataType.enum_type;
             fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
-        } else if (fieldType == List.class) {
+        } else if (isClassList(fieldType) && isJavaClass(fieldType)) {
             Type listParameterType = genericType.getActualTypeArguments()[0];
             if (listParameterType == String.class) {
                 parameterDataType = ParameterDataType.string_list_type;
@@ -243,7 +243,7 @@ public class ReflectionServiceImpl implements ReflectionService {
                 parameterDataType = ParameterDataType.object_type;
                 fieldInfo.setObjectDataType(ObjectDataType.list_type);
             }
-        } else if (fieldType == Map.class) {
+        } else if (isClassMap(fieldType) && isJavaClass(fieldType)) {
             parameterDataType = ParameterDataType.object_type;
             fieldInfo.setObjectDataType(ObjectDataType.map_type);
         } else {
@@ -258,6 +258,18 @@ public class ReflectionServiceImpl implements ReflectionService {
 
         fieldInfo.setGenericDataType(genericType);
         return parameterDataType;
+    }
+
+    private boolean isJavaClass(Class<?> clazz) {
+        return clazz.getClassLoader() == null;
+    }
+
+    private boolean isClassList(Class<?> clazz) {
+        return List.class.isAssignableFrom(clazz);
+    }
+
+    private boolean isClassMap(Class<?> clazz) {
+        return Map.class.isAssignableFrom(clazz);
     }
 
     /**

@@ -95,15 +95,15 @@ Model containing fundamental configuration of a single data quality check.
 |schema_name|Schema name.|string|
 |table_name|Table name.|string|
 |column_name|Column name, if the check is set up on a column.|string|
-|check_target|Check target (table or column).|[CheckTarget](\docs\client\models\schemas\#checktarget)|
-|check_type|Check type (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|
-|check_time_scale|Category to which this check belongs.|[CheckTimeScale](\docs\client\models\#checktimescale)|
+|[check_target](\docs\client\models\schemas\#checktarget)|Check target (table or column).|[CheckTarget](\docs\client\models\schemas\#checktarget)|
+|[check_type](\docs\client\models\#checktype)|Check type (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|
+|[check_time_scale](\docs\client\models\#checktimescale)|Category to which this check belongs.|[CheckTimeScale](\docs\client\models\#checktimescale)|
 |category_name|Category to which this check belongs.|string|
 |check_name|Check name that is used in YAML file.|string|
-|sensor_parameters|List of fields for editing the sensor parameters.|List&lt;[FieldModel](#null)&gt;|
+|sensor_parameters|List of fields for editing the sensor parameters.|List&lt;[FieldModel](#fieldmodel)&gt;|
 |table_level_filter|SQL WHERE clause added to the sensor query for every check on this table.|string|
 |sensor_level_filter|SQL WHERE clause added to the sensor query for this check.|string|
-|[warning](#null)|Rule parameters for the warning severity rule.|[RuleParametersModel](#null)|
+|[warning](#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](#ruleparametersmodel)|
 |[error](\docs\client\models\#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](\docs\client\models\#ruleparametersmodel)|
 |[fatal](\docs\client\models\#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](\docs\client\models\#ruleparametersmodel)|
 |disabled|Whether the check has been disabled.|boolean|
@@ -138,7 +138,7 @@ Simplistic model that returns the list of data quality checks, their names, cate
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|checks|Simplistic list of all data quality checks.|List&lt;[CheckListModel](#null)&gt;|
+|checks|Simplistic list of all data quality checks.|List&lt;[CheckListModel](#checklistmodel)&gt;|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
@@ -212,8 +212,8 @@ Model of a configured schedule (on connection or table) or schedule override (on
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schedule_group|Field value for a schedule group to which this schedule belongs.|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|
-|schedule_level|Field value for the level at which the schedule has been configured.|[EffectiveScheduleLevelModel](#null)|
+|[schedule_group](\docs\client\models\#checkrunschedulegroup)|Field value for a schedule group to which this schedule belongs.|[CheckRunScheduleGroup](\docs\client\models\#checkrunschedulegroup)|
+|[schedule_level](#effectiveschedulelevelmodel)|Field value for the level at which the schedule has been configured.|[EffectiveScheduleLevelModel](#effectiveschedulelevelmodel)|
 |cron_expression|Field value for a CRON expression defining the scheduling.|string|
 |disabled|Field value stating if the schedule has been explicitly disabled.|boolean|
 
@@ -275,9 +275,9 @@ Hierarchy node search filters.
 |column_name||string|
 |column_data_type||string|
 |column_nullable||boolean|
-|check_target||[CheckTarget](\docs\client\models\#checktarget)|
-|check_type||[CheckType](\docs\client\models\#checktype)|
-|time_scale||[CheckTimeScale](\docs\client\models\#checktimescale)|
+|[check_target](\docs\client\models\#checktarget)||[CheckTarget](\docs\client\models\#checktarget)|
+|[check_type](\docs\client\models\#checktype)||[CheckType](\docs\client\models\#checktype)|
+|[time_scale](\docs\client\models\#checktimescale)||[CheckTimeScale](\docs\client\models\#checktimescale)|
 |check_category||string|
 |table_comparison_name||string|
 |check_name||string|
@@ -345,9 +345,9 @@ Describes a single check that is similar to other checks in other check types.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_target|The check target (table or column).|[CheckTarget](\docs\client\models\#checktarget)|
-|check_type|The check type.|[CheckType](\docs\client\models\#checktype)|
-|time_scale|The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).|[CheckTimeScale](\docs\client\models\#checktimescale)|
+|[check_target](\docs\client\models\#checktarget)|The check target (table or column).|[CheckTarget](\docs\client\models\#checktarget)|
+|[check_type](\docs\client\models\#checktype)|The check type.|[CheckType](\docs\client\models\#checktype)|
+|[time_scale](\docs\client\models\#checktimescale)|The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).|[CheckTimeScale](\docs\client\models\#checktimescale)|
 |category|The check&#x27;s category.|string|
 |check_name|The similar check name in another category.|string|
 
@@ -368,24 +368,24 @@ Model that returns the form definition and the form data to edit a single data q
 |sensor_parameters|List of fields for editing the sensor parameters.|List&lt;[FieldModel](\docs\client\models\#fieldmodel)&gt;|
 |sensor_name|Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.|string|
 |quality_dimension|Data quality dimension used for tagging the results of this data quality checks.|string|
-|[rule](#null)|Threshold (alerting) rules defined for a check.|[RuleThresholdsModel](#null)|
+|[rule](#rulethresholdsmodel)|Threshold (alerting) rules defined for a check.|[RuleThresholdsModel](#rulethresholdsmodel)|
 |supports_grouping|The data quality check supports a custom data grouping configuration.|boolean|
 |[data_grouping_override](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|
 |[schedule_override](\docs\client\models\#monitoringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|
-|[effective_schedule](#null)|Model of configured schedule enabled on the check level.|[EffectiveScheduleModel](#null)|
-|schedule_enabled_status|State of the scheduling override for this check.|[ScheduleEnabledStatusModel](#null)|
-|[comments](#null)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#null)|
+|[effective_schedule](#effectiveschedulemodel)|Model of configured schedule enabled on the check level.|[EffectiveScheduleModel](#effectiveschedulemodel)|
+|[schedule_enabled_status](#scheduleenabledstatusmodel)|State of the scheduling override for this check.|[ScheduleEnabledStatusModel](#scheduleenabledstatusmodel)|
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)|
 |disabled|Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean|
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean|
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean|
 |configured|True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.|boolean|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string|
-|[run_checks_job_template](#null)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#null)|
+|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#checksearchfilters)|
 |[data_clean_job_template](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[DeleteStoredDataQueueJobParameters](\docs\client\models\jobs\#deletestoreddataqueuejobparameters)|
 |data_grouping_configuration|The name of a data grouping configuration defined at a table that should be used for this check.|string|
-|check_target|Type of the check&#x27;s target (column, table).|[CheckTargetModel](#null)|
+|[check_target](#checktargetmodel)|Type of the check&#x27;s target (column, table).|[CheckTargetModel](#checktargetmodel)|
 |configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|string_list|
-|similar_checks|List of similar checks in other check types or in other time scales.|List&lt;[SimilarCheckModel](#null)&gt;|
+|similar_checks|List of similar checks in other check types or in other time scales.|List&lt;[SimilarCheckModel](#similarcheckmodel)&gt;|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
@@ -406,7 +406,7 @@ Model that returns the form definition and the form data to edit all checks with
 |comparison_name|The name of the reference table configuration used for a cross table data comparison (when the category is &#x27;comparisons&#x27;).|string|
 |compare_to_column|The name of the column in the reference table that is compared.|string|
 |help_text|Help text that describes the category.|string|
-|checks|List of data quality checks within the category.|List&lt;[CheckModel](#null)&gt;|
+|checks|List of data quality checks within the category.|List&lt;[CheckModel](#checkmodel)&gt;|
 |[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
 |[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this quality category.|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
 
@@ -422,9 +422,9 @@ Model that returns the form definition and the form data to edit all data qualit
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|categories|List of all data quality categories that contain data quality checks inside.|List&lt;[QualityCategoryModel](#null)&gt;|
+|categories|List of all data quality categories that contain data quality checks inside.|List&lt;[QualityCategoryModel](#qualitycategorymodel)&gt;|
 |[effective_schedule](\docs\client\models\#effectiveschedulemodel)|Model of configured schedule enabled on the check container.|[EffectiveScheduleModel](\docs\client\models\#effectiveschedulemodel)|
-|effective_schedule_enabled_status|State of the effective scheduling on the check container.|[ScheduleEnabledStatusModel](\docs\client\models\#scheduleenabledstatusmodel)|
+|[effective_schedule_enabled_status](\docs\client\models\#scheduleenabledstatusmodel)|State of the effective scheduling on the check container.|[ScheduleEnabledStatusModel](\docs\client\models\#scheduleenabledstatusmodel)|
 |partition_by_column|The name of the column that partitioned checks will use for the time period partitioning. Important only for partitioned checks.|string|
 |[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
 |[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
@@ -444,8 +444,8 @@ Model identifying the check type and timescale of checks belonging to a containe
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_type|Check type.|[CheckType](\docs\client\models\#checktype)|
-|check_time_scale|Check timescale.|[CheckTimeScale](\docs\client\models\#checktimescale)|
+|[check_type](\docs\client\models\#checktype)|Check type.|[CheckType](\docs\client\models\#checktype)|
+|[check_time_scale](\docs\client\models\#checktimescale)|Check timescale.|[CheckTimeScale](\docs\client\models\#checktimescale)|
 
 
 ___  
@@ -459,11 +459,11 @@ Model depicting a named data quality check that can potentially be enabled, rega
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_target|Check target (table, column)|[CheckTarget](\docs\client\models\#checktarget)|
+|[check_target](\docs\client\models\#checktarget)|Check target (table, column)|[CheckTarget](\docs\client\models\#checktarget)|
 |check_category|Data quality check category.|string|
 |check_name|Data quality check name that is used in YAML.|string|
 |help_text|Help text that describes the data quality check.|string|
-|[check_container_type](#null)|Check type with time-scale.|[CheckContainerTypeModel](#null)|
+|[check_container_type](#checkcontainertypemodel)|Check type with time-scale.|[CheckContainerTypeModel](#checkcontainertypemodel)|
 |sensor_name|Full sensor name.|string|
 |sensor_parameters_definitions|List of sensor parameter fields definitions.|List&lt;[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)&gt;|
 |rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List&lt;[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)&gt;|
@@ -510,7 +510,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |collector_name||string|
 |sensor_name||string|
 |collector_category||string|
-|target||[StatisticsCollectorTarget](#null)|
+|[target](#statisticscollectortarget)||[StatisticsCollectorTarget](#statisticscollectortarget)|
 |connection_name||string|
 |schema_table_name||string|
 |enabled||boolean|
@@ -530,7 +530,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |connection_name|Connection name.|string|
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long|
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer|
-|provider_type|Database provider type (required). Accepts: bigquery, snowflake.|[ProviderType](#null)|
+|[provider_type](#providertype)|Database provider type (required). Accepts: bigquery, snowflake.|[ProviderType](#providertype)|
 |[bigquery](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|
 |[snowflake](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|Snowflake connection parameters.|[SnowflakeParametersSpec](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|
 |[postgresql](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|PostgreSQL connection parameters.|[PostgresqlParametersSpec](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|

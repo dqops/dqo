@@ -39,7 +39,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
 
 
 
@@ -71,7 +71,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
 
 
 
@@ -104,7 +104,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
 
 
 
@@ -138,7 +138,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
 
 
 
@@ -173,7 +173,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
 
 
 

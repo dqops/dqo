@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 
@@ -57,7 +57,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 
@@ -98,7 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 
@@ -138,7 +138,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 
@@ -178,7 +178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 
@@ -218,7 +218,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_readouts_list_model](\docs\client\models\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\#sensorreadoutslistmodel)|
+|[sensor_readouts_list_model](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)||[SensorReadoutsListModel](\docs\client\models\sensor_readouts\#sensorreadoutslistmodel)|
 
 
 

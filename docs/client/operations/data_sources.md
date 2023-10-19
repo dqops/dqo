@@ -16,7 +16,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schema_remote_model](\docs\client\models\#schemaremotemodel)||[SchemaRemoteModel](\docs\client\models\#schemaremotemodel)|
+|[schema_remote_model](\docs\client\models\data_sources\#schemaremotemodel)||[SchemaRemoteModel](\docs\client\models\data_sources\#schemaremotemodel)|
 
 
 
@@ -46,7 +46,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[remote_table_list_model](\docs\client\models\#remotetablelistmodel)||[RemoteTableListModel](\docs\client\models\#remotetablelistmodel)|
+|[remote_table_list_model](\docs\client\models\data_sources\#remotetablelistmodel)||[RemoteTableListModel](\docs\client\models\data_sources\#remotetablelistmodel)|
 
 
 
@@ -77,7 +77,7 @@ http://localhost:8888/api/datasource/testconnection
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_model](\docs\client\models\#connectiontestmodel)||[ConnectionTestModel](\docs\client\models\#connectiontestmodel)|
+|[connection_test_model](\docs\client\models\data_sources\#connectiontestmodel)||[ConnectionTestModel](\docs\client\models\data_sources\#connectiontestmodel)|
 
 
 

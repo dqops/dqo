@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class CheckResultsOverviewDataModelStatusesItem(str, Enum):
+class CheckResultStatus(str, Enum):
     ERROR = "error"
     EXECUTION_ERROR = "execution_error"
     FATAL = "fatal"

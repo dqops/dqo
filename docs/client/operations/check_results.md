@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 
@@ -57,7 +57,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 
@@ -98,7 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 
@@ -138,7 +138,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_data_quality_status_model](\docs\client\models\#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](\docs\client\models\#tabledataqualitystatusmodel)|
+|[table_data_quality_status_model](\docs\client\models\check_results\#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](\docs\client\models\check_results\#tabledataqualitystatusmodel)|
 
 
 
@@ -173,7 +173,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 
@@ -213,7 +213,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 
@@ -253,7 +253,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_list_model](\docs\client\models\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\#checkresultslistmodel)|
+|[check_results_list_model](\docs\client\models\check_results\#checkresultslistmodel)||[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)|
 
 
 

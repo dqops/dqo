@@ -73,7 +73,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|User model|[DqoCloudUserModel](\docs\client\models\#dqocloudusermodel)|false|
+|User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
 
 
@@ -115,7 +115,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](\docs\client\models\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\#dqocloudusermodel)|
+|[dqo_cloud_user_model](\docs\client\models\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|
 
 
 
@@ -138,7 +138,7 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](\docs\client\models\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\#dqocloudusermodel)|
+|[dqo_cloud_user_model](\docs\client\models\users\#dqocloudusermodel)||[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|
 
 
 
@@ -179,7 +179,7 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|----------|
-|User model|[DqoCloudUserModel](\docs\client\models\#dqocloudusermodel)|false|
+|User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
 
 

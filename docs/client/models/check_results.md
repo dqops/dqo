@@ -20,6 +20,19 @@ Check detailed results. Returned in the context of a single data group, with a s
 
 ___  
 
+## CheckResultStatus  
+Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>execution_error<br/>error<br/>fatal<br/>|
+
+___  
+
 ## TableDataQualityStatusModel  
 The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.  
   
@@ -39,7 +52,7 @@ The table validity status. It is a summary of the results of the most recently e
 |errors|The number of most recent data quality checks that failed by raising an error severity data quality issue.|integer|
 |fatals|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|integer|
 |execution_errors|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.|integer|
-|failed_checks_statuses|The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].|Map&lt;string, [CheckResultStatus](#null)&gt;|
+|failed_checks_statuses|The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].|Map&lt;string, [CheckResultStatus](#checkresultstatus)&gt;|
 
 
 ___  

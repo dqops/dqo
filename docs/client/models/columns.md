@@ -57,8 +57,8 @@ Container of column level daily monitoring checks. Contains categories of daily 
 |[datatype](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatatypedailymonitoringchecksspec)|Daily monitoring checks of datatype in the column|[ColumnDatatypeDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columndatatypedailymonitoringchecksspec)|
 |[anomaly](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnanomalydailymonitoringchecksspec)|Daily monitoring checks of anomaly in the column|[ColumnAnomalyDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnanomalydailymonitoringchecksspec)|
 |[schema](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnschemadailymonitoringchecksspec)|Daily monitoring column schema checks|[ColumnSchemaDailyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-daily-monitoring-checks\#columnschemadailymonitoringchecksspec)|
-|[comparisons](#null)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyMonitoringChecksSpecMap](#null)|
-|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
+|[comparisons](#columncomparisondailymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyMonitoringChecksSpecMap](#columncomparisondailymonitoringchecksspecmap)|
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
 
 
 ___  
@@ -103,8 +103,23 @@ Container of data quality partitioned checks on a column level that are checking
 |[accuracy](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columnaccuracydailypartitionedchecksspec)|Daily partitioned checks for accuracy in the column|[ColumnAccuracyDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columnaccuracydailypartitionedchecksspec)|
 |[datatype](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columndatatypedailypartitionedchecksspec)|Daily partitioned checks for datatype in the column|[ColumnDatatypeDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columndatatypedailypartitionedchecksspec)|
 |[anomaly](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columnanomalydailypartitionedchecksspec)|Daily partitioned checks for anomaly in the column|[ColumnAnomalyDailyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-daily-partitioned-checks\#columnanomalydailypartitionedchecksspec)|
-|[comparisons](#null)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyPartitionedChecksSpecMap](#null)|
-|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
+|[comparisons](#columncomparisondailypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyPartitionedChecksSpecMap](#columncomparisondailypartitionedchecksspecmap)|
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
+
+
+___  
+
+## PhysicalTableName  
+Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|schema_name|Schema name|string|
+|table_name|Table name|string|
 
 
 ___  
@@ -119,7 +134,7 @@ Column list model that returns the basic fields from a column specification, exc
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[table](#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](#physicaltablename)|
 |column_name|Column names.|string|
 |sql_expression|SQL expression.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
@@ -153,7 +168,7 @@ Table model that returns the specification of a single column in the REST Api.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[table](\docs\client\models\columns\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\columns\#physicaltablename)|
 |column_name|Column name.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
 |[spec](\docs\reference\yaml\tableyaml\#columnspec)|Full column specification.|[ColumnSpec](\docs\reference\yaml\tableyaml\#columnspec)|
@@ -203,8 +218,8 @@ Container of column level monthly monitoring checks. Contains categories of mont
 |[datatype](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatatypemonthlymonitoringchecksspec)|Monthly monitoring checks of datatype in the column|[ColumnDatatypeMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columndatatypemonthlymonitoringchecksspec)|
 |[anomaly](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnanomalymonthlymonitoringchecksspec)|Monthly monitoring checks of anomaly in the column|[ColumnAnomalyMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnanomalymonthlymonitoringchecksspec)|
 |[schema](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnschemamonthlymonitoringchecksspec)|Monthly monitoring column schema checks|[ColumnSchemaMonthlyMonitoringChecksSpec](\docs\reference\yaml\monitoring\column-monthly-monitoring-checks\#columnschemamonthlymonitoringchecksspec)|
-|[comparisons](#null)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyMonitoringChecksSpecMap](#null)|
-|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
+|[comparisons](#columncomparisonmonthlymonitoringchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyMonitoringChecksSpecMap](#columncomparisonmonthlymonitoringchecksspecmap)|
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
 
 
 ___  
@@ -249,8 +264,8 @@ Container of data quality partitioned checks on a column level that are checking
 |[accuracy](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columnaccuracymonthlypartitionedchecksspec)|Monthly partitioned checks for accuracy in the column|[ColumnAccuracyMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columnaccuracymonthlypartitionedchecksspec)|
 |[datatype](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columndatatypemonthlypartitionedchecksspec)|Monthly partitioned checks for datatype in the column|[ColumnDatatypeMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columndatatypemonthlypartitionedchecksspec)|
 |[anomaly](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columnanomalymonthlypartitionedchecksspec)|Monthly partitioned checks for anomaly in the column|[ColumnAnomalyMonthlyPartitionedChecksSpec](\docs\reference\yaml\partitioned\column-monthly-partitioned-checks\#columnanomalymonthlypartitionedchecksspec)|
-|[comparisons](#null)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyPartitionedChecksSpecMap](#null)|
-|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
+|[comparisons](#columncomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyPartitionedChecksSpecMap](#columncomparisonmonthlypartitionedchecksspecmap)|
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
 
 
 ___  
@@ -296,8 +311,8 @@ Container of column level, preconfigured checks.
 |[datatype](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)|Configuration of datatype checks on a column level.|[ColumnDatatypeProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columndatatypeprofilingchecksspec)|
 |[anomaly](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)|Configuration of anomaly checks on a column level.|[ColumnAnomalyProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnanomalyprofilingchecksspec)|
 |[schema](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)|Configuration of schema checks on a column level.|[ColumnSchemaProfilingChecksSpec](\docs\reference\yaml\profiling\column-profiling-checks\#columnschemaprofilingchecksspec)|
-|[comparisons](#null)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonProfilingChecksSpecMap](#null)|
-|[custom](#null)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#null)|
+|[comparisons](#columncomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonProfilingChecksSpecMap](#columncomparisonprofilingchecksspecmap)|
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](#customcheckspecmap)|
 
 
 ___  
@@ -312,7 +327,7 @@ Column model that returns the basic fields from a column specification and a sum
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[table](\docs\client\models\columns\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\columns\#physicaltablename)|
 |column_name|Column name.|string|
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
 |disabled|Disables all data quality checks on the column. Data quality checks will not be executed.|boolean|
@@ -334,7 +349,7 @@ Model that returns a summary of the column statistics (the basic profiling resul
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
-|[table](\docs\client\models\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\#physicaltablename)|
+|[table](\docs\client\models\columns\#physicaltablename)|Physical table name including the schema and table names.|[PhysicalTableName](\docs\client\models\columns\#physicaltablename)|
 |[collect_column_statistics_job_template](\docs\client\models\#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors for all columns on this table.|[StatisticsCollectorSearchFilters](\docs\client\models\#statisticscollectorsearchfilters)|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 

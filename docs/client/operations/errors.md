@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 
@@ -57,7 +57,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 
@@ -98,7 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 
@@ -138,7 +138,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 
@@ -178,7 +178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 
@@ -218,7 +218,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[errors_list_model](\docs\client\models\#errorslistmodel)||[ErrorsListModel](\docs\client\models\#errorslistmodel)|
+|[errors_list_model](\docs\client\models\errors\#errorslistmodel)||[ErrorsListModel](\docs\client\models\errors\#errorslistmodel)|
 
 
 

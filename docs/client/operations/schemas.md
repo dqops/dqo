@@ -239,7 +239,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schema_model](\docs\client\models\#schemamodel)||[SchemaModel](\docs\client\models\#schemamodel)|
+|[schema_model](\docs\client\models\schemas\#schemamodel)||[SchemaModel](\docs\client\models\schemas\#schemamodel)|
 
 
 
