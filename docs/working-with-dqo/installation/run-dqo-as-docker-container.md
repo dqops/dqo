@@ -69,12 +69,18 @@ To start DQO in server mode follow the steps below.
 
 2. Run the DQOps Docker image
     ```
-    docker run -v [enter the path to your local userhome folder]:/dqo/userhome -d -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key] run
+    docker run -v [enter the path to your local userhome folder]:/dqo/userhome -d -m=4g -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key] run
     ```
 
    - The `-v` flag mounts your locally created `DQOps User Home` folder into the container.
      You need to provide the path to your local `DQOps User Home` folder
    - The `-p` flag creates a mapping between the host’s port 8888 to the container’s port 8888. Without the port mapping, you would not be able to access the application.
+   - The `-d` flag turns on a daemon mode
+   - The `-m` parameter configures the memory size for the container. We are advising to allocate at least 1 GB of memory for the DQOps
+     container, which is configured by `-m=1g`. DQOps container runs one Java JVM process and several small Python processes (two per core)
+     that are running the rules. DQOps runtime allocates 80%% of the container memory for the JVM heap. The memory is used for caching
+     YAML and parquet files in memory. The memory size could be changed by passing the `DQO_JAVA_OPTS`
+     environment variable to the container using the following docker run parameter: `-e DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0`
    - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud account](https://cloud.dqops.com/registration).
    - The `run` command at the end will run the [run CLI command](../../command-line-interface/run.md) command and activate a server mode
      without the DQOps Shell.
