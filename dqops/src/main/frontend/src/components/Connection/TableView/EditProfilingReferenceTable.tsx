@@ -16,7 +16,8 @@ import {
   TableComparisonResultsModel,
   DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
-  ComparisonCheckResultModel
+  ComparisonCheckResultModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -179,7 +180,7 @@ export const EditProfilingReferenceTable = ({
     if (!comparisonCategory || !comparisonCategory.checks) {
       return;
     }
-
+    
     const rowCountElem = comparisonCategory.checks.find(
       (c: any) =>
         c.check_name === 'profile_row_count_match' ||
@@ -201,6 +202,7 @@ export const EditProfilingReferenceTable = ({
       setShowColumnCount(!!columnCountElem.configured)
     }
   };
+  console.log(checksUI)
 
   useEffect(() => {
     if (selectedReference) {
@@ -489,11 +491,10 @@ export const EditProfilingReferenceTable = ({
       const res = await JobApiClient.runChecks(
         false,
         undefined,
-        categoryCheck?.run_checks_job_template
-          ? {
-              check_search_filters: categoryCheck?.run_checks_job_template
-            }
-          : undefined
+        { check_search_filters: categoryCheck ? categoryCheck?.run_checks_job_template : 
+        { connectionName: connection, schemaTableName: schema + "." + table,
+         tableComparisonName: reference?.table_comparison_configuration_name, enabled: true,
+         checkCategory: 'comparisons', checkType: checkTypes as CheckSearchFiltersCheckTypeEnum }} 
       );
       dispatch(
         setCurrentJobId(
@@ -538,7 +539,7 @@ export const EditProfilingReferenceTable = ({
   const calculateColor = (
     nameOfCol: string,
     nameOfCheck: string,
-    bool?: boolean
+    type?: 'row_count' | 'column_count' 
   ): string => {
     let newNameOfCheck = '';
     if (checkTypes === CheckTypes.PROFILING) {
@@ -552,34 +553,22 @@ export const EditProfilingReferenceTable = ({
     }
 
     let colorVar = getComparisonResults(nameOfCol)[newNameOfCheck];
-    if (
-      bool &&
-      tableComparisonResults?.table_comparison_results &&
-      tableComparisonResults
-    ) {
-      const comparisonResult = Object.values(
-        tableComparisonResults.table_comparison_results
-      )?.at(0);
-      if (comparisonResult) {
-        colorVar = comparisonResult;
-      }
+    if (type && tableComparisonResults && tableComparisonResults.table_comparison_results) {
+      if (type === 'row_count') {
+        colorVar = Object.values(tableComparisonResults.table_comparison_results)?.at(0) ?? {}
+      } 
+      else if (type === 'column_count') {
+        colorVar = Object.values(tableComparisonResults.table_comparison_results)?.at(1) ?? {}
+      } 
     }
 
-    if (colorVar && colorVar.fatals && Number(colorVar.fatals) !== 0) {
+    if (colorVar?.fatals && Number(colorVar.fatals) !== 0) {
       return 'bg-red-200';
-    } else if (colorVar && colorVar.errors && Number(colorVar.errors) !== 0) {
+    } else if (colorVar?.errors && Number(colorVar.errors) !== 0) {
       return 'bg-orange-200';
-    } else if (
-      colorVar &&
-      colorVar.warnings &&
-      Number(colorVar.warnings) !== 0
-    ) {
+    } else if (colorVar?.warnings && Number(colorVar.warnings) !== 0) {
       return 'bg-yellow-200';
-    } else if (
-      colorVar &&
-      colorVar.valid_results &&
-      Number(colorVar.valid_results) !== 0
-    ) {
+    } else if (colorVar?.valid_results && Number(colorVar.valid_results) !== 0) {
       return 'bg-green-200';
     } else {
       return '';
@@ -669,7 +658,7 @@ export const EditProfilingReferenceTable = ({
                     <tr>
                       <th
                         className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"
-                        onClick={() => settableLevelComparisonExtended(!tableLevelComparisonExtended)}
+                        onClick={() => settableLevelComparisonExtended((prevState) => !prevState)}
                       >
                         {tableLevelComparisonExtended ? (
                           <SvgIcon name="chevron-down" className="w-5 h-5" />
@@ -682,7 +671,7 @@ export const EditProfilingReferenceTable = ({
                       <th
                         className={clsx(
                           'text-center px-0 py-4 pr-2 w-1/12 ',
-                          showRowCount ? calculateColor('', '', true) : ''
+                          showRowCount ? calculateColor('', '', 'row_count') : ''
                         )}
                       >
                         <Checkbox
@@ -695,7 +684,7 @@ export const EditProfilingReferenceTable = ({
                       <th
                         className={clsx(
                           'text-center px-0 py-4 pr-2 w-1/12 ',
-                          showColumnCount && reference.supports_compare_column_count=== true ? calculateColor('', '', true) : ''
+                          showColumnCount && reference.supports_compare_column_count=== true ? calculateColor('', '', 'column_count') : ''
                         )}
                       >
                         {reference.supports_compare_column_count===true ? 

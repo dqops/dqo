@@ -467,8 +467,10 @@ const EditReferenceTable = ({
     ) || (isCreating === true && refConnection.length !== 0 &&
       refSchema.length !== 0 &&
       refTable.length !== 0 && name.length !== 0));
-  }, [isUpdated, isUpdatedParent, dataGroupingArray]);
-
+  }, [isUpdated, isUpdatedParent, dataGroupingArray, refTable]);
+console.log((isCreating === true && refConnection.length !== 0 &&
+  refSchema.length !== 0 &&
+  refTable.length !== 0 && name.length !== 0))
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;
