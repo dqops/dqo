@@ -10,7 +10,8 @@ import { IRootState } from '../../../redux/reducers';
 import SvgIcon from '../../SvgIcon';
 import { useDashboard } from '../../../contexts/dashboardContext';
 import { DashboardsFolderSpec } from '../../../api';
-import clsx from 'clsx';
+import { getDashboardTooltipState } from '../../../redux/actions/dashboard.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -24,8 +25,8 @@ const LeftView = () => {
   const { dashboardFolders } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
-
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -61,43 +62,38 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
+  
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
-      useDashboard();
-
+    useDashboard();
+    
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
-    );
+      );
+      
+      useEffect(() => {
+        if(selected !== activeTab){
+          setSelected(activeTab);
+        }
+      },[activeTab]);
+      
+    const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
 
-    const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    let timeout: NodeJS.Timeout | null = null;
-    
-    const handleMouseEnter = (index: number) => {
-      timeout = setTimeout(() => {
-        setActiveTooltip(index);
-      }, 300);
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
+      setMouseEnterTimeout(setTimeout(() => {
+        const height = e.clientY;
+        dispatch(getDashboardTooltipState({height, label, url}));
+      }, 50))
     };
 
     const handleMouseLeave = () => {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
       }
-      setActiveTooltip(null);
+      dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
     };
-
-    const handleImageLoad = () => {
-      setIsImageLoaded(true);
-    };
-
-    useEffect(() => {
-      if(selected !== activeTab){
-        setSelected(activeTab)
-      }
-    },[activeTab])
-
+    
     return (
       <div>
         <div
@@ -129,7 +125,7 @@ const LeftView = () => {
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
-                onClick={() => {
+                onMouseDown={() => {
                   changeActiveTab(
                     dashboard,
                     folder.folder_name,
@@ -150,24 +146,8 @@ const LeftView = () => {
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
-                      onMouseEnter={() => handleMouseEnter(jIndex)}
-                      onMouseLeave={handleMouseLeave}>
-                   {activeTooltip === jIndex && (
-              <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal", dashboard.dashboard_name?.includes("profiling status") ? "top-5" : "bottom-5")} style={{ left: "0" }}>
-                {dashboard.dashboard_name}
-                {dashboard.disable_thumbnail !== true &&
-                <img
-                src={`${dashboard.url}/thumbnail`}
-                alt=""
-                style={{ display: isImageLoaded ? "block" : "none" }}
-                onLoad={handleImageLoad}
-                className='pt-2'
-                loading='eager'
-                />
-              }
-              {!isImageLoaded && dashboard.disable_thumbnail !== true && <p className='pt-5'>Loading...</p>}
-            </div>
-            )}
+                      onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
+                      onMouseLeave={() => handleMouseLeave()}>
                   {dashboard.dashboard_name}
                 </div>
               </div>

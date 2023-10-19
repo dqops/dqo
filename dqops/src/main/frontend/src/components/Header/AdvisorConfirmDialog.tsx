@@ -5,15 +5,14 @@ import Button from "../Button";
 interface ConfirmDialogProps {
   open: boolean;
   onClose: () => void;
+  onConfirm: () => void;
 }
 
 const AdvisorConfirmDialog = ({
   open,
   onClose,
+  onConfirm
 }: ConfirmDialogProps) => {
-  const handleSubmit = async () => {
-    onClose();
-  };
 
   return (
     <div>
@@ -34,7 +33,7 @@ const AdvisorConfirmDialog = ({
           <Button
             color="primary"
             className="px-8"
-            onClick={handleSubmit}
+            onClick={onConfirm}
             label="Yes"
           />
         </DialogFooter>

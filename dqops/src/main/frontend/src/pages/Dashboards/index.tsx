@@ -10,24 +10,19 @@ import { AuthenticatedDashboardModel } from '../../api';
 import { TabOption } from '../../components/PageTabs/tab';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import axios from 'axios';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { useTree } from '../../contexts/treeContext';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
+  const { dashboardTooltipState } = useSelector(
+    (state: IRootState) => state.dashboard
+  );
 
-  const [objectNotFound, setObjectNotFound] = React.useState(false)
- 
+  const { objectNotFound, setObjectNotFound } = useTree()
 
-  axios.interceptors.response.use(undefined, function (error) {
-    const statusCode = error.response ? error.response.status : null;
-    if (statusCode === 404 ) {
-      setObjectNotFound(true)
-    }
-    return Promise.reject(error);
-  });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error } =
+  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
     useDashboard();
 
   useEffect(() => {
@@ -90,6 +85,20 @@ const Dashboards = () => {
             );
           })}
         </div>
+        {dashboardTooltipState.height ? 
+        <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
+          style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
+              {dashboardTooltipState.label}
+                <img
+                alt=""
+                src={`${dashboardTooltipState.url}/thumbnail`}
+                style={{ display: "block"}}
+                className='pt-2 max-h-100 max-w-100'
+                loading='eager'
+                />
+              </div> 
+        : null 
+        }
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"

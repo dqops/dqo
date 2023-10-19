@@ -16,6 +16,7 @@
 package com.dqops.metadata.storage.localfiles.sensordefinitions;
 
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionListImpl;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapperImpl;
@@ -76,6 +77,7 @@ public class FileSensorDefinitionListImpl extends SensorDefinitionListImpl {
         FileSensorDefinitionWrapperImpl sensorDefinitionModelWrapper = new FileSensorDefinitionWrapperImpl(newSensorFolderNode, this.yamlSerializer);
         sensorDefinitionModelWrapper.setName(sensorName);
         sensorDefinitionModelWrapper.setSpec(new SensorDefinitionSpec());
+        sensorDefinitionModelWrapper.setStatus(InstanceStatus.ADDED);
         return sensorDefinitionModelWrapper;
     }
 }

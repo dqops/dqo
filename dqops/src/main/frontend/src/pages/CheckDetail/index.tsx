@@ -156,8 +156,9 @@ export const SensorDetail = () => {
         full_check_name
           ? urlencodeDecoder(full_check_name)
           : urlencodeDecoder(Array.from(path).join('/') + '/' + checkName)
-      )
-    );
+          )
+          );
+    dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
     dispatch(
       closeFirstLevelTab(
         '/definitions/checks/' +
@@ -166,7 +167,6 @@ export const SensorDetail = () => {
           ]
       )
     );
-    dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
   };
   const onChangecheckName = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdated(true);

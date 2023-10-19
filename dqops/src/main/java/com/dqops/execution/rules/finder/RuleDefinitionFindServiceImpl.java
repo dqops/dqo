@@ -24,6 +24,7 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.userhome.UserHome;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -40,6 +41,10 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
      * @return Rule definition find result or null when the rule was not found.
      */
     public RuleDefinitionFindResult findRule(ExecutionContext executionContext, String ruleName) {
+        if (Strings.isNullOrEmpty(ruleName)) {
+            return null;
+        }
+
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
         // remove the optional .py file extension

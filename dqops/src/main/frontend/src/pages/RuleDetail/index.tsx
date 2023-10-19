@@ -54,7 +54,7 @@ export const RuleDetail = () => {
 
   useEffect(() => {
     if (!ruleDetail && (type !== 'create' || copied === true)) {
-      dispatch(getRule(full_rule_name));
+      dispatch(getRule(urlencodeDecoder(String(full_rule_name))));
     }
   }, [full_rule_name, ruleDetail, type]);
 
@@ -127,6 +127,7 @@ export const RuleDetail = () => {
   };
 
   const closeRuleFirstLevelTab = () => {
+    dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
     dispatch(
       closeFirstLevelTab(
         '/definitions/rules/' +
@@ -194,9 +195,7 @@ export const RuleDetail = () => {
 
   const onDelete = async () => {
     RulesApi.deleteRule(urlencodeDecoder(full_rule_name)).then(async () =>
-      closeRuleFirstLevelTab(),
-      dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
-
+      closeRuleFirstLevelTab()
     );
   };
 

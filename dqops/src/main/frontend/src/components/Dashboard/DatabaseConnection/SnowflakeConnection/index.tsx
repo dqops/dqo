@@ -34,24 +34,28 @@ const SnowflakeConnection = ({
         className="mb-4"
         value={snowflake?.account}
         onChange={(value) => handleChange({ account: value })}
+        data = {sharedCredentials}
       />
       <FieldTypeInput
         label="Warehouse"
         className="mb-4"
         value={snowflake?.warehouse}
         onChange={(value) => handleChange({ warehouse: value })}
+        data = {sharedCredentials}
       />
       <FieldTypeInput
         label="Database"
         className="mb-4"
         value={snowflake?.database}
         onChange={(value) => handleChange({ database: value })}
+        data = {sharedCredentials}
       />
       <FieldTypeInput
         label="User name"
         className="mb-4"
         value={snowflake?.user}
         onChange={(value) => handleChange({ user: value })}
+        data = {sharedCredentials}
       />
       <FieldTypeInput
         label="Password"
@@ -59,11 +63,13 @@ const SnowflakeConnection = ({
         maskingType="password"
         value={snowflake?.password}
         onChange={(value) => handleChange({ password: value })}
+        data = {sharedCredentials}
       />
       <FieldTypeInput
         label="Role"
         value={snowflake?.role}
         onChange={(value) => handleChange({ role: value })}
+        data = {sharedCredentials}
       />
 
       <JdbcPropertiesView

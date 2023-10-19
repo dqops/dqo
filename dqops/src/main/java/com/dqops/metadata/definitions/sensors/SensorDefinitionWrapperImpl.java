@@ -95,7 +95,7 @@ public class SensorDefinitionWrapperImpl extends AbstractElementWrapper<String, 
      * @param providerSensors New provider sensor collection.
      */
     public void setProviderSensors(ProviderSensorDefinitionListImpl providerSensors) {
-		this.setModifiedIf(this.providerSensors != providerSensors);
+		this.setDirtyIf(this.providerSensors != providerSensors);    // this is a special case, we are not making the object modified
         this.providerSensors = providerSensors;
         if (providerSensors != null && this.getHierarchyId() != null) {
 			this.propagateHierarchyIdToField(providerSensors, "provider_sensors");

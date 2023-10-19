@@ -322,25 +322,25 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
                     checkResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
+                }
 
-                    try {
-                        RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
-                                executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
-                                normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
-                        progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
+                try {
+                    RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
+                            executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
+                            normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                    progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
-                        allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
-                        executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
-                    }
-                    catch (Throwable ex) {
-                        this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage(), ex);
-                        executionStatistics.incrementRuleExecutionErrorsCount(1);
-                        ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
-                                sensorExecutionResult, sensorRunParameters, ex);
-                        allErrorsTable.append(normalizedRuleErrorResults.getTable());
-                        progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
-                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
-                    }
+                    allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
+                    executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
+                }
+                catch (Throwable ex) {
+                    this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage(), ex);
+                    executionStatistics.incrementRuleExecutionErrorsCount(1);
+                    ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
+                            sensorExecutionResult, sensorRunParameters, ex);
+                    allErrorsTable.append(normalizedRuleErrorResults.getTable());
+                    progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
                 }
             }
             catch (DqoQueueJobCancelledException cex) {

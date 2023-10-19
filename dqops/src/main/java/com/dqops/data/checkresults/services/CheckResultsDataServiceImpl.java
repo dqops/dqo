@@ -651,21 +651,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
 
         LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn timeSeriesIdColumn = sortedTable.longColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        TextColumn timeSeriesIdColumn = sortedTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
         TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
 
         long lastCheckHash = Long.MIN_VALUE;
-        long lastTimeSeriesId = Long.MIN_VALUE;
+        String lastTimeSeriesId = "";
         int rowCount = sortedTable.rowCount();
 
         for (int i = 0; i < rowCount; i++) {
             long currentCheckHash = checkHashColumn.getLong(i);
-            long currentTimeSeriesId = timeSeriesIdColumn.getLong(i);
+            String currentTimeSeriesId = timeSeriesIdColumn.getString(i);
 
-            if (lastCheckHash == currentCheckHash && lastTimeSeriesId == currentTimeSeriesId) {
+            if (lastCheckHash == currentCheckHash && Objects.equals(lastTimeSeriesId, currentTimeSeriesId)) {
                 continue;
             }
 
