@@ -117,3 +117,16 @@ Once you have completed the configuration steps, you can edit the dashboard to m
 
 Finally, to make the dashboard visible, you need to add it to YAML configuration file in DQOps, which is located in DQOps
 home catalog (home/settings/dashboardslist.dqodashboards.yaml). This will make the dashboard visible in the user interface.
+
+The section of the yaml file that you complete looks like this:
+![yaml_file](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/yaml_file.png)
+
+We add a folder where the dashboard will be placed. Enter the name of the dashboard, the url generated in Looker(see below for a description of how to generate URL).
+When creating a dashboard in a yaml file, you should also specify its width and height. These parameters can be found in Looker studio in the edition of the dashboard by clicking on Layout.
+
+Here we can pass various parameters and provide a token. We specify, among other things, whether our dashboard will be in the profiling, monitoring or partitioned section.
+It is very important that the link to the dashboard in the yaml file contains the "embed" part in the name. The best way is to generate the link in Looker. Go into edit dashboard, then file, embed report and select embed url.
+
+![embed_URL](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/embed_URL.jpg)
+
+After completing the yaml file with the list of dashboards, commit the changes. Your dashboard will be visible in the app.
