@@ -93,7 +93,7 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-    - folder_name: Detail results
+    - folder_name: Check results
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
@@ -455,7 +455,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-    - folder_name: Detail results
+    - folder_name: Check results
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
@@ -833,7 +833,7 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
 
-    - folder_name: Detail results
+    - folder_name: Check results
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
@@ -958,7 +958,7 @@ spec:
   folders:
   - folder_name: Data quality issues count
     dashboards:
-      - dashboard_name: Count summary per check
+      - dashboard_name: Data quality issues summary per check
         url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
         width: 1400
         height: 1870
@@ -967,7 +967,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Count per table
+      - dashboard_name: Data quality issues per table
         url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
         width: 1400
         height: 2500
@@ -976,7 +976,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Count per table, data grouping and day
+      - dashboard_name: Data quality issues per table, data grouping and day
         url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
         width: 1400
         height: 1800
@@ -985,19 +985,10 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Count per check
+      - dashboard_name: Data quality issues per check
         url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
         width: 1400
         height: 1800
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
-      - dashboard_name: Count per table, check, data grouping and day
-        url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-        width: 1400
-        height: 2100
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
