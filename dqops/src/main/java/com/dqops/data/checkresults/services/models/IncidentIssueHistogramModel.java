@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.opencensus.trace.Link;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -35,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
+@Data
 public class IncidentIssueHistogramModel {
     /**
      * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
@@ -53,30 +57,6 @@ public class IncidentIssueHistogramModel {
      */
     @JsonPropertyDescription("A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
     private Map<String, Integer> checks = new LinkedHashMap<>();
-
-    public TreeMap<LocalDate, IncidentDailyIssuesCount> getDays() {
-        return (TreeMap<LocalDate, IncidentDailyIssuesCount>) days;
-    }
-
-    public void setDays(TreeMap<LocalDate, IncidentDailyIssuesCount> days) {
-        this.days = days;
-    }
-
-    public LinkedHashMap<String, Integer> getColumns() {
-        return (LinkedHashMap<String, Integer>) columns;
-    }
-
-    public void setColumns(LinkedHashMap<String, Integer> columns) {
-        this.columns = columns;
-    }
-
-    public LinkedHashMap<String, Integer> getChecks() {
-        return (LinkedHashMap<String, Integer>) checks;
-    }
-
-    public void setChecks(LinkedHashMap<String, Integer> checks) {
-        this.checks = checks;
-    }
 
     /**
      * Increments a count of data quality issues for a date.
@@ -133,8 +113,17 @@ public class IncidentIssueHistogramModel {
             return;
         }
 
-        LocalDate firstDate = this.getDays().firstKey();
-        LocalDate lastDate = this.getDays().lastKey();
+        LocalDate firstDate;
+        LocalDate lastDate;
+
+        if (this.days instanceof TreeMap) {
+            firstDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).firstKey();
+            lastDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).lastKey();
+        } else {
+            List<LocalDate> daysKeysSortedList = this.days.keySet().stream().sorted().collect(Collectors.toList());
+            firstDate = daysKeysSortedList.get(0);
+            lastDate = daysKeysSortedList.get(daysKeysSortedList.size() - 1);
+        }
 
         for (LocalDate date = firstDate.plus(1L, ChronoUnit.DAYS); date.isBefore(lastDate);
              date = date.plus(1L, ChronoUnit.DAYS)) {
