@@ -74,9 +74,11 @@ Within the Advisor, you can collect basic statistics, run profiling checks or mo
 
     ![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling.png)
 
-    You will be linked to **Data Source** section, **Schedule** tab where you can review scheduling settings for the added connection. You can also enable scheduling which is turned off by default by clicking on the toggle button. 
+    You will be linked to **Data Source** section, **Schedule** tab where you can review scheduling settings for the added connection.
+    The scheduling is enabled by default. You can turn it off by clicking the notification icon in the upper right corner and 
+    then clicking the **Job scheduler** toggle button. 
       
-    ![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section.png)
+    ![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section2.png)
 
     There are several tabs to explore that differs depending on the selection of the elements in the tree view on the left (connection, schema, table or column):
 

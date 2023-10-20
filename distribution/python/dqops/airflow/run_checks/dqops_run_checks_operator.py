@@ -91,6 +91,13 @@ class DqopsRunChecksOperator(BaseOperator):
                 httpx.Timeout(self.wait_timeout + extra_timeout_seconds)
             )
 
+        if self.api_key is not UNSET:
+            client.with_headers(
+                {
+                    "Authorization": "Bearer " + self.api_key
+                }
+            )
+
         try:
             response: Response[RunChecksQueueJobResult] = sync_detailed(
                 client=client,
@@ -114,21 +121,20 @@ class DqopsRunChecksOperator(BaseOperator):
         if job_result.status == DqoJobStatus.FAILED:
             raise DqopsJobFailedException()
 
+        if job_result.status == DqoJobStatus.CANCELLED:
+            raise DqopsJobFailedException()
+
         # dqo times out with RunChecksQueueJobResult object details
         if job_result.status == DqoJobStatus.RUNNING:
             self._handle_dqo_timeout()
 
-        if (
-            job_result.result.highest_severity is not None
-            and job_result.result.highest_severity != RuleSeverityLevel.VALID
-            and job_result.status != DqoJobStatus.CANCELLED
-        ):
+        if job_result.result.highest_severity == RuleSeverityLevel.FATAL:
             raise DqopsChecksFailedException()
 
         return job_result.to_dict()
 
     def _handle_dqo_timeout(self):
-        timeout_message: str = "DQOps' job has timed out!"
+        timeout_message: str = "DQOps job has timed out!"
 
         if self.fail_on_timeout:
             logging.error(timeout_message)
@@ -137,7 +143,7 @@ class DqopsRunChecksOperator(BaseOperator):
             logging.info(timeout_message)
 
     def _handle_python_timeout(self, exception):
-        timeout_message: str = "Python client has timed out!"
+        timeout_message: str = "DQOps Python client has timed out, please increase the timeout to wait for all data quality checks to finish"
         if self.fail_on_timeout:
             logging.error(timeout_message)
             raise exception

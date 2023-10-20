@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {
   CheckSearchFilters,
   ColumnListModel,
@@ -99,6 +99,7 @@ function TreeProvider(props: any) {
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
+  const [objectNotFound, setObjectNotFound] = useState(false)
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -1793,6 +1794,15 @@ function TreeProvider(props: any) {
 
     setTabMaps(newTabMaps);
   };
+  
+  axios.interceptors.response.use(undefined, function (error) {
+    const statusCode = error.response ? error.response.status : null;
+    if (statusCode === 404 ) {
+      console.log(error)
+      setObjectNotFound(true)
+    }
+    return Promise.reject(error);
+  });
 
   return (
     <TreeContext.Provider
@@ -1830,7 +1840,9 @@ function TreeProvider(props: any) {
         loadingNodes,
         addSchema,
         refreshDatabaseNode,
-        runPartitionedChecks
+        runPartitionedChecks,
+        objectNotFound,
+        setObjectNotFound
       }}
       {...props}
     />
