@@ -2,18 +2,19 @@ import json
 import logging
 from typing import Any, Dict, Union
 
+from airflow.models.baseoperator import BaseOperator
 from httpx import ReadTimeout
 
-from airflow.models.baseoperator import BaseOperator
 from dqops.airflow.exceptions.dqops_data_quality_issue_detected_exception import (
     DqopsDataQualityIssueDetectedException,
 )
 from dqops.airflow.exceptions.dqops_empty_response_exception import (
     DqopsEmptyResponseException,
 )
+from dqops.airflow.tools.client_creator import create_client
 from dqops.airflow.tools.rule_severity_level_utility import get_severity_value
-from dqops.airflow.tools.url_resolver import extract_base_url
 from dqops.airflow.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.check_results.get_table_data_quality_status import sync_detailed
 from dqops.client.models.check_time_scale import CheckTimeScale
@@ -23,11 +24,10 @@ from dqops.client.models.table_data_quality_status_model import (
     TableDataQualityStatusModel,
 )
 from dqops.client.types import UNSET, Response, Unset
-from dqops.airflow.tools.client_creator import create_client
 
 class DqoAssertTableStatusOperator(BaseOperator):
     """
-    Airflow require table data quality status operator for receiving DQOps table status.
+    Airflow assert table status operator for receiving DQOps table status.
 
     """
 
@@ -53,11 +53,11 @@ class DqoAssertTableStatusOperator(BaseOperator):
             The connection name to the data source in DQOps. When not set, all connection names will be used.
         schema_name : str
             The schema name.
-        table_name : str 
+        table_name : str
             The table name.
         months : Union[Unset, None, int] = UNSET,
-            Optional filter - the number of months to review the data quality check results. 
-            For partitioned checks, it is the number of months to analyze. 
+            Optional filter - the number of months to review the data quality check results.
+            For partitioned checks, it is the number of months to analyze.
             The default value is 1 (which is the current month and 1 previous month).
         check_type : Union[Unset, None, CheckType] = UNSET
             Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.
@@ -88,7 +88,6 @@ class DqoAssertTableStatusOperator(BaseOperator):
         self.maximum_severity_threshold: RuleSeverityLevel = maximum_severity_threshold
 
     def execute(self, context):
-        
         client: Client = create_client(base_url=self.base_url, wait_timeout=self.wait_timeout)
 
         try:

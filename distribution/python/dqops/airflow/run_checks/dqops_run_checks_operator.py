@@ -11,9 +11,9 @@ from dqops.airflow.exceptions.dqops_data_quality_issue_detected_exception import
 from dqops.airflow.exceptions.dqops_empty_response_exception import (
     DqopsEmptyResponseException,
 )
-from dqops.airflow.tools.rule_severity_level_utility import RuleSeverityLevelUtility
 from dqops.airflow.exceptions.dqops_job_failed_exception import DqopsJobFailedException
 from dqops.airflow.tools.client_creator import create_client
+from dqops.airflow.tools.rule_severity_level_utility import RuleSeverityLevelUtility
 from dqops.airflow.tools.timeout.dqo_timeout import handle_dqo_timeout
 from dqops.airflow.tools.timeout.python_client_timeout import handle_python_timeout
 from dqops.airflow.tools.url_resolver import extract_base_url

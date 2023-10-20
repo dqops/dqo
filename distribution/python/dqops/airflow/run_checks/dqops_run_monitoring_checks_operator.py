@@ -51,6 +51,6 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
             check_type=CheckType.MONITORING,
             wait_timeout=wait_timeout,
             fail_on_timeout=fail_on_timeout,
-            maximum_severity_threshold=maximum_severity_threshold
+            maximum_severity_threshold=maximum_severity_threshold,
             **kwargs
         )

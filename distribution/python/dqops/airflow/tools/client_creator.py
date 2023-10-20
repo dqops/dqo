@@ -1,13 +1,13 @@
-from dqops.client import Client
-from httpx import Timeout
-from dqops.client.types import UNSET, Unset
 from typing import Union
+from httpx import Timeout
+from dqops.client import Client
+from dqops.client.types import UNSET, Unset
 
 # extra time for python client to wait for dqo after it times out
 EXTRA_TIMEOUT_SECONDS: int = 1
 
-def create_client(base_url: str, 
-                  *, 
+def create_client(base_url: str,
+                  *,
                   wait_timeout: Union[int, Unset] = Unset) -> Client:
     """Creates python client for airflow operators.
 
