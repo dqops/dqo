@@ -26,6 +26,7 @@ nav:
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
+      - Table comparison: "dqo-concepts/table-comparison/table-comparison.md"
       - Working with YAML files: "dqo-concepts/working-with-yaml-files/working-with-yaml-files.md"
       - Working with CLI: "dqo-concepts/working-with-cli/working-with-cli.md"
   - Use cases:

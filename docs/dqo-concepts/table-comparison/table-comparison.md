@@ -39,9 +39,10 @@ Once all the requisite elements have been chosen, you can initiate a comparison 
 
 ![Results](https://dqops.com/docs/images/working-with-dqo/comparisons/results.png)
 
-After seing the results it is possible to delete them by clicking "Delete results", this will 
+After seing the results, you can delete them by clicking "Delete results" button.
 
 ## Deleting table comparison
 
-If it is needed to delete whole table comparison configuration, not only check results, its can be done from list of table comparisons configuration by clicking: 
+
+If you find it necessary to remove an entire table comparison configuration, rather than just the check results, you can achieve this from the list of table comparison configurations by selecting the "Delete" option. This action will remove table comparison configuration from list, as well as from yaml file. 
 ![Deleting comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison.png)
