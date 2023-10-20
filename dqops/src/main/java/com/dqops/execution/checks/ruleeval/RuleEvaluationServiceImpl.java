@@ -222,7 +222,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 2;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                    if (ruleExecutionResultError.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
@@ -240,7 +240,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 1;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                    if (ruleExecutionResultWarning.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultWarning.getExpectedValue();
                     }
 
