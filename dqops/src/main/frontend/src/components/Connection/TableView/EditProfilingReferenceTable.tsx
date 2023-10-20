@@ -530,7 +530,7 @@ export const EditProfilingReferenceTable = ({
       tableComparisonResults?.column_comparison_results ?? {};
 
     if (Object.keys(columnComparisonResults).find((x) => x === nameOfColumn)) {
-      return columnComparisonResults[nameOfColumn] ?? [];
+      return columnComparisonResults[nameOfColumn].column_comparison_results as {[key: string]: ComparisonCheckResultModel} ?? {};
     } else {
       return {};
     }
