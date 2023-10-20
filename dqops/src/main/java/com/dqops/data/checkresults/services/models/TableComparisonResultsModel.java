@@ -15,6 +15,7 @@
  */
 package com.dqops.data.checkresults.services.models;
 
+import com.dqops.checks.CheckNameUtility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,18 +29,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The table comparison result model with the summary information about the most recent table comparison that was performed.
+ * The table comparison results model with the summary information about the most recent table comparison that was performed.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableComparisonResultsModel", description = "The table comparison result model with the summary information about the most recent table comparison that was performed.")
+@ApiModel(value = "TableComparisonResultsModel", description = "The table comparison results model with the summary information about the most recent table comparison that was performed.")
 @Data
 public class TableComparisonResultsModel {
     /**
-     * The dictionary of comparison results between the tables for table level comparisons (the row count).
+     * The dictionary of comparison results between the tables for table level comparisons (e.g. row count).
      * The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.
      */
-    @JsonPropertyDescription("The dictionary of comparison results between the tables for table level comparisons (the row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.")
+    @JsonPropertyDescription("The dictionary of comparison results between the tables for table level comparisons (e.g. row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.")
     private Map<String, ComparisonCheckResultModel> tableComparisonResults = new LinkedHashMap<>();
 
     /**
@@ -47,7 +48,7 @@ public class TableComparisonResultsModel {
      * The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.
      */
     @JsonPropertyDescription("The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.")
-    private Map<String, Map<String, ComparisonCheckResultModel>> columnComparisonResults = new LinkedHashMap<>();
+    private Map<String, TableComparisonColumnResultsModel> columnComparisonResults = new LinkedHashMap<>();
 
     /**
      * Appends a result for a check or a column+check.
@@ -58,31 +59,22 @@ public class TableComparisonResultsModel {
      * @param dataGroupingName The name of the data group.
      */
     public void appendResult(Instant executedAt, String checkName, String columnName, Integer severity, String dataGroupingName) {
+        String unifiedCheckName = CheckNameUtility.getUnifiedCheckName(checkName);
         Map<String, ComparisonCheckResultModel> checkResultModelMap;
         if (Strings.isNullOrEmpty(columnName)) {
             checkResultModelMap = tableComparisonResults;
         } else {
-            checkResultModelMap = this.columnComparisonResults.get(columnName);
-            if (checkResultModelMap == null) {
-                checkResultModelMap = new LinkedHashMap<>();
-                this.columnComparisonResults.put(columnName, checkResultModelMap);
+            TableComparisonColumnResultsModel columnCheckResultModelMap = this.columnComparisonResults.get(columnName);
+            if (columnCheckResultModelMap == null) {
+                columnCheckResultModelMap = new TableComparisonColumnResultsModel(columnName);
+                this.columnComparisonResults.put(columnName, columnCheckResultModelMap);
             }
+            checkResultModelMap = columnCheckResultModelMap.getColumnComparisonResults();
         }
 
-        ComparisonCheckResultModel comparisonCheckResultModel = checkResultModelMap.get(checkName);
+        ComparisonCheckResultModel comparisonCheckResultModel = checkResultModelMap.get(unifiedCheckName);
         if (comparisonCheckResultModel == null) {
-            comparisonCheckResultModel = new ComparisonCheckResultModel(checkName, executedAt);
-            String unifiedCheckName = checkName;
-            if (checkName.startsWith("daily_partition_")) {
-                unifiedCheckName = checkName.substring("daily_partition_".length());
-            } else if (checkName.startsWith("monthly_partition_")) {
-                unifiedCheckName = checkName.substring("monthly_partition_".length());
-            } else if (checkName.startsWith("daily_")) {
-                unifiedCheckName = checkName.substring("daily_".length());
-            } else if (checkName.startsWith("monthly_")) {
-                unifiedCheckName = checkName.substring("monthly_".length());
-            }
-
+            comparisonCheckResultModel = new ComparisonCheckResultModel(unifiedCheckName, executedAt);
             checkResultModelMap.put(unifiedCheckName, comparisonCheckResultModel);
         }
 
