@@ -7,6 +7,15 @@ import { AxiosResponse } from 'axios';
 import { formatNumber } from '../../shared/constants';
 import moment from 'moment';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import { getDetectedDatatype } from '../../utils';
+
+type TColumnStatistics = {
+  type: string, 
+  children: {
+    type: string,
+    result: string,
+  }
+}
 
 const ColumnStatisticsView = () => {
   const {
@@ -53,30 +62,6 @@ const ColumnStatisticsView = () => {
     fetchRows();
   }, [connection, schema, table, column]);
 
-  const datatype_detected = (numberForFile: any) => {
-    if (Number(numberForFile) === 1) {
-      return 'INTEGER';
-    }
-    if (Number(numberForFile) === 2) {
-      return 'FLOAT';
-    }
-    if (Number(numberForFile) === 3) {
-      return 'DATETIME';
-    }
-    if (Number(numberForFile) === 4) {
-      return 'TIMESTAMP';
-    }
-    if (Number(numberForFile) === 5) {
-      return 'BOOLEAN';
-    }
-    if (Number(numberForFile) === 6) {
-      return 'STRING';
-    }
-    if (Number(numberForFile) === 7) {
-      return 'Mixed data type';
-    }
-  };
-
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -108,7 +93,7 @@ const ColumnStatisticsView = () => {
               statistics?.statistics?.map((x, index) => (
                 <div className="mr-2 font-bold" key={index}>
                   {x.collector === 'string_datatype_detect'
-                    ? datatype_detected(x.result)
+                    ? getDetectedDatatype(x.result)
                     : ''}
                 </div>
               ))
@@ -262,7 +247,7 @@ const ColumnStatisticsView = () => {
         </SectionWrapper>
         <SectionWrapper title='Range' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50">
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light font-bold">Minimum</div>
+            <div className="ml-2 font-light">Minimum</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -273,7 +258,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light font-bold">Median</div>
+            <div className="ml-2 font-light ">Median</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (

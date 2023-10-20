@@ -42,3 +42,27 @@ export const urlencodeDecoder = (url: string) =>{
 export const urlencodeEncoder = (url: string | undefined) =>{
   return url && url.replace(/%20/g, ' ')
 }
+
+export const getDetectedDatatype = (numberForFile: any) => {
+  if (Number(numberForFile) === 1) {
+    return 'INTEGER';
+  }
+  if (Number(numberForFile) === 2) {
+    return 'FLOAT';
+  }
+  if (Number(numberForFile) === 3) {
+    return 'DATETIME';
+  }
+  if (Number(numberForFile) === 4) {
+    return 'TIMESTAMP';
+  }
+  if (Number(numberForFile) === 5) {
+    return 'BOOLEAN';
+  }
+  if (Number(numberForFile) === 6) {
+    return 'STRING';
+  }
+  if (Number(numberForFile) === 7) {
+    return 'Mixed data type';
+  }
+};
