@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.opencensus.trace.Link;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -34,25 +35,48 @@ import java.util.stream.Collectors;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-@Data
 public class IncidentIssueHistogramModel {
     /**
      * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
      */
     @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.")
-    private TreeMap<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
+    private Map<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
 
     /**
      * A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.
      */
     @JsonPropertyDescription("A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
-    private LinkedHashMap<String, Integer> columns = new LinkedHashMap<>();
+    private Map<String, Integer> columns = new LinkedHashMap<>();
 
     /**
      * A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.
      */
     @JsonPropertyDescription("A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
-    private LinkedHashMap<String, Integer> checks = new LinkedHashMap<>();
+    private Map<String, Integer> checks = new LinkedHashMap<>();
+
+    public TreeMap<LocalDate, IncidentDailyIssuesCount> getDays() {
+        return (TreeMap<LocalDate, IncidentDailyIssuesCount>) days;
+    }
+
+    public void setDays(TreeMap<LocalDate, IncidentDailyIssuesCount> days) {
+        this.days = days;
+    }
+
+    public LinkedHashMap<String, Integer> getColumns() {
+        return (LinkedHashMap<String, Integer>) columns;
+    }
+
+    public void setColumns(LinkedHashMap<String, Integer> columns) {
+        this.columns = columns;
+    }
+
+    public LinkedHashMap<String, Integer> getChecks() {
+        return (LinkedHashMap<String, Integer>) checks;
+    }
+
+    public void setChecks(LinkedHashMap<String, Integer> checks) {
+        this.checks = checks;
+    }
 
     /**
      * Increments a count of data quality issues for a date.
@@ -109,8 +133,8 @@ public class IncidentIssueHistogramModel {
             return;
         }
 
-        LocalDate firstDate = this.days.firstKey();
-        LocalDate lastDate = this.days.lastKey();
+        LocalDate firstDate = this.getDays().firstKey();
+        LocalDate lastDate = this.getDays().lastKey();
 
         for (LocalDate date = firstDate.plus(1L, ChronoUnit.DAYS); date.isBefore(lastDate);
              date = date.plus(1L, ChronoUnit.DAYS)) {
@@ -144,7 +168,7 @@ public class IncidentIssueHistogramModel {
      * @param histogramSize Histogram size.
      * @return New hashmap that is sorted and truncated.
      */
-    protected LinkedHashMap<String, Integer> findTop(LinkedHashMap<String, Integer> map, int histogramSize) {
+    protected LinkedHashMap<String, Integer> findTop(Map<String, Integer> map, int histogramSize) {
         final LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
         map.entrySet()
                 .stream()
