@@ -131,7 +131,7 @@ spec:
             ds0.p_check_type: profiling
     - folder_name: Availability
       dashboards:
-        - dashboard_name: Table availability
+        - dashboard_name: Current table availability
           url: https://lookerstudio.google.com/embed/reporting/22de9488-a7bd-4b34-9d4e-131601cdc25b/page/c5B8C
           width: 1400
           height: 1820
@@ -473,7 +473,7 @@ spec:
         - dashboard_name: Empty or too small tables
           url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
