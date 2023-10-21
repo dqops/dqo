@@ -12,6 +12,7 @@ import { getDetectedDatatype } from '../../utils';
 type TColumnStatistics = {
     type?: string,
     result?: string,
+    sampleCount?: number
 }   
 
 const ColumnStatisticsView = () => {
@@ -70,17 +71,61 @@ const ColumnStatisticsView = () => {
     return value;
   };
 
+  const renderCategory = (value: string) => {
+    if (value.toLowerCase() === 'sampling') {
+      return "Top most common values"
+    } else if (value.toLowerCase() === 'strings') {
+      return "String length"
+    } 
+    return value.replace(/_/g, " ")
+                .replace(/^\w/g, c => c.toUpperCase())
+  }
+
+  const renderKey = (value: TColumnStatistics) => {
+    if (value.sampleCount) {
+      return value.result
+    }
+      return value.type?.replace(/_/g, " ")
+                        .replace(/^\w/g, c => c.toUpperCase())
+  }
+
+  const renderColumnStatisticsValue = (value : TColumnStatistics) => {
+    if (value.type?.toLowerCase().includes("percent")) {
+      return Number(value.result).toFixed(2) + "%"
+    } else if (value.sampleCount) {
+      return value.sampleCount  
+    }
+    return value.result
+  }
+
+  
   const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
     const column_statistics_dictionary: Record<string, TColumnStatistics[]> = {}
     fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
       if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
-        column_statistics_dictionary[String(item.category)].push({type: item.collector, result: renderValue(item.result)})
+        column_statistics_dictionary[String(item.category)].push({type: item.collector, result: renderValue(item.result), sampleCount: item.sampleCount})
       } else {
-        column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: renderValue(item.result)}]
+        column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: renderValue(item.result), sampleCount: item.sampleCount}]
       }
     })
     setColumnStatistics(column_statistics_dictionary)
   }
+  console.log(columnStatistics)
+  const renderSampleIndicator = (value: number) : React.JSX.Element => {
+    const nullCount = columnStatistics["nulls"].find((x) => x.type === 'not_nulls_count')?.result
+    return (
+      <div className=" h-3 border border-gray-100 flex ml-5 w-[100px]">
+          <div
+            className="h-3 bg-green-700 gap-x-5"
+            style={{
+              width: `${
+                   (value * 100) /
+                    Number(renderValue(nullCount))
+              }px`
+            }}
+          ></div>  
+      </div>
+    )}
 
   return (
     <div className="p-4">
@@ -136,12 +181,14 @@ const ColumnStatisticsView = () => {
 
       <div className="w-full flex gap-8 flex-wrap">
         {Object.keys(columnStatistics).map((column, index) => 
-        <SectionWrapper key={index} title={column}
-        className="text-sm bg-white rounded-lg p-4 border border-gray-200 w-100">
+        <SectionWrapper key={index} title={renderCategory(column)}
+        className="text-sm bg-white rounded-lg p-4 border border-gray-200 min-w-100">
           {columnStatistics[column].map((item, jIndex) => 
           <div key={jIndex} className="h-10 flex justify-between items-center">
-            <div className="ml-2 font-light">{item.type}</div>
-            <div className="mr-2 font-bold">{item.result}</div>
+            <div className="ml-2 font-light">{renderKey(item)}</div>
+            <div className="mr-2 font-bold flex items-center">{renderColumnStatisticsValue(item)} 
+            {item.sampleCount ? renderSampleIndicator(item.sampleCount): null}
+            </div>
           </div>)}
         </SectionWrapper>)}
         {/* <SectionWrapper title='Nulls' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
