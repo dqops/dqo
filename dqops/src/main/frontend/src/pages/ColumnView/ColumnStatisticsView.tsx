@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient, TableApiClient } from '../../services/apiClient';
 import { useParams } from 'react-router-dom';
-import { ColumnStatisticsModel, TableStatisticsModel } from '../../api';
+import { ColumnStatisticsModel, StatisticsMetricModel, TableStatisticsModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
 import { formatNumber } from '../../shared/constants';
@@ -10,12 +10,9 @@ import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import { getDetectedDatatype } from '../../utils';
 
 type TColumnStatistics = {
-  type: string, 
-  children: {
-    type: string,
-    result: string,
-  }
-}
+    type?: string,
+    result?: string,
+}   
 
 const ColumnStatisticsView = () => {
   const {
@@ -32,6 +29,7 @@ const ColumnStatisticsView = () => {
   } = useParams();
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
+  const [columnStatistics, setColumnStatistics] = useState<Record<string, TColumnStatistics[]>>({})
 
   const fetchColumns = async () => {
     try {
@@ -72,10 +70,22 @@ const ColumnStatisticsView = () => {
     return value;
   };
 
+  const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
+    const column_statistics_dictionary: Record<string, TColumnStatistics[]> = {}
+    fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
+      if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
+        column_statistics_dictionary[String(item.category)].push({type: item.collector, result: renderValue(item.result)})
+      } else {
+        column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: renderValue(item.result)}]
+      }
+    })
+    setColumnStatistics(column_statistics_dictionary)
+  }
+
   return (
     <div className="p-4">
       <div className="flex w-full h-15">
-        <div className="w-1/4 flex font-light ml-5">
+        <div className="w-1/4 flex font-light ml-5" onClick={() => getColumnStatisticsModel(statistics ?? {})}>
           Datatype{' '}
           <div className="font-bold ml-5">
             {statistics?.type_snapshot?.column_type}
@@ -125,7 +135,16 @@ const ColumnStatisticsView = () => {
       </div>
 
       <div className="w-full flex gap-8 flex-wrap">
-        <SectionWrapper title='Nulls' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
+        {Object.keys(columnStatistics).map((column, index) => 
+        <SectionWrapper key={index} title={column}
+        className="text-sm bg-white rounded-lg p-4 border border-gray-200 w-100">
+          {columnStatistics[column].map((item, jIndex) => 
+          <div key={jIndex} className="h-10 flex justify-between items-center">
+            <div className="ml-2 font-light">{item.type}</div>
+            <div className="mr-2 font-bold">{item.result}</div>
+          </div>)}
+        </SectionWrapper>)}
+        {/* <SectionWrapper title='Nulls' className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Nulls count</div>
             <div>
@@ -409,7 +428,7 @@ const ColumnStatisticsView = () => {
           </SectionWrapper>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
     </div>
   );

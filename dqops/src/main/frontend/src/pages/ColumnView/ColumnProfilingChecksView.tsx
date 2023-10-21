@@ -177,7 +177,7 @@ const ColumnProfilingChecksView = ({
     );
     setActiveTab(tab);
   };
-    console.log(tabs)
+
   return (
     <div className="flex flex-col overflow-x-auto overflow-y-hidden"
     >
