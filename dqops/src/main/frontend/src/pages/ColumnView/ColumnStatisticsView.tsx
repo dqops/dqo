@@ -28,10 +28,9 @@ const ColumnStatisticsView = () => {
     table: string;
     column: string;
   } = useParams();
-  const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
-  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>({})
- 
-  const tableStatistics : TStatistics[] = []
+  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>({});
+  const [tableStatistics, setTableStatistics] = useState<TStatistics[]>([]);
+  const [rowCount, setRowCount] = useState<number>()
 
   const fetchColumns = async () => {
     try {
@@ -42,7 +41,7 @@ const ColumnStatisticsView = () => {
           table,
           column
         );
-      setStatistics(res.data);
+      getColumnStatisticsModel(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -99,9 +98,9 @@ const ColumnStatisticsView = () => {
     return value.result
   }
 
-  
   const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
     const column_statistics_dictionary: Record<string, TStatistics[]> = {}
+    const table_statistics_array : TStatistics[] = []
     fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
       if (item.collector !== "string_datatype_detect") {
         if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
@@ -110,22 +109,22 @@ const ColumnStatisticsView = () => {
             column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: renderValue(item.result), sampleCount: item.sampleCount}]
           }
       } else {
-        tableStatistics.push({type: "Detected Datatype", result: getDetectedDatatype(item.result)})
+        table_statistics_array.push({type: "Detected Datatype:", result: getDetectedDatatype(item.result)})
       }
     })
-    setColumnStatistics(column_statistics_dictionary)
+    table_statistics_array.push({type: "Datatype:", result: String(fetchedColumnsStatistics.type_snapshot?.column_type)})
+    table_statistics_array.push({type: "Collected at:", result: moment(fetchedColumnsStatistics.statistics?.at(0)?.collectedAt).format('YYYY-MM-DD HH:mm:ss')})
     
-    tableStatistics.push({type: "Datatype", result: String(fetchedColumnsStatistics.type_snapshot)})
-    tableStatistics.push({type: "Collected at", result: fetchedColumnsStatistics.statistics?.at(0)?.collectedAt})
-  
+    setColumnStatistics(column_statistics_dictionary)  
+    setTableStatistics(table_statistics_array)
   }
 
-    const getTableStatisticsModel = (fetchedTableStatistics: TableStatisticsModel) => {
-      tableStatistics.push({type: "Row count", result: String(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result)})
-    }
+  const getTableStatisticsModel = (fetchedTableStatistics: TableStatisticsModel) => {
+    setRowCount(Number(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result))
+  }
 
     
-    const renderSampleIndicator = (value: number) : React.JSX.Element => {
+  const renderSampleIndicator = (value: number) : React.JSX.Element => {
     const nullCount = columnStatistics["nulls"].find((x) => x.type === 'not_nulls_count')?.result
     return (
       <div className=" h-3 border border-gray-100 flex ml-5 w-[100px]">
@@ -145,63 +144,16 @@ const ColumnStatisticsView = () => {
   console.log(tableStatistics)
 
   return (
-    <div className="p-4" onClick={() => getColumnStatisticsModel(statistics ?? {})}>
+    <div className="p-4">
       <div className="flex w-full h-15">
-        {tableStatistics.map((x, index) => 
-        <div className="w-1/4 flex font-light ml-5" key={index}>
+        {[...tableStatistics, {type: "Row count", result: rowCount}].map((x, index) => 
+        <div className="flex font-light ml-5 mr-20" key={index}>
           {x.type}
           <div className="font-bold ml-5">
             {x.result}
           </div>
         </div>
         )}
-        {/* <div className="w-1/4 flex font-light ml-5" onClick={() => getColumnStatisticsModel(statistics ?? {})}>
-          Datatype{' '}
-          <div className="font-bold ml-5">
-            {statistics?.type_snapshot?.column_type}
-          </div>
-        </div>
-        <div className="w-1/3 flex font-light">
-          Detected Datatype
-          <div className="font-bold ml-5">
-            {statistics &&
-            statistics?.statistics?.filter(
-              (x) => x.collector === 'string_datatype_detect'
-            ).length === 0 ? (
-              <div className="mr-2 font-bold ">No datatype detected</div>
-            ) : (
-              statistics?.statistics?.map((x, index) => (
-                <div className="mr-2 font-bold" key={index}>
-                  {x.collector === 'string_datatype_detect'
-                    ? getDetectedDatatype(x.result)
-                    : ''}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-        <div className="w-1/5 flex font-light">
-          Total Rows
-          <div className="font-bold ml-5">
-            {rowCount &&
-              rowCount.statistics?.map((x, index) => (
-                <div key={index}>
-                  {x.collector === 'row_count' && x.category === 'volume'
-                    ? renderValue(x.result)
-                    : ''}
-                </div>
-              ))}
-          </div>
-        </div>
-        <div className="w-1/4 flex font-light">
-          Collected at
-          <div className="font-bold ml-5">
-            {statistics?.statistics?.at(0)?.collectedAt &&
-              moment(statistics?.statistics?.at(0)?.collectedAt).format(
-                'YYYY-MM-DD HH:mm:ss'
-              )}
-          </div>
-        </div> */}
       </div>
       <div className="w-full flex gap-8 flex-wrap">
         {Object.keys(columnStatistics).map((column, index) => 
