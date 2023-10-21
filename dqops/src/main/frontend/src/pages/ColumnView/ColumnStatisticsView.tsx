@@ -16,7 +16,7 @@ type TStatistics = {
     sampleCount?: number
 }   
 
-const ColumnStatisticsView = () => {
+const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollectedIndicator?: boolean}) => {
   const {
     connection,
     schema,
@@ -33,7 +33,7 @@ const ColumnStatisticsView = () => {
   const [tableStatistics, setTableStatistics] = useState<TStatistics[]>([]);
   const [rowCount, setRowCount] = useState<number>()
 
-  const fetchColumns = async () => {
+  const fetchColumnsStatistics = async () => {
     try {
       const res: AxiosResponse<ColumnStatisticsModel> =
         await ColumnApiClient.getColumnStatistics(
@@ -47,7 +47,8 @@ const ColumnStatisticsView = () => {
       console.error(err);
     }
   };
-  const fetchRows = async () => {
+
+  const fetchRowStatistics = async () => {
     try {
       const res: AxiosResponse<TableStatisticsModel> =
         await TableApiClient.getTableStatistics(connection, schema, table);
@@ -58,19 +59,9 @@ const ColumnStatisticsView = () => {
   };
 
   useEffect(() => {
-    fetchColumns();
-    fetchRows();
-  }, [connection, schema, table, column]);
-
-  const renderValue = (value: any) => {
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-    if (typeof value === 'object') {
-      return value.toString();
-    }
-    return value;
-  };
+    fetchColumnsStatistics();
+    fetchRowStatistics();
+  }, [connection, schema, table, column, statisticsCollectedIndicator]);
 
   const renderCategory = (value: string) => {
     if (value.toLowerCase() === 'sampling') {
@@ -117,23 +108,28 @@ const ColumnStatisticsView = () => {
     fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
       if (item.collector !== "string_datatype_detect") {
         if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
-            column_statistics_dictionary[String(item.category)].push({type: item.collector, result: renderValue(item.result), sampleCount: item.sampleCount})
+            column_statistics_dictionary[String(item.category)].push({type: item.collector, result: String(item.result), sampleCount: item.sampleCount})
           } else {
-            column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: renderValue(item.result), sampleCount: item.sampleCount}]
+            column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: String(item.result), sampleCount: item.sampleCount}]
           }
       } else {
         table_statistics_array.push({type: "Detected Datatype:", result: getDetectedDatatype(item.result)})
       }
     })
-    table_statistics_array.push({type: "Datatype:", result: String(fetchedColumnsStatistics.type_snapshot?.column_type)})
-    table_statistics_array.push({type: "Collected at:", result: moment(fetchedColumnsStatistics.statistics?.at(0)?.collectedAt).format('YYYY-MM-DD HH:mm:ss')})
+    table_statistics_array.push({type: "Datatype:", 
+    result: String(fetchedColumnsStatistics.type_snapshot?.column_type)})
+    
+    table_statistics_array.push({type: "Collected at:", 
+    result: moment(fetchedColumnsStatistics.statistics?.at(0)?.collectedAt).format('YYYY-MM-DD HH:mm:ss')})
     
     setColumnStatistics(column_statistics_dictionary)  
     setTableStatistics(table_statistics_array)
   }
 
   const getTableStatisticsModel = (fetchedTableStatistics: TableStatisticsModel) => {
-    setRowCount(Number(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result))
+    if (!isNaN(Number(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result))) {
+      setRowCount(Number(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result))
+    }
   }
  
   const renderSampleIndicator = (value: number) : React.JSX.Element => {
@@ -145,7 +141,7 @@ const ColumnStatisticsView = () => {
             style={{
               width: `${
                 (value * 100) /
-                    Number(renderValue(nullCount))
+                    Number(nullCount)
               }px`
             }}
             ></div>  
@@ -156,7 +152,7 @@ const ColumnStatisticsView = () => {
   return (
     <div className="p-4">
       <div className="flex w-full h-15">
-        {[...tableStatistics, {type: "Row count", result: rowCount}].map((x, index) => 
+        {[...tableStatistics, rowCount ? { type: "Row count", result: rowCount} : {}].map((x, index) => 
         <div className="flex font-light ml-5 mr-20" key={index}>
           {x.type}
           <div className="font-bold ml-5">
