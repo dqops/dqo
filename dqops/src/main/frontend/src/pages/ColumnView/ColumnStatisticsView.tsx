@@ -8,6 +8,7 @@ import { formatNumber } from '../../shared/constants';
 import moment from 'moment';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import { getDetectedDatatype } from '../../utils';
+import { isDate, isInteger } from 'lodash';
 
 type TStatistics = {
     type?: string,
@@ -90,10 +91,22 @@ const ColumnStatisticsView = () => {
   }
 
   const renderColumnStatisticsValue = (value : TStatistics) => {
-    if (value.type?.toLowerCase().includes("percent")) {
-      return Number(value.result).toFixed(2) + "%"
-    } else if (value.sampleCount) {
+    if (value.sampleCount) {
       return value.sampleCount  
+    } else if (value.type?.toLowerCase().includes("percent")) {
+      if (isInteger(Number(value.result))) {
+        return value.result + "%"
+      } else {
+        return Number(value.result).toFixed(2) + "%"
+      }
+    } else if (!isNaN(Number(value.result))) {
+      if (isInteger(Number(value.result))) {
+        return formatNumber(Number(value.result))
+      } else {
+        return formatNumber(Number(Number(value.result).toFixed(2)))
+      }
+    } else if (isDate(value.result)) {
+      moment(value.result).format('YYYY-MM-DD HH:mm:ss')
     }
     return value.result
   }
@@ -122,8 +135,7 @@ const ColumnStatisticsView = () => {
   const getTableStatisticsModel = (fetchedTableStatistics: TableStatisticsModel) => {
     setRowCount(Number(fetchedTableStatistics.statistics?.find((item) => item.collector === "row_count")?.result))
   }
-
-    
+ 
   const renderSampleIndicator = (value: number) : React.JSX.Element => {
     const nullCount = columnStatistics["nulls"].find((x) => x.type === 'not_nulls_count')?.result
     return (
@@ -140,8 +152,6 @@ const ColumnStatisticsView = () => {
       </div>
     )
   }
-  console.log(columnStatistics)
-  console.log(tableStatistics)
 
   return (
     <div className="p-4">
