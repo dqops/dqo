@@ -22,10 +22,10 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { dashboardFolders } = useSelector(
+  const { dashboardFolders,  dashboardTooltipState } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth,} = useDashboard();
   const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -79,12 +79,12 @@ const LeftView = () => {
       },[activeTab]);
       
     const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
-
+    const [mousePos, setMousePos] = useState<any>({});
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
       setMouseEnterTimeout(setTimeout(() => {
         const height = e.clientY;
         dispatch(getDashboardTooltipState({height, label, url}));
-      }, 50))
+      }, 100))
     };
 
     const handleMouseLeave = () => {
@@ -93,6 +93,26 @@ const LeftView = () => {
       }
       dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
     };
+    useEffect(() => {
+      const handleMouseMove = (event : any) => {
+        setMousePos({x: event.clientX, y: event.clientY});
+      };
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => {
+        window.removeEventListener(
+          'mousemove',
+          handleMouseMove
+        );
+      };
+    }, []);
+
+    useEffect(() => {
+      if (dashboardTooltipState.label && mousePos) {
+        if (mousePos.x > sidebarWidth) {
+          dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
+        }
+      }
+    }, [mousePos.x])
     
     return (
       <div>
