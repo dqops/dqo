@@ -79,7 +79,7 @@ const LeftView = () => {
       },[activeTab]);
       
     const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
-    const [mousePos, setMousePos] = useState<any>({});
+    const [mousePos, setMousePos] = useState<number>();
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
       setMouseEnterTimeout(setTimeout(() => {
         const height = e.clientY;
@@ -95,7 +95,7 @@ const LeftView = () => {
     };
     useEffect(() => {
       const handleMouseMove = (event : any) => {
-        setMousePos({x: event.clientX, y: event.clientY});
+        setMousePos(event.clientX);
       };
       window.addEventListener('mousemove', handleMouseMove);
       return () => {
@@ -108,11 +108,11 @@ const LeftView = () => {
 
     useEffect(() => {
       if (dashboardTooltipState.label && mousePos) {
-        if (mousePos.x > sidebarWidth) {
+        if (mousePos > sidebarWidth) {
           dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
         }
       }
-    }, [mousePos.x])
+    }, [mousePos])
     
     return (
       <div>
