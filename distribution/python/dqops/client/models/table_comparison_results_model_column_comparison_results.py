@@ -4,8 +4,8 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.table_comparison_results_model_column_comparison_results_additional_property import (
-        TableComparisonResultsModelColumnComparisonResultsAdditionalProperty,
+    from ..models.table_comparison_column_results_model import (
+        TableComparisonColumnResultsModel,
     )
 
 
@@ -20,7 +20,7 @@ class TableComparisonResultsModelColumnComparisonResults:
     """
 
     additional_properties: Dict[
-        str, "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty"
+        str, "TableComparisonColumnResultsModel"
     ] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -36,8 +36,8 @@ class TableComparisonResultsModelColumnComparisonResults:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_comparison_results_model_column_comparison_results_additional_property import (
-            TableComparisonResultsModelColumnComparisonResultsAdditionalProperty,
+        from ..models.table_comparison_column_results_model import (
+            TableComparisonColumnResultsModel,
         )
 
         d = src_dict.copy()
@@ -45,9 +45,7 @@ class TableComparisonResultsModelColumnComparisonResults:
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
-            additional_property = TableComparisonResultsModelColumnComparisonResultsAdditionalProperty.from_dict(
-                prop_dict
-            )
+            additional_property = TableComparisonColumnResultsModel.from_dict(prop_dict)
 
             additional_properties[prop_name] = additional_property
 
@@ -60,16 +58,10 @@ class TableComparisonResultsModelColumnComparisonResults:
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(
-        self, key: str
-    ) -> "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty":
+    def __getitem__(self, key: str) -> "TableComparisonColumnResultsModel":
         return self.additional_properties[key]
 
-    def __setitem__(
-        self,
-        key: str,
-        value: "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty",
-    ) -> None:
+    def __setitem__(self, key: str, value: "TableComparisonColumnResultsModel") -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

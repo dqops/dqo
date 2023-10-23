@@ -13,7 +13,7 @@ if TYPE_CHECKING:
         ConnectionIncidentGroupingSpec,
     )
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-    from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
+    from ..models.default_schedules_spec import DefaultSchedulesSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -40,7 +40,7 @@ class ConnectionSpec:
         parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
-        schedules (Union[Unset, MonitoringSchedulesSpec]):
+        schedules (Union[Unset, DefaultSchedulesSpec]):
         incident_grouping (Union[Unset, ConnectionIncidentGroupingSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
@@ -61,7 +61,7 @@ class ConnectionSpec:
     default_grouping_configuration: Union[
         Unset, "DataGroupingConfigurationSpec"
     ] = UNSET
-    schedules: Union[Unset, "MonitoringSchedulesSpec"] = UNSET
+    schedules: Union[Unset, "DefaultSchedulesSpec"] = UNSET
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
@@ -173,7 +173,7 @@ class ConnectionSpec:
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
-        from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
+        from ..models.default_schedules_spec import DefaultSchedulesSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -250,11 +250,11 @@ class ConnectionSpec:
             )
 
         _schedules = d.pop("schedules", UNSET)
-        schedules: Union[Unset, MonitoringSchedulesSpec]
+        schedules: Union[Unset, DefaultSchedulesSpec]
         if isinstance(_schedules, Unset):
             schedules = UNSET
         else:
-            schedules = MonitoringSchedulesSpec.from_dict(_schedules)
+            schedules = DefaultSchedulesSpec.from_dict(_schedules)
 
         _incident_grouping = d.pop("incident_grouping", UNSET)
         incident_grouping: Union[Unset, ConnectionIncidentGroupingSpec]

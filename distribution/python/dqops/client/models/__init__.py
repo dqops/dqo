@@ -1274,6 +1274,7 @@ from .data_grouping_dimension_source import DataGroupingDimensionSource
 from .data_grouping_dimension_spec import DataGroupingDimensionSpec
 from .datatype_equals_rule_parameters_spec import DatatypeEqualsRuleParametersSpec
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
+from .default_schedules_spec import DefaultSchedulesSpec
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1365,7 +1366,6 @@ from .min_percent_rule_100_parameters_spec import MinPercentRule100ParametersSpe
 from .min_value_rule_parameters_spec import MinValueRuleParametersSpec
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
 from .monitoring_schedule_spec import MonitoringScheduleSpec
-from .monitoring_schedules_spec import MonitoringSchedulesSpec
 from .mono import Mono
 from .mono_dqo_queue_job_id import MonoDqoQueueJobId
 from .mono_object import MonoObject
@@ -1575,6 +1575,10 @@ from .table_columns_statistics_model import TableColumnsStatisticsModel
 from .table_comparison_column_count_match_check_spec import (
     TableComparisonColumnCountMatchCheckSpec,
 )
+from .table_comparison_column_results_model import TableComparisonColumnResultsModel
+from .table_comparison_column_results_model_column_comparison_results import (
+    TableComparisonColumnResultsModelColumnComparisonResults,
+)
 from .table_comparison_configuration_model import TableComparisonConfigurationModel
 from .table_comparison_configuration_spec import TableComparisonConfigurationSpec
 from .table_comparison_daily_monitoring_checks_spec import (
@@ -1615,9 +1619,6 @@ from .table_comparison_profiling_checks_spec_custom_checks import (
 from .table_comparison_results_model import TableComparisonResultsModel
 from .table_comparison_results_model_column_comparison_results import (
     TableComparisonResultsModelColumnComparisonResults,
-)
-from .table_comparison_results_model_column_comparison_results_additional_property import (
-    TableComparisonResultsModelColumnComparisonResultsAdditionalProperty,
 )
 from .table_comparison_results_model_table_comparison_results import (
     TableComparisonResultsModelTableComparisonResults,
@@ -2355,6 +2356,7 @@ __all__ = (
     "DataGroupingDimensionSpec",
     "DatatypeEqualsRuleParametersSpec",
     "DatetimeBuiltInDateFormats",
+    "DefaultSchedulesSpec",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2440,7 +2442,6 @@ __all__ = (
     "MinPercentRule99ParametersSpec",
     "MinValueRuleParametersSpec",
     "MonitoringScheduleSpec",
-    "MonitoringSchedulesSpec",
     "Mono",
     "MonoDqoQueueJobId",
     "MonoObject",
@@ -2564,6 +2565,8 @@ __all__ = (
     "TableColumnsStatisticsModel",
     "TableColumnTypesHashSensorParametersSpec",
     "TableComparisonColumnCountMatchCheckSpec",
+    "TableComparisonColumnResultsModel",
+    "TableComparisonColumnResultsModelColumnComparisonResults",
     "TableComparisonConfigurationModel",
     "TableComparisonConfigurationSpec",
     "TableComparisonDailyMonitoringChecksSpec",
@@ -2581,7 +2584,6 @@ __all__ = (
     "TableComparisonProfilingChecksSpecCustomChecks",
     "TableComparisonResultsModel",
     "TableComparisonResultsModelColumnComparisonResults",
-    "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty",
     "TableComparisonResultsModelTableComparisonResults",
     "TableComparisonRowCountMatchCheckSpec",
     "TableDailyMonitoringCheckCategoriesSpec",

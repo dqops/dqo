@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
-T = TypeVar("T", bound="MonitoringSchedulesSpec")
+T = TypeVar("T", bound="DefaultSchedulesSpec")
 
 
 @_attrs_define
-class MonitoringSchedulesSpec:
+class DefaultSchedulesSpec:
     """
     Attributes:
         profiling (Union[Unset, MonitoringScheduleSpec]):
@@ -107,7 +107,7 @@ class MonitoringSchedulesSpec:
         else:
             partitioned_monthly = MonitoringScheduleSpec.from_dict(_partitioned_monthly)
 
-        monitoring_schedules_spec = cls(
+        default_schedules_spec = cls(
             profiling=profiling,
             monitoring_daily=monitoring_daily,
             monitoring_monthly=monitoring_monthly,
@@ -115,8 +115,8 @@ class MonitoringSchedulesSpec:
             partitioned_monthly=partitioned_monthly,
         )
 
-        monitoring_schedules_spec.additional_properties = d
-        return monitoring_schedules_spec
+        default_schedules_spec.additional_properties = d
+        return default_schedules_spec
 
     @property
     def additional_keys(self) -> List[str]:

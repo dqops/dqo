@@ -92,11 +92,7 @@ class DqopsRunChecksOperator(BaseOperator):
             )
 
         if self.api_key is not UNSET:
-            client.with_headers(
-                {
-                    "Authorization": "Bearer " + self.api_key
-                }
-            )
+            client.with_headers({"Authorization": "Bearer " + self.api_key})
 
         try:
             response: Response[RunChecksQueueJobResult] = sync_detailed(

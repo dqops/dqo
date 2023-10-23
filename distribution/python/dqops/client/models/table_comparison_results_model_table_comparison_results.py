@@ -12,7 +12,7 @@ T = TypeVar("T", bound="TableComparisonResultsModelTableComparisonResults")
 
 @_attrs_define
 class TableComparisonResultsModelTableComparisonResults:
-    """The dictionary of comparison results between the tables for table level comparisons (the row count). The keys for
+    """The dictionary of comparison results between the tables for table level comparisons (e.g. row count). The keys for
     the dictionary are the check names. The value in the dictionary is a summary information about the most recent
     comparison.
 

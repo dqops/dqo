@@ -7,14 +7,15 @@ if TYPE_CHECKING:
     from ..models.comparison_check_result_model import ComparisonCheckResultModel
 
 
-T = TypeVar(
-    "T", bound="TableComparisonResultsModelColumnComparisonResultsAdditionalProperty"
-)
+T = TypeVar("T", bound="TableComparisonColumnResultsModelColumnComparisonResults")
 
 
 @_attrs_define
-class TableComparisonResultsModelColumnComparisonResultsAdditionalProperty:
-    """ """
+class TableComparisonColumnResultsModelColumnComparisonResults:
+    """The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are
+    check names. The values are summaries of the most recent comparison on this column.
+
+    """
 
     additional_properties: Dict[str, "ComparisonCheckResultModel"] = _attrs_field(
         init=False, factory=dict
@@ -36,9 +37,7 @@ class TableComparisonResultsModelColumnComparisonResultsAdditionalProperty:
         from ..models.comparison_check_result_model import ComparisonCheckResultModel
 
         d = src_dict.copy()
-        table_comparison_results_model_column_comparison_results_additional_property = (
-            cls()
-        )
+        table_comparison_column_results_model_column_comparison_results = cls()
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
@@ -46,12 +45,10 @@ class TableComparisonResultsModelColumnComparisonResultsAdditionalProperty:
 
             additional_properties[prop_name] = additional_property
 
-        table_comparison_results_model_column_comparison_results_additional_property.additional_properties = (
+        table_comparison_column_results_model_column_comparison_results.additional_properties = (
             additional_properties
         )
-        return (
-            table_comparison_results_model_column_comparison_results_additional_property
-        )
+        return table_comparison_column_results_model_column_comparison_results
 
     @property
     def additional_keys(self) -> List[str]:
