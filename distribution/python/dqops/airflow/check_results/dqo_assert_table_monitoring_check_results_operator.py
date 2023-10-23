@@ -5,7 +5,7 @@ from airflow.models.baseoperator import BaseOperator
 from dqops.airflow.check_results.common.dqo_assert_table_check_results import (
     DqoAssertTableCheckResults
 )
-from dqops.airflow.tools.url_resolver import extract_base_url
+from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client.models.check_time_scale import CheckTimeScale
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel

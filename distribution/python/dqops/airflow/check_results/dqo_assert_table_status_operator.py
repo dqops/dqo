@@ -5,16 +5,16 @@ from typing import Any, Dict, Union
 from airflow.models.baseoperator import BaseOperator
 from httpx import ReadTimeout
 
-from dqops.airflow.exceptions.dqops_data_quality_issue_detected_exception import (
+from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import (
     DqopsDataQualityIssueDetectedException,
 )
-from dqops.airflow.exceptions.dqops_empty_response_exception import (
+from dqops.airflow.common.exceptions.dqops_empty_response_exception import (
     DqopsEmptyResponseException,
 )
-from dqops.airflow.tools.client_creator import create_client
-from dqops.airflow.tools.rule_severity_level_utility import get_severity_value
-from dqops.airflow.tools.timeout.python_client_timeout import handle_python_timeout
-from dqops.airflow.tools.url_resolver import extract_base_url
+from dqops.airflow.common.tools.client_creator import create_client
+from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value
+from dqops.airflow.common.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.check_results.get_table_data_quality_status import sync_detailed
 from dqops.client.models.check_time_scale import CheckTimeScale
