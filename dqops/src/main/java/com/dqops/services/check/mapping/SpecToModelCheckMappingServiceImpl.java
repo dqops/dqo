@@ -43,7 +43,7 @@ import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -1121,7 +1121,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleLevel Schedule level.
      * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
      */
-    protected EffectiveScheduleModel getEffectiveScheduleModel(MonitoringSchedulesSpec schedulesSpec,
+    protected EffectiveScheduleModel getEffectiveScheduleModel(DefaultSchedulesSpec schedulesSpec,
                                                                CheckRunScheduleGroup scheduleGroup,
                                                                EffectiveScheduleLevelModel scheduleLevel) {
         MonitoringScheduleSpec scheduleSpec = schedulesSpec != null

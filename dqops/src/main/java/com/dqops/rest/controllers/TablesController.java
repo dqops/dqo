@@ -28,7 +28,6 @@ import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSp
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.models.DeleteStoredDataResult;
@@ -42,7 +41,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -407,7 +406,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -2173,9 +2172,9 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
-            schedules = new MonitoringSchedulesSpec();
+            schedules = new DefaultSchedulesSpec();
             tableSpec.setSchedulesOverride(schedules);
         }
 

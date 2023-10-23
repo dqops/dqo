@@ -31,7 +31,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -132,7 +132,7 @@ public class ConnectionSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringSchedulesSpec schedules;
+    private DefaultSchedulesSpec schedules;
 
     @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
@@ -311,7 +311,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
-    public MonitoringSchedulesSpec getSchedules() {
+    public DefaultSchedulesSpec getSchedules() {
         return schedules;
     }
 
@@ -319,7 +319,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the configuration of schedules for running each type of checks.
      * @param schedules Configuration of schedules.
      */
-    public void setSchedules(MonitoringSchedulesSpec schedules) {
+    public void setSchedules(DefaultSchedulesSpec schedules) {
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");

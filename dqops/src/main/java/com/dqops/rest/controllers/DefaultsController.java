@@ -27,7 +27,7 @@ import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -696,19 +696,19 @@ public class DefaultsController {
 
         UserHome userHome = userHomeContext.getUserHome();
 
-        MonitoringSchedulesSpec monitoringSchedulesSpec = null;
+        DefaultSchedulesSpec defaultSchedulesSpec = null;
 
         if (userHome == null
                 || userHome.getDefaultSchedules() == null
                 || userHome.getDefaultSchedules().getSpec() == null
         ) {
-            monitoringSchedulesSpec = new MonitoringSchedulesSpec();
+            defaultSchedulesSpec = new DefaultSchedulesSpec();
         } else {
-            monitoringSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+            defaultSchedulesSpec = userHome.getDefaultSchedules().getSpec();
         }
 
         if (newMonitoringScheduleSpec.isPresent()) {
-            monitoringSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+            defaultSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
         }
 
         userHomeContext.flush();

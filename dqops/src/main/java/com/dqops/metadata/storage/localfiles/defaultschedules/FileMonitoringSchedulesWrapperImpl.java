@@ -4,7 +4,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -38,14 +38,14 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
      * @return Loaded default schedules specification.
      */
     @Override
-    public MonitoringSchedulesSpec getSpec() {
-        MonitoringSchedulesSpec spec = super.getSpec();
+    public DefaultSchedulesSpec getSpec() {
+        DefaultSchedulesSpec spec = super.getSpec();
         if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                MonitoringSchedulesSpec deserializedSpec = (MonitoringSchedulesSpec) fileContent.getCachedObjectInstance();
+                DefaultSchedulesSpec deserializedSpec = (DefaultSchedulesSpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
                     DefaultSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());

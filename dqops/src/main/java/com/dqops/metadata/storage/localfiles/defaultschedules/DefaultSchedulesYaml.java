@@ -1,7 +1,7 @@
 package com.dqops.metadata.storage.localfiles.defaultschedules;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
@@ -12,12 +12,12 @@ public class DefaultSchedulesYaml {
 
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.DEFAULT_SCHEDULES;
-    private MonitoringSchedulesSpec spec = new MonitoringSchedulesSpec();
+    private DefaultSchedulesSpec spec = new DefaultSchedulesSpec();
 
     public DefaultSchedulesYaml() {
     }
 
-    public DefaultSchedulesYaml(MonitoringSchedulesSpec spec) {
+    public DefaultSchedulesYaml(DefaultSchedulesSpec spec) {
         this.spec = spec;
     }
 
@@ -57,7 +57,7 @@ public class DefaultSchedulesYaml {
      * Returns a data source specification.
      * @return Data source specification.
      */
-    public MonitoringSchedulesSpec getSpec() {
+    public DefaultSchedulesSpec getSpec() {
         return spec;
     }
 
@@ -65,7 +65,7 @@ public class DefaultSchedulesYaml {
      * Sets a data source specification.
      * @param spec Data source specification.
      */
-    public void setSpec(MonitoringSchedulesSpec spec) {
+    public void setSpec(DefaultSchedulesSpec spec) {
         this.spec = spec;
     }
 

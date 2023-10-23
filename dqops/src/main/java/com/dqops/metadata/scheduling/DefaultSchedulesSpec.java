@@ -43,8 +43,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class MonitoringSchedulesSpec extends AbstractSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MonitoringSchedulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DefaultSchedulesSpec extends AbstractSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<DefaultSchedulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("profiling", o -> o.profiling);
             put("monitoring_daily", o -> o.monitoringDaily);
@@ -237,8 +237,8 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override
-    public MonitoringSchedulesSpec deepClone() {
-        return (MonitoringSchedulesSpec)super.deepClone();
+    public DefaultSchedulesSpec deepClone() {
+        return (DefaultSchedulesSpec)super.deepClone();
     }
 
     /**
@@ -246,8 +246,8 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed and expanded version of this object.
      */
-    public MonitoringSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
-        MonitoringSchedulesSpec cloned = (MonitoringSchedulesSpec) super.deepClone();
+    public DefaultSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
+        DefaultSchedulesSpec cloned = (DefaultSchedulesSpec) super.deepClone();
         if (cloned.profiling != null) {
             cloned.setProfiling(cloned.profiling.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }

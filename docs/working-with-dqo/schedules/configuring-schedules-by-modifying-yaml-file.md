@@ -33,7 +33,7 @@ spec:
     jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
     profiling:
-      cron_expression: 0 12 * * *
+      cron_expression: 0 12 1 * *
     monitoring_daily:
       cron_expression: 0 12 * * *
     monitoring_monthly:
