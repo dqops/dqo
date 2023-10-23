@@ -26,7 +26,6 @@ nav:
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
-      - Table comparison: "dqo-concepts/table-comparison/table-comparison.md"
       - Working with YAML files: "dqo-concepts/working-with-yaml-files/working-with-yaml-files.md"
       - Working with CLI: "dqo-concepts/working-with-cli/working-with-cli.md"
   - Use cases:
@@ -88,6 +87,7 @@ nav:
           - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
           - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
+      - Table comparison: "working-with-dqo/table-comparison/table-comparison.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY

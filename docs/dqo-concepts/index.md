@@ -44,10 +44,7 @@ These topics introduce the basic concepts of DQOps.
 - **[Data storage](./data-storage/data-storage.md)**
 
     Description how data is stored in DQOps.
-
-- **[Table comparison](./table-comparison/table-comparison.md)**
-
-    Description describes the concept of table comparison.    
+ 
 
 - **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
 
