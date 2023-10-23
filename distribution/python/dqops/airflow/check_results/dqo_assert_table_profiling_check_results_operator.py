@@ -13,7 +13,7 @@ from dqops.client.types import UNSET, Unset
 
 class DqoAssertTableProfilingCheckResultsOperator(BaseOperator):
     """
-    Returns the summary for the complete results of the most recent check executions for all table level data quality profiling checks on a table",
+    Returns the summary for the complete results of the most recent check executions for all table level data quality profiling checks on a table.
 
     """
 

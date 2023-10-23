@@ -1,8 +1,22 @@
-# Check status operators
+# Check results operators
 
-Check status airflow operators are used to receive the data quality status for a table. 
+Check results airflow operators are used to receive the data quality status for a table. 
 
 The operator can be used to collect information about the data quality before or after execution of a significant operations. 
+
+There are 4 operators for checking the results.
+
+- **DqoAssertTableStatusOperator**: Airflow assert table status operator for receiving DQOps table status.
+
+This operator is used for receiving overall status on a table. 
+
+
+And three operators that return the summary for the complete results of the most recent check executions for all table level data quality checks on a table, with specific type of checks:
+- **DqoAssertTableProfilingCheckResultsOperator**: For profiling checks.
+- **DqoAssertTableMonitoringCheckResultsOperator**: For monitoring checks.
+- **DqoAssertTablePartitionedCheckResultsOperator**: For partitioned checks.
+
+These operators are used to receive status from particular checks that can be pointed with use of extra parameters.
 
 
 ## Operator parameters
@@ -22,6 +36,42 @@ Required parameters points to a specific table which status has to be provided.
 | wait_timeout               | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.     | int                                                           |
 | fail_on_timeout            | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                     | bool [optional, default=True]                                 |
 | maximum_severity_threshold | The maximum level of rule severity that is accepted, causing that an airflow task finishes with succeeded status.                                                                                                       | RuleSeverityLevel [optional, default=RuleSeverityLevel.ERROR] |
+
+
+connection_name: str,
+schema_name: str,
+table_name: str,
+
+months: Union[Unset, None, int] = UNSET,
+check_type: Union[Unset, None, CheckType] = UNSET,
+check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+
+base_url: str = "http://localhost:8888/",
+wait_timeout: int = UNSET,
+fail_on_timeout: bool = True,
+maximum_severity_threshold: RuleSeverityLevel = RuleSeverityLevel.ERROR,
+
+
+connection_name: str,
+schema_name: str,
+table_name: str,
+(only monitoring and partitioned) time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+
+data_group: Union[Unset, None, str] = UNSET,
+month_start: Union[Unset, None, datetime.date] = UNSET,
+month_end: Union[Unset, None, datetime.date] = UNSET,
+check_name: Union[Unset, None, str] = UNSET,
+category: Union[Unset, None, str] = UNSET,
+table_comparison: Union[Unset, None, str] = UNSET,
+max_results_per_check: Union[Unset, None, int] = UNSET,
+
+base_url: str = "http://localhost:8888/",
+wait_timeout: int = UNSET,
+fail_on_timeout: bool = True,
+maximum_severity_threshold: RuleSeverityLevel = RuleSeverityLevel.ERROR,
+
+**kwargs,
+
 
 
 ## Set up the operator

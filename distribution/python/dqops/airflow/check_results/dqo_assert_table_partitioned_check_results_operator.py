@@ -14,7 +14,7 @@ from dqops.client.types import UNSET, Unset
 
 class DqoAssertTablePartitionedCheckResultsOperator(BaseOperator):
     """
-    Returns the summary for the complete results of the most recent check executions for all table level data quality partitioned checks on a table",
+    Returns the summary for the complete results of the most recent check executions for all table level data quality partitioned checks on a table.
 
     """
 

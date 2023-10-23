@@ -14,7 +14,7 @@ from dqops.client.types import UNSET, Unset
 
 class DqoAssertTableMonitoringCheckResultsOperator(BaseOperator):
     """
-    Returns the summary for the complete results of the most recent check executions for all table level data quality monitoring checks on a table",
+    Returns the summary for the complete results of the most recent check executions for all table level data quality monitoring checks on a table.
     
     """
 
@@ -32,7 +32,6 @@ class DqoAssertTableMonitoringCheckResultsOperator(BaseOperator):
         category: Union[Unset, None, str] = UNSET,
         table_comparison: Union[Unset, None, str] = UNSET,
         max_results_per_check: Union[Unset, None, int] = UNSET,
-        months: Union[Unset, None, int] = UNSET,
         base_url: str = "http://localhost:8888/",
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
@@ -90,8 +89,6 @@ class DqoAssertTableMonitoringCheckResultsOperator(BaseOperator):
         self.table_comparison: Union[Unset, None, str] = table_comparison
         self.max_results_per_check: Union[Unset, None, int] = max_results_per_check
 
-        self.months: Union[Unset, None, int] = months
-
         self.base_url: str = extract_base_url(base_url)
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
@@ -113,7 +110,6 @@ class DqoAssertTableMonitoringCheckResultsOperator(BaseOperator):
             category=self.category,
             table_comparison=self.table_comparison,
             max_results_per_check=self.max_results_per_check,
-            months=self.months,
             check_type=self.check_type,
             base_url=self.base_url,
             wait_timeout=self.wait_timeout,
