@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level comparison check compares the row count of the current (parent) table to the column count in the reference table.
+ * Table level comparison check compares the column count of the current (parent) table to the column count in the reference table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
