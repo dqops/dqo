@@ -14,10 +14,10 @@ Table comparison enables you to identify differences between two tables. It is u
     - mean match
     - not null count match
     - null count match
-<!-- lista z kropkami -->
+
 ## Create a new table comparison
 
-Just like checks, table comparison can be in any of the three types: profiling, monitoring, or partition. Read more about different types of checks in the DQOps concept section.
+Just like checks, table comparison can be in any of the three types: profiling, monitoring, or partition. Read more about different [types of checks in the DQOps concept section](../../dqo-concepts/checks/index.md).
 
 1. Go to **Profiling, Monitoring checks, or Partition checks** and select the table of interest from the tree view on the left. This will be your source table.
 
@@ -37,7 +37,7 @@ Just like checks, table comparison can be in any of the three types: profiling, 
 
 ![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks.png)
 
-7. For each enabled check, you can specify the severity level by expanding the row with the name of the table or column. You can choose from 3 severity levels in DQOps: warning, error, and fatal. Learn more about the severity levels. 
+7. For each enabled check, you can specify the severity level by expanding the row with the name of the table or column. You can choose from 3 severity levels in DQOps: warning, error, and fatal. [Learn more about the severity levels](../../dqo-concepts/checks/index.md/#severity-levels).
 
 ![Select severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/severity-levels.png)
 
