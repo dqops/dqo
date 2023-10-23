@@ -16,7 +16,7 @@ These topics introduce the basic concepts of DQOps.
 
     Description of the rules. A set of conditions against which sensor readouts are verified, described by a list of thresholds.
 
- - **[Deployment architecture](./architecture/deployment-architecture.md)**
+ - **[Deployment architecture](./architecture/dqops-architecture.md)**
 
     DQOps architecture, components and deployment options.
 

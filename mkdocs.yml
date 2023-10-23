@@ -21,6 +21,8 @@ nav:
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
       - Sensors: "dqo-concepts/sensors/sensors.md"
       - Rules: "dqo-concepts/rules/rules.md"
+      - Data quality flow: "dqo-concepts/architecture/data-quality-flow.md"
+      - DQOps architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
       - Dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
