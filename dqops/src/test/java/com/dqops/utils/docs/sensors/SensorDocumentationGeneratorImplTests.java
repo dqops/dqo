@@ -24,7 +24,7 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
@@ -42,7 +42,7 @@ import java.util.Optional;
 public class SensorDocumentationGeneratorImplTests extends BaseTest {
     private SensorDocumentationGeneratorImpl sut;
     private Path projectRootPath;
-    private HandledClassesLinkageStore linkageStore;
+    private LinkageStore<Class<?>> linkageStore;
     private DqoHome dqoHome;
 
     @BeforeEach
@@ -55,7 +55,7 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
-        this.linkageStore = new HandledClassesLinkageStore();
+        this.linkageStore = new LinkageStore<>();
 
         this.sut = new SensorDocumentationGeneratorImpl(sensorDocumentationModelFactory);
     }

@@ -19,7 +19,7 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
@@ -48,7 +48,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderSensorDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome) {
+    public DocumentationFolder renderSensorDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder sensorsFolder = new DocumentationFolder();
         sensorsFolder.setFolderName("reference/sensors");
         sensorsFolder.setLinkName("Sensors");

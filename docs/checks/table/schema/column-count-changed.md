@@ -12,9 +12,9 @@ ___
 **Check description**  
 Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_count_changed|profiling| |[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_count_changed|profiling| |Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -88,9 +88,9 @@ ___
 **Check description**  
 Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_count_changed|monitoring|daily|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_count_changed|monitoring|daily|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -166,9 +166,9 @@ ___
 **Check description**  
 Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_count_changed|monitoring|monthly|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_count_changed|monitoring|monthly|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

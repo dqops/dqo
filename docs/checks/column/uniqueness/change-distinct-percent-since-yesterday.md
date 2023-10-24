@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_change_distinct_percent_since_yesterday|profiling| |[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_change_distinct_percent_since_yesterday|profiling| |Consistency|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -654,9 +654,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_change_distinct_percent_since_yesterday|monitoring|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_change_distinct_percent_since_yesterday|monitoring|daily|Consistency|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1301,9 +1301,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_change_distinct_percent_since_yesterday|monitoring|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_change_distinct_percent_since_yesterday|monitoring|monthly|Consistency|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1948,9 +1948,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_change_distinct_percent_since_yesterday|partitioned|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_change_distinct_percent_since_yesterday|partitioned|daily|Consistency|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2609,9 +2609,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_change_distinct_percent_since_yesterday|partitioned|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_change_distinct_percent_since_yesterday|partitioned|monthly|Consistency|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

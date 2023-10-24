@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_invalid_ip4_address_count|profiling| |[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_invalid_ip4_address_count|profiling| |Validity|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -721,9 +721,9 @@ ___
 **Check description**  
 Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_invalid_ip4_address_count|monitoring|daily|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_invalid_ip4_address_count|monitoring|daily|Validity|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1435,9 +1435,9 @@ ___
 **Check description**  
 Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_invalid_ip4_address_count|monitoring|monthly|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_invalid_ip4_address_count|monitoring|monthly|Validity|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2149,9 +2149,9 @@ ___
 **Check description**  
 Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_invalid_ip4_address_count|partitioned|daily|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_invalid_ip4_address_count|partitioned|daily|Validity|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2877,9 +2877,9 @@ ___
 **Check description**  
 Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_invalid_ip4_address_count|partitioned|monthly|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_invalid_ip4_address_count|partitioned|monthly|Validity|[string_invalid_ip4_address_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-ip4-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

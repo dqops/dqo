@@ -113,6 +113,35 @@
 		</profile>
 
 		<profile>
+			<id>generate-python-docs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-python-docs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.docs.client.GeneratePythonDocumentationPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
 			<id>update-dqo-home-specs</id>
 			<build>
 				<plugins>
@@ -861,7 +890,7 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
+						<arg>-Ajavadoc.packages=com.dqops.services,com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

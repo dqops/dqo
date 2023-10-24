@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that a set percentage of rows passed a custom SQL condition (expression).  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_sql_condition_passed_percent_on_table|profiling| |[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_sql_condition_passed_percent_on_table|profiling| |Validity|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -766,9 +766,9 @@ ___
 **Check description**  
 Verifies that a set percentage of rows passed a custom SQL condition (expression). Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_sql_condition_passed_percent_on_table|monitoring|daily|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_sql_condition_passed_percent_on_table|monitoring|daily|Validity|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1552,9 +1552,9 @@ ___
 **Check description**  
 Verifies that a set percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_sql_condition_passed_percent_on_table|monitoring|monthly|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_sql_condition_passed_percent_on_table|monitoring|monthly|Validity|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2338,9 +2338,9 @@ ___
 **Check description**  
 Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_sql_condition_passed_percent_on_table|partitioned|daily|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_sql_condition_passed_percent_on_table|partitioned|daily|Validity|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3138,9 +3138,9 @@ ___
 **Check description**  
 Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_condition_passed_percent_on_table|partitioned|monthly|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_sql_condition_passed_percent_on_table|partitioned|monthly|Validity|[sql_condition_passed_percent](../../../../reference/sensors/table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

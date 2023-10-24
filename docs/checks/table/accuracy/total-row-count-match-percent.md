@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the total row count of the tested table matches the total row count of another (reference) table.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_total_row_count_match_percent|profiling| |[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_total_row_count_match_percent|profiling| |Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -300,9 +300,9 @@ ___
 **Check description**  
 Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_total_row_count_match_percent|monitoring|daily|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_total_row_count_match_percent|monitoring|daily|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -592,9 +592,9 @@ ___
 **Check description**  
 Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_total_row_count_match_percent|monitoring|monthly|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_total_row_count_match_percent|monitoring|monthly|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

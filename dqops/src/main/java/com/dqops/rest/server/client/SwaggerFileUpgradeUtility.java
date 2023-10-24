@@ -24,7 +24,9 @@ import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
@@ -196,45 +198,116 @@ public class SwaggerFileUpgradeUtility {
             for (Map.Entry<String, Schema> apiModel : apiModels) {
                 Map<String, Schema> apiProperties = apiModel.getValue().getProperties();
                 if (apiProperties != null) {
-                    List<Map.Entry<String, Schema>> apiEnumParameters = apiProperties.entrySet().stream()
-                            .filter(propEntry -> propEntry.getValue().getEnum() != null)
-                            .collect(Collectors.toList());
+                    String modelName = apiModel.getKey();
+                    Class<?> model = projectModels.get(modelName);
 
-                    if (!apiEnumParameters.isEmpty()) {
-                        String modelName = apiModel.getKey();
-
-                        Class<?> model = projectModels.get(modelName);
-
-                        for (Map.Entry<String, Schema> apiEnumParameter : apiEnumParameters) {
-                            String apiEnumParameterName = apiEnumParameter.getKey();
-                            String parameterName = apiEnumParameterName;
-                            if (parameterName.contains("_")) {
-                                parameterName = CaseUtils.toCamelCase(parameterName, false, '_');
-                            }
-
-                            Field parameter;
-                            try {
-                                parameter = model.getDeclaredField(parameterName);
-                            } catch (Exception e) {
-                                System.err.println("Cannot find parameter " + parameterName + " on the model " + modelName + ", error: " + e.toString());
-                                throw new RuntimeException(e);
-                            }
-
-                            String enumRef = useReferentiableEnumSingle(enumRefMapping, parameter.getGenericType());
-                            apiProperties.put(apiEnumParameterName, new Schema<>() {{
-                                set$ref(enumRef);
-                            }});
-                        }
-                    }
+                    useReferentiableEnumsInApiProperties(model, apiProperties, enumRefMapping);
+                    useReferentiableEnumsInApiPropertiesLists(model, apiProperties, enumRefMapping);
+                    useReferentiableEnumsInApiPropertiesMaps(model, apiProperties, enumRefMapping);
                 }
             }
+        }
+
+        private void useReferentiableEnumsInApiProperties(Class<?> model,
+                                                          Map<String, Schema> apiProperties,
+                                                          Map<Class<? extends Enum<?>>, String> enumRefMapping) {
+            List<String> apiEnumParameters = apiProperties.entrySet().stream()
+                    .filter(propEntry -> propEntry.getValue().getEnum() != null)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
+            if (!apiEnumParameters.isEmpty()) {
+                for (String apiEnumParameter : apiEnumParameters) {
+                    String enumRef = getEnumRefForReferentiableEnumProperty(model, apiEnumParameter, enumRefMapping);
+                    apiProperties.put(apiEnumParameter, new Schema<>() {{
+                        set$ref(enumRef);
+                    }});
+                }
+            }
+        }
+
+        private void useReferentiableEnumsInApiPropertiesLists(Class<?> model,
+                                                               Map<String, Schema> apiProperties,
+                                                               Map<Class<? extends Enum<?>>, String> enumRefMapping) {
+            List<Map.Entry<String, Schema>> apiEnumItems = apiProperties.entrySet().stream()
+                    .filter(propEntry -> {
+                        Schema<?> propSchema = propEntry.getValue();
+                        if (propSchema.getEnum() != null) {
+                            return false;
+                        }
+
+                        Schema<?> propItems = propSchema.getItems();
+                        return propItems != null && propItems.getEnum() != null;
+                    })
+                    .collect(Collectors.toList());
+
+            if (!apiEnumItems.isEmpty()) {
+                for (Map.Entry<String, Schema> apiEnumItem : apiEnumItems) {
+                    String apiEnumItemName = apiEnumItem.getKey();
+                    Schema<?> apiItemSchema = apiEnumItem.getValue();
+                    String enumRef = getEnumRefForReferentiableEnumProperty(model, apiEnumItemName, enumRefMapping);
+
+                    apiItemSchema.setItems(new Schema<>().$ref(enumRef));
+                }
+            }
+        }
+
+        private void useReferentiableEnumsInApiPropertiesMaps(Class<?> model,
+                                                              Map<String, Schema> apiProperties,
+                                                              Map<Class<? extends Enum<?>>, String> enumRefMapping) {
+            List<Map.Entry<String, Schema>> apiEnumAdditionalProperties = apiProperties.entrySet().stream()
+                    .filter(propEntry -> {
+                        Schema propSchema = propEntry.getValue();
+                        if (propSchema.getEnum() != null) {
+                            return false;
+                        }
+
+                        Object propAdditionalProperties = propSchema.getAdditionalProperties();
+                        if (propAdditionalProperties instanceof Schema<?>) {
+                            Schema<?> propAdditionalPropertiesSchema = (Schema<?>) propAdditionalProperties;
+                            return propAdditionalPropertiesSchema.getEnum() != null;
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+
+            if (!apiEnumAdditionalProperties.isEmpty()) {
+                for (Map.Entry<String, Schema> apiEnumParameter : apiEnumAdditionalProperties) {
+                    String apiEnumParameterName = apiEnumParameter.getKey();
+                    Schema apiPropertySchema = apiEnumParameter.getValue();
+                    String enumRef = getEnumRefForReferentiableEnumProperty(model, apiEnumParameterName, enumRefMapping);
+
+                    apiPropertySchema.setAdditionalProperties(new Schema<>().$ref(enumRef));
+                }
+            }
+        }
+
+        private String getEnumRefForReferentiableEnumProperty(Class<?> clazz, String enumParameterName, Map<Class<? extends Enum<?>>, String> enumRefMapping) {
+            if (enumParameterName.contains("_")) {
+                enumParameterName = CaseUtils.toCamelCase(enumParameterName, false, '_');
+            }
+
+            Field parameter;
+            try {
+                parameter = clazz.getDeclaredField(enumParameterName);
+            } catch (Exception e) {
+                System.err.println("Cannot find parameter " + enumParameterName + " on the model " + clazz.getName() + ", error: " + e.toString());
+                throw new RuntimeException(e);
+            }
+
+            return useReferentiableEnumSingle(enumRefMapping, parameter.getGenericType());
         }
 
         private String useReferentiableEnumSingle(Map<Class<? extends Enum<?>>, String> enumRefMapping,
                                                   Type reflectEnumType) {
             Class<?> reflectClass;
             if (reflectEnumType instanceof ParameterizedType) {
-                reflectClass = (Class<?>) ((ParameterizedType) reflectEnumType).getActualTypeArguments()[0];
+                Type[] actualTypeArguments = ((ParameterizedType) reflectEnumType).getActualTypeArguments();
+                if (actualTypeArguments.length == 2) {
+                    reflectClass = (Class<?>) actualTypeArguments[1];
+                } else {
+                    reflectClass = (Class<?>) actualTypeArguments[0];
+                }
             } else {
                 reflectClass = (Class<?>) reflectEnumType;
             }

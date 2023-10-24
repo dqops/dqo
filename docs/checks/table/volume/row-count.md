@@ -11,9 +11,9 @@ ___
 **Check description**  
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_row_count|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_row_count|profiling| |Reasonableness|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -522,9 +522,9 @@ ___
 **Check description**  
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_row_count|monitoring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_row_count|monitoring|daily|Reasonableness|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1036,9 +1036,9 @@ ___
 **Check description**  
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_row_count|monitoring|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_row_count|monitoring|monthly|Reasonableness|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1550,9 +1550,9 @@ ___
 **Check description**  
 Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_row_count|partitioned|daily|Reasonableness|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2073,43 +2073,43 @@ spec:
 
 ___
 
-## **monthly partition min row count**  
+## **monthly partition row count**  
   
 **Check description**  
 Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_row_count|partitioned|monthly|Reasonableness|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_min_row_count
+dqo> check enable -c=connection_name -ch=monthly_partition_row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=monthly_partition_min_row_count
+dqo> check run -ch=monthly_partition_row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -ch=monthly_partition_row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     monthly:
       volume:
-        monthly_partition_min_row_count:
+        monthly_partition_row_count:
           warning:
             min_count: 1
           error:
@@ -2133,7 +2133,7 @@ spec:
   partitioned_checks:
     monthly:
       volume:
-        monthly_partition_min_row_count:
+        monthly_partition_row_count:
           warning:
             min_count: 1
           error:
@@ -2368,7 +2368,7 @@ spec:
       partitioned_checks:
         monthly:
           volume:
-            monthly_partition_min_row_count:
+            monthly_partition_row_count:
               warning:
                 min_count: 1
               error:

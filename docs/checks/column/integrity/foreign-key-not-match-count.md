@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_foreign_key_not_match_count|profiling| |Integrity|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -815,9 +815,9 @@ ___
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_foreign_key_not_match_count|monitoring|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_foreign_key_not_match_count|monitoring|daily|Integrity|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1623,9 +1623,9 @@ ___
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_not_match_count|monitoring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_foreign_key_not_match_count|monitoring|monthly|Integrity|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2431,9 +2431,9 @@ ___
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_foreign_key_not_match_count|partitioned|daily|Integrity|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3253,9 +3253,9 @@ ___
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_foreign_key_not_match_count|partitioned|monthly|Integrity|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

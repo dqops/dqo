@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the number of not null values in a column does not exceed the minimum accepted count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_not_nulls_count|profiling| |Completeness|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -549,9 +549,9 @@ ___
 **Check description**  
 Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_not_nulls_count|monitoring|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_not_nulls_count|monitoring|daily|Completeness|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1091,9 +1091,9 @@ ___
 **Check description**  
 Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_count|monitoring|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_not_nulls_count|monitoring|monthly|Completeness|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1633,9 +1633,9 @@ ___
 **Check description**  
 Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_not_nulls_count|partitioned|daily|Completeness|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2189,9 +2189,9 @@ ___
 **Check description**  
 Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_not_nulls_count|partitioned|monthly|Completeness|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that empty strings in a column does not exceed the maximum accepted count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_empty_count|profiling| |[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_empty_count|profiling| |Completeness|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -815,9 +815,9 @@ ___
 **Check description**  
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_empty_count|monitoring|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_empty_count|monitoring|daily|Completeness|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1623,9 +1623,9 @@ ___
 **Check description**  
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_empty_count|monitoring|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_empty_count|monitoring|monthly|Completeness|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2431,9 +2431,9 @@ ___
 **Check description**  
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_empty_count|partitioned|daily|Completeness|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3253,9 +3253,9 @@ ___
 **Check description**  
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_empty_count|partitioned|monthly|Completeness|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

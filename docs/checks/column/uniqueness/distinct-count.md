@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_distinct_count|profiling| |[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_distinct_count|profiling| |Uniqueness|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -589,9 +589,9 @@ ___
 **Check description**  
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_distinct_count|monitoring|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_distinct_count|monitoring|daily|Uniqueness|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1171,9 +1171,9 @@ ___
 **Check description**  
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_distinct_count|monitoring|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_distinct_count|monitoring|monthly|Uniqueness|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1753,9 +1753,9 @@ ___
 **Check description**  
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_distinct_count|partitioned|daily|Uniqueness|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2349,9 +2349,9 @@ ___
 **Check description**  
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_distinct_count|partitioned|monthly|Uniqueness|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

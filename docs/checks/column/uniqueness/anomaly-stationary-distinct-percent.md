@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_anomaly_stationary_distinct_percent|profiling| |[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_anomaly_stationary_distinct_percent|profiling| |Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -589,9 +589,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_anomaly_stationary_distinct_percent|monitoring|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_anomaly_stationary_distinct_percent|monitoring|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1171,9 +1171,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_anomaly_stationary_distinct_percent|monitoring|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_anomaly_stationary_distinct_percent|monitoring|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1753,9 +1753,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_anomaly_stationary_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_anomaly_stationary_distinct_count|partitioned|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2349,9 +2349,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_anomaly_stationary_distinct_percent|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_anomaly_stationary_distinct_percent|partitioned|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2945,9 +2945,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_anomaly_stationary_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_anomaly_stationary_distinct_count|partitioned|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3541,9 +3541,9 @@ ___
 **Check description**  
 Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_anomaly_stationary_distinct_percent|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_anomaly_stationary_distinct_percent|partitioned|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
