@@ -87,7 +87,7 @@ nav:
           - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
           - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
-      - Table comparison: "working-with-dqo/table-comparison/table-comparison.md"
+      - Create and run table comparisons: "working-with-dqo/table-comparison/table-comparison.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY

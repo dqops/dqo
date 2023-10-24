@@ -42,7 +42,7 @@ Just like checks, table comparison can be in any of the three types: profiling, 
 
 7. For each enabled check, you can specify the severity level by expanding the row with the name of the table or column. You can choose from 3 severity levels in DQOps: warning, error, and fatal. [Learn more about the severity levels](../../dqo-concepts/checks/index.md/#severity-levels).
 
-    If you enable one of 2 checks(row_count or column_count) on list of checks. Checkbox in table comparison configuration screen will be filled autotalically.
+    You can manage a comparison table and perform checks at the column level for a list of checks. You can enable/disable checks, set severity levels, and view the results with all the data.
     
     ![Select severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/severity-levels.png)
 
