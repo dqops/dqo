@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_median_change|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_median_change|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -700,9 +700,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_median_change|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_median_change|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1393,9 +1393,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_median_change|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_median_change|monitoring|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2086,9 +2086,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_median_change|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_median_change|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2791,9 +2791,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_median_change|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_median_change|partitioned|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

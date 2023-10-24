@@ -282,65 +282,16 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     }
 
     private TypeModel getObjectsTypeModel(Type type, Map<String, ComponentModel> componentModelMap) {
-        TypeModel typeModel = new TypeModel();
-
-        Class<?> clazz;
-        ParameterizedType genericType;
-        FieldInfo fieldInfoContainer = new FieldInfo();
-
-        if (type instanceof ParameterizedType) {
-            genericType = (ParameterizedType) type;
-            clazz = (Class<?>) genericType.getRawType();
-        } else {
-            clazz = (Class<?>) type;
-            genericType = null;
-
-            ComponentModel componentModel = componentModelMap.get(clazz.getSimpleName());
+        Function<String, String> linkAccessor = (simpleClassName) -> {
+            ComponentModel componentModel = componentModelMap.get(simpleClassName);
             if (componentModel != null && componentModel.getDocsLink() != null) {
-                typeModel.setClassUsedOnTheFieldPath(componentModel.getDocsLink().toString());
+                return componentModel.getDocsLink().toString();
             } else {
-                typeModel.setClassUsedOnTheFieldPath("#" + clazz.getSimpleName());
+                return "#" + simpleClassName;
             }
-        }
+        };
 
-        ParameterDataType parameterDataType = documentationReflectionService.getReflectionService().determineParameterDataType(clazz, genericType, fieldInfoContainer);
-
-        String classSimpleName = clazz.getSimpleName();
-        typeModel.setClassNameUsedOnTheField(classSimpleName);
-        typeModel.setClazz(clazz);
-        typeModel.setDataType(parameterDataType);
-        typeModel.setObjectDataType(fieldInfoContainer.getObjectDataType());
-
-        if (parameterDataType == ParameterDataType.object_type ||
-                (parameterDataType == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {
-            ParameterizedType parameterizedType = fieldInfoContainer.getGenericDataType();
-            ObjectDataType objectDataType = Objects.requireNonNullElse(fieldInfoContainer.getObjectDataType(), ObjectDataType.object_type);
-            switch (objectDataType) {
-                case object_type:
-                    break;
-
-                case list_type:
-                    Type listType = parameterizedType.getActualTypeArguments()[0];
-                    TypeModel listTypeModel = getObjectsTypeModel(listType, componentModelMap);
-                    typeModel.setGenericKeyType(listTypeModel);
-                    break;
-
-                case map_type:
-                    Type keyType = parameterizedType.getActualTypeArguments()[0];
-                    TypeModel keyTypeModel = getObjectsTypeModel(keyType, componentModelMap);
-                    typeModel.setGenericKeyType(keyTypeModel);
-
-                    Type valueType = parameterizedType.getActualTypeArguments()[1];
-                    TypeModel valueTypeModel = getObjectsTypeModel(valueType, componentModelMap);
-                    typeModel.setGenericValueType(valueTypeModel);
-                    break;
-
-                default:
-                    throw new RuntimeException(new NoSuchFieldException("Enum value is not present"));
-            }
-        }
-
-        return typeModel;
+        return documentationReflectionService.getObjectsTypeModel(type, linkAccessor);
     }
 
     /**

@@ -102,7 +102,7 @@ Compiled results of the &quot;data delete&quot;.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|partition_results|Dictionary of partitions that where deleted or updated when the rows were deleted.|Map&lt;[ParquetPartitionId](#parquetpartitionid), [DataDeleteResultPartition](#datadeleteresultpartition)&gt;|
+|partition_results|Dictionary of partitions that where deleted or updated when the rows were deleted.|Dict[[ParquetPartitionId](#parquetpartitionid), [DataDeleteResultPartition](#datadeleteresultpartition)]|
 
 
 ___  
@@ -505,7 +505,7 @@ Job history snapshot model that returns only changes after a given change sequen
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|job_changes||List&lt;[DqoJobChangeModel](#dqojobchangemodel)&gt;|
+|job_changes||List[[DqoJobChangeModel](#dqojobchangemodel)]|
 |[folder_synchronization_status](#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)|
 |last_sequence_number||long|
 
@@ -521,7 +521,7 @@ Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table i
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|source_table_specs|Table schemas (including column schemas) of imported tables.|List&lt;[TableSpec](\docs\reference\yaml\tableyaml\#tablespec)&gt;|
+|source_table_specs|Table schemas (including column schemas) of imported tables.|List[[TableSpec](\docs\reference\yaml\tableyaml\#tablespec)]|
 
 
 ___  

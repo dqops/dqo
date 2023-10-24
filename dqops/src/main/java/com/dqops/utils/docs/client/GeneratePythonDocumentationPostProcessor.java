@@ -225,7 +225,7 @@ public class GeneratePythonDocumentationPostProcessor {
     }
 
     protected static void generateDocumentationForOperations(Path projectRoot,
-                                                              OpenAPIModel openAPIModel) {
+                                                             OpenAPIModel openAPIModel) {
         Path operationsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)

@@ -16,15 +16,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|
@@ -50,15 +50,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|
@@ -84,15 +84,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|
@@ -117,15 +117,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|
@@ -150,15 +150,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|
@@ -183,15 +183,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_results_overview_data_model](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)||[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](\docs\client\models\check_results_overview\#checkresultsoverviewdatamodel)]|
 
 
 
 
 **The structure of this method is described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|----------|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|true|
 |schema_name|Schema name|string|true|
 |table_name|Table name|string|true|

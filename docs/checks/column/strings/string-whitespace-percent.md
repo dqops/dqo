@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_whitespace_percent|profiling| |[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_whitespace_percent|profiling| |Completeness|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -929,9 +929,9 @@ ___
 **Check description**  
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_whitespace_percent|monitoring|daily|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_whitespace_percent|monitoring|daily|Completeness|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1851,9 +1851,9 @@ ___
 **Check description**  
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_whitespace_percent|monitoring|monthly|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_whitespace_percent|monitoring|monthly|Completeness|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2773,9 +2773,9 @@ ___
 **Check description**  
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_whitespace_percent|partitioned|daily|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_whitespace_percent|partitioned|daily|Completeness|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3709,9 +3709,9 @@ ___
 **Check description**  
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_whitespace_percent|partitioned|monthly|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_whitespace_percent|partitioned|monthly|Completeness|[string_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -10,7 +10,7 @@
 |---------------|---------------------------------|-----------|
 |[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
 |[check_model_patch](\docs\client\models\#checkmodel)|Sample configured check model which will pasted onto selected checks.|[CheckModel](\docs\client\models\#checkmodel)|
-|selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Map&lt;string, string_list&gt;|
+|selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Dict[string, string_list]|
 |override_conflicts|Override existing configurations if they&#x27;re present. If false, apply updates only to the fields for which no configuration exists.|boolean|
 
 
@@ -26,7 +26,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
-|selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Map&lt;string, string_list&gt;|
+|selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Dict[string, string_list]|
 
 
 ___  

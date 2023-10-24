@@ -11,9 +11,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_min_match|profiling| |[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_min_match|profiling| |Accuracy|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -304,9 +304,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_min_match|monitoring|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_min_match|monitoring|daily|Accuracy|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -599,9 +599,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_min_match|monitoring|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_min_match|monitoring|monthly|Accuracy|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -894,9 +894,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_min_match|partitioned|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_min_match|partitioned|daily|Accuracy|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1199,9 +1199,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_min_match|partitioned|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_min_match|partitioned|monthly|Accuracy|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

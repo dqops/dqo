@@ -12,9 +12,9 @@ ___
 **Check description**  
 Calculates the number of days since the most recent event timestamp (freshness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_data_freshness|profiling| |[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_data_freshness|profiling| |Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -907,9 +907,9 @@ ___
 **Check description**  
 Daily  calculating the number of days since the most recent event timestamp (freshness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_data_freshness|monitoring|daily|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_data_freshness|monitoring|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1805,9 +1805,9 @@ ___
 **Check description**  
 Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_data_freshness|monitoring|monthly|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_data_freshness|monitoring|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2703,9 +2703,9 @@ ___
 **Check description**  
 Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_data_freshness|partitioned|daily|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_data_freshness|partitioned|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3615,9 +3615,9 @@ ___
 **Check description**  
 Monthly partitioned check calculating the number of days since the most recent event (freshness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_data_freshness|partitioned|monthly|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_data_freshness|partitioned|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

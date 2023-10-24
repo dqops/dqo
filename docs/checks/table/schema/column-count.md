@@ -10,9 +10,9 @@ ___
 **Check description**  
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_count|profiling| |[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_count|profiling| |Validity|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -92,9 +92,9 @@ ___
 **Check description**  
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_count|monitoring|daily|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_count|monitoring|daily|Validity|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -176,9 +176,9 @@ ___
 **Check description**  
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_count|monitoring|monthly|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_count|monitoring|monthly|Validity|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

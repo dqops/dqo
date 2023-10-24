@@ -12,9 +12,9 @@ ___
 **Check description**  
 Verifies availability of the table in a database using a simple row count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_table_availability|profiling| |[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_table_availability|profiling| |Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -322,9 +322,9 @@ ___
 **Check description**  
 Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_table_availability|monitoring|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_table_availability|monitoring|daily|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -634,9 +634,9 @@ ___
 **Check description**  
 Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_table_availability|monitoring|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

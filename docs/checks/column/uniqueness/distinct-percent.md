@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_distinct_percent|profiling| |[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_distinct_percent|profiling| |Uniqueness|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -645,9 +645,9 @@ ___
 **Check description**  
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_distinct_percent|monitoring|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_distinct_percent|monitoring|daily|Uniqueness|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1283,9 +1283,9 @@ ___
 **Check description**  
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_distinct_percent|monitoring|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_distinct_percent|monitoring|monthly|Uniqueness|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1921,9 +1921,9 @@ ___
 **Check description**  
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_distinct_percent|partitioned|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_distinct_percent|partitioned|daily|Uniqueness|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2573,9 +2573,9 @@ ___
 **Check description**  
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_distinct_percent|partitioned|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_distinct_percent|partitioned|monthly|Uniqueness|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -19,7 +19,13 @@ package com.dqops.utils.docs;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.ReflectionService;
 
+import java.lang.reflect.Type;
+import java.util.function.Function;
+
 public interface DocumentationReflectionService {
     ClassInfo getClassInfoForClass(Class<?> targetClass);
+
+    TypeModel getObjectsTypeModel(Type type, Function<String, String> objectLinkAccessor);
+
     ReflectionService getReflectionService();
 }

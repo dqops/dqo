@@ -77,9 +77,9 @@ Model that returns histograms of the data quality issue occurrences related to a
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Map&lt;date, [IncidentDailyIssuesCount](#incidentdailyissuescount)&gt;|
-|columns|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Map&lt;string, integer&gt;|
-|checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Map&lt;string, integer&gt;|
+|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Dict[date, [IncidentDailyIssuesCount](#incidentdailyissuescount)]|
+|columns|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
+|checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
 
 
 ___  

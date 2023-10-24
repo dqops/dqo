@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_total_sum_match_percent|profiling| |[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_total_sum_match_percent|profiling| |Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -305,9 +305,9 @@ ___
 **Check description**  
 Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_total_sum_match_percent|monitoring|daily|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_total_sum_match_percent|monitoring|daily|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -602,9 +602,9 @@ ___
 **Check description**  
 Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_total_sum_match_percent|monitoring|monthly|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_total_sum_match_percent|monitoring|monthly|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

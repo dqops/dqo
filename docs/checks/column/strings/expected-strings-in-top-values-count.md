@@ -14,9 +14,9 @@ ___
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_expected_strings_in_top_values_count|profiling| |[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_expected_strings_in_top_values_count|profiling| |Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1892,9 +1892,9 @@ ___
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_expected_strings_in_top_values_count|monitoring|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_expected_strings_in_top_values_count|monitoring|daily|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3773,9 +3773,9 @@ ___
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_expected_strings_in_top_values_count|monitoring|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_expected_strings_in_top_values_count|monitoring|monthly|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -5654,9 +5654,9 @@ ___
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_expected_strings_in_top_values_count|partitioned|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_expected_strings_in_top_values_count|partitioned|daily|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7547,9 +7547,9 @@ ___
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_expected_strings_in_top_values_count|partitioned|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_expected_strings_in_top_values_count|partitioned|monthly|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

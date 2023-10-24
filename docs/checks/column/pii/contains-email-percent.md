@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_contains_email_percent|profiling| |[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_contains_email_percent|profiling| |Validity|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -785,9 +785,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_contains_email_percent|monitoring|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_contains_email_percent|monitoring|daily|Validity|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1563,9 +1563,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_contains_email_percent|monitoring|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_contains_email_percent|monitoring|monthly|Validity|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2341,9 +2341,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_contains_email_percent|partitioned|daily|Validity|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3133,9 +3133,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_contains_email_percent|partitioned|monthly|Validity|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

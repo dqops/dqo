@@ -75,7 +75,7 @@ Model that returns the form definition and the form data to edit parameters (thr
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |rule_name|Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.|string|
-|rule_parameters|List of fields for editing the rule parameters like thresholds.|List&lt;[FieldModel](\docs\client\models\#fieldmodel)&gt;|
+|rule_parameters|List of fields for editing the rule parameters like thresholds.|List[[FieldModel](\docs\client\models\#fieldmodel)]|
 |disabled|Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.|boolean|
 |configured|Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).|boolean|
 
@@ -100,7 +100,7 @@ Model containing fundamental configuration of a single data quality check.
 |[check_time_scale](\docs\client\models\#checktimescale)|Category to which this check belongs.|[CheckTimeScale](\docs\client\models\#checktimescale)|
 |category_name|Category to which this check belongs.|string|
 |check_name|Check name that is used in YAML file.|string|
-|sensor_parameters|List of fields for editing the sensor parameters.|List&lt;[FieldModel](#fieldmodel)&gt;|
+|sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](#fieldmodel)]|
 |table_level_filter|SQL WHERE clause added to the sensor query for every check on this table.|string|
 |sensor_level_filter|SQL WHERE clause added to the sensor query for this check.|string|
 |[warning](#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](#ruleparametersmodel)|
@@ -138,7 +138,7 @@ Simplistic model that returns the list of data quality checks, their names, cate
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|checks|Simplistic list of all data quality checks.|List&lt;[CheckListModel](#checklistmodel)&gt;|
+|checks|Simplistic list of all data quality checks.|List[[CheckListModel](#checklistmodel)]|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
@@ -258,7 +258,7 @@ List of comments.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|this||List&lt;[CommentSpec](\docs\client\models\#commentspec)&gt;|
+|self||List[[CommentSpec](\docs\client\models\#commentspec)]|
 
 
 ___  
@@ -365,7 +365,7 @@ Model that returns the form definition and the form data to edit a single data q
 |---------------|---------------------------------|-----------|
 |check_name|Data quality check name that is used in YAML.|string|
 |help_text|Help text that describes the data quality check.|string|
-|sensor_parameters|List of fields for editing the sensor parameters.|List&lt;[FieldModel](\docs\client\models\#fieldmodel)&gt;|
+|sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](\docs\client\models\#fieldmodel)]|
 |sensor_name|Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.|string|
 |quality_dimension|Data quality dimension used for tagging the results of this data quality checks.|string|
 |[rule](#rulethresholdsmodel)|Threshold (alerting) rules defined for a check.|[RuleThresholdsModel](#rulethresholdsmodel)|
@@ -385,7 +385,7 @@ Model that returns the form definition and the form data to edit a single data q
 |data_grouping_configuration|The name of a data grouping configuration defined at a table that should be used for this check.|string|
 |[check_target](#checktargetmodel)|Type of the check&#x27;s target (column, table).|[CheckTargetModel](#checktargetmodel)|
 |configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|string_list|
-|similar_checks|List of similar checks in other check types or in other time scales.|List&lt;[SimilarCheckModel](#similarcheckmodel)&gt;|
+|similar_checks|List of similar checks in other check types or in other time scales.|List[[SimilarCheckModel](#similarcheckmodel)]|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
@@ -406,7 +406,7 @@ Model that returns the form definition and the form data to edit all checks with
 |comparison_name|The name of the reference table configuration used for a cross table data comparison (when the category is &#x27;comparisons&#x27;).|string|
 |compare_to_column|The name of the column in the reference table that is compared.|string|
 |help_text|Help text that describes the category.|string|
-|checks|List of data quality checks within the category.|List&lt;[CheckModel](#checkmodel)&gt;|
+|checks|List of data quality checks within the category.|List[[CheckModel](#checkmodel)]|
 |[run_checks_job_template](\docs\client\models\#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
 |[data_clean_job_template](\docs\client\models\#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this quality category.|[DeleteStoredDataQueueJobParameters](\docs\client\models\#deletestoreddataqueuejobparameters)|
 
@@ -422,7 +422,7 @@ Model that returns the form definition and the form data to edit all data qualit
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|categories|List of all data quality categories that contain data quality checks inside.|List&lt;[QualityCategoryModel](#qualitycategorymodel)&gt;|
+|categories|List of all data quality categories that contain data quality checks inside.|List[[QualityCategoryModel](#qualitycategorymodel)]|
 |[effective_schedule](\docs\client\models\#effectiveschedulemodel)|Model of configured schedule enabled on the check container.|[EffectiveScheduleModel](\docs\client\models\#effectiveschedulemodel)|
 |[effective_schedule_enabled_status](\docs\client\models\#scheduleenabledstatusmodel)|State of the effective scheduling on the check container.|[ScheduleEnabledStatusModel](\docs\client\models\#scheduleenabledstatusmodel)|
 |partition_by_column|The name of the column that partitioned checks will use for the time period partitioning. Important only for partitioned checks.|string|
@@ -465,8 +465,8 @@ Model depicting a named data quality check that can potentially be enabled, rega
 |help_text|Help text that describes the data quality check.|string|
 |[check_container_type](#checkcontainertypemodel)|Check type with time-scale.|[CheckContainerTypeModel](#checkcontainertypemodel)|
 |sensor_name|Full sensor name.|string|
-|sensor_parameters_definitions|List of sensor parameter fields definitions.|List&lt;[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)&gt;|
-|rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List&lt;[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)&gt;|
+|sensor_parameters_definitions|List of sensor parameter fields definitions.|List[[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)]|
+|rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List[[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)]|
 
 
 ___  

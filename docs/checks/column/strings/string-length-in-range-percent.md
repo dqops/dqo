@@ -10,9 +10,9 @@ ___
 **Check description**  
 The check counts the percentage of those strings with length in the range provided by the user in the column.   
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_length_in_range_percent|profiling| |[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_length_in_range_percent|profiling| |Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -864,9 +864,9 @@ ___
 **Check description**  
 The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_length_in_range_percent|monitoring|daily|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_length_in_range_percent|monitoring|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1721,9 +1721,9 @@ ___
 **Check description**  
 The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_length_in_range_percent|monitoring|monthly|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_length_in_range_percent|monitoring|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2578,9 +2578,9 @@ ___
 **Check description**  
 The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_in_range_percent|partitioned|daily|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_length_in_range_percent|partitioned|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3449,9 +3449,9 @@ ___
 **Check description**  
 The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_in_range_percent|partitioned|monthly|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_length_in_range_percent|partitioned|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

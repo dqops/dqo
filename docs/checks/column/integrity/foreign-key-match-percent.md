@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_foreign_key_match_percent|profiling| |[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_foreign_key_match_percent|profiling| |Integrity|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -791,9 +791,9 @@ ___
 **Check description**  
 Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_foreign_key_match_percent|monitoring|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_foreign_key_match_percent|monitoring|daily|Integrity|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1575,9 +1575,9 @@ ___
 **Check description**  
 Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_match_percent|monitoring|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_foreign_key_match_percent|monitoring|monthly|Integrity|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2359,9 +2359,9 @@ ___
 **Check description**  
 Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_match_percent|partitioned|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_foreign_key_match_percent|partitioned|daily|Integrity|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3157,9 +3157,9 @@ ___
 **Check description**  
 Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_match_percent|partitioned|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_foreign_key_match_percent|partitioned|monthly|Integrity|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

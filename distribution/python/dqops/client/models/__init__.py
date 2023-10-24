@@ -1647,6 +1647,9 @@ from .table_schema_column_count_changed_check_spec import (
     TableSchemaColumnCountChangedCheckSpec,
 )
 from .table_schema_column_count_check_spec import TableSchemaColumnCountCheckSpec
+from .table_schema_column_count_statistics_collector_spec import (
+    TableSchemaColumnCountStatisticsCollectorSpec,
+)
 from .table_schema_column_list_changed_check_spec import (
     TableSchemaColumnListChangedCheckSpec,
 )
@@ -1672,6 +1675,7 @@ from .table_schema_profiling_checks_spec import TableSchemaProfilingChecksSpec
 from .table_schema_profiling_checks_spec_custom_checks import (
     TableSchemaProfilingChecksSpecCustomChecks,
 )
+from .table_schema_statistics_collectors_spec import TableSchemaStatisticsCollectorsSpec
 from .table_spec import TableSpec
 from .table_spec_columns import TableSpecColumns
 from .table_spec_groupings import TableSpecGroupings
@@ -2556,6 +2560,7 @@ __all__ = (
     "TableRowCountCheckSpec",
     "TableSchemaColumnCountChangedCheckSpec",
     "TableSchemaColumnCountCheckSpec",
+    "TableSchemaColumnCountStatisticsCollectorSpec",
     "TableSchemaColumnListChangedCheckSpec",
     "TableSchemaColumnListOrOrderChangedCheckSpec",
     "TableSchemaColumnTypesChangedCheckSpec",
@@ -2565,6 +2570,7 @@ __all__ = (
     "TableSchemaMonthlyMonitoringChecksSpecCustomChecks",
     "TableSchemaProfilingChecksSpec",
     "TableSchemaProfilingChecksSpecCustomChecks",
+    "TableSchemaStatisticsCollectorsSpec",
     "TableSpec",
     "TableSpecColumns",
     "TableSpecGroupings",

@@ -16,6 +16,8 @@
 package com.dqops.utils.docs.yaml;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.DocumentationReflectionService;
+import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
@@ -38,7 +40,7 @@ import java.util.Map;
  */
 public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModelFactory {
 
-    private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+    private final DocumentationReflectionService reflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     private final LinkageStore<Class<?>> linkageStore;

@@ -103,9 +103,9 @@ public class HandlebarsDocumentationUtilities {
             ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
             switch (objectDataType) {
                 case list_type:
-                    return "List<%s>".formatted(apply(typeModel.getGenericKeyType(), options));
+                    return "List[%s]".formatted(apply(typeModel.getGenericKeyType(), options));
                 case map_type:
-                    return "Map<%s, %s>".formatted(apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
+                    return "Dict[%s, %s]".formatted(apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
                 case object_type:
                 default:
                     return "[" + typeModel.getClassNameUsedOnTheField() + "]" +

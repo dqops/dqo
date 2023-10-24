@@ -10,9 +10,9 @@ ___
 **Check description**  
 The check counts the percentage of values in the column that is below the value defined by the user as a parameter.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_value_below_min_value_percent|profiling| |[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_value_below_min_value_percent|profiling| |Validity|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -681,9 +681,9 @@ ___
 **Check description**  
 The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_value_below_min_value_percent|monitoring|daily|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_value_below_min_value_percent|monitoring|daily|Validity|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1355,9 +1355,9 @@ ___
 **Check description**  
 The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_value_below_min_value_percent|monitoring|monthly|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_value_below_min_value_percent|monitoring|monthly|Validity|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2029,9 +2029,9 @@ ___
 **Check description**  
 The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_value_below_min_value_percent|partitioned|daily|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_value_below_min_value_percent|partitioned|daily|Validity|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2717,9 +2717,9 @@ ___
 **Check description**  
 The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_value_below_min_value_percent|partitioned|monthly|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_value_below_min_value_percent|partitioned|monthly|Validity|[value_below_min_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

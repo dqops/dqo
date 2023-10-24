@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.client.operations;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.TypeModel;
 import com.dqops.utils.reflection.EnumValueInfo;
 import lombok.Data;
 
@@ -43,13 +44,9 @@ public class OperationParameterDocumentationModel {
      */
     private String helpText;
     /**
-     * Field class link.
+     * Field class type model.
      */
-    private String classUsedOnTheFieldPath;
-    /**
-     * Field data type.
-     */
-    private ParameterDataType dataType;
+    private TypeModel typeModel;
     /**
      * Field enum values (if dataType is enum).
      */

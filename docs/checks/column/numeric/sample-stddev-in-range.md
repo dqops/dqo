@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the sample standard deviation of all values in a column is not outside the set range.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_sample_stddev_in_range|profiling| |[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_sample_stddev_in_range|profiling| |Reasonableness|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -542,9 +542,9 @@ ___
 **Check description**  
 Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_sample_stddev_in_range|monitoring|daily|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_sample_stddev_in_range|monitoring|daily|Reasonableness|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1077,9 +1077,9 @@ ___
 **Check description**  
 Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_sample_stddev_in_range|monitoring|monthly|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_sample_stddev_in_range|monitoring|monthly|Reasonableness|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1612,9 +1612,9 @@ ___
 **Check description**  
 Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_sample_stddev_in_range|partitioned|daily|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_sample_stddev_in_range|partitioned|daily|Reasonableness|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2161,9 +2161,9 @@ ___
 **Check description**  
 Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_sample_stddev_in_range|partitioned|monthly|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_sample_stddev_in_range|partitioned|monthly|Reasonableness|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

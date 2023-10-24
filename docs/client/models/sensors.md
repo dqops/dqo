@@ -29,7 +29,7 @@ Sensor model returned from REST API.
 |---------------|---------------------------------|-----------|
 |full_sensor_name|Full sensor name.|string|
 |[sensor_definition_spec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](\docs\reference\yaml\sensordefinitionyaml\#sensordefinitionspec)|
-|provider_sensor_list|Provider sensors list with provider specific sensor definitions.|List&lt;[ProviderSensorModel](#providersensormodel)&gt;|
+|provider_sensor_list|Provider sensors list with provider specific sensor definitions.|List[[ProviderSensorModel](#providersensormodel)]|
 |custom|Whether the sensor is a User Home sensor|boolean|
 |built_in|This is a DQOps built-in sensor, whose parameters cannot be changed.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|

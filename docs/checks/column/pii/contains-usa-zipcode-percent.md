@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_contains_usa_zipcode_percent|profiling| |[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_contains_usa_zipcode_percent|profiling| |Validity|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -793,9 +793,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_contains_usa_zipcode_percent|monitoring|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_contains_usa_zipcode_percent|monitoring|daily|Validity|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1579,9 +1579,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_contains_usa_zipcode_percent|monitoring|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_contains_usa_zipcode_percent|monitoring|monthly|Validity|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2365,9 +2365,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_contains_usa_zipcode_percent|partitioned|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_contains_usa_zipcode_percent|partitioned|daily|Validity|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3165,9 +3165,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|Validity|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
