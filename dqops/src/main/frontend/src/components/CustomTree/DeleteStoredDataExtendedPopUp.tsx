@@ -162,12 +162,19 @@ import Input from '../Input';
               </div>
             </div>
             <div className='flex w-full gap-4 px-4 py-4 text-gray-700 pl-12 border-b border-gray-300'>
+
             <SelectInput 
-            options={Object.values(CheckTypes).map((x) => ({label: x, value: x})).filter((_, index) => index !== 1)} label='CheckType (profiling, monitoring, partitioned)' className='w-1/3'
-            value={params.checkType} onChange={(e) => onChangeParams({checkType: e})}/>
+            className='w-1/3'
+            options={["", ...Object.values(CheckTypes)].map((x) => ({label: x, value: x})).filter((_, index) => index !== 2)} 
+            label='CheckType (profiling, monitoring, partitioned)' 
+            value={params.checkType} 
+            onChange={(value) => onChangeParams({checkType: String(value).length !== 0 ? value : undefined})}/>
+
             <SelectInput label='Time gradient (daily/monthly)'  className='w-1/4'
-            options={[{label: "daily", value: "daily"}, {label: "monthly", value: "monthly"}]} 
-            value={params.timeGradient} onChange={(e) => onChangeParams({timeGradient: e})} disabled={!(params.checkType === 'partitioned' || params.checkType === 'monitoring')}/>
+            options={[{label: "", value: ""},{label: "daily", value: "daily"}, {label: "monthly", value: "monthly"}]} 
+            value={params.timeGradient} 
+            onChange={(value) => onChangeParams({timeGradient: String(value).length !== 0 ? value : undefined})} 
+            disabled={!(params.checkType === 'partitioned' || params.checkType === 'monitoring')}/>
             </div>
         </div>
               <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">
