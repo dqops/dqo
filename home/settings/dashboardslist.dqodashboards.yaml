@@ -845,13 +845,6 @@ spec:
 
     - folder_name: Completeness
       dashboards:
-        - dashboard_name: Number of null values in the columns
-          url: https://lookerstudio.google.com/embed/reporting/66165591-d5ed-43d3-a0d7-25f4acfb8b16/page/c5B8C
-          width: 1400
-          height: 1800
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
         - dashboard_name: Current completeness issues on columns
           url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
           width: 1400
