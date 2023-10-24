@@ -20,6 +20,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import com.dqops.statistics.StatisticsCollectorTarget;
 import com.dqops.statistics.table.volume.TableVolumeStatisticsCollectorsSpec;
+import com.dqops.statistics.table.schema.TableSchemaStatisticsCollectorsSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
