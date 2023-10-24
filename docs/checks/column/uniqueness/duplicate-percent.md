@@ -12,7 +12,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_duplicate_percent|profiling| |[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_duplicate_percent|profiling| |[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,7 +675,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_duplicate_percent|monitoring|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_duplicate_percent|monitoring|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1341,7 +1341,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_duplicate_percent|monitoring|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_duplicate_percent|monitoring|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2007,7 +2007,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2687,7 +2687,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

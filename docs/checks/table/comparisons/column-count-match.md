@@ -12,7 +12,7 @@ Verifies that the column count of the tested (parent) table matches the column c
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_column_count_match|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_column_count_match|profiling| |[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -115,7 +115,7 @@ Verifies that the column count of the tested (parent) table matches the column c
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_count_match|monitoring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_column_count_match|monitoring|daily|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -220,7 +220,7 @@ Verifies that the column count of the tested (parent) table matches the column c
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_count_match|monitoring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_column_count_match|monitoring|monthly|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sql_condition_passed_percent_on_column|profiling| |[sql_condition_passed_percent](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_sql_condition_passed_percent_on_column|profiling| |[sql_condition_passed_percent](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -713,7 +713,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sql_condition_passed_percent_on_column|monitoring|daily|[sql_condition_passed_percent](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_sql_condition_passed_percent_on_column|monitoring|daily|[sql_condition_passed_percent](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1417,7 +1417,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sql_condition_passed_percent_on_column|monitoring|monthly|[sql_condition_passed_percent](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_sql_condition_passed_percent_on_column|monitoring|monthly|[sql_condition_passed_percent](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2121,7 +2121,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_condition_passed_percent_on_column|partitioned|daily|[sql_condition_passed_percent](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_sql_condition_passed_percent_on_column|partitioned|daily|[sql_condition_passed_percent](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2839,7 +2839,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_condition_passed_percent_on_column|partitioned|monthly|[sql_condition_passed_percent](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_sql_condition_passed_percent_on_column|partitioned|monthly|[sql_condition_passed_percent](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

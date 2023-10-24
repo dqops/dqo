@@ -12,7 +12,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|profile_sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -540,7 +540,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sql_aggregate_expr_table|monitoring|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|daily_sql_aggregate_expr_table|monitoring|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1071,7 +1071,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sql_aggregate_expr_table|monitoring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|monthly_sql_aggregate_expr_table|monitoring|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1602,7 +1602,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2147,7 +2147,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

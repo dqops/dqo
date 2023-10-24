@@ -12,7 +12,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_anomaly_stationary_distinct_percent_30_days|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|profile_anomaly_stationary_distinct_percent_30_days|profiling| |[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -591,7 +591,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_anomaly_stationary_distinct_percent_30_days|monitoring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_anomaly_stationary_distinct_percent_30_days|monitoring|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1173,7 +1173,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_anomaly_stationary_distinct_percent_30_days|monitoring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|monthly_anomaly_stationary_distinct_percent_30_days|monitoring|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1755,7 +1755,7 @@ Verifies that the distinct count in a monitored column is within a two-tailed pe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_anomaly_stationary_distinct_count_30_days|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_partition_anomaly_stationary_distinct_count_30_days|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2351,7 +2351,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_anomaly_stationary_distinct_percent_30_days|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_partition_anomaly_stationary_distinct_percent_30_days|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2947,7 +2947,7 @@ Verifies that the distinct count in a monitored column is within a two-tailed pe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_anomaly_stationary_distinct_count_30_days|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|monthly_partition_anomaly_stationary_distinct_count_30_days|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3543,7 +3543,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_anomaly_stationary_distinct_percent_30_days|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|monthly_partition_anomaly_stationary_distinct_percent_30_days|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

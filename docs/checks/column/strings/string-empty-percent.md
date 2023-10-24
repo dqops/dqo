@@ -12,7 +12,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_empty_percent|profiling| |[string_empty_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_string_empty_percent|profiling| |[string_empty_percent](../../../../reference/sensors/column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -897,7 +897,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_empty_percent|monitoring|daily|[string_empty_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_string_empty_percent|monitoring|daily|[string_empty_percent](../../../../reference/sensors/column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1785,7 +1785,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_empty_percent|monitoring|monthly|[string_empty_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_string_empty_percent|monitoring|monthly|[string_empty_percent](../../../../reference/sensors/column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2673,7 +2673,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_empty_percent|partitioned|daily|[string_empty_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_string_empty_percent|partitioned|daily|[string_empty_percent](../../../../reference/sensors/column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3575,7 +3575,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_empty_percent|partitioned|monthly|[string_empty_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_string_empty_percent|partitioned|monthly|[string_empty_percent](../../../../reference/sensors/column/strings-column-sensors/#string-empty-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

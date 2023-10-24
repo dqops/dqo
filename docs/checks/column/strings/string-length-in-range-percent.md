@@ -12,7 +12,7 @@ The check counts the percentage of those strings with length in the range provid
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_length_in_range_percent|profiling| |[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_string_length_in_range_percent|profiling| |[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -866,7 +866,7 @@ The check counts the percentage of those strings with length in the range provid
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_length_in_range_percent|monitoring|daily|[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_string_length_in_range_percent|monitoring|daily|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1723,7 +1723,7 @@ The check counts percentage of those strings with length in the range provided b
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_length_in_range_percent|monitoring|monthly|[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_string_length_in_range_percent|monitoring|monthly|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2580,7 +2580,7 @@ The check counts the percentage of those strings with length in the range provid
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_in_range_percent|partitioned|daily|[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_string_length_in_range_percent|partitioned|daily|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3451,7 +3451,7 @@ The check counts the percentage of those strings with length in the range provid
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_in_range_percent|partitioned|monthly|[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_string_length_in_range_percent|partitioned|monthly|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

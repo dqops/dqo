@@ -15,7 +15,7 @@ Calculates the time difference in days between the current date and the most rec
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_data_staleness|profiling| |[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|profile_data_staleness|profiling| |[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -912,7 +912,7 @@ Daily  calculating the time difference in days between the current date and the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_data_staleness|monitoring|daily|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_data_staleness|monitoring|daily|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1812,7 +1812,7 @@ Monthly monitoring calculating the time difference in days between the current d
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_data_staleness|monitoring|monthly|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_data_staleness|monitoring|monthly|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2712,7 +2712,7 @@ Daily partitioned check calculating the time difference in days between the curr
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_data_staleness|partitioned|daily|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_partition_data_staleness|partitioned|daily|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3626,7 +3626,7 @@ Monthly partitioned check calculating the time difference in days between the cu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_data_staleness|partitioned|monthly|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_partition_data_staleness|partitioned|monthly|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

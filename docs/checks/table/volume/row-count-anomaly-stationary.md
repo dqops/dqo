@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table is within a percentile fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_anomaly_stationary|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|daily_partition_row_count_anomaly_stationary|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

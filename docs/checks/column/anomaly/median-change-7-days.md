@@ -12,7 +12,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_median_change_7_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|profile_median_change_7_days|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -711,7 +711,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_change_7_days|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|daily_median_change_7_days|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1413,7 +1413,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_change_7_days|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|daily_partition_median_change_7_days|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

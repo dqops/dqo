@@ -12,7 +12,7 @@ Verifies that the percentage of rows that contains valid IP4 address values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_contains_ip4_percent|profiling| |[contains_ip4_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_contains_ip4_percent|profiling| |[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -787,7 +787,7 @@ Verifies that the percentage of rows that contains IP4 address values in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_contains_ip4_percent|monitoring|daily|[contains_ip4_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_contains_ip4_percent|monitoring|daily|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1565,7 +1565,7 @@ Verifies that the percentage of rows that contains IP4 address values in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_contains_ip4_percent|monitoring|monthly|[contains_ip4_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_contains_ip4_percent|monitoring|monthly|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2343,7 +2343,7 @@ Verifies that the percentage of rows that contains IP4 address values in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_contains_ip4_percent|partitioned|daily|[contains_ip4_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_contains_ip4_percent|partitioned|daily|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3135,7 +3135,7 @@ Verifies that the percentage of rows that contains IP4 address values in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_ip4_percent|partitioned|monthly|[contains_ip4_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_contains_ip4_percent|partitioned|monthly|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

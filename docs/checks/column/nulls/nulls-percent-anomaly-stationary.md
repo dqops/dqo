@@ -12,7 +12,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_nulls_percent_anomaly_stationary|profiling| |[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|profile_nulls_percent_anomaly_stationary|profiling| |[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -759,7 +759,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent_anomaly_stationary|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|daily_nulls_percent_anomaly_stationary|monitoring|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1509,7 +1509,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_nulls_percent_anomaly_stationary|partitioned|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|daily_partition_nulls_percent_anomaly_stationary|partitioned|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

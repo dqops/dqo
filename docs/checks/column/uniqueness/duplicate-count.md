@@ -12,7 +12,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_duplicate_count|profiling| |[duplicate_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_duplicate_count|profiling| |[duplicate_count](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -563,7 +563,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_duplicate_count|monitoring|daily|[duplicate_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_duplicate_count|monitoring|daily|[duplicate_count](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1117,7 +1117,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_duplicate_count|monitoring|monthly|[duplicate_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_duplicate_count|monitoring|monthly|[duplicate_count](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1671,7 +1671,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_duplicate_count|partitioned|daily|[duplicate_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_duplicate_count|partitioned|daily|[duplicate_count](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2239,7 +2239,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_duplicate_count|partitioned|monthly|[duplicate_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_duplicate_count|partitioned|monthly|[duplicate_count](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

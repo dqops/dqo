@@ -12,7 +12,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_nulls_percent_anomaly_stationary_30_days|profiling| |[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|profile_nulls_percent_anomaly_stationary_30_days|profiling| |[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -759,7 +759,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent_anomaly_stationary_30_days|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_nulls_percent_anomaly_stationary_30_days|monitoring|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1509,7 +1509,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_nulls_percent_anomaly_stationary_30_days|partitioned|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_partition_nulls_percent_anomaly_stationary_30_days|partitioned|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

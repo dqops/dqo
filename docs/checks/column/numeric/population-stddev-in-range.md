@@ -12,7 +12,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_population_stddev_in_range|profiling| |[population_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_population_stddev_in_range|profiling| |[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -544,7 +544,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_population_stddev_in_range|monitoring|daily|[population_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_population_stddev_in_range|monitoring|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1079,7 +1079,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_population_stddev_in_range|monitoring|monthly|[population_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_population_stddev_in_range|monitoring|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1614,7 +1614,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_population_stddev_in_range|partitioned|daily|[population_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_population_stddev_in_range|partitioned|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2163,7 +2163,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_population_stddev_in_range|partitioned|monthly|[population_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_population_stddev_in_range|partitioned|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

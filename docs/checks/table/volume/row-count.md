@@ -13,7 +13,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_row_count|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|profile_row_count|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -524,7 +524,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|daily_row_count|monitoring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1038,7 +1038,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count|monitoring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|monthly_row_count|monitoring|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1552,7 +1552,7 @@ Verifies that each daily partition in the tested table has at least a minimum ac
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2080,7 +2080,7 @@ Verifies that each monthly partition in the tested table has at least a minimum 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
+|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

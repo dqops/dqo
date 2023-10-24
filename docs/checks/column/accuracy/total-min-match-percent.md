@@ -12,7 +12,7 @@ Verifies that the percentage of difference in total min of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_total_min_match_percent|profiling| |[total_min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_total_min_match_percent|profiling| |[total_min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -347,7 +347,7 @@ Verifies that the percentage of difference in total min of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_total_min_match_percent|monitoring|daily|[total_min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_total_min_match_percent|monitoring|daily|[total_min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -684,7 +684,7 @@ Verifies that the percentage of difference in total min of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_total_min_match_percent|monitoring|monthly|[total_min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_total_min_match_percent|monitoring|monthly|[total_min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

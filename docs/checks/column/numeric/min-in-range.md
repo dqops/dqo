@@ -12,7 +12,7 @@ Verifies that the minimal value in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_min_in_range|profiling| |[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_min_in_range|profiling| |[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -544,7 +544,7 @@ Verifies that the minimal value in a column is not outside the set range. Stores
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_min_in_range|monitoring|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_min_in_range|monitoring|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1079,7 +1079,7 @@ Verifies that the minimal value in a column does not exceed the set range. Store
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_min_in_range|monitoring|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_min_in_range|monitoring|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1614,7 +1614,7 @@ Verifies that the minimal value in a column is not outside the set range. Create
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_min_in_range|partitioned|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_min_in_range|partitioned|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2163,7 +2163,7 @@ Verifies that the minimal value in a column is not outside the set range. Create
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_min_in_range|partitioned|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_min_in_range|partitioned|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

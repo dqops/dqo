@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_row_count_change_30_days|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
+|profile_row_count_change_30_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -532,7 +532,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_change_30_days|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
+|daily_row_count_change_30_days|monitoring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1055,7 +1055,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_change_30_days|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
+|daily_partition_row_count_change_30_days|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

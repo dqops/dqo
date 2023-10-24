@@ -12,7 +12,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_datetime_value_in_range_date_percent|profiling| |[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_datetime_value_in_range_date_percent|profiling| |[value_in_range_date_percent](../../../../reference/sensors/column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -958,7 +958,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_datetime_value_in_range_date_percent|monitoring|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_datetime_value_in_range_date_percent|monitoring|daily|[value_in_range_date_percent](../../../../reference/sensors/column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1907,7 +1907,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_datetime_value_in_range_date_percent|monitoring|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_datetime_value_in_range_date_percent|monitoring|monthly|[value_in_range_date_percent](../../../../reference/sensors/column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2856,7 +2856,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_datetime_value_in_range_date_percent|partitioned|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_datetime_value_in_range_date_percent|partitioned|daily|[value_in_range_date_percent](../../../../reference/sensors/column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3816,7 +3816,7 @@ Verifies that the percentage of date values in the range defined by the user in 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|[value_in_range_date_percent](../../../../reference/sensors/column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

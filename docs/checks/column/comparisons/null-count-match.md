@@ -13,7 +13,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_null_count_match|profiling| |[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_null_count_match|profiling| |[null_count](../../../../reference/sensors/column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -376,7 +376,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_null_count_match|monitoring|daily|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_null_count_match|monitoring|daily|[null_count](../../../../reference/sensors/column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -741,7 +741,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_null_count_match|monitoring|monthly|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_null_count_match|monitoring|monthly|[null_count](../../../../reference/sensors/column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1106,7 +1106,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_null_count_match|partitioned|daily|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_null_count_match|partitioned|daily|[null_count](../../../../reference/sensors/column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1481,7 +1481,7 @@ Verifies that percentage of the difference between the count of null values in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_null_count_match|partitioned|monthly|[null_count](../../../../reference/sensors/Column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_null_count_match|partitioned|monthly|[null_count](../../../../reference/sensors/column/nulls-column-sensors/#null-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

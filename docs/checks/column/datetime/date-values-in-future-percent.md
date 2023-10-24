@@ -12,7 +12,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_date_values_in_future_percent|profiling| |[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_date_values_in_future_percent|profiling| |[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1135,7 +1135,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_date_values_in_future_percent|monitoring|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_date_values_in_future_percent|monitoring|daily|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2261,7 +2261,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_date_values_in_future_percent|monitoring|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_date_values_in_future_percent|monitoring|monthly|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3387,7 +3387,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4527,7 +4527,7 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

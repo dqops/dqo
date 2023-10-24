@@ -12,7 +12,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_mean_change_yesterday|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|profile_mean_change_yesterday|profiling| |[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -544,7 +544,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_mean_change_yesterday|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_mean_change_yesterday|monitoring|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1079,7 +1079,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_mean_change_yesterday|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_partition_mean_change_yesterday|partitioned|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

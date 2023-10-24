@@ -12,7 +12,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_row_count_match|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_row_count_match|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -297,7 +297,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_match|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_row_count_match|monitoring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -584,7 +584,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count_match|monitoring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_row_count_match|monitoring|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -871,7 +871,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_match|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_row_count_match|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1168,7 +1168,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_row_count_match|partitioned|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_row_count_match|partitioned|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sum_change_yesterday|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|profile_sum_change_yesterday|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -544,7 +544,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_change_yesterday|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_sum_change_yesterday|monitoring|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1079,7 +1079,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_change_yesterday|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_partition_sum_change_yesterday|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

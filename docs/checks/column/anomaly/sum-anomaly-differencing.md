@@ -12,7 +12,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sum_anomaly_differencing|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|profile_sum_anomaly_differencing|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -535,7 +535,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_anomaly_differencing|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|daily_sum_anomaly_differencing|monitoring|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

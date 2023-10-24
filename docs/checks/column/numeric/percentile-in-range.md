@@ -12,7 +12,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_percentile_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_percentile_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -705,7 +705,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_median_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_median_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1404,7 +1404,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_percentile_10_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_percentile_10_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2103,7 +2103,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_percentile_25_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_percentile_25_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2802,7 +2802,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_percentile_75_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_percentile_75_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3501,7 +3501,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_percentile_90_in_range|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_percentile_90_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4200,7 +4200,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4896,7 +4896,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_median_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -5598,7 +5598,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_10_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_10_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -6300,7 +6300,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_25_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_25_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7002,7 +7002,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_75_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_75_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7704,7 +7704,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_percentile_90_in_range|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_percentile_90_in_range|monitoring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -8406,7 +8406,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -9102,7 +9102,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_median_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_median_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -9804,7 +9804,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_10_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_10_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -10506,7 +10506,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_25_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_25_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -11208,7 +11208,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_75_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_75_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -11910,7 +11910,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_percentile_90_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_percentile_90_in_range|monitoring|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -12612,7 +12612,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_percentile_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -13320,7 +13320,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_median_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -14034,7 +14034,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_percentile_10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -14748,7 +14748,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_percentile_25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -15462,7 +15462,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_percentile_75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -16176,7 +16176,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_percentile_90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -16890,7 +16890,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_percentile_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -17598,7 +17598,7 @@ Verifies that the median of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_median_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_median_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -18312,7 +18312,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_percentile_10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -19026,7 +19026,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_percentile_25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -19740,7 +19740,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_percentile_75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -20454,7 +20454,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_percentile_90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

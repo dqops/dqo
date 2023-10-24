@@ -15,7 +15,7 @@ Detects if new columns were added, removed or their data types have changed. Ret
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_column_types_changed|profiling| |[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_column_types_changed|profiling| |[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -91,7 +91,7 @@ Detects if new columns were added, removed or their data types have changed sinc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_types_changed|monitoring|daily|[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_types_changed|monitoring|daily|[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -169,7 +169,7 @@ Detects if new columns were added, removed or their data types have changed sinc
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_types_changed|monitoring|monthly|[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_types_changed|monitoring|monthly|[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

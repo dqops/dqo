@@ -12,7 +12,7 @@ Verifies that the length of string in a column does not exceed the mean accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_mean_length|profiling| |[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_string_mean_length|profiling| |[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -686,7 +686,7 @@ Verifies that the length of string in a column does not exceed the mean accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_mean_length|monitoring|daily|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_string_mean_length|monitoring|daily|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1363,7 +1363,7 @@ Verifies that the length of string in a column does not exceed the mean accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_mean_length|monitoring|monthly|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_string_mean_length|monitoring|monthly|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2040,7 +2040,7 @@ Verifies that the length of string in a column does not exceed the mean accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_mean_length|partitioned|daily|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_string_mean_length|partitioned|daily|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2731,7 +2731,7 @@ Verifies that the length of string in a column does not exceed the mean accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_mean_length|partitioned|monthly|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_string_mean_length|partitioned|monthly|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

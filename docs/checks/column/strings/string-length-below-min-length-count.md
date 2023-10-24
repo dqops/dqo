@@ -12,7 +12,7 @@ The check counts the number of strings in the column that is below the length de
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_length_below_min_length_count|profiling| |[string_length_below_min_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_string_length_below_min_length_count|profiling| |[string_length_below_min_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -797,7 +797,7 @@ The check counts the number of strings in the column that is below the length de
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_length_below_min_length_count|monitoring|daily|[string_length_below_min_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_length_below_min_length_count|monitoring|daily|[string_length_below_min_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1585,7 +1585,7 @@ The check counts those strings with length below the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_length_below_min_length_count|monitoring|monthly|[string_length_below_min_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_length_below_min_length_count|monitoring|monthly|[string_length_below_min_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2373,7 +2373,7 @@ The check counts the number of strings in the column that is below the length de
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_below_min_length_count|partitioned|daily|[string_length_below_min_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_string_length_below_min_length_count|partitioned|daily|[string_length_below_min_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3175,7 +3175,7 @@ The check counts the number of strings in the column that is below the length de
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_below_min_length_count|partitioned|monthly|[string_length_below_min_length_count](../../../../reference/sensors/Column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_string_length_below_min_length_count|partitioned|monthly|[string_length_below_min_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

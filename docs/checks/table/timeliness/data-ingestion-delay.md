@@ -16,7 +16,7 @@ Calculates the time difference in days between the most recent event timestamp a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|profile_data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -955,7 +955,7 @@ Daily  calculating the time difference in days between the most recent event tim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_data_ingestion_delay|monitoring|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_data_ingestion_delay|monitoring|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1897,7 +1897,7 @@ Monthly monitoring calculating the time difference in days between the most rece
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_data_ingestion_delay|monitoring|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_data_ingestion_delay|monitoring|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2839,7 +2839,7 @@ Daily partitioned check calculating the time difference in days between the most
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3795,7 +3795,7 @@ Monthly partitioned check calculating the time difference in days between the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

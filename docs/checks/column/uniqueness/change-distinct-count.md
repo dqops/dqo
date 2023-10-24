@@ -12,7 +12,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_change_distinct_count|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|profile_change_distinct_count|profiling| |[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -591,7 +591,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_change_distinct_count|monitoring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_change_distinct_count|monitoring|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1173,7 +1173,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_change_distinct_count|monitoring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_change_distinct_count|monitoring|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1755,7 +1755,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_change_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_partition_change_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2351,7 +2351,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_change_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_partition_change_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

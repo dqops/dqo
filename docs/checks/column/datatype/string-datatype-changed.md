@@ -14,7 +14,7 @@ Detects that the data type of texts stored in a text column has changed since th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_datatype_changed|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_string_datatype_changed|profiling| |[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2008,7 +2008,7 @@ Detects that the data type of texts stored in a text column has changed since th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_datatype_changed|monitoring|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_string_datatype_changed|monitoring|daily|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4005,7 +4005,7 @@ Detects that the data type of texts stored in a text column has changed since th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_datatype_changed|monitoring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_string_datatype_changed|monitoring|monthly|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -6002,7 +6002,7 @@ Detects that the data type of texts stored in a text column has changed when com
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -8011,7 +8011,7 @@ Detects that the data type of texts stored in a text column has changed when com
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

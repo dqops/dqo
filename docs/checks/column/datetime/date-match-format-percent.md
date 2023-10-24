@@ -12,7 +12,7 @@ Verifies that the percentage of date values matching the given format in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_date_match_format_percent|profiling| |[date_match_format_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_date_match_format_percent|profiling| |[date_match_format_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -975,7 +975,7 @@ Verifies that the percentage of date values matching the given format in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_date_match_format_percent|monitoring|daily|[date_match_format_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_date_match_format_percent|monitoring|daily|[date_match_format_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1941,7 +1941,7 @@ Verifies that the percentage of date values matching the given format in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_date_match_format_percent|monitoring|monthly|[date_match_format_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_date_match_format_percent|monitoring|monthly|[date_match_format_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2907,7 +2907,7 @@ Verifies that the percentage of date values matching the given format in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_date_match_format_percent|partitioned|daily|[date_match_format_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_date_match_format_percent|partitioned|daily|[date_match_format_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3887,7 +3887,7 @@ Verifies that the percentage of date values matching the given format in a colum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_date_match_format_percent|partitioned|monthly|[date_match_format_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_date_match_format_percent|partitioned|monthly|[date_match_format_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-match-format-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -703,7 +703,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_value_above_max_value_percent|monitoring|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_value_above_max_value_percent|monitoring|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1397,7 +1397,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_value_above_max_value_percent|monitoring|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_value_above_max_value_percent|monitoring|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2091,7 +2091,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2799,7 +2799,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

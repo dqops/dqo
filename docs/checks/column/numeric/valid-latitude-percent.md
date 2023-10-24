@@ -12,7 +12,7 @@ Verifies that the percentage of valid latitude values in a column does not fall 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,7 +675,7 @@ Verifies that the percentage of valid latitude values in a column does not fall 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_valid_latitude_percent|monitoring|daily|[valid_latitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_valid_latitude_percent|monitoring|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1341,7 +1341,7 @@ Verifies that the percentage of valid latitude values in a column does not fall 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_valid_latitude_percent|monitoring|monthly|[valid_latitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_valid_latitude_percent|monitoring|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2007,7 +2007,7 @@ Verifies that the percentage of valid latitude values in a column does not fall 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2687,7 +2687,7 @@ Verifies that the percentage of valid latitude values in a column does not fall 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

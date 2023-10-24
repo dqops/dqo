@@ -13,7 +13,7 @@ Checks the metadata of the monitored table and verifies if the column exists.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_column_exists|profiling| |[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|profile_column_exists|profiling| |[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -98,7 +98,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_exists|monitoring|daily|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|daily_column_exists|monitoring|daily|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -185,7 +185,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_exists|monitoring|monthly|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|monthly_column_exists|monitoring|monthly|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

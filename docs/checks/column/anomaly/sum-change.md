@@ -12,7 +12,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sum_change|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|profile_sum_change|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -535,7 +535,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_change|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_sum_change|monitoring|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1061,7 +1061,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sum_change|monitoring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_sum_change|monitoring|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1587,7 +1587,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_change|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_partition_sum_change|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2127,7 +2127,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sum_change|partitioned|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_partition_sum_change|partitioned|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

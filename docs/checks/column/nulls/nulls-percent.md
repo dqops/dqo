@@ -12,7 +12,7 @@ Verifies that the percent of null values in a column does not exceed the maximum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_nulls_percent|profiling| |[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_nulls_percent|profiling| |[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -759,7 +759,7 @@ Verifies that the percentage of nulls in a column does not exceed the maximum ac
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_nulls_percent|monitoring|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1509,7 +1509,7 @@ Verifies that the percentage of null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_nulls_percent|monitoring|monthly|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_nulls_percent|monitoring|monthly|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2259,7 +2259,7 @@ Verifies that the percentage of null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_nulls_percent|partitioned|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_nulls_percent|partitioned|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3023,7 +3023,7 @@ Verifies that the percentage of null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_nulls_percent|partitioned|monthly|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_nulls_percent|partitioned|monthly|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

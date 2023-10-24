@@ -12,7 +12,7 @@ Verifies that the sum in a column is within a percentile from measurements made 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_anomaly_stationary|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
+|daily_partition_sum_anomaly_stationary|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

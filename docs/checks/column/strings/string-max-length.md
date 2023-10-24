@@ -12,7 +12,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_max_length|profiling| |[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|profile_string_max_length|profiling| |[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -677,7 +677,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_max_length|monitoring|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|daily_string_max_length|monitoring|daily|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1345,7 +1345,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_max_length|monitoring|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|monthly_string_max_length|monitoring|monthly|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2013,7 +2013,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2695,7 +2695,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
+|monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

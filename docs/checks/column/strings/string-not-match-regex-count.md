@@ -12,7 +12,7 @@ Verifies that the number of strings not matching the custom regex in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_not_match_regex_count|profiling| |[string_not_match_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_string_not_match_regex_count|profiling| |[string_not_match_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -917,7 +917,7 @@ Verifies that the number of strings not matching the custom regex in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_not_match_regex_count|monitoring|daily|[string_not_match_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_not_match_regex_count|monitoring|daily|[string_not_match_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1825,7 +1825,7 @@ Verifies that the number of strings not matching the custom regex in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_not_match_regex_count|monitoring|monthly|[string_not_match_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_not_match_regex_count|monitoring|monthly|[string_not_match_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2733,7 +2733,7 @@ Verifies that the number of strings not matching the custom regex in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_not_match_regex_count|partitioned|daily|[string_not_match_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_string_not_match_regex_count|partitioned|daily|[string_not_match_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3655,7 +3655,7 @@ Verifies that the number of strings not matching the custom regex in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_not_match_regex_count|partitioned|monthly|[string_not_match_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_string_not_match_regex_count|partitioned|monthly|[string_not_match_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

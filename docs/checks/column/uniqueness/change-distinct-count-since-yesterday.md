@@ -12,7 +12,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_change_distinct_count_since_yesterday|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|profile_change_distinct_count_since_yesterday|profiling| |[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -600,7 +600,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_change_distinct_count_since_yesterday|monitoring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_change_distinct_count_since_yesterday|monitoring|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1191,7 +1191,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_change_distinct_count_since_yesterday|monitoring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|monthly_change_distinct_count_since_yesterday|monitoring|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1782,7 +1782,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_change_distinct_count_since_yesterday|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|daily_partition_change_distinct_count_since_yesterday|partitioned|daily|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2387,7 +2387,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_change_distinct_count_since_yesterday|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|monthly_partition_change_distinct_count_since_yesterday|partitioned|monthly|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

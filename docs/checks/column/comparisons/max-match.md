@@ -13,7 +13,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_max_match|profiling| |[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_max_match|profiling| |[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -306,7 +306,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_max_match|monitoring|daily|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_max_match|monitoring|daily|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -601,7 +601,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_max_match|monitoring|monthly|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_max_match|monitoring|monthly|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -896,7 +896,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_max_match|partitioned|daily|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_max_match|partitioned|daily|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1201,7 +1201,7 @@ Verifies that percentage of the difference between the maximum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_max_match|partitioned|monthly|[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_max_match|partitioned|monthly|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_non_negative_percent|profiling| |[non_negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_non_negative_percent|profiling| |[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,7 +675,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_non_negative_percent|monitoring|daily|[non_negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_non_negative_percent|monitoring|daily|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1341,7 +1341,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_non_negative_percent|monitoring|monthly|[non_negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_non_negative_percent|monitoring|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2007,7 +2007,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_non_negative_percent|partitioned|daily|[non_negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_non_negative_percent|partitioned|daily|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2687,7 +2687,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_non_negative_percent|partitioned|monthly|[non_negative_percent](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_non_negative_percent|partitioned|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

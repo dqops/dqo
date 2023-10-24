@@ -12,7 +12,7 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -641,7 +641,7 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sql_condition_failed_count_on_column|monitoring|daily|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_sql_condition_failed_count_on_column|monitoring|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1273,7 +1273,7 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sql_condition_failed_count_on_column|monitoring|monthly|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_sql_condition_failed_count_on_column|monitoring|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1905,7 +1905,7 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2551,7 +2551,7 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

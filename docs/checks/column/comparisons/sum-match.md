@@ -13,7 +13,7 @@ Verifies that percentage of the difference between the sum of values in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sum_match|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_sum_match|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -306,7 +306,7 @@ Verifies that percentage of the difference between the sum of values in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_match|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_sum_match|monitoring|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -601,7 +601,7 @@ Verifies that percentage of the difference between the sum of values in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sum_match|monitoring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_sum_match|monitoring|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -896,7 +896,7 @@ Verifies that percentage of the difference between the sum of values in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_match|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_sum_match|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1201,7 +1201,7 @@ Verifies that percentage of the difference between the sum of values in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sum_match|partitioned|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_sum_match|partitioned|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

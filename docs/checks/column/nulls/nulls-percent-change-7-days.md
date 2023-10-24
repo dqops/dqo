@@ -12,7 +12,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_nulls_percent_change_7_days|profiling| |[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|profile_nulls_percent_change_7_days|profiling| |[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -768,7 +768,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_nulls_percent_change_7_days|monitoring|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|daily_nulls_percent_change_7_days|monitoring|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1527,7 +1527,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_nulls_percent_change_7_days|partitioned|daily|[null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|daily_partition_nulls_percent_change_7_days|partitioned|daily|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

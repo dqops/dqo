@@ -12,7 +12,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_negative_count|profiling| |[negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_negative_count|profiling| |[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -677,7 +677,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_negative_count|monitoring|daily|[negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_negative_count|monitoring|daily|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1345,7 +1345,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_negative_count|monitoring|monthly|[negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_negative_count|monitoring|monthly|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2013,7 +2013,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_negative_count|partitioned|daily|[negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_negative_count|partitioned|daily|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2695,7 +2695,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_negative_count|partitioned|monthly|[negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_negative_count|partitioned|monthly|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

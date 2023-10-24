@@ -16,7 +16,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_expected_strings_in_top_values_count|profiling| |[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|profile_expected_strings_in_top_values_count|profiling| |[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1894,7 +1894,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_expected_strings_in_top_values_count|monitoring|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|daily_expected_strings_in_top_values_count|monitoring|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3775,7 +3775,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_expected_strings_in_top_values_count|monitoring|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|monthly_expected_strings_in_top_values_count|monitoring|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -5656,7 +5656,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_expected_strings_in_top_values_count|partitioned|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|daily_partition_expected_strings_in_top_values_count|partitioned|daily|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -7549,7 +7549,7 @@ Verifies that the top X most popular column values contain all values from a lis
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_expected_strings_in_top_values_count|partitioned|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|monthly_partition_expected_strings_in_top_values_count|partitioned|monthly|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -817,7 +817,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_foreign_key_not_match_count|monitoring|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_foreign_key_not_match_count|monitoring|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1625,7 +1625,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_not_match_count|monitoring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_foreign_key_not_match_count|monitoring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2433,7 +2433,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3255,7 +3255,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

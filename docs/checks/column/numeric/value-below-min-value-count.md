@@ -12,7 +12,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_value_below_min_value_count|profiling| |[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_value_below_min_value_count|profiling| |[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -683,7 +683,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_value_below_min_value_count|monitoring|daily|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_value_below_min_value_count|monitoring|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1357,7 +1357,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_value_below_min_value_count|monitoring|monthly|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_value_below_min_value_count|monitoring|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2031,7 +2031,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_below_min_value_count|partitioned|daily|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_value_below_min_value_count|partitioned|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2719,7 +2719,7 @@ The check counts the number of values in the column that is below the value defi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_below_min_value_count|partitioned|monthly|[value_below_min_value_count](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_value_below_min_value_count|partitioned|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

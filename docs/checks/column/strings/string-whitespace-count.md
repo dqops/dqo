@@ -12,7 +12,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_whitespace_count|profiling| |[string_whitespace_count](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_string_whitespace_count|profiling| |[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -845,7 +845,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_whitespace_count|monitoring|daily|[string_whitespace_count](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_whitespace_count|monitoring|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1681,7 +1681,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_whitespace_count|monitoring|monthly|[string_whitespace_count](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_whitespace_count|monitoring|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2517,7 +2517,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3367,7 +3367,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -12,7 +12,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_sample_stddev_in_range|profiling| |[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|profile_sample_stddev_in_range|profiling| |[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -544,7 +544,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sample_stddev_in_range|monitoring|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_sample_stddev_in_range|monitoring|daily|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1079,7 +1079,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sample_stddev_in_range|monitoring|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_sample_stddev_in_range|monitoring|monthly|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1614,7 +1614,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sample_stddev_in_range|partitioned|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|daily_partition_sample_stddev_in_range|partitioned|daily|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2163,7 +2163,7 @@ Verifies that the sample standard deviation of all values in a column is not out
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sample_stddev_in_range|partitioned|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|monthly_partition_sample_stddev_in_range|partitioned|monthly|[sample_stddev](../../../../reference/sensors/column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

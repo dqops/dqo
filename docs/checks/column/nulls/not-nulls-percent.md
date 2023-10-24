@@ -12,7 +12,7 @@ Verifies that the percent of not null values in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -619,7 +619,7 @@ Verifies that the percentage of not nulls in a column does not fall below the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_nulls_percent|monitoring|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_not_nulls_percent|monitoring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1229,7 +1229,7 @@ Verifies that the percentage of not nulls in a column does not fall below the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_percent|monitoring|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_not_nulls_percent|monitoring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1839,7 +1839,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2463,7 +2463,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

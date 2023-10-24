@@ -14,7 +14,7 @@ Detects if the count of columns has changed. Retrieves the metadata of the monit
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_column_count_changed|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_column_count_changed|profiling| |[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -90,7 +90,7 @@ Detects if the count of columns has changed since the most recent day. Retrieves
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_count_changed|monitoring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_count_changed|monitoring|daily|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -168,7 +168,7 @@ Detects if the count of columns has changed since the last month. Retrieves the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_count_changed|monitoring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_count_changed|monitoring|monthly|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

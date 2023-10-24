@@ -13,7 +13,7 @@ Verifies that percentage of the difference between the minimum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_min_match|profiling| |[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_min_match|profiling| |[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -306,7 +306,7 @@ Verifies that percentage of the difference between the minimum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_min_match|monitoring|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_min_match|monitoring|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -601,7 +601,7 @@ Verifies that percentage of the difference between the minimum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_min_match|monitoring|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_min_match|monitoring|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -896,7 +896,7 @@ Verifies that percentage of the difference between the minimum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_min_match|partitioned|daily|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_min_match|partitioned|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1201,7 +1201,7 @@ Verifies that percentage of the difference between the minimum value in a tested
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_min_match|partitioned|monthly|[min_value](../../../../reference/sensors/Column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_min_match|partitioned|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

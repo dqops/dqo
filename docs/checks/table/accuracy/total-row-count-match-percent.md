@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table matches the total row coun
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_total_row_count_match_percent|profiling| |[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_total_row_count_match_percent|profiling| |[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -302,7 +302,7 @@ Verifies the total ow count of a tested table and compares it to a row count of 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_total_row_count_match_percent|monitoring|daily|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_total_row_count_match_percent|monitoring|daily|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -594,7 +594,7 @@ Verifies the total row count of a tested table and compares it to a row count of
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_total_row_count_match_percent|monitoring|monthly|[total_row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_total_row_count_match_percent|monitoring|monthly|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

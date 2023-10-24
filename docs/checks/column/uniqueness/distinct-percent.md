@@ -12,7 +12,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_distinct_percent|profiling| |[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_distinct_percent|profiling| |[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -647,7 +647,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_distinct_percent|monitoring|daily|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_distinct_percent|monitoring|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1285,7 +1285,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_distinct_percent|monitoring|monthly|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_distinct_percent|monitoring|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1923,7 +1923,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_distinct_percent|partitioned|daily|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_distinct_percent|partitioned|daily|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2575,7 +2575,7 @@ Verifies that the percentage of distinct values in a column does not fall below 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_distinct_percent|partitioned|monthly|[distinct_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_distinct_percent|partitioned|monthly|[distinct_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

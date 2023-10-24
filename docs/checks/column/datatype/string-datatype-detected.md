@@ -13,7 +13,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|profile_string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2016,7 +2016,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_datatype_detected|monitoring|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|daily_string_datatype_detected|monitoring|daily|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -4022,7 +4022,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_datatype_detected|monitoring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|monthly_string_datatype_detected|monitoring|monthly|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -6028,7 +6028,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_datatype_detected|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|daily_partition_string_datatype_detected|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -8046,7 +8046,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_datatype_detected|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|monthly_partition_string_datatype_detected|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

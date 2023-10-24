@@ -12,7 +12,7 @@ Verifies that the percentage of rows that contains valid emails in a column does
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_contains_email_percent|profiling| |[contains_email_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_contains_email_percent|profiling| |[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -787,7 +787,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_contains_email_percent|monitoring|daily|[contains_email_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_contains_email_percent|monitoring|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1565,7 +1565,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_contains_email_percent|monitoring|monthly|[contains_email_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_contains_email_percent|monitoring|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2343,7 +2343,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3135,7 +3135,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

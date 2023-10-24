@@ -12,7 +12,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_match_date_regex_percent|profiling| |[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_string_match_date_regex_percent|profiling| |[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -999,7 +999,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_match_date_regex_percent|monitoring|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_string_match_date_regex_percent|monitoring|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1989,7 +1989,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_match_date_regex_percent|monitoring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_string_match_date_regex_percent|monitoring|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2979,7 +2979,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3983,7 +3983,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

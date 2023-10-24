@@ -12,7 +12,7 @@ Verifies that empty strings in a column does not exceed the maximum accepted cou
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_empty_count|profiling| |[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_string_empty_count|profiling| |[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -817,7 +817,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_empty_count|monitoring|daily|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_string_empty_count|monitoring|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1625,7 +1625,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_empty_count|monitoring|monthly|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_string_empty_count|monitoring|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2433,7 +2433,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3255,7 +3255,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../../reference/sensors/Column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

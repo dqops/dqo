@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_row_count_change|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|profile_row_count_change|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -523,7 +523,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_change|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_row_count_change|monitoring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1037,7 +1037,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count_change|monitoring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_row_count_change|monitoring|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1551,7 +1551,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_change|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|daily_partition_row_count_change|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2079,7 +2079,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_row_count_change|partitioned|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|monthly_partition_row_count_change|partitioned|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

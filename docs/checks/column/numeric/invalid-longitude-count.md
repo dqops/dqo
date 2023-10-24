@@ -12,7 +12,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_invalid_longitude_count|profiling| |[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|profile_invalid_longitude_count|profiling| |[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,7 +675,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_invalid_longitude_count|monitoring|daily|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_invalid_longitude_count|monitoring|daily|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1341,7 +1341,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_invalid_longitude_count|monitoring|monthly|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_invalid_longitude_count|monitoring|monthly|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2007,7 +2007,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_invalid_longitude_count|partitioned|daily|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|daily_partition_invalid_longitude_count|partitioned|daily|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2687,7 +2687,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_invalid_longitude_count|partitioned|monthly|[invalid_longitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|monthly_partition_invalid_longitude_count|partitioned|monthly|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

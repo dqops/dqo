@@ -14,7 +14,7 @@ Detects if new columns were added or existing columns were removed. Retrieves th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_column_list_changed|profiling| |[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_column_list_changed|profiling| |[column_list_unordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -90,7 +90,7 @@ Detects if new columns were added or existing columns were removed since the mos
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_column_list_changed|monitoring|daily|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|daily_column_list_changed|monitoring|daily|[column_list_unordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -168,7 +168,7 @@ Detects if new columns were added or existing columns were removed since the las
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_column_list_changed|monitoring|monthly|[column_list_unordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|monthly_column_list_changed|monitoring|monthly|[column_list_unordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-unordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -13,7 +13,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_mean_match|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_mean_match|profiling| |[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -306,7 +306,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_mean_match|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_mean_match|monitoring|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -601,7 +601,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_mean_match|monitoring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_mean_match|monitoring|monthly|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -896,7 +896,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_mean_match|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|daily_partition_mean_match|partitioned|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1201,7 +1201,7 @@ Verifies that percentage of the difference between the mean (average) value in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_mean_match|partitioned|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|monthly_partition_mean_match|partitioned|monthly|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

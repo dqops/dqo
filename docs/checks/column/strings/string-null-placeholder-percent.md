@@ -12,7 +12,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|profile_string_null_placeholder_percent|profiling| |[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|profile_string_null_placeholder_percent|profiling| |[string_null_placeholder_percent](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -881,7 +881,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_null_placeholder_percent|monitoring|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_string_null_placeholder_percent|monitoring|daily|[string_null_placeholder_percent](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1753,7 +1753,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_null_placeholder_percent|monitoring|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_string_null_placeholder_percent|monitoring|monthly|[string_null_placeholder_percent](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2625,7 +2625,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_null_placeholder_percent|partitioned|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|daily_partition_string_null_placeholder_percent|partitioned|daily|[string_null_placeholder_percent](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3511,7 +3511,7 @@ Verifies that the percentage of null placeholders in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_null_placeholder_percent|partitioned|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|monthly_partition_string_null_placeholder_percent|partitioned|monthly|[string_null_placeholder_percent](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

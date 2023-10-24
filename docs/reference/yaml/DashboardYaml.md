@@ -1,4 +1,33 @@
 
+## DashboardYaml  
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
+|[spec](#dashboardsfolderlistspec)||[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## DashboardSpec  
 Description of a single dashboard that is available in the platform.  
   
@@ -30,8 +59,8 @@ Description of a single dashboard that is available in the platform.
 
 ___  
 
-## DashboardYaml  
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
+## DashboardListSpec  
+List of dashboards.  
   
 
 
@@ -40,14 +69,6 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
 
 
 
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
-|[spec](#dashboardsfolderlistspec)||[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
 
 
 
@@ -62,27 +83,6 @@ ___
 ## DashboardsFolderListSpec  
 List of dashboard folders.  
   
-
-
-
-
-
-
-___  
-
-## DashboardListSpec  
-List of dashboards.  
-  
-
-
-
-
-
-
-
-
-
-
 
 
 
