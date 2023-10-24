@@ -328,7 +328,7 @@ const Tree = () => {
               className={clsx('w-4 shrink-0 min-w-4')}
             />
             <Tooltip
-              content={node.tooltip}
+              content={node.id}
               className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
               placement="top-start"
             >
