@@ -207,7 +207,8 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     private TypeModel getTypeModelForType(String parameterTypeString,
                                           Schema<?> parameterSchema,
                                           Map<String, ComponentModel> componentModelMap) {
-        Function<String, String> linkAccessor = (simpleClassName) -> {
+        Function<Class<?>, String> linkAccessor = (clazz) -> {
+            String simpleClassName = clazz.getSimpleName();
             ComponentModel linkageComponent = componentModelMap.get(simpleClassName);
             if (linkageComponent != null && linkageComponent.getDocsLink() != null) {
                 return linkageComponent.getDocsLink().toString();

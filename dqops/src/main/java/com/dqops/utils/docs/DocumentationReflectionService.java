@@ -25,7 +25,7 @@ import java.util.function.Function;
 public interface DocumentationReflectionService {
     ClassInfo getClassInfoForClass(Class<?> targetClass);
 
-    TypeModel getObjectsTypeModel(Type type, Function<String, String> objectLinkAccessor);
+    TypeModel getObjectsTypeModel(Type type, Function<Class<?>, String> objectLinkAccessor);
 
     ReflectionService getReflectionService();
 }

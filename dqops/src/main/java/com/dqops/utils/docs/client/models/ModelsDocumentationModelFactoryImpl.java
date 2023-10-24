@@ -282,7 +282,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     }
 
     private TypeModel getObjectsTypeModel(Type type, Map<String, ComponentModel> componentModelMap) {
-        Function<String, String> linkAccessor = (simpleClassName) -> {
+        Function<Class<?>, String> linkAccessor = (clazz) -> {
+            String simpleClassName = clazz.getSimpleName();
             ComponentModel componentModel = componentModelMap.get(simpleClassName);
             if (componentModel != null && componentModel.getDocsLink() != null) {
                 return componentModel.getDocsLink().toString();

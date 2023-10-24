@@ -63,6 +63,10 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
             setDisplayName(REFLECTIVE_FIELD_NAME);
             setDisplayHint(DisplayHint.textarea);
         }};
+
+        if (!(clazz.getGenericSuperclass() instanceof ParameterizedType)) {
+            return;
+        }
         ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
         ParameterizedType javaSuperclass = getJavaParameterizedSuperclass(parameterizedSuperclass);
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType((Class<?>) javaSuperclass.getRawType(),
@@ -81,6 +85,10 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
             setDisplayName(REFLECTIVE_FIELD_NAME);
             setDisplayHint(DisplayHint.textarea);
         }};
+
+        if (!(clazz.getGenericSuperclass() instanceof ParameterizedType)) {
+            return;
+        }
         ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
         ParameterizedType javaSuperclass = getJavaParameterizedSuperclass(parameterizedSuperclass);
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType((Class<?>) javaSuperclass.getRawType(),
@@ -122,7 +130,7 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
     }
 
     @Override
-    public TypeModel getObjectsTypeModel(Type type, Function<String, String> objectLinkAccessor) {
+    public TypeModel getObjectsTypeModel(Type type, Function<Class<?>, String> objectLinkAccessor) {
         TypeModel typeModel = new TypeModel();
 
         Class<?> clazz;
@@ -137,7 +145,7 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
             genericType = null;
 
             String link = Objects.requireNonNullElseGet(
-                    objectLinkAccessor.apply(clazz.getSimpleName()),
+                    objectLinkAccessor.apply(clazz),
                     () -> "#" + clazz.getSimpleName());
             typeModel.setClassUsedOnTheFieldPath(link);
         }
