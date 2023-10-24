@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-        AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
-    )
     from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
         AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+    )
+    from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
     )
     from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
         AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
@@ -145,11 +145,11 @@ class ColumnAnomalyDifferencingDistinctCountCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-            AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
-        )
         from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
             AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+        )
+        from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
         )
         from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
             AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,

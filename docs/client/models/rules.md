@@ -34,7 +34,7 @@ List of parameter definitions - the parameters for custom sensors or custom rule
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|mod_count||integer|
+|this||List&lt;[ParameterDefinitionSpec](\docs\reference\yaml\ruledefinitionyaml\#parameterdefinitionspec)&gt;|
 
 
 ___  

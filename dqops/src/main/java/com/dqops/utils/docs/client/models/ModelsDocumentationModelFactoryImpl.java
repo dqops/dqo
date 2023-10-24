@@ -16,6 +16,8 @@
 package com.dqops.utils.docs.client.models;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.DocumentationReflectionService;
+import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
 import com.dqops.utils.docs.TypeModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.reflection.ClassInfo;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
 
 public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationModelFactory {
 
-    private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+    private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     @Override
@@ -194,7 +196,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 }
             }
 
-            ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
+            ClassInfo classInfo = documentationReflectionService.getClassInfoForClass(targetClass);
             List<FieldInfo> infoFields = classInfo.getFields();
 
             modelsObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
@@ -301,7 +303,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             }
         }
 
-        ParameterDataType parameterDataType = reflectionService.determineParameterDataType(clazz, genericType, fieldInfoContainer);
+        ParameterDataType parameterDataType = documentationReflectionService.getReflectionService().determineParameterDataType(clazz, genericType, fieldInfoContainer);
 
         String classSimpleName = clazz.getSimpleName();
         typeModel.setClassNameUsedOnTheField(classSimpleName);

@@ -108,7 +108,6 @@ public class GeneratePythonDocumentationPostProcessor {
             ComponentReflectionService componentReflectionService = new ComponentReflectionServiceImpl(projectDir);
 
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
-            List sschemas = openAPIModel.getModels().stream().filter(e->e.getClassName().toLowerCase().contains("postgres")).collect(Collectors.toList());
 
             generateDocumentationForModels(projectDir, openAPIModel);
             generateDocumentationForOperations(projectDir, openAPIModel);
