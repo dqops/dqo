@@ -91,7 +91,7 @@ public class HandlebarsDocumentationUtilities {
                 } else {
                     templateToReturn = "%s";
                 }
-                return templateToReturn.formatted(displayText);
+                return String.format(templateToReturn, displayText);
             }
 
             if (!isObject(typeModel) && !isLinkableEnum(typeModel)) {
@@ -103,9 +103,9 @@ public class HandlebarsDocumentationUtilities {
             ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
             switch (objectDataType) {
                 case list_type:
-                    return "List[%s]".formatted(apply(typeModel.getGenericKeyType(), options));
+                    return String.format("List[%s]", apply(typeModel.getGenericKeyType(), options));
                 case map_type:
-                    return "Dict[%s, %s]".formatted(apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
+                    return String.format("Dict[%s, %s]", apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
                 case object_type:
                 default:
                     return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
