@@ -763,10 +763,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         Selection rowSelection = Selection.withRange(0, sourceTable.rowCount());
 
-        String checkType = filterParameters.getCheckType().toString();
+        CheckType checkType = filterParameters.getCheckType();
         if (checkType != null) {
-            rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
-                    .isEqualTo(checkType);
+            rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType.toString());
         }
 
         CheckTimeScale checkTimeScale = filterParameters.getCheckTimeScale();
