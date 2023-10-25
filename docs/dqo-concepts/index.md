@@ -44,7 +44,7 @@ These topics introduce the basic concepts of DQOps.
 - **[Data storage](./data-storage/data-storage.md)**
 
     Description how data is stored in DQOps.
-
+ 
 
 - **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
 

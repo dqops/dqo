@@ -1,7 +1,7 @@
 **column count match** checks  
 
 **Description**  
-Table level comparison check compares the row count of the current (parent) table to the column count in the reference table.
+Table level comparison check compares the column count of the current (parent) table to the column count in the reference table.
 
 ___
 
