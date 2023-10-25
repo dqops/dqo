@@ -112,7 +112,7 @@ public interface CheckResultsDataService {
     /**
      * Analyzes the table to find the status of the most recent data quality check for each time series
      * and asses the most current status.
-     * @param tableDataQualityStatusFilterParameters // todo description
+     * @param tableDataQualityStatusFilterParameters Filter parameters container.
      * @return The table status.
      */
     TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(TableDataQualityStatusFilterParameters tableDataQualityStatusFilterParameters);

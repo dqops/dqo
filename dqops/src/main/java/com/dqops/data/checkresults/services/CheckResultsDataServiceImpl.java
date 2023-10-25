@@ -645,19 +645,24 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         return statusModelWithStatistics;
     }
 
-    // todo: description
-    protected TableDataQualityStatusModel calculateStatus(Table sortedTable, TableDataQualityStatusModel statusModel){
+    /**
+     * Calculates status for the table. Completes the TableDataQualityStatusModel with total severity data.
+     * @param sourceTable Source table to be filtered.
+     * @param statusModel Object with connection, schema and table name.
+     * @return Complete TableDataQualityStatusModel
+     */
+    protected TableDataQualityStatusModel calculateStatus(Table sourceTable, TableDataQualityStatusModel statusModel){
 
-        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn timeSeriesIdColumn = sortedTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
-        InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
-        TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
-        TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        LongColumn checkHashColumn = sourceTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn timeSeriesIdColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        InstantColumn executedAtColumn = sourceTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        IntColumn severityColumn = sourceTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
 
         long lastCheckHash = Long.MIN_VALUE;
         String lastTimeSeriesId = "";
-        int rowCount = sortedTable.rowCount();
+        int rowCount = sourceTable.rowCount();
 
         for (int i = 0; i < rowCount; i++) {
             long currentCheckHash = checkHashColumn.getLong(i);
@@ -747,7 +752,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         return filteredTable;
     }
 
-    // todo: description
+    /**
+     * Filters the results based on filterParameters object to only the results for the target object.
+     * @param sourceTable Source table to be filtered.
+     * @param filterParameters Filter parameters.
+     * @return Filtered table.
+     */
     protected Table filterTableOnFilterParameters(Table sourceTable,
                                                   TableDataQualityStatusFilterParameters filterParameters) {
 
@@ -779,11 +789,18 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         return filteredTable;
     }
 
-    // todo description
+    /**
+     * Reduces the selection with a filter composed of combined the check category and table comparison.
+     * @param sourceTable Source table to be filtered.
+     * @param currentSelection A selection that will be reduced.
+     * @param checkCategory Check category.
+     * @param tableComparison Table comparison.
+     * @return Reduced selection to combined check category and table comparison used for filtering a table.
+     */
     protected Selection filterCategoryAndTableComparison(Table sourceTable,
-                                                       Selection currentSelection,
-                                                       String checkCategory,
-                                                       String tableComparison){
+                                                         Selection currentSelection,
+                                                         String checkCategory,
+                                                         String tableComparison){
 
         if (!Strings.isNullOrEmpty(checkCategory)) {
             if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {

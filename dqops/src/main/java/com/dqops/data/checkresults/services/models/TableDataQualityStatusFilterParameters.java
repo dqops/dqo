@@ -16,29 +16,58 @@ import java.util.Optional;
 @Builder
 public class TableDataQualityStatusFilterParameters {
 
-    // Connection name.
-    @JsonPropertyDescription("Connection name.")
+    /**
+     * The connection name in DQOps.
+     */
+    @JsonPropertyDescription("The connection name in DQOps.")
     private String connectionName;
 
+    /**
+     * The physicalTableName composed with a schema and a table name.
+     */
+    @JsonPropertyDescription("The physicalTableName composed with a schema and a table name.")
     private PhysicalTableName physicalTableName;
 
+    /**
+     * The number of recent months to load the data. 1 means the current month and 1 last month.
+     */
+    @JsonPropertyDescription("The number of recent months to load the data. 1 means the current month and 1 last month.")
     private Integer lastMonths;
 
+    /**
+     * Data quality check type (profiling, monitoring, partitioned)
+     */
+    @JsonPropertyDescription("Data quality check type (profiling, monitoring, partitioned)")
     private CheckType checkType;
 
+    /**
+     * Check timescale (for monitoring and partitioned checks).
+     */
+    @JsonPropertyDescription("Time scale filter for monitoring and partitioned checks (values: daily or monthly).")
     private CheckTimeScale checkTimeScale;
 
+    /**
+     * Data group.
+     */
+    @JsonPropertyDescription("Data group.")
     private String dataGroup;
 
+    /**
+     * Data quality check name.
+     */
+    @JsonPropertyDescription("Data quality check name")
     private String checkName;
 
+    /**
+     * Check's category name
+     */
+    @JsonPropertyDescription("Check's category name")
     private String category;
 
+    /**
+     * Table comparison name.
+     */
+    @JsonPropertyDescription("Table comparison name.")
     private String tableComparison;
-
-//     * @param physicalTableName Physical table name.
-//            * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
-//            * @param checkType Check type (optional filter).
-//            * @param checkTimeScale Check time scale (optional filter).
 
 }
