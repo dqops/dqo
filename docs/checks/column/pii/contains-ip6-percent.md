@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_contains_ip6_percent|profiling| |[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_contains_ip6_percent|profiling| |Validity|[contains_ip6_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -995,9 +995,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_contains_ip6_percent|monitoring|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_contains_ip6_percent|monitoring|daily|Validity|[contains_ip6_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1983,9 +1983,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_contains_ip6_percent|monitoring|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_contains_ip6_percent|monitoring|monthly|Validity|[contains_ip6_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2971,9 +2971,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_contains_ip6_percent|partitioned|daily|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_contains_ip6_percent|partitioned|daily|Validity|[contains_ip6_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3973,9 +3973,9 @@ ___
 **Check description**  
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_ip6_percent|partitioned|monthly|[contains_ip6_percent](../../../../reference/sensors/Column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_contains_ip6_percent|partitioned|monthly|Validity|[contains_ip6_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip6-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

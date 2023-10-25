@@ -17,7 +17,7 @@ package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 
@@ -54,7 +54,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        MonitoringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null && !schedulesOverride.isDefault()) {

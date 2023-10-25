@@ -18,7 +18,7 @@ package com.dqops.core.scheduler.defaults;
 
 import com.dqops.core.configuration.DqoSchedulerDefaultSchedulesConfigurationProperties;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -51,8 +51,8 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return Schedules configuration with the default schedules (only configured ones) or null when no schedules are configured.
      */
     @Override
-    public MonitoringSchedulesSpec createDefaultMonitoringSchedules() {
-        MonitoringSchedulesSpec schedules = new MonitoringSchedulesSpec();
+    public DefaultSchedulesSpec createDefaultSchedules() {
+        DefaultSchedulesSpec schedules = new DefaultSchedulesSpec();
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getProfiling())) {
             schedules.setProfiling(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getProfiling()));
@@ -86,18 +86,18 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return New monitoring schedule configuration for a new connection.
      */
     @Override
-    public MonitoringSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
+    public DefaultSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
         MonitoringSchedulesWrapper schedulesWrapper = userHome.getDefaultSchedules();
         if (schedulesWrapper == null || schedulesWrapper.getSpec() == null) {
-            return createDefaultMonitoringSchedules();
+            return createDefaultSchedules();
         }
 
         if (schedulesWrapper.getSpec() == null) {
             return null;
         }
 
-        MonitoringSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
-        MonitoringSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
+        DefaultSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
+        DefaultSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
 
         return clonedSchedules;
     }

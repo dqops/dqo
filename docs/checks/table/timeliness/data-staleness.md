@@ -13,9 +13,9 @@ ___
 **Check description**  
 Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_data_staleness|profiling| |[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_data_staleness|profiling| |Timeliness|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -910,9 +910,9 @@ ___
 **Check description**  
 Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_data_staleness|monitoring|daily|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_data_staleness|monitoring|daily|Timeliness|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1810,9 +1810,9 @@ ___
 **Check description**  
 Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_data_staleness|monitoring|monthly|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_data_staleness|monitoring|monthly|Timeliness|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2710,9 +2710,9 @@ ___
 **Check description**  
 Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_data_staleness|partitioned|daily|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_data_staleness|partitioned|daily|Timeliness|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3624,9 +3624,9 @@ ___
 **Check description**  
 Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_data_staleness|partitioned|monthly|[data_staleness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_data_staleness|partitioned|monthly|Timeliness|[data_staleness](../../../../reference/sensors/table/timeliness-table-sensors/#data-staleness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

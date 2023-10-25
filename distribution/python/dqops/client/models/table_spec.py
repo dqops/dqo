@@ -7,7 +7,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
+    from ..models.default_schedules_spec import DefaultSchedulesSpec
     from ..models.partition_incremental_time_window_spec import (
         PartitionIncrementalTimeWindowSpec,
     )
@@ -73,7 +73,7 @@ class TableSpec:
         monitoring_checks (Union[Unset, TableMonitoringChecksSpec]):
         partitioned_checks (Union[Unset, TablePartitionedChecksRootSpec]):
         statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
-        schedules_override (Union[Unset, MonitoringSchedulesSpec]):
+        schedules_override (Union[Unset, DefaultSchedulesSpec]):
         columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
             specification contains the expected column data type and a list of column level data quality checks that are
             enabled for a column.
@@ -98,7 +98,7 @@ class TableSpec:
     monitoring_checks: Union[Unset, "TableMonitoringChecksSpec"] = UNSET
     partitioned_checks: Union[Unset, "TablePartitionedChecksRootSpec"] = UNSET
     statistics: Union[Unset, "TableStatisticsCollectorsRootCategoriesSpec"] = UNSET
-    schedules_override: Union[Unset, "MonitoringSchedulesSpec"] = UNSET
+    schedules_override: Union[Unset, "DefaultSchedulesSpec"] = UNSET
     columns: Union[Unset, "TableSpecColumns"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -217,7 +217,7 @@ class TableSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.monitoring_schedules_spec import MonitoringSchedulesSpec
+        from ..models.default_schedules_spec import DefaultSchedulesSpec
         from ..models.partition_incremental_time_window_spec import (
             PartitionIncrementalTimeWindowSpec,
         )
@@ -328,11 +328,11 @@ class TableSpec:
             )
 
         _schedules_override = d.pop("schedules_override", UNSET)
-        schedules_override: Union[Unset, MonitoringSchedulesSpec]
+        schedules_override: Union[Unset, DefaultSchedulesSpec]
         if isinstance(_schedules_override, Unset):
             schedules_override = UNSET
         else:
-            schedules_override = MonitoringSchedulesSpec.from_dict(_schedules_override)
+            schedules_override = DefaultSchedulesSpec.from_dict(_schedules_override)
 
         _columns = d.pop("columns", UNSET)
         columns: Union[Unset, TableSpecColumns]

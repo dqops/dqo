@@ -28,7 +28,7 @@ import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -246,7 +246,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path defaultSchedulesPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (!Files.exists(defaultSchedulesPath)) {
                 DefaultSchedulesYaml schedulesYaml = new DefaultSchedulesYaml();
-                schedulesYaml.setSpec(this.defaultSchedulesProvider.createDefaultMonitoringSchedules());
+                schedulesYaml.setSpec(this.defaultSchedulesProvider.createDefaultSchedules());
                 String defaultSchedules = this.yamlSerializer.serialize(schedulesYaml);
                 Files.writeString(defaultSchedulesPath, defaultSchedules);
             }
@@ -374,7 +374,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (userHome.getDefaultSchedules() == null || userHome.getDefaultSchedules().getSpec() == null) {
-            MonitoringSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultMonitoringSchedules();
+            DefaultSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 

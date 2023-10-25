@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_sql_aggregate_expr_column|profiling| |[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_sql_aggregate_expr_column|profiling| |Reasonableness|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -480,9 +480,9 @@ ___
 **Check description**  
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_sql_aggregate_expr_column|monitoring|daily|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_sql_aggregate_expr_column|monitoring|daily|Reasonableness|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -953,9 +953,9 @@ ___
 **Check description**  
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_sql_aggregate_expr_column|monitoring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_sql_aggregate_expr_column|monitoring|monthly|Reasonableness|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1426,9 +1426,9 @@ ___
 **Check description**  
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_sql_aggregate_expr_column|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_sql_aggregate_expr_column|partitioned|daily|Reasonableness|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1913,9 +1913,9 @@ ___
 **Check description**  
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_aggregate_expr_column|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/Column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_sql_aggregate_expr_column|partitioned|monthly|Reasonableness|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

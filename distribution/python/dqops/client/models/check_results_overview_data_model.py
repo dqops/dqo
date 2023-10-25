@@ -5,9 +5,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..models.check_results_overview_data_model_statuses_item import (
-    CheckResultsOverviewDataModelStatusesItem,
-)
+from ..models.check_result_status import CheckResultStatus
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckResultsOverviewDataModel")
@@ -27,8 +25,8 @@ class CheckResultsOverviewDataModel:
             or an error was raised.
         time_period_display_texts (Union[Unset, List[str]]): List of time periods, sorted descending, returned as a text
             with a possible time zone.
-        statuses (Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]]): List of check severity levels or an
-            error status, indexes with the severity levels match the time periods.
+        statuses (Union[Unset, List[CheckResultStatus]]): List of check severity levels or an error status, indexes with
+            the severity levels match the time periods.
         data_groups (Union[Unset, List[str]]): List of data group names. Identifies the data group with the highest
             severity or error result.
         results (Union[Unset, List[float]]): List of sensor results. Returns the data quality result readout for the
@@ -42,7 +40,7 @@ class CheckResultsOverviewDataModel:
     time_periods_utc: Union[Unset, List[int]] = UNSET
     executed_at_timestamps: Union[Unset, List[int]] = UNSET
     time_period_display_texts: Union[Unset, List[str]] = UNSET
-    statuses: Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]] = UNSET
+    statuses: Union[Unset, List[CheckResultStatus]] = UNSET
     data_groups: Union[Unset, List[str]] = UNSET
     results: Union[Unset, List[float]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -140,9 +138,7 @@ class CheckResultsOverviewDataModel:
         statuses = []
         _statuses = d.pop("statuses", UNSET)
         for statuses_item_data in _statuses or []:
-            statuses_item = CheckResultsOverviewDataModelStatusesItem(
-                statuses_item_data
-            )
+            statuses_item = CheckResultStatus(statuses_item_data)
 
             statuses.append(statuses_item)
 

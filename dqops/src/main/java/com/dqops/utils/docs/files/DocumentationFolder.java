@@ -96,6 +96,41 @@ public class DocumentationFolder {
     }
 
     /**
+     * Adds a nested file.
+     * @param file Markdown file object to be added to the file tree. <code>fileName</code> needs to be set.
+     * @return Markdown file object that was added to the file tree.
+     */
+    public DocumentationMarkdownFile addNestedFile(DocumentationMarkdownFile file) {
+        String fileNameUnix = file.getFileName().replace('\\', '/');
+        String[] folderPath = StringUtils.split(fileNameUnix, '/');
+        if (folderPath.length > 1) {
+            DocumentationFolder subFolder = ListFindUtils.findElement(
+                    this.subFolders, folder -> Objects.equals(folderPath[0], folder.getFolderName()));
+
+            if (subFolder == null) {
+                Path subFolderPath = this.directPath.resolve(folderPath[0]);
+                subFolder = new DocumentationFolder() {{
+                    setFolderName(folderPath[0]);
+                    setLinkName(folderPath[0]);
+                    setDirectPath(subFolderPath);
+                }};
+                this.subFolders.add(subFolder);
+            }
+
+            file.setFileName(fileNameUnix.substring(fileNameUnix.indexOf('/') + 1));
+            return subFolder.addNestedFile(file);
+        }
+
+        Path directFilePath = this.directPath.resolve(folderPath[0]);
+        file.setFileName(folderPath[0]);
+        file.setLinkName(folderPath[0].substring(0, folderPath[0].length() - ".md".length()));
+        file.setDirectPath(directFilePath);
+
+        this.files.add(file);
+        return file;
+    }
+
+    /**
      * Generates the content of the navigation for MkDocs that references all files.
      * @param indentSpaces Number of spaces to use for indentation.
      * @return Rendered yaml content with the navigation tree.

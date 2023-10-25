@@ -13,9 +13,9 @@ ___
 **Check description**  
 Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_types_changed|profiling| |[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_types_changed|profiling| |Consistency|[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -89,9 +89,9 @@ ___
 **Check description**  
 Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_types_changed|monitoring|daily|[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_types_changed|monitoring|daily|Consistency|[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -167,9 +167,9 @@ ___
 **Check description**  
 Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_types_changed|monitoring|monthly|[column_types_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_types_changed|monitoring|monthly|Consistency|[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

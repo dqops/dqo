@@ -83,6 +83,8 @@ const CheckCategoriesView = ({
   useEffect(() => {
     shouldExtend();
   }, []);
+  console.log(checkResultsOverview)
+  console.log(category)
 
   return (
     <Fragment>
@@ -154,7 +156,9 @@ const CheckCategoriesView = ({
             checkResult={checkResultsOverview.find(
               (item) =>
                 item.checkName === check.check_name &&
-                category.category === item.checkCategory
+                ((category.category === item.checkCategory) || 
+                (category.category?.includes("comparisons") && 
+                item.checkCategory === 'comparisons'))
             )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}

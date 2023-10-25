@@ -22,10 +22,10 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { dashboardFolders, dashboardTooltipState } = useSelector(
+  const { dashboardFolders,  dashboardTooltipState } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth,} = useDashboard();
   const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -62,43 +62,58 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
+  
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
-      useDashboard();
-
+    useDashboard();
+    
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
-    );
+      );
+      
+      useEffect(() => {
+        if(selected !== activeTab){
+          setSelected(activeTab);
+        }
+      },[activeTab]);
+      
+    const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [mousePos, setMousePos] = useState<number>();
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
+      setMouseEnterTimeout(setTimeout(() => {
+        const height = e.clientY;
+        dispatch(getDashboardTooltipState({height, label, url}));
+      }, 100))
+    };
+
+    const handleMouseLeave = () => {
+      if (mouseEnterTimeout) {
+        clearTimeout(mouseEnterTimeout);
+      }
+      dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
+    };
+    useEffect(() => {
+      const handleMouseMove = (event : any) => {
+        setMousePos(event.clientX);
+      };
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => {
+        window.removeEventListener(
+          'mousemove',
+          handleMouseMove
+        );
+      };
+    }, []);
 
     useEffect(() => {
-      if(selected !== activeTab){
-        setSelected(activeTab)
+      if (dashboardTooltipState.label && mousePos) {
+        if (mousePos > sidebarWidth) {
+          dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
+        }
       }
-    },[activeTab])
-
-    let mouseEnterTimeout: NodeJS.Timeout | undefined; 
+    }, [mousePos])
     
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
-
-      if (mouseEnterTimeout) {
-        clearTimeout(mouseEnterTimeout);
-      }
-      mouseEnterTimeout = setTimeout(() => {
-        const height = e.clientY;
-        dispatch(getDashboardTooltipState({height, label, url}))
-      }, 100); 
-    };
-    const handleMouseLeave = () => {
-
-      if (mouseEnterTimeout) {
-        clearTimeout(mouseEnterTimeout);
-      }
-      dispatch(getDashboardTooltipState({height: undefined, label: undefined, url: undefined}))
-    };
-    
-
-  console.log(dashboardTooltipState)
     return (
       <div>
         <div
@@ -130,7 +145,7 @@ const LeftView = () => {
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
-                onClick={() => {
+                onMouseDown={() => {
                   changeActiveTab(
                     dashboard,
                     folder.folder_name,
@@ -152,7 +167,7 @@ const LeftView = () => {
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap" 
                       onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
-                      onMouseLeave={handleMouseLeave}>
+                      onMouseLeave={() => handleMouseLeave()}>
                   {dashboard.dashboard_name}
                 </div>
               </div>

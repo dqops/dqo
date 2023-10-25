@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not fall below the minimum accepted length.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_min_length|profiling| |[string_min_length](../../../../reference/sensors/Column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_min_length|profiling| |Reasonableness|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,9 +675,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_min_length|monitoring|daily|[string_min_length](../../../../reference/sensors/Column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_min_length|monitoring|daily|Reasonableness|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1343,9 +1343,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_min_length|monitoring|monthly|[string_min_length](../../../../reference/sensors/Column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_min_length|monitoring|monthly|Reasonableness|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2011,9 +2011,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not fall below the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_min_length|partitioned|daily|[string_min_length](../../../../reference/sensors/Column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_min_length|partitioned|daily|Reasonableness|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2693,9 +2693,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not fall below the minimum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_min_length|partitioned|monthly|[string_min_length](../../../../reference/sensors/Column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_min_length|partitioned|monthly|Reasonableness|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/Comparison/#min-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_change_distinct_count|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_change_distinct_count|profiling| |Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -589,9 +589,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_change_distinct_count|monitoring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_change_distinct_count|monitoring|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1171,9 +1171,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_change_distinct_count|monitoring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_change_distinct_count|monitoring|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1753,9 +1753,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_change_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_change_distinct_count|partitioned|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2349,9 +2349,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_change_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_change_distinct_count|partitioned|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

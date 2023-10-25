@@ -63,7 +63,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
@@ -741,12 +741,12 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a container of schedules, divided by the time range.
      *
-     * @param monitoringSchedulesSpec Container of schedule categories.
+     * @param defaultSchedulesSpec Container of schedule categories.
      * @param parameter                     Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(MonitoringSchedulesSpec monitoringSchedulesSpec, T parameter) {
+    public TreeNodeTraversalResult accept(DefaultSchedulesSpec defaultSchedulesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

@@ -97,9 +97,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         DateTimeColumn timePeriodColumn = normalizedSensorResults.getTimePeriodColumn();
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
-        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
+        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames() != null ?
+                sensorRunParameters.getEffectiveSensorRuleNames().getRuleName() : null;
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
-        RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
+        RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null ?
+                ruleFindResult.getRuleDefinitionSpec().getTimeWindow() : null;
         TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
@@ -220,7 +222,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 2;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                    if (ruleExecutionResultError.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
@@ -238,7 +240,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 1;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                    if (ruleExecutionResultWarning.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultWarning.getExpectedValue();
                     }
 
@@ -247,12 +249,16 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     }
                 }
 
-                if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
-                        (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
-                        (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
-                    // no rule was present or no rule managed to evaluate, the result is inconclusive, no rule returned any result,
-                    // probably not enough historical data to calculate, we are not adding a check result row
-                    continue;
+                if (warningRule == null && errorRule == null && fatalRule == null) {
+                    // no rules are enabled, we are appending the check result as passed
+                } else {
+                    if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
+                            (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
+                            (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
+                        // no rule managed to evaluate, the result is inconclusive, no rule returned any result,
+                        // probably not enough historical data to calculate, we are not adding a check result row
+                        continue;
+                    }
                 }
 
                 if (highestSeverity == null) {
@@ -298,8 +304,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 TableIncidentGroupingSpec tableIncidentGrouping = sensorRunParameters.getTable().getIncidentGrouping();
                 EffectiveIncidentGroupingConfiguration effectiveIncidentGrouping = new EffectiveIncidentGroupingConfiguration(connectionIncidentGrouping, tableIncidentGrouping);
 
-                if (effectiveIncidentGrouping != null && !effectiveIncidentGrouping.isDisabled() &&
-                        highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
+                if (!effectiveIncidentGrouping.isDisabled() && highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
                     String dataStreamName = !normalizedSensorResults.getDataGroupNameColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getDataGroupNameColumn().get(allSensorResultsRowIndex) : null;
                     String qualityDimension = !normalizedSensorResults.getQualityDimensionColumn().isMissing(allSensorResultsRowIndex) ?

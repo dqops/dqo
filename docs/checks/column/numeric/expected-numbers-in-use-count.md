@@ -12,9 +12,9 @@ ___
 **Check description**  
 Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_expected_numbers_in_use_count|profiling| |[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_expected_numbers_in_use_count|profiling| |Reasonableness|[expected_numbers_in_use_count](../../../../reference/sensors/column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -995,9 +995,9 @@ ___
 **Check description**  
 Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_expected_numbers_in_use_count|monitoring|daily|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_expected_numbers_in_use_count|monitoring|daily|Reasonableness|[expected_numbers_in_use_count](../../../../reference/sensors/column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1981,9 +1981,9 @@ ___
 **Check description**  
 Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_expected_numbers_in_use_count|monitoring|monthly|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_expected_numbers_in_use_count|monitoring|monthly|Reasonableness|[expected_numbers_in_use_count](../../../../reference/sensors/column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2967,9 +2967,9 @@ ___
 **Check description**  
 Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_expected_numbers_in_use_count|partitioned|daily|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_expected_numbers_in_use_count|partitioned|daily|Reasonableness|[expected_numbers_in_use_count](../../../../reference/sensors/column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -3967,9 +3967,9 @@ ___
 **Check description**  
 Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_expected_numbers_in_use_count|partitioned|monthly|[expected_numbers_in_use_count](../../../../reference/sensors/Column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_expected_numbers_in_use_count|partitioned|monthly|Reasonableness|[expected_numbers_in_use_count](../../../../reference/sensors/column/numeric-column-sensors/#expected-numbers-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

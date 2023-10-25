@@ -358,9 +358,9 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.profiling"},
             description = "Sets the default schedule for running profiling checks that is copied to the configuration of new data source connections that are registered in DQOps. " +
-                    "The default schedule runs checks once a day at 12 PM (noon). " +
+                    "The default schedule runs profiling checks once a month, on the first day of the month at 12 PM (noon). " +
                     "This parameter is used only once, during the first initialization of DQOps user home. " +
-                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 * * *")
+                    "The value is copied to the settings/defaultschedules.dqoschedules.yaml file.", defaultValue = "0 12 1 * *")
     private String dqoSchedulerDefaultSchedulesProfiling;
 
     @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.monitoring-daily"},

@@ -1,48 +1,87 @@
 # Data storage
 
-In DQO, sensor readouts and check results are stored as Apache Parquet files following the Apache
+In DQOps, sensor readouts and check results are stored as Apache Parquet files following the Apache
 Hive compatible folder tree, partitioned by connection name, table name, and month.
 For example, rule results for February 2023 for a single table would be stored in a file
-`/.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
+`.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
 
-The data is stored locally in `userhome` folder, allowing true multi-cloud data collection without accessing any
-sensitive data through an external cloud or SaaS solution.
+The data files are stored locally in the `.data` subfolder inside the **DQOps User Home** folder.
+**DQOps User Home** folder is the place on the disk where DQOps stores both the configuration files and the data result files.
+The configuration files are YAML files that scribe the metadata of monitored data sources and the rule parameters for enabled data checks.
+It is usually the current folder where DQOPs was started, which means that DQOps will create all configuration and data files
+in the current folder. It is also possible to select a different folder to store the files by setting the `$DQO_USER_HOME`
+environment variable before starting DQOps.
 
-The data can simply be replicated to a data lake or cloud bucket. Any SQL engine capable of querying
-Hive-compatible data can query the output files of the data quality tool. Data can be queried using Apache Hive,
-Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server PolyBase, AWS Athena, and AWS Redshift Spectrum.
+The `.data` folder is organized as an offline Data Quality Data Lake, storing files in a Hive-compatible partitioning folder structure.
+DQOps synchronizes the files between the `.data` folder and a Data Quality Data Lake hosted as a DQOps Cloud SaaS platform.
+DQOps Cloud continuously refreshed the Data Quality Data Warehouse by loading the parquet data files
+that were uploaded to the DQOps Cloud Data Quality Data Lake (the files from the `.data` folder).
 
-## Userhome folder structure
+DQOps creates a separate Data Quality Data Warehouse for each account, not sharing any tables or databases between tenants.
+The Data Quality Data Warehouse is queries by a Looker Studio Community Connector provided by DQOps.
+The data quality dashboards that are visible in DQOps are presented as embedded, multi-tenant Looker Studio dashboards.
 
-The `userhome` folder has the following structure:
+The local, offline copy of the Data Quality Data Lake enables multiple deployment options. 
+- **Hybrid deployment** - an on-premise DQOps instance can monitor on-premise data source without opening connectivity
+  to a data source from the cloud 
+- **Anomaly detection on historic data** - anomalies can be instantly detected by using historical data quality sensor readouts
+  from previous dates
+- **Anomaly detection with machine learning** - Python data quality rules can train time series prediction models to
+  detect non-obvious or seasonal anomalies in the data
+
+
+> NOTE: **DQOps Cloud license limits**
+> 
+> The Data Quality Data Lake hosted by DQOps is a complimentary service provided for free for DQOps users using a FREE license.
+> 
+> A standalone DQOps instance that uses a FREE DQOps Cloud license is limited to synchronize
+> the data quality results for up to 5 tables organized within one data source. DQOps will pick the first data source
+> and will synchronize the data for the first 5 tables.
+> 
+> If you need to synchronize more results to the DQOps Cloud Data Quality Data Lake, please contact
+> [DQOps sales](https://dqops.com/contact-us/).
+
+The local Data Quality Data Warehouse is not limited to be synchronized with DQOps Cloud data lake.
+Each user can set up a secondary file synchronization process that would replicate all the files in the `.data` folder
+to a different location, using the user's owned S3 buckets, Storage Accounts or Cloud Storage.
+Because the files are organized as a Hive-compatible data lake, it is possible to synchronize the data files
+to any on-premise or cloud hosted data lake. The data files for each table should be registered as external tables.
+This architecture will allow to build a private Data Quality Data Warehouse with custom data quality dashboards
+using any SQL engine that can query Hive-compatible external tables. To be precise, the files could be queried
+using Apache Hive, Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server, Azure Synapse, Snowflake,
+AWS Athena, and AWS Redshift Spectrum.
+
+## `.data` folder structure
+
+The `.data` folder inside the **DQOps User Home** folder has the following structure:
 
 ```
-userhome
+$DQO_USER_HOME
 ├───.data                                                                   
 │   ├───statistics                                                        
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01   
-│   │               ├─.statistics.0.parquet.snappy.crc   
-│   │               └─statistics.0.parquet.snappy   
-│   ├───sensor_redouts                                                            
+│   │               └─statistics.0.parquet   
+│   ├───sensor_readouts                                                            
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01
-│   │               ├─.sensor_readout.0.parquet.crc   
 │   │               └─sensor_readout.0.parquet  
 │   ├───check_results
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01 
-│   │               ├─.rule_results.0.parquet.crc   
 │   │               └─rule_results.0.parquet
-│   └───errors
+│   ├───errors
+│   │   └───c=bigquery-public-data                                                
+│   │       └───t=america_health_rankings.ahr
+│   │           └───m=2023-02-01  
+│   │               └─errors.0.parquet                                          
+│   └───incidents
 │       └───c=bigquery-public-data                                                
-│           └───t=america_health_rankings.ahr
-│               └───m=2023-02-01  
-│                   ├─.errors.0.parquet.snappy.crc   
-│                   └─errors.0.parquet.snappy                                           
+│           └───m=2023-02-01
+│               └───incidents.0.parquet 
 ├───.index 
 │    ├─data_check_results.LOCAL.dqofidx.json
 │    ├─data_check_results.REMOTE.dqofidx.json
@@ -55,10 +94,11 @@ userhome
 │    ├─sources.LOCAL.dqofidx.json
 │    └─sources.REMOTE.dqofidx.json                                                                
 ├───.logs
-│   ├─dqo-logs.log   
-│   └─dqo-logs-2023-02-01_15.log 
-├───rules                                                                   
+│   └─dqo-logs.log   
+├───checks                                                                   
+├───rules                                                                 
 ├───sensors                                                                 
+├───settings                                                                 
 └───sources                                                                
     └───bigquery-public-data
         └─america_health_rankings.ahr.dqotable.yaml
@@ -66,21 +106,35 @@ userhome
 ```
 
 The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. These subfolders 
-are further organized into subfolders for specific connections, tables, and months. Each dataset contains .parquet 
-files that store compressed data in a columnar format and a .crc (Cyclic Redundancy Check) files used to verify the 
-integrity of the Parquet file, to ensure that it has not been corrupted during transmission or storage.
+are further organized into subfolders for specific connections, tables, and months. Each dataset contains parquet 
+files that store compressed data in a columnar format.
+The detailed schema of each type of data table that is stored in the `.data` folder is documented in the reference section of the documentation.
 
-The `.index` folder contain JSON files with metadata about the stored data. Each data type has a separate index file for 
-both locally stored and remote sources.
+The following tables are documented:
 
-The `.logs` folder contains daily log files for DQO.
+|                      table |                                                            documentation |
+|---------------------------:|-------------------------------------------------------------------------:|
+| data quality check results |     [.data/check_results](../../reference/parquetfiles/check_results.md) |
+|            sensor readouts | [.data/sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) |
+|                 statistics |           [.data/statistics](../../reference/parquetfiles/statistics.md) |
+|                     errors |                   [.data/errors](../../reference/parquetfiles/errors.md) |
+|                  incidents |             [.data/incidents](../../reference/parquetfiles/incidents.md) |
+
+
+The `.index` folder contain JSON files used for tracing the synchronization status for each file between the local folder
+and the DQOps Cloud SaaS hosted data lake. The files are managed by DQOps runtime.
+
+The `.logs` folder contains daily log files for DQOps. If DQOps returns an error, please check the details of
+the error (including the stack trace) in the files in this folder.
 
 The `rules` folder contains user-defined [data quality rules](../rules/rules.md), while the `sensors` folder contains 
 user-defined [data quality sensors](../sensors/sensors.md) in Jinja2 templating engine which are further rendered into a
 SQL queries.
 
 The `sources` folder contains [YAML configuration files](../working-with-yaml-files/working-with-yaml-files.md) for 
-each connection and table.
+each connection and table. These files describe the metadata of imported data sources and contain a configuration
+of enabled data quality checks on a table and column level. The alerting thresholds for data quality rules
+are configured together with the list of enabled data quality checks.
 
 ## Storage of check results data
 The way check results data are stored varies depending on the type of check used.

@@ -11,9 +11,9 @@ ___
 **Check description**{{#with "  "}}{{.}}{{/with}}
 {{checkHelp}}{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{capitalizeFirst target}}/{{sensor.category}}-{{target}}-sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{capitalizeFirst rule.category}}/#{{replace rule.ruleName "_" "-"}})|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{capitalizeFirst rule.category}}/#{{replace rule.ruleName "_" "-"}})|
 {{#with "  "}}{{.}}{{/with}}
 **Enable check (Shell)**{{#with "  "}}{{.}}{{/with}}
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

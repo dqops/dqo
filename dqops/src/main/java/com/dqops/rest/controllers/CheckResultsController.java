@@ -22,6 +22,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.checkresults.services.models.CheckResultsListModel;
+import com.dqops.data.checkresults.services.models.TableDataQualityStatusFilterParameters;
 import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -103,7 +104,18 @@ public class CheckResultsController {
             @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
-            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
+            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale,
+            @ApiParam(name = "dataGroup", value = "Optional data group", required = false)
+            @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Optional check category name", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Optional table comparison name", required = false)
+            @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "qualityDimension", value = "Optional data quality dimension", required = false)
+            @RequestParam(required = false) Optional<String> qualityDimension) {
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -125,9 +137,21 @@ public class CheckResultsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService.analyzeTableMostRecentQualityStatus(
-                connectionName, physicalTableName,
-                months.orElse(1), checkType.orElse(null), checkTimeScale.orElse(null));
+        TableDataQualityStatusFilterParameters tableDataQualityStatusFilterParameters = TableDataQualityStatusFilterParameters.builder()
+                .connectionName(connectionName)
+                .physicalTableName(physicalTableName)
+                .lastMonths(months.orElse(1))
+                .checkType(checkType.orElse(null))
+                .checkTimeScale(checkTimeScale.orElse(null))
+                .dataGroup(dataGroup.orElse(null))
+                .checkName(checkName.orElse(null))
+                .category(category.orElse(null))
+                .tableComparison(tableComparison.orElse(null))
+                .qualityDimension(qualityDimension.orElse(null))
+                .build();
+
+        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService
+                .analyzeTableMostRecentQualityStatus(tableDataQualityStatusFilterParameters);
 
         return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
     }

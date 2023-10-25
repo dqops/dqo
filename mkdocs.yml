@@ -5,14 +5,14 @@ edit_uri: edit/main/docs/
 
 # Docs navigation
 nav:
-  - What is DQO?: "index.md"
+  - What is DQOps?: "index.md"
   - Getting started:
       - "getting-started/index.md"
       - Installation: "getting-started/installation/installation.md"
       - Connect to a data source: "getting-started/add-data-source-connection/add-data-source-connection.md"
       - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md"
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
-  - DQO concepts:
+  - DQOps concepts:
       - "dqo-concepts/index.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
@@ -21,6 +21,8 @@ nav:
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
       - Sensors: "dqo-concepts/sensors/sensors.md"
       - Rules: "dqo-concepts/rules/rules.md"
+      - Data quality flow: "dqo-concepts/architecture/data-quality-flow.md"
+      - DQOps architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
       - Dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
@@ -53,16 +55,16 @@ nav:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
           - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Stability:
+      - Availability:
           - Table availability: "examples/stability/table-availability.md"
       - Data quality monitoring:
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
-  - Working with DQO:
+  - Working with DQOps:
       - Installation:
-          - Install DQO using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
-          - Install DQO from Git: "working-with-dqo/installation/install-dqo-from-git.md"
-          - Install DQO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
-          - Run DQO as a Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+          - Install DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
+          - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+          - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
+          - Install DQpsO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
       - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
@@ -87,7 +89,7 @@ nav:
           - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
           - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
-      - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
+      - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
@@ -106,6 +108,57 @@ nav:
     - run: 'command-line-interface/run.md'
     - rule: 'command-line-interface/rule.md'
 ########## END INCLUDE CLI COMMANDS
+########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
+  - REST API Python client:
+    - models:
+      - checks: 'client/models/checks.md'
+      - check_results: 'client/models/check_results.md'
+      - check_results_overview: 'client/models/check_results_overview.md'
+      - columns: 'client/models/columns.md'
+      - connections: 'client/models/connections.md'
+      - dashboards: 'client/models/dashboards.md'
+      - data_grouping_configurations: 'client/models/data_grouping_configurations.md'
+      - data_sources: 'client/models/data_sources.md'
+      - errors: 'client/models/errors.md'
+      - incidents: 'client/models/incidents.md'
+      - index: 'client/models/index.md'
+      - jobs: 'client/models/jobs.md'
+      - rules: 'client/models/rules.md'
+      - schemas: 'client/models/schemas.md'
+      - sensors: 'client/models/sensors.md'
+      - sensor_readouts: 'client/models/sensor_readouts.md'
+      - shared_credentials: 'client/models/shared_credentials.md'
+      - tables: 'client/models/tables.md'
+      - table_comparisons: 'client/models/table_comparisons.md'
+      - table_comparison_results: 'client/models/table_comparison_results.md'
+      - users: 'client/models/users.md'
+    - operations:
+      - checks: 'client/operations/checks.md'
+      - check_results: 'client/operations/check_results.md'
+      - check_results_overview: 'client/operations/check_results_overview.md'
+      - columns: 'client/operations/columns.md'
+      - connections: 'client/operations/connections.md'
+      - dashboards: 'client/operations/dashboards.md'
+      - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
+      - data_sources: 'client/operations/data_sources.md'
+      - defaults: 'client/operations/defaults.md'
+      - environment: 'client/operations/environment.md'
+      - errors: 'client/operations/errors.md'
+      - healthcheck: 'client/operations/healthcheck.md'
+      - incidents: 'client/operations/incidents.md'
+      - jobs: 'client/operations/jobs.md'
+      - log_shipping: 'client/operations/log_shipping.md'
+      - rules: 'client/operations/rules.md'
+      - schemas: 'client/operations/schemas.md'
+      - sensors: 'client/operations/sensors.md'
+      - sensor_readouts: 'client/operations/sensor_readouts.md'
+      - shared_credentials: 'client/operations/shared_credentials.md'
+      - tables: 'client/operations/tables.md'
+      - table_comparisons: 'client/operations/table_comparisons.md'
+      - table_comparison_results: 'client/operations/table_comparison_results.md'
+      - timezones: 'client/operations/timezones.md'
+      - users: 'client/operations/users.md'
+########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:
     - table:
@@ -408,6 +461,7 @@ markdown_extensions:
   - pymdownx.details
   - attr_list
   - md_in_html
+  - def_list
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

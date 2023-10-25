@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_mean_change_7_days|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_mean_change_7_days|profiling| |Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -542,9 +542,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_mean_change_7_days|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_mean_change_7_days|monitoring|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1077,9 +1077,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_mean_change_7_days|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_mean_change_7_days|partitioned|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

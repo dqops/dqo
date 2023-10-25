@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableColumnsStatisticsModel } from '../../../api'
-import { datatype_detected } from '../../../shared/constants';
+import { getDetectedDatatype } from '../../../utils';
 
 interface tablePreviewProps {
     statistics : TableColumnsStatisticsModel;
@@ -71,7 +71,7 @@ export default function TablePreview({statistics} : tablePreviewProps) {
           unique_percent: Number(x.statistics?.find((item) => item.collector === 'distinct_percent')?.result),
           duplicate_value: Number(x.statistics?.find((item) => item.collector === 'duplicate_count')?.result),
           duplicate_percent: Number(x.statistics?.find((item) => item.collector === 'duplicate_percent')?.result),
-          detectedDatatypeVar: datatype_detected(Number(x.statistics?.find((item) => item.collector === 'string_datatype_detect')?.result)),
+          detectedDatatypeVar: getDetectedDatatype(Number(x.statistics?.find((item) => item.collector === 'string_datatype_detect')?.result)),
           nameOfCol: x.column_name,
           minimalValue: x.statistics?.find((item) => item.collector === 'min_value')?.result,
           maximumValue: x.statistics?.find((item) => item.collector === 'max_value')?.result,

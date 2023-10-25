@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_non_negative_count|profiling| |[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_non_negative_count|profiling| |Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -675,9 +675,9 @@ ___
 **Check description**  
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_non_negative_count|monitoring|daily|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_non_negative_count|monitoring|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1343,9 +1343,9 @@ ___
 **Check description**  
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_non_negative_count|monitoring|monthly|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_non_negative_count|monitoring|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2011,9 +2011,9 @@ ___
 **Check description**  
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_non_negative_count|partitioned|daily|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_non_negative_count|partitioned|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2693,9 +2693,9 @@ ___
 **Check description**  
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_non_negative_count|partitioned|monthly|[non_negative_count](../../../../reference/sensors/Column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_non_negative_count|partitioned|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

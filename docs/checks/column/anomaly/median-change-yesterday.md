@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_median_change_yesterday|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_median_change_yesterday|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -709,9 +709,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_median_change_yesterday|monitoring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_median_change_yesterday|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1411,9 +1411,9 @@ ___
 **Check description**  
 Verifies that the median in a column changed in a fixed rate since last readout from yesterday.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_median_change_yesterday|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_median_change_yesterday|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

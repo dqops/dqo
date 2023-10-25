@@ -16,9 +16,13 @@
 package com.dqops.utils.docs.yaml;
 
 import com.dqops.metadata.fields.ParameterDataType;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.DocumentationReflectionService;
+import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
+import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
+import com.dqops.utils.reflection.ObjectDataType;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
@@ -28,6 +32,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Yaml documentation model factory that creates a yaml documentation.
@@ -35,12 +40,12 @@ import java.util.*;
  */
 public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModelFactory {
 
-    private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+    private final DocumentationReflectionService reflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
-    private final HandledClassesLinkageStore linkageStore;
+    private final LinkageStore<Class<?>> linkageStore;
 
-    public YamlDocumentationModelFactoryImpl(HandledClassesLinkageStore linkageStore) {
+    public YamlDocumentationModelFactoryImpl(LinkageStore<Class<?>> linkageStore) {
         this.linkageStore = linkageStore;
     }
 
@@ -88,7 +93,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
     private void generateYamlObjectDocumentationModelRecursive(Path superiorObjectFileName,
                                                                Class<?> targetClass,
                                                                Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
-        if (!visitedObjects.containsKey(targetClass) && !linkageStore.containsKey(targetClass)) {
+        if (targetClass != null && !visitedObjects.containsKey(targetClass) && !linkageStore.containsKey(targetClass)) {
             visitedObjects.put(targetClass, null);
 
             YamlObjectDocumentationModel yamlObjectDocumentationModel = new YamlObjectDocumentationModel();
@@ -121,30 +126,50 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             );
 
             for (FieldInfo info : infoFields) {
-                if (info.getDataType().equals(ParameterDataType.object_type)) {
-                    if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
-                        continue;
-                    }
-                    generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects);
+                if (info.getDataType() == null) {
+                    continue;
                 }
 
                 YamlFieldsDocumentationModel yamlFieldsDocumentationModel = new YamlFieldsDocumentationModel();
-                yamlFieldsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
-                if (linkageStore.containsKey(info.getClazz())) {
-                    Path infoClassPath = linkageStore.get(info.getClazz());
-                    yamlFieldsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
-                } else {
-                    yamlFieldsDocumentationModel.setClassUsedOnTheFieldPath(
-                            "#" + yamlFieldsDocumentationModel.getClassNameUsedOnTheField());
+                Type infoType = Objects.requireNonNullElse(info.getGenericDataType(), info.getClazz());
+                TypeModel infoTypeModel = getObjectsTypeModel(infoType);
+                yamlFieldsDocumentationModel.setTypeModel(infoTypeModel);
+
+                if (info.getDataType().equals(ParameterDataType.object_type)) {
+                    if (info.getClazz().getName().contains("float")) {
+                        // Float values
+                        continue;
+                    } else if (!info.getClazz().getName().contains("java.")) {
+                        // Custom objects
+                        generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects);
+                    } else if (info.getObjectDataType() == ObjectDataType.list_type) {
+                        // Objects that can be rendered as lists
+                        TypeModel genericType = infoTypeModel.getGenericKeyType();
+                        if (genericType.getDataType().equals(ParameterDataType.object_type)) {
+                            generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericType.getClazz(), visitedObjects);
+                        }
+                    } else if (info.getObjectDataType() == ObjectDataType.map_type) {
+                        // Objects that can be rendered as maps
+                        TypeModel genericTypeK = infoTypeModel.getGenericKeyType();
+                        if (genericTypeK.getDataType().equals(ParameterDataType.object_type)) {
+                            generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericTypeK.getClazz(), visitedObjects);
+                        }
+
+                        TypeModel genericTypeV = infoTypeModel.getGenericValueType();
+                        if (genericTypeV.getDataType().equals(ParameterDataType.object_type)) {
+                            generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericTypeV.getClazz(), visitedObjects);
+                        }
+                    } else {
+                        // Java std objects that cannot be rendered as maps
+                        continue;
+                    }
                 }
 
                 yamlFieldsDocumentationModel.setClassFieldName(info.getClassFieldName());
                 yamlFieldsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
                 yamlFieldsDocumentationModel.setDisplayName(info.getDisplayName());
                 yamlFieldsDocumentationModel.setHelpText(info.getHelpText());
-                yamlFieldsDocumentationModel.setClazz(info.getClazz());
-                yamlFieldsDocumentationModel.setDataType(info.getDataType());
                 yamlFieldsDocumentationModel.setEnumValuesByName(info.getEnumValuesByName());
                 yamlFieldsDocumentationModel.setDefaultValue(info.getDefaultValue());
                 yamlFieldsDocumentationModel.setSampleValues(info.getSampleValues());
@@ -155,6 +180,21 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             yamlObjectDocumentationModel.setObjectFields(yamlFieldsDocumentationModels);
             visitedObjects.put(targetClass, yamlObjectDocumentationModel);
         }
+    }
+
+    private TypeModel getObjectsTypeModel(Type type) {
+        Function<Class<?>, String> linkAccessor = (clazz) -> {
+            String simpleClassName = clazz.getSimpleName();
+
+            if (linkageStore.containsKey(clazz)) {
+                Path infoClassPath = linkageStore.get(clazz);
+                return infoClassPath.toString();
+            } else {
+                return "#" + simpleClassName;
+            }
+        };
+
+        return reflectionService.getObjectsTypeModel(type, linkAccessor);
     }
 
     /**

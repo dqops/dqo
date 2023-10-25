@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the sum in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_sum_change_7_days|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_sum_change_7_days|profiling| |Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -542,9 +542,9 @@ ___
 **Check description**  
 Verifies that the sum in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_sum_change_7_days|monitoring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_sum_change_7_days|monitoring|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1077,9 +1077,9 @@ ___
 **Check description**  
 Verifies that the sum in a column changed in a fixed rate since last readout from last week.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_sum_change_7_days|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_sum_change_7_days|partitioned|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

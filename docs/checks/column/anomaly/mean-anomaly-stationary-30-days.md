@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_mean_anomaly_stationary_30_days|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_mean_anomaly_stationary_30_days|profiling| |Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -533,9 +533,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_mean_anomaly_stationary_30_days|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_mean_anomaly_stationary_30_days|monitoring|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1059,9 +1059,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_mean_anomaly_stationary_30_days|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_mean_anomaly_stationary_30_days|partitioned|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

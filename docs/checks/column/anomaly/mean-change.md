@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_mean_change|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_mean_change|profiling| |Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -533,9 +533,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_mean_change|monitoring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_mean_change|monitoring|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1059,9 +1059,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_mean_change|monitoring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_mean_change|monitoring|monthly|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1585,9 +1585,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_mean_change|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_mean_change|partitioned|daily|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2125,9 +2125,9 @@ ___
 **Check description**  
 Verifies that the mean value in a column changed in a fixed rate since last readout.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_mean_change|partitioned|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_mean_change|partitioned|monthly|Consistency|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the mean accepted length.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_string_mean_length|profiling| |[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_string_mean_length|profiling| |Reasonableness|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -684,9 +684,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_string_mean_length|monitoring|daily|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_string_mean_length|monitoring|daily|Reasonableness|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1361,9 +1361,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_string_mean_length|monitoring|monthly|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_string_mean_length|monitoring|monthly|Reasonableness|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2038,9 +2038,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_string_mean_length|partitioned|daily|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_string_mean_length|partitioned|daily|Reasonableness|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2729,9 +2729,9 @@ ___
 **Check description**  
 Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_string_mean_length|partitioned|monthly|[string_mean_length](../../../../reference/sensors/Column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_string_mean_length|partitioned|monthly|Reasonableness|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

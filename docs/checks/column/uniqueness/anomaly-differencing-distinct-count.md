@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_anomaly_differencing_distinct_count|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_anomaly_differencing_distinct_count|profiling| |Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -589,9 +589,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_anomaly_differencing_distinct_count|monitoring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_anomaly_differencing_distinct_count|monitoring|daily|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1171,9 +1171,9 @@ ___
 **Check description**  
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_anomaly_differencing_distinct_count|monitoring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_anomaly_differencing_distinct_count|monitoring|monthly|Consistency|[distinct_count](../../../../reference/sensors/column/uniqueness-column-sensors/#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

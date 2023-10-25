@@ -18,7 +18,7 @@ package com.dqops.metadata.search;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -50,7 +50,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, FoundResultsCollector<ScheduleRootResult> foundNodes) {
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        MonitoringSchedulesSpec schedules = connectionSpec.getSchedules();
+        DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
         assert this.filters.getSchedule() != null;
         assert this.filters.getSchedule() != null;
 
@@ -96,7 +96,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
             }
         }
 
-        MonitoringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null) {

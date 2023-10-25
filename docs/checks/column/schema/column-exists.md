@@ -11,9 +11,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_exists|profiling| |[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_exists|profiling| |Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -96,9 +96,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_exists|monitoring|daily|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_exists|monitoring|daily|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -183,9 +183,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_exists|monitoring|monthly|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_exists|monitoring|monthly|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -43,6 +43,9 @@ const tabs = [
     value: 'execution_errors'
   }
 ];
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 
 interface CheckDetailsProps {
   checkTypes: CheckTypes;
@@ -59,6 +62,7 @@ interface CheckDetailsProps {
   defaultFilters?: any;
   category?: string;
   comparisonName?: string;
+  onChangeRefreshCheckObject?: (obj: IRefetchResultsProps) => void
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -74,7 +78,8 @@ const CheckDetails = ({
   onClose,
   defaultFilters,
   category,
-  comparisonName
+  comparisonName,
+  onChangeRefreshCheckObject
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -218,24 +223,6 @@ const CheckDetails = ({
   );
 
   useEffect(() => {
-    if (!sensorErrors?.length) {
-      fetchCheckErrors(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sensorReadouts?.length) {
-      fetchCheckReadouts(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!checkResults?.length) {
-      fetchCheckResults(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
     if (
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
@@ -273,6 +260,23 @@ const CheckDetails = ({
     fetchCheckResults(month, name);
     fetchCheckReadouts(month, name);
   };
+
+  useEffect(() => {
+    if(onChangeRefreshCheckObject) {
+      onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.dataGroup)})
+    }
+  }, [fetchCheckResults])
+
+  useEffect(() => {
+    if(activeTab === 'check_results') {
+      fetchCheckResults(filters.month, filters.dataGroup)
+    } else if(activeTab === 'sensor_readouts') {
+      fetchCheckReadouts(filters.month, filters.dataGroup)
+    } else if(activeTab === 'execution_errors') {
+      fetchCheckErrors(filters.month, filters.dataGroup)
+    }
+
+  }, [activeTab])
 
   return (
     <div

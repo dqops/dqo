@@ -12,9 +12,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_type_changed|profiling| |[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_type_changed|profiling| |Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -91,9 +91,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_type_changed|monitoring|daily|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_type_changed|monitoring|daily|Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -172,9 +172,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_type_changed|monitoring|monthly|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_type_changed|monitoring|monthly|Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

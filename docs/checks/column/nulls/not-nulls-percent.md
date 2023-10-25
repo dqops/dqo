@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_not_nulls_percent|profiling| |Completeness|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -617,9 +617,9 @@ ___
 **Check description**  
 Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_not_nulls_percent|monitoring|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_not_nulls_percent|monitoring|daily|Completeness|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1227,9 +1227,9 @@ ___
 **Check description**  
 Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_percent|monitoring|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_not_nulls_percent|monitoring|monthly|Completeness|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1837,9 +1837,9 @@ ___
 **Check description**  
 Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_partition_not_nulls_percent|partitioned|daily|Completeness|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2461,9 +2461,9 @@ ___
 **Check description**  
 Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_partition_not_nulls_percent|partitioned|monthly|Completeness|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

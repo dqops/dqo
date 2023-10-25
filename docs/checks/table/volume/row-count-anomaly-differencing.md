@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_row_count_anomaly_differencing|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_row_count_anomaly_differencing|profiling| |Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -521,9 +521,9 @@ ___
 **Check description**  
 Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_differencing|monitoring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_row_count_anomaly_differencing|monitoring|daily|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
