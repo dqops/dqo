@@ -113,6 +113,7 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
+  const { tabs: pageTabs } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [showColumnCount, setShowColumnCount] = useState(false)
@@ -138,7 +139,6 @@ export const EditProfilingReferenceTable = ({
       ...obj
     }))
   }
-
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(
@@ -204,12 +204,14 @@ export const EditProfilingReferenceTable = ({
  
   const onUpdateChecksUI = (type : 'row' | 'column', disabled?: boolean, severity?: TSeverityValues) => {
     const copiedChecks = {...tableChecksToUpdate}
-
+    let checks;
     if (copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? ''))) {
-
-      const checks = copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+       checks = copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    } else {
+      checks = (pageTabs.find((item) => item.value === firstLevelActiveTab)?.state.checksUI as any)
+      .categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    }
       let selectedCheck;
-      console.log(checks)
       if (type === 'row') {
         selectedCheck = checks.find((item : any) => String(item.check_name).includes("row"))
       } else {
@@ -240,7 +242,7 @@ export const EditProfilingReferenceTable = ({
     
     setTableChecksToUpdate(copiedChecks as CheckContainerModel)
   }
-  }
+  
 
   useEffect(() => {
     if (selectedReference) {
@@ -430,7 +432,6 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
-    console.log(tableChecksToUpdate)
     handleChange(tableChecksToUpdate as CheckContainerModel)
   };
 
