@@ -63,10 +63,10 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Profiling issues count per check
-          url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        - dashboard_name: History of data quality check results
+          url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/p_9xvdtzxu0c
           width: 1400
-          height: 1800
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -97,7 +97,7 @@ spec:
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-          width: 1600
+          width: 1550
           height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
@@ -154,10 +154,10 @@ spec:
             ds0.p_check_type: profiling
     - folder_name: PII
       dashboards:
-        - dashboard_name: PII detected
-          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+        - dashboard_name: PII data detected
+          url: https://lookerstudio.google.com/embed/reporting/565ce9a5-220e-4e7b-80f7-18e9a3bf66a4/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2450
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -373,10 +373,10 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Data quality issues per check
-          url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        - dashboard_name: History of data quality check results
+          url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/p_9xvdtzxu0c
           width: 1400
-          height: 1800
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -452,7 +452,7 @@ spec:
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-          width: 1600
+          width: 1550
           height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
@@ -509,10 +509,10 @@ spec:
             ds0.p_check_type: monitoring
     - folder_name: PII
       dashboards:
-        - dashboard_name: PII detected
-          url: https://lookerstudio.google.com/embed/reporting/7c310fc6-7dd4-496c-99fb-c975062584ce/page/c5B8C
+        - dashboard_name: PII data detected
+          url: https://lookerstudio.google.com/embed/reporting/565ce9a5-220e-4e7b-80f7-18e9a3bf66a4/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2450
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -743,10 +743,10 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Count per check
-          url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        - dashboard_name: History of data quality check results
+          url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/p_9xvdtzxu0c
           width: 1400
-          height: 1800
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -823,7 +823,7 @@ spec:
       dashboards:
         - dashboard_name: Check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
-          width: 1600
+          width: 1550
           height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
@@ -964,10 +964,10 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Data quality issues per check
-        url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+      - dashboard_name: History of data quality check results
+        url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/p_9xvdtzxu0c
         width: 1400
-        height: 1800
+        height: 2500
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
