@@ -40,6 +40,12 @@ class DqoAssertTableStatusOperator(BaseOperator):
         months: Union[Unset, None, int] = UNSET,
         check_type: Union[Unset, None, CheckType] = UNSET,
         check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+        data_group: Union[Unset, None, str] = UNSET,
+        check_name: Union[Unset, None, str] = UNSET,
+        category: Union[Unset, None, str] = UNSET,
+        table_comparison: Union[Unset, None, str] = UNSET,
+        quality_dimension: Union[Unset, None, str] = UNSET,
+        
         base_url: str = "http://localhost:8888/",
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
@@ -63,6 +69,16 @@ class DqoAssertTableStatusOperator(BaseOperator):
             Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.
         check_time_scale : Union[Unset, None, CheckTimeScale] = UNSET
             Time scale filter for monitoring and partitioned checks (values: daily or monthly).
+        data_group: Union[Unset, None, str] = UNSET
+            Data group.
+        check_name: Union[Unset, None, str] = UNSET
+            Data quality check name.
+        category: Union[Unset, None, str] = UNSET
+            Check's category name.
+        table_comparison: Union[Unset, None, str] = UNSET
+            Table comparison name.
+        quality_dimension: Union[Unset, None, str] = UNSET
+            Check quality dimension.
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
         wait_timeout : int
@@ -80,6 +96,11 @@ class DqoAssertTableStatusOperator(BaseOperator):
         self.months: Union[Unset, None, int] = months
         self.check_type: Union[Unset, None, CheckType] = check_type
         self.check_time_scale: Union[Unset, None, CheckTimeScale] = check_time_scale
+        self.data_group: Union[Unset, None, str] = data_group,
+        self.check_name: Union[Unset, None, str] = check_name,
+        self.category: Union[Unset, None, str] = category,
+        self.table_comparison: Union[Unset, None, str] = table_comparison,
+        self.quality_dimension: Union[Unset, None, str] = quality_dimension,
 
         self.base_url: str = extract_base_url(base_url)
         self.wait_timeout: int = wait_timeout
@@ -99,6 +120,11 @@ class DqoAssertTableStatusOperator(BaseOperator):
                 months=self.months,
                 check_type=self.check_type,
                 check_time_scale=self.check_time_scale,
+                data_group=self.data_group,
+                check_name=self.check_name,
+                category=self.category,
+                table_comparison=self.table_comparison,
+                quality_dimension=self.quality_dimension,
             )
         except ReadTimeout as exception:
             handle_python_timeout(exception, self.fail_on_timeout)

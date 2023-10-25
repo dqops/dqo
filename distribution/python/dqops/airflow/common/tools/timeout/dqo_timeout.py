@@ -1,5 +1,7 @@
 import logging
+
 from airflow.exceptions import AirflowException
+
 
 def handle_dqo_timeout(fail_on_timeout: bool):
     """

@@ -1,5 +1,6 @@
 from airflow.exceptions import AirflowException
 
+
 class DqopsDataQualityIssueDetectedException(AirflowException):
     """
     Exception used in airflow to mark status of task execution as Failed.

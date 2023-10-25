@@ -1,5 +1,7 @@
 import logging
+
 from httpx import ReadTimeout
+
 
 def handle_python_timeout(exception: ReadTimeout, fail_on_timeout: bool):
     """

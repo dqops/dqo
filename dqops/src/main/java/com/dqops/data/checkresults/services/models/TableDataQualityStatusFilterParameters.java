@@ -39,7 +39,7 @@ public class TableDataQualityStatusFilterParameters {
     private CheckType checkType;
 
     /**
-     * Check timescale (for monitoring and partitioned checks).
+     * Time scale filter for monitoring and partitioned checks (values: daily or monthly).
      */
     @JsonPropertyDescription("Time scale filter for monitoring and partitioned checks (values: daily or monthly).")
     private CheckTimeScale checkTimeScale;
