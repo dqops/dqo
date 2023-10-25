@@ -601,24 +601,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     /**
      * Analyzes the table to find the status of the most recent data quality check for each time series
      * and asses the most current status.
-     * @param connectionName Connection name.
-     * @param physicalTableName Physical table name.
-     * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
-     * @param checkType Check type (optional filter).
-     * @param checkTimeScale Check time scale (optional filter).
+     * @param tableDataQualityStatusFilterParameters Filter parameters container.
      * @return The table status.
      */
     @Override
-    public TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(String connectionName,
-                                                                           PhysicalTableName physicalTableName,
-                                                                           int lastMonths,
-                                                                           CheckType checkType,
-                                                                           CheckTimeScale checkTimeScale) {
+    public TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(
+            TableDataQualityStatusFilterParameters tableDataQualityStatusFilterParameters) {
+        String connectionName = tableDataQualityStatusFilterParameters.getConnectionName();
+        PhysicalTableName physicalTableName = tableDataQualityStatusFilterParameters.getPhysicalTableName();
+
         TableDataQualityStatusModel statusModel = new TableDataQualityStatusModel();
         statusModel.setConnectionName(connectionName);
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());
-        CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(lastMonths, 1);
+        CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters
+                .createForRecentMonths(tableDataQualityStatusFilterParameters.getLastMonths(), 1);
 
         Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
         Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
@@ -630,25 +627,26 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             return statusModel;
         }
 
-        Selection rowSelection = Selection.withRange(0, combinedTable.rowCount());
-        if (checkType != null) {
-            String checkTypeString = checkType.getDisplayName();
-            rowSelection = combinedTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
-                    .isEqualTo(checkTypeString);
+        Table filteredTable = filterTableOnFilterParameters(combinedTable, tableDataQualityStatusFilterParameters);
+
+        Table filteredTableByDataGroup = filteredTable;
+        if (!Strings.isNullOrEmpty(tableDataQualityStatusFilterParameters.getDataGroup())) {
+            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableDataQualityStatusFilterParameters.getDataGroup()));
         }
 
-        if (checkTimeScale != null) {
-            TextColumn timeGradientColumn = combinedTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            TimePeriodGradient timePeriodGradient = checkTimeScale.toTimeSeriesGradient();
-            String timeSeriesGradientName = timePeriodGradient.name();
-            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradientName));
-        }
-
-        Table filteredTable = combinedTable.where(rowSelection);
-        Table sortedTable = filteredTable.sortDescendingOn(
+        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
                 CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME,
                 CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME,
                 CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+
+        TableDataQualityStatusModel statusModelWithStatistics = calculateStatus(sortedTable, statusModel);
+
+        return statusModelWithStatistics;
+    }
+
+    // todo: description
+    protected TableDataQualityStatusModel calculateStatus(Table sortedTable, TableDataQualityStatusModel statusModel){
 
         LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
         TextColumn timeSeriesIdColumn = sortedTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
@@ -731,24 +729,82 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     protected Table filterTableToRootChecksContainer(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                      Table sourceTable) {
-        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
-        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
-
         Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
+        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
         if (timeScale != null) {
             TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
+        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         Table filteredTable = sourceTable.where(rowSelection);
         return filteredTable;
     }
+
+    // todo: description
+    protected Table filterTableOnFilterParameters(Table sourceTable,
+                                                  TableDataQualityStatusFilterParameters filterParameters) {
+
+        Selection rowSelection = Selection.withRange(0, sourceTable.rowCount());
+
+        String checkType = filterParameters.getCheckType().toString();
+        if (checkType != null) {
+            rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isEqualTo(checkType);
+        }
+
+        CheckTimeScale checkTimeScale = filterParameters.getCheckTimeScale();
+        if (checkTimeScale != null) {
+            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = checkTimeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
+        }
+
+        if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
+            TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
+        }
+
+        String checkCategory = filterParameters.getCategory();
+        String tableComparison = filterParameters.getTableComparison();
+        rowSelection = filterCategoryAndTableComparison(sourceTable, rowSelection, checkCategory, tableComparison);
+
+        Table filteredTable = sourceTable.where(rowSelection);
+        return filteredTable;
+    }
+
+    // todo description
+    protected Selection filterCategoryAndTableComparison(Table sourceTable,
+                                                       Selection currentSelection,
+                                                       String checkCategory,
+                                                       String tableComparison){
+
+        if (!Strings.isNullOrEmpty(checkCategory)) {
+            if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {
+                // this code will support receiving combined category names for table comparisons
+                String[] columnCategorySplits = StringUtils.split(checkCategory, '/');
+                checkCategory = columnCategorySplits[0];
+                tableComparison = columnCategorySplits[1];
+            }
+
+            TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            currentSelection = currentSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
+        }
+
+        if (!Strings.isNullOrEmpty(tableComparison)) {
+            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            currentSelection = currentSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
+        }
+
+        return currentSelection;
+    }
+
 
     /**
      * Filters the results to only the results for the target object.
@@ -760,18 +816,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     protected Table filterTableToRootChecksContainerAndFilterParameters(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                                         Table sourceTable,
                                                                         CheckResultsDetailedFilterParameters filterParameters) {
-        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
-        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
-
         Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
+        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
         if (timeScale != null) {
             TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
+        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
@@ -783,22 +838,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String checkCategory = filterParameters.getCheckCategory();
         String tableComparison = filterParameters.getTableComparison();
 
-        if (!Strings.isNullOrEmpty(checkCategory)) {
-            if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {
-                // this code will support receiving combined category names for table comparisons
-                String[] columnCategorySplits = StringUtils.split(checkCategory, '/');
-                checkCategory = columnCategorySplits[0];
-                tableComparison = columnCategorySplits[1];
-            }
-
-            TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
-        }
-
-        if (!Strings.isNullOrEmpty(tableComparison)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
-            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
-        }
+        rowSelection = filterCategoryAndTableComparison(sourceTable, rowSelection, checkCategory, tableComparison);
 
         Table filteredTable = sourceTable.where(rowSelection);
         return filteredTable;
