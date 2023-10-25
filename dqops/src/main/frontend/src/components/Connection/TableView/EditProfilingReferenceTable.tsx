@@ -30,7 +30,6 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
 } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -51,9 +50,13 @@ type EditProfilingReferenceTableProps = {
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
   canUserCompareTables?: boolean;
+  checksUI: any;
+  onUpdateChecks: () => void;
 };
 
-type TParameters = {refConnection?: string, refSchema?: string, refTable?: string}
+type TParameters = {name?: string, refConnection?: string, refSchema?: string, refTable?: string}
+
+type TSeverityValues = Partial<{warning: number, error: number, fatal: number}>
 
 const itemsToRender = [
   {
@@ -93,6 +96,8 @@ export const EditProfilingReferenceTable = ({
   onChangeSelectedReference,
   listOfExistingReferences,
   canUserCompareTables,
+  checksUI,
+  onUpdateChecks
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -108,13 +113,6 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const {
-    checksUI,
-    dailyMonitoring,
-    monthlyMonitoring,
-    dailyPartitionedChecks,
-    monthlyPartitionedChecks
-  } = useSelector(getFirstLevelState(checkTypes));
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [showColumnCount, setShowColumnCount] = useState(false)
@@ -132,6 +130,7 @@ export const EditProfilingReferenceTable = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({})
+  const [tableChecksToUpdate, setTableChecksToUpdate] = useState<any>(checksUI)
 
   const onChangeParameters = (obj:  Partial<TParameters>) => {
     setParameters((prevState) => ({
@@ -157,21 +156,10 @@ export const EditProfilingReferenceTable = ({
   };
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
-    if (checkTypes === CheckTypes.PROFILING) {
-      values = Object.values(checksUI);
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyPartitionedChecks ?? {});
-      } else {
-        values = Object.values(monthlyPartitionedChecks ?? {});
-      }
-    } else if (checkTypes === CheckTypes.MONITORING) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyMonitoring ?? {});
-      } else {
-        values = Object.values(monthlyMonitoring ?? {});
-      }
+       if (!checksUI) {
+      return;
     }
+      values = Object.values(checksUI);
 
     if (values.length === 0 || !Array.isArray(values[0])) {
       return;
@@ -204,22 +192,30 @@ export const EditProfilingReferenceTable = ({
       setShowColumnCount(!!columnCountElem.configured)
     }
   };
-  const handleChange = (value: CheckContainerModel) => {
-    dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
+
+  const handleChange = async (value: CheckContainerModel) => {
+    return new Promise<void>((resolve) => {
+      dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
+      resolve();
+    }).then(() => {
+      onUpdateChecks();
+    });
   };
  
-  const onUpdateChecksUI = (type : 'row' | 'column', disabled?: boolean, severity?: Partial<{warning: number, error: number, fatal: number}>) => {
-    const copiedChecks = {...checksUI}
-    const checks = copiedChecks.categories.find((item : any) => String(item.category).includes(selectedReference ?? '')).checks
-    let selectedCheck;
-    console.log(checks)
-    if(type === 'row') {
-      selectedCheck = checks.find((item : any) => String(item.check_name).includes("row"))
-    } else {
-      selectedCheck = checks.find((item : any) => String(item.check_name).includes("column"))
+  const onUpdateChecksUI = (type : 'row' | 'column', disabled?: boolean, severity?: TSeverityValues) => {
+    const copiedChecks = {...tableChecksToUpdate}
+
+    if (copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? ''))) {
+
+      const checks = copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+      let selectedCheck;
+      console.log(checks)
+      if (type === 'row') {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("row"))
+      } else {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("column"))
     }
-    
-    if (disabled) {
+    if (disabled !== undefined) {
       selectedCheck.configured = disabled;
       if (type === 'row') {
         setShowRowCount(disabled)
@@ -228,19 +224,22 @@ export const EditProfilingReferenceTable = ({
       }
     }
     if (severity) {
-      if(severity.warning) {
-        selectedCheck.rule.warning.rule_parameters[0].double_value = severity.warning
+      if (severity.warning) {
+        selectedCheck.rule.warning.rule_parameters[0].double_value = severity.warning;
+        selectedCheck.rule.warning.configured = true;
       } 
-      if(severity.error) {
-        selectedCheck.rule.error.rule_parameters[0].double_value = severity.error
+      if (severity.error) {
+        selectedCheck.rule.error.rule_parameters[0].double_value = severity.error;
+        selectedCheck.rule.error.configured = true;
       } 
-      if(severity.fatal) {
-        selectedCheck.rule.fatal.rule_parameters[0].double_value = severity.fatal
+      if (severity.fatal) {
+        selectedCheck.rule.fatal.rule_parameters[0].double_value = severity.fatal;
+        selectedCheck.rule.fatal.configured = true;
       } 
     }
-
-    console.log(copiedChecks)
-   handleChange(copiedChecks as CheckContainerModel)
+    
+    setTableChecksToUpdate(copiedChecks as CheckContainerModel)
+  }
   }
 
   useEffect(() => {
@@ -431,6 +430,8 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
+    console.log(tableChecksToUpdate)
+    handleChange(tableChecksToUpdate as CheckContainerModel)
   };
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
@@ -668,6 +669,7 @@ export const EditProfilingReferenceTable = ({
           canUserCompareTables={canUserCompareTables}
           columnOptions = {{comparedColumnsOptions: comparedColumnOptions ?? [], referencedColumnsOptions: columnOptions }}
           onChangeParameters = { onChangeParameters }
+          onUpdateChecks={onUpdateChecks}
         />
       </div>
       {reference &&
