@@ -118,7 +118,8 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             TIME_PERIOD_UTC_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,
             TABLE_COMPARISON_NAME_COLUMN_NAME,
-            TIME_SERIES_ID_COLUMN_NAME
+            TIME_SERIES_ID_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME
     };
 
     /**
