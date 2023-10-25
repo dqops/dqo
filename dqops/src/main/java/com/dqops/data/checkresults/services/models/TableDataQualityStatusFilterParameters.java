@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Optional;
-
 /**
  * The parameters for retrieving the TableDataQualityStatusModel.
  */
@@ -37,7 +35,7 @@ public class TableDataQualityStatusFilterParameters {
     /**
      * Data quality check type (profiling, monitoring, partitioned)
      */
-    @JsonPropertyDescription("Data quality check type (profiling, monitoring, partitioned)")
+    @JsonPropertyDescription("Data quality check type (profiling, monitoring, partitioned).")
     private CheckType checkType;
 
     /**
@@ -55,13 +53,13 @@ public class TableDataQualityStatusFilterParameters {
     /**
      * Data quality check name.
      */
-    @JsonPropertyDescription("Data quality check name")
+    @JsonPropertyDescription("Data quality check name.")
     private String checkName;
 
     /**
      * Check's category name
      */
-    @JsonPropertyDescription("Check's category name")
+    @JsonPropertyDescription("Check's category name.")
     private String category;
 
     /**
@@ -69,5 +67,11 @@ public class TableDataQualityStatusFilterParameters {
      */
     @JsonPropertyDescription("Table comparison name.")
     private String tableComparison;
+
+    /**
+     * Check quality dimension.
+     */
+    @JsonPropertyDescription("Check quality dimension.")
+    private String qualityDimension;
 
 }

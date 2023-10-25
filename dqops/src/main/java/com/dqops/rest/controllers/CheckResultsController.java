@@ -112,8 +112,9 @@ public class CheckResultsController {
             @ApiParam(name = "category", value = "Optional check category name", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Optional table comparison name", required = false)
-            @RequestParam(required = false) Optional<String> tableComparison
-            ) {
+            @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "qualityDimension", value = "Optional data quality dimension", required = false)
+            @RequestParam(required = false) Optional<String> qualityDimension) {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -146,6 +147,7 @@ public class CheckResultsController {
                 .checkName(checkName.orElse(null))
                 .category(category.orElse(null))
                 .tableComparison(tableComparison.orElse(null))
+                .qualityDimension(qualityDimension.orElse(null))
                 .build();
 
         TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService

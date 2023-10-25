@@ -785,6 +785,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String tableComparison = filterParameters.getTableComparison();
         rowSelection = filterCategoryAndTableComparison(sourceTable, rowSelection, checkCategory, tableComparison);
 
+
+        String qualityDimension = filterParameters.getQualityDimension();
+        if (qualityDimension != null) {
+            TextColumn dimensionColumn = sourceTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+            rowSelection = rowSelection.and(dimensionColumn.isEqualTo(qualityDimension));
+        }
+
         Table filteredTable = sourceTable.where(rowSelection);
         return filteredTable;
     }
