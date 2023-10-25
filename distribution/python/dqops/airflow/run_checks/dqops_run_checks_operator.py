@@ -2,20 +2,25 @@ import json
 import logging
 from typing import Any, Dict, Optional, Union
 
-from httpx import ReadTimeout
-
 from airflow.models.baseoperator import BaseOperator
+from httpx import ReadTimeout
 from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import (
     DqopsDataQualityIssueDetectedException,
 )
 from dqops.airflow.common.exceptions.dqops_empty_response_exception import (
     DqopsEmptyResponseException,
 )
-from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
+from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
+    DqopsJobFailedException,
+)
 from dqops.airflow.common.tools.client_creator import create_client
-from dqops.airflow.common.tools.rule_severity_level_utility import RuleSeverityLevelUtility
+from dqops.airflow.common.tools.rule_severity_level_utility import (
+    RuleSeverityLevelUtility,
+)
 from dqops.airflow.common.tools.timeout.dqo_timeout import handle_dqo_timeout
-from dqops.airflow.common.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.common.tools.timeout.python_client_timeout import (
+    handle_python_timeout,
+)
 from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.jobs.run_checks import sync_detailed
@@ -79,7 +84,6 @@ class DqopsRunChecksOperator(BaseOperator):
         self.maximum_severity_threshold: RuleSeverityLevel = maximum_severity_threshold
 
     def execute(self, context):
-
         filters: CheckSearchFilters = CheckSearchFilters(
             connection_name=self.connection_name,
             check_type=self.check_type,
@@ -87,7 +91,9 @@ class DqopsRunChecksOperator(BaseOperator):
         )
         params: RunChecksParameters = RunChecksParameters(check_search_filters=filters)
 
-        client: Client = create_client(base_url=self.base_url, wait_timeout=self.wait_timeout)
+        client: Client = create_client(
+            base_url=self.base_url, wait_timeout=self.wait_timeout
+        )
 
         try:
             response: Response[RunChecksQueueJobResult] = sync_detailed(
@@ -118,7 +124,10 @@ class DqopsRunChecksOperator(BaseOperator):
 
         if (
             job_result.result.highest_severity is not None
-            and job_result.result.highest_severity > RuleSeverityLevelUtility.get_severity_value(self.maximum_severity_threshold)
+            and job_result.result.highest_severity
+            > RuleSeverityLevelUtility.get_severity_value(
+                self.maximum_severity_threshold
+            )
             and job_result.status != DqoJobStatus.CANCELLED
         ):
             raise DqopsDataQualityIssueDetectedException()
