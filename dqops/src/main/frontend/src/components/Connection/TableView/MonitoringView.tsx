@@ -250,6 +250,7 @@ const MonitoringView = () => {
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyMonitoring}
+          onUpdateChecks = {onUpdate}
         />
       )}
       {tab === 'monthly_comparisons' && (
@@ -257,6 +258,7 @@ const MonitoringView = () => {
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyMonitoring}
+          onUpdateChecks = {onUpdate}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getAllDashboards } from '../../redux/actions/dashboard.actions';
 import DashboardLayout from '../../components/DashboardLayout';
@@ -28,6 +28,39 @@ const Dashboards = () => {
   useEffect(() => {
     dispatch(getAllDashboards());
   }, []);
+
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null); 
+  
+  const showTooltip = () => {
+    setIsTooltipVisible(true);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  
+    timerRef.current = setTimeout(() => {
+      setIsTooltipVisible(false);
+    }, 3000);
+  };
+  
+  useEffect(() => {
+    if (dashboardTooltipState.label) {
+      showTooltip();
+    } else {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+    
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [dashboardTooltipState.label]);
 
   return (
     <DashboardLayout>
@@ -85,7 +118,7 @@ const Dashboards = () => {
             );
           })}
         </div>
-        {dashboardTooltipState.height ? 
+        {(dashboardTooltipState.height && isTooltipVisible) ? 
         <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
           style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
               {dashboardTooltipState.label}
