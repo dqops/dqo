@@ -13,7 +13,9 @@ from dqops.airflow.common.exceptions.dqops_empty_response_exception import (
 )
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value
-from dqops.airflow.common.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.common.tools.timeout.python_client_timeout import (
+    handle_python_timeout,
+)
 from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.check_results.get_table_data_quality_status import sync_detailed
@@ -24,6 +26,7 @@ from dqops.client.models.table_data_quality_status_model import (
     TableDataQualityStatusModel,
 )
 from dqops.client.types import UNSET, Response, Unset
+
 
 class DqoAssertTableStatusOperator(BaseOperator):
     """
@@ -106,7 +109,9 @@ class DqoAssertTableStatusOperator(BaseOperator):
         self.fail_at_severity: RuleSeverityLevel = fail_at_severity
 
     def execute(self, context):
-        client: Client = create_client(base_url=self.base_url, wait_timeout=self.wait_timeout)
+        client: Client = create_client(
+            base_url=self.base_url, wait_timeout=self.wait_timeout
+        )
 
         try:
             response: Response[TableDataQualityStatusModel] = sync_detailed(
@@ -138,7 +143,9 @@ class DqoAssertTableStatusOperator(BaseOperator):
         )
         logging.info(table_dq_status.to_dict())
 
-        if table_dq_status.highest_severity_issue >= get_severity_value(self.fail_at_severity):
+        if table_dq_status.highest_severity_issue >= get_severity_value(
+            self.fail_at_severity
+        ):
             raise DqopsDataQualityIssueDetectedException()
 
         return table_dq_status.to_dict()

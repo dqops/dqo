@@ -153,6 +153,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long|false|
 |[check_type](\docs\client\models\#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|false|
 |[check_time_scale](\docs\client\models\#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](\docs\client\models\#checktimescale)|false|
+|data_group|Optional data group|string|false|
+|check_name|Optional check name|string|false|
+|category|Optional check category name|string|false|
+|table_comparison|Optional table comparison name|string|false|
+|quality_dimension|Optional data quality dimension|string|false|
 
 
 

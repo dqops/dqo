@@ -4,13 +4,22 @@ from typing import Any, Dict, Optional, Union
 
 from airflow.models.baseoperator import BaseOperator
 from httpx import ReadTimeout
-from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import DqopsDataQualityIssueDetectedException
-from dqops.airflow.common.exceptions.dqops_empty_response_exception import DqopsEmptyResponseException
-from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
+
+from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import (
+    DqopsDataQualityIssueDetectedException,
+)
+from dqops.airflow.common.exceptions.dqops_empty_response_exception import (
+    DqopsEmptyResponseException,
+)
+from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
+    DqopsJobFailedException,
+)
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value
 from dqops.airflow.common.tools.timeout.dqo_timeout import handle_dqo_timeout
-from dqops.airflow.common.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.common.tools.timeout.python_client_timeout import (
+    handle_python_timeout,
+)
 from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.jobs.run_checks import sync_detailed
@@ -112,9 +121,10 @@ class DqopsRunChecksOperator(BaseOperator):
         if job_result.status == DqoJobStatus.RUNNING:
             handle_dqo_timeout(self.fail_on_timeout)
 
-        if (job_result.result.highest_severity is not None
-            and get_severity_value(job_result.result.highest_severity) 
-                >= get_severity_value(self.fail_at_severity)
+        if (
+            job_result.result.highest_severity is not None
+            and get_severity_value(job_result.result.highest_severity)
+            >= get_severity_value(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):
             raise DqopsDataQualityIssueDetectedException()

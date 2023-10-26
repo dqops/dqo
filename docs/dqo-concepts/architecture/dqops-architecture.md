@@ -113,10 +113,18 @@ The most important folders in the *DQOps user home* are:
 
 - *./sources* (or *$DQO_USER_HOME/sources*) stores the metadata of data sources with the configuration of enabled data quality checks.
   This is the folder that will be actively used to change the data quality check configuration directly in YAML files.
-  The *./sources* folder has subfolders for data sources. Each subfolder contains one file to describe the connection parameters
-  to the data source whose file name is always [connection.dqoconnection.yaml](../../reference/yaml/ConnectionYaml.md).
+  The *./sources* folder has nested folders for data sources, the name of the data source is simply the folder name.
+  Each data source's subfolder contains the data source configuration file [connection.dqoconnection.yaml](../../reference/yaml/ConnectionYaml.md).
   The remaining files are the metadata files for each table, named as [<schema_name>.<table_name>.dqotable.yaml](../../reference/yaml/TableYaml.md). 
-- *./sensors* (or *$DQO_USER_HOME/sensors*)
+- *./sensors* (or *$DQO_USER_HOME/sensors*) is a place to create custom data quality sensor definitions. The data quality sensors
+  are defined as Jinja2 templates of SQL queries. 
+- *./rules* (or *$DQO_USER_HOME/rules*) is a place to create custom data quality rules. The data quality rules are Python modules
+  that are called by DQOps to verify the results of the data quality metrics captured by the sensors.
+- *./checks* (or *$DQO_USER_HOME/checks*) is a folder where custom data quality checks are defined. A custom data quality check
+  is defined in [.checkspec.yaml](../../reference/yaml/CheckDefinitionYaml.md) files. The data quality check definition is a pair
+  of a data quality sensor that captures a metric value and a data quality rule that will assess if the metric value is an issue or not.
+- *./settings* (or *$DQO_USER_HOME/settings*) contains shared configuration that is synchronized to DQOps Cloud data lake.
+
 
 `DQOps Cloud`
 

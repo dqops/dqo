@@ -40,7 +40,7 @@ import ch.qos.logback.core.util.FileSize;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
-import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -231,8 +231,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
             Path localSettingsPath = userHomePath.resolve(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(localSettingsPath)) {
-                SettingsYaml settingsYaml = new SettingsYaml();
-                String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
+                LocalSettingsYaml localSettingsYaml = new LocalSettingsYaml();
+                String emptyLocalSettings = this.yamlSerializer.serialize(localSettingsYaml);
                 Files.writeString(localSettingsPath, emptyLocalSettings);
             }
 
