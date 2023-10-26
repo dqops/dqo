@@ -40,6 +40,8 @@ The required parameters set clearly indicates the specific table in a connection
 | fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                       | bool [optional, default=True]                                 |
 | fail_at_severity    | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                           | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL] |
 
+Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
+For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
 
 ## Set up the operator
 
@@ -64,7 +66,7 @@ with DAG(
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    check_status_task = DqoAssertMonitoringTableStatusOperator(
+    assert_status_task = DqoAssertMonitoringTableStatusOperator(
         task_id="dqo_assert_table_status_operator_task",
         base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
@@ -114,7 +116,7 @@ Either rule adjustment is necessary in case the data are correct, or part of dat
 Furthermore, the task will finish with Failed airflow status as we did not set the **maximum_severity_threshold** parameter.
 
 Technically, the executed operator returns the TableDataQualityStatusModel object with status details.
-When the task execution succeeds or not, the task instance will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
 
 ## TableDataQualityStatusModel fields 
 

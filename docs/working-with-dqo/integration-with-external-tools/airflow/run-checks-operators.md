@@ -38,6 +38,8 @@ When none of the available operator parameters are set, possibly all sensors wil
 | fail_on_timeout    | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                                                                 | bool                                                           |
 | fail_at_severity   | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                                                                     | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]  |
 
+Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
+For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
 
 ## Set up the run check operator
 
@@ -82,7 +84,7 @@ Airflow DAG provides logs to the executed tasks.
 
 Executed job adds information to an airflow task log. 
 The executed run checks operator returns the RunChecksQueueJobResult object with execution details.
-When the task execution succeeded or not, the task instance is marked as Success or Failed accordingly.
+When the task execution succeeded or not, the task instance in airflow is marked as Success or Failed accordingly.
 
 RunChecksQueueJobResult includes:
 - **job_id (DqoQueueJobId)**: Identifies a single job that was pushed to the job queue.
