@@ -272,6 +272,12 @@ const EditReferenceTable = ({
           )
             .then(() => {
               onBack(false);
+              setPopUp(false)
+            })
+            .catch((error) => {
+              if(error.response.status === 409) {
+                setPopUp(true)
+              }
             })
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
@@ -298,6 +304,12 @@ const EditReferenceTable = ({
           )
             .then(() => {
               onBack(false);
+              setPopUp(false)
+            })
+            .catch((error) => {
+              if(error.response.status === 409) {
+                setPopUp(true)
+              }
             })
         } else if (
           checkTypes === CheckTypes.PARTITIONED &&
@@ -324,6 +336,12 @@ const EditReferenceTable = ({
           )
             .then(() => {
               onBack(false);
+              setPopUp(false)
+            })
+            .catch((error) => {
+              if(error.response.status === 409) {
+                setPopUp(true)
+              }
             })
         } else if (
           checkTypes === CheckTypes.MONITORING &&
@@ -350,6 +368,12 @@ const EditReferenceTable = ({
           )
             .then(() => {
               onBack(false);
+              setPopUp(false)
+            })
+            .catch((error) => {
+              if(error.response.status === 409) {
+                setPopUp(true)
+              }
             })
         } else if (
           checkTypes === CheckTypes.MONITORING &&
@@ -376,10 +400,17 @@ const EditReferenceTable = ({
           )
             .then(() => {
               onBack(false);
+              setPopUp(false)
+            })
+            .catch((error) => {
+              if(error.response.status === 409) {
+                console.log(error)
+                setPopUp(true)
+              }
             })
         }
         combinedFunc(name);
-        setPopUp(false);
+        // setPopUp(false);
       }
     }
     setIsButtonEnabled(false);
