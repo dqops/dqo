@@ -113,7 +113,8 @@ class DqopsRunChecksOperator(BaseOperator):
             handle_dqo_timeout(self.fail_on_timeout)
 
         if (job_result.result.highest_severity is not None
-            and job_result.result.highest_severity >= get_severity_value(self.fail_at_severity)
+            and get_severity_value(job_result.result.highest_severity) 
+                >= get_severity_value(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):
             raise DqopsDataQualityIssueDetectedException()

@@ -37,7 +37,7 @@ When none of the available operator parameters are set, possibly all sensors wil
 | wait_timeout       | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.                                                                                                                                                 | int                                                            |
 | fail_on_timeout    | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                                                                 | bool                                                           |
 | fail_at_severity   | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                                                                     | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]  |
-            
+
 
 ## Set up the run check operator
 
