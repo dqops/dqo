@@ -25,9 +25,9 @@ The required parameters clearly indicates the specific table in a connection.
 | Name                       | Description                                                                                                                                                                                                         | Type                                                          |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
 | connection_name            | (Required) The connection name to the data source in DQOps.                                                                                                                                                         | str                                                           |
-| schema_name                | (Required) The schema name.                                                                                                                                                                                                    | str                                                           |
-| table_name                 | (Required) The table name.                                                                                                                                                                                                     | str                                                           |
-| months                     | The number of months to review the data quality check results.For partitioned checks, it is the number of months to analyze.The default value is 1 (which is the current month and 1 previous month).               | Union[Unset, None, int]                                       |
+| schema_name                | (Required) The schema name.                                                                                                                                                                                         | str                                                           |
+| table_name                 | (Required) The table name.                                                                                                                                                                                          | str                                                           |
+| months                     | The number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).             | Union[Unset, None, int]                                       |
 | check_type                 | Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.                                                   | Union[Unset, None, CheckType]                                 |
 | check_time_scale           | Time scale filter for monitoring and partitioned checks (values: daily or monthly).                                                                                                                                 | Union[Unset, None, CheckTimeScale]                            |
 | data_group                 | Data group.                                                                                                                                                                                                         | Union[Unset, None, str]                                       |
@@ -51,46 +51,72 @@ Entry requirements includes:
 
 **DAG example**
 
-The example sets a task to execute all profiling sensors on "example_connection" connection every 12 hours. 
+The example sets a task to receive status from the monitoring sensors set on "maven_restaurant_ratings.consumers" table from "example_connection". 
 The operator connects to the locally started DQOps server.
 
 ```python
 import datetime
 import pendulum
 from airflow import DAG
-from dqops.airflow.check_results.dqo_require_table_data_quality_status_operator import DqoRequireTableDataQualityStatusOperator
-from dqops.client.models.check_type import CheckType
+from dqops.airflow.table_status.dqo_assert_monitoring_table_status_operator import DqoAssertMonitoringTableStatusOperator
 
 with DAG(
-    dag_id="example_connection_dqops_check_status",
+    dag_id="example_connection_dqops_assert_table_status",
     schedule=datetime.timedelta(hours=12),
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    check_status_task = DqoRequireTableDataQualityStatusOperator(
-        task_id="dqo_require_table_data_quality_status_operator_task",
+    check_status_task = DqoAssertMonitoringTableStatusOperator(
+        task_id="dqo_assert_table_status_operator_task",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
         base_url='http://host.docker.internal:8888',
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
-        table_name="consumers",
-        check_type=CheckType.MONITORING
+        table_name="consumers"
     )
+
 ```
 
 
 ## Execution details
 
-Airflow DAG provides logs to the executed tasks.   
+Airflow DAG provides logs to the executed tasks.
+The status details will appear in one line info log from the operator, which contains a JSON formatted response from DQOps presented below. 
 
-```text
-[2023-10-18, 09:16:05 UTC] {dqo_require_table_data_quality_status_operator.py:118} INFO - {'connection_name': 'example_connection', 'schema_name': 'maven_restaurant_ratings', 'table_name': 'consumers', 'highest_severity_issue': 0, 'last_check_executed_at': '2023-10-18T08:34:15.896Z', 'executed_checks': 88, 'valid_results': 88, 'warnings': 0, 'errors': 0, 'fatals': 0, 'execution_errors': 0, 'failed_checks_statuses': {}}
-[2023-10-18, 09:16:05 UTC] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=example_connection_dqops_check_status, task_id=dqo_require_table_data_quality_status_operator_task, execution_date=20231017T211547, start_date=20231018T091605, end_date=20231018T091605
+```json5
+{
+  'connection_name': 'example_connection', 
+  'schema_name': 'maven_restaurant_ratings', 
+  'table_name': 'consumers', 
+  'highest_severity_issue': 3, 
+  'last_check_executed_at': '2023-10-25T12:00:00.578Z', 
+  'executed_checks': 148, 
+  'valid_results': 143, 
+  'warnings': 0, 
+  'errors': 0, 
+  'fatals': 5, 
+  'execution_errors': 0, 
+  'failed_checks_statuses': {
+    'daily_row_count': 'fatal'
+  }
+}
 ```
 
-Executed job adds information to an airflow task log. 
-The executed operator returns the TableDataQualityStatusModel object with status details.
-When the task execution succeeded or not, the task instance is marked as Success or Failed accordingly.
+In this example we used the default number of months to be checked (it if form the beginning of previous month up to now).
+Since that time 5 checks failed out of 148 in total.
+The causes of the failure are known, which are shown in **failed_checks_statuses** JSON object.
+
+```text
+This issue might be easy to be verified. It is the row count issue, which fall out of expected bounds of check rule.
+Either rule adjustment is necessary in case the data are correct, or part of data did not load which was easily verified by checking the status.
+```
+
+Furthermore, the task will finish with Failed airflow status as we did not set the **maximum_severity_threshold** parameter.
+
+Technically, the executed operator returns the TableDataQualityStatusModel object with status details.
+When the task execution succeed or not, the task instance will be marked as Success or Failed accordingly.
+
+## TableDataQualityStatusModel fields 
 
 TableDataQualityStatusModel includes:
 - **connection_name**: The connection name in DQOps.
@@ -111,15 +137,3 @@ When an execution error is reported, the configuration of a data quality check o
 - **failed_checks_statuses** (TableDataQualityStatusModelFailedChecksStatuses): The paths to all failed
 data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
 are identified by the check name. Column-level checks are identified as a check_name[column_name].
-
-
-## Status
-
-Status field is the DqoJobStatus enum, which have one of values:
-- **cancelled**: The job was fully cancelled and removed from the job queue.
-- **cancel_requested**: A request to cancel a job was issued, but the job is not yet cancelled.
-- **failed**: The job has failed with an execution error.
-- **queued**: The job is queued.
-- **running**: The job is now running.
-- **succeeded**: The job has finished successfully.
-- **waiting**: The job is parked until the concurrency constraints are met.
