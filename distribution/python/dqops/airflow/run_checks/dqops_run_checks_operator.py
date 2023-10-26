@@ -39,7 +39,7 @@ class DqopsRunChecksOperator(BaseOperator):
         check_type: Optional[CheckType] = UNSET,
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
-        maximum_severity_threshold: RuleSeverityLevel = RuleSeverityLevel.ERROR,
+        fail_at_severity: RuleSeverityLevel = RuleSeverityLevel.FATAL,
         **kwargs
     ) -> Union[Dict[str, Any], None]:
         """
@@ -59,8 +59,8 @@ class DqopsRunChecksOperator(BaseOperator):
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
-        maximum_severity_threshold: RuleSeverityLevel [optional, default=RuleSeverityLevel.ERROR]
-            The maximum level of rule severity that is accepted, causing that an airflow task finishes with succeeded status.
+        fail_at_severity: RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]
+            The threshold level of rule severity, causing that an airflow task finishes with failed status.
         """
 
         super().__init__(**kwargs)
@@ -71,7 +71,7 @@ class DqopsRunChecksOperator(BaseOperator):
         self.check_type: Optional[CheckType] = check_type
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
-        self.maximum_severity_threshold: RuleSeverityLevel = maximum_severity_threshold
+        self.fail_at_severity: RuleSeverityLevel = fail_at_severity
 
     def execute(self, context):
         filters: CheckSearchFilters = CheckSearchFilters(
@@ -112,10 +112,8 @@ class DqopsRunChecksOperator(BaseOperator):
         if job_result.status == DqoJobStatus.RUNNING:
             handle_dqo_timeout(self.fail_on_timeout)
 
-        if (
-            job_result.result.highest_severity is not None
-            and job_result.result.highest_severity
-            > get_severity_value(self.maximum_severity_threshold)
+        if (job_result.result.highest_severity is not None
+            and job_result.result.highest_severity >= get_severity_value(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):
             raise DqopsDataQualityIssueDetectedException()

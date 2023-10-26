@@ -28,7 +28,7 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
         base_url: str = "http://localhost:8888/",
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
-        maximum_severity_threshold: RuleSeverityLevel = RuleSeverityLevel.ERROR,
+        fail_at_severity: RuleSeverityLevel = RuleSeverityLevel.FATAL,
         **kwargs
     ) -> Union[Dict[str, Any], None]:
         """
@@ -62,8 +62,8 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
-        maximum_severity_threshold: RuleSeverityLevel [optional, default=RuleSeverityLevel.ERROR]
-            The maximum level of rule severity that is accepted, causing that an airflow task finishes with succeeded status.
+        fail_at_severity: RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]
+            The threshold level of rule severity, causing that an airflow task finishes with failed status.
         """
 
         super().__init__(
