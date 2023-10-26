@@ -27,9 +27,7 @@ export const TableReferenceComparisons = ({
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-  const [references, setReferences] = useState<
-    TableComparisonConfigurationModel[]
-  >([]);
+  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -72,8 +70,7 @@ export const TableReferenceComparisons = ({
         connection,
         schema,
         table,
-        checkTypes,
-        timePartitioned
+        checkTypes
       ).then((res) => {
         setReferences(res.data);
       });
@@ -82,8 +79,7 @@ export const TableReferenceComparisons = ({
         connection,
         schema,
         table,
-        checkTypes,
-        timePartitioned
+        checkTypes
       ).then((res) => {
         setReferences(res.data);
       });
@@ -225,7 +221,7 @@ export const TableReferenceComparisons = ({
         />
       ) : (
         <ProfilingReferenceTableList
-          references={references}
+          references={references.filter((x) => x.time_scale === timePartitioned)}
           onCreate={onCreate}
           selectReference={onEditProfilingReference}
           canUserCreateTableComparison={userProfile.can_manage_data_sources}
