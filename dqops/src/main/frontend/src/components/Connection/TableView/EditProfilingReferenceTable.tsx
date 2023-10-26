@@ -713,7 +713,7 @@ export const EditProfilingReferenceTable = ({
                       <th className="text-left px-4 py-1.5"></th>
                       <th
                         className={clsx(
-                          'text-center px-0 py-4 pr-2 w-1/12 ',
+                          'text-center px-0 py-4 pr-2 w-1/12 relative',
                          calculateColor('', '', 'row_count')
                         )}
                       >
@@ -728,13 +728,13 @@ export const EditProfilingReferenceTable = ({
                               content="Previous comparison results are present, delete the results before comparing the tables again"
                               className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
                               <div>
-                                <SvgIcon name='warning' className='w-5 h-5'/>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
                               </div>
                         </Tooltip>}
                       </th>
                       <th
                         className={clsx(
-                          'text-center px-0 py-4 pr-2 w-1/12 ',
+                          'text-center px-0 py-4 pr-2 w-1/12 relative',
                            reference.supports_compare_column_count=== true ? calculateColor('', '', 'column_count') : ''
                         )}
                       >
@@ -750,7 +750,7 @@ export const EditProfilingReferenceTable = ({
                               content="Previous comparison results are present, delete the results before comparing the tables again"
                               className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
                               <div>
-                                <SvgIcon name='warning' className='w-5 h-5'/>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
                               </div>
                         </Tooltip>}
                       </th>
@@ -1029,7 +1029,7 @@ export const EditProfilingReferenceTable = ({
                           <td
                             key={jIndex}
                             className={clsx(
-                              'text-center px-4 py-1.5',
+                              'text-center px-4 py-1.5 relative',
                               calculateColor(
                                 item.compared_column_name ?? '',
                                 itemData.key
@@ -1093,7 +1093,7 @@ export const EditProfilingReferenceTable = ({
                               content="Previous comparison results are present, delete the results before comparing the tables again"
                               className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
                               <div>
-                                <SvgIcon name='warning' className='w-5 h-5'/>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
                               </div>
                         </Tooltip>}
                           </td>
