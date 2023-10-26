@@ -5,7 +5,7 @@ ___
 ## dqo
 | Command&nbsp;name | Description |
 |--------------|-------------|
- | [dqo ](./dqo/#dqo-) | A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application. |
+ | [dqo ](./dqo/#dqo-) | *dqo* is an executable script installed in the Python scripts local folder when DQOps is installed locally by installing the *dqops* package from PyPi. When the python environment Scripts folder is in the path, running *dqo* from the command line (bash, etc.) will start a DQOps local instance. |
 
 
 ## cls

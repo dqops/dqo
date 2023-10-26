@@ -106,8 +106,9 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
         rootDqoCommandModel.setRootCommandName("dqo");
         CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
-        myCommandModel.setHeader(new String[]{"Root command that permit control on CLI mode"});
-        myCommandModel.setDescription(new String[]{"A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application."});
+        myCommandModel.setHeader(new String[]{"DQOps command-line entry point script"});
+        myCommandModel.setDescription(new String[]{"*dqo* is an executable script installed in the Python scripts local folder when DQOps is installed locally by installing the *dqops* package from PyPi. " +
+                "When the python environment Scripts folder is in the path, running *dqo* from the command line (bash, etc.) will start a DQOps local instance."});
         rootDqoCommandModel.getCommands().add(myCommandModel);
 
         return rootDqoCommandModel;

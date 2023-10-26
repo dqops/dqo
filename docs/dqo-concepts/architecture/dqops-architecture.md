@@ -123,17 +123,44 @@ The most important folders in the *DQOps user home* are:
 - *./checks* (or *$DQO_USER_HOME/checks*) is a folder where custom data quality checks are defined. A custom data quality check
   is defined in [.checkspec.yaml](../../reference/yaml/CheckDefinitionYaml.md) files. The data quality check definition is a pair
   of a data quality sensor that captures a metric value and a data quality rule that will assess if the metric value is an issue or not.
-- *./settings* (or *$DQO_USER_HOME/settings*) contains shared configuration that is synchronized to DQOps Cloud data lake.
-
+- *./settings* (or *$DQO_USER_HOME/settings*) contains shared configuration that is synchronized to the DQOps Cloud data lake.
+  Notable files in the *settings* folder are: 
+    * [dashboardslist.dqodashboards.yaml](../../reference/yaml/DashboardYaml.md) - the list of custom data quality dashboards,
+      these dashboards are shown in the [Data Quality Dashboard](../data-quality-dashboards/data-quality-dashboards.md) section
+    * [defaultnotifications.dqonotifications.yaml](../../reference/yaml/DefaultNotificationsYaml.md) - external REST API webhook
+      URLs for calling [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md)
+      when data quality incidents are detected or updated.
+    * [defaultchecks.dqochecks.yaml](../../reference/yaml/DefaultObservabilityChecksYaml.md) - the template of the configuration
+      of standard data quality checks that are applied on all imported tables and columns. The selection of default quality checks
+      provided by DQOps activates data observability and anomaly detection checks. The user can modify the list and configure
+      additional checks to be enabled on data sources.
+    * [defaultschedules.dqoschedules.yaml](../../reference/yaml/DefaultSchedulesYaml.md) - the configuration of the default schedules
+      for running profiling, monitoring and partition data quality checks. The [schedules](../../working-with-dqo/schedules/index.md)
+      are defined as a Linux CRON compatible expressions. 
+- *./.data* (or *$DQO_USER_HOME/.data*) is the local data quality data warehouse location. The storage format
+  of the sensor readouts (the metrics captured by the sensors), data quality checks, statistics, execution errors and incidents
+  is a Hive-compatible folder structure that stores all files in the Parquet format. The table partitioning pattern
+  is described in the [data storage](../data-storage/data-storage.md) section. The files from the *.data* folder are synchronized
+  with the DQOps Cloud Data Lake, to allow showing the data quality dashboards. However, the *.data* folder is added to the *./.gitignore* file
+  and the results should not be committed to a Git source code repository.
+- *./.credentials* (or *$DQO_USER_HOME/.credentials*) is a folder where shared credentials such as passwords, certificates,
+  API keys or similar sensitive files should be stored. DQOps does not require any file formats, supporting both text and binary files.
+  The shared credentials are also ignored in the *./.gitignore* file, avoiding the leakage of sensitive information, but the files
+  are synchronized to DQOps Cloud.
+- *./.index* (or *$DQO_USER_HOME/.index*) is a DQOps internal folder that stores the DQOps Cloud file synchronization status for
+  each file that is synchronized between the local DQOps instance and the DQOps Cloud Data Lake. The files should not be modified manually.
+- *./.logs* (or *$DQO_USER_HOME/.logs*) stores error logs. DQOps uses Logback library for logging.
+- *.gitignore* (or *$DQO_USER_HOME/.gitignore*) contains the list of folders that should not be committed to Git. 
+- *.DQO_USER_HOME* (or *$DQO_USER_HOME/.DQO_USER_HOME*) is just a placeholder file that marks the root folder of the *DQOps user home*.
+  DQOps creates this file when the *DQOps user home* is initialized. The only purpose of this file is to avoid the folder reinitialization.
+- *.localsettings.dqosettings.yaml* (or *$DQO_USER_HOME/.localsettings.dqosettings.yaml*) - contains some local settings that
+  should not be committed to Git and should not be synchronized to DQOps Cloud. The DQOps Cloud Pairing API key is stored in this file. 
 
 `DQOps Cloud`
 
-: fdfad
-
-
-`Looker Studio Dashboards`
-
-: fdfad
+- *Data Quality Data Lake*
+- *Data Quality Data Warehouse*
+- *Data Quality Dashboards*
 
 
 `Git repository`
