@@ -117,6 +117,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         TextColumn checkCategoryColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
         TextColumn checkNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn tableComparisonColumn = sortedTable.textColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
         DoubleColumn actualValueColumn = sortedTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         for (int i = 0; i < rowCount ; i++) {
             LocalDateTime timePeriod = timePeriodColumn.get(i);
@@ -134,10 +135,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             if (checkResultsOverviewDataModel == null) {
                 String checkCategory = checkCategoryColumn.get(i);
                 String checkName = checkNameColumn.get(i);
+                String comparisonName = tableComparisonColumn.isMissing(i) ? null : tableComparisonColumn.get(i);
                 checkResultsOverviewDataModel = new CheckResultsOverviewDataModel() {{
                     setCheckCategory(checkCategory);
                     setCheckName(checkName);
                     setCheckHash(checkHash);
+                    setComparisonName(comparisonName);
                 }};
                 resultMap.put(checkHash, checkResultsOverviewDataModel);
             }

@@ -87,6 +87,7 @@ public class CheckModel implements Cloneable {
     @JsonIgnore
     private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
 
+
     /**
      * Threshold (alerting) rules defined for a check.
      */
@@ -218,6 +219,15 @@ public class CheckModel implements Cloneable {
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
     private boolean canDeleteData;
+
+    /**
+     * Returns the check hash code that identifies the check instance.
+     * @return Check hash or null.
+     */
+    @JsonPropertyDescription("The check hash code that identifies the check instance.")
+    public Long getCheckHash() {
+        return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
+    }
 
     public CheckModel() {
     }
