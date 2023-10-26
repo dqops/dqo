@@ -1,9 +1,9 @@
 # Table status operators
 
 Table status airflow operators are used to receive the overall data quality status for a table from previously run sensors. 
-When issues are present on the table, the operator informs about a scale the issue and points them for further work on the data quality. 
+When issues are present on the table, the operator informs about the scale of issue and points them for further work on the data quality. 
 
-The operator can be used to collect information about the data quality before or after execution of a significant operations. 
+The operator can be used to collect information about the data quality before or after execution of a significant operation. 
 
 There are 4 operators for checking the status.
 
@@ -19,8 +19,8 @@ And three operators with that verifies status from specific type of checks:
 
 ## Operator parameters
 
-Parameters allows selection of specific checks results that should be contained in the received status.
-The required parameters clearly indicates the specific table in a connection.
+Parameters allow selection of specific checks results that should be contained in the received status.
+The required parameters set clearly indicates the specific table in a connection.
 
 | Name                       | Description                                                                                                                                                                                                         | Type                                                          |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
@@ -32,16 +32,14 @@ The required parameters clearly indicates the specific table in a connection.
 | check_time_scale           | Time scale filter for monitoring and partitioned checks (values: daily or monthly).                                                                                                                                 | Union[Unset, None, CheckTimeScale]                            |
 | data_group                 | Data group.                                                                                                                                                                                                         | Union[Unset, None, str]                                       |
 | check_name                 | Data quality check name.                                                                                                                                                                                            | Union[Unset, None, str]                                       |
-| category                   | Check's category name.                                                                                                                                                                                              | Union[Unset, None, str]                                       | 
+| category                   | Category name of the check.                                                                                                                                                                                         | Union[Unset, None, str]                                       | 
 | table_comparison           | Table comparison name.                                                                                                                                                                                              | Union[Unset, None, str]                                       | 
-| quality_dimension          | Check quality dimension.                                                                                                                                                                                            | Union[Unset, None, str]                                       |
+| quality_dimension          | Quality dimension of the check.                                                                                                                                                                                     | Union[Unset, None, str]                                       |
 | base_url                   | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                          | str                                                           |
 | wait_timeout               | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds. | int                                                           |
 | fail_on_timeout            | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                 | bool [optional, default=True]                                 |
 | maximum_severity_threshold | The maximum level of rule severity that is accepted, causing that an airflow task finishes with succeeded status.                                                                                                   | RuleSeverityLevel [optional, default=RuleSeverityLevel.ERROR] |
 
-
-###################### todo: down below ################################################################################################
 
 ## Set up the operator
 
@@ -51,7 +49,7 @@ Entry requirements includes:
 
 **DAG example**
 
-The example sets a task to receive status from the monitoring sensors set on "maven_restaurant_ratings.consumers" table from "example_connection". 
+The example sets a task to receive status from the monitoring sensors set on the "maven_restaurant_ratings.consumers" table from "example_connection". 
 The operator connects to the locally started DQOps server.
 
 ```python
@@ -81,7 +79,7 @@ with DAG(
 ## Execution details
 
 Airflow DAG provides logs to the executed tasks.
-The status details will appear in one line info log from the operator, which contains a JSON formatted response from DQOps presented below. 
+The status details will appear in a one line as an info level log from the operator, which contains a JSON formatted response from DQOps presented below. 
 
 ```json5
 {
@@ -102,19 +100,19 @@ The status details will appear in one line info log from the operator, which con
 }
 ```
 
-In this example we used the default number of months to be checked (it if form the beginning of previous month up to now).
-Since that time 5 checks failed out of 148 in total.
+In this example we used the default number of months to be checked (it is from the beginning of the previous month up to now).
+Since that time 5 checks have failed out of 148 in total.
 The causes of the failure are known, which are shown in **failed_checks_statuses** JSON object.
 
 ```text
-This issue might be easy to be verified. It is the row count issue, which fall out of expected bounds of check rule.
+This issue might be easy to verify. It is the row count issue, which falls out of expected bounds of the check's rule threshold.
 Either rule adjustment is necessary in case the data are correct, or part of data did not load which was easily verified by checking the status.
 ```
 
 Furthermore, the task will finish with Failed airflow status as we did not set the **maximum_severity_threshold** parameter.
 
 Technically, the executed operator returns the TableDataQualityStatusModel object with status details.
-When the task execution succeed or not, the task instance will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance will be marked as Success or Failed accordingly.
 
 ## TableDataQualityStatusModel fields 
 
