@@ -36,8 +36,9 @@ import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
+import { getTableDailyMonitoringChecks, getTableDailyPartitionedChecks, getTableMonthlyMonitoringChecks, getTableMonthlyPartitionedChecks, getTableProfilingChecksModel } from '../../../redux/actions/table.actions';
 
-type TParameters = {refConnection?: string, refSchema?: string, refTable?: string}
+type TParameters = {name?: string, refConnection?: string, refSchema?: string, refTable?: string}
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -58,7 +59,8 @@ type EditReferenceTableProps = {
   canUserCompareTables?: boolean;
   onUpdateParent: () => void;
   columnOptions : {comparedColumnsOptions : Option[], referencedColumnsOptions: Option[]}
-  onChangeParameters : (obj: Partial<TParameters>) => void
+  onChangeParameters : (obj: Partial<TParameters>) => void;
+  onUpdateChecks: () => void;
 };
 
 const EditReferenceTable = ({
@@ -80,7 +82,8 @@ const EditReferenceTable = ({
   canUserCompareTables,
   onUpdateParent,
   columnOptions,
-  onChangeParameters
+  onChangeParameters,
+  onUpdateChecks
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -271,6 +274,15 @@ const EditReferenceTable = ({
             }
           )
             .then(() => {
+              dispatch(
+                getTableProfilingChecksModel(
+                  checkTypes,
+                  firstLevelActiveTab,
+                  connection,
+                  schema,
+                  table
+                )
+              );
               onBack(false);
             })
         } else if (
@@ -297,6 +309,15 @@ const EditReferenceTable = ({
             }
           )
             .then(() => {
+              dispatch(
+                getTableDailyPartitionedChecks(
+                  checkTypes,
+                  firstLevelActiveTab,
+                  connection,
+                  schema,
+                  table
+                )
+              );
               onBack(false);
             })
         } else if (
@@ -323,6 +344,15 @@ const EditReferenceTable = ({
             }
           )
             .then(() => {
+              dispatch(
+                getTableMonthlyPartitionedChecks(
+                  checkTypes,
+                  firstLevelActiveTab,
+                  connection,
+                  schema,
+                  table
+                )
+              );
               onBack(false);
             })
         } else if (
@@ -349,6 +379,15 @@ const EditReferenceTable = ({
             }
           )
             .then(() => {
+              dispatch(
+                getTableDailyMonitoringChecks(
+                  checkTypes,
+                  firstLevelActiveTab,
+                  connection,
+                  schema,
+                  table
+                )
+              );
               onBack(false);
             })
         } else if (
@@ -375,6 +414,15 @@ const EditReferenceTable = ({
             }
           )
             .then(() => {
+              dispatch(
+                getTableMonthlyMonitoringChecks(
+                  checkTypes,
+                  firstLevelActiveTab,
+                  connection,
+                  schema,
+                  table
+                )
+              );
               onBack(false);
             })
         }
@@ -468,9 +516,6 @@ const EditReferenceTable = ({
       refSchema.length !== 0 &&
       refTable.length !== 0 && name.length !== 0));
   }, [isUpdated, isUpdatedParent, dataGroupingArray, refTable]);
-console.log((isCreating === true && refConnection.length !== 0 &&
-  refSchema.length !== 0 &&
-  refTable.length !== 0 && name.length !== 0))
 
   const deleteDataFunct = async (params: {
     [key: string]: string | boolean;

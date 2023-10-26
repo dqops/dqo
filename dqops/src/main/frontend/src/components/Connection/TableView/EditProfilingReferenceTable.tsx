@@ -17,7 +17,8 @@ import {
   DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
   ComparisonCheckResultModel,
-  CheckSearchFiltersCheckTypeEnum
+  CheckSearchFiltersCheckTypeEnum,
+  CheckContainerModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -29,7 +30,6 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
 } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -37,6 +37,7 @@ import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
 import EditReferenceTable from './EditReferenceTable';
 import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
+import { setUpdatedChecksModel } from '../../../redux/actions/table.actions';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -49,9 +50,13 @@ type EditProfilingReferenceTableProps = {
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
   canUserCompareTables?: boolean;
+  checksUI: any;
+  onUpdateChecks: () => void;
 };
 
-type TParameters = {refConnection?: string, refSchema?: string, refTable?: string}
+type TParameters = {name?: string, refConnection?: string, refSchema?: string, refTable?: string}
+
+type TSeverityValues = Partial<{warning: number, error: number, fatal: number}>
 
 const itemsToRender = [
   {
@@ -90,7 +95,9 @@ export const EditProfilingReferenceTable = ({
   getNewTableComparison,
   onChangeSelectedReference,
   listOfExistingReferences,
-  canUserCompareTables
+  canUserCompareTables,
+  checksUI,
+  onUpdateChecks
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -106,13 +113,7 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const {
-    checksUI,
-    dailyMonitoring,
-    monthlyMonitoring,
-    dailyPartitionedChecks,
-    monthlyPartitionedChecks
-  } = useSelector(getFirstLevelState(checkTypes));
+  const { tabs: pageTabs } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [showColumnCount, setShowColumnCount] = useState(false)
@@ -130,6 +131,7 @@ export const EditProfilingReferenceTable = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({})
+  const [tableChecksToUpdate, setTableChecksToUpdate] = useState<any>(checksUI)
 
   const onChangeParameters = (obj:  Partial<TParameters>) => {
     setParameters((prevState) => ({
@@ -137,7 +139,6 @@ export const EditProfilingReferenceTable = ({
       ...obj
     }))
   }
-
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(
@@ -155,21 +156,10 @@ export const EditProfilingReferenceTable = ({
   };
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
-    if (checkTypes === CheckTypes.PROFILING) {
-      values = Object.values(checksUI);
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyPartitionedChecks ?? {});
-      } else {
-        values = Object.values(monthlyPartitionedChecks ?? {});
-      }
-    } else if (checkTypes === CheckTypes.MONITORING) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyMonitoring ?? {});
-      } else {
-        values = Object.values(monthlyMonitoring ?? {});
-      }
+       if (!checksUI) {
+      return;
     }
+      values = Object.values(checksUI);
 
     if (values.length === 0 || !Array.isArray(values[0])) {
       return;
@@ -202,7 +192,57 @@ export const EditProfilingReferenceTable = ({
       setShowColumnCount(!!columnCountElem.configured)
     }
   };
-  console.log(checksUI)
+
+  const handleChange = async (value: CheckContainerModel) => {
+    return new Promise<void>((resolve) => {
+      dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
+      resolve();
+    }).then(() => {
+      onUpdateChecks();
+    });
+  };
+ 
+  const onUpdateChecksUI = (type : 'row' | 'column', disabled?: boolean, severity?: TSeverityValues) => {
+    const copiedChecks = {...tableChecksToUpdate}
+    let checks;
+    if (copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? ''))) {
+       checks = copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    } else {
+      checks = (pageTabs.find((item) => item.value === firstLevelActiveTab)?.state.checksUI as any)
+      .categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    }
+      let selectedCheck;
+      if (type === 'row') {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("row"))
+      } else {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("column"))
+    }
+    if (disabled !== undefined) {
+      selectedCheck.configured = disabled;
+      if (type === 'row') {
+        setShowRowCount(disabled)
+      } else {
+        setShowColumnCount(disabled)
+      }
+    }
+    if (severity) {
+      if (severity.warning) {
+        selectedCheck.rule.warning.rule_parameters[0].double_value = severity.warning;
+        selectedCheck.rule.warning.configured = true;
+      } 
+      if (severity.error) {
+        selectedCheck.rule.error.rule_parameters[0].double_value = severity.error;
+        selectedCheck.rule.error.configured = true;
+      } 
+      if (severity.fatal) {
+        selectedCheck.rule.fatal.rule_parameters[0].double_value = severity.fatal;
+        selectedCheck.rule.fatal.configured = true;
+      } 
+    }
+    
+    setTableChecksToUpdate(copiedChecks as CheckContainerModel)
+  }
+  
 
   useEffect(() => {
     if (selectedReference) {
@@ -392,6 +432,7 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
+    handleChange(tableChecksToUpdate as CheckContainerModel)
   };
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
@@ -629,6 +670,7 @@ export const EditProfilingReferenceTable = ({
           canUserCompareTables={canUserCompareTables}
           columnOptions = {{comparedColumnsOptions: comparedColumnOptions ?? [], referencedColumnsOptions: columnOptions }}
           onChangeParameters = { onChangeParameters }
+          onUpdateChecks={onUpdateChecks}
         />
       </div>
       {reference &&
@@ -677,7 +719,7 @@ export const EditProfilingReferenceTable = ({
                         <Checkbox
                           checked={showRowCount}
                           onChange={(checked) => {
-                            setShowRowCount(checked);
+                            onUpdateChecksUI('row', checked);
                           }}
                         />{' '}
                       </th>
@@ -691,7 +733,7 @@ export const EditProfilingReferenceTable = ({
                         <Checkbox
                           checked={showColumnCount}
                           onChange={(checked) => {
-                            setShowColumnCount(checked);
+                            onUpdateChecksUI('column', checked);
                           }}
                         /> : null }
                       </th>
@@ -751,13 +793,14 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.warning_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         warning_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
-                                    }
+                                      onUpdateChecksUI("row", undefined, {warning: Number(e.target.value)})
+                                    }}
                                   />
                                   %
                                 </div>
@@ -769,13 +812,14 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.error_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         error_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
-                                    }
+                                      onUpdateChecksUI("row", undefined, {error: Number(e.target.value)})
+                                      }}
                                   />
                                   %
                                 </div>
@@ -787,12 +831,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.fatal_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         fatal_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("row", undefined, {fatal: Number(e.target.value)})}
                                     }
                                   />
                                   %
@@ -849,12 +894,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.warning_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) =>{
                                       onChangeCompareColumnCount({
                                         warning_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("column", undefined, {warning: Number(e.target.value)})}
                                     }
                                   />
                                   %
@@ -867,13 +913,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.error_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareColumnCount({
                                         error_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
-                                    }
+                                    onUpdateChecksUI("column", undefined, {error: Number(e.target.value)})}}
                                   />
                                   %
                                 </div>
@@ -885,12 +931,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.fatal_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) =>{
                                       onChangeCompareColumnCount({
                                         fatal_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("column", undefined, {fatal: Number(e.target.value)})}
                                     }
                                   />
                                   %

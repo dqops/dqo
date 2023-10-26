@@ -15,12 +15,14 @@ type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
+  onUpdateChecks: () => void;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
   timePartitioned,
   checksUI,
+  onUpdateChecks
 }: TableReferenceComparisonsProps) => {
   const {
     connection,
@@ -222,6 +224,9 @@ export const TableReferenceComparisons = ({
           listOfExistingReferences={references.map(
             (x) => x.table_comparison_configuration_name
           )}
+          checksUI={checksUI}
+          onUpdateChecks = {onUpdateChecks}
+          
         />
       ) : (
         <ProfilingReferenceTableList
