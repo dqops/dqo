@@ -64,7 +64,7 @@ with DAG(
 ) as dag:
     run_checks_task = DqopsRunProfilingChecksOperator(
         task_id="dqops_run_profiling_checks_operator_task",
-        url='http://localhost:8888/',
+        base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_table_name="maven_restaurant_ratings.consumers"
     )

@@ -5,7 +5,7 @@ DQOps integrates with Apache Airflow.
 Operators are available for actions such as:
 - run checks
 - (Planned) collect statistics
-- (Planned) import tables
+- import tables
 - table status verification
 
 
