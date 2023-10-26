@@ -13,7 +13,7 @@ with DAG(
     run_checks_task = DqopsRunChecksOperator(
         task_id="dqops_run_checks_operator_task",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
-        base_url='http://host.docker.internal:8888',
+        base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         check_type=CheckType.MONITORING
     )

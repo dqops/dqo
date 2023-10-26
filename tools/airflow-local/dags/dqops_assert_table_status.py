@@ -13,7 +13,7 @@ with DAG(
     check_status_task = DqoAssertTableStatusOperator(
         task_id="dqo_assert_table_status_operator_task",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
-        base_url='http://host.docker.internal:8888',
+        base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
         table_name="consumers",
