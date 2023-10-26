@@ -6,7 +6,7 @@ Operators are available for actions such as:
 - run checks
 - (Planned) collect statistics
 - (Planned) import tables
-- (Planned) table status verification
+- table status verification
 
 
 ## DQOps python package for airflow

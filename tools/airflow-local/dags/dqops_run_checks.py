@@ -5,7 +5,7 @@ from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOpe
 from dqops.client.models.check_type import CheckType
 
 with DAG(
-    dag_id="my_connection_dqops_run_checks",
+    dag_id="example_connection_dqops_run_checks",
     schedule=datetime.timedelta(hours=12),
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
