@@ -93,6 +93,8 @@ public class CheckResultEntryModel {
     String qualityDimension;
     @JsonPropertyDescription("Sensor name.")
     String sensorName;
+    @JsonPropertyDescription("Table comparison name.")
+    String tableComparison;
 
     /**
      * Checks if any filtered field name matches a pattern.
@@ -164,6 +166,8 @@ public class CheckResultEntryModel {
                 return Comparator.comparing(o -> o.qualityDimension);
             case sensorName:
                 return Comparator.comparing(o -> o.sensorName);
+            case tableComparison:
+                return Comparator.comparing(o -> o.tableComparison);
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
         }

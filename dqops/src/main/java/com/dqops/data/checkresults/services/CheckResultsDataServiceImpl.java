@@ -333,6 +333,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
 
+        String tableComparison = row.getString(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+
         CheckResultEntryModel singleModel = new CheckResultEntryModel() {{
             setId(id);
             setActualValue(actualValue);
@@ -364,6 +366,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             setProvider(provider);
             setQualityDimension(qualityDimension);
             setSensorName(sensorName);
+            setTableComparison(tableComparison);
         }};
         return singleModel;
     }

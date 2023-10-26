@@ -40,9 +40,7 @@ export const UpdateCheckModel = ({
     }));
   };
 
-  const onUpdate = () => {
-    console.log('onUpdate');
-  };
+
 
   return (
     <div>
@@ -61,7 +59,7 @@ export const UpdateCheckModel = ({
               onChange={(parameters: FieldModel[]) =>
                 handleChange({ sensor_parameters: parameters })
               }
-              onUpdate={onUpdate}
+              onUpdate={() => undefined}
             />
           </div>
 
