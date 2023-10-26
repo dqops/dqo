@@ -889,7 +889,7 @@ const getReferenceTableStatistics = async () => {
               title="Data grouping on compared table"
               placeholder="Select column on compared table"
               onChangeDataGroupingArray={onChangeDataGroupingArray}
-              columnOptions={columnOptions.comparedColumnsOptions}
+              columnOptions={[{label: "", value: ""}, ...columnOptions.comparedColumnsOptions]}
               requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).comparedMissingIndexes}      
               responseList={dataGroupingArray?.map((item) => item?.compared_table_column_name ?? '')}
               warningMessageList={listOfWarnings}
@@ -903,7 +903,7 @@ const getReferenceTableStatistics = async () => {
               refConnection={refConnection}
               refSchema={refSchema}
               refTable={refTable}
-              columnOptions={columnOptions.referencedColumnsOptions}
+              columnOptions={[{label: "", value: ""}, ...columnOptions.referencedColumnsOptions]}
               onChangeDataGroupingArray={onChangeDataGroupingArray}
               requiredColumnsIndexes={getRequiredColumnsIndexes(dataGroupingArray).referenceMissingIndexes}
               responseList={dataGroupingArray?.map((item) => item?.reference_table_column_name ?? '')}

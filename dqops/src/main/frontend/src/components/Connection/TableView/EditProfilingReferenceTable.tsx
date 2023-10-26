@@ -750,39 +750,6 @@ export const EditProfilingReferenceTable = ({
                       <th>
                         {tableLevelComparisonExtended && (
                           <div className="flex flex-col w-full font-normal">
-                            {rowKey ? (
-                              <div className="gap-y-3">
-                                Results:
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Valid:</th>
-                                  {                               
-                                  tableComparisonResults?.table_comparison_results?.[rowKey ?? '']?.valid_results
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Errors:
-                                  </th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.errors
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Fatal:</th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.fatals
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Warning:
-                                  </th>
-                                  {
-                                    tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.warnings
-                                  }
-                                </td>
-                              </div>
-                            ) : null}
                             {showRowCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -816,7 +783,7 @@ export const EditProfilingReferenceTable = ({
                                       onChangeCompareRowCount({
                                         error_difference_percent: Number(
                                           e.target.value
-                                        )
+                                          )
                                       })
                                       onUpdateChecksUI("row", undefined, {error: Number(e.target.value)})
                                       }}
@@ -839,51 +806,50 @@ export const EditProfilingReferenceTable = ({
                                       })
                                       onUpdateChecksUI("row", undefined, {fatal: Number(e.target.value)})}
                                     }
-                                  />
+                                    />
                                   %
                                 </div>
                               </div>
                             )}
+                        {rowKey ? (
+                          <div className="gap-y-3">
+                            Results:
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Valid:</th>
+                              {                               
+                              tableComparisonResults?.table_comparison_results?.[rowKey ?? '']?.valid_results
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Errors:
+                              </th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.errors
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Fatal:</th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.fatals
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Warning:
+                              </th>
+                              {
+                                tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.warnings
+                              }
+                            </td>
+                          </div>
+                        ) : null}
                           </div>
                         )}
                       </th>
                       <th>
                         {(tableLevelComparisonExtended  && reference?.supports_compare_column_count===true) ? (
                           <div className="flex flex-col w-full font-normal">
-                            {columnKey ? 
-                              <div className="gap-y-3">
-                                Results:
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Valid:</th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.valid_results
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Errors:
-                                  </th>
-                                  {
-                                    tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.errors
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Fatal:</th>
-                                  {
-                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.fatals
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Warning:
-                                  </th>
-                                  {
-                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.warnings
-                                  }
-                                </td>
-                              </div>
-                              : null
-                              }           
                             {showColumnCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -939,11 +905,45 @@ export const EditProfilingReferenceTable = ({
                                       })
                                       onUpdateChecksUI("column", undefined, {fatal: Number(e.target.value)})}
                                     }
-                                  />
+                                    />
                                   %
                                 </div>
                               </div>
                             )}
+                        {columnKey ? 
+                          <div className="gap-y-3">
+                            Results:
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Valid:</th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.valid_results
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Errors:
+                              </th>
+                              {
+                                tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.errors
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Fatal:</th>
+                              {
+                             tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.fatals
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Warning:
+                              </th>
+                              {
+                             tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.warnings
+                              }
+                            </td>
+                          </div>
+                          : null
+                          }           
                           </div>
                         ) : null}
                       </th>
