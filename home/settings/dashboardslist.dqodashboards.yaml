@@ -94,7 +94,7 @@ spec:
             ds0.p_quality_dimension: all
     - folder_name: Check results
       dashboards:
-        - dashboard_name: Check results
+        - dashboard_name: History of data quality check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
           width: 1550
           height: 2600
@@ -454,7 +454,7 @@ spec:
             ds0.p_quality_dimension: all
     - folder_name: Check results
       dashboards:
-        - dashboard_name: Check results
+        - dashboard_name: History of data quality check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
           width: 1550
           height: 2600
@@ -830,7 +830,7 @@ spec:
 
     - folder_name: Check results
       dashboards:
-        - dashboard_name: Check results
+        - dashboard_name: History of data quality check results
           url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
           width: 1550
           height: 2600
