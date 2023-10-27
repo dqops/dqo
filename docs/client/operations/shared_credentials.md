@@ -85,7 +85,7 @@ http://localhost:8888/api/credentials
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|shared_credential_list_model||List[[SharedCredentialListModel](#sharedcredentiallistmodel)]|
+|shared_credential_list_model||List[[SharedCredentialListModel](\docs\client\models\shared_credentials\#sharedcredentiallistmodel)]|
 
 
 

@@ -8,15 +8,14 @@ from httpx import ReadTimeout
 from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import (
     DqopsDataQualityIssueDetectedException,
 )
-from dqops.airflow.common.exceptions.dqops_empty_response_exception import (
-    DqopsEmptyResponseException,
-)
 from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
     DqopsJobFailedException,
 )
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value
-from dqops.airflow.common.tools.server_response_verifier import verify_server_response_correctness
+from dqops.airflow.common.tools.server_response_verifier import (
+    verify_server_response_correctness,
+)
 from dqops.airflow.common.tools.timeout.dqo_timeout import handle_dqo_timeout
 from dqops.airflow.common.tools.timeout.python_client_timeout import (
     handle_python_timeout,

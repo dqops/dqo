@@ -141,6 +141,21 @@ Incident sort order columns.
 
 ___  
 
+## IncidentsPerConnectionModel  
+Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|connection|Connection (data source) name.|string|
+|open_incidents|Count of open (new) data quality incidents.|integer|
+
+
+___  
+
 ## SortDirection  
 REST api model sort direction.  
   

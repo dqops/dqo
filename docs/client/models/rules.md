@@ -1,4 +1,37 @@
 
+## RuleListModel  
+Rule list model that is returned by the REST API.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|rule_name|Rule name without the folder.|string|
+|full_rule_name|Full rule name, including the folder within the &quot;rules&quot; rule folder.|string|
+|custom|This rule has is a custom rule or was customized by the user. This is a read-only value.|boolean|
+|built_in|This rule is provided with DQOps as a built-in rule. This is a read-only value.|boolean|
+|can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+
+
+___  
+
+## RuleFolderModel  
+Rule folder model that is returned by the REST API.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|folders|A dictionary of nested folders with rules, the keys are the folder names.|Dict[string, [RuleFolderModel](\docs\client\models\rules\#rulefoldermodel)]|
+|rules|List of rules defined in this folder.|List[[RuleListModel](\docs\client\models\rules\#rulelistmodel)]|
+
+
+___  
+
 ## RuleRunnerType  
 Implementation mode for a rule runner (rule implementation).  
   

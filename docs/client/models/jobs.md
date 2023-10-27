@@ -512,6 +512,22 @@ Job history snapshot model that returns only changes after a given change sequen
 
 ___  
 
+## DqoJobQueueInitialSnapshotModel  
+Returns the current snapshot of running jobs.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|jobs||List[[DqoJobHistoryEntryModel](\docs\client\models\jobs\#dqojobhistoryentrymodel)]|
+|[folder_synchronization_status](\docs\client\models\jobs\#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](\docs\client\models\jobs\#cloudsynchronizationfoldersstatusmodel)|
+|last_sequence_number||long|
+
+
+___  
+
 ## ImportTablesResult  
 Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table import job that returns list of tables that have been imported.  
   

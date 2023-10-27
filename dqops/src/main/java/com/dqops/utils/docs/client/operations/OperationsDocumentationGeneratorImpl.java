@@ -17,12 +17,14 @@ package com.dqops.utils.docs.client.operations;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -49,10 +51,22 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         operationsFolder.setLinkName("Operations");
         operationsFolder.setDirectPath(projectRootPath.resolve("../docs/client/operations").toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("client/operations/operations_documentation");
-
         List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorObjectDocumentationModels =
                 operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel);
+
+        operationsSuperiorObjectDocumentationModels.sort(Comparator.comparing(OperationsSuperiorObjectDocumentationModel::getSuperiorClassSimpleName));
+
+        MainPageOperationsDocumentationModel mainPageOperationsDocumentationModel = new MainPageOperationsDocumentationModel();
+        mainPageOperationsDocumentationModel.setControllerOperations(operationsSuperiorObjectDocumentationModels);
+
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/operations/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = operationsFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageOperationsDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageOperationsDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("client/operations/operations_documentation");
 
         for (OperationsSuperiorObjectDocumentationModel operationsSuperiorObjectDocumentationModel : operationsSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = operationsFolder.addNestedFile(operationsSuperiorObjectDocumentationModel.getLocationFilePath());
