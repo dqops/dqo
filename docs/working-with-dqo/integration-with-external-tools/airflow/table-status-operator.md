@@ -1,4 +1,4 @@
-# Table status operators
+# Table status operator
 
 Table status airflow operators are used to receive the overall data quality status for a table from previously run sensors. 
 When issues are present on the table, the operator informs about the scale of issue and points them for further work on the data quality. 
@@ -12,6 +12,7 @@ There are 4 operators for checking the status.
 This operator is used for receiving overall status on a table. 
 
 And three operators with that verifies status from specific type of checks:
+
 - **DqoAssertProfilingTableStatusOperator**: For profiling checks.
 - **DqoAssertMonitoringTableStatusOperator**: For monitoring checks.
 - **DqoAssertPartitionedTableStatusOperator**: For partitioned checks.
@@ -40,10 +41,13 @@ The required parameters set clearly indicates the specific table in a connection
 | fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                       | bool [optional, default=True]                                 |
 | fail_at_severity    | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                           | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL] |
 
+Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
+For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
 
 ## Set up the operator
 
 Entry requirements includes:
+
 - installation of python package from PyPi called dqops
 - configuration of data source and sensors in DQOps.
 
@@ -64,10 +68,9 @@ with DAG(
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    check_status_task = DqoAssertMonitoringTableStatusOperator(
+    assert_status_task = DqoAssertMonitoringTableStatusOperator(
         task_id="dqo_assert_table_status_operator_task",
-        # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
-        base_url='http://host.docker.internal:8888',
+        base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
         table_name="consumers"
@@ -115,11 +118,12 @@ Either rule adjustment is necessary in case the data are correct, or part of dat
 Furthermore, the task will finish with Failed airflow status as we did not set the **maximum_severity_threshold** parameter.
 
 Technically, the executed operator returns the TableDataQualityStatusModel object with status details.
-When the task execution succeeds or not, the task instance will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
 
 ## TableDataQualityStatusModel fields 
 
 TableDataQualityStatusModel includes:
+
 - **connection_name**: The connection name in DQOps.
 - **schema_name**: The schema name.
 - **table_name**: The table name.

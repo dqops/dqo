@@ -84,6 +84,6 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
             base_url=base_url,
             wait_timeout=wait_timeout,
             fail_on_timeout=fail_on_timeout,
-            maximum_severity_threshold=maximum_severity_threshold,
+            fail_at_severity=fail_at_severity,
             **kwargs
         )
