@@ -147,6 +147,7 @@ nav:
       - errors: 'client/operations/errors.md'
       - healthcheck: 'client/operations/healthcheck.md'
       - incidents: 'client/operations/incidents.md'
+      - index: 'client/operations/index.md'
       - jobs: 'client/operations/jobs.md'
       - log_shipping: 'client/operations/log_shipping.md'
       - rules: 'client/operations/rules.md'

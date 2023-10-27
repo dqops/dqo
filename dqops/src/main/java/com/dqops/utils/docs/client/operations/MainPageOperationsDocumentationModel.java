@@ -17,34 +17,16 @@ package com.dqops.utils.docs.client.operations;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Yaml superior class description model. Contains info about superior class and the objects it comprises.
+ * Container object with a list of all operations divided by controllers.
  */
 @Data
-public class OperationsSuperiorObjectDocumentationModel {
+public class MainPageOperationsDocumentationModel {
     /**
-     * Superior class full name.
+     * List of all operations divided by controllers.
      */
-    private String superiorClassFullName;
-    /**
-     * Superior class simple name.
-     */
-    private String superiorClassSimpleName;
-    private String superiorDescription;
-
-    /**
-     * List of particular operations fields.
-     */
-    private List<OperationsOperationDocumentationModel> operationObjects;
-
-    public String getLocationFilePath() {
-        if (this.superiorClassSimpleName == null) {
-            return null;
-        }
-
-        return this.superiorClassSimpleName + ".md";
-    }
-
+    private List<OperationsSuperiorObjectDocumentationModel> controllerOperations = new ArrayList<>();
 }

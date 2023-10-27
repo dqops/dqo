@@ -2,10 +2,10 @@
 
 **This is a list of the checks in DQOps broken down by category and a brief description of what they do.**
 
-## **Table checks**
+## Table checks
 
 
-###accuracy  
+### accuracy  
 Compares the tested table with another (reference) table.
 
 | Check name | Check type | Description |
@@ -18,7 +18,7 @@ Compares the tested table with another (reference) table.
 
 
 
-###availability  
+### availability  
 Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
@@ -31,7 +31,7 @@ Checks whether the table is accessible and available for use.
 
 
 
-###comparisons  
+### comparisons  
 
 
 | Check name | Check type | Description |
@@ -53,7 +53,7 @@ Checks whether the table is accessible and available for use.
 
 
 
-###schema  
+### schema  
 Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.
 
 | Check name | Check type | Description |
@@ -94,7 +94,7 @@ Detects schema drifts such as columns added, removed, reordered or the data type
 
 
 
-###sql  
+### sql  
 Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
 
 | Check name | Check type | Description |
@@ -127,7 +127,7 @@ Validate data against user-defined SQL queries at the table level. Checks in thi
 
 
 
-###timeliness  
+### timeliness  
 Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.
 
 | Check name | Check type | Description |
@@ -166,7 +166,7 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 
 
 
-###volume  
+### volume  
 Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
@@ -275,7 +275,7 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
-## **Column checks**
+## Column checks
 
 
 
@@ -299,7 +299,7 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
-###accuracy  
+### accuracy  
 
 
 | Check name | Check type | Description |
@@ -340,7 +340,7 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
-###anomaly  
+### anomaly  
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
 | Check name | Check type | Description |
@@ -486,7 +486,7 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 
 
 
-###bool  
+### bool  
 Calculates the percentage of data in a Boolean format.
 
 | Check name | Check type | Description |
@@ -510,7 +510,7 @@ Calculates the percentage of data in a Boolean format.
 
 
 
-###comparisons  
+### comparisons  
 
 
 | Check name | Check type | Description |
@@ -570,7 +570,7 @@ Calculates the percentage of data in a Boolean format.
 
 
 
-###datatype  
+### datatype  
 
 
 | Check name | Check type | Description |
@@ -594,7 +594,7 @@ Calculates the percentage of data in a Boolean format.
 
 
 
-###datetime  
+### datetime  
 Validates that the data in a date or time column is in the expected format and within predefined ranges.
 
 | Check name | Check type | Description |
@@ -627,7 +627,7 @@ Validates that the data in a date or time column is in the expected format and w
 
 
 
-###integrity  
+### integrity  
 Checks the referential integrity of a column against a column in another table.
 
 | Check name | Check type | Description |
@@ -651,7 +651,7 @@ Checks the referential integrity of a column against a column in another table.
 
 
 
-###nulls  
+### nulls  
 Checks for the presence of null or missing values in a column.
 
 | Check name | Check type | Description |
@@ -735,7 +735,7 @@ Checks for the presence of null or missing values in a column.
 
 
 
-###numeric  
+### numeric  
 Validates that the data in a numeric column is in the expected format or within predefined ranges.
 
 | Check name | Check type | Description |
@@ -991,7 +991,7 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
-###pii  
+### pii  
 Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
 
 | Check name | Check type | Description |
@@ -1042,7 +1042,7 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 
 
-###schema  
+### schema  
 Detects schema drifts such as a column is missing or the data type has changed.
 
 | Check name | Check type | Description |
@@ -1062,7 +1062,7 @@ Detects schema drifts such as a column is missing or the data type has changed.
 
 
 
-###sql  
+### sql  
 Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
 
 | Check name | Check type | Description |
@@ -1095,7 +1095,7 @@ Validate data against user-defined SQL queries at the column level. Checks in th
 
 
 
-###strings  
+### strings  
 Validates that the data in a string column match the expected format or pattern.
 
 | Check name | Check type | Description |
@@ -1416,7 +1416,7 @@ Validates that the data in a string column match the expected format or pattern.
 
 
 
-###uniqueness  
+### uniqueness  
 Counts the number or percent of duplicate or unique values in a column.
 
 | Check name | Check type | Description |
