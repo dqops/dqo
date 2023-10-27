@@ -284,7 +284,6 @@ const CheckDetails = ({
 
   }, [activeTab])
 
-console.log(resultsData)
   return (
     <div
       className="my-4"

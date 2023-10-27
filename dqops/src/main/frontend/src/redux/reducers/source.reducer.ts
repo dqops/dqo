@@ -1170,16 +1170,19 @@ const connectionReducer = (state = initialState, action: Action) => {
       state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-          console.log(action.data)
-          console.log(action.data.checkName + (action.data.checkResults?.[0].checkResultEntries?.[0]
-            .tableComparison))
+            let key = action.data.checkName;
+            console.log(key, action.data)
+            if (String(action?.data?.comparisonName).length > 0) {
+              key = action.data.checkName + "/" + action.data.comparisonName;
+            } else if (Object.keys(action.data.checkResults).length > 0 &&  action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison) {
+              key = action.data.checkName + "/" + action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison;
+            } 
+            console.log(key, action.data)
 
       return setActiveTabState(state, action, {
         checkResults: {
           ...(firstState.checkResults || {}),
-          [action.data.checkName + (action.data.checkResults?.[0].checkResultEntries?.[0]
-            .tableComparison ? ("/" + action.data.checkResults?.[0].checkResultEntries?.[0]
-              .tableComparison) : "") ]: action.data.checkResults
+          [key]: action.data.checkResults
         }
       });
     }
@@ -1188,12 +1191,16 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
+        let key = action.data.checkName;
+        if (String(action.data.comparisonName).length > 0) {
+          key = action.data.checkName + "/" + action.data.comparisonName;
+        } else if (Object.keys(action.data.sensorReadouts).length > 0 && action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison) {
+          key = action.data.checkName + "/" + action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison;
+        } 
       return setActiveTabState(state, action, {
         sensorReadouts: {
           ...(firstState.sensorReadouts || {}),
-          [action.data.checkName + (action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison
-             ? ("/" + action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison) : "") ]: action.data.sensorReadouts
+          [key]: action.data.sensorReadouts
         }
       });
     }
@@ -1202,10 +1209,16 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
+        let key = action.data.checkName;
+        if (String(action.data.comparisonName).length > 0) {
+          key = action.data.checkName + "/" + action.data.comparisonName;
+        } else if (Object.keys(action.data.sensorErrors).length > 0 && action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison) {
+          key = action.data.checkName + "/" + action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison;
+        } 
+        console.log(key, action.data.sensorErrors)
       const newSensors = {
         ...(firstState.sensorErrors || {}),
-        [action.data.checkName + (action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison ? 
-          ("/" + action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison) : "")]: action.data.sensorErrors
+        [key]: action.data.sensorErrors
       };
       return setActiveTabState(state, action, {
         sensorErrors: newSensors
