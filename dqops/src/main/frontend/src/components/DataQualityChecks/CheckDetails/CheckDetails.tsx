@@ -106,7 +106,7 @@ const CheckDetails = ({
 
   const checkResults = resultsData ? resultsData[checkNameWithComparisonName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[checkName ?? ''] || []
+    ? readoutsData[checkNameWithComparisonName ?? ''] || []
     : [];
   const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
   const filters =

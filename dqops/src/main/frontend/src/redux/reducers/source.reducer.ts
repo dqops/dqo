@@ -1189,7 +1189,8 @@ const connectionReducer = (state = initialState, action: Action) => {
       return setActiveTabState(state, action, {
         sensorReadouts: {
           ...(firstState.sensorReadouts || {}),
-          [action.data.checkName]: action.data.sensorReadouts
+          [action.data.checkName + (action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison
+             ? ("/" + action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison) : "") ]: action.data.sensorReadouts
         }
       });
     }
