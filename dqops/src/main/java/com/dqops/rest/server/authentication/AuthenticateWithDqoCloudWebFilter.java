@@ -23,7 +23,6 @@ import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -51,12 +50,18 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     /**
      * Special url that receives a post with the authentication token received from DQOps Cloud.
      */
-    public static final String ISSUE_TOKEN_URL = "/tokenissuer";
+    public static final String ISSUE_TOKEN_REQUEST_PATH = "/tokenissuer";
 
     /**
      * Health check url.
      */
-    public static final String HEALTHCHECK_URL = "/api/ishealthy";
+    public static final String HEALTHCHECK_REQUEST_PATH = "/api/ishealthy";
+
+    /**
+     * /manifest.json path
+     */
+    public static final String MANIFEST_JSON_REQUEST_PATH = "/manifest.json";
+
 
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
@@ -176,7 +181,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     .then();
         }
 
-        if (Objects.equals(requestPath, ISSUE_TOKEN_URL)) {
+        if (Objects.equals(requestPath, ISSUE_TOKEN_REQUEST_PATH)) {
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
             String returnUrl = exchange.getRequest().getQueryParams().getFirst("returnUrl");
             String refreshToken = exchange.getRequest().getQueryParams().getFirst("refreshToken");
@@ -215,7 +220,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
-        } else if (Objects.equals(requestPath, HEALTHCHECK_URL) || Objects.equals(requestPath, "/manifest.json")) {
+        } else if (Objects.equals(requestPath, HEALTHCHECK_REQUEST_PATH) || Objects.equals(requestPath, MANIFEST_JSON_REQUEST_PATH)) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAnonymousToken();
 
             ServerWebExchange mutatedExchange = exchange.mutate()
