@@ -16,6 +16,7 @@
 package com.dqops.rest.server.authentication;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
+import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
@@ -62,18 +63,25 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
      */
     public static final String MANIFEST_JSON_REQUEST_PATH = "/manifest.json";
 
+    /**
+     * Cookie name used to send the authentication token.
+     */
+    public static final String AUTHENTICATION_TOKEN_COOKIE = "DQOAccessToken";
 
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
+    private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;
     private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
+                                             DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                              InstanceCloudLoginService instanceCloudLoginService,
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
+        this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dqoAuthenticationTokenFactory = dqoAuthenticationTokenFactory;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
@@ -208,11 +216,11 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                         signedAuthenticationToken.getTarget().getTenantId() + ", the cookie is valid for " + hostHeader + " host");
             }
 
-            ResponseCookie dqoAccessTokenCookie = ResponseCookie.from("DQOAccessToken", signedAuthenticationToken.getSignedHex())
-                    .maxAge(Duration.ofHours(24))
+            ResponseCookie dqoAccessTokenCookie = ResponseCookie.from(AUTHENTICATION_TOKEN_COOKIE, signedAuthenticationToken.getSignedHex())
+                    .maxAge(Duration.ofMinutes(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes()))
                     .domain(hostHeader)
                     .build();
-            exchange.getResponse().getCookies().add("DQOAccessToken", dqoAccessTokenCookie);
+            exchange.getResponse().getCookies().add(AUTHENTICATION_TOKEN_COOKIE, dqoAccessTokenCookie);
             exchange.getResponse().getHeaders().add("Location", returnUrl);
 
             if (log.isDebugEnabled()) {
@@ -231,7 +239,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     .filter(mutatedExchange)
                     .then();
         } else {
-            HttpCookie dqoAccessTokenCookie = exchange.getRequest().getCookies().getFirst("DQOAccessToken");
+            HttpCookie dqoAccessTokenCookie = exchange.getRequest().getCookies().getFirst(AUTHENTICATION_TOKEN_COOKIE);
             if (dqoAccessTokenCookie == null) {
                 if (requestPath.startsWith("/api")) {
                     exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(401));

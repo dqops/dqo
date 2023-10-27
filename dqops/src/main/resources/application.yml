@@ -132,7 +132,7 @@ dqo:
     watch-file-system-changes: true
     process-file-changes-delay-millis: 100
   instance:
-    authentication-token-expiration-minutes: 10080
+    authentication-token-expiration-minutes: 1440
     return-base-url: http://localhost:8888
     validate-return-base-url: false
   sensor:
