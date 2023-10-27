@@ -1167,14 +1167,16 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_CHECK_RESULTS: {
       const firstState =
-        state[action.checkType]?.tabs.find(
+      state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
       return setActiveTabState(state, action, {
         checkResults: {
           ...(firstState.checkResults || {}),
-          [action.data.checkName]: action.data.checkResults
+          [action.data.checkName + (action.data.checkResults?.[0].checkResultEntries?.[0]
+            .tableComparison ? ("/" + action.data.checkResults?.[0].checkResultEntries?.[0]
+              .tableComparison) : "") ]: action.data.checkResults
         }
       });
     }

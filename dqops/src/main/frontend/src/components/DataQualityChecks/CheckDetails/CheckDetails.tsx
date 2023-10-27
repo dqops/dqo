@@ -3,7 +3,8 @@ import Tabs from '../../Tabs';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
-  DeleteStoredDataQueueJobParameters
+  DeleteStoredDataQueueJobParameters,
+  CheckResultEntryModel
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -94,11 +95,16 @@ const CheckDetails = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
+
   const currentJob = currentJobId
     ? job_dictionary_state[currentJobId]
     : undefined;
+  
+  const checkNameWithComparisonName = comparisonName 
+   ? (checkName + "/" + comparisonName)
+   : checkName   
 
-  const checkResults = resultsData ? resultsData[checkName ?? ''] || [] : [];
+  const checkResults = resultsData ? resultsData[checkNameWithComparisonName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
     ? readoutsData[checkName ?? ''] || []
     : [];
@@ -277,6 +283,8 @@ const CheckDetails = ({
     }
 
   }, [activeTab])
+
+  console.log(resultsData, checkResults)
 
   return (
     <div
