@@ -23,9 +23,7 @@ import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
-import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.MkDocsIndexReplaceUtility;
+import com.dqops.utils.docs.*;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
@@ -56,6 +54,7 @@ import java.util.stream.Collectors;
 public class GeneratePythonDocumentationPostProcessor {
     public static final Path baseClientDocsPath = Path.of("docs", "client");
     public static LinkageStore<String> linkageStore;
+    public static final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
 
     /**
      * Main method of the documentation generator that generates markdown documentation files for mkdocs.
@@ -81,9 +80,7 @@ public class GeneratePythonDocumentationPostProcessor {
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
             OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
-//            List schemas = openAPI.getComponents().getSchemas().entrySet().stream().filter(e->e.getKey().toLowerCase().contains("sslmode")).map(Map.Entry::getValue).collect(Collectors.toList());
-            List schemas = openAPI.getPaths().entrySet().stream()
-                    .filter(e->e.getKey().toLowerCase().contains("api/connections/{connectionName}/basic".toLowerCase())).map(Map.Entry::getValue).collect(Collectors.toList());
+
             linkageStore = new LinkageStore<>();
             LinkageStore<String> targetLinkage = getPopulatedLinkageStore(openAPI);
 
@@ -139,7 +136,7 @@ public class GeneratePythonDocumentationPostProcessor {
             Path baseModelDestination = Path.of("/")
                     .resolve(baseClientDocsPath)
                     .resolve(Path.of("models"));
-            Path modelDestination = null;
+            Path modelDestination;
             if (modelOccurrences.size() == 1) {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
@@ -163,10 +160,7 @@ public class GeneratePythonDocumentationPostProcessor {
     }
 
     protected static void populateModelMappingByOperation(Operation operation, Map<String, Set<String>> modelMethodMapping) {
-        List<Parameter> operationParameters = operation.getParameters();
-        if (operationParameters == null) {
-            return;
-        }
+        List<Parameter> operationParameters = Objects.requireNonNullElseGet(operation.getParameters(), ArrayList::new);
 
         // Parameters (path and query)
         Set<String> variables$refs = operationParameters.stream()

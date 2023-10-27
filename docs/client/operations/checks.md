@@ -69,7 +69,7 @@ http://localhost:8888/api/checks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_definition_list_model||List[[CheckDefinitionListModel](#checkdefinitionlistmodel)]|
+|check_definition_list_model||List[[CheckDefinitionListModel](\docs\client\models\checks\#checkdefinitionlistmodel)]|
 
 
 
@@ -122,7 +122,7 @@ http://localhost:8888/api/definitions/checks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_folder_model](#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](#checkdefinitionfoldermodel)|
+|[check_definition_folder_model](\docs\client\models\checks\#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](\docs\client\models\checks\#checkdefinitionfoldermodel)|
 
 
 

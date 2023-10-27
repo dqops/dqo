@@ -153,7 +153,7 @@ http://localhost:8888/api/jobs/jobs
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_queue_initial_snapshot_model](#dqojobqueueinitialsnapshotmodel)||[DqoJobQueueInitialSnapshotModel](#dqojobqueueinitialsnapshotmodel)|
+|[dqo_job_queue_initial_snapshot_model](\docs\client\models\jobs\#dqojobqueueinitialsnapshotmodel)||[DqoJobQueueInitialSnapshotModel](\docs\client\models\jobs\#dqojobqueueinitialsnapshotmodel)|
 
 
 

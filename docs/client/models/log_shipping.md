@@ -1,6 +1,6 @@
 
-## DqoCloudUserModel  
-DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.  
+## ExternalLogEntry  
+External log entry that would be logged on the server.  
   
 
 **The structure of this object is described below**  
@@ -8,8 +8,8 @@ DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|email|User&#x27;s email that identifies the user.|string|
-|[account_role](\docs\client\models\environment\#dqouserrole)|Account role.|[DqoUserRole](\docs\client\models\environment\#dqouserrole)|
+|window_location|window.location value at the time when the log entry was reported.|string|
+|message|Log message that should be logged.|string|
 
 
 ___  

@@ -69,7 +69,7 @@ http://localhost:8888/api/sensors
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_list_model||List[[SensorListModel](#sensorlistmodel)]|
+|sensor_list_model||List[[SensorListModel](\docs\client\models\sensors\#sensorlistmodel)]|
 
 
 
@@ -122,7 +122,7 @@ http://localhost:8888/api/definitions/sensors
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_folder_model](#sensorfoldermodel)||[SensorFolderModel](#sensorfoldermodel)|
+|[sensor_folder_model](\docs\client\models\sensors\#sensorfoldermodel)||[SensorFolderModel](\docs\client\models\sensors\#sensorfoldermodel)|
 
 
 

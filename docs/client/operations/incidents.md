@@ -16,7 +16,7 @@ http://localhost:8888/api/incidentstat
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incidents_per_connection_model||List[[IncidentsPerConnectionModel](#incidentsperconnectionmodel)]|
+|incidents_per_connection_model||List[[IncidentsPerConnectionModel](\docs\client\models\incidents\#incidentsperconnectionmodel)]|
 
 
 

@@ -16,7 +16,7 @@ http://localhost:8888/api/dashboards
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dashboards_folder_spec||List[[DashboardsFolderSpec](#dashboardsfolderspec)]|
+|dashboards_folder_spec||List[[DashboardsFolderSpec](\docs\client\models\dashboards\#dashboardsfolderspec)]|
 
 
 
