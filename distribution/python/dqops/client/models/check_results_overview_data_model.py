@@ -18,6 +18,7 @@ class CheckResultsOverviewDataModel:
         check_hash (Union[Unset, int]): Check hash.
         check_category (Union[Unset, str]): Check category name.
         check_name (Union[Unset, str]): Check name.
+        comparison_name (Union[Unset, str]): Optional table comparison name for table comparison checks only.
         time_periods (Union[Unset, List[datetime.datetime]]): List of time periods for the results, returned as a local
             time, sorted from the newest to the oldest.
         time_periods_utc (Union[Unset, List[int]]): List of time periods for the results, returned as absolute UTC time.
@@ -36,6 +37,7 @@ class CheckResultsOverviewDataModel:
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
+    comparison_name: Union[Unset, str] = UNSET
     time_periods: Union[Unset, List[datetime.datetime]] = UNSET
     time_periods_utc: Union[Unset, List[int]] = UNSET
     executed_at_timestamps: Union[Unset, List[int]] = UNSET
@@ -49,6 +51,7 @@ class CheckResultsOverviewDataModel:
         check_hash = self.check_hash
         check_category = self.check_category
         check_name = self.check_name
+        comparison_name = self.comparison_name
         time_periods: Union[Unset, List[str]] = UNSET
         if not isinstance(self.time_periods, Unset):
             time_periods = []
@@ -94,6 +97,8 @@ class CheckResultsOverviewDataModel:
             field_dict["checkCategory"] = check_category
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
+        if comparison_name is not UNSET:
+            field_dict["comparisonName"] = comparison_name
         if time_periods is not UNSET:
             field_dict["timePeriods"] = time_periods
         if time_periods_utc is not UNSET:
@@ -119,6 +124,8 @@ class CheckResultsOverviewDataModel:
         check_category = d.pop("checkCategory", UNSET)
 
         check_name = d.pop("checkName", UNSET)
+
+        comparison_name = d.pop("comparisonName", UNSET)
 
         time_periods = []
         _time_periods = d.pop("timePeriods", UNSET)
@@ -150,6 +157,7 @@ class CheckResultsOverviewDataModel:
             check_hash=check_hash,
             check_category=check_category,
             check_name=check_name,
+            comparison_name=comparison_name,
             time_periods=time_periods,
             time_periods_utc=time_periods_utc,
             executed_at_timestamps=executed_at_timestamps,

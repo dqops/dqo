@@ -26,6 +26,7 @@ Check recent results overview. Returns the highest severity for the last several
 |check_hash|Check hash.|long|
 |check_category|Check category name.|string|
 |check_name|Check name.|string|
+|comparison_name|Optional table comparison name for table comparison checks only.|string|
 |time_periods|List of time periods for the results, returned as a local time, sorted from the newest to the oldest.|List[datetime]|
 |time_periods_utc|List of time periods for the results, returned as absolute UTC time.|List[[Instant](#instant)]|
 |executed_at_timestamps|List of absolute timestamp (UTC) when the check was executed or an error was raised.|List[[Instant](#instant)]|

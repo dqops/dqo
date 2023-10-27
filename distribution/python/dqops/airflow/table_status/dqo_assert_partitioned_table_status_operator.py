@@ -1,5 +1,8 @@
 from typing import Any, Dict, Union
-from dqops.airflow.table_status.dqo_assert_table_status_operator import DqoAssertTableStatusOperator
+
+from dqops.airflow.table_status.dqo_assert_table_status_operator import (
+    DqoAssertTableStatusOperator,
+)
 from dqops.client.models.check_time_scale import CheckTimeScale
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
@@ -84,4 +87,3 @@ class DqoAssertPartitionedTableStatusOperator(DqoAssertTableStatusOperator):
             fail_at_severity=fail_at_severity,
             **kwargs
         )
-

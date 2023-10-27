@@ -1,6 +1,8 @@
 from typing import Any, Dict, Union
-from dqops.airflow.table_status.dqo_assert_table_status_operator import DqoAssertTableStatusOperator
-from dqops.airflow.common.tools.url_resolver import extract_base_url
+
+from dqops.airflow.table_status.dqo_assert_table_status_operator import (
+    DqoAssertTableStatusOperator,
+)
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET, Unset

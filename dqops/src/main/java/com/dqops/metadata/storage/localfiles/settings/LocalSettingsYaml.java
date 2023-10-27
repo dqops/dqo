@@ -24,15 +24,15 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
  * The local settings contain the current DQOps Cloud API Key and other settings. The local settings take precedence over parameters
  * passed when starting DQOps.
  */
-public class SettingsYaml {
+public class LocalSettingsYaml {
 	private String apiVersion = ApiVersion.CURRENT_API_VERSION;
 	private SpecificationKind kind = SpecificationKind.SETTINGS;
 	private SettingsSpec spec = new SettingsSpec();
 
-	public SettingsYaml() {
+	public LocalSettingsYaml() {
 	}
 
-	public SettingsYaml(SettingsSpec spec) {
+	public LocalSettingsYaml(SettingsSpec spec) {
 		this.spec = spec;
 	}
 

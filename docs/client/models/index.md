@@ -97,7 +97,7 @@ Model containing fundamental configuration of a single data quality check.
 |column_name|Column name, if the check is set up on a column.|string|
 |[check_target](\docs\client\models\schemas\#checktarget)|Check target (table or column).|[CheckTarget](\docs\client\models\schemas\#checktarget)|
 |[check_type](\docs\client\models\#checktype)|Check type (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|
-|[check_time_scale](\docs\client\models\#checktimescale)|Category to which this check belongs.|[CheckTimeScale](\docs\client\models\#checktimescale)|
+|[check_time_scale](\docs\client\models\#checktimescale)|Check timescale (for monitoring and partitioned checks).|[CheckTimeScale](\docs\client\models\#checktimescale)|
 |category_name|Category to which this check belongs.|string|
 |check_name|Check name that is used in YAML file.|string|
 |sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](#fieldmodel)]|
