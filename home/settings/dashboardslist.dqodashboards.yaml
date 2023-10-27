@@ -45,15 +45,6 @@ spec:
 
     - folder_name: Data profiling issues count
       dashboards:
-        - dashboard_name: Profiling issues count summary per check
-          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-          width: 1400
-          height: 1870
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Profiling issues count per table
           url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
           width: 1400
@@ -63,10 +54,10 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: History of data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
+        - dashboard_name: Profiling issues count summary per check
+          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 2500
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -351,15 +342,6 @@ spec:
             ds0.p_check_type: monitoring
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Data quality issues summary per check
-          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-          width: 1400
-          height: 1870
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Data quality issues per table
           url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
           width: 1400
@@ -369,10 +351,19 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Data quality issues per table, data grouping and day
+        - dashboard_name: History of data quality table results
           url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Data quality issues summary per check
+          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+          width: 1400
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -726,15 +717,6 @@ spec:
 
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Count summary per check
-          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-          width: 1400
-          height: 1870
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: Count per table
           url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
           width: 1400
@@ -744,10 +726,19 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Count per table, data grouping and daily partition
+        - dashboard_name: History of data quality table results
           url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: partitioned
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Data quality issue summary per check
+          url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+          width: 1400
+          height: 1870
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -955,15 +946,6 @@ spec:
   folders:
   - folder_name: Data quality issues count
     dashboards:
-      - dashboard_name: Data quality issues summary per check
-        url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-        width: 1400
-        height: 1870
-        parameters:
-          ds0.token: '%DQO_CLOUD_TOKEN%'
-          ds0.p_check_type: all
-          ds0.p_quality_dimension: all
-          ds0.p_check_category: all
       - dashboard_name: Data quality issues per table
         url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
         width: 1400
@@ -973,10 +955,19 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Data quality issues per table, data grouping and day
+      - dashboard_name: History of data quality table results
         url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
         width: 1400
-        height: 1800
+        height: 2500
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: all
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Data quality issues summary per check
+        url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+        width: 1400
+        height: 1870
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
