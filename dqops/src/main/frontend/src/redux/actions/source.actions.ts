@@ -513,6 +513,14 @@ export const getCheckReadouts =
     const successCallback = (
       res: AxiosResponse<SensorReadoutsListModel[]>
     ) => {
+      const sensors = [...res.data]
+
+      // if (sensors && sensors[0] && sensors[0].sensorReadoutEntries) {
+      //   sensors[0].sensorReadoutEntries = sensors[0].sensorReadoutEntries.filter(entry => entry.tableComparison === comparisonName);
+      // }
+      
+      // const filteredChecks = checks.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorReadouts(
           checkType,

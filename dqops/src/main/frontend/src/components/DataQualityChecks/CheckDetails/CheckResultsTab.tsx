@@ -305,7 +305,7 @@ const CheckResultsTab = ({
     //   }))
     // )
     // .reduce((arr, el) => [...arr, ...el], []);
-    console.log(results)
+    // console.log(results)
 
   return (
     <div

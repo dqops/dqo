@@ -284,7 +284,6 @@ const CheckDetails = ({
 
   }, [activeTab])
 
-  console.log(resultsData, checkResults)
 
   return (
     <div

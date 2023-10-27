@@ -64,4 +64,7 @@ public class SensorReadoutEntryModel {
     String provider;
     @JsonPropertyDescription("Quality dimension.")
     String qualityDimension;
+
+    @JsonPropertyDescription("Quality dimension.")
+    String tableComparison;
 }
