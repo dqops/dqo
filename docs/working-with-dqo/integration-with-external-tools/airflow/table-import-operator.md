@@ -24,6 +24,7 @@ For the complete list of parameters that are supported by BaseOperator, visit th
 ## Set up the operator
 
 Entry requirements includes:
+
 - installation of python package from PyPi called dqops
 - configuration of data source including setting the connection in DQOps application
 
@@ -74,41 +75,42 @@ The status details will appear in a one line as an info level log from the opera
         'Consumer_ID': {
           'type_snapshot': {
             'column_type': 'STRING', 
-            'nullable': True
+            'nullable': 'True'
           }, 
           'comments': []
         }, 
         'Restaurant_ID': {
           'type_snapshot': {
             'column_type': 'INT64', 
-            'nullable': True
+            'nullable': 'True'
           }, 
           'comments': []
         }, 
         'Overall_Rating': {
           'type_snapshot': {
             'column_type': 'INT64', 
-            'nullable': True
+            'nullable': 'True'
           }, 
           'comments': []
         }, 
         'Food_Rating': {
           'type_snapshot': {
             'column_type': 'INT64', 
-            'nullable': True
+            'nullable': 'True'
           }, 
           'comments': []
         }, 
         'Service_Rating': {
           'type_snapshot': {
             'column_type': 'INT64', 
-            'nullable': True
+            'nullable': 'True'
           }, 'comments': []
         }
       }, 'comments': []
     }]
   }, 
-  'status': 'succeeded'}
+  'status': 'succeeded'
+}
 ```
 
 When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
@@ -117,6 +119,7 @@ In this example the table has been imported with success, as present in the valu
 The returned object in the response has a type of ImportTablesQueueJobResult.
 
 ImportTablesQueueJobResult includes:
+
 - **job_id (DqoQueueJobId)**: Identifies a single job that was pushed to the job queue.
 - **result (ImportTablesResult)**: Result object returned from the "import tables" job. 
 Contains the original table schemas and column schemas of imported tables.
@@ -133,15 +136,10 @@ Job id has a type of DqoQueueJobId which includes job tracking details:
 | created_at    | The timestamp when the job was created.                   | int            |
 
 
-## ImportTablesResult fields 
-
-
-todo
-
-
 ## Status
 
 Status field is the DqoJobStatus enum, which have one of values:
+
 - **cancelled**: The job was fully cancelled and removed from the job queue.
 - **cancel_requested**: A request to cancel a job was issued, but the job is not yet cancelled.
 - **failed**: The job has failed with an execution error.

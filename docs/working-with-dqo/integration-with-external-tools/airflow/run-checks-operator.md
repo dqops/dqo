@@ -1,8 +1,9 @@
-# Run checks operators
+# Run checks operator
 
 Run checks airflow operators are used to execute sensors configured in the DQOps application. 
 
 The operator provides parameters which allow setting it specifically:
+
 - within a connection, 
 - particular table sensors, 
 - check types 
@@ -14,9 +15,11 @@ To prevent endless execution, the operator supports a timeout parameter.
 There are 4 operators for running checks.
 
 Generic operators:
+
 - **DqopsRunChecksOperator**: Generic run checks operator for all types of checks.
 
 Typed operators:
+
 - **DqopsRunProfilingChecksOperator**: Run checks operator for running profiling type of checks.
 - **DqopsRunMonitoringChecksOperator**: Run checks operator for running monitoring type of checks.
 - **DqopsRunPartitionedChecksOperator**: Run checks operator for running partitioned type of checks.
@@ -44,6 +47,7 @@ For the complete list of parameters that are supported by BaseOperator, visit th
 ## Set up the run check operator
 
 Entry requirements includes:
+
 - installation of python package from PyPi called dqops
 - configuration of data source and sensors in DQOps.
 
@@ -76,10 +80,25 @@ with DAG(
 ## Execution details
 
 Airflow DAG provides logs to the executed tasks.   
+The status details will appear in a one line as an info level log from the operator, which contains a JSON formatted response from DQOps presented below.
 
-```text
-[2023-10-09, 06:44:19 UTC] {dqops_run_checks_operator.py:59} INFO - {'jobId': {'jobId': 1696833858000000, 'createdAt': '2023-10-09T06:44:18.519114400Z'}, 'result': {'highest_severity': 'valid', 'executed_checks': 3, 'valid_results': 3, 'warnings': 0, 'errors': 0, 'fatals': 0, 'execution_errors': 0}, 'status': 'running'}
-[2023-10-09, 06:44:19 UTC] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=my_connection_dqops_run_profiling_checks, task_id=dqops_run_profiling_checks_operator_task, execution_date=20231009T064416, start_date=20231009T064418, end_date=20231009T064419
+```json5
+{
+  'jobId': {
+    'jobId': 1696833858000000, 
+    'createdAt': '2023-10-09T06:44:18.519114400Z'
+  }, 
+  'result': {
+    'highest_severity': 'valid', 
+    'executed_checks': 3, 
+    'valid_results': 3, 
+    'warnings': 0, 
+    'errors': 0, 
+    'fatals': 0, 
+    'execution_errors': 0
+  }, 
+  'status': 'running'
+}
 ```
 
 Executed job adds information to an airflow task log. 
@@ -87,6 +106,7 @@ The executed run checks operator returns the RunChecksQueueJobResult object with
 When the task execution succeeded or not, the task instance in airflow is marked as Success or Failed accordingly.
 
 RunChecksQueueJobResult includes:
+
 - **job_id (DqoQueueJobId)**: Identifies a single job that was pushed to the job queue.
 - **result (RunChecksResult)**: Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.
 - **status (DqoJobStatus)**: The job status.
@@ -109,7 +129,7 @@ Job result has a type of RunChecksResult with the overall summary of checks exec
 
 | name             | description                                                                                                                                                                                                               | type                |
 |------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
-| highest_severity | The highest severity returned from executed checks (in order from highest): fatal, error, warning, valid. <br/>Here you can learn about [Severity levels](../../../dqo-concepts/data-quality-kpis/data-quality-kpis.md)   | RuleSeverityLevel   |
+| highest_severity | The highest severity returned from executed checks (in order from highest): fatal, error, warning, valid. Here you can learn about [Severity levels](../../../dqo-concepts/data-quality-kpis/data-quality-kpis.md)   | RuleSeverityLevel   |
 | executed_checks  | The total count of all executed checks.                                                                                                                                                                                   | int                 |
 | valid_results    | The total count of all checks that finished successfully (with no data quality issues).                                                                                                                                   | int                 |
 | warnings         | The total count of all invalid data quality checks that finished raising a warning.                                                                                                                                       | int                 |
@@ -121,6 +141,7 @@ Job result has a type of RunChecksResult with the overall summary of checks exec
 ## Status
 
 Status field is the DqoJobStatus enum, which have one of values:
+
 - **cancelled**: The job was fully cancelled and removed from the job queue.
 - **cancel_requested**: A request to cancel a job was issued, but the job is not yet cancelled.
 - **failed**: The job has failed with an execution error.

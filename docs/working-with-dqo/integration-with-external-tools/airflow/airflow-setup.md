@@ -3,6 +3,7 @@
 DQOps integrates with Apache Airflow. 
 
 Operators are available for actions such as:
+
 - run checks
 - (Planned) collect statistics
 - import tables
@@ -22,6 +23,7 @@ In case you get the error in a task based on DQOps airflow operator in logs, her
 **httpx.ConnectError: [Errno 111] Connection refused**
 
 This error points out that the DQOps python client can not connect to the DQOps application. The reasons are:
+
 - DQOps application is down, server is not running
 - Passed url to application is invalid 
 - The DQOps server is not reachable due to network configuration 

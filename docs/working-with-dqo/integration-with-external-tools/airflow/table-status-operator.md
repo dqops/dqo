@@ -1,4 +1,4 @@
-# Table status operators
+# Table status operator
 
 Table status airflow operators are used to receive the overall data quality status for a table from previously run sensors. 
 When issues are present on the table, the operator informs about the scale of issue and points them for further work on the data quality. 
@@ -12,6 +12,7 @@ There are 4 operators for checking the status.
 This operator is used for receiving overall status on a table. 
 
 And three operators with that verifies status from specific type of checks:
+
 - **DqoAssertProfilingTableStatusOperator**: For profiling checks.
 - **DqoAssertMonitoringTableStatusOperator**: For monitoring checks.
 - **DqoAssertPartitionedTableStatusOperator**: For partitioned checks.
@@ -46,6 +47,7 @@ For the complete list of parameters that are supported by BaseOperator, visit th
 ## Set up the operator
 
 Entry requirements includes:
+
 - installation of python package from PyPi called dqops
 - configuration of data source and sensors in DQOps.
 
@@ -121,6 +123,7 @@ When the task execution succeeds or not, the task instance in airflow will be ma
 ## TableDataQualityStatusModel fields 
 
 TableDataQualityStatusModel includes:
+
 - **connection_name**: The connection name in DQOps.
 - **schema_name**: The schema name.
 - **table_name**: The table name.
