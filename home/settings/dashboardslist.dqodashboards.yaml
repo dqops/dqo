@@ -167,7 +167,7 @@ spec:
       folders:
         - folder_name: Table-level issues
           dashboards:
-            - dashboard_name: Schema changes - table-level checks summary
+            - dashboard_name: Summary of changes in columns
               url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
               width: 1400
               height: 1800
@@ -211,13 +211,6 @@ spec:
                 ds0.p_check_type: profiling
         - folder_name: Column-level issues
           dashboards:
-            - dashboard_name: Schema changes - column-level checks summary
-              url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
-              width: 1400
-              height: 1800
-              parameters:
-                ds0.token: '%DQO_CLOUD_TOKEN%'
-                ds0.p_check_type: profiling
             - dashboard_name: Column exists
               url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
               width: 1400
@@ -526,7 +519,7 @@ spec:
       folders:
         - folder_name: Table-level issues
           dashboards:
-            - dashboard_name: Schema changes - table-level checks summary
+            - dashboard_name: Summary of changes in columns
               url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
               width: 1400
               height: 1800
@@ -570,13 +563,6 @@ spec:
                 ds0.p_check_type: monitoring
         - folder_name: Column-level issues
           dashboards:
-            - dashboard_name: Schema changes - column-level checks summary
-              url: https://lookerstudio.google.com/embed/reporting/b5c48045-171a-4c1c-83c6-1e21b61d5ad5/page/c5B8C
-              width: 1400
-              height: 1800
-              parameters:
-                ds0.token: '%DQO_CLOUD_TOKEN%'
-                ds0.p_check_type: monitoring
             - dashboard_name: Column exists
               url: https://lookerstudio.google.com/embed/reporting/5a85e34e-4baa-419e-ad6f-f88a5917b156/page/c5B8C
               width: 1400
