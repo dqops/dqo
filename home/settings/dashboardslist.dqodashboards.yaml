@@ -93,6 +93,14 @@ spec:
             ds0.p_check_type: profiling
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+        - dashboard_name: KPIs per quality dimension and data group name
+          url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
     - folder_name: Check results
       dashboards:
         - dashboard_name: Check results
@@ -445,6 +453,14 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+        - dashboard_name: KPIs per quality dimension and data group name
+          url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+            ds0.p_quality_dimension: all
     - folder_name: Check results
       dashboards:
         - dashboard_name: Check results
@@ -812,6 +828,14 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
+        - dashboard_name: KPIs per quality dimension and data group name
+          url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/p_9xvdtzxu0c
+          width: 1400
+          height: 1500
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: partitioned
+            ds0.p_quality_dimension: all
 
     - folder_name: Check results
       dashboards:
