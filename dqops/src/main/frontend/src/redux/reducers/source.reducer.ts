@@ -1199,10 +1199,10 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
       const newSensors = {
         ...(firstState.sensorErrors || {}),
-        [action.data.checkName]: action.data.sensorErrors
+        [action.data.checkName + (action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison ? 
+          ("/" + action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison) : "")]: action.data.sensorErrors
       };
       return setActiveTabState(state, action, {
         sensorErrors: newSensors

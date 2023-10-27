@@ -108,10 +108,10 @@ const CheckDetails = ({
   const sensorReadouts = readoutsData
     ? readoutsData[checkNameWithComparisonName ?? ''] || []
     : [];
-  const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
+  const sensorErrors = errorsData ? errorsData[checkNameWithComparisonName ?? ''] || [] : [];
   const filters =
-    filtersData && filtersData[checkName ?? '']
-      ? filtersData[checkName ?? '']
+    filtersData && filtersData[checkNameWithComparisonName ?? '']
+      ? filtersData[checkNameWithComparisonName ?? '']
       : defaultFilters || {
           month: "Last 3 months"
         };

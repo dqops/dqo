@@ -701,12 +701,20 @@ export const getCheckErrors =
     dispatch(getCheckErrorsRequest(checkType, activeTab));
 
     const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
+      const errors = [...res.data]
+
+      if (errors && errors[0] && errors[0].errorEntries) {
+        errors[0].errorEntries = errors[0].errorEntries.filter((item) => item.tableComparison === comparisonName)
+      }
+
+      const filteredErrors = errors.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorErrors(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
+          filteredErrors ?? []
         )
       );
     };
