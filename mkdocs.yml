@@ -1,7 +1,7 @@
 site_name: DQOps Data Quality Operations Center Documentation
 site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
-edit_uri: edit/main/docs/
+#edit_uri: edit/main/docs/
 
 # Docs navigation
 nav:
