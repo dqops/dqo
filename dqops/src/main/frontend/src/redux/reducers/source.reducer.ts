@@ -1171,13 +1171,11 @@ const connectionReducer = (state = initialState, action: Action) => {
           (item) => item.value === action.activeTab
         )?.state || {};
             let key = action.data.checkName;
-            console.log(key, action.data)
             if (String(action?.data?.comparisonName).length > 0) {
               key = action.data.checkName + "/" + action.data.comparisonName;
             } else if (Object.keys(action.data.checkResults).length > 0 &&  action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison) {
               key = action.data.checkName + "/" + action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison;
             } 
-            console.log(key, action.data)
 
       return setActiveTabState(state, action, {
         checkResults: {
@@ -1215,7 +1213,6 @@ const connectionReducer = (state = initialState, action: Action) => {
         } else if (Object.keys(action.data.sensorErrors).length > 0 && action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison) {
           key = action.data.checkName + "/" + action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison;
         } 
-        console.log(key, action.data.sensorErrors)
       const newSensors = {
         ...(firstState.sensorErrors || {}),
         [key]: action.data.sensorErrors
@@ -1229,7 +1226,6 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-console.log(firstState)
       const newCheckFilters = {
         ...(firstState.checkFilters || {}),
         [action.data.checkName]: action.data.filters
