@@ -243,7 +243,7 @@ const CheckDetails = ({
 
   const onChangeDataGroup = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         onChangeDataGroup: value
       })
@@ -253,7 +253,7 @@ const CheckDetails = ({
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         month: value
       })
@@ -284,7 +284,7 @@ const CheckDetails = ({
 
   }, [activeTab])
 
-
+console.log(resultsData)
   return (
     <div
       className="my-4"

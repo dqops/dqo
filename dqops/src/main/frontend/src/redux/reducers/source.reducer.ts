@@ -1170,6 +1170,9 @@ const connectionReducer = (state = initialState, action: Action) => {
       state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
+          console.log(action.data)
+          console.log(action.data.checkName + (action.data.checkResults?.[0].checkResultEntries?.[0]
+            .tableComparison))
 
       return setActiveTabState(state, action, {
         checkResults: {
@@ -1213,7 +1216,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
+console.log(firstState)
       const newCheckFilters = {
         ...(firstState.checkFilters || {}),
         [action.data.checkName]: action.data.filters
