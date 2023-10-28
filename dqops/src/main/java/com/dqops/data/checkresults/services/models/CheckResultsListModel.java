@@ -54,8 +54,4 @@ public class CheckResultsListModel {
 
     @JsonPropertyDescription("Single check results")
     private List<CheckResultEntryModel> checkResultEntries = new ArrayList<>();
-
-    @JsonPropertyDescription("Table comparison name")
-    private String tableComparison;
-
 }

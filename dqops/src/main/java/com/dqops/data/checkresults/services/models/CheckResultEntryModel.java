@@ -166,8 +166,6 @@ public class CheckResultEntryModel {
                 return Comparator.comparing(o -> o.qualityDimension);
             case sensorName:
                 return Comparator.comparing(o -> o.sensorName);
-            case tableComparison:
-                return Comparator.comparing(o -> o.tableComparison);
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
         }

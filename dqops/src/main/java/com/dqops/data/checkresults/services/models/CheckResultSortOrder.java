@@ -34,6 +34,5 @@ public enum CheckResultSortOrder {
     timeGradient,
     timePeriod,
     qualityDimension,
-    sensorName,
-    tableComparison;
+    sensorName;
 }
