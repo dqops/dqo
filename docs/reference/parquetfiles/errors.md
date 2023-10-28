@@ -1,4 +1,4 @@
-##errors  
+## errors  
 The data quality execution errors table that stores execution errors captured during the sensor execution or the rule evaluation.
  The sensor execution errors are error messages received from the data source when the tested table does not exist or the sensor&#x27;s SQL query is invalid.
  The rule execution errors are exceptions raised during the Python rule evaluation.
