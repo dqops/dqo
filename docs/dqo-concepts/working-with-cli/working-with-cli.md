@@ -37,5 +37,5 @@ dqo> check run --help
 
 ## List of commands
 
-You can find the complete list of commands and parameters in Command-line interface section
+You can find the complete list of commands and parameters in the [command-line](../../command-line-interface/index.md) interface section.
 

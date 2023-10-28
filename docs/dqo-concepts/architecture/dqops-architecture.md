@@ -28,7 +28,7 @@ DQOps achieves its principal idea by separating the platform into four core comp
       are designed using Looker Studio. They are accessing the Data Quality Data Warehouse using a dedicated
       DQOps Looker Studio Community Connector. 
 
-- `Python client` - DQOps python client provides typed access to all operations supported by DQOps user interface, enabling
+- `Python client` - DQOps python client provides typed access to all [operations](../../client/operations/index.md) supported by DQOps user interface, enabling
   complex automation of all operations. The client supports:
     * running data quality checks from external tools
     * importing metadata
@@ -210,10 +210,10 @@ and running data quality checks. All DQOPs cli commands are documented [here](..
 The web server that is embedded in DQOps exposes REST API endpoints for all operations.
 The REST API can be used from external clients to run data quality checks.
 Additionally, when complex automation of all data quality activities is required, DQOps REST API can be used directly.
-A full description of all REST API operations is available the client section of this documentation.
+A full description of all REST API operations is included in the [DQOps Python Client](../../client/operations/index.md) documentation.
 
 ### Python client
-The *dqops* Python module contains a typed Python client that is a wrapper over the DQOps REST API.
+The *dqops* Python module contains a typed Python [client](../../client/operations/index.md) that is a wrapper over the DQOps REST API.
 The source code of the module is available on [GitHub](https://github.com/dqops/dqo/tree/develop/distribution/python/dqops/client) for reference.
 The Python client can be integrated with additional tools, called from data pipelines or imported directly into a Notebook, to execute
 data quality checks directly using the [run_checks](../../client/operations/jobs.md#run_checks) function.
@@ -282,7 +282,3 @@ A hybrid deployment is presented below.
 
 ![DQOps Cloud hybrid deployment](https://dqops.com/docs/images/architecture/DQOps-architecture-components-hybrid-min.png)
 
-# DQOps engine details
-
-
-TODO: Add a diagram showing DQOPs internal components: file watcher, cache, sensor runner, rule runner, scheduler, queue, rest api,
