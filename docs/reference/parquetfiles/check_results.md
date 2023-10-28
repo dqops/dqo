@@ -1,4 +1,4 @@
-##check_results  
+## check_results  
 The data quality check results table that stores check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
  This table differs from the sensor_readouts by adding also the result of the rule evaluation. The additional columns are the &#x27;severity&#x27; which says if the check passed (the severity is 0)
  or the data quality check raised a data quality issue with a severity warning - 1, error - 2 or fatal - 3.

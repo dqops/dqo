@@ -1,4 +1,4 @@
-##statistics  
+## statistics  
 The basic profiling results (statistics) table that stores basic profiling statistical values.
  The statistics are stored in the errors table is located in the $DQO_USER_HOME/.data/statistics folder that contains uncompressed parquet files.
  The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
