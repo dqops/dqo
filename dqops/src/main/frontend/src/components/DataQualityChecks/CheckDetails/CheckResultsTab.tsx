@@ -385,7 +385,8 @@ const CheckResultsTab = ({
               data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
                 checkName: results[0].checkName,
-                executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
+                executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss'),
+                timePeriod: item.timePeriod?.replace(/T/g, " ")
               }))}
               emptyMessage="No Data"
               getRowClass={getSeverityClass}
