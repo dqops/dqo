@@ -92,6 +92,13 @@ nav:
       - Create and run table comparisons: "working-with-dqo/table-comparison/table-comparison.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
+      - Integration with external tools:
+          - Airflow:
+              - Setup: "working-with-dqo/integration-with-external-tools/airflow/airflow-setup.md"
+              - Run check operator: "working-with-dqo/integration-with-external-tools/airflow/run-checks-operator.md"
+              - Collect statistics operator: "working-with-dqo/integration-with-external-tools/airflow/collect-statistics-operator.md"
+              - Table import operator: "working-with-dqo/integration-with-external-tools/airflow/table-import-operator.md"
+              - Table status operator: "working-with-dqo/integration-with-external-tools/airflow/table-status-operator.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - index: 'command-line-interface/index.md'

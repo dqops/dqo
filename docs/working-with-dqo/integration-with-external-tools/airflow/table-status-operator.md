@@ -1,45 +1,43 @@
 # Table status operator
 
-Table status airflow operators are used to receive the overall data quality status for a table from previously run sensors. 
-When issues are present on the table, the operator informs about the scale of issue and points them for further work on the data quality. 
+The Airflow table status operators are used to receive the overall data quality status of a table based on checks run in the DQOps platform
+If there are any issues with the table, the operator will inform about the scale of the issue and point towards a specific area of the data quality that needs improvement. 
 
-The operator can be used to collect information about the data quality before or after execution of a significant operation. 
+This operator can be used to collect information about the data quality before or after the execution of a significant operation. 
 
-There are 4 operators for checking the status.
+There are four operators available to check the status of the table.
 
-- **DqoAssertTableStatusOperator**: Generic airflow assert table status operator for receiving DQOps table status.
-
-This operator is used for receiving overall status on a table. 
+- **DqoAssertTableStatusOperator**: A generic Airflow assert table status operator that is used to receive the overall status of a table in DQOps.
 
 And three operators with that verifies status from specific type of checks:
 
-- **DqoAssertProfilingTableStatusOperator**: For profiling checks.
-- **DqoAssertMonitoringTableStatusOperator**: For monitoring checks.
-- **DqoAssertPartitionedTableStatusOperator**: For partitioned checks.
+- **DqoAssertProfilingTableStatusOperator**: Verifies the status of profiling checks.
+- **DqoAssertMonitoringTableStatusOperator**: Verifies the status of monitoring checks.
+- **DqoAssertPartitionedTableStatusOperator**: Verifies the status of partition checks.
 
 
 ## Operator parameters
 
-Parameters allow selection of specific checks results that should be contained in the received status.
-The required parameters set clearly indicates the specific table in a connection.
+Parameters allow the selection of specific check results to be included in the received status.
+The required parameters set clearly indicate the specific table in a connection.
 
-| Name                | Description                                                                                                                                                                                                                                                                                                               | Type                                                          |
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
-| connection_name     | (Required) The connection name to the data source in DQOps.                                                                                                                                                                                                                                                               | str                                                           |
-| schema_name         | (Required) The schema name.                                                                                                                                                                                                                                                                                               | str                                                           |
-| table_name          | (Required) The table name.                                                                                                                                                                                                                                                                                                | str                                                           |
-| months              | The number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).                                                                                                                   | Union[Unset, None, int]                                       |
-| check_type          | Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.                                                                                                                                                         | Union[Unset, None, CheckType]                                 |
-| check_time_scale    | Time scale filter for monitoring and partitioned checks (values: daily or monthly).                                                                                                                                                                                                                                       | Union[Unset, None, CheckTimeScale]                            |
-| data_group          | Data group.                                                                                                                                                                                                                                                                                                               | Union[Unset, None, str]                                       |
-| check_name          | Data quality check name.                                                                                                                                                                                                                                                                                                  | Union[Unset, None, str]                                       |
-| category            | Category name of the check.                                                                                                                                                                                                                                                                                               | Union[Unset, None, str]                                       | 
-| table_comparison    | Table comparison name.                                                                                                                                                                                                                                                                                                    | Union[Unset, None, str]                                       | 
-| quality_dimension   | Quality dimension of the check.                                                                                                                                                                                                                                                                                           | Union[Unset, None, str]                                       |
-| base_url            | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                                                                                                                                | str                                                           |
-| wait_timeout        | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.                                                                                                       | int                                                           |
-| fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                       | bool [optional, default=True]                                 |
-| fail_at_severity    | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                           | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL] |
+| Name                | Description                                                                                                                                                                                                           | Type                                                          |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| connection_name     | (Required) The name of the connection in DQOps.                                                                                                                                                                       | str                                                           |
+| schema_name         | (Required) The name of the schema.                                                                                                                                                                                    | str                                                           |
+| table_name          | (Required) The name of the table.                                                                                                                                                                                     | str                                                           |
+| months              | The number of months for reviewing the data quality check results. The default value is 1, which includes the current month and 1 previous month. For partitioned checks, it is the number of months to analyze.      | Union[Unset, None, int]                                       |
+| check_type          | Specifies the type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.                                                 | Union[Unset, None, CheckType]                                 |
+| check_time_scale    | Time scale filter for monitoring and partition checks (values: daily or monthly).                                                                                                                                     | Union[Unset, None, CheckTimeScale]                            |
+| data_group          | The name of the data group.                                                                                                                                                                                           | Union[Unset, None, str]                                       |
+| check_name          | The name of the data quality check.                                                                                                                                                                                   | Union[Unset, None, str]                                       |
+| category            | The name of the check category.                                                                                                                                                                                       | Union[Unset, None, str]                                       | 
+| table_comparison    | The name of the table comparison created in DQOps.                                                                                                                                                                    | Union[Unset, None, str]                                       | 
+| quality_dimension   | The name of the data quality dimension for which the check is categorized.                                                                                                                                            | Union[Unset, None, str]                                       |
+| base_url            | The base URL to the DQOps platform. The default value is http://localhost:8888/                                                                                                                                       | str                                                           |
+| wait_timeout        | The number of seconds the client will wait for activity before terminating the idle task. If not set, the timeout is read from the client’s default value, which is set to 120 seconds.                               | int                                                           |
+| fail_on_timeout     | By default, exceeding the timeout limit causes the status of the task to end with the Failed status. By setting the flag of this parameter to True, the status of the failed task will result in the Success status.  | bool [optional, default=True]                                 |
+| fail_at_severity    | The threshold level of rule severity, causing the Airflow task to terminate with a Failed status.                                                                                                                       | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL] |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
 For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
@@ -48,12 +46,12 @@ For the complete list of parameters that are supported by BaseOperator, visit th
 
 Entry requirements includes:
 
-- installation of python package from PyPi called dqops
-- configuration of data source and sensors in DQOps.
+- Installation of Python package from PyPi called dqops
+- Configuration of data source and sensors in DQOps platform.
 
 **DAG example**
 
-The example sets a task to receive status from the monitoring sensors set on the "maven_restaurant_ratings.consumers" table from "example_connection". 
+The following example shows how to configure an operator that receive status from the monitoring sensors  enabled on the "maven_restaurant_ratings.consumers" table located in "example_connection". 
 The operator connects to the locally started DQOps server.
 
 ```python
@@ -79,10 +77,11 @@ with DAG(
 ```
 
 
-## Execution details
+## Execution results
 
-Airflow DAG provides logs to the executed tasks.
-The status details will appear in a one line as an info level log from the operator, which contains a JSON formatted response from DQOps presented below. 
+Airflow DAG provides logs to the executed tasks. 
+The status details will be displayed in a one line of the task logs as a JSON formatted INFO level log. 
+An example of the response from the DQOps platform is shown below.
 
 ```json5
 {
@@ -103,41 +102,42 @@ The status details will appear in a one line as an info level log from the opera
 }
 ```
 
-In this example we used the default number of months to be checked (it is from the beginning of the previous month up to now).
-Since that time 5 checks have failed out of 148 in total.
-The causes of the failure are known, which are shown in **failed_checks_statuses** JSON object.
+The example indicates that out of 148 executed checks, 5 failed with a Fatal result. 
+The failed checks name was daily_row_count, as shown in the failed_checks_statuses JSON object. 
+Here we used the default number of months which is from the beginning of the previous month to the present.
 
 
 ```text
 Tip
 
-This kind of issue is easy to verify. It is the row count issue, which falls out of expected bounds of the check's rule threshold.
-Either rule adjustment is necessary in case the data are correct, or part of data did not load which was easily verified by checking the status.
+It is easy to verify the issue with row count, which exceeds the expected limit set by the check's rules. 
+In such a case, we need to check if data was loaded or adjust the rule thresholds if the number of rows is as expected.
 ```
 
 Furthermore, the task will finish with Failed airflow status as we did not set the **maximum_severity_threshold** parameter.
 
-Technically, the executed operator returns the TableDataQualityStatusModel object with status details.
-When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
+As we did not set the maximum_severity_threshold parameter, the task will finish with Failed Airflow status. Technically, the executed operator returns the TableDataQualityStatusModel object with the relevant status details. 
+Depending on whether the task execution was successful or not, the task instance will be marked as either Success or Failed respectively.
 
 ## TableDataQualityStatusModel fields 
 
-TableDataQualityStatusModel includes:
+TableDataQualityStatusModel contains the following fields:
 
-- **connection_name**: The connection name in DQOps.
-- **schema_name**: The schema name.
-- **table_name**: The table name.
-- **highest_severity_issue**: The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) 
-or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.
-- **last_check_executed_at**: The UTC timestamp when the most recent data quality check was executed on the table.
-- **executed_checks**: The total number of most recent checks that were executed on the table. 
-Table comparison checks that are comparing groups of data are counted as the number of compared data groups.
+- **connection_name**: The name of the connection in DQOps.
+- **schema_name**: The name of the schema.
+- **table_name**: The name of the table.
+- **highest_severity_issue**: The highest severity level of all identified data quality issues (1 for warning, 2 for error and 3 for fatal). 
+If no issues were identified, the value is 0. 
+If no data quality checks have been executed on the table, this field is null.
+- **last_check_executed_at**: The UTC timestamp of the most recent data quality check executed on the table.
+- **executed_checks**: The total number of most recent checks executed on the table. 
+For table comparison checks that compare groups of data this field is the number of compared data groups.
 - **valid_results**: The number of most recent valid data quality checks that passed without raising any issues.
 - **warnings**: The number of most recent data quality checks that failed by raising a warning severity data quality issue.
 - **errors**: The number of most recent data quality checks that failed by raising an error severity data quality issue.
 - **fatals**: The number of most recent data quality checks that failed by raising a fatal severity data quality issue.
 - **execution_errors**: The number of data quality check execution errors that were reported due to access issues to the data source, 
-invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. 
+invalid mapping in DQOps, invalid queries in data quality sensors, or invalid Python rules. 
 When an execution error is reported, the configuration of a data quality check on a table must be updated.
 - **failed_checks_statuses** (TableDataQualityStatusModelFailedChecksStatuses): The paths to all failed
 data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks

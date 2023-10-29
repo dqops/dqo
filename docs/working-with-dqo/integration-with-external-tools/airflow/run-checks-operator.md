@@ -48,8 +48,8 @@ For the complete list of parameters that are supported by BaseOperator, visit th
 
 Entry requirements includes:
 
-- installation of python package from PyPi called dqops
-- configuration of data source and sensors in DQOps.
+- Installation of python package from PyPi called dqops
+- Configuration of data source and sensors in DQOps.
 
 **DAG example**
 
@@ -77,7 +77,7 @@ with DAG(
 ```
 
 
-## Execution details
+## Execution results
 
 Airflow DAG provides logs to the executed tasks.   
 The status details will appear in a one line as an info level log from the operator, which contains a JSON formatted response from DQOps presented below.

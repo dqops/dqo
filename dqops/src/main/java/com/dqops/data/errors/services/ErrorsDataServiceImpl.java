@@ -187,6 +187,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         String errorMessage = row.getString(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
         LocalDateTime errorTimestamp = row.getDateTime(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
         String errorSource = row.getString(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
+        String tableComparison = row.getString(ErrorsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
 
         ErrorEntryModel singleModel = new ErrorEntryModel() {{
             setActualValue(actualValue);
@@ -208,6 +209,8 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             setErrorMessage(errorMessage);
             setErrorSource(errorSource);
             setErrorTimestamp(errorTimestamp);
+
+            setTableComparison(tableComparison);
         }};
         return singleModel;
     }
