@@ -296,13 +296,16 @@ const CheckResultsTab = ({
   }, [mode]);
 
   const allResults = results
-    .map((result) =>
-      (result.checkResultEntries || []).map((item) => ({
-        ...item,
-        checkName: result.checkName
-      }))
-    )
-    .reduce((arr, el) => [...arr, ...el], []);
+    // .map((result) =>
+    //   (result.checkResultEntries || [])
+    //   // .filter((item) => item.tableComparison === comparisonName)
+    //   .map((item) => ({
+    //     ...item,
+    //     checkName: result.checkName
+    //   }))
+    // )
+    // .reduce((arr, el) => [...arr, ...el], []);
+    // console.log(results)
 
   return (
     <div
